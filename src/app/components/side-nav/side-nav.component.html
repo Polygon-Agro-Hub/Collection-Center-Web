@@ -1,0 +1,97 @@
+<div class="flex h-screen">
+    <!-- Sidebar -->
+    <div [ngClass]="isCollapsed ? 'w-20' : 'w-64'" class="flex flex-col bg-white border-r transition-all duration-300">
+        <!-- Header -->
+        <div class="flex items-center gap-3 p-5 cursor-pointer" (click)="toggleSidebar()">
+            <img src="../../../assets/images/logo.png" class="w-10 h-10" />
+            <span [ngClass]="isCollapsed ? 'hidden' : 'block'" class="text-xl font-bold text-gray-800 ">4C
+                Operator</span>
+        </div>
+
+        <!-- Menu -->
+        <ul class="flex-1 space-y-1 p-4">
+            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]">
+                <i class="fas fa-th-large text-[#6B6B6B] text-xl group-hover:text-[#415CFF]"></i>
+                <span [ngClass]="isCollapsed ? 'hidden' : 'block'"
+                    class="text-[#6B6B6B] text-lg font-normal group-hover:text-[#415CFF]">
+                    Dashboard
+                </span>
+            </li>
+
+            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]">
+                <i class="fas fa-tags text-[#6B6B6B] text-xl group-hover:text-[#415CFF]"></i>
+                <span [ngClass]="isCollapsed ? 'hidden' : 'block'"
+                    class="text-[#6B6B6B] text-lg font-normal group-hover:text-[#415CFF]">
+                    Price List
+                </span>
+            </li>
+
+            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]">
+                <i class="fas fa-hand-holding-usd text-[#6B6B6B] text-xl group-hover:text-[#415CFF]"></i>
+                <span [ngClass]="isCollapsed ? 'hidden' : 'block'"
+                    class="text-[#6B6B6B] text-lg font-normal group-hover:text-[#415CFF]">
+                    Price Requests
+                </span>
+            </li>
+
+            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]">
+                <i class="fas fa-chart-bar text-[#6B6B6B] text-xl group-hover:text-[#415CFF]"></i>
+                <span [ngClass]="isCollapsed ? 'hidden' : 'block'"
+                    class="text-[#6B6B6B] text-lg font-normal group-hover:text-[#415CFF]">
+                    Reports
+                </span>
+            </li>
+
+            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]">
+                <i class="fas fa-user-cog text-[#6B6B6B] text-xl group-hover:text-[#415CFF]"></i>
+                <span [ngClass]="isCollapsed ? 'hidden' : 'block'"
+                    class="text-[#6B6B6B] text-lg font-normal group-hover:text-[#415CFF]">
+                    Manage Officers
+                </span>
+            </li>
+
+
+            <li class="flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-gray-100">
+                <i class="fas  text-gray-600 text-lg"></i>
+                <span [ngClass]="isCollapsed ? 'hidden' : 'block'" class="text-gray-700"></span>
+            </li>
+
+        </ul>
+
+        <!-- Footer -->
+        <div class="mx-5 space-y-4">
+            <div *ngIf="!isCollapsed"
+                class="flex flex-row justify-center items-center bg-gray-100 px-1 py-2 rounded-lg">
+                <div class="flex flex-row justify-center items-center bg-white shadow-lg px-3 py-1 rounded-lg mr-1">
+                    <i class="fas fa-sun text-gray-600 text-lg mx-2"></i>
+                    <p class="">Light</p>
+                </div>
+                <div class="flex flex-row justify-center items-center shadow-lg px-3 py-1 rounded-lg ml-1">
+                    <i class="fas fa-moon text-gray-600 text-lg mx-2"></i>
+                    <p class="">Dark</p>
+                </div>
+            </div>
+
+            <div *ngIf="isCollapsed" class="flex flex-col justify-center items-center bg-gray-100 px-3 py-2 rounded-lg">
+                <div class="flex justify-center items-center bg-white shadow-lg px-1 py-1 rounded-lg mb-1">
+                    <i class="fas fa-sun text-gray-600 text-lg mx-1"></i>
+                </div>
+                <div class="flex justify-center items-center bg-white shadow-lg px-1 py-1 rounded-lg mt-1">
+                    <i class="fas fa-moon text-gray-600 text-lg mx-2"></i>
+                </div>
+
+            </div>
+
+            <hr />
+
+            <button class="flex items-center gap-4 text-gray-700 hover:text-red-500 pb-4 pl-5">
+                <i class="fas fa-sign-out-alt text-lg"></i>
+                <span [ngClass]="isCollapsed ? 'hidden' : 'block'">Logout</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- <div class="flex-1 p-6">
+      <h1 class="text-2xl font-bold">Main Content</h1>
+    </div> -->
+</div>

@@ -14,23 +14,23 @@ export class ManageOfficersService {
 
   constructor(private http: HttpClient) { }
 
-  // getForCreateId(role: string): Observable<any> {
-  //   const headers = new HttpHeaders({
-  //     Authorization: `Bearer ${this.token}`,
-  //     'Content-Type': 'application/json',
-  //   });
-  //   return this.http.get(`${this.apiUrl}get-last-emp-id/${role}`, {
-  //     headers,
-  //   });
-  // }
+  getForCreateId(role: string): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+    return this.http.get(`${this.apiUrl}/manage-officers/get-last-emp-id/${role}`, {
+      headers,
+    });
+  }
 
-  // getAllCollectionCenter(): Observable<any> {
-  //   const headers = new HttpHeaders({
-  //     Authorization: `Bearer ${this.token}`,
-  //     'Content-Type': 'application/json',
-  //   });
-  //   return this.http.get(`${this.apiUrl}get-all-center`, {
-  //     headers,
-  //   });
-  // }
+  getAllCollectionCenter(): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+    return this.http.get(`${this.apiUrl}/manage-officers/get-all-center`, {
+      headers,
+    });
+  }
 }

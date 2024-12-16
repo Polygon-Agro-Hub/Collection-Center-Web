@@ -22,7 +22,7 @@ export class AddOfficersComponent implements OnInit {
   languages: string[] = ['Sinhala', 'English', 'Tamil'];
   selectedPage: 'pageOne' | 'pageTwo' = 'pageOne';
   isLoading = false;
-  lastID!:number
+  lastID!: number
   itemId: number | null = null;
 
 
@@ -62,7 +62,10 @@ export class AddOfficersComponent implements OnInit {
 
 
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+    this.getAllCollectionCetnter();
+    this.getLastID('COO');
+
+
   }
 
 
@@ -123,21 +126,21 @@ export class AddOfficersComponent implements OnInit {
     }
   }
 
-  // getLastID(role: string): Promise<string> {
-  //   return new Promise((resolve, reject) => {
-  //     this.ManageOficerSrv.getForCreateId(role).subscribe(
-  //       (res) => {
-  //         this.lastID = res.result.empId;
-  //         const lastId = res.result.empId;
-  //         resolve(lastId); // Resolve the Promise with the empId
-  //       },
-  //       (error) => {
-  //         console.error('Error fetching last ID:', error);
-  //         reject(error);
-  //       }
-  //     );
-  //   });
-  // }
+  getLastID(role: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      this.ManageOficerSrv.getForCreateId(role).subscribe(
+        (res) => {
+          this.lastID = res.result.empId;
+          const lastId = res.result.empId;
+          resolve(lastId); // Resolve the Promise with the empId
+        },
+        (error) => {
+          console.error('Error fetching last ID:', error);
+          reject(error);
+        }
+      );
+    });
+  }
 
   EpmloyeIdCreate() {
     let rolePrefix: string;
@@ -152,37 +155,35 @@ export class AddOfficersComponent implements OnInit {
       rolePrefix = 'COO';
     }
 
-
-
-    // this.getLastID(rolePrefix).then((lastID) => {
-    //   this.companyData.empId = rolePrefix + lastID;
-    // });
+    this.getLastID(rolePrefix).then((lastID) => {
+      this.companyData.empId = rolePrefix + lastID;
+    });
   }
 
   updateProvince(event: Event): void {
     const target = event.target as HTMLSelectElement; // Cast to HTMLSelectElement
     const selectedDistrict = target.value;
-  
+
     const selected = this.districts.find(district => district.name === selectedDistrict);
 
-    if(this.itemId === null){
+    if (this.itemId === null) {
 
       if (selected) {
         this.personalData.province = selected.province;
       } else {
-        this.personalData.province = ''; 
+        this.personalData.province = '';
       }
 
     }
-   
+
   }
 
   getAllCollectionCetnter() {
-    // this.ManageOficerSrv.getAllCollectionCenter().subscribe(
-    //   (res) => {
-    //     this.collectionCenterData = res
-    //   }
-    // )
+    this.ManageOficerSrv.getAllCollectionCenter().subscribe(
+      (res) => {
+        this.collectionCenterData = res
+      }
+    )
   }
 
   onSubmit() {

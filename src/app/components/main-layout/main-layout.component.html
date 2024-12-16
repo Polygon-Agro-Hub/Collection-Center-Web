@@ -1,6 +1,11 @@
-<div class="relative">
+<div>
     <app-header />
-    <div class="absolute left-0 top-0 bottom-0">
-        <app-side-nav />
+    <div class="flex flex-row">
+        <div>
+            <app-side-nav />
+        </div>
+        <div class="flex-1 p-6 mt-16">
+            <router-outlet/>
+        </div>
     </div>
 </div>

@@ -59,9 +59,25 @@
         </ul>
 
         <!-- Footer -->
+    
+
+          
         <div class="mx-5 space-y-4">
-            <div *ngIf="!isCollapsed"
-                class="flex flex-row justify-center items-center bg-gray-100 px-1 py-2 rounded-lg">
+
+
+            <div *ngIf="!isCollapsed && isDarkTheme()" (click)="toggleTheme()" class="flex flex-row justify-center items-center bg-[#303030] px-1 py-2 rounded-lg">
+                <div class="flex flex-row justify-center items-center shadow-lg px-3 py-1 rounded-lg mr-1">
+                    <i class="fas fa-sun text-gray-600 text-lg mx-2"></i>
+                    <p class="text-white">Light</p>
+                </div>
+                <div class="flex flex-row justify-center items-center bg-white shadow-lg px-3 py-1 rounded-lg ml-1">
+                    <i class="fas fa-moon text-gray-600 text-lg mx-2"></i>
+                    <p class="">Dark</p>
+                </div>
+            </div>
+
+
+            <div *ngIf="!isCollapsed && !isDarkTheme()" (click)="toggleTheme()" class="flex flex-row justify-center items-center bg-gray-100 px-1 py-2 rounded-lg">
                 <div class="flex flex-row justify-center items-center bg-white shadow-lg px-3 py-1 rounded-lg mr-1">
                     <i class="fas fa-sun text-gray-600 text-lg mx-2"></i>
                     <p class="">Light</p>
@@ -70,16 +86,27 @@
                     <i class="fas fa-moon text-gray-600 text-lg mx-2"></i>
                     <p class="">Dark</p>
                 </div>
+             </div>
+
+
+
+            <div *ngIf="isCollapsed && isDarkTheme()" (click)="toggleTheme()" class="flex flex-col justify-center items-center bg-[#303030] px-3 py-2 rounded-lg">
+                    <div class="flex justify-center items-center bg-[#303030] shadow-lg px-1 py-1 rounded-lg mb-1">
+                        <i class="fas fa-sun text-white text-lg mx-1"></i>
+                    </div>
+                    <div class="flex justify-center items-center bg-white shadow-lg px-1 py-1 rounded-lg mt-1">
+                        <i class="fas fa-moon text-gray-600 text-lg mx-2"></i>
+                    </div>
             </div>
 
-            <div *ngIf="isCollapsed" class="flex flex-col justify-center items-center bg-gray-100 px-3 py-2 rounded-lg">
+
+            <div *ngIf="isCollapsed && !isDarkTheme()" (click)="toggleTheme()" class="flex flex-col justify-center items-center bg-gray-100 px-3 py-2 rounded-lg">
                 <div class="flex justify-center items-center bg-white shadow-lg px-1 py-1 rounded-lg mb-1">
                     <i class="fas fa-sun text-gray-600 text-lg mx-1"></i>
                 </div>
-                <div class="flex justify-center items-center bg-white shadow-lg px-1 py-1 rounded-lg mt-1">
+                <div class="flex justify-center items-center bg-gray-100 shadow-lg px-1 py-1 rounded-lg mt-1">
                     <i class="fas fa-moon text-gray-600 text-lg mx-2"></i>
                 </div>
-
             </div>
 
             <hr />

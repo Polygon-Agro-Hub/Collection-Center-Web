@@ -33,4 +33,13 @@ export class ManageOfficersService {
       headers,
     });
   }
+
+  createCollectiveOfficer(person:any , bank:any, company:any): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
+    return this.http.post(`${this.apiUrl}/manage-officers/create-officer`, {officerData:person, companyData:company, bankData:bank}, {
+      headers,
+    });
+  }
 }

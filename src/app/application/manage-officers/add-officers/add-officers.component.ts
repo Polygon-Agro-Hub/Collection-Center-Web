@@ -3,6 +3,7 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { ManageOfficersService } from '../../../services/manage-officers-service/manage-officers.service';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-add-officers',
@@ -22,15 +23,19 @@ export class AddOfficersComponent implements OnInit {
   languages: string[] = ['Sinhala', 'English', 'Tamil'];
   selectedPage: 'pageOne' | 'pageTwo' = 'pageOne';
   isLoading = false;
-  lastID!:number
+  lastID!: number
   itemId: number | null = null;
+  officerId!: number
 
 
   selectedFileName!: string
   selectedImage: string | ArrayBuffer | null = null;
   selectedFile: File | null = null;
 
-  constructor(private ManageOficerSrv: ManageOfficersService) { }
+  constructor(
+    private ManageOficerSrv: ManageOfficersService,
+    private router: Router
+  ) { }
 
   districts = [
     { name: 'Ampara', province: 'Eastern' },
@@ -62,7 +67,10 @@ export class AddOfficersComponent implements OnInit {
 
 
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+    this.getAllCollectionCetnter();
+    this.getLastID('COO');
+
+
   }
 
 
@@ -87,7 +95,12 @@ export class AddOfficersComponent implements OnInit {
 
 
   nextForm(page: 'pageOne' | 'pageTwo') {
-    this.selectedPage = page;
+    if (!this.personalData.centerId || !this.personalData.firstNameEnglish || !this.personalData.firstNameSinhala || !this.personalData.firstNameTamil || !this.personalData.city || !this.personalData.country || !this.personalData.district || !this.personalData.email || !this.personalData.houseNumber || !this.personalData.languages || !this.personalData.lastNameEnglish || !this.personalData.lastNameSinhala || !this.personalData.lastNameTamil || !this.personalData.nic || !this.personalData.phoneNumber01) {
+      Swal.fire('warning', 'Pleace fill all required feilds', 'warning')
+    } else {
+      this.selectedPage = page;
+    }
+
   }
 
   triggerFileInput(event: Event): void {
@@ -123,21 +136,21 @@ export class AddOfficersComponent implements OnInit {
     }
   }
 
-  // getLastID(role: string): Promise<string> {
-  //   return new Promise((resolve, reject) => {
-  //     this.ManageOficerSrv.getForCreateId(role).subscribe(
-  //       (res) => {
-  //         this.lastID = res.result.empId;
-  //         const lastId = res.result.empId;
-  //         resolve(lastId); // Resolve the Promise with the empId
-  //       },
-  //       (error) => {
-  //         console.error('Error fetching last ID:', error);
-  //         reject(error);
-  //       }
-  //     );
-  //   });
-  // }
+  getLastID(role: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      this.ManageOficerSrv.getForCreateId(role).subscribe(
+        (res) => {
+          this.lastID = res.result.empId;
+          const lastId = res.result.empId;
+          resolve(lastId); // Resolve the Promise with the empId
+        },
+        (error) => {
+          console.error('Error fetching last ID:', error);
+          reject(error);
+        }
+      );
+    });
+  }
 
   EpmloyeIdCreate() {
     let rolePrefix: string;
@@ -152,37 +165,35 @@ export class AddOfficersComponent implements OnInit {
       rolePrefix = 'COO';
     }
 
-
-
-    // this.getLastID(rolePrefix).then((lastID) => {
-    //   this.companyData.empId = rolePrefix + lastID;
-    // });
+    this.getLastID(rolePrefix).then((lastID) => {
+      this.companyData.empId = rolePrefix + lastID;
+    });
   }
 
   updateProvince(event: Event): void {
     const target = event.target as HTMLSelectElement; // Cast to HTMLSelectElement
     const selectedDistrict = target.value;
-  
+
     const selected = this.districts.find(district => district.name === selectedDistrict);
 
-    if(this.itemId === null){
+    if (this.itemId === null) {
 
       if (selected) {
         this.personalData.province = selected.province;
       } else {
-        this.personalData.province = ''; 
+        this.personalData.province = '';
       }
 
     }
-   
+
   }
 
   getAllCollectionCetnter() {
-    // this.ManageOficerSrv.getAllCollectionCenter().subscribe(
-    //   (res) => {
-    //     this.collectionCenterData = res
-    //   }
-    // )
+    this.ManageOficerSrv.getAllCollectionCenter().subscribe(
+      (res) => {
+        this.collectionCenterData = res
+      }
+    )
   }
 
   onSubmit() {
@@ -190,36 +201,57 @@ export class AddOfficersComponent implements OnInit {
     console.log(this.bankData);
     console.log(this.companyData);
 
-    // const formValue = this.officerForm.value;
+    if (!this.bankData.accHolderName || !this.bankData.accNumber || !this.bankData.bankName || !this.bankData.branchName || !this.companyData.IRMname || !this.companyData.assignedDistrict || !this.companyData.companyEmail || !this.companyData.companyNameEnglish || !this.companyData.companyNameSinhala || !this.companyData.companyNameTamil) {
+      Swal.fire('warning', 'Pleace fill all required feilds', 'warning')
 
-    // const formData = new FormData();
-    // if (this.officerForm.value) {
-    //   const officerData = this.officerForm.value;
-    //   for (const key in officerData) {
-    //     if (officerData.hasOwnProperty(key)) {
-    //       formData.append(key, officerData[key]);
-    //     }
-    //   }
+    } else {
+      this.ManageOficerSrv.createCollectiveOfficer(this.personalData, this.bankData, this.companyData).subscribe(
+        (res: any) => {
+          this.officerId = res.officerId;
+          Swal.fire('Success', 'Collective Officer Created Successfully', 'success');
+          this.router.navigate(['/steckholders/collective-officer'])
+        },
+        (error: any) => {
+          Swal.fire('Error', 'There was an error creating the collective officer', 'error');
+        }
+      );
 
-    // this.personalData.image = this.selectedFile
+    }
 
-    // this.collectionOfficerService.createCollectiveOfficer(this.personalData, this.bankData, this.companyData).subscribe(
-    //   (res: any) => {
-    //     this.officerId = res.officerId;
-    //     Swal.fire('Success', 'Collective Officer Created Successfully', 'success');
-    //     this.router.navigate(['/steckholders/collective-officer'])
-    //   },
-    //   (error: any) => {
-    //     Swal.fire('Error', 'There was an error creating the collective officer', 'error');
-    //   }
-    // );
-    // }
+
+  }
+
+  onCancel() {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you really want to clear this form?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, clear it!',
+      cancelButtonText: 'Cancel'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.personalData = new Personal();
+        this.bankData = new Bank();
+        this.companyData = new Company();
+
+        Swal.fire(
+          'Cleared!',
+          'The form has been cleared.',
+          'success'
+        );
+      }
+    });
   }
 
 
 
 
 }
+
+
 
 
 class Personal {
@@ -229,9 +261,9 @@ class Personal {
   lastNameEnglish!: string;
   lastNameSinhala!: string;
   lastNameTamil!: string;
-  phoneNumber01Code!: string;
+  phoneNumber01Code: string = '+94';
   phoneNumber01!: string;
-  phoneNumber02Code!: string;
+  phoneNumber02Code: string = '+94';
   phoneNumber02!: string;
   nic!: string;
   email!: string;

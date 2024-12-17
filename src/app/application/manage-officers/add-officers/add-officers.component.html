@@ -14,8 +14,8 @@
                             alt="Profile Picture" />
 
                         <!-- Display the selected image if available -->
-                        <img *ngIf="selectedImage" class="rounded-full w-60 h-60" [src]="selectedImage" (click)="triggerFileInput($event)"
-                            alt="Profile Picture" />
+                        <img *ngIf="selectedImage" class="rounded-full w-60 h-60" [src]="selectedImage"
+                            (click)="triggerFileInput($event)" alt="Profile Picture" />
                     </div>
                 </div>
 
@@ -26,7 +26,7 @@
                         <label for="centerId" class="block text-sm font-medium text-gray-700 dark:text-textDark">
                             Collection Center Name
                         </label>
-                        <select id="centerId" [(ngModel)]="personalData.centerId"
+                        <select id="centerId" [(ngModel)]="personalData.centerId" (change)="getAllmanagers()"
                             name="centerId"
                             class="form-control mt-1 block w-full p-2 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-100 dark:bg-gray-800 appearance-none focus:ring-indigo-500 focus:border-indigo-500">
                             <option selected disabled>--Select---</option>
@@ -70,13 +70,8 @@
                         <select id="jobRole" [(ngModel)]="companyData.jobRole" (change)="EpmloyeIdCreate()"
                             name="jobRole" placeholder="select"
                             class="form-control mt-1 block w-full p-2 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-100 dark:bg-gray-800 appearance-none focus:ring-indigo-500 focus:border-indigo-500">
-                            <option disabled
-                                class="p-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800">
+                            <option disabled class="p-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800">
                                 -- select --
-                            </option>
-                            <option value="Collection Center Head"
-                                class="p-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800">
-                                Collection Center Head
                             </option>
                             <option value="Collection Center Manager"
                                 class="p-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800">
@@ -94,17 +89,16 @@
                     </div>
 
                     <div>
-                        <label
-                            class="block text-sm font-medium text-gray-700 dark:text-textDark">EMP ID / User name</label>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-textDark">EMP ID / User
+                            name</label>
                         <div class="flex mt-1">
                             <span
                                 class="inline-flex items-center px-3 py-3 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
-                                <p *ngIf="companyData.jobRole === 'Collection Center Head'">CCH</p>
                                 <p *ngIf="companyData.jobRole === 'Collection Center Manager'">CCM</p>
                                 <p *ngIf="companyData.jobRole === 'Collection Officer'">COO</p>
                                 <p *ngIf="companyData.jobRole === 'Customer Officer'">CUO</p>
                             </span>
-                            <input type="text" [value]="lastID" name="empId" 
+                            <input type="text" [value]="lastID" name="empId"
                                 class="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm pl-4  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 disabled>
                         </div>
@@ -114,48 +108,42 @@
                         <label for="firstNameEnglish"
                             class="block text-sm font-medium text-gray-700 dark:text-textDark">First
                             Name (in English)</label>
-                        <input id="firstNameEnglish"
-                            [(ngModel)]="personalData.firstNameEnglish" name="firstNameEnglish"
+                        <input id="firstNameEnglish" [(ngModel)]="personalData.firstNameEnglish" name="firstNameEnglish"
                             class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
                     </div>
 
                     <div>
                         <label for="variety" class="block text-sm font-medium text-gray-700 dark:text-textDark">Last
                             Name (in English)</label>
-                        <input  id="lastName" name="lastName"
-                            [(ngModel)]="personalData.lastNameEnglish"
+                        <input id="lastName" name="lastName" [(ngModel)]="personalData.lastNameEnglish"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
                     </div>
 
                     <div>
                         <label for="crop" class="block text-sm font-medium text-gray-700 dark:text-textDark">First
                             Name (in Sinhala)</label>
-                        <input id="firstName" name="firstName"
-                            [(ngModel)]="personalData.firstNameSinhala"
+                        <input id="firstName" name="firstName" [(ngModel)]="personalData.firstNameSinhala"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
                     </div>
 
                     <div>
                         <label for="variety" class="block text-sm font-medium text-gray-700 dark:text-textDark">Last
                             Name (in Sinhala)</label>
-                        <input id="lastName" name="lastName"
-                            [(ngModel)]="personalData.lastNameSinhala"
+                        <input id="lastName" name="lastName" [(ngModel)]="personalData.lastNameSinhala"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
                     </div>
 
                     <div>
                         <label for="crop" class="block text-sm font-medium text-gray-700 dark:text-textDark">First
                             Name (in Tamil)</label>
-                        <input id="firstName" name="firstName"
-                            [(ngModel)]="personalData.firstNameTamil"
+                        <input id="firstName" name="firstName" [(ngModel)]="personalData.firstNameTamil"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
                     </div>
 
                     <div>
                         <label for="variety" class="block text-sm font-medium text-gray-700 dark:text-textDark">Last
                             Name (in Tamil)</label>
-                        <input  id="lastName" name="lastName"
-                            [(ngModel)]="personalData.lastNameTamil"
+                        <input id="lastName" name="lastName" [(ngModel)]="personalData.lastNameTamil"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
                     </div>
 
@@ -172,7 +160,7 @@
                                 <option value="+44">+44 (UK)</option>
                                 <option value="+91">+91 (India)</option>
                             </select>
-                            <input  id="phoneNumber01" name="phoneNumber01" type="number"
+                            <input id="phoneNumber01" name="phoneNumber01" type="number"
                                 [(ngModel)]="personalData.phoneNumber01"
                                 class="block w-full p-2 border border-gray-300 rounded-r-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack"
                                 placeholder="Enter your phone number" />
@@ -184,7 +172,7 @@
                             Phone Number - 2
                         </label>
                         <div class="mt-1 flex">
-                            <select id="phoneNumber02Code" name="phoneNumber02Code" 
+                            <select id="phoneNumber02Code" name="phoneNumber02Code"
                                 [(ngModel)]="personalData.phoneNumber02Code"
                                 class="block p-2 border border-gray-300 rounded-l-md bg-gray-50 mr-5 text-textLight dark:text-textDark dark:bg-tileBlack">
                                 <option value="+94">+94 (LK)</option>
@@ -192,7 +180,7 @@
                                 <option value="+44">+44 (UK)</option>
                                 <option value="+91">+91 (India)</option>
                             </select>
-                            <input  id="phoneNumber02" name="phoneNumber02" type="number"
+                            <input id="phoneNumber02" name="phoneNumber02" type="number"
                                 [(ngModel)]="personalData.phoneNumber02"
                                 class="block w-full p-2 border border-gray-300 rounded-r-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack"
                                 placeholder="Enter your phone number" />
@@ -202,38 +190,35 @@
                     <div>
                         <label for="nic" class="block text-sm font-medium text-gray-700 dark:text-textDark">NIC
                             Number</label>
-                        <input  id="nic" name="nic" [(ngModel)]="personalData.nic"
+                        <input id="nic" name="nic" [(ngModel)]="personalData.nic"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
                     </div>
 
                     <div>
                         <label for="email"
                             class="block text-sm font-medium text-gray-700 dark:text-textDark">Email</label>
-                        <input type="email" id="email" name="nic"
-                            [(ngModel)]="personalData.email"
+                        <input type="email" id="email" name="nic" [(ngModel)]="personalData.email"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
                     </div>
 
                     <div>
                         <label for="house" class="block text-sm font-medium text-gray-700 dark:text-textDark">House /
                             Plot Number</label>
-                        <input  id="houseNumber" name="houseNumber"
-                            [(ngModel)]="personalData.houseNumber"
+                        <input id="houseNumber" name="houseNumber" [(ngModel)]="personalData.houseNumber"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
                     </div>
 
                     <div>
                         <label for="street" class="block text-sm font-medium text-gray-700 dark:text-textDark">Street
                             Name</label>
-                        <input  id="streetName" name="streetName"
-                            [(ngModel)]="personalData.streetName"
+                        <input id="streetName" name="streetName" [(ngModel)]="personalData.streetName"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
                     </div>
 
                     <div>
                         <label for="city"
                             class="block text-sm font-medium text-gray-700 dark:text-textDark">City</label>
-                        <input  id="city" name="city" [(ngModel)]="personalData.city"
+                        <input id="city" name="city" [(ngModel)]="personalData.city"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
                     </div>
 
@@ -242,50 +227,36 @@
 
 
                     <div>
-                        <label
-                          for="district"
-                          class="block text-sm font-medium text-gray-700 dark:text-textDark"
-                        >
-                          District
+                        <label for="district" class="block text-sm font-medium text-gray-700 dark:text-textDark">
+                            District
                         </label>
-                        <select
-                          id="district"
-                          name="district"
-                          [(ngModel)]="personalData.district"
-                          (change)="updateProvince($event)"
-                          class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack"
-                        >
-                          <option value="" disabled selected>Select a district</option>
-                          <option *ngFor="let district of districts" [value]="district.name">
-                            {{ district.name }}
-                          </option>
+                        <select id="district" name="district" [(ngModel)]="personalData.district"
+                            (change)="updateProvince($event)"
+                            class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack">
+                            <option value="" disabled selected>Select a district</option>
+                            <option *ngFor="let district of districts" [value]="district.name">
+                                {{ district.name }}
+                            </option>
                         </select>
-                      </div>
-                      
-
-                    
+                    </div>
 
 
 
 
 
 
-                      <div>
-                        <label
-                          for="province"
-                          class="block text-sm font-medium text-gray-700 dark:text-textDark"
-                        >
-                          Province
+
+
+
+                    <div>
+                        <label for="province" class="block text-sm font-medium text-gray-700 dark:text-textDark">
+                            Province
                         </label>
-                        <input
-                          id="province"
-                          name="province"
-                          [(ngModel)]="personalData.province"
-                          class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack"
-                          readonly
-                        />
-                      </div>
-                      
+                        <input id="province" name="province" [(ngModel)]="personalData.province"
+                            class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack"
+                            readonly />
+                    </div>
+
 
 
 
@@ -297,15 +268,15 @@
                     <div>
                         <label for="country"
                             class="block text-sm font-medium text-gray-700 dark:text-textDark">Country</label>
-                        <input  id="country" name="country" [(ngModel)]="personalData.country"
+                        <input id="country" name="country" [(ngModel)]="personalData.country"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
                     </div>
 
                 </div>
 
                 <div class="flex justify-end m-10">
-                    <button type="button"
-                        class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md mr-2" (click)="onCancel()">Cancel</button>
+                    <button type="button" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md mr-2"
+                        (click)="onCancel()">Cancel</button>
                     <button (click)="nextForm('pageTwo')" type="button"
                         class="px-4 py-2 bg-[#3980C0] text-white rounded-md">Next</button>
                 </div>
@@ -320,7 +291,7 @@
                     <label for="companyNameEnglish"
                         class="block text-sm font-medium text-gray-700 dark:text-textDark">Company Name (in
                         English)</label>
-                    <input id="companyNameEnglish" name="companyNameEnglish" 
+                    <input id="companyNameEnglish" name="companyNameEnglish"
                         [(ngModel)]="companyData.companyNameEnglish"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
                 </div>
@@ -329,7 +300,7 @@
                     <label for="companyNameSinhala"
                         class="block text-sm font-medium text-gray-700 dark:text-textDark">Company Name (in
                         Sinhala)</label>
-                    <input id="companyNameSinhala" name="companyNameSinhala" 
+                    <input id="companyNameSinhala" name="companyNameSinhala"
                         [(ngModel)]="companyData.companyNameSinhala"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
                 </div>
@@ -338,8 +309,7 @@
                     <label for="companyNameTamil"
                         class="block text-sm font-medium text-gray-700 dark:text-textDark">Company Name (in
                         Tamil)</label>
-                    <input id="companyNameTamil" name="companyNameTamil" 
-                        [(ngModel)]="companyData.companyNameTamil"
+                    <input id="companyNameTamil" name="companyNameTamil" [(ngModel)]="companyData.companyNameTamil"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
                 </div>
 
@@ -347,24 +317,32 @@
                     <label for="IRMname" class="block text-sm font-medium text-gray-700 dark:text-textDark">Name of the
                         immediate
                         reporting manager</label>
-                    <input id="IRMname" name="IRMname"  [(ngModel)]="companyData.IRMname"
-                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
+                    <!-- <input id="IRMname" name="IRMname" [(ngModel)]="companyData.IRMname"
+                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" /> -->
+
+                    <select id="collectionManagerId" [(ngModel)]="companyData.collectionManagerId"
+                        name="collectionManagerId"
+                        class="form-control mt-1 block w-full p-2 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-100 dark:bg-gray-800 appearance-none focus:ring-indigo-500 focus:border-indigo-500">
+                        <option selected disabled>--Select---</option>
+                        <option *ngFor="let item of ManagerArr" [value]="item.id"
+                            class="p-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800">
+                            {{ item.firstNameEnglish }} {{item.lastNameEnglish}}
+                        </option>
+                    </select>
                 </div>
 
                 <div class="pb-6">
                     <label for="companyEmail" class="block text-sm font-medium text-gray-700 dark:text-textDark">Email
                         of the company /
                         manager</label>
-                    <input id="companyEmail" name="companyEmail" type="email"
-                        [(ngModel)]="companyData.companyEmail"
+                    <input id="companyEmail" name="companyEmail" type="email" [(ngModel)]="companyData.companyEmail"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
                 </div>
 
                 <div class="pb-6">
                     <label for="assignedDistrict"
                         class="block text-sm font-medium text-gray-700 dark:text-textDark">District assigned to</label>
-                    <input id="assignedDistrict" name="assignedDistrict" 
-                        [(ngModel)]="companyData.assignedDistrict"
+                    <input id="assignedDistrict" name="assignedDistrict" [(ngModel)]="companyData.assignedDistrict"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
                 </div>
 
@@ -377,7 +355,7 @@
                     <div class="flex items-center space-x-4 mt-3">
                         <div class="flex items-center space-x-2">
                             <input class="w-5 h-5" type="radio" id="sinhala" name="employeeType" value="Permanent"
-                                 [(ngModel)]="companyData.employeeType">
+                                [(ngModel)]="companyData.employeeType">
                             <label for="sinhala"
                                 class="block text-sm font-medium text-gray-700 dark:text-textDark">Permanent</label>
                         </div>
@@ -395,30 +373,28 @@
                 <div class="pb-6">
                     <label for="accHolderName"
                         class="block text-sm font-medium text-gray-700 dark:text-textDark">Account Holder’s Name</label>
-                    <input id="accHolderName" name="accHolderName" 
-                        [(ngModel)]="bankData.accHolderName"
+                    <input id="accHolderName" name="accHolderName" [(ngModel)]="bankData.accHolderName"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
                 </div>
 
                 <div class="pb-6">
                     <label for="accNumber" class="block text-sm font-medium text-gray-700 dark:text-textDark">Account
                         Number</label>
-                    <input id="accNumber" name="accNumber"  [(ngModel)]="bankData.accNumber"
+                    <input id="accNumber" name="accNumber" [(ngModel)]="bankData.accNumber"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
                 </div>
 
                 <div class="pb-6">
                     <label for="bankName" class="block text-sm font-medium text-gray-700 dark:text-textDark">Bank
                         Name</label>
-                    <input id="bankName" name="bankName"  [(ngModel)]="bankData.bankName"
+                    <input id="bankName" name="bankName" [(ngModel)]="bankData.bankName"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
                 </div>
 
                 <div class="pb-6">
                     <label for="branchName" class="block text-sm font-medium text-gray-700 dark:text-textDark">Branch
                         Name</label>
-                    <input id="branchName" name="branchName"
-                        [(ngModel)]="bankData.branchName"
+                    <input id="branchName" name="branchName" [(ngModel)]="bankData.branchName"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
                 </div>
             </div>
@@ -426,7 +402,8 @@
             <div class="flex justify-end m-10">
                 <button (click)="nextForm('pageOne')" type="button"
                     class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md mr-2">Back</button>
-                <button type="submit" class="px-4 py-2 bg-[#3980C0] text-white rounded-md" (click)="onSubmit()">Submit</button>
+                <button type="submit" class="px-4 py-2 bg-[#3980C0] text-white rounded-md"
+                    (click)="onSubmit()">Submit</button>
             </div>
         </div>
 

@@ -18,6 +18,7 @@ export class AddOfficersComponent implements OnInit {
   bankData: Bank = new Bank();
   companyData: Company = new Company();
   collectionCenterData: CollectionCenter[] = []
+  ManagerArr!: ManagerDetails[]
 
 
   languages: string[] = ['Sinhala', 'English', 'Tamil'];
@@ -155,9 +156,10 @@ export class AddOfficersComponent implements OnInit {
   EpmloyeIdCreate() {
     let rolePrefix: string;
 
-    if (this.companyData.jobRole === 'Collection Center Head') {
-      rolePrefix = 'CCH';
-    } else if (this.companyData.jobRole === 'Collection Center Manager') {
+    // if (this.companyData.jobRole === 'Collection Center Head') {
+    //   rolePrefix = 'CCH';
+    // }
+    if (this.companyData.jobRole === 'Collection Center Manager') {
       rolePrefix = 'CCM';
     } else if (this.companyData.jobRole === 'Customer Officer') {
       rolePrefix = 'CUO';
@@ -201,7 +203,7 @@ export class AddOfficersComponent implements OnInit {
     console.log(this.bankData);
     console.log(this.companyData);
 
-    if (!this.bankData.accHolderName || !this.bankData.accNumber || !this.bankData.bankName || !this.bankData.branchName || !this.companyData.IRMname || !this.companyData.assignedDistrict || !this.companyData.companyEmail || !this.companyData.companyNameEnglish || !this.companyData.companyNameSinhala || !this.companyData.companyNameTamil) {
+    if (!this.bankData.accHolderName || !this.bankData.accNumber || !this.bankData.bankName || !this.bankData.branchName || !this.companyData.collectionManagerId || !this.companyData.assignedDistrict || !this.companyData.companyEmail || !this.companyData.companyNameEnglish || !this.companyData.companyNameSinhala || !this.companyData.companyNameTamil) {
       Swal.fire('warning', 'Pleace fill all required feilds', 'warning')
 
     } else {
@@ -244,6 +246,14 @@ export class AddOfficersComponent implements OnInit {
         );
       }
     });
+  }
+
+  getAllmanagers() {
+    this.ManageOficerSrv.getAllManagersByCenter(this.personalData.centerId).subscribe(
+      (res) => {
+        this.ManagerArr = res.result
+      }
+    )
   }
 
 
@@ -297,11 +307,18 @@ class Company {
   companyEmail!: string;
   assignedDistrict!: string;
   employeeType!: string;
+  collectionManagerId: string = ''
 }
 
 class CollectionCenter {
   id!: number
   centerName!: string
 
+}
+
+class ManagerDetails {
+  id!: number
+  firstNameEnglish!: string
+  lastNameEnglish!: string
 }
 

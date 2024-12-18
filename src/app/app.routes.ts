@@ -5,6 +5,7 @@ import { MainLayoutComponent } from './components/main-layout/main-layout.compon
 import { DashboardComponent } from './application/dashboard/dashboard.component';
 import { AddOfficersComponent } from './application/manage-officers/add-officers/add-officers.component';
 import { ChangePasswordComponent } from './application/Auth/change-password/change-password.component';
+import { ViewOfficersComponent } from './application/manage-officers/view-officers/view-officers.component';
 
 export const routes: Routes = [
     {
@@ -30,12 +31,14 @@ export const routes: Routes = [
                     {
                         path:'create-officer',
                         component:AddOfficersComponent
+                    },
+                    {
+                        path:'view-officer',
+                        component:ViewOfficersComponent
                     }
                 ]
             }
 
         ]
     },
-    // { path: 'login', component: LoginComponent },
-
 ];

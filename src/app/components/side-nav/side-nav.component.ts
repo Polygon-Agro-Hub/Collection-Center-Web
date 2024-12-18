@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component } from '@angular/core';
-import { RouterOutlet } from '@angular/router';
+import { Router, RouterOutlet } from '@angular/router';
 import { ThemeService } from '../../theme.service';
 
 @Component({
@@ -13,7 +13,10 @@ import { ThemeService } from '../../theme.service';
 export class SideNavComponent {
   isCollapsed = false;
 
-  constructor(private themeService: ThemeService) {}
+  constructor(
+    private themeService: ThemeService,
+    private router: Router
+  ) {}
 
   toggleSidebar() {
     this.isCollapsed = !this.isCollapsed;
@@ -25,5 +28,9 @@ export class SideNavComponent {
 
   isDarkTheme(): boolean {
     return this.themeService.getActiveTheme() === 'dark';
+  }
+
+  navigate(path:string){
+    this.router.navigate([`${path}`])
   }
 }

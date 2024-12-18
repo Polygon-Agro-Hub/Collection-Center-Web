@@ -53,4 +53,58 @@ export class ManageOfficersService {
       headers,
     });
   }
+
+  getAllOfficers( page: number = 1, limit: number = 10, company:string ='', role:string = '', searchText:string = ''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    let url = `${this.apiUrl}/manage-officers/get-all-officers?page=${page}&limit=${limit}`
+
+    if(company){
+      url += `&company=${company}`
+    }
+
+    if(role){
+      url +=`&role=${role}`
+    }
+
+    if(searchText){
+      url +=`&searchText=${searchText}`
+    }
+
+
+
+    return this.http.get(url, {
+      headers,
+    });
+  }
+
+  getCompanyNames(): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/manage-officers/get-all-company-names`;
+    return this.http.get<any>(url, { headers });
+  }
+
+  deleteOfficer(id:number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/manage-officers/delete-officer/${id}`;
+    return this.http.delete<any>(url, { headers });
+  }
+
+  ChangeStatus(id:number, status:string): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/manage-officers/update-status/${id}/${status}`;
+    return this.http.get<any>(url, { headers });
+  }
 }

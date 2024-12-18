@@ -1,0 +1,154 @@
+<p class="font-semibold text[#424242] mb-8 mx-5">Manage Officers</p>
+
+<div class="w-full px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg">
+    <div class="flex flex-row items-center gap-[5%]">
+        <div>
+            <button class="bg-[#415CFF] text-lg text-white rounded-lg shadow-lg px-4 py-2"
+                (click)="navigate('/manage-officers/create-officer')">
+                Add Officer
+            </button>
+        </div>
+        <div class="flex flex-row items-center gap-8 ">
+            <i class="fa-solid fa-list text-2xl"></i>
+
+            <p class="text-lg">Filter By</p>
+
+            <!-- <p-dropdown
+                styleClass="border border-2 rounded-xl h-8 items-center bg-[#F1F1F1] dark:bg-[#272F45] text-textLight dark:text-textDark"
+                [options]="" [checkmark]="true" optionLabel="companyNameEnglish" [showClear]="true"
+                placeholder="Company" (onChange)="applyFilters()" /> -->
+
+            <div class="relative w-36">
+                <div
+                    class="border-2 rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center">
+                    <select (change)="applyCompanyFilters()" [(ngModel)]="selectCompany"
+                        class="block w-full appearance-none dark:bg-[#272F45] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
+                        <option value="" selected disabled>Company</option>
+                        <option *ngFor="let item of companyArr" [value]="item.companyNameEnglish"
+                            class=" dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300">
+                            {{ item.companyNameEnglish }}
+                        </option>
+                    </select>
+                    <button *ngIf="selectCompany" (click)="clearCompanyFilter()">
+                        <i class="fa-solid fa-xmark text-lg mr-3"></i>
+                    </button>
+
+                </div>
+            </div>
+
+            <div class="relative w-46">
+                <div
+                    class="border-2 rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center">
+                    <select (change)="applyRoleFilters()" [(ngModel)]="selectRole"
+                        class="block w-full appearance-none  dark:bg-[#272F45] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
+                        <option value="" selected disabled>Role</option>
+                        <option class=" dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
+                            value="Collection Center Head">Collection Center Head</option>
+                        <option class=" dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
+                            value="Collection Center Manager">Collection Center Manager</option>
+                        <option class=" dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
+                            value="Collection Officer">Collection Officer</option>
+                        <option class=" dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
+                            value="Customer Officer">Customer Officer</option>
+
+                    </select>
+                    <button *ngIf="selectRole" (click)="clearRoleFilter()">
+                        <i class="fa-solid fa-xmark text-lg mr-3"></i>
+                    </button>
+
+                </div>
+            </div>
+
+
+            <!-- <p-dropdown
+                styleClass="border border-2 rounded-xl h-8 items-center bg-[#F1F1F1] dark:bg-[#272F45] text-textLight dark:text-textDark"
+                [options]="companyArr" [checkmark]="true" optionLabel="companyNameEnglish" [showClear]="true"
+                placeholder="Role" (onChange)="applyCompanyFilters()" /> -->
+
+            <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#272F45]">
+                <input type="text" placeholder="Search by EMP ID, First / Last name,NIC" [(ngModel)]="searchText"
+                    class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
+                <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
+                    (click)="onSearch()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
+                    </svg>
+                </button>
+                <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none"
+                    (click)="offSearch()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class="overflow-x-auto mt-8 mr-5">
+        <table class="w-full divide-y-2 border-[1px] border-gray-300 rounded-lg overflow-hidden">
+            <thead class=" dark:bg-[#272F45] text-gray-700 dark:text-gray-300">
+                <tr>
+                    <th class="px-2 py-3 text-left text-sm font-medium">No</th>
+                    <th class="px-3 py-3 text-left text-sm font-medium">EMP ID</th>
+                    <th class="px-3 py-3 text-left text-sm font-medium">First Name</th>
+                    <th class="px-3 py-3 text-left text-sm font-medium">Last Name</th>
+                    <th class="px-3 py-3 text-left text-sm font-medium">Company</th>
+                    <th class="px-3 py-3 text-left text-sm font-medium">Role</th>
+                    <th class="px-3 py-3 text-left text-sm font-medium">Status</th>
+                    <th class="px-3 py-3 text-left text-sm font-medium">Phone</th>
+                    <th class="px-3 py-3 text-left text-sm font-medium">NIC</th>
+                    <th class="px-3 py-3 text-center text-sm font-medium">Actions</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white dark:bg-[#1E293B]">
+                <tr *ngFor="let item of OfficerArr;  let i = index">
+                    <td class="px-2 py-4 text-sm text-gray-900 dark:text-gray-300">{{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }}</td>
+                    <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.empId}}</td>
+                    <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.firstNameEnglish}}</td>
+                    <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.lastNameEnglish}}</td>
+                    <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.companyNameEnglish}}</td>
+                    <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.jobRole}}</td>
+                    <td class="px-3 py-4" >
+                        <div class="flex justify-center items-center" (click)="openPopup(item)">
+                            <span *ngIf="item.status === 'Approved'"
+                                class="inline-block px-3 py-1 bg-[#C8E0FF] text-[#415CFF] text-sm font-medium rounded-md">
+                                Approved
+                            </span>
+                            <span *ngIf="item.status === 'Not Approved'"
+                                class="inline-block px-3 py-1 bg-[#FFB9B7] text-[#D16D6A] text-sm font-medium rounded-md">
+                                Not Approved
+                            </span>
+                            <span *ngIf="item.status === 'Rejected'"
+                                class="inline-block px-3 py-1 bg-[#F8FFA6] text-[#A8A100] text-sm font-medium rounded-md">
+                                Rejected
+                            </span>
+                        </div>
+                    </td>
+                    <td class="px-3  py-4 text-sm text-gray-900 dark:text-gray-300">{{item.phoneNumber01}}</td>
+                    <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.nic}}</td>
+                    <td class="px-3 py-4 flex justify-center space-x-4">
+                        <button class="text-[#415CFF] hover:text-blue-500">
+                            <i class="fa-solid fa-pen-to-square text-lg"></i>
+                        </button>
+                        <button class="text-[#FF415C] hover:text-red-500" (click)="deleteCollectionOfficer(item.id)">
+                            <i class="fa-solid fa-trash text-lg"></i>
+                        </button>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="flex items-center justify-end my-5 mr-5">
+        <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
+            [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
+            [screenReaderCurrentLabel]="'Youre on page'">
+        </pagination-controls>
+    </div>
+</div>

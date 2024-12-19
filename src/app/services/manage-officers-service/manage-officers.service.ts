@@ -107,4 +107,26 @@ export class ManageOfficersService {
     let url = `${this.apiUrl}/manage-officers/update-status/${id}/${status}`;
     return this.http.get<any>(url, { headers });
   }
+
+
+  getOfficerById(id: number) {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
+    return this.http.get(`${this.apiUrl}/manage-officers/get-officer-by-id/${id}`, {
+      headers,
+    });
+  }
+
+  updateCollectiveOfficer(person:any , bank:any, company:any, id:number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
+    return this.http.put(`${this.apiUrl}/manage-officers/update-officer/${id}`, {officerData:person, companyData:company, bankData:bank}, {
+      headers,
+    });
+  }
 }
+
+
+

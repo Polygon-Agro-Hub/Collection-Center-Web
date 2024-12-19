@@ -6,6 +6,7 @@ import { DashboardComponent } from './application/dashboard/dashboard.component'
 import { AddOfficersComponent } from './application/manage-officers/add-officers/add-officers.component';
 import { ChangePasswordComponent } from './application/Auth/change-password/change-password.component';
 import { ViewOfficersComponent } from './application/manage-officers/view-officers/view-officers.component';
+import { EditOfficerComponent } from './application/manage-officers/edit-officer/edit-officer.component';
 
 export const routes: Routes = [
     {
@@ -35,6 +36,10 @@ export const routes: Routes = [
                     {
                         path:'view-officer',
                         component:ViewOfficersComponent
+                    },
+                    {
+                        path:'edit-officer/:id',
+                        component:EditOfficerComponent
                     }
                 ]
             }

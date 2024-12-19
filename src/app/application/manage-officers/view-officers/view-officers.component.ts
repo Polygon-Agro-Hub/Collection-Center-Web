@@ -44,6 +44,10 @@ export class ViewOfficersComponent implements OnInit {
     this.router.navigate([`${path}`])
   }
 
+  navigateToEdit(id:number){
+    this.router.navigate([`/manage-officers/edit-officer/${id}`])
+  }
+
   fetchAllOfficers(page: number = 1, limit: number = this.itemsPerPage, company: string = '', role: string = '', searchText: string = '') {
     this.ManageOficerSrv.getAllOfficers(page, limit, company, role, searchText).subscribe(
       (res) => {

@@ -3,17 +3,16 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { ManageOfficersService } from '../../../services/manage-officers-service/manage-officers.service';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
-  selector: 'app-add-officers',
+  selector: 'app-edit-officer',
   standalone: true,
   imports: [CommonModule, FormsModule, ReactiveFormsModule],
-  templateUrl: './add-officers.component.html',
-  styleUrl: './add-officers.component.css'
+  templateUrl: './edit-officer.component.html',
+  styleUrl: './edit-officer.component.css'
 })
-export class AddOfficersComponent implements OnInit {
-
+export class EditOfficerComponent implements OnInit {
   personalData: Personal = new Personal();
   bankData: Bank = new Bank();
   companyData: Company = new Company();
@@ -27,6 +26,14 @@ export class AddOfficersComponent implements OnInit {
   lastID!: number
   itemId: number | null = null;
   officerId!: number
+  editOfficerId!: number
+  selectJobRole!: string
+  UpdatelastID!: string
+  upateEmpID!: string
+  selectedLanguages: string[] = [];
+
+
+
 
 
   selectedFileName!: string
@@ -35,7 +42,8 @@ export class AddOfficersComponent implements OnInit {
 
   constructor(
     private ManageOficerSrv: ManageOfficersService,
-    private router: Router
+    private router: Router,
+    private route: ActivatedRoute
   ) { }
 
   districts = [
@@ -69,9 +77,91 @@ export class AddOfficersComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllCollectionCetnter();
-    this.getLastID('COO');
+    this.editOfficerId = this.route.snapshot.params['id'];
+    this.fetchOffierById(this.editOfficerId);
+    this.UpdateEpmloyeIdCreate();
+  }
+
+  fetchOffierById(id: number) {
+    this.ManageOficerSrv.getOfficerById(id).subscribe(
+      (res: any) => {
+        this.personalData = res.officerData.collectionOfficer;
+        this.bankData = res.officerData.bankDetails;
+        this.companyData = res.officerData.companyDetails;
+        this.getUpdateLastID(res.officerData.companyDetails.jobRole);
+  
+        // Initialize languages as a comma-separated string if it's not already in that format
+        if (Array.isArray(this.personalData.languages)) {
+          this.personalData.languages = this.personalData.languages.join(',');
+        } else if (!this.personalData.languages) {
+          this.personalData.languages = '';
+        }
+  
+        this.selectJobRole = res.officerData.companyDetails.jobRole;
+        console.log(res.officerData.companyDetails.empId, "empid");
+  
+        this.UpdateEpmloyeIdCreate();
+        this.getAllmanagers();
+      }
+    );
+  }
+  
+
+  getUpdateLastID(role: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      this.ManageOficerSrv.getForCreateId(role).subscribe(
+        (res) => {
+          let lastId;
+          if (this.selectJobRole === this.companyData.jobRole) {
+            lastId = this.companyData.empId;
+            this.UpdatelastID = lastId;
+            console.log(lastId);
+
+          } else {
+            this.UpdatelastID = res.result.empId;
+            lastId = res.result.empId
+            console.log(lastId);
+
+          }
+          ;
+          resolve(lastId); // Resolve the Promise with the empId
+        },
+        (error) => {
+          console.error('Error fetching last ID:', error);
+          reject(error);
+        }
+      );
+    });
+  }
 
 
+  UpdateEpmloyeIdCreate() {
+    let rolePrefix: string | undefined;
+
+    // Map job roles to their respective prefixes
+    if (this.companyData.jobRole === 'Collection Center Manager') {
+      rolePrefix = 'CCM';
+    } else if (this.companyData.jobRole === 'Customer Officer') {
+      rolePrefix = 'CUO';
+    } else {
+      rolePrefix = 'COO';
+    }
+
+
+    if (!rolePrefix) {
+      console.error(`Invalid job role: ${this.companyData.jobRole}`);
+      return;
+    }
+
+
+    this.getUpdateLastID(rolePrefix)
+      .then((lastId) => {
+        this.upateEmpID = rolePrefix + lastId;
+        console.log("Updated EMP ID:", this.upateEmpID);
+      })
+      .catch((error) => {
+        console.error('Error fetching updated last ID:', error);
+      });
   }
 
 
@@ -137,40 +227,6 @@ export class AddOfficersComponent implements OnInit {
     }
   }
 
-  getLastID(role: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      this.ManageOficerSrv.getForCreateId(role).subscribe(
-        (res) => {
-          this.lastID = res.result.empId;
-          const lastId = res.result.empId;
-          resolve(lastId); // Resolve the Promise with the empId
-        },
-        (error) => {
-          console.error('Error fetching last ID:', error);
-          reject(error);
-        }
-      );
-    });
-  }
-
-  EpmloyeIdCreate() {
-    let rolePrefix: string;
-
-    // if (this.companyData.jobRole === 'Collection Center Head') {
-    //   rolePrefix = 'CCH';
-    // }
-    if (this.companyData.jobRole === 'Collection Center Manager') {
-      rolePrefix = 'CCM';
-    } else if (this.companyData.jobRole === 'Customer Officer') {
-      rolePrefix = 'CUO';
-    } else {
-      rolePrefix = 'COO';
-    }
-
-    this.getLastID(rolePrefix).then((lastID) => {
-      this.companyData.empId = rolePrefix + lastID;
-    });
-  }
 
   updateProvince(event: Event): void {
     const target = event.target as HTMLSelectElement; // Cast to HTMLSelectElement
@@ -202,15 +258,19 @@ export class AddOfficersComponent implements OnInit {
     console.log(this.personalData); // Logs the personal data with updated languages
     console.log(this.bankData);
     console.log(this.companyData);
+    this.companyData.empId = this.upateEmpID;
+    if(this.companyData.jobRole === 'Collection Center Manager'){
+      this.companyData.collectionManagerId = null;
+    }
 
     if (!this.bankData.accHolderName || !this.bankData.accNumber || !this.bankData.bankName || !this.bankData.branchName || !this.companyData.assignedDistrict || !this.companyData.companyEmail || !this.companyData.companyNameEnglish || !this.companyData.companyNameSinhala || !this.companyData.companyNameTamil) {
       Swal.fire('warning', 'Pleace fill all required feilds', 'warning')
 
     } else {
-      this.ManageOficerSrv.createCollectiveOfficer(this.personalData, this.bankData, this.companyData).subscribe(
+      this.ManageOficerSrv.updateCollectiveOfficer(this.personalData, this.bankData, this.companyData, this.editOfficerId).subscribe(
         (res: any) => {
           this.officerId = res.officerId;
-          Swal.fire('Success', 'Collective Officer Created Successfully', 'success');
+          Swal.fire('Success', 'Collective Officer Updated Successfully', 'success');
           this.router.navigate(['/manage-officers/view-officer'])
         },
         (error: any) => {
@@ -307,7 +367,7 @@ class Company {
   companyEmail!: string;
   assignedDistrict!: string;
   employeeType!: string;
-  collectionManagerId: string = ''
+  collectionManagerId: string | null = ''
 }
 
 class CollectionCenter {

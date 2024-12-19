@@ -7,7 +7,7 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class AuthService {
-  private apiUrl = `${environment.API_BASE_URL}/auth/login`;
+  private apiUrl = `${environment.API_BASE_URL}`;
 
 
   constructor(private http: HttpClient) { }
@@ -15,6 +15,11 @@ export class AuthService {
 
   login(userName: string, password: string): Observable<any> {
     const loginObj = { userName, password };
-    return this.http.post<any>(this.apiUrl, loginObj);
+    return this.http.post<any>(`${this.apiUrl}/auth/login`, loginObj);
   }
+
+  changePassword(userId: string, password: string): Observable<any> {
+    const changePasswordObj = {password};
+    return this.http.post<any>(`${this.apiUrl}/auth/change-passwords/${userId}`, changePasswordObj);
+  }  
 }

@@ -27,8 +27,20 @@ export class PriceListService {
     if (searchText) {
       url += `&searchText=${searchText}`
     }
-    
+
     return this.http.get(url, {
+      headers,
+    });
+  }
+
+
+  updatePrice(id:number, value:number): Observable<any> {
+    console.log("hii",id,value);
+    
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
+    return this.http.patch(`${this.apiUrl}/update-price/${id}`, {value}, {
       headers,
     });
   }

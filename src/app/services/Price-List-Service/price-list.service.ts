@@ -1,0 +1,37 @@
+import { Injectable } from '@angular/core';
+import { environment } from '../../environments/environment';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class PriceListService {
+  private apiUrl = `${environment.API_BASE_URL}/price-list`;
+  private token = `${environment.TOKEN}`;
+
+  constructor(private http: HttpClient) { }
+
+  getAllPriceList(page: number = 1, limit: number = 10, grade: string = '', searchText: string = ''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    let url = `${this.apiUrl}/view-all-price?page=${page}&limit=${limit}`
+
+    if (grade) {
+      url += `&grade=${grade}`
+    }
+
+    if (searchText) {
+      url += `&searchText=${searchText}`
+    }
+    
+    return this.http.get(url, {
+      headers,
+    });
+  }
+
+
+}

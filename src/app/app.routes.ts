@@ -8,6 +8,7 @@ import { ChangePasswordComponent } from './application/Auth/change-password/chan
 import { ViewOfficersComponent } from './application/manage-officers/view-officers/view-officers.component';
 import { EditOfficerComponent } from './application/manage-officers/edit-officer/edit-officer.component';
 import { ViewPriceListComponent } from './application/Price-List/view-price-list/view-price-list.component';
+import { PriceRequestComponent } from './application/Price-List/price-request/price-request.component';
 
 export const routes: Routes = [
     {
@@ -50,6 +51,15 @@ export const routes: Routes = [
                     {
                         path:'view-prices',
                         component:ViewPriceListComponent
+                    }
+                ]
+            },
+            {
+                path:'price-request',
+                children:[
+                    {
+                        path:'view-request',
+                        component:PriceRequestComponent
                     }
                 ]
             }

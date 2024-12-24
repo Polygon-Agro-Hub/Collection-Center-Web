@@ -84,22 +84,82 @@ export class ViewPriceListComponent implements OnInit {
   
   saveRow(id: number) {
     if (this.editValue != null) {
-      this.PriceListSrv.updatePrice(id, this.editValue).subscribe(
-        (res) => {
-          if(res.status){
-            Swal.fire('success',"Price Updated success", 'success')
-          }else{
-            Swal.fire('success',"Price Updated success", 'success')
-          }
-          this.fetchAllPriceList(this.page, this.itemsPerPage);
-        },
-        (error) => {
-          console.error("Error updating price:", error);
+      Swal.fire({
+        html: `
+          <div style="text-align: center; font-family: Arial, sans-serif;">
+            <div style="
+              margin-bottom: 16px;
+              display: flex;
+              justify-content: center;
+              align-items: center;
+              width: 48px;
+              height: 48px;
+              border-radius: 50%;
+              background-color: #F4F4F4;
+              margin: 0 auto;
+            ">
+              <i class="fa-solid fa-exclamation" style="color: #415CFF; font-size: 24px;"></i>
+            </div>
+            <h3 style="font-size: 18px; color: #333; margin-bottom: 8px;">You have unsaved changes.</h3>
+            <p style="font-size: 14px; color: #666; margin: 0;">
+              If you leave this page now, your changes will be lost.<br>
+              Do you want to continue without saving?
+            </p>
+          </div>
+        `,
+        showCancelButton: true,
+        confirmButtonColor: '#415CFF',
+        cancelButtonColor: '#F4F4F4',
+        confirmButtonText: `
+          <span style="
+            display: inline-block;
+            background-color: #415CFF;
+            color: white;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;">
+            Stay on page
+          </span>
+        `,
+        cancelButtonText: `
+          <span style="
+            display: inline-block;
+            background-color: #F4F4F4;
+            color: #333;
+            border: 1px solid #E5E5E5;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-size: 14px;">
+            Leave without saving
+          </span>
+        `,
+        reverseButtons: true,
+      }).then((result) => {
+        if (result.dismiss === Swal.DismissReason.cancel) {
+          this.PriceListSrv.updatePrice(id, this.editValue).subscribe(
+            (res) => {
+              if (res.status) {
+                Swal.fire('Success', 'Price updated successfully', 'success');
+              } else {
+                Swal.fire('Error', 'Price update failed', 'error');
+              }
+              this.fetchAllPriceList(this.page, this.itemsPerPage);
+            },
+            (error) => {
+              console.error('Error updating price:', error);
+              Swal.fire('Error', 'Failed to update price', 'error');
+            }
+          );
+          this.editingIndex = null;
         }
-      );
+      });
+    } else {
+      this.editingIndex = null;
     }
-    this.editingIndex = null; // Reset the editing index
   }
+  
+  
 }  
 
 class PriceList {

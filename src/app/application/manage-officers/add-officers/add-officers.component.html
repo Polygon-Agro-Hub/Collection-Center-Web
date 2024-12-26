@@ -23,6 +23,42 @@
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
 
                     <div>
+                        <label for="jobRole" class="block text-sm font-medium text-gray-700 dark:text-textDark">
+                            Job Role
+                        </label>
+                        <select id="jobRole" [(ngModel)]="personalData.jobRole" (change)="EpmloyeIdCreate()"
+                            name="jobRole" placeholder="select"
+                            class="form-control mt-1 block w-full p-2 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-100 dark:bg-gray-800 appearance-none focus:ring-indigo-500 focus:border-indigo-500">
+                            <option disabled class="p-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800">
+                                -- select --
+                            </option>
+                            <option selected value="Collection Officer"
+                                class="p-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800">
+                                Collection Officer
+                            </option>
+                            <option value="Customer Officer"
+                                class="p-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800">
+                                Customer Officer
+                            </option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-sm font-medium text-gray-700 dark:text-textDark">EMP ID / User
+                            name</label>
+                        <div class="flex mt-1">
+                            <span
+                                class="inline-flex items-center px-3 py-3 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+                                <p *ngIf="personalData.jobRole === 'Collection Officer'">COO</p>
+                                <p *ngIf="personalData.jobRole === 'Customer Officer'">CUO</p>
+                            </span>
+                            <input type="text" [value]="lastID" name="empId"
+                                class="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm pl-4  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                disabled>
+                        </div>
+                    </div>
+
+                    <!-- <div>
                         <label for="centerId" class="block text-sm font-medium text-gray-700 dark:text-textDark">
                             Collection Center Name
                         </label>
@@ -35,6 +71,27 @@
                                 {{ center.centerName }}
                             </option>
                         </select>
+                    </div> -->
+
+                    <div>
+                        <label for="languages" class="block text-sm font-medium text-gray-700 dark:text-textDark">
+                            Staff employee type
+                        </label>
+
+                        <div class="flex items-center space-x-4 mt-3">
+                            <div class="flex items-center space-x-2">
+                                <input class="w-5 h-5" type="radio" id="sinhala" name="employeeType" value="Permanent"
+                                    [(ngModel)]="personalData.employeeType">
+                                <label for="sinhala"
+                                    class="block text-sm font-medium text-gray-700 dark:text-textDark">Permanent</label>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <input class="w-5 h-5" type="radio" id="employeeType" name="employeeType"
+                                    value="Temporary" [(ngModel)]="personalData.employeeType">
+                                <label for="english"
+                                    class="block text-sm font-medium text-gray-700 dark:text-textDark">Temporary</label>
+                            </div>
+                        </div>
                     </div>
 
 
@@ -63,46 +120,6 @@
                         </div>
                     </div>
 
-                    <div>
-                        <label for="jobRole" class="block text-sm font-medium text-gray-700 dark:text-textDark">
-                            Job Role
-                        </label>
-                        <select id="jobRole" [(ngModel)]="companyData.jobRole" (change)="EpmloyeIdCreate()"
-                            name="jobRole" placeholder="select"
-                            class="form-control mt-1 block w-full p-2 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-100 dark:bg-gray-800 appearance-none focus:ring-indigo-500 focus:border-indigo-500">
-                            <option disabled class="p-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800">
-                                -- select --
-                            </option>
-                            <option value="Collection Center Manager"
-                                class="p-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800">
-                                Collection Center Manager
-                            </option>
-                            <option selected value="Collection Officer"
-                                class="p-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800">
-                                Collection Officer
-                            </option>
-                            <option value="Customer Officer"
-                                class="p-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800">
-                                Customer Officer
-                            </option>
-                        </select>
-                    </div>
-
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 dark:text-textDark">EMP ID / User
-                            name</label>
-                        <div class="flex mt-1">
-                            <span
-                                class="inline-flex items-center px-3 py-3 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
-                                <p *ngIf="companyData.jobRole === 'Collection Center Manager'">CCM</p>
-                                <p *ngIf="companyData.jobRole === 'Collection Officer'">COO</p>
-                                <p *ngIf="companyData.jobRole === 'Customer Officer'">CUO</p>
-                            </span>
-                            <input type="text" [value]="lastID" name="empId"
-                                class="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm pl-4  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                disabled>
-                        </div>
-                    </div>
 
                     <div>
                         <label for="firstNameEnglish"
@@ -201,77 +218,6 @@
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
                     </div>
 
-                    <div>
-                        <label for="house" class="block text-sm font-medium text-gray-700 dark:text-textDark">House /
-                            Plot Number</label>
-                        <input id="houseNumber" name="houseNumber" [(ngModel)]="personalData.houseNumber"
-                            class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
-                    </div>
-
-                    <div>
-                        <label for="street" class="block text-sm font-medium text-gray-700 dark:text-textDark">Street
-                            Name</label>
-                        <input id="streetName" name="streetName" [(ngModel)]="personalData.streetName"
-                            class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
-                    </div>
-
-                    <div>
-                        <label for="city"
-                            class="block text-sm font-medium text-gray-700 dark:text-textDark">City</label>
-                        <input id="city" name="city" [(ngModel)]="personalData.city"
-                            class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
-                    </div>
-
-
-
-
-
-                    <div>
-                        <label for="district" class="block text-sm font-medium text-gray-700 dark:text-textDark">
-                            District
-                        </label>
-                        <select id="district" name="district" [(ngModel)]="personalData.district"
-                            (change)="updateProvince($event)"
-                            class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack">
-                            <option value="" disabled selected>Select a district</option>
-                            <option *ngFor="let district of districts" [value]="district.name">
-                                {{ district.name }}
-                            </option>
-                        </select>
-                    </div>
-
-
-
-
-
-
-
-
-
-                    <div>
-                        <label for="province" class="block text-sm font-medium text-gray-700 dark:text-textDark">
-                            Province
-                        </label>
-                        <input id="province" name="province" [(ngModel)]="personalData.province"
-                            class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack"
-                            readonly />
-                    </div>
-
-
-
-
-
-
-
-
-
-                    <div>
-                        <label for="country"
-                            class="block text-sm font-medium text-gray-700 dark:text-textDark">Country</label>
-                        <input id="country" name="country" [(ngModel)]="personalData.country"
-                            class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
-                    </div>
-
                 </div>
 
                 <div class="flex justify-end m-10">
@@ -285,116 +231,86 @@
         </div>
 
         <div *ngIf="selectedPage === 'pageTwo'">
-            <h2 class="text-2xl mb-6 text-textLight dark:text-textDark">Add Company Details</h2>
-            <div>
-                <div class="pb-6">
-                    <label for="companyNameEnglish"
-                        class="block text-sm font-medium text-gray-700 dark:text-textDark">Company Name (in
-                        English)</label>
-                    <input id="companyNameEnglish" name="companyNameEnglish"
-                        [(ngModel)]="companyData.companyNameEnglish"
+            <h2 class="text-2xl mb-6 text-textLight dark:text-textDark">Residential Details</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                <div>
+                    <label for="house" class="block text-sm font-medium text-gray-700 dark:text-textDark">House /
+                        Plot Number</label>
+                    <input id="houseNumber" name="houseNumber" [(ngModel)]="personalData.houseNumber"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
                 </div>
 
-                <div class="pb-6">
-                    <label for="companyNameSinhala"
-                        class="block text-sm font-medium text-gray-700 dark:text-textDark">Company Name (in
-                        Sinhala)</label>
-                    <input id="companyNameSinhala" name="companyNameSinhala"
-                        [(ngModel)]="companyData.companyNameSinhala"
+                <div>
+                    <label for="street" class="block text-sm font-medium text-gray-700 dark:text-textDark">Street
+                        Name</label>
+                    <input id="streetName" name="streetName" [(ngModel)]="personalData.streetName"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
                 </div>
 
-                <div class="pb-6">
-                    <label for="companyNameTamil"
-                        class="block text-sm font-medium text-gray-700 dark:text-textDark">Company Name (in
-                        Tamil)</label>
-                    <input id="companyNameTamil" name="companyNameTamil" [(ngModel)]="companyData.companyNameTamil"
+                <div>
+                    <label for="city" class="block text-sm font-medium text-gray-700 dark:text-textDark">City</label>
+                    <input id="city" name="city" [(ngModel)]="personalData.city"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
                 </div>
 
-                <div class="pb-6">
-                    <label for="IRMname" class="block text-sm font-medium text-gray-700 dark:text-textDark">Name of the
-                        immediate
-                        reporting manager</label>
-                    <!-- <input id="IRMname" name="IRMname" [(ngModel)]="companyData.IRMname"
-                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" /> -->
-
-                    <select id="collectionManagerId" [(ngModel)]="companyData.collectionManagerId" [disabled]="companyData.jobRole === 'Collection Center Manager'"
-                        name="collectionManagerId"
-                        class="form-control mt-1 block w-full p-2 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-100 dark:bg-gray-800 appearance-none focus:ring-indigo-500 focus:border-indigo-500">
-                        <option selected disabled>--Select---</option>
-                        <option *ngFor="let item of ManagerArr" [value]="item.id"
-                            class="p-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800">
-                            {{ item.firstNameEnglish }} {{item.lastNameEnglish}}
+                <div>
+                    <label for="district" class="block text-sm font-medium text-gray-700 dark:text-textDark">
+                        District
+                    </label>
+                    <select id="district" name="district" [(ngModel)]="personalData.district"
+                        (change)="updateProvince($event)"
+                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack">
+                        <option value="" disabled selected>Select a district</option>
+                        <option *ngFor="let district of districts" [value]="district.name">
+                            {{ district.name }}
                         </option>
                     </select>
                 </div>
 
-                <div class="pb-6">
-                    <label for="companyEmail" class="block text-sm font-medium text-gray-700 dark:text-textDark">Email
-                        of the company /
-                        manager</label>
-                    <input id="companyEmail" name="companyEmail" type="email" [(ngModel)]="companyData.companyEmail"
-                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
+                <div>
+                    <label for="province" class="block text-sm font-medium text-gray-700 dark:text-textDark">
+                        Province
+                    </label>
+                    <input id="province" name="province" [(ngModel)]="personalData.province"
+                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack"
+                        readonly />
                 </div>
-
-                <div class="pb-6">
-                    <label for="assignedDistrict"
-                        class="block text-sm font-medium text-gray-700 dark:text-textDark">District assigned to</label>
-                    <input id="assignedDistrict" name="assignedDistrict" [(ngModel)]="companyData.assignedDistrict"
-                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
-                </div>
-
 
                 <div>
-                    <label for="languages" class="block text-sm font-medium text-gray-700 dark:text-textDark">
-                        Staff employee type
-                    </label>
-
-                    <div class="flex items-center space-x-4 mt-3">
-                        <div class="flex items-center space-x-2">
-                            <input class="w-5 h-5" type="radio" id="sinhala" name="employeeType" value="Permanent"
-                                [(ngModel)]="companyData.employeeType">
-                            <label for="sinhala"
-                                class="block text-sm font-medium text-gray-700 dark:text-textDark">Permanent</label>
-                        </div>
-                        <div class="flex items-center space-x-2">
-                            <input class="w-5 h-5" type="radio" id="employeeType" name="employeeType" value="Temporary"
-                                [(ngModel)]="companyData.employeeType">
-                            <label for="english"
-                                class="block text-sm font-medium text-gray-700 dark:text-textDark">Temporary</label>
-                        </div>
-                    </div>
+                    <label for="country"
+                        class="block text-sm font-medium text-gray-700 dark:text-textDark">Country</label>
+                    <input id="country" name="country" [(ngModel)]="personalData.country"
+                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
                 </div>
             </div>
+
             <div>
                 <h2 class="text-2xl mt-10 mb-6 text-textLight dark:text-textDark">Add Bank Details</h2>
                 <div class="pb-6">
                     <label for="accHolderName"
                         class="block text-sm font-medium text-gray-700 dark:text-textDark">Account Holder’s Name</label>
-                    <input id="accHolderName" name="accHolderName" [(ngModel)]="bankData.accHolderName"
+                    <input id="accHolderName" name="accHolderName" [(ngModel)]="personalData.accHolderName"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
                 </div>
 
                 <div class="pb-6">
                     <label for="accNumber" class="block text-sm font-medium text-gray-700 dark:text-textDark">Account
                         Number</label>
-                    <input id="accNumber" name="accNumber" [(ngModel)]="bankData.accNumber"
+                    <input id="accNumber" name="accNumber" [(ngModel)]="personalData.accNumber"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
                 </div>
 
                 <div class="pb-6">
                     <label for="bankName" class="block text-sm font-medium text-gray-700 dark:text-textDark">Bank
                         Name</label>
-                    <input id="bankName" name="bankName" [(ngModel)]="bankData.bankName"
+                    <input id="bankName" name="bankName" [(ngModel)]="personalData.bankName"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
                 </div>
 
                 <div class="pb-6">
                     <label for="branchName" class="block text-sm font-medium text-gray-700 dark:text-textDark">Branch
                         Name</label>
-                    <input id="branchName" name="branchName" [(ngModel)]="bankData.branchName"
+                    <input id="branchName" name="branchName" [(ngModel)]="personalData.branchName"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
                 </div>
             </div>
@@ -403,7 +319,7 @@
                 <button (click)="nextForm('pageOne')" type="button"
                     class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md mr-2">Back</button>
                 <button type="submit" class="px-4 py-2 bg-[#3980C0] text-white rounded-md"
-                    (click)="onSubmit()">Submit</button>
+                    (click)="onSubmit()">Sent to Approve</button>
             </div>
         </div>
 

@@ -15,8 +15,8 @@ import { Router } from '@angular/router';
 export class AddOfficersComponent implements OnInit {
 
   personalData: Personal = new Personal();
-  bankData: Bank = new Bank();
-  companyData: Company = new Company();
+  // personalData: Bank = new Bank();
+  // personalData: Company = new Company();
   collectionCenterData: CollectionCenter[] = []
   ManagerArr!: ManagerDetails[]
 
@@ -68,10 +68,9 @@ export class AddOfficersComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.getAllCollectionCetnter();
+    // this.getAllCollectionCetnter();
     this.getLastID('COO');
-
-
+    this.EpmloyeIdCreate();
   }
 
 
@@ -96,11 +95,13 @@ export class AddOfficersComponent implements OnInit {
 
 
   nextForm(page: 'pageOne' | 'pageTwo') {
-    if (!this.personalData.centerId || !this.personalData.firstNameEnglish || !this.personalData.firstNameSinhala || !this.personalData.firstNameTamil || !this.personalData.city || !this.personalData.country || !this.personalData.district || !this.personalData.email || !this.personalData.houseNumber || !this.personalData.languages || !this.personalData.lastNameEnglish || !this.personalData.lastNameSinhala || !this.personalData.lastNameTamil || !this.personalData.nic || !this.personalData.phoneNumber01) {
-      Swal.fire('warning', 'Pleace fill all required feilds', 'warning')
-    } else {
-      this.selectedPage = page;
-    }
+    // if (!this.personalData.centerId || !this.personalData.firstNameEnglish || !this.personalData.firstNameSinhala || !this.personalData.firstNameTamil || !this.personalData.city || !this.personalData.country || !this.personalData.district || !this.personalData.email || !this.personalData.houseNumber || !this.personalData.languages || !this.personalData.lastNameEnglish || !this.personalData.lastNameSinhala || !this.personalData.lastNameTamil || !this.personalData.nic || !this.personalData.phoneNumber01) {
+    //   Swal.fire('warning', 'Pleace fill all required feilds', 'warning')
+    // } else {
+    //   this.selectedPage = page;
+    // }
+
+    this.selectedPage = page;
 
   }
 
@@ -156,19 +157,14 @@ export class AddOfficersComponent implements OnInit {
   EpmloyeIdCreate() {
     let rolePrefix: string;
 
-    // if (this.companyData.jobRole === 'Collection Center Head') {
-    //   rolePrefix = 'CCH';
-    // }
-    if (this.companyData.jobRole === 'Collection Center Manager') {
-      rolePrefix = 'CCM';
-    } else if (this.companyData.jobRole === 'Customer Officer') {
+    if (this.personalData.jobRole === 'Customer Officer') {
       rolePrefix = 'CUO';
     } else {
       rolePrefix = 'COO';
     }
 
     this.getLastID(rolePrefix).then((lastID) => {
-      this.companyData.empId = rolePrefix + lastID;
+      this.personalData.empId = rolePrefix + lastID;
     });
   }
 
@@ -190,24 +186,22 @@ export class AddOfficersComponent implements OnInit {
 
   }
 
-  getAllCollectionCetnter() {
-    this.ManageOficerSrv.getAllCollectionCenter().subscribe(
-      (res) => {
-        this.collectionCenterData = res
-      }
-    )
-  }
+  // getAllCollectionCetnter() {
+  //   this.ManageOficerSrv.getAllCollectionCenter().subscribe(
+  //     (res) => {
+  //       this.collectionCenterData = res
+  //     }
+  //   )
+  // }
 
   onSubmit() {
     console.log(this.personalData); // Logs the personal data with updated languages
-    console.log(this.bankData);
-    console.log(this.companyData);
 
-    if (!this.bankData.accHolderName || !this.bankData.accNumber || !this.bankData.bankName || !this.bankData.branchName || !this.companyData.assignedDistrict || !this.companyData.companyEmail || !this.companyData.companyNameEnglish || !this.companyData.companyNameSinhala || !this.companyData.companyNameTamil) {
+    if (!this.personalData.accHolderName || !this.personalData.accNumber || !this.personalData.bankName || !this.personalData.branchName) {
       Swal.fire('warning', 'Pleace fill all required feilds', 'warning')
 
     } else {
-      this.ManageOficerSrv.createCollectiveOfficer(this.personalData, this.bankData, this.companyData).subscribe(
+      this.ManageOficerSrv.createCollectiveOfficer(this.personalData).subscribe(
         (res: any) => {
           this.officerId = res.officerId;
           Swal.fire('Success', 'Collective Officer Created Successfully', 'success');
@@ -236,8 +230,8 @@ export class AddOfficersComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.personalData = new Personal();
-        this.bankData = new Bank();
-        this.companyData = new Company();
+        // this.personalData = new Bank();
+        // this.personalData = new Company();
 
         Swal.fire(
           'Cleared!',
@@ -248,13 +242,13 @@ export class AddOfficersComponent implements OnInit {
     });
   }
 
-  getAllmanagers() {
-    this.ManageOficerSrv.getAllManagersByCenter(this.personalData.centerId).subscribe(
-      (res) => {
-        this.ManagerArr = res.result
-      }
-    )
-  }
+  // getAllmanagers() {
+  //   this.ManageOficerSrv.getAllManagersByCenter(this.personalData.centerId).subscribe(
+  //     (res) => {
+  //       this.ManagerArr = res.result
+  //     }
+  //   )
+  // }
 
 
 
@@ -277,8 +271,6 @@ class Personal {
   phoneNumber02!: string;
   nic!: string;
   email!: string;
-  password!: string;
-  passwordUpdated!: string;
   houseNumber!: string;
   streetName!: string;
   city!: string;
@@ -286,29 +278,38 @@ class Personal {
   province!: string;
   country: string = 'Sri Lanka';
   languages: string = '';
-  centerId!: string
-  image!: any
-}
 
-class Bank {
   accHolderName!: string;
   accNumber!: string;
   bankName!: string;
   branchName!: string;
-}
 
-class Company {
-  companyNameEnglish!: string;
-  companyNameSinhala!: string;
-  companyNameTamil!: string;
   jobRole: string = 'Collection Officer'
   empId!: string
-  IRMname!: string;
-  companyEmail!: string;
-  assignedDistrict!: string;
   employeeType!: string;
-  collectionManagerId: string = ''
+
+  image!: any
 }
+
+// class Bank {
+//   accHolderName!: string;
+//   accNumber!: string;
+//   bankName!: string;
+//   branchName!: string;
+// }
+
+// class Company {
+//   companyNameEnglish!: string;
+//   companyNameSinhala!: string;
+//   companyNameTamil!: string;
+//   jobRole: string = 'Collection Officer'
+//   empId!: string
+//   IRMname!: string;
+//   companyEmail!: string;
+//   assignedDistrict!: string;
+//   employeeType!: string;
+//   collectionManagerId: string = ''
+// }
 
 class CollectionCenter {
   id!: number

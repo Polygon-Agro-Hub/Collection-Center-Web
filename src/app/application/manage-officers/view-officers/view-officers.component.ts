@@ -161,7 +161,7 @@ export class ViewOfficersComponent implements OnInit {
                   Swal.fire({
                     icon: 'error',
                     title: 'Error!',
-                    text: 'Something went wrong. Please try again.',
+                    text: res.message,
                     showConfirmButton: false,
                     timer: 3000,
                   });
@@ -202,7 +202,7 @@ export class ViewOfficersComponent implements OnInit {
                   Swal.fire({
                     icon: 'error',
                     title: 'Error!',
-                    text: 'Something went wrong. Please try again.',
+                    text: res.message,
                     showConfirmButton: false,
                     timer: 3000,
                   });

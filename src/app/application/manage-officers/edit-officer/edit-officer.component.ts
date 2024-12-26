@@ -14,10 +14,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class EditOfficerComponent implements OnInit {
   personalData: Personal = new Personal();
-  bankData: Bank = new Bank();
-  companyData: Company = new Company();
-  collectionCenterData: CollectionCenter[] = []
-  ManagerArr!: ManagerDetails[]
+  // ManagerArr!: ManagerDetails[]
 
 
   languages: string[] = ['Sinhala', 'English', 'Tamil'];
@@ -76,7 +73,7 @@ export class EditOfficerComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.getAllCollectionCetnter();
+    // this.getAllCollectionCetnter();
     this.editOfficerId = this.route.snapshot.params['id'];
     this.fetchOffierById(this.editOfficerId);
     this.UpdateEpmloyeIdCreate();
@@ -86,9 +83,8 @@ export class EditOfficerComponent implements OnInit {
     this.ManageOficerSrv.getOfficerById(id).subscribe(
       (res: any) => {
         this.personalData = res.officerData.collectionOfficer;
-        this.bankData = res.officerData.bankDetails;
-        this.companyData = res.officerData.companyDetails;
-        this.getUpdateLastID(res.officerData.companyDetails.jobRole);
+        console.log(res.officerData.collectionOfficer);
+        this.getUpdateLastID(res.officerData.collectionOfficer.jobRole);
   
         // Initialize languages as a comma-separated string if it's not already in that format
         if (Array.isArray(this.personalData.languages)) {
@@ -97,11 +93,11 @@ export class EditOfficerComponent implements OnInit {
           this.personalData.languages = '';
         }
   
-        this.selectJobRole = res.officerData.companyDetails.jobRole;
-        console.log(res.officerData.companyDetails.empId, "empid");
+        this.selectJobRole = res.officerData.collectionOfficer.jobRole;
+        console.log(res.officerData.collectionOfficer.empId, "empid");
   
         this.UpdateEpmloyeIdCreate();
-        this.getAllmanagers();
+        // this.getAllmanagers();
       }
     );
   }
@@ -112,8 +108,8 @@ export class EditOfficerComponent implements OnInit {
       this.ManageOficerSrv.getForCreateId(role).subscribe(
         (res) => {
           let lastId;
-          if (this.selectJobRole === this.companyData.jobRole) {
-            lastId = this.companyData.empId;
+          if (this.selectJobRole === this.personalData.jobRole) {
+            lastId = this.personalData.empId;
             this.UpdatelastID = lastId;
             console.log(lastId);
 
@@ -139,9 +135,7 @@ export class EditOfficerComponent implements OnInit {
     let rolePrefix: string | undefined;
 
     // Map job roles to their respective prefixes
-    if (this.companyData.jobRole === 'Collection Center Manager') {
-      rolePrefix = 'CCM';
-    } else if (this.companyData.jobRole === 'Customer Officer') {
+    if (this.personalData.jobRole === 'Customer Officer') {
       rolePrefix = 'CUO';
     } else {
       rolePrefix = 'COO';
@@ -149,7 +143,7 @@ export class EditOfficerComponent implements OnInit {
 
 
     if (!rolePrefix) {
-      console.error(`Invalid job role: ${this.companyData.jobRole}`);
+      console.error(`Invalid job role: ${this.personalData.jobRole}`);
       return;
     }
 
@@ -186,7 +180,7 @@ export class EditOfficerComponent implements OnInit {
 
 
   nextForm(page: 'pageOne' | 'pageTwo') {
-    if (!this.personalData.centerId || !this.personalData.firstNameEnglish || !this.personalData.firstNameSinhala || !this.personalData.firstNameTamil || !this.personalData.city || !this.personalData.country || !this.personalData.district || !this.personalData.email || !this.personalData.houseNumber || !this.personalData.languages || !this.personalData.lastNameEnglish || !this.personalData.lastNameSinhala || !this.personalData.lastNameTamil || !this.personalData.nic || !this.personalData.phoneNumber01) {
+    if ( !this.personalData.firstNameEnglish || !this.personalData.firstNameSinhala || !this.personalData.firstNameTamil || !this.personalData.email || !this.personalData.languages || !this.personalData.lastNameEnglish || !this.personalData.lastNameSinhala || !this.personalData.lastNameTamil || !this.personalData.nic || !this.personalData.phoneNumber01 || !this.personalData.phoneCode01) {
       Swal.fire('warning', 'Pleace fill all required feilds', 'warning')
     } else {
       this.selectedPage = page;
@@ -229,7 +223,7 @@ export class EditOfficerComponent implements OnInit {
 
 
   updateProvince(event: Event): void {
-    const target = event.target as HTMLSelectElement; // Cast to HTMLSelectElement
+    const target = event.target as HTMLSelectElement; 
     const selectedDistrict = target.value;
 
     const selected = this.districts.find(district => district.name === selectedDistrict);
@@ -246,28 +240,16 @@ export class EditOfficerComponent implements OnInit {
 
   }
 
-  getAllCollectionCetnter() {
-    this.ManageOficerSrv.getAllCollectionCenter().subscribe(
-      (res) => {
-        this.collectionCenterData = res
-      }
-    )
-  }
-
+  
   onSubmit() {
     console.log(this.personalData); // Logs the personal data with updated languages
-    console.log(this.bankData);
-    console.log(this.companyData);
-    this.companyData.empId = this.upateEmpID;
-    if(this.companyData.jobRole === 'Collection Center Manager'){
-      this.companyData.collectionManagerId = null;
-    }
+    this.personalData.empId = this.upateEmpID;
 
-    if (!this.bankData.accHolderName || !this.bankData.accNumber || !this.bankData.bankName || !this.bankData.branchName || !this.companyData.assignedDistrict || !this.companyData.companyEmail || !this.companyData.companyNameEnglish || !this.companyData.companyNameSinhala || !this.companyData.companyNameTamil) {
+    if (!this.personalData.accHolderName || !this.personalData.accNumber || !this.personalData.bankName || !this.personalData.branchName || !this.personalData.city || !this.personalData.country  || !this.personalData.district || !this.personalData.houseNumber) {
       Swal.fire('warning', 'Pleace fill all required feilds', 'warning')
 
     } else {
-      this.ManageOficerSrv.updateCollectiveOfficer(this.personalData, this.bankData, this.companyData, this.editOfficerId).subscribe(
+      this.ManageOficerSrv.updateCollectiveOfficer(this.personalData, this.editOfficerId).subscribe(
         (res: any) => {
           this.officerId = res.officerId;
           Swal.fire('Success', 'Collective Officer Updated Successfully', 'success');
@@ -296,8 +278,8 @@ export class EditOfficerComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.personalData = new Personal();
-        this.bankData = new Bank();
-        this.companyData = new Company();
+        // this.personalData = new Bank();
+        // this.personalData = new Company();
 
         Swal.fire(
           'Cleared!',
@@ -308,13 +290,6 @@ export class EditOfficerComponent implements OnInit {
     });
   }
 
-  getAllmanagers() {
-    this.ManageOficerSrv.getAllManagersByCenter(this.personalData.centerId).subscribe(
-      (res) => {
-        this.ManagerArr = res.result
-      }
-    )
-  }
 
 
 
@@ -331,14 +306,12 @@ class Personal {
   lastNameEnglish!: string;
   lastNameSinhala!: string;
   lastNameTamil!: string;
-  phoneNumber01Code: string = '+94';
+  phoneCode01: string = '+94';
   phoneNumber01!: string;
-  phoneNumber02Code: string = '+94';
+  phoneCode02: string = '+94';
   phoneNumber02!: string;
   nic!: string;
   email!: string;
-  password!: string;
-  passwordUpdated!: string;
   houseNumber!: string;
   streetName!: string;
   city!: string;
@@ -346,39 +319,18 @@ class Personal {
   province!: string;
   country: string = 'Sri Lanka';
   languages: string = '';
-  centerId!: string
-  image!: any
-}
 
-class Bank {
   accHolderName!: string;
   accNumber!: string;
   bankName!: string;
   branchName!: string;
-}
 
-class Company {
-  companyNameEnglish!: string;
-  companyNameSinhala!: string;
-  companyNameTamil!: string;
   jobRole: string = 'Collection Officer'
   empId!: string
-  IRMname!: string;
-  companyEmail!: string;
-  assignedDistrict!: string;
   employeeType!: string;
-  collectionManagerId: string | null = ''
+
+  image!: any
 }
 
-class CollectionCenter {
-  id!: number
-  centerName!: string
 
-}
-
-class ManagerDetails {
-  id!: number
-  firstNameEnglish!: string
-  lastNameEnglish!: string
-}
 

@@ -54,7 +54,7 @@ export class ManageOfficersService {
     });
   }
 
-  getAllOfficers( page: number = 1, limit: number = 10, company:string ='', role:string = '', searchText:string = ''): Observable<any> {
+  getAllOfficers( page: number = 1, limit: number = 10, status:string ='', role:string = '', searchText:string = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
@@ -62,8 +62,8 @@ export class ManageOfficersService {
 
     let url = `${this.apiUrl}/manage-officers/get-all-officers?page=${page}&limit=${limit}`
 
-    if(company){
-      url += `&company=${company}`
+    if(status){
+      url += `&status=${status}`
     }
 
     if(role){
@@ -118,11 +118,11 @@ export class ManageOfficersService {
     });
   }
 
-  updateCollectiveOfficer(person:any , bank:any, company:any, id:number): Observable<any> {
+  updateCollectiveOfficer(person:any , id:number): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
     });
-    return this.http.put(`${this.apiUrl}/manage-officers/update-officer/${id}`, {officerData:person, companyData:company, bankData:bank}, {
+    return this.http.put(`${this.apiUrl}/manage-officers/update-officer/${id}`, person, {
       headers,
     });
   }

@@ -23,7 +23,7 @@ export class ViewOfficersComponent implements OnInit {
   itemsPerPage: number = 10;
   hasData: boolean = true
 
-  selectCompany: string = '';
+  selectStatus: string = '';
   selectRole: string = '';
   searchText: string = '';
   isPopupVisible: boolean = false
@@ -48,8 +48,8 @@ export class ViewOfficersComponent implements OnInit {
     this.router.navigate([`/manage-officers/edit-officer/${id}`])
   }
 
-  fetchAllOfficers(page: number = 1, limit: number = this.itemsPerPage, company: string = '', role: string = '', searchText: string = '') {
-    this.ManageOficerSrv.getAllOfficers(page, limit, company, role, searchText).subscribe(
+  fetchAllOfficers(page: number = 1, limit: number = this.itemsPerPage, status: string = '', role: string = '', searchText: string = '') {
+    this.ManageOficerSrv.getAllOfficers(page, limit, status, role, searchText).subscribe(
       (res) => {
         this.OfficerArr = res.items
         this.totalItems = res.total
@@ -93,7 +93,7 @@ export class ViewOfficersComponent implements OnInit {
                 'The Officer has been deleted.',
                 'success'
               );
-              this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectCompany, this.selectRole, this.searchText);
+              this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectStatus, this.selectRole, this.searchText);
             } else {
               Swal.fire(
                 'Error!',
@@ -156,7 +156,7 @@ export class ViewOfficersComponent implements OnInit {
                     showConfirmButton: false,
                     timer: 3000,
                   });
-                  this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectCompany, this.selectRole, this.searchText);
+                  this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectStatus, this.selectRole, this.searchText);
                 } else {
                   Swal.fire({
                     icon: 'error',
@@ -197,7 +197,7 @@ export class ViewOfficersComponent implements OnInit {
                     showConfirmButton: false,
                     timer: 3000,
                   });
-                  this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectCompany, this.selectRole, this.searchText);
+                  this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectStatus, this.selectRole, this.searchText);
                 } else {
                   Swal.fire({
                     icon: 'error',
@@ -224,36 +224,36 @@ export class ViewOfficersComponent implements OnInit {
     });
   }
 
-  applyCompanyFilters() {
-    console.log(this.selectCompany);
-    this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectCompany, this.selectRole)
+  applyStatusFilters() {
+    console.log(this.selectStatus);
+    this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectStatus, this.selectRole)
   }
 
   applyRoleFilters() {
     console.log(this.selectRole);
-    this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectCompany, this.selectRole)
+    this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectStatus, this.selectRole)
 
   }
 
-  clearCompanyFilter() {
-    this.selectCompany = ''
-    this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectCompany, this.selectRole)
+  clearStatusFilter() {
+    this.selectStatus = ''
+    this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectStatus, this.selectRole)
 
   }
 
   clearRoleFilter() {
     this.selectRole = ''
-    this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectCompany, this.selectRole)
+    this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectStatus, this.selectRole)
   }
 
   onSearch() {
-    this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectCompany, this.selectRole, this.searchText)
+    this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectStatus, this.selectRole, this.searchText)
 
   }
 
   offSearch() {
     this.searchText = ''
-    this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectCompany, this.selectRole, this.searchText)
+    this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectStatus, this.selectRole, this.searchText)
   }
 
   onPageChange(event: number) {

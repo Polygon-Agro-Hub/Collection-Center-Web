@@ -53,10 +53,11 @@ export class ViewOfficersComponent implements OnInit {
       (res) => {
         this.OfficerArr = res.items
         this.totalItems = res.total
-        if(res.item.lenght === 0){
-          this.hasData = false
+        if (res.items.length === 0) {
+          this.hasData = false;
+        }else{
+          this.hasData = true;
         }
-        console.log(res);
 
       }
     )

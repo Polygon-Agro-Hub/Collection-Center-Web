@@ -90,8 +90,11 @@
 
     </div>
 
+    <div *ngIf="!hasData" class="flex justify-center items-center mt-8 mr-5 w-full h-[500px]">
+        <p class="text-3xl text-center font-semibold">No Data Availabale</p>
+    </div>
 
-    <div class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg">
+    <div *ngIf="hasData" class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg">
         <table class="w-full divide-y-2 border-[1px] border-gray-300 rounded-lg overflow-hidden">
             <thead class=" dark:bg-[#272F45] text-gray-700 dark:text-gray-300">
                 <tr>

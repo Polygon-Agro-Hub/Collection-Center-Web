@@ -9,6 +9,7 @@ import { ViewOfficersComponent } from './application/manage-officers/view-office
 import { EditOfficerComponent } from './application/manage-officers/edit-officer/edit-officer.component';
 import { ViewPriceListComponent } from './application/Price-List/view-price-list/view-price-list.component';
 import { PriceRequestComponent } from './application/Price-List/price-request/price-request.component';
+import { SelectReportComponent } from './application/Report/select-report/select-report/select-report.component';
 
 export const routes: Routes = [
     {
@@ -60,6 +61,15 @@ export const routes: Routes = [
                     {
                         path:'view-request',
                         component:PriceRequestComponent
+                    }
+                ]
+            },
+            {
+                path: 'reports',
+                children: [
+                    {
+                        path: 'select-report',
+                        component: SelectReportComponent
                     }
                 ]
             }

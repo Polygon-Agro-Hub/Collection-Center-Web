@@ -11,6 +11,7 @@ import { ViewPriceListComponent } from './application/Price-List/view-price-list
 import { PriceRequestComponent } from './application/Price-List/price-request/price-request.component';
 import { SelectReportComponent } from './application/Report/select-report/select-report/select-report.component';
 import { CollectionMonthlyReportComponent } from './application/Report/collection-monthly-report/collection-monthly-report.component';
+import { FarmerListComponent } from './application/Report/farmer-list/farmer-list.component';
 
 export const routes: Routes = [
     {
@@ -75,6 +76,10 @@ export const routes: Routes = [
                     {
                         path: 'collection-monthly-report/:id',
                         component: CollectionMonthlyReportComponent
+                    },
+                    {
+                        path: 'farmer-list/:id',
+                        component: FarmerListComponent
                     }
                 ]
             }

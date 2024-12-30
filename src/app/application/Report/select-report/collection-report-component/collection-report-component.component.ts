@@ -63,6 +63,10 @@ export class CollectionReportComponentComponent implements OnInit {
     this.fetchAllOfficers(this.page, this.itemsPerPage);
   }
 
+  viewmonthlyReport(id: number) {
+    this.router.navigate([`reports/collection-monthly-report/${id}`])
+  }
+
 }
 
 class CollectionOfficers {

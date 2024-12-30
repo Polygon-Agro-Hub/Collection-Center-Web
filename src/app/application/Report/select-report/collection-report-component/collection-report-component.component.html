@@ -49,7 +49,7 @@
                     <td class="px-5 py-4  text-gray-900 dark:text-gray-300">{{item.firstNameEnglish}}</td>
                     <td class="px-5 py-4  text-gray-900 dark:text-gray-300">{{item.lastNameEnglish}}</td>
                     <td class="px-5  py-4  text-gray-900 dark:text-gray-300">
-                        <button class="flex items-center justify-center text-[#415CFF] hover:text-gray-600 w-10 h-10">
+                        <button class="flex items-center justify-center text-[#415CFF] hover:text-gray-600 w-10 h-10" (click)="viewmonthlyReport(item.id)">
                             <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>
                         </button>
                     </td>

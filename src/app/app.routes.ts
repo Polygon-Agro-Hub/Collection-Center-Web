@@ -10,6 +10,7 @@ import { EditOfficerComponent } from './application/manage-officers/edit-officer
 import { ViewPriceListComponent } from './application/Price-List/view-price-list/view-price-list.component';
 import { PriceRequestComponent } from './application/Price-List/price-request/price-request.component';
 import { SelectReportComponent } from './application/Report/select-report/select-report/select-report.component';
+import { CollectionMonthlyReportComponent } from './application/Report/collection-monthly-report/collection-monthly-report.component';
 
 export const routes: Routes = [
     {
@@ -70,6 +71,10 @@ export const routes: Routes = [
                     {
                         path: 'select-report',
                         component: SelectReportComponent
+                    },
+                    {
+                        path: 'collection-monthly-report/:id',
+                        component: CollectionMonthlyReportComponent
                     }
                 ]
             }

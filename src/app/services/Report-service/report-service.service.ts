@@ -46,4 +46,29 @@ export class ReportServiceService {
       headers,
     });
   }
+
+
+  getCollectionFarmerList(id: number, page: number = 1, limit: number = 10, searchText: string = '', date: string = ''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    let url = `${this.apiUrl}/get-collection-farmer-list/${id}?page=${page}&limit=${limit}`
+
+    if (searchText) {
+      url += `&searchText=${searchText}`
+    }
+
+    if(date){
+      url += `&date=${date}`
+    }
+
+    return this.http.get(url, {
+      headers,
+    });
+  }
 }
+
+
+

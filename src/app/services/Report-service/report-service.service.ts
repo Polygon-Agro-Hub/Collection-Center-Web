@@ -68,7 +68,23 @@ export class ReportServiceService {
       headers,
     });
   }
+
+  getCollectionDailyReport(id:number, date:string): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    let url = `${this.apiUrl}/get-daily-report/${id}/${date}`
+
+    return this.http.get(url, {
+      headers,
+    });
+  }
 }
+
+
+
 
 
 

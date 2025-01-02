@@ -12,6 +12,7 @@ import { PriceRequestComponent } from './application/Price-List/price-request/pr
 import { SelectReportComponent } from './application/Report/select-report/select-report/select-report.component';
 import { CollectionMonthlyReportComponent } from './application/Report/collection-monthly-report/collection-monthly-report.component';
 import { FarmerListComponent } from './application/Report/farmer-list/farmer-list.component';
+import { CollectionDailyReportComponent } from './application/Report/collection-daily-report/collection-daily-report.component';
 
 export const routes: Routes = [
     {
@@ -80,7 +81,12 @@ export const routes: Routes = [
                     {
                         path: 'farmer-list/:id',
                         component: FarmerListComponent
+                    },
+                    {
+                        path: 'daily-report/:id/:name/:empid',
+                        component: CollectionDailyReportComponent
                     }
+                    
                 ]
             }
 

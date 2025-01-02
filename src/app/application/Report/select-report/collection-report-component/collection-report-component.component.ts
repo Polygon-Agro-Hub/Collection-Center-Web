@@ -70,6 +70,11 @@ export class CollectionReportComponentComponent implements OnInit {
   viewFarmerList(id: number) {
     this.router.navigate([`reports/farmer-list/${id}`])
   }
+
+  viewDailyReport(id: number, fname: string, lname: string, empid: string) {
+    let name = `${fname} ${lname}`
+    this.router.navigate([`reports/daily-report/${id}/${name}/${empid}`])
+  }
   
 }
 

@@ -4,6 +4,7 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReportServiceService } from '../../../services/Report-service/report-service.service';
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
+import { jsPDF } from 'jspdf';
 
 @Component({
   selector: 'app-collection-daily-report',
@@ -65,7 +66,7 @@ export class CollectionDailyReportComponent implements OnInit {
   }
 
   filterByDate() {
-    this.dailyReportArr=[];
+    this.dailyReportArr = [];
     this.fetchDailyReport(this.selectDate);
   }
 
@@ -134,9 +135,71 @@ export class CollectionDailyReportComponent implements OnInit {
     this.loadingChart = false;
   }
 
-  downloadPdf(){
-    
+  downloadPdf() {
+    const doc = new jsPDF();
+  
+    // Set Title
+    const title = `Daily Report`;
+    doc.setFontSize(18);
+    doc.text(title, 14, 10);
+  
+    // Officer Info
+    const title2 = `${this.officerName} - ${this.empId}`;
+    doc.setFontSize(14);
+    doc.text(title2, 14, 20);
+  
+    // Date
+    const dateText = `On ${this.selectDate}`;
+    doc.setFontSize(12);
+    doc.text(dateText, 14, 30);
+  
+    // Table header
+    const startY = 40; // starting Y position for the table
+    doc.setFontSize(10);
+    const headers = ['Variety Name', 'Grade A', 'Grade B', 'Grade C', 'Total'];
+  
+    // Calculate row height and column widths
+    const rowHeight = 10;
+    const columnWidths = [60, 30, 30, 30, 30]; // width for each column
+  
+    // Draw header row with borders
+    let currentX = 14;
+    headers.forEach((header, index) => {
+      // Draw header cell
+      doc.rect(currentX, startY, columnWidths[index], rowHeight);
+      doc.text(header, currentX + 2, startY + 7); // Slightly inside the cell
+      currentX += columnWidths[index];
+    });
+  
+    // Add table data rows with borders
+    let currentY = startY + rowHeight;
+    this.dailyReportArr.forEach((report) => {
+      currentX = 14; // Reset X for each row
+      const rowData = [
+        report.varietyNameEnglish,
+        report.gradeA.toString() + 'Kg',
+        report.gradeB.toString() + 'Kg',
+        report.gradeC.toString() + 'Kg',
+        report.total.toString() + 'Kg',
+      ];
+  
+      rowData.forEach((data, index) => {
+        // Draw cell with border
+        doc.rect(currentX, currentY, columnWidths[index], rowHeight);
+        doc.text(data, currentX + 2, currentY + 7); // Slightly inside the cell
+        currentX += columnWidths[index];
+      });
+  
+      currentY += rowHeight;
+    });
+  
+    // Save the document as PDF
+    doc.save(`Daily_Report_${this.officerName}_${this.selectDate}.pdf`);
   }
+  
+  
+  
+  
 }
 
 class DailyReport {

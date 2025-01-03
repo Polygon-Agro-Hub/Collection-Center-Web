@@ -15,8 +15,6 @@ import { Router } from '@angular/router';
 export class AddOfficersComponent implements OnInit {
 
   personalData: Personal = new Personal();
-  // personalData: Bank = new Bank();
-  // personalData: Company = new Company();
   collectionCenterData: CollectionCenter[] = []
   ManagerArr!: ManagerDetails[]
 
@@ -68,7 +66,6 @@ export class AddOfficersComponent implements OnInit {
 
 
   ngOnInit(): void {
-    // this.getAllCollectionCetnter();
     this.getLastID('COO');
     this.EpmloyeIdCreate();
   }
@@ -186,14 +183,6 @@ export class AddOfficersComponent implements OnInit {
 
   }
 
-  // getAllCollectionCetnter() {
-  //   this.ManageOficerSrv.getAllCollectionCenter().subscribe(
-  //     (res) => {
-  //       this.collectionCenterData = res
-  //     }
-  //   )
-  // }
-
   onSubmit() {
     console.log(this.personalData); // Logs the personal data with updated languages
 
@@ -230,8 +219,6 @@ export class AddOfficersComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.personalData = new Personal();
-        // this.personalData = new Bank();
-        // this.personalData = new Company();
 
         Swal.fire(
           'Cleared!',
@@ -242,13 +229,6 @@ export class AddOfficersComponent implements OnInit {
     });
   }
 
-  // getAllmanagers() {
-  //   this.ManageOficerSrv.getAllManagersByCenter(this.personalData.centerId).subscribe(
-  //     (res) => {
-  //       this.ManagerArr = res.result
-  //     }
-  //   )
-  // }
 
 
 
@@ -291,25 +271,7 @@ class Personal {
   image!: any
 }
 
-// class Bank {
-//   accHolderName!: string;
-//   accNumber!: string;
-//   bankName!: string;
-//   branchName!: string;
-// }
 
-// class Company {
-//   companyNameEnglish!: string;
-//   companyNameSinhala!: string;
-//   companyNameTamil!: string;
-//   jobRole: string = 'Collection Officer'
-//   empId!: string
-//   IRMname!: string;
-//   companyEmail!: string;
-//   assignedDistrict!: string;
-//   employeeType!: string;
-//   collectionManagerId: string = ''
-// }
 
 class CollectionCenter {
   id!: number

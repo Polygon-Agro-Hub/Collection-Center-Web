@@ -81,6 +81,21 @@ export class ReportServiceService {
       headers,
     });
   }
+
+
+  getCollectionmonthlyReportOfficerData(id:number,startDate:Date, endDate:Date): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    let url = `${this.apiUrl}/get-monthly-officer-details/${id}/${startDate}/${endDate}`
+
+    return this.http.get(url, {
+      headers,
+    });
+  }
+
 }
 
 

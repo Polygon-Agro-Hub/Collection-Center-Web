@@ -71,6 +71,10 @@ export class FarmerListComponent implements OnInit {
     this.fetchFarmerList(this.page, this.itemsPerPage);
   }
 
+  vieFarmerReport(id: number) {
+    this.router.navigate([`reports/farmer-report/${id}`])
+  }
+
 
 }
 

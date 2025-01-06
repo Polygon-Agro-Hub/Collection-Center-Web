@@ -13,6 +13,7 @@ import { SelectReportComponent } from './application/Report/select-report/select
 import { CollectionMonthlyReportComponent } from './application/Report/collection-monthly-report/collection-monthly-report.component';
 import { FarmerListComponent } from './application/Report/farmer-list/farmer-list.component';
 import { CollectionDailyReportComponent } from './application/Report/collection-daily-report/collection-daily-report.component';
+import { FarmerReportComponent } from './application/Report/farmer-report/farmer-report.component';
 
 export const routes: Routes = [
     {
@@ -85,7 +86,12 @@ export const routes: Routes = [
                     {
                         path: 'daily-report/:id/:name/:empid',
                         component: CollectionDailyReportComponent
-                    }
+                    },
+                    {
+                        path: 'farmer-report/:id',
+                        component: FarmerReportComponent
+                    },
+                    
                     
                 ]
             }

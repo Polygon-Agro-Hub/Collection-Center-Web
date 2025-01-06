@@ -96,10 +96,17 @@ export class ReportServiceService {
     });
   }
 
+  getFarmerReport(id:number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+    
+    let url = `${this.apiUrl}/get-farmer-report-details/${id}`
+
+    return this.http.get(url, {
+      headers,
+    });
+  }
+
 }
-
-
-
-
-
-

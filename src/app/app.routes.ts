@@ -14,6 +14,7 @@ import { CollectionMonthlyReportComponent } from './application/Report/collectio
 import { FarmerListComponent } from './application/Report/farmer-list/farmer-list.component';
 import { CollectionDailyReportComponent } from './application/Report/collection-daily-report/collection-daily-report.component';
 import { FarmerReportComponent } from './application/Report/farmer-report/farmer-report.component';
+import { AddDailyTargetComponent } from './application/Target/add-daily-target/add-daily-target.component';
 
 export const routes: Routes = [
     {
@@ -93,6 +94,15 @@ export const routes: Routes = [
                     },
                     
                     
+                ]
+            },
+            {
+                path:'target',
+                children:[
+                    {
+                        path:'add-target',
+                        component:AddDailyTargetComponent
+                    }
                 ]
             }
 

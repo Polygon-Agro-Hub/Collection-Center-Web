@@ -15,6 +15,7 @@ import { FarmerListComponent } from './application/Report/farmer-list/farmer-lis
 import { CollectionDailyReportComponent } from './application/Report/collection-daily-report/collection-daily-report.component';
 import { FarmerReportComponent } from './application/Report/farmer-report/farmer-report.component';
 import { AddDailyTargetComponent } from './application/Target/add-daily-target/add-daily-target.component';
+import { ViewDailyTargetComponent } from './application/Target/view-daily-target/view-daily-target.component';
 
 export const routes: Routes = [
     {
@@ -102,6 +103,10 @@ export const routes: Routes = [
                     {
                         path:'add-target',
                         component:AddDailyTargetComponent
+                    },
+                    {
+                        path:'view-target',
+                        component:ViewDailyTargetComponent
                     }
                 ]
             }

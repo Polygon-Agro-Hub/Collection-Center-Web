@@ -16,10 +16,11 @@ import Swal from 'sweetalert2';
 export class ChangePasswordComponent {
   showPassword: boolean = false;
   showPassword1: boolean = false;
-  changePasswordObj: ChangePassword;
+  changePassword:string = '';
+  conformPassword:string = '';
 
   constructor(private authService: AuthService, private http: HttpClient, private router: Router) {
-    this.changePasswordObj = new ChangePassword();
+    // this.changePassword = new ChangePassword();
   }
 
   togglePasswordVisibility(): void {
@@ -34,26 +35,26 @@ export class ChangePasswordComponent {
    * Update the user's password with SweetAlert for notifications
    */
   updatePassword(): void {
-    const userId = localStorage.getItem('userId:'); // Example: fetch the userId from localStorage
-    console.log(userId);
+    console.log(this.conformPassword,this.changePassword);
     
 
-    if (!userId) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'User ID is not available. Please log in again.',
-      });
-      return;
-    }
-
-    if (!this.changePasswordObj.password || this.changePasswordObj.password.trim() === '') {
+    if (!this.changePassword || !this.conformPassword) {
       Swal.fire({
         icon: 'error',
         title: 'Error',
         text: 'Password cannot be empty.',
       });
       return;
+    }
+
+    if(this.changePassword !== this.conformPassword){
+      Swal.fire({
+        icon: 'error',
+        title: 'Error',
+        text: 'New Password and Conform Password does not match!',
+      });
+      return;
+
     }
 
     Swal.fire({
@@ -66,7 +67,7 @@ export class ChangePasswordComponent {
       confirmButtonText: 'Yes, update it!',
     }).then((result) => {
       if (result.isConfirmed) {
-        this.authService.changePassword(userId, this.changePasswordObj.password).subscribe(
+        this.authService.changePassword(this.changePassword).subscribe(
           (response) => {
             Swal.fire({
               icon: 'success',

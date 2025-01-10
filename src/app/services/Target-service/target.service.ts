@@ -29,4 +29,18 @@ export class TargetService {
     let url = `${this.apiUrl}/create-daily-target`;
     return this.http.post<any>(url, data, { headers });
   }
+
+  getAllDailyTarget(page:number = 1, limit: number = 10, searchText:string = ''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/get-daily-target?page=${page}&limit=${limit}`;
+
+    if(searchText){
+      url+=`&searchText=${searchText}`
+    }
+
+    return this.http.get<any>(url, { headers });
+  }
 }

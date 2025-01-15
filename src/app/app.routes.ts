@@ -16,6 +16,7 @@ import { CollectionDailyReportComponent } from './application/Report/collection-
 import { FarmerReportComponent } from './application/Report/farmer-report/farmer-report.component';
 import { AddDailyTargetComponent } from './application/Target/add-daily-target/add-daily-target.component';
 import { ViewDailyTargetComponent } from './application/Target/view-daily-target/view-daily-target.component';
+import { OfficerProfileComponent } from './application/manage-officers/officer-profile/officer-profile.component';
 
 export const routes: Routes = [
     {
@@ -49,6 +50,10 @@ export const routes: Routes = [
                     {
                         path:'edit-officer/:id',
                         component:EditOfficerComponent
+                    },
+                    {
+                        path:'officer-profile/:id',
+                        component:OfficerProfileComponent
                     }
                 ]
             },

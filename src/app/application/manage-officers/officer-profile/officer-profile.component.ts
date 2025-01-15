@@ -1,12 +1,92 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
+import { ManageOfficersService } from '../../../services/manage-officers-service/manage-officers.service';
+import jsPDF from 'jspdf';
+import html2canvas from 'html2canvas';
+import { CommonModule } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 
 @Component({
   selector: 'app-officer-profile',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, FormsModule],
   templateUrl: './officer-profile.component.html',
-  styleUrl: './officer-profile.component.css'
+  styleUrls: ['./officer-profile.component.css']
 })
-export class OfficerProfileComponent {
+export class OfficerProfileComponent implements OnInit {
+  officerObj: Officer = new Officer();
+  officerId!: number;
 
+  constructor(
+    private ManageOficerSrv: ManageOfficersService,
+    private router: Router,
+    private route: ActivatedRoute
+  ) {}
+
+  ngOnInit(): void {
+    this.officerId = this.route.snapshot.params['id'];
+    this.fetchOfficer(this.officerId);
+  }
+
+  fetchOfficer(id: number) {
+    this.ManageOficerSrv.getOfficerById(id).subscribe((res: any) => {
+      this.officerObj = res.officerData.collectionOfficer;
+      console.log(this.officerObj);
+    });
+  }
+
+  generatePDF() {
+    const reportContainer = document.getElementById('reportcontainer');
+  
+    if (reportContainer) {
+      const buttons = reportContainer.querySelectorAll('button');
+      buttons.forEach((btn) => (btn.style.display = 'none'));
+  
+      html2canvas(reportContainer, {
+        scale: 2,
+        useCORS: true, 
+        logging: true
+      }).then((canvas) => {
+        const imgData = canvas.toDataURL('image/png');
+        const pdf = new jsPDF('p', 'mm', 'a4');
+        const pdfWidth = pdf.internal.pageSize.getWidth();
+        const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
+  
+        pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
+        pdf.save(`${this.officerObj.firstNameEnglish} ${this.officerObj.lastNameEnglish}(${this.officerObj.empId}).pdf`);
+  
+        buttons.forEach((btn) => (btn.style.display = 'block'));
+      }).catch((error) => {
+        console.error('Error generating PDF:', error);
+      });
+    }
+  }
+  
+}
+
+class Officer {
+  id!: number;
+  firstNameEnglish!: string;
+  lastNameEnglish!: string;
+  phoneNumber01!: string;
+  phoneNumber02!: string;
+  phoneCode01!: string;
+  phoneCode02!: string;
+  image!: string;
+  nic!: string;
+  email!: string;
+  houseNumber!: string;
+  streetName!: string;
+  city!: string;
+  district!: string;
+  province!: string;
+  country!: string;
+  empId!: string;
+  jobRole!: string;
+  accHolderName!: string;
+  accNumber!: string;
+  bankName!: string;
+  branchName!: string;
+  companyNameEnglish!: string;
+  centerName!: string;
 }

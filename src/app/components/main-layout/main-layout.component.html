@@ -1,11 +1,11 @@
-<div>
-    <app-header />
-    <div class="flex flex-row bg-primaryMainLight dark:bg-primaryMainDark">
-        <div>
-            <app-side-nav />
+<div class="h-screen flex flex-col">
+    <app-header></app-header>
+    <div class="flex flex-row flex-1 bg-primaryMainLight dark:bg-primaryMainDark overflow-hidden">
+        <div class="flex-none">
+            <app-side-nav></app-side-nav>
         </div>
-        <div class="flex-1 p-10">
-            <router-outlet/>
+        <div class="flex-1 overflow-y-auto p-10">
+            <router-outlet></router-outlet>
         </div>
     </div>
 </div>

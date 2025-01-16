@@ -17,6 +17,7 @@ import { FarmerReportComponent } from './application/Report/farmer-report/farmer
 import { AddDailyTargetComponent } from './application/Target/add-daily-target/add-daily-target.component';
 import { ViewDailyTargetComponent } from './application/Target/view-daily-target/view-daily-target.component';
 import { OfficerProfileComponent } from './application/manage-officers/officer-profile/officer-profile.component';
+import { DownloadTargetComponent } from './application/Target/download-target/download-target.component';
 
 export const routes: Routes = [
     {
@@ -112,6 +113,10 @@ export const routes: Routes = [
                     {
                         path:'view-target',
                         component:ViewDailyTargetComponent
+                    },
+                    {
+                        path:'download-target',
+                        component:DownloadTargetComponent
                     }
                 ]
             }

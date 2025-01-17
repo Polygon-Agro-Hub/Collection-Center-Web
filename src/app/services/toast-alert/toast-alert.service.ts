@@ -35,12 +35,32 @@ export class ToastAlertService {
     );
   }
 
-  error(message: string, title: string = 'Error', options: any = {}) {
-    this.toastr.error(message, title, {
-      positionClass: 'toast-bottom-right',
-      timeOut: 5000,
-      ...options,
-    });
+  error(message: string, options: any = {}) {
+    this.toastr.warning(
+      `
+        <div class="flex items-center space-x-4 bg-[#FFDADA] px-8 py-4">
+          <!-- Icon -->
+          <div class="flex items-center justify-center bg-[#D63232] w-12 h-12 rounded-lg shadow-md">
+            <i class="fa-solid fa-ban text-white text-2xl"></i>
+          </div>
+          <!-- Text -->
+          <p class="text-xl text-[#333333] font-normal m-0">${message}</p>
+
+          <i class="fa-solid fa-xmark text-lg text-[#95A1AC]"></i>
+
+        </div>
+      `,
+      '',
+      {
+        enableHtml: true,
+        progressBar:true,
+        positionClass: 'toast-bottom-right',
+        toastClass: 'custom-hidden custom-toast-spacing', 
+        timeOut: 5000, 
+        tapToDismiss:false,
+        ...options
+      }
+    );
   }
   
   warning(message: string, options: any = {}) {

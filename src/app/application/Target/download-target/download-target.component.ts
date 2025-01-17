@@ -12,7 +12,7 @@ import { ToastAlertService } from '../../../services/toast-alert/toast-alert.ser
 @Component({
   selector: 'app-download-target',
   standalone: true,
-  imports: [CommonModule, FormsModule, ToastrModule],  // Add ToastrModule here
+  imports: [CommonModule, FormsModule, ToastrModule], 
   templateUrl: './download-target.component.html',
   styleUrls: ['./download-target.component.css']
 })
@@ -24,7 +24,7 @@ export class DownloadTargetComponent {
 
   hasData: boolean = false;
 
-  toaster = inject(ToastrService);  // Inject ToastrService
+  // toaster = inject(ToastrService); 
 
   constructor(
     private router: Router,
@@ -47,29 +47,16 @@ export class DownloadTargetComponent {
 
   goBtn() {
     if (!this.fromDate || !this.toDate) {
-      // this.toaster.error('Please fill in all fields', 'Error',{
-      //   positionClass: 'toast-bottom-right'
-      // });
-
-      this.toastSrv.warning("Please fill in all fields");
-
-      
-      
-      
-      
-      
-      
-      
+      this.toastSrv.warning("Please fill in all fields"); 
       return; 
     }
 
     this.fetchDownloadTarget();
-    this.toaster.success('Data fetched successfully!', 'Success'); // Show success toast
   }
 
   downloadXlSheet() {
     if (!this.targetArr || this.targetArr.length === 0) {
-      this.toaster.error('No data available to export.', 'Error');
+      this.toastSrv.error("No data available to export!")
       return;
     }
 
@@ -92,7 +79,10 @@ export class DownloadTargetComponent {
     });
     const data: Blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
     saveAs(data, `Target-Report (${this.fromDate} - ${this.toDate}).xlsx`);
+    this.toastSrv.success(`Target-Report (${this.fromDate} - ${this.toDate}).xlsx DownLoaded`)
   }
+
+  
 }
 
 class DailyTargets {

@@ -5,6 +5,7 @@ import jsPDF from 'jspdf';
 import html2canvas from 'html2canvas';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 
 @Component({
   selector: 'app-officer-profile',
@@ -20,8 +21,10 @@ export class OfficerProfileComponent implements OnInit {
   constructor(
     private ManageOficerSrv: ManageOfficersService,
     private router: Router,
-    private route: ActivatedRoute
-  ) {}
+    private route: ActivatedRoute,
+    private toastSrv: ToastAlertService
+
+  ) { }
 
   ngOnInit(): void {
     this.officerId = this.route.snapshot.params['id'];
@@ -37,31 +40,32 @@ export class OfficerProfileComponent implements OnInit {
 
   generatePDF() {
     const reportContainer = document.getElementById('reportcontainer');
-  
+
     if (reportContainer) {
       const buttons = reportContainer.querySelectorAll('button');
       buttons.forEach((btn) => (btn.style.display = 'none'));
-  
+
       html2canvas(reportContainer, {
         scale: 2,
-        useCORS: true, 
+        useCORS: true,
         logging: true
       }).then((canvas) => {
         const imgData = canvas.toDataURL('image/png');
         const pdf = new jsPDF('p', 'mm', 'a4');
         const pdfWidth = pdf.internal.pageSize.getWidth();
         const pdfHeight = (canvas.height * pdfWidth) / canvas.width;
-  
+
         pdf.addImage(imgData, 'PNG', 0, 0, pdfWidth, pdfHeight);
         pdf.save(`${this.officerObj.firstNameEnglish} ${this.officerObj.lastNameEnglish}(${this.officerObj.empId}).pdf`);
-  
+
         buttons.forEach((btn) => (btn.style.display = 'block'));
+        this.toastSrv.success(`<b>${this.officerObj.firstNameEnglish} ${this.officerObj.lastNameEnglish}(${this.officerObj.empId}).pdf</b> Downloaded!`)
       }).catch((error) => {
         console.error('Error generating PDF:', error);
       });
     }
   }
-  
+
 }
 
 class Officer {

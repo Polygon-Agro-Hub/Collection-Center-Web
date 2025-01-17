@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { ManageOfficersService } from '../../../services/manage-officers-service/manage-officers.service';
 import { Router } from '@angular/router';
+import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 
 @Component({
   selector: 'app-add-officers',
@@ -33,7 +34,9 @@ export class AddOfficersComponent implements OnInit {
 
   constructor(
     private ManageOficerSrv: ManageOfficersService,
-    private router: Router
+    private router: Router,
+    private toastSrv: ToastAlertService
+
   ) { }
 
   districts = [
@@ -113,13 +116,13 @@ export class AddOfficersComponent implements OnInit {
     const file: File = event.target.files[0];
     if (file) {
       if (file.size > 5000000) {
-        Swal.fire('Error', 'File size should not exceed 5MB', 'error');
+        this.toastSrv.error('File size should not exceed 5MB')
         return;
       }
 
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
-        Swal.fire('Error', 'Only JPEG, JPG and PNG files are allowed', 'error');
+        this.toastSrv.error('Only JPEG, JPG and PNG files are allowed')
         return;
       }
 
@@ -187,17 +190,17 @@ export class AddOfficersComponent implements OnInit {
     console.log(this.personalData); // Logs the personal data with updated languages
 
     if (!this.personalData.accHolderName || !this.personalData.accNumber || !this.personalData.bankName || !this.personalData.branchName) {
-      Swal.fire('warning', 'Pleace fill all required feilds', 'warning')
+      this.toastSrv.warning('Pleace fill all required feilds')
 
     } else {
       this.ManageOficerSrv.createCollectiveOfficer(this.personalData).subscribe(
         (res: any) => {
           this.officerId = res.officerId;
-          Swal.fire('Success', 'Collective Officer Created Successfully', 'success');
+          this.toastSrv.success('Collective Officer Created Successfully')
           this.router.navigate(['/manage-officers/view-officer'])
         },
         (error: any) => {
-          Swal.fire('Error', 'There was an error creating the collective officer', 'error');
+          this.toastSrv.error('There was an error creating the collective officer')
         }
       );
 
@@ -219,12 +222,7 @@ export class AddOfficersComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.personalData = new Personal();
-
-        Swal.fire(
-          'Cleared!',
-          'The form has been cleared.',
-          'success'
-        );
+        this.toastSrv.success('The form has been cleared.')
       }
     });
   }

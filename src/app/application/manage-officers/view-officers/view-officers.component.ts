@@ -6,6 +6,7 @@ import { DropdownModule } from 'primeng/dropdown'
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ManageOfficersService } from '../../../services/manage-officers-service/manage-officers.service';
 import Swal from 'sweetalert2';
+import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 
 @Component({
   selector: 'app-view-officers',
@@ -32,6 +33,8 @@ export class ViewOfficersComponent implements OnInit {
   constructor(
     private router: Router,
     private ManageOficerSrv: ManageOfficersService,
+    private toastSrv: ToastAlertService
+    
 
   ) { }
 
@@ -92,27 +95,17 @@ export class ViewOfficersComponent implements OnInit {
           (data) => {
             if (data.status) {
               console.log('Collection Officer deleted successfully');
-              Swal.fire(
-                'Deleted!',
-                'The Officer has been deleted.',
-                'success'
-              );
+              this.toastSrv.success('The Officer has been deleted.')
               this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectStatus, this.selectRole, this.searchText);
             } else {
-              Swal.fire(
-                'Error!',
-                'There was an error deleting the news item.',
-                'error'
-              );
+              this.toastSrv.error('There was an error deleting the ofiicer')
+
             }
           },
           (error) => {
             console.error('Error deleting news:', error);
-            Swal.fire(
-              'Error!',
-              'There was an error deleting the news item.',
-              'error'
-            );
+            this.toastSrv.error('There was an error deleting the ofiicer')
+
           }
         );
       }
@@ -153,33 +146,15 @@ export class ViewOfficersComponent implements OnInit {
                 
                 // this.isLoading = false;
                 if (res.status) {
-                  Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: 'The collection was approved successfully.',
-                    showConfirmButton: false,
-                    timer: 3000,
-                  });
+                  this.toastSrv.success('The collection was approved successfully.')
                   this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectStatus, this.selectRole, this.searchText);
                 } else {
-                  Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: res.message,
-                    showConfirmButton: false,
-                    timer: 3000,
-                  });
+                  this.toastSrv.error(res.message)
                 }
               },
               (err) => {
                 // this.isLoading = false;
-                Swal.fire({
-                  icon: 'error',
-                  title: 'Error!',
-                  text: 'An error occurred while approving. Please try again.',
-                  showConfirmButton: false,
-                  timer: 3000,
-                });
+                this.toastSrv.error('An error occurred while approving. Please try again.')
               }
             );
           });
@@ -194,33 +169,18 @@ export class ViewOfficersComponent implements OnInit {
               (res) => {
                 // this.isLoading = false;
                 if (res.status) {
-                  Swal.fire({
-                    icon: 'success',
-                    title: 'Success!',
-                    text: 'The collection was rejected successfully.',
-                    showConfirmButton: false,
-                    timer: 3000,
-                  });
+                  this.toastSrv.success('The collection was rejected successfully.')
+
                   this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectStatus, this.selectRole, this.searchText);
                 } else {
-                  Swal.fire({
-                    icon: 'error',
-                    title: 'Error!',
-                    text: res.message,
-                    showConfirmButton: false,
-                    timer: 3000,
-                  });
+                this.toastSrv.error(res.message)
+
                 }
               },
               (err) => {
                 // this.isLoading = false;
-                Swal.fire({
-                  icon: 'error',
-                  title: 'Error!',
-                  text: 'An error occurred while rejecting. Please try again.',
-                  showConfirmButton: false,
-                  timer: 3000,
-                });
+                this.toastSrv.error('An error occurred while rejecting. Please try again.')
+
               }
             );
           });

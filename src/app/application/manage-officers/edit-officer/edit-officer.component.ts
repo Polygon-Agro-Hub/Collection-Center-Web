@@ -4,6 +4,7 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { ManageOfficersService } from '../../../services/manage-officers-service/manage-officers.service';
 import { ActivatedRoute, Router } from '@angular/router';
+import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 
 @Component({
   selector: 'app-edit-officer',
@@ -40,7 +41,9 @@ export class EditOfficerComponent implements OnInit {
   constructor(
     private ManageOficerSrv: ManageOfficersService,
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toastSrv: ToastAlertService
+
   ) { }
 
   districts = [
@@ -85,23 +88,23 @@ export class EditOfficerComponent implements OnInit {
         this.personalData = res.officerData.collectionOfficer;
         console.log(res.officerData.collectionOfficer);
         this.getUpdateLastID(res.officerData.collectionOfficer.jobRole);
-  
+
         // Initialize languages as a comma-separated string if it's not already in that format
         if (Array.isArray(this.personalData.languages)) {
           this.personalData.languages = this.personalData.languages.join(',');
         } else if (!this.personalData.languages) {
           this.personalData.languages = '';
         }
-  
+
         this.selectJobRole = res.officerData.collectionOfficer.jobRole;
         console.log(res.officerData.collectionOfficer.empId, "empid");
-  
+
         this.UpdateEpmloyeIdCreate();
         // this.getAllmanagers();
       }
     );
   }
-  
+
 
   getUpdateLastID(role: string): Promise<string> {
     return new Promise((resolve, reject) => {
@@ -180,7 +183,7 @@ export class EditOfficerComponent implements OnInit {
 
 
   nextForm(page: 'pageOne' | 'pageTwo') {
-    if ( !this.personalData.firstNameEnglish || !this.personalData.firstNameSinhala || !this.personalData.firstNameTamil || !this.personalData.email || !this.personalData.languages || !this.personalData.lastNameEnglish || !this.personalData.lastNameSinhala || !this.personalData.lastNameTamil || !this.personalData.nic || !this.personalData.phoneNumber01 || !this.personalData.phoneCode01) {
+    if (!this.personalData.firstNameEnglish || !this.personalData.firstNameSinhala || !this.personalData.firstNameTamil || !this.personalData.email || !this.personalData.languages || !this.personalData.lastNameEnglish || !this.personalData.lastNameSinhala || !this.personalData.lastNameTamil || !this.personalData.nic || !this.personalData.phoneNumber01 || !this.personalData.phoneCode01) {
       Swal.fire('warning', 'Pleace fill all required feilds', 'warning')
     } else {
       this.selectedPage = page;
@@ -199,13 +202,13 @@ export class EditOfficerComponent implements OnInit {
     const file: File = event.target.files[0];
     if (file) {
       if (file.size > 5000000) {
-        Swal.fire('Error', 'File size should not exceed 5MB', 'error');
+        this.toastSrv.error('File size should not exceed 5MB')
         return;
       }
 
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
-        Swal.fire('Error', 'Only JPEG, JPG and PNG files are allowed', 'error');
+        this.toastSrv.error('Only JPEG, JPG and PNG files are allowed')
         return;
       }
 
@@ -223,7 +226,7 @@ export class EditOfficerComponent implements OnInit {
 
 
   updateProvince(event: Event): void {
-    const target = event.target as HTMLSelectElement; 
+    const target = event.target as HTMLSelectElement;
     const selectedDistrict = target.value;
 
     const selected = this.districts.find(district => district.name === selectedDistrict);
@@ -240,23 +243,25 @@ export class EditOfficerComponent implements OnInit {
 
   }
 
-  
+
   onSubmit() {
     console.log(this.personalData); // Logs the personal data with updated languages
     this.personalData.empId = this.upateEmpID;
 
-    if (!this.personalData.accHolderName || !this.personalData.accNumber || !this.personalData.bankName || !this.personalData.branchName || !this.personalData.city || !this.personalData.country  || !this.personalData.district || !this.personalData.houseNumber) {
-      Swal.fire('warning', 'Pleace fill all required feilds', 'warning')
+    if (!this.personalData.accHolderName || !this.personalData.accNumber || !this.personalData.bankName || !this.personalData.branchName || !this.personalData.city || !this.personalData.country || !this.personalData.district || !this.personalData.houseNumber) {
+      this.toastSrv.warning('Pleace fill all required feilds')
+
 
     } else {
       this.ManageOficerSrv.updateCollectiveOfficer(this.personalData, this.editOfficerId).subscribe(
         (res: any) => {
           this.officerId = res.officerId;
-          Swal.fire('Success', 'Collective Officer Updated Successfully', 'success');
+          this.toastSrv.success('Collective Officer Updated Successfully')
           this.router.navigate(['/manage-officers/view-officer'])
         },
         (error: any) => {
-          Swal.fire('Error', 'There was an error creating the collective officer', 'error');
+          this.toastSrv.error('There was an error creating the collective officer')
+
         }
       );
 
@@ -280,12 +285,8 @@ export class EditOfficerComponent implements OnInit {
         this.personalData = new Personal();
         // this.personalData = new Bank();
         // this.personalData = new Company();
+        this.toastSrv.error('The form has been cleared.')
 
-        Swal.fire(
-          'Cleared!',
-          'The form has been cleared.',
-          'success'
-        );
       }
     });
   }

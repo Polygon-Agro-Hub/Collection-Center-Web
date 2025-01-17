@@ -4,6 +4,7 @@ import { TargetService } from '../../../services/Target-service/target.service';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
+import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 
 @Component({
   selector: 'app-add-daily-target',
@@ -29,6 +30,8 @@ export class AddDailyTargetComponent implements OnInit {
   constructor(
     private router: Router,
     private TargetSrv: TargetService,
+    private toastSrv: ToastAlertService
+
   ) { }
 
 
@@ -83,6 +86,7 @@ export class AddDailyTargetComponent implements OnInit {
 
   AddButton() {
     if (!this.InputObj.varietyId || this.InputObj.qtyA < 0 || this.InputObj.qtyB < 0 || this.InputObj.qtyC < 0) {
+      // this.toastSrv.warning("")
       Swal.fire({
         icon: 'error',
         title: 'Invalid Input',
@@ -100,16 +104,12 @@ export class AddDailyTargetComponent implements OnInit {
           VarietyName: this.InputObj.VarietyName,
         }
       );
+      this.toastSrv.success(`<b>${this.InputObj.cropName} - ${this.InputObj.VarietyName}</b> added successfully!`);
 
       this.InputObj = new TargetItem();
       this.selectCropId = ''
       this.isAddColumn = false;
 
-      Swal.fire({
-        icon: 'success',
-        title: 'Success',
-        text: 'Target item added successfully!',
-      });
     }
   }
 
@@ -127,7 +127,8 @@ export class AddDailyTargetComponent implements OnInit {
       }).then((result) => {
         if (result.isConfirmed) {
           this.dailyTartgetObj.TargetItems.splice(index, 1);
-          Swal.fire('Removed!', 'The item has been removed.', 'success');
+          this.toastSrv.success('The item has been removed.')
+
         }
       });
     }
@@ -141,14 +142,15 @@ export class AddDailyTargetComponent implements OnInit {
       this.TargetSrv.createDailyTarget(this.dailyTartgetObj).subscribe(
         (res: any) => {
           if (res.status) {
-            Swal.fire('Success', res.message, 'success');
-            // this.router.navigate(['/manage-officers/view-officer'])
+          this.toastSrv.success(res.message)
+            this.router.navigate(['/target/view-target'])
           } else {
-            Swal.fire('Error', res.message, 'error');
+          this.toastSrv.error(res.message)
+
           }
         },
         (error: any) => {
-          Swal.fire('Error', 'There was an error creating the Daily Targets', 'error');
+          this.toastSrv.error('There was an error creating the Daily Targets')
         }
       );
 
@@ -162,13 +164,8 @@ export class AddDailyTargetComponent implements OnInit {
     const selectedDate = new Date(this.dailyTartgetObj.fromDate);
 
     if (selectedDate < today) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Invalid Date',
-        text: 'The selected date cannot be in the past.',
-      });
+      this.toastSrv.warning('The selected <b>From Date</b> cannot be in the past.')
 
-      // Reset both model and input field
       this.dailyTartgetObj.fromDate = '';
       inputField.value = '';
     }
@@ -182,11 +179,8 @@ export class AddDailyTargetComponent implements OnInit {
     const selectedDate = new Date(this.dailyTartgetObj.toDate);
 
     if (selectedDate < today) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Invalid Date',
-        text: 'The selected date cannot be in the past.',
-      });
+      this.toastSrv.warning('The selected <b>To Date</b> cannot be in the past.')
+
 
       this.dailyTartgetObj.toDate = '';
       inputField.value = '';
@@ -210,6 +204,8 @@ export class AddDailyTargetComponent implements OnInit {
         this.selectCropId = '';
         this.isVerityVisible = true;
         this.isAddColumn = false;
+        this.router.navigate(['/target/view-target'])
+
       }
     });
   }

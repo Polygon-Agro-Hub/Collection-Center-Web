@@ -7,6 +7,7 @@ import * as XLSX from 'xlsx';
 import { saveAs } from 'file-saver';
 import { ToastrService } from 'ngx-toastr';  // Import ToastrService
 import { ToastrModule } from 'ngx-toastr';   // Import ToastrModule
+import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 
 @Component({
   selector: 'app-download-target',
@@ -27,7 +28,8 @@ export class DownloadTargetComponent {
 
   constructor(
     private router: Router,
-    private TargetSrv: TargetService
+    private TargetSrv: TargetService,
+    private toastSrv: ToastAlertService
   ) { }
 
   fetchDownloadTarget() {
@@ -45,9 +47,19 @@ export class DownloadTargetComponent {
 
   goBtn() {
     if (!this.fromDate || !this.toDate) {
-      this.toaster.error('Please fill in all fields', 'Error',{
-        positionClass: 'toast-bottom-right'
-      });
+      // this.toaster.error('Please fill in all fields', 'Error',{
+      //   positionClass: 'toast-bottom-right'
+      // });
+
+      this.toastSrv.warning("Please fill in all fields");
+
+      
+      
+      
+      
+      
+      
+      
       return; 
     }
 

@@ -18,6 +18,7 @@ import { AddDailyTargetComponent } from './application/Target/add-daily-target/a
 import { ViewDailyTargetComponent } from './application/Target/view-daily-target/view-daily-target.component';
 import { OfficerProfileComponent } from './application/manage-officers/officer-profile/officer-profile.component';
 import { DownloadTargetComponent } from './application/Target/download-target/download-target.component';
+import { ViewComplaintsComponent } from './application/Complaints/view-complaint/view-complaints/view-complaints.component';
 
 export const routes: Routes = [
     {
@@ -26,14 +27,14 @@ export const routes: Routes = [
         pathMatch: 'full',
     },
     { path: 'login', component: LoginComponent },
-    { path: 'change-password', component: ChangePasswordComponent,canActivate: [AuthGuard] },
+    { path: 'change-password', component: ChangePasswordComponent, canActivate: [AuthGuard] },
 
     {
         path: '',
         component: MainLayoutComponent,
         canActivate: [AuthGuard],
         children: [
-            { 
+            {
                 path: 'dashbord',
                 component: DashboardComponent
             },
@@ -41,38 +42,38 @@ export const routes: Routes = [
                 path: 'manage-officers',
                 children: [
                     {
-                        path:'create-officer',
-                        component:AddOfficersComponent
+                        path: 'create-officer',
+                        component: AddOfficersComponent
                     },
                     {
-                        path:'view-officer',
-                        component:ViewOfficersComponent
+                        path: 'view-officer',
+                        component: ViewOfficersComponent
                     },
                     {
-                        path:'edit-officer/:id',
-                        component:EditOfficerComponent
+                        path: 'edit-officer/:id',
+                        component: EditOfficerComponent
                     },
                     {
-                        path:'officer-profile/:id',
-                        component:OfficerProfileComponent
+                        path: 'officer-profile/:id',
+                        component: OfficerProfileComponent
                     }
                 ]
             },
             {
-                path:'price-list',
-                children:[
+                path: 'price-list',
+                children: [
                     {
-                        path:'view-prices',
-                        component:ViewPriceListComponent
+                        path: 'view-prices',
+                        component: ViewPriceListComponent
                     }
                 ]
             },
             {
-                path:'price-request',
-                children:[
+                path: 'price-request',
+                children: [
                     {
-                        path:'view-request',
-                        component:PriceRequestComponent
+                        path: 'view-request',
+                        component: PriceRequestComponent
                     }
                 ]
             },
@@ -99,24 +100,34 @@ export const routes: Routes = [
                         path: 'farmer-report/:id',
                         component: FarmerReportComponent
                     },
-                    
-                    
+
+
                 ]
             },
             {
-                path:'target',
-                children:[
+                path: 'target',
+                children: [
                     {
-                        path:'add-target',
-                        component:AddDailyTargetComponent
+                        path: 'add-target',
+                        component: AddDailyTargetComponent
                     },
                     {
-                        path:'view-target',
-                        component:ViewDailyTargetComponent
+                        path: 'view-target',
+                        component: ViewDailyTargetComponent
                     },
                     {
-                        path:'download-target',
-                        component:DownloadTargetComponent
+                        path: 'download-target',
+                        component: DownloadTargetComponent
+                    }
+                ]
+            },
+            {
+                path: 'complaints',
+                children: [
+                    {
+                        path: '',
+                        component: ViewComplaintsComponent
+
                     }
                 ]
             }

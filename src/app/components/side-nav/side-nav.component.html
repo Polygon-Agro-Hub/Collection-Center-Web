@@ -58,6 +58,14 @@
                 </span>
             </li>
 
+            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]" (click)="navigate('/complaints')">
+                <i class="fa-solid fa-triangle-exclamation text-[#6B6B6B] dark:text-white text-xl group-hover:text-[#415CFF]"></i>
+                <span [ngClass]="isCollapsed ? 'hidden' : 'block'"
+                    class="text-[#6B6B6B] dark:text-white text-lg font-normal group-hover:text-[#415CFF]">
+                    Complaints
+                </span>
+            </li>
+
 
             <li class="flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-gray-100">
                 <i class="fas  text-gray-600 text-lg"></i>

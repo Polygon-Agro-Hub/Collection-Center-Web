@@ -1,0 +1,114 @@
+<div class="flex flex-row items-center justify-end gap-8 ">
+    <i class="fa-solid fa-list text-2xl"></i>
+
+    <p class="text-lg">Filter By</p>
+
+
+    <div class="relative w-46">
+        <div
+            class="border-2 rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center">
+            <select [(ngModel)]="selectStatus" (change)="filterStatus()"
+                class="block w-full appearance-none  dark:bg-[#272F45] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
+                <option value="" selected disabled>Status</option>
+                <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300" value="Assigned">
+                    Assigned</option>
+                <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300" value="Closed">
+                    Closed</option>
+
+            </select>
+            <button *ngIf="!selectStatus">
+                <i class="fa-solid fa-angle-down text-lg mr-3"></i>
+            </button>
+            <button *ngIf="selectStatus" (click)="cancelStatus()">
+                <i class="fa-solid fa-xmark text-lg mr-3"></i>
+            </button>
+
+        </div>
+    </div>
+
+
+    <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#272F45]">
+        <input type="text" placeholder="Search by Ref No, EMP ID" [(ngModel)]="searchText"
+            class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
+        <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2" (click)="onSearch()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                    d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
+            </svg>
+        </button>
+        <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none" (click)="offSearch()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+        </button>
+    </div>
+
+</div>
+
+
+<div class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg">
+    <table class="w-full divide-y-2 overflow-hidden">
+        <thead class=" dark:bg-[#272F45] text-gray-700 dark:text-gray-300">
+            <tr>
+                <th class="px-6 py-3 text-left text-sm font-medium">Ref. No</th>
+                <th class="px-6 py-3 text-left text-sm font-medium">EMP ID</th>
+                <th class="px-6 py-3 text-left text-sm font-medium">Category</th>
+                <th class="px-6 py-3 text-center text-sm font-medium">Received At</th>
+                <th class="px-6 py-3 text-center text-sm font-medium">Status</th>
+                <th class="px-6 py-3 text-left text-sm font-medium">Action</th>
+                <th class="px-6 py-3 text-center text-sm font-medium">Reply</th>
+            </tr>
+        </thead>
+        <tbody class="bg-white dark:bg-[#1E293B]">
+            <tr
+                *ngFor="let item of complainArr | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index">
+                <!-- <tr *ngFor="let item of complainArr"> -->
+                <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.refNo}}</td>
+                <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.empId}}</td>
+                <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.complainCategory}}</td>
+                <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
+                    <div class="flex flex-col items-center justify-center">
+                        <p class="text-[#3E3E3E]">{{item.createdAt | date:'yyyy/mm/dd'}}</p>
+                        <p class="text-[#3E3E3E]">{{item.createdAt | date:'hh:mm a'}}</p>
+                    </div>
+                </td>
+                <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300 flex items-center justify-center">
+                    <span *ngIf="item.status ==='Assigned'" class="bg-[#C8E0FF] text-[#415CFF] px-3 py-1 rounded-lg">
+                        Assigned
+                    </span>
+
+                    <span *ngIf="item.status ==='Closed'" class="bg-[#B7FFBE] text-[#02BB3D] px-3 py-1 rounded-lg">
+                        Closed
+                    </span>
+                </td>
+                <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300"
+                
+                >
+                    <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg"
+                        stroke="">
+                        <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                        <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                        <g id="SVGRepo_iconCarrier">
+                            <path
+                                d="M3 14C3 9.02944 7.02944 5 12 5C16.9706 5 21 9.02944 21 14M17 14C17 16.7614 14.7614 19 12 19C9.23858 19 7 16.7614 7 14C7 11.2386 9.23858 9 12 9C14.7614 9 17 11.2386 17 14Z"
+                                stroke="#415CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                        </g>
+                    </svg>
+                </td>
+                <td class="px-6 py-4 flex justify-center space-x-4" 
+
+                >
+                <i class="fa-solid fa-share-from-square text-[#415CFF] text-lg" [ngClass]="{'text-gray-200': item.reply === null}"></i>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+    <div class="flex items-center justify-end my-5 mr-5">
+        <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
+            [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
+            [screenReaderCurrentLabel]="'Youre on page'">
+        </pagination-controls>
+    </div>
+</div>

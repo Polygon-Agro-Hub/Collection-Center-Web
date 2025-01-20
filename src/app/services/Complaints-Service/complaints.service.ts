@@ -7,19 +7,29 @@ import { Observable } from 'rxjs';
   providedIn: 'root'
 })
 export class ComplaintsService {
-  private apiUrl = `${environment.API_BASE_URL}`;
+  private apiUrl = `${environment.API_BASE_URL}/complaint`;
   private token = `${environment.TOKEN}`;
 
 
 
   constructor(private http: HttpClient) { }
 
-  // downloadDailyTarget(fromDate: Date | string, toDate: Date | string): Observable<any> {
-  //     const headers = new HttpHeaders({
-  //       Authorization: `Bearer ${this.token}`
-  //     });
+  getAllReciveComplaints(page: number = 1, limit: number = 10, status: string = '', searchText:string=''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
 
-  //     let url = `${this.apiUrl}/download-daily-target?fromDate=${fromDate}&toDate=${toDate}`;
-  //     return this.http.get<any>(url, { headers });
-  //   }
+
+    let url = `${this.apiUrl}/get-recived-complaints?page=${page}&limit=${limit}`;
+    if (status) {
+      url += `&status=${status}`
+    }
+
+    if(searchText){
+      url += `&searchText=${searchText}`
+
+    }
+
+    return this.http.get<any>(url, { headers });
+  }
 }

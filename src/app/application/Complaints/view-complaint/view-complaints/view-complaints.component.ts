@@ -3,18 +3,19 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ReceviedComplaintsComponent } from '../recevied-complaints/recevied-complaints.component';
 import { AddComplaintComponent } from '../../add-complaint/add-complaint.component';
+import { SendedComplaintComponent } from '../sended-complaint/sended-complaint.component';
 
 @Component({
   selector: 'app-view-complaints',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReceviedComplaintsComponent, AddComplaintComponent],
+  imports: [CommonModule, FormsModule, ReceviedComplaintsComponent, AddComplaintComponent, SendedComplaintComponent],
   templateUrl: './view-complaints.component.html',
   styleUrl: './view-complaints.component.css'
 })
 export class ViewComplaintsComponent {
 
-  isSelectRecevied: boolean = true;
-  isSelectSent: boolean = false;
+  isSelectRecevied: boolean = false;
+  isSelectSent: boolean = true;
   isAddComplaintOpen:boolean = false;
 
   selectRecevied() {

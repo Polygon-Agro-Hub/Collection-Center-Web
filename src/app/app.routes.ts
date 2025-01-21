@@ -19,6 +19,7 @@ import { ViewDailyTargetComponent } from './application/Target/view-daily-target
 import { OfficerProfileComponent } from './application/manage-officers/officer-profile/officer-profile.component';
 import { DownloadTargetComponent } from './application/Target/download-target/download-target.component';
 import { ViewComplaintsComponent } from './application/Complaints/view-complaint/view-complaints/view-complaints.component';
+import { ViewRecivedComplaintComponent } from './application/Complaints/view-recived-complaint/view-recived-complaint.component';
 
 export const routes: Routes = [
     {
@@ -127,7 +128,10 @@ export const routes: Routes = [
                     {
                         path: '',
                         component: ViewComplaintsComponent
-
+                    },
+                    {
+                        path: 'view-recive-reply/:id',
+                        component: ViewRecivedComplaintComponent
                     }
                 ]
             }

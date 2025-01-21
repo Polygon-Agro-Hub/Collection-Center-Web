@@ -16,9 +16,12 @@ import { NgxPaginationModule } from 'ngx-pagination';
 })
 export class ReceviedComplaintsComponent implements OnInit {
   complainArr!: RecivedComplaint[];
+  replyObj: Reply = new Reply();
 
   searchText: string = '';
   selectStatus: string = '';
+  isReplyView: boolean = false;
+  complainId!: number;
 
   page: number = 1;
   totalItems: number = 0;
@@ -52,6 +55,24 @@ export class ReceviedComplaintsComponent implements OnInit {
     )
   }
 
+  fetchGetReply(id: number) {
+    this.ComplainSrv.getReply(id).subscribe(
+      (res) => {
+        console.log(res);
+        this.replyObj = res.data;
+      }
+    )
+  }
+
+  viewReply(id: number) {
+    this.isReplyView = true;
+    this.fetchGetReply(id);
+  }
+
+  cancelViewReply() {
+    this.isReplyView = false;
+  }
+
   onSearch() {
     this.fetchAllreciveComplaint();
 
@@ -74,8 +95,12 @@ export class ReceviedComplaintsComponent implements OnInit {
 
 
   onPageChange(event: number) {
-    // this.page = event;
-    // this.fetchAllRequestPrice(this.page, this.itemsPerPage);
+    this.page = event;
+    this.fetchAllreciveComplaint(this.page, this.itemsPerPage);
+  }
+
+  navigateViewReply(id:number){
+    this.router.navigate([`/complaints/view-recive-reply/${id}`])
   }
 
 }
@@ -89,4 +114,9 @@ class RecivedComplaint {
   empId!: string
   reply: string | null = null
   createdAt!: Date
+}
+
+class Reply {
+  id!: number
+  reply!: string
 }

@@ -14,7 +14,7 @@ export class ComplaintsService {
 
   constructor(private http: HttpClient) { }
 
-  getAllReciveComplaints(page: number = 1, limit: number = 10, status: string = '', searchText:string=''): Observable<any> {
+  getAllReciveComplaints(page: number = 1, limit: number = 10, status: string = '', searchText: string = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
@@ -25,11 +25,20 @@ export class ComplaintsService {
       url += `&status=${status}`
     }
 
-    if(searchText){
+    if (searchText) {
       url += `&searchText=${searchText}`
 
     }
 
+    return this.http.get<any>(url, { headers });
+  }
+
+  getReply(id: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/get-recived-complaints-by-id/${id}`;
     return this.http.get<any>(url, { headers });
   }
 }

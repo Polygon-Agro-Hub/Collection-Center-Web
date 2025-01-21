@@ -33,12 +33,22 @@ export class ComplaintsService {
     return this.http.get<any>(url, { headers });
   }
 
-  getReply(id: number): Observable<any> {
+  getComplainById(id: number): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
 
     let url = `${this.apiUrl}/get-recived-complaints-by-id/${id}`;
     return this.http.get<any>(url, { headers });
+  }
+
+
+  forwordComplain(id: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/forword-to-complain/${id}`;
+    return this.http.patch<any>(url,{}, { headers });
   }
 }

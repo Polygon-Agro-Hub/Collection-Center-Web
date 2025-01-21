@@ -51,4 +51,14 @@ export class ComplaintsService {
     let url = `${this.apiUrl}/forword-to-complain/${id}`;
     return this.http.patch<any>(url,{}, { headers });
   }
+
+
+  replyToComplain(data: any): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/reply-complain`;
+    return this.http.patch<any>(url, data, { headers });
+  }
 }

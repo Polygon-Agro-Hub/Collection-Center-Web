@@ -69,14 +69,12 @@
 <div *ngIf="isReplyView" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
     <div class="bg-white dark:bg-[#272F45] shadow-lg rounded-lg p-6 w-1/2">
         <div class="flex flex-col items-center justify-center gap-5">
-            <div class="bg-[#F6F6F6] rounded-full shadow-md p-5">
+            <div class="bg-[#F6F6F6] rounded-full shadow-md p-5"> 
                 <i class="fa-regular fa-envelope text-4xl"></i>
             </div>
 
-            <p class="text-3xl font-bold">Your Response</p>
-
-            <div class="border-[1px] border-[#D9D9D9] rounded-lg w-full h-60">
-                <textarea class="w-full h-full" cols="6"></textarea>
+            <div class="border-[1px] border-[#D9D9D9] rounded-lg w-full h-60 p-1">
+                <textarea class="w-full h-full" cols="6" [(ngModel)]="replyObj.reply" name="reply"></textarea>
             </div>
 
             <div class="flex flex-row justify-center items-center gap-8">
@@ -84,8 +82,7 @@
                     (click)="cancelViewReply()">
                     Close
                 </button>
-                <button class="text-xl bg-[#415CFF] text-white border-[2px] font-semibold rounded-lg shadow-lg px-6 py-2"
-        >
+                <button class="text-xl bg-[#415CFF] text-white border-[2px] font-semibold rounded-lg shadow-lg px-6 py-2" (click)="sendReply()">
                     Save
                 </button>
             </div>

@@ -18,6 +18,9 @@ import Swal from 'sweetalert2';
 export class ViewRecivedComplaintComponent implements OnInit {
 
   compalintObj: Complaint = new Complaint();
+  replyObj: Reply = new Reply();
+
+
   compalinId!: number;
   hasData: boolean = false;
   officerName!: string;
@@ -95,6 +98,25 @@ export class ViewRecivedComplaintComponent implements OnInit {
     this.isReplyView = false;
   }
 
+  sendReply() {
+    if(!this.replyObj.reply){
+      return this.toastSrv.warning('Pleace fill reply before send!')
+    }
+
+    this.replyObj.id = this.compalinId;
+
+    this.ComplainSrv.replyToComplain(this.replyObj).subscribe(
+      (res) => {
+        if (res.status) {
+          this.toastSrv.success(res.message)
+          this.router.navigate(['/complaints']);
+        } else {
+          this.toastSrv.error(res.message)
+
+        }
+      }
+    )
+  }
 
 
 
@@ -118,7 +140,7 @@ class Complaint {
   phoneNumber02!: string
 }
 
-class Reply{
-  id!:number
-  reply!:string
+class Reply {
+  id!: number
+  reply!: string
 }

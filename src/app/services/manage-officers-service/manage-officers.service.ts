@@ -126,6 +126,15 @@ export class ManageOfficersService {
       headers,
     });
   }
+
+  disclaimOfficer(id: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
+    return this.http.put(`${this.apiUrl}/manage-officers/disclaim-officer/${id}`,{}, {
+      headers,
+    });
+  }
 }
 
 

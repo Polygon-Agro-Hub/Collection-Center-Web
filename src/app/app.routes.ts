@@ -20,6 +20,7 @@ import { OfficerProfileComponent } from './application/manage-officers/officer-p
 import { DownloadTargetComponent } from './application/Target/download-target/download-target.component';
 import { ViewComplaintsComponent } from './application/Complaints/view-complaint/view-complaints/view-complaints.component';
 import { ViewRecivedComplaintComponent } from './application/Complaints/view-recived-complaint/view-recived-complaint.component';
+import { ClaimOfficerComponent } from './application/manage-officers/claim-officer/claim-officer.component';
 
 export const routes: Routes = [
     {
@@ -57,7 +58,12 @@ export const routes: Routes = [
                     {
                         path: 'officer-profile/:id',
                         component: OfficerProfileComponent
+                    },
+                    {
+                        path: 'claim-officer',
+                        component: ClaimOfficerComponent
                     }
+                    
                 ]
             },
             {

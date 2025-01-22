@@ -32,10 +32,11 @@
 </div>
 
 <div *ngIf="isAddComplaintOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-    <div class="bg-white dark:bg-[#272F45] shadow-lg rounded-lg p-6 w-1/2" style="max-width: 500px;">
+    <div class="bg-white dark:bg-[#272F45] shadow-lg rounded-lg p-6 w-1/2">
         <div class="flex justify-end items-center mb-4">
             <button class="text-red-500 font-bold text-xl" (click)="closeAddComplaint()">&times;</button>
         </div>
         <app-add-complaint/>
     </div>
 </div>
+

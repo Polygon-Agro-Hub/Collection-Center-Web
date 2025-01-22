@@ -17,6 +17,7 @@ import { ToastAlertService } from '../../../services/toast-alert/toast-alert.ser
 export class OfficerProfileComponent implements OnInit {
   officerObj: Officer = new Officer();
   officerId!: number;
+  showDisclaimView = false;
 
   constructor(
     private ManageOficerSrv: ManageOfficersService,
@@ -66,6 +67,31 @@ export class OfficerProfileComponent implements OnInit {
     }
   }
 
+  toggleDisclaimView() {
+    this.showDisclaimView = !this.showDisclaimView; // Toggle the boolean value
+  }
+
+  cancelDisclaim() {
+    this.showDisclaimView = false;
+  }
+  
+  confirmDisclaim(id: number) {
+    
+    this.ManageOficerSrv.disclaimOfficer(id).subscribe(
+      (response) => {
+        console.log('Officer ID sent successfully:', response);
+        this.toastSrv.success('Officer ID sent successfully!');
+        this.showDisclaimView = false;
+        this.router.navigate(['/manage-officers/view-officer']);
+      },
+      (error) => {
+        console.error('Error sending Officer ID:', error);
+        this.toastSrv.error('Failed to send Officer ID!');
+      }
+    );
+    
+  }
+
 }
 
 class Officer {
@@ -93,4 +119,5 @@ class Officer {
   branchName!: string;
   companyNameEnglish!: string;
   centerName!: string;
+
 }

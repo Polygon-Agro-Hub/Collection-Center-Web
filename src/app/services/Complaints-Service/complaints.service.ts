@@ -32,4 +32,14 @@ export class ComplaintsService {
 
     return this.http.get<any>(url, { headers });
   }
+
+  submitComplaint(data: { category: string; complaint: string }): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/add-complain`;
+    return this.http.post<any>(url, data, { headers });
+  }
+
 }

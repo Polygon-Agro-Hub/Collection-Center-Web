@@ -10,7 +10,7 @@
             <label for="jobRole" class="block text-sm font-medium text-gray-700 dark:text-textDark">
                 Job Role
             </label>
-            <select id="jobRole" [(ngModel)]="selectJobRole" name="jobRole" placeholder="select"
+            <select id="jobRole" [(ngModel)]="selectJobRole" name="selectJobRole" placeholder="select"
                 class="form-control mt-1 block w-full p-2 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-100 dark:bg-gray-800 appearance-none focus:ring-indigo-500 focus:border-indigo-500">
                 <option disabled class="p-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800">
                     -- select --
@@ -59,7 +59,7 @@
             </div>
         </div>
 
-        <button class="bg-[#415CFF] text-white font-semibold rounded-lg shadow-md px-5 py-2">Claim</button>
+        <button class="bg-[#415CFF] text-white font-semibold rounded-lg shadow-md px-5 py-2" (click)="cliamBtn(officerObj.id)">Claim</button>
 
     </div>
 
@@ -68,6 +68,9 @@
         <p class="text-[#494949] my-6">--The user already claimed By {{officerObj.centerName}} Center.--</p>
         <img src="../../../../assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
     </div>
+
+    <hr *ngIf="hasData" class="border-gray-300 border-[1px] my-8" />
+
 
     <div *ngIf="hasData"
         class="flex flex-col items-center w-full h-screen px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg mt-6">

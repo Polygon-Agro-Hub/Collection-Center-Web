@@ -34,7 +34,7 @@ export class ManageOfficersService {
     });
   }
 
-  createCollectiveOfficer(person:any): Observable<any> {
+  createCollectiveOfficer(person: any): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
     });
@@ -44,7 +44,7 @@ export class ManageOfficersService {
   }
 
 
-  getAllManagersByCenter(centerId:string): Observable<any> {
+  getAllManagersByCenter(centerId: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
@@ -54,7 +54,7 @@ export class ManageOfficersService {
     });
   }
 
-  getAllOfficers( page: number = 1, limit: number = 10, status:string ='', role:string = '', searchText:string = ''): Observable<any> {
+  getAllOfficers(page: number = 1, limit: number = 10, status: string = '', role: string = '', searchText: string = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
@@ -62,16 +62,16 @@ export class ManageOfficersService {
 
     let url = `${this.apiUrl}/manage-officers/get-all-officers?page=${page}&limit=${limit}`
 
-    if(status){
+    if (status) {
       url += `&status=${status}`
     }
 
-    if(role){
-      url +=`&role=${role}`
+    if (role) {
+      url += `&role=${role}`
     }
 
-    if(searchText){
-      url +=`&searchText=${searchText}`
+    if (searchText) {
+      url += `&searchText=${searchText}`
     }
 
 
@@ -90,7 +90,7 @@ export class ManageOfficersService {
     return this.http.get<any>(url, { headers });
   }
 
-  deleteOfficer(id:number): Observable<any> {
+  deleteOfficer(id: number): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
@@ -99,7 +99,7 @@ export class ManageOfficersService {
     return this.http.delete<any>(url, { headers });
   }
 
-  ChangeStatus(id:number, status:string): Observable<any> {
+  ChangeStatus(id: number, status: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
@@ -118,7 +118,7 @@ export class ManageOfficersService {
     });
   }
 
-  updateCollectiveOfficer(person:any , id:number): Observable<any> {
+  updateCollectiveOfficer(person: any, id: number): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
     });
@@ -132,6 +132,26 @@ export class ManageOfficersService {
       Authorization: `Bearer ${this.token}`,
     });
     return this.http.put(`${this.apiUrl}/manage-officers/disclaim-officer/${id}`,{}, {
+      headers,
+    });
+  }
+
+  getOfficerByEmpId(role: string): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+    return this.http.get(`${this.apiUrl}/manage-officers/get-officer-by-empId/${role}`, {
+      headers,
+    });
+  }
+
+  claimOfficer(id: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+    return this.http.patch(`${this.apiUrl}/manage-officers/claim-officer`, { id }, {
       headers,
     });
   }

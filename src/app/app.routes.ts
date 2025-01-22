@@ -133,6 +133,7 @@ export const routes: Routes = [
                         path: 'view-recive-reply/:id',
                         component: ViewRecivedComplaintComponent
                     }
+                    
                 ]
             }
 

@@ -27,7 +27,7 @@ export class ViewRecivedComplaintComponent implements OnInit {
   phone1!: string;
   phone2!: string;
 
-  isReplyView: boolean = true;
+  isReplyView: boolean = false;
 
 
   constructor(

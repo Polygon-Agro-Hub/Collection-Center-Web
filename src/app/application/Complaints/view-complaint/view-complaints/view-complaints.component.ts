@@ -14,9 +14,9 @@ import { SendedComplaintComponent } from '../sended-complaint/sended-complaint.c
 })
 export class ViewComplaintsComponent {
 
-  isSelectRecevied: boolean = false;
+  isSelectRecevied: boolean = true;
   isSelectSent: boolean = false;
-  isAddComplaintOpen:boolean = true;
+  isAddComplaintOpen:boolean = false;
 
   selectRecevied() {
     this.isSelectRecevied = true;

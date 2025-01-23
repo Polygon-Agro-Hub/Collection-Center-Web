@@ -22,7 +22,7 @@ export class ViewDailyTargetComponent implements OnInit {
   hasData: boolean = true;
   page: number = 1;
   totalItems: number = 0;
-  itemsPerPage: number = 10;
+  itemsPerPage: number = 4;
 
   constructor(
     private router: Router,
@@ -40,7 +40,7 @@ export class ViewDailyTargetComponent implements OnInit {
       (res) => {
         this.targetArr = res.items;
         this.totalItems = res.totalPages
-        if (res.length) {
+        if (res.items.length>0) {
           this.hasData = true;
         } else {
           this.hasData = false;

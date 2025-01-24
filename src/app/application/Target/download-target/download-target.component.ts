@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe } from '@angular/common';
 import { Component, inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -14,7 +14,8 @@ import { ToastAlertService } from '../../../services/toast-alert/toast-alert.ser
   standalone: true,
   imports: [CommonModule, FormsModule, ToastrModule], 
   templateUrl: './download-target.component.html',
-  styleUrls: ['./download-target.component.css']
+  styleUrls: ['./download-target.component.css'],
+  providers: [DatePipe]
 })
 export class DownloadTargetComponent {
   targetArr!: DailyTargets[];

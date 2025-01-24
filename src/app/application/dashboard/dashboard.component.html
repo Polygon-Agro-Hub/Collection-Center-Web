@@ -1,12 +1,10 @@
 <div class="p-4">
     <h2 class="text-lg font-semibold mb-4">Dashboard</h2>
     <div class="flex space-x-4">
-        <!-- Card 1 -->
         <div class="bg-white shadow-md rounded-lg p-6 text-center border">
             <h3 class="text-sm font-medium text-gray-500">Total COO</h3>
             <p class="text-2xl font-bold text-black mt-2">{{ COOCount }}</p>
         </div>
-        <!-- Card 2 -->
         <div class="bg-white shadow-md rounded-lg p-6 text-center border">
             <h3 class="text-sm font-medium text-gray-500">Total CUO</h3>
             <p class="text-2xl font-bold text-black mt-2">{{ CUOCount }}</p>
@@ -15,14 +13,36 @@
 </div>
 
 <div class="w-full px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg">
+    <div class="dashboard">
+        <h2>Chart Data</h2>
+
+        <div class="range-buttons">
+            <button (click)="fetchChart('7 days')">Last 7 Days</button>
+            <button (click)="fetchChart('30 days')">Last 30 Days</button>
+            <button (click)="fetchChart('by month')">By Month</button>
+        </div>
+
+        <div>
+            <h3>Chart Data</h3>
+            <div class="bg-[#1e2a38] p-5 rounded-lg text-center text-[#888888]">
+              <canvas id="MyChart" class="w-full"></canvas>
+            </div>
+          </div>
+          
+
+        <div *ngIf="!totals || totals.length === 0">
+            <p>No data available for the selected range.</p>
+        </div>
+    </div>
+
     <div class="p-4">
         <h3 class="text-blue-500 underline my-3 border-b-2 ">Activity</h3>
         <ul class="my-2">
             <li class="text-[#636D81] my-3" *ngFor="let log of activityLogs">
                 You changed the price of
-                <span class="text-black font-bold">{{ log.cropNameEnglish }} {{ log.varietyNameEnglish }}</span> grade 
-                <span class="font-bold text-black">{{ log.grade }} </span> from 
-                <span class="font-bold text-black"> Rs.{{ log.price }}</span> to 
+                <span class="text-black font-bold">{{ log.cropNameEnglish }} {{ log.varietyNameEnglish }}</span> grade
+                <span class="font-bold text-black">{{ log.grade }} </span> from
+                <span class="font-bold text-black"> Rs.{{ log.price }}</span> to
                 <span class="font-bold text-black">Rs.{{ log.updatedPrice }}</span>
                 <br />
                 {{ log.updateAt }}
@@ -30,4 +50,3 @@
         </ul>
     </div>
 </div>
-

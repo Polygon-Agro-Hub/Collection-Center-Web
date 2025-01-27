@@ -17,8 +17,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   COOCount: number = 0;
   CUOCount: number = 0;
   totals: Total[] = [];
-  activityLogs!: ActiveData[]; 
+  activityLogs!: ActiveData[];
   chart: any;
+  activeButton: string = 'week';
 
   constructor(
     private dashboardService: DashboardService,
@@ -27,10 +28,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   ngOnInit(): void {
     this.fetchOfficerCounts();
+    this.fetchChart('week')
   }
 
   ngAfterViewInit(): void {
-    this.createChart();
+    this.fetchChart('week');
   }
 
   fetchOfficerCounts(): void {
@@ -39,7 +41,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         this.COOCount = data.COOCount.COOCount;
         this.CUOCount = data.CUOCount.CUOCount;
         this.activityLogs = data.activities.map((log: any) => {
-          log.updateAt = this.formatDate(log.updateAt);
+          log.updateAt = this.formatDate(log.updateAt);  // Time only format
           return log;
         });
       },
@@ -48,86 +50,91 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       }
     );
   }
-
-  formatDate(dateString: string, format: string = 'yyyy-MM-dd h:mm a'): string {
+  
+  formatDate(dateString: string, format: string = 'h:mm a'): string {
     const formattedDate = this.datePipe.transform(dateString, format);
     return formattedDate ? formattedDate : 'Unknown time';
   }
+  
 
-  fetchChart(range: string): void {
-    this.dashboardService.getChartData(range).subscribe(
-      (data) => {
-        this.totals = data.map((item: any) => ({
-          date: this.formatDate(item.date),
-          totCount: item.totCount,
-        }));
-        this.updateChart();
+  fetchChart(filter: string) {
+    this.activeButton = filter;
+    
+    this.dashboardService.getChartData(filter).subscribe(
+      (response: any) => {
+        
+        this.totals = response;
+        console.log("--Responce--", response);
+
+       
+        const labels = this.totals.map(item => item.date);
+        const data = this.totals.map(item => item.totCount);
+
+        
+        const canvas = document.getElementById('MyChart') as HTMLCanvasElement;
+
+        if (canvas) {
+         
+          if (this.chart) {
+            this.chart.destroy();
+          }
+
+          this.chart = new Chart(canvas, {
+            type: 'line',
+            data: {
+              labels: labels, 
+              datasets: [
+                {
+                  label: "",
+                  data: data, 
+                  borderColor: "#4E97FD",
+                  backgroundColor: "#6F64A766",
+                  fill: true,
+                  tension: 0.4
+                },
+              ]
+            },
+            options: {
+              responsive: true,
+              plugins: {
+                legend: {
+                  display: true,
+                  labels: {
+                    color: 'black'
+                  }
+                }
+              },
+              scales: {
+                x: {
+                  ticks: {
+                    color: 'balck'
+                  },
+                  grid: {
+                    display: false
+                  }
+                },
+                y: {
+                  ticks: {
+                    color: 'balck'
+                  },
+                  grid: {
+                    color: '#CCCCCC'
+                  }
+                }
+              }
+            }
+          });
+        } else {
+          console.error('Canvas element not found');
+        }
       },
       (error) => {
-        console.error('Error fetching chart data', error);
+        console.error('Error fetching chart data:', error);
       }
     );
   }
 
-  getDayOfWeek(date: string): string {
-    const dayOfWeek = new Date(date).getDay();
-    const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'];
-    return days[dayOfWeek];
-  }
 
-  createChart() {
-    const canvas = document.getElementById('MyChart') as HTMLCanvasElement;
-
-    if (canvas) {
-      this.chart = new Chart(canvas, {
-        type: 'line',
-        data: {
-          labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-          datasets: [
-            {
-              label: "Sales",
-              data: [4000, 3000, 2000, 5000, 6000, 8000, 7000, 5000, 4000, 3000, 2000, 1000],
-              borderColor: "#4E97FD",
-              backgroundColor: "rgba(78, 151, 253, 0.3)",
-              fill: true,
-              tension: 0.4
-            },
-          ]
-        },
-        options: {
-          responsive: true,
-          plugins: {
-            legend: {
-              display: true,
-              labels: {
-                color: 'white'
-              }
-            }
-          },
-          scales: {
-            x: {
-              ticks: {
-                color: 'white'
-              },
-              grid: {
-                display: false
-              }
-            },
-            y: {
-              ticks: {
-                color: 'white'
-              },
-              grid: {
-                color: 'rgba(255, 255, 255, 0.1)'
-              }
-            }
-          }
-        }
-      });
-    } else {
-      console.error('Canvas element not found');
-    }
-  }
 
   updateChart() {
     if (this.chart) {

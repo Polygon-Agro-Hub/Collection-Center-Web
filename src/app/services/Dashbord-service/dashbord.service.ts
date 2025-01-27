@@ -32,13 +32,13 @@ export class DashboardService {
     });
   }
 
-  getChartData(endpoint: string): Observable<any[]> {
+  getChartData(filter: string): Observable<any[]> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
     });
     // Pass the dynamic endpoint into the URL
-    return this.http.get<any[]>(`${this.apiUrl}/get-chart?filter=${endpoint}`, {
+    return this.http.get<any[]>(`${this.apiUrl}/get-chart?filter=${filter}`, {
       headers,
     });
   }

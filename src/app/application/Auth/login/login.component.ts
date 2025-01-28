@@ -77,7 +77,7 @@ onLogin(){
         localStorage.setItem('userId:', res.userId);
         localStorage.setItem('role:', res.role);
         localStorage.setItem('updatedPassword:', res.updatedPassword);
-          localStorage.setItem('Token Expiration', String(new Date().getTime() + (res.expiresIn * 20))); // Assuming expiresIn is in seconds
+          localStorage.setItem('Token Expiration', String(new Date().getTime() + (res.expiresIn * 20)));
           // console.log("hi..",res.token);
           // console.log("hi..",res.userName);
           // console.log("hi..",res.role);

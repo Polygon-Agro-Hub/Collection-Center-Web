@@ -2,7 +2,7 @@
     <p class="text-center text-black text-lg font-bold">WPCK02: Kollupitiya</p>
 </div>
 
-<div
+<div *ngIf="isSaveButtonDisabled"
     class="flex flex-col items-center bg-tileLight dark:bg-tileBlack p-6 border-2 border-blue-500 rounded-lg shadow-lg my-3">
     <p class="text-lg font-bold text-gray-900 dark:text-white">
         Editing Timer for Center's Target
@@ -10,7 +10,7 @@
 
     <div class="relative w-24 h-24 my-4">
         <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
-            
+
             <circle class="text-gray-300 stroke-current" cx="50" cy="50" r="45" stroke-width="8" fill="transparent">
             </circle>
 
@@ -193,7 +193,8 @@
     </div>
 </div>
 
-<div class="w-full px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg mt-6">
+<div *ngIf="(dailyTartgetObj.fromDate && dailyTartgetObj.toDate && dailyTartgetObj.fromTime && dailyTartgetObj.toTime)"
+    class="w-full px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg mt-6">
     <div class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg">
         <table class="w-full divide-y-2 border-[1px] border-gray-300 rounded-lg overflow-hidden">
             <thead class=" dark:bg-[#272F45] text-gray-700 dark:text-gray-300">
@@ -227,11 +228,13 @@
         </table>
     </div>
 
-    <div class="flex flex-row justify-end my-5 mx-5 gap-5" (click)="onCancel()">
-        <button class="bg-[#F6F7F9] text-[#6B7D8C] border-[2px] rounded-lg text-lg px-6 py-2">
+    <div class="flex flex-row justify-end my-5 mx-5 gap-5">
+        <button class="bg-[#F6F7F9] text-[#6B7D8C] border-[2px] rounded-lg text-lg px-6 py-2" (click)="onCancel()">
             Cancel
         </button>
-        <button class="bg-[#415CFF] text-white border-[2px] rounded-lg text-lg px-8 py-2" (click)="onSubmit()">
+        <button class="bg-[#415CFF] text-white border-[2px] rounded-lg text-lg px-8 py-2"
+            [ngClass]="{'bg-[#F6F7F9] cursor-not-allowed text-[#415CFF]': isSaveButtonDisabled}"
+            (click)="!isSaveButtonDisabled && onSubmit()">
             Save
         </button>
 

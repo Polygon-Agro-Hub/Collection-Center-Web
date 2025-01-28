@@ -27,10 +27,14 @@ export class AddDailyTargetComponent implements OnInit {
   isAddColumn = false;
   selectCropId: number | string = '';
 
-  totalTime = 300;
+
+  totalTime = 10;
   remainingTime = this.totalTime;
   intervalId: any;
-  progress = 283; 
+  progress = 283;
+
+  isSaveButtonDisabled = false;
+  iscountDown = true;
 
 
   constructor(
@@ -47,7 +51,6 @@ export class AddDailyTargetComponent implements OnInit {
     // this.dailyTartgetObj.centerId = this.route.snapshot.params['id'];
     this.dailyTartgetObj.centerId = 1;
     this.getAllCropVerity();
-    this.startTimer();
   }
 
   getAllCropVerity() {
@@ -146,6 +149,13 @@ export class AddDailyTargetComponent implements OnInit {
   }
 
   onSubmit() {
+    if (this.iscountDown) {
+      this.iscountDown = false;
+      this.isSaveButtonDisabled = true;
+      this.startTimer();
+      return;
+    }
+
     console.log(this.dailyTartgetObj);
     if (this.dailyTartgetObj.TargetItems.length === 0) {
       Swal.fire('warning', 'Pleace fill all required feilds', 'warning')
@@ -153,10 +163,10 @@ export class AddDailyTargetComponent implements OnInit {
       this.TargetSrv.createDailyTarget(this.dailyTartgetObj).subscribe(
         (res: any) => {
           if (res.status) {
-          this.toastSrv.success(res.message)
+            this.toastSrv.success(res.message)
             this.router.navigate(['/target/view-target'])
           } else {
-          this.toastSrv.error(res.message)
+            this.toastSrv.error(res.message)
 
           }
         },
@@ -225,12 +235,14 @@ export class AddDailyTargetComponent implements OnInit {
     this.intervalId = setInterval(() => {
       if (this.remainingTime > 0) {
         this.remainingTime--;
-        this.progress = (this.remainingTime / this.totalTime) * 283; // Update stroke-dashoffset
+        this.progress = (this.remainingTime / this.totalTime) * 283; 
       } else {
         clearInterval(this.intervalId);
+        this.isSaveButtonDisabled = false;
       }
     }, 1000);
   }
+  
 
   getFormattedTime(): string {
     const minutes = Math.floor(this.remainingTime / 60);

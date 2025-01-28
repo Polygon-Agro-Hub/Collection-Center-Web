@@ -1,3 +1,38 @@
+<div class="w-full px-10 py-3 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg mt-6">
+    <p class="text-center text-black text-lg font-bold">WPCK02: Kollupitiya</p>
+</div>
+
+<div
+    class="flex flex-col items-center bg-tileLight dark:bg-tileBlack p-6 border-2 border-blue-500 rounded-lg shadow-lg my-3">
+    <p class="text-lg font-bold text-gray-900 dark:text-white">
+        Editing Timer for Center's Target
+    </p>
+
+    <div class="relative w-24 h-24 my-4">
+        <svg class="w-full h-full transform -rotate-90" viewBox="0 0 100 100">
+            
+            <circle class="text-gray-300 stroke-current" cx="50" cy="50" r="45" stroke-width="8" fill="transparent">
+            </circle>
+
+            <circle class="text-blue-500 stroke-current transition-all duration-1000" cx="50" cy="50" r="45"
+                stroke-width="8" stroke-linecap="round" fill="transparent" stroke-dasharray="283"
+                [attr.stroke-dashoffset]="progress"></circle>
+        </svg>
+
+        <span class="absolute inset-0 flex items-center justify-center text-lg font-semibold text-gray-900">
+            {{ getFormattedTime() }}
+        </span>
+    </div>
+
+    <p class="text-center text-gray-700 dark:text-gray-300">
+        <span class="font-semibold text-black">Don't leave this page,</span> you have a 5-minute editing time. The
+        target remains hidden from centers.
+        <span class="font-semibold text-black">Please make sure to click on "Save" again after editing.</span>
+    </p>
+</div>
+
+
+
 <div class="w-full px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg mt-6">
     <div class="flex flex-row items-center justify-center gap-52 px-10">
         <div class="flex flex-col">
@@ -5,7 +40,8 @@
             <div class="flex flex-row gap-3">
                 <div
                     class="border-2 rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
-                    <input type="date" #fromDateInput [(ngModel)]="dailyTartgetObj.fromDate" name="fromDate" (change)="checkFromDate(fromDateInput)"
+                    <input type="date" #fromDateInput [(ngModel)]="dailyTartgetObj.fromDate" name="fromDate"
+                        (change)="checkFromDate(fromDateInput)"
                         class="block w-full appearance-none dark:bg-[#272F45] text-textLight dark:text-textDark px-3 py-1 rounded-xl focus:outline-none" />
                 </div>
                 <div
@@ -20,9 +56,10 @@
         <div class="flex flex-col">
             <p class="font-semibold text-lg my-1 ml-1">To</p>
             <div class="flex flex-row gap-3">
-                <div 
+                <div
                     class="border-2 rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
-                    <input type="date" #toDateInput  [(ngModel)]="dailyTartgetObj.toDate" name="toDate" (change)="checkToDate(toDateInput)"
+                    <input type="date" #toDateInput [(ngModel)]="dailyTartgetObj.toDate" name="toDate"
+                        (change)="checkToDate(toDateInput)"
                         class="block w-full appearance-none dark:bg-[#272F45] text-textLight dark:text-textDark px-3 py-1 rounded-xl focus:outline-none" />
                 </div>
                 <div
@@ -42,8 +79,10 @@
     <img src="../../../../assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
 </div>
 
-<div *ngIf="(dailyTartgetObj.fromDate && dailyTartgetObj.toDate && dailyTartgetObj.fromTime && dailyTartgetObj.toTime)" class="w-full px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg mt-6">
-    <p class="font-semibold ">Daily Target from {{dailyTartgetObj.fromDate}} <span class="text-[#415CFF]">{{dailyTartgetObj.fromTime}}</span> to {{dailyTartgetObj.toDate}}
+<div *ngIf="(dailyTartgetObj.fromDate && dailyTartgetObj.toDate && dailyTartgetObj.fromTime && dailyTartgetObj.toTime)"
+    class="w-full px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg mt-6">
+    <p class="font-semibold ">Daily Target from {{dailyTartgetObj.fromDate}} <span
+            class="text-[#415CFF]">{{dailyTartgetObj.fromTime}}</span> to {{dailyTartgetObj.toDate}}
         <span class="text-[#415CFF]">{{dailyTartgetObj.toTime}}</span>
     </p>
 
@@ -52,13 +91,14 @@
             <label for="jobRole" class="block font-medium text-gray-700 dark:text-textDark">
                 Crop
             </label>
-            <select id="selectId" name="selectId" placeholder="select" [(ngModel)]="selectCropId" (change)="onCropChange();"
+            <select id="selectId" name="selectId" placeholder="select" [(ngModel)]="selectCropId"
+                (change)="onCropChange();"
                 class="form-control mt-1 block w-[100%] p-2 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-800 appearance-none focus:ring-indigo-500 focus:border-indigo-500">
                 <option selected disabled value=""
                     class="p-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800">
                     -- select --
                 </option>
-                <option *ngFor="let cropItem of cropsObj" [value]="cropItem.cropId" 
+                <option *ngFor="let cropItem of cropsObj" [value]="cropItem.cropId"
                     class="p-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800">
                     {{ cropItem.cropNameEnglish }}
                 </option>
@@ -70,19 +110,22 @@
             <label for="jobRole" class="block font-medium text-gray-700 dark:text-textDark">
                 Variety
             </label>
-            <select id="jobRole" name="jobRole" placeholder="select" [disabled]="isVerityVisible" [(ngModel)]="InputObj.varietyId" name="varietyId" (change)="onVariatyChange()"
+            <select id="jobRole" name="jobRole" placeholder="select" [disabled]="isVerityVisible"
+                [(ngModel)]="InputObj.varietyId" name="varietyId" (change)="onVariatyChange()"
                 class="form-control mt-1 block w-[100%] p-2 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-800 appearance-none focus:ring-indigo-500 focus:border-indigo-500">
                 <option disabled selected class="p-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800">
                     -- select --
                 </option>
-                <option *ngFor="let variety of selectedVarieties" [value]="variety.id" class="p-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800">
+                <option *ngFor="let variety of selectedVarieties" [value]="variety.id"
+                    class="p-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800">
                     {{ variety.varietyEnglish }}
                 </option>
             </select>
         </div>
 
         <div>
-            <button class="bg-[#415CFF] text-white border-[2px] text-lg rounded-lg  px-4 py-1 mt-5" (click)="goButton()">
+            <button class="bg-[#415CFF] text-white border-[2px] text-lg rounded-lg  px-4 py-1 mt-5"
+                (click)="goButton()">
                 Go
             </button>
         </div>
@@ -137,7 +180,8 @@
                             class="border-[#415CFF] border-[2px] border-dotted rounded-lg w-20 px-2 py-1" />
                     </td>
                     <td class="px-3 py-4">
-                        <button class="bg-[#F6F7F9] text-[#6B7D8C] border-[2px] rounded-lg px-4 py-2" (click)="AddButton()">
+                        <button class="bg-[#F6F7F9] text-[#6B7D8C] border-[2px] rounded-lg px-4 py-2"
+                            (click)="AddButton()">
                             Add
                         </button>
                     </td>
@@ -165,14 +209,16 @@
             </thead>
             <tbody class="bg-white dark:bg-[#1E293B]">
                 <tr *ngFor="let item of dailyTartgetObj.TargetItems; let i = index">
-                    <td class="px-5 py-4  text-gray-900 dark:text-gray-300">{{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1)  }}</td>
+                    <td class="px-5 py-4  text-gray-900 dark:text-gray-300">{{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1)
+                            }}</td>
                     <td class="px-5 py-4  text-gray-900 dark:text-gray-300">{{item.cropName}}</td>
                     <td class="px-5 py-4  text-gray-900 dark:text-gray-300">{{item.VarietyName}}</td>
                     <td class="px-5 py-4  text-gray-900 dark:text-gray-300">{{item.qtyA}}</td>
                     <td class="px-5 py-4  text-gray-900 dark:text-gray-300">{{item.qtyB}}</td>
                     <td class="px-5 py-4  text-gray-900 dark:text-gray-300">{{item.qtyC}}</td>
                     <td class="px-5 py-4  text-gray-900 dark:text-gray-300">
-                        <button class="flex items-center justify-center text-red-600 hover:text-rose-900 w-10 h-10" (click)="removeItem(i)">
+                        <button class="flex items-center justify-center text-red-600 hover:text-rose-900 w-10 h-10"
+                            (click)="removeItem(i)">
                             <i class="fa-solid fa-trash-can text-lg"></i>
                         </button>
                     </td>

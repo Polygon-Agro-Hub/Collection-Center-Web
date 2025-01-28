@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { TargetService } from '../../../services/Target-service/target.service';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -18,6 +18,7 @@ import { ToastAlertService } from '../../../services/toast-alert/toast-alert.ser
 export class AddDailyTargetComponent implements OnInit {
   cropsObj: Crop[] = [];
   selectedVarieties!: Variety[];
+  centerId!: number;
 
   dailyTartgetObj: DailyTarget = new DailyTarget();
   InputObj: TargetItem = new TargetItem();
@@ -26,17 +27,27 @@ export class AddDailyTargetComponent implements OnInit {
   isAddColumn = false;
   selectCropId: number | string = '';
 
+  totalTime = 300;
+  remainingTime = this.totalTime;
+  intervalId: any;
+  progress = 283; 
+
 
   constructor(
     private router: Router,
     private TargetSrv: TargetService,
-    private toastSrv: ToastAlertService
+    private toastSrv: ToastAlertService,
+    private route: ActivatedRoute,
+
 
   ) { }
 
 
   ngOnInit(): void {
+    // this.dailyTartgetObj.centerId = this.route.snapshot.params['id'];
+    this.dailyTartgetObj.centerId = 1;
     this.getAllCropVerity();
+    this.startTimer();
   }
 
   getAllCropVerity() {
@@ -210,7 +221,28 @@ export class AddDailyTargetComponent implements OnInit {
     });
   }
 
+  startTimer() {
+    this.intervalId = setInterval(() => {
+      if (this.remainingTime > 0) {
+        this.remainingTime--;
+        this.progress = (this.remainingTime / this.totalTime) * 283; // Update stroke-dashoffset
+      } else {
+        clearInterval(this.intervalId);
+      }
+    }, 1000);
+  }
 
+  getFormattedTime(): string {
+    const minutes = Math.floor(this.remainingTime / 60);
+    const seconds = this.remainingTime % 60;
+    return `${minutes.toString().padStart(2, '0')}:${seconds.toString().padStart(2, '0')}`;
+  }
+
+  ngOnDestroy() {
+    if (this.intervalId) {
+      clearInterval(this.intervalId);
+    }
+  }
 
 
 
@@ -242,5 +274,6 @@ class DailyTarget {
   toDate: Date | string = ''
   fromTime: Date | string = ''
   toTime: Date | string = ''
+  centerId!: number
   TargetItems: TargetItem[] = []
 }

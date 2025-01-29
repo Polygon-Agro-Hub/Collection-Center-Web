@@ -99,7 +99,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of itemsArr; let i = index">
+                <tr *ngFor="let item of itemsArr | paginate : { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index">
                     <td class="px-6 py-3">{{ i + 1 }}</td>
                     <td class="px-6 py-3">{{ item.regCode }}</td>
                     <td class="px-6 py-3">{{ item.centerName }}</td>
@@ -113,6 +113,14 @@
             </tbody>
         </table>
     </div>
+    <div class="flex items-center justify-end my-5 mr-5">
+        <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
+            [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
+            [screenReaderCurrentLabel]="'Youre on page'">
+        </pagination-controls>
+    </div>
+
+    
 
 </div>
 

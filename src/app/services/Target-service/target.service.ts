@@ -82,30 +82,25 @@ export class TargetService {
 
   /////////////
 
-  getCenterDetails(province: string = '', district: string = '', search: string = ''): Observable<any> {
+  getCenterDetails(province: string = '', district: string = '', search: string = '', page: number = 1, limit: number = 10): Observable<any> {
     const headers = new HttpHeaders({
-      Authorization: `Bearer ${this.token}`
+        Authorization: `Bearer ${this.token}`
     });
-    const page = 1;
-    const limit = 10;
 
-
-    let url = `${this.apiUrl}/get-all-centers?page=${page}&limit=${limit}`
+    let url = `${this.apiUrl}/get-all-centers?page=${page}&limit=${limit}`;
 
     if (province) {
-      url += `&province=${province}`
+        url += `&province=${province}`;
     }
 
     if (district) {
-      url += `&district=${district}`
+        url += `&district=${district}`;
     }
 
     if (search) {
-      url += `&searchText=${search}`
+        url += `&searchText=${search}`;
     }
 
-    return this.http.get(url, {
-      headers,
-    });
-  }
+    return this.http.get(url, { headers });
+}
 }

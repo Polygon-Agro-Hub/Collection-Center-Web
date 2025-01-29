@@ -14,67 +14,70 @@ import { TargetService } from '../../../services/Target-service/target.service'
   styleUrl: './view-centers.component.css'
 })
 export class ViewCentersComponent implements OnInit {
-
   itemsArr!: CenterData[];
-
   searchText: string = '';
   selectProvince: string = '';
   selectDistrict: string = '';
-
+  currentPage: number = 1;
+  itemsPerPage: number = 10;
+  totalItems: number = 0;
 
   constructor(
-    private router: Router,
-    private TargetSrv: TargetService,
+      private router: Router,
+      private TargetSrv: TargetService,
   ) { }
 
   ngOnInit(): void {
-    this.fetchAllCenterDetails()
+      this.fetchAllCenterDetails();
   }
-
-  
 
   fetchAllCenterDetails(province: string = this.selectProvince, district: string = this.selectDistrict, search: string = this.searchText) {
-    this.TargetSrv.getCenterDetails(province, district, search).subscribe(
-      (res) => {
-        this.itemsArr = res.items;
-        console.log(res);
-        
-        // this.isLoading = false;
-      }
-    )
+      this.TargetSrv.getCenterDetails(province, district, search, this.currentPage, this.itemsPerPage).subscribe(
+          (res) => {
+              this.itemsArr = res.items;
+              this.totalItems = res.totalItems;
+              console.log(res);
+          }
+      );
   }
 
-  
+  onPageChange(page: number) {
+      this.currentPage = page;
+      this.fetchAllCenterDetails();
+  }
+
   onSearch() {
-    this.fetchAllCenterDetails(this.selectProvince, this.selectDistrict, this.searchText);
+      this.currentPage = 1; // Reset to first page on new search
+      this.fetchAllCenterDetails(this.selectProvince, this.selectDistrict, this.searchText);
   }
 
   offSearch() {
-    this.searchText = '';
-    this.fetchAllCenterDetails(this.selectProvince, this.selectDistrict, this.searchText);
+      this.searchText = '';
+      this.fetchAllCenterDetails(this.selectProvince, this.selectDistrict, this.searchText);
   }
 
-  
-
   cancelProvince() {
-    this.selectProvince = '';
-    this.fetchAllCenterDetails(this.selectProvince, this.selectDistrict);
+      this.selectProvince = '';
+      this.fetchAllCenterDetails(this.selectProvince, this.selectDistrict);
   }
 
   filterProvince() {
-    this.fetchAllCenterDetails(this.selectProvince, this.selectDistrict);
+      this.fetchAllCenterDetails(this.selectProvince, this.selectDistrict);
   }
 
   cancelDistrict() {
-    this.selectDistrict = '';
-    this.fetchAllCenterDetails(this.selectProvince, this.selectDistrict);
+      this.selectDistrict = '';
+      this.fetchAllCenterDetails(this.selectProvince, this.selectDistrict);
   }
 
   filterDistrict() {
-    this.fetchAllCenterDetails(this.selectProvince, this.selectDistrict);
+      this.fetchAllCenterDetails(this.selectProvince, this.selectDistrict);
   }
 
-  
+
+getTotalPages(): number {
+    return Math.ceil(this.totalItems / this.itemsPerPage);
+}
 }
 
 class CenterData {

@@ -1,0 +1,92 @@
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { Router } from '@angular/router';
+import { NgxPaginationModule } from 'ngx-pagination';
+import { DropdownModule } from 'primeng/dropdown';
+import { TargetService } from '../../../services/Target-service/target.service'
+
+@Component({
+  selector: 'app-view-centers',
+  standalone: true,
+  imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule],
+  templateUrl: './view-centers.component.html',
+  styleUrl: './view-centers.component.css'
+})
+export class ViewCentersComponent implements OnInit {
+
+  itemsArr!: CenterData[];
+
+  searchText: string = '';
+  selectProvince: string = '';
+  selectDistrict: string = '';
+
+
+  constructor(
+    private router: Router,
+    private TargetSrv: TargetService,
+  ) { }
+
+  ngOnInit(): void {
+    this.fetchAllCenterDetails()
+  }
+
+  
+
+  fetchAllCenterDetails(province: string = this.selectProvince, district: string = this.selectDistrict, search: string = this.searchText) {
+    this.TargetSrv.getCenterDetails(province, district, search).subscribe(
+      (res) => {
+        this.itemsArr = res.items;
+        console.log(res);
+        
+        // this.isLoading = false;
+      }
+    )
+  }
+
+  
+  onSearch() {
+    this.fetchAllCenterDetails(this.selectProvince, this.selectDistrict, this.searchText);
+  }
+
+  offSearch() {
+    this.searchText = '';
+    this.fetchAllCenterDetails(this.selectProvince, this.selectDistrict, this.searchText);
+  }
+
+  
+
+  cancelProvince() {
+    this.selectProvince = '';
+    this.fetchAllCenterDetails(this.selectProvince, this.selectDistrict);
+  }
+
+  filterProvince() {
+    this.fetchAllCenterDetails(this.selectProvince, this.selectDistrict);
+  }
+
+  cancelDistrict() {
+    this.selectDistrict = '';
+    this.fetchAllCenterDetails(this.selectProvince, this.selectDistrict);
+  }
+
+  filterDistrict() {
+    this.fetchAllCenterDetails(this.selectProvince, this.selectDistrict);
+  }
+
+  
+}
+
+class CenterData {
+  id!: number
+  centerName!: string
+  province!: string
+  district!: string
+  city!: string
+  contact01!: string
+  CollectionOfficer!: number
+  CustomerOfficer!: number
+  CollectionCenterManager!: number
+  CustomerService!: number
+  regCode!: string
+}

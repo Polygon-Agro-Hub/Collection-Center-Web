@@ -1,5 +1,5 @@
 
-<div class="p-4">
+<div class="my-5">
     <h2 class="text-lg font-semibold mb-4">Dashboard</h2>
     <div class="flex space-x-4">
         <div class="bg-white shadow-md rounded-lg p-6 text-center border">
@@ -20,19 +20,19 @@
         <div class="flex flex-row items-center gap-1 bg-[#F5F6F6] rounded-lg">
             <button 
               [ngClass]="{'bg-[#E0E0E0] shadow-lg rounded-lg border-[1px] border-gray-300': activeButton === 'week', 'bg-[#F5F6F6]': activeButton !== 'week'}" 
-              class="px-3 py-2 font-semibold " 
+              class="px-3 py-2 font-semibold w-18" 
               (click)="fetchChart('week')">
               week
             </button>
             <button 
               [ngClass]="{'bg-[#E0E0E0] shadow-lg rounded-lg border-[1px] border-gray-300': activeButton === 'month', 'bg-[#F5F6F6]': activeButton !== 'month'}" 
-              class="px-3 py-2 font-semibold" 
+              class="px-3 py-2 font-semibold w-18" 
               (click)="fetchChart('month')">
               month
             </button>
             <button 
               [ngClass]="{'bg-[#E0E0E0] shadow-lg rounded-lg border-[1px] border-gray-300': activeButton === 'year', 'bg-[#F5F6F6]': activeButton !== 'year'}" 
-              class="px-3 py-2 font-semibold" 
+              class="px-3 py-2 font-semibold w-18" 
               (click)="fetchChart('year')">
               year
             </button>
@@ -53,15 +53,16 @@
     <div>
         <div>
             
-            <div class="bg-[#FFFFFF] p-5 rounded-lg text-center text-[#888888]">
-              <canvas id="MyChart" class="w-full"></canvas>
+            <div class=" bg-[#FFFFFF] p-5 rounded-lg text-center text-[#888888]">
+                <canvas id="MyChart" class="w-full"></canvas>
             </div>
           </div>
     </div>
 
     <div class="p-4">
-        <h3 class="text-blue-500 underline decoration-offset-custom my-3 border-b-2 ">Activity</h3>
-        <ul class="my-2 list-disc">
+        <h3 class="text-blue-500 underline decoration-offset-custom my-3">Activity</h3>
+        <hr class="my-2 border-gray-200 border-[1px]"/>
+        <ul class="my-2 list-disc pl-12">
             <li class="text-[#636D81] my-3" *ngFor="let log of activityLogs">
                 You changed the price of
                 <span class="text-black font-bold">{{ log.cropNameEnglish }} {{ log.varietyNameEnglish }}</span> grade

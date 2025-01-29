@@ -21,6 +21,7 @@ import { DownloadTargetComponent } from './application/Target/download-target/do
 import { ViewComplaintsComponent } from './application/Complaints/view-complaint/view-complaints/view-complaints.component';
 import { ViewRecivedComplaintComponent } from './application/Complaints/view-recived-complaint/view-recived-complaint.component';
 import { ClaimOfficerComponent } from './application/manage-officers/claim-officer/claim-officer.component';
+import { ViewCentersComponent } from './application/Target/view-centers/view-centers.component';
 
 export const routes: Routes = [
     {
@@ -125,6 +126,10 @@ export const routes: Routes = [
                     {
                         path: 'download-target',
                         component: DownloadTargetComponent
+                    },
+                    {
+                        path: 'view-centers',
+                        component: ViewCentersComponent
                     }
                 ]
             },

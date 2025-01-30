@@ -125,10 +125,6 @@ export const routes: Routes = [
                 path: 'target',
                 children: [
                     {
-                        path: 'add-target',
-                        component: AddDailyTargetComponent
-                    },
-                    {
                         path: 'view-target',
                         component: ViewDailyTargetComponent
                     },
@@ -165,6 +161,10 @@ export const routes: Routes = [
                     {
                         path: 'center-shashbord/:id',
                         component: CentersDashbordComponent
+                    },
+                    {
+                        path: 'add-target/:id',
+                        component: AddDailyTargetComponent
                     },
                 ]
             }

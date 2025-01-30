@@ -58,23 +58,32 @@ export class TargetService {
 
   getCenterDetails(province: string = '', district: string = '', search: string = '', page: number = 1, limit: number = 10): Observable<any> {
     const headers = new HttpHeaders({
-        Authorization: `Bearer ${this.token}`
+      Authorization: `Bearer ${this.token}`
     });
 
     let url = `${this.apiUrl}/get-all-centers?page=${page}&limit=${limit}`;
 
     if (province) {
-        url += `&province=${province}`;
+      url += `&province=${province}`;
     }
 
     if (district) {
-        url += `&district=${district}`;
+      url += `&district=${district}`;
     }
 
     if (search) {
-        url += `&searchText=${search}`;
+      url += `&searchText=${search}`;
     }
 
     return this.http.get(url, { headers });
-}
+  }
+
+  getDashbordDetails(id:number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/get-center-dashboard/${id}`;
+    return this.http.get<any>(url, { headers });
+  }
 }

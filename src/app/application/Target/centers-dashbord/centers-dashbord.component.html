@@ -1,6 +1,6 @@
 <div class="flex flex-row items-center justify-center gap-16">
     <div class="flex justify-center items-center w-1/5 py-4 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg">
-        <p class="font-bold text-black text-lg">WPCK02</p>
+        <p class="font-bold text-black text-lg">{{centerNameObj.centerName}}</p>
     </div>
 
     <div class="flex flex-row items-center justify-between w-2/5 gap-14 px-10 py-4 bg-tileLight shadow-lg rounded-lg">
@@ -9,7 +9,8 @@
         <i class="fa-solid fa-arrow-up-right-from-square text-[#415CFF] text-xl"></i>
     </div>
 
-    <div class="flex flex-row items-center justify-center w-2/5 py-4 bg-[#415CFF] shadow-lg rounded-lg">
+    <div class="flex flex-row items-center justify-center w-2/5 py-4 bg-[#415CFF] shadow-lg rounded-lg"
+        (click)="navigateAddTarget()">
         <p class="font-bold text-tileLight text-lg">Assign Center Target</p>
     </div>
 </div>
@@ -33,9 +34,13 @@
         <i class="fa-solid fa-layer-group text-2xl text-white"></i>
         <div class="flex flex-col justify-center items-center">
             <p class="font-bold text-white text-lg">Today Collection</p>
-            <p class="font-bold text-white text-lg">800 Transactions</p>
+            <p class="font-bold text-white text-lg">{{transCount < 10 ? '0' + transCount : transCount}} Transactions</p>
         </div>
-        <p class="font-bold text-white text-2xl my-4">Rs. 3,50,000</p>
+        <p class="font-bold text-white text-2xl my-4">
+            {{ transAmount | currency:'Rs. ':'symbol':'1.2-2' }}
+        </p>
+
+
     </div>
 
     <div class="flex flex-col items-center justify-center w-2/5 py-5 bg-[#619DFF] shadow-lg rounded-lg">
@@ -57,11 +62,13 @@
             </div>
             <div class="flex flex-col justify-center items-center">
                 <p class="text-[#627189] ">Officers</p>
-                <p class="font-bold text-black text-lg">09</p>
+                <p class="font-bold text-black text-lg">{{centerNameObj.officerCount < 10 ? '0' +
+                        centerNameObj.officerCount : centerNameObj.officerCount}}</p>
             </div>
         </div>
         <div class="flex flex-row items-end justify-end">
-            <i class="fa-solid fa-arrow-up-right-from-square text-[#415CFF] mx-4" (click)="navigatePath('/centers/view-center-officers')"></i>
+            <i class="fa-solid fa-arrow-up-right-from-square text-[#415CFF] mx-4"
+                (click)="navigatePath('/centers/view-center-officers')"></i>
         </div>
     </div>
 
@@ -76,7 +83,7 @@
             </div>
             <div class="flex flex-col justify-start items-start">
                 <p class="text-[#627189] ">Total Collection Expense</p>
-                <p class="font-bold text-black text-lg">Rs. 11,25,568</p>
+                <p class="font-bold text-black text-lg">{{ totExpences | currency:'Rs. ':'symbol':'1.2-2' }}</p>
             </div>
         </div>
         <div class="flex flex-row items-end justify-end gap-2">
@@ -109,14 +116,18 @@
 
 <div class="w-full px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg my-8">
     <div class="flex flex-row items-center gap-7">
-        <div class="py-1 font-semibold text-[#627189] cursor-pointer" [ngClass]="{ 'border-b-2 border-[#415CFF] text-black': selectTable==='collection' }" (click)="chooseTable('collection')">
+        <div class="py-1 font-semibold text-[#627189] cursor-pointer"
+            [ngClass]="{ 'border-b-2 border-[#415CFF] text-black': selectTable==='collection' }"
+            (click)="chooseTable('collection')">
             <p>Recent Collections</p>
         </div>
-        <div class="py-1 font-semibold text-[#627189] cursor-pointer" [ngClass]="{ 'border-b-2 border-[#415CFF] text-black': selectTable==='sale' }" (click)="chooseTable('sale')">
+        <div class="py-1 font-semibold text-[#627189] cursor-pointer"
+            [ngClass]="{ 'border-b-2 border-[#415CFF] text-black': selectTable==='sale' }"
+            (click)="chooseTable('sale')">
             <p>Recent Sales</p>
         </div>
     </div>
-    <div class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg">
+    <div *ngIf="selectTable==='collection'" class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg">
         <table class="w-full divide-y-2 overflow-hidden">
             <thead class=" dark:bg-[#272F45] text-gray-700 dark:text-gray-300">
                 <tr>
@@ -126,21 +137,23 @@
                     <th class="px-6 py-3 text-left font-medium">Grade</th>
                     <th class="px-6 py-3 text-left font-medium">Collected (kg)</th>
                     <th class="px-6 py-3 text-left font-medium">Value (Rs.)</th>
-                    <th class="px-6 py-3 text-left font-medium">Date</th>
+                    <th class="px-6 py-3 text-center font-medium">Date</th>
                 </tr>
             </thead>
             <tbody class="bg-white dark:bg-[#1E293B]">
-                <!-- <tr *ngFor="let item of targetArr | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index"> -->
-                <tr >
-                    <!-- <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
-                        {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }} </td> -->
-                    <td class="px-6 py-4 text-gray-900 dark:text-gray-300">dwd</td>
-                    <td class="px-6 py-4 text-gray-900 dark:text-gray-300">dwd</td>
-                    <td class="px-6 py-4 text-gray-900 dark:text-gray-300">dwd</td>
-                    <td class="px-6 py-4 text-gray-900 dark:text-gray-300">dwd</td>
-                    <td class="px-6 py-4 text-gray-900 dark:text-gray-300">dwd</td>
-                    <td class="px-6 py-4 text-gray-900 dark:text-gray-300">dwd</td>
-                    <td class="px-6 py-4 text-gray-900 dark:text-gray-300">dwd</td>                    
+                <tr *ngFor="let item of resentCollectionArr; let i = index">
+                    <td class="px-6 py-4 text-gray-900 dark:text-gray-300"> {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }} </td>
+                    <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.cropNameEnglish}}</td>
+                    <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.varietyNameEnglish}}</td>
+                    <td class="px-6 py-4 text-gray-900 text-center dark:text-gray-300">{{item.grade}}</td>
+                    <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.totQty}}</td>
+                    <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.totPrice}}</td>
+                    <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
+                        <div class="flex flex-col items-center justify-center">
+                            <p class="text-[#3E3E3E]">{{item.date | date:'yyyy/mm/dd'}}</p>
+                            <p class="text-[#3E3E3E]">{{item.date | date:'hh:mm a'}}</p>
+                        </div>
+                    </td>
                 </tr>
             </tbody>
 

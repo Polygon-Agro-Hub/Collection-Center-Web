@@ -24,6 +24,7 @@ import { ClaimOfficerComponent } from './application/manage-officers/claim-offic
 import { ViewCentersComponent } from './application/Target/view-centers/view-centers.component';
 import { CentersDashbordComponent } from './application/Target/centers-dashbord/centers-dashbord.component';
 import { ProfileComponent } from './application/Auth/profile/profile.component';
+import { CenterViewOfficersComponent } from './application/Target/center-view-officers/center-view-officers.component';
 
 
 export const routes: Routes = [
@@ -160,6 +161,10 @@ export const routes: Routes = [
                     {
                         path: '',
                         component: CentersDashbordComponent
+                    },
+                    {
+                        path: 'view-center-officers',
+                        component: CenterViewOfficersComponent
                     },
                     
                 ]

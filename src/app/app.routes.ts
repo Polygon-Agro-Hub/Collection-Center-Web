@@ -23,6 +23,8 @@ import { ViewRecivedComplaintComponent } from './application/Complaints/view-rec
 import { ClaimOfficerComponent } from './application/manage-officers/claim-officer/claim-officer.component';
 import { ViewCentersComponent } from './application/Target/view-centers/view-centers.component';
 import { CentersDashbordComponent } from './application/Target/centers-dashbord/centers-dashbord.component';
+import { ProfileComponent } from './application/Auth/profile/profile.component';
+
 
 export const routes: Routes = [
     {
@@ -33,11 +35,16 @@ export const routes: Routes = [
     { path: 'login', component: LoginComponent },
     { path: 'change-password', component: ChangePasswordComponent, canActivate: [AuthGuard] },
 
+
     {
         path: '',
         component: MainLayoutComponent,
         canActivate: [AuthGuard],
         children: [
+            { 
+                path: 'profile', 
+                component: ProfileComponent, 
+            },
             {
                 path: 'dashbord',
                 component: DashboardComponent
@@ -65,7 +72,7 @@ export const routes: Routes = [
                         path: 'claim-officer',
                         component: ClaimOfficerComponent
                     }
-                    
+
                 ]
             },
             {
@@ -145,6 +152,15 @@ export const routes: Routes = [
                         path: 'view-recive-reply/:id',
                         component: ViewRecivedComplaintComponent
                     }
+                ]
+            },
+            {
+                path: 'centers',
+                children: [
+                    {
+                        path: '',
+                        component: CentersDashbordComponent
+                    },
                     
                 ]
             },

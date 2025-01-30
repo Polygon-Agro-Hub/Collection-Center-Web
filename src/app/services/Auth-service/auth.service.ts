@@ -31,4 +31,13 @@ export class AuthService {
       headers,
     });
   }
+
+  getLoggedInUser(): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.get(`${this.apiUrl}/auth/get-profile`, { headers });
+  }
 }

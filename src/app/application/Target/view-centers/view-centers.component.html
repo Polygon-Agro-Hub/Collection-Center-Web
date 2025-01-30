@@ -1,9 +1,9 @@
-<p class="font-semibold text[#424242] mb-8 mx-5">Price Update Requests</p>
+<p class="font-semibold text[#424242] mb-8 mx-5">Centers</p>
 
 <div class="w-full px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg">
     <div class="flex flex-row items-center justify-between">
         <div class="flex flex-col justify-between">
-            <p class="font-semibold text-lg mb-1">Market Price on <!--{{today}}--></p>
+            <p class="font-semibold text-lg mb-1">Total Centers ({{countOfOfficers}})</p>
         </div>
         <div class="flex flex-row items-center gap-8 ">
             <i class="fa-solid fa-list text-2xl"></i>
@@ -83,7 +83,7 @@
     </div>
     
     
-    <div>
+    <div class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg">
         <table class="w-full divide-y-2 overflow-hidden">
             <thead class="dark:bg-[#272F45] text-gray-700 dark:text-gray-300">
                 <tr>
@@ -99,8 +99,10 @@
                 </tr>
             </thead>
             <tbody>
-                <tr *ngFor="let item of itemsArr | paginate : { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index">
-                    <td class="px-6 py-3">{{ i + 1 }}</td>
+                <tr class="hover:bg-[#415CFF]" *ngFor="let item of itemsArr | paginate : { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index"
+                (click)="navigateToDashboard(item.id)"
+                >
+                    <td class="px-6 py-3">{{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }}</td>
                     <td class="px-6 py-3">{{ item.regCode }}</td>
                     <td class="px-6 py-3">{{ item.centerName }}</td>
                     <td class="px-6 py-3">{{ item.province }}</td>

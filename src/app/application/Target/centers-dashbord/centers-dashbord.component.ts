@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
   selector: 'app-centers-dashbord',
@@ -10,18 +10,26 @@ import { Router } from '@angular/router';
   templateUrl: './centers-dashbord.component.html',
   styleUrl: './centers-dashbord.component.css'
 })
-export class CentersDashbordComponent {
-  constructor(private router: Router,
-  ) {
-
-  }
+export class CentersDashbordComponent implements OnInit {
   selectTable: string = 'collection';
+  centerId!: number;
+
+
+  constructor(
+    private router: Router,
+    private route: ActivatedRoute
+  ) { }
+
+
+  ngOnInit(): void {
+    this.centerId = this.route.snapshot.params['id'];
+  }
 
   chooseTable(table: string) {
     this.selectTable = table;
   }
 
-  navigatePath(path:string){
+  navigatePath(path: string) {
     this.router.navigate([path]);
   }
 

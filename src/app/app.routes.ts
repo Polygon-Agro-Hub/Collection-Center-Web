@@ -136,10 +136,10 @@ export const routes: Routes = [
                         path: 'download-target',
                         component: DownloadTargetComponent
                     },
-                    {
-                        path: 'view-centers',
-                        component: ViewCentersComponent
-                    }
+                    // {
+                    //     path: 'view-centers',
+                    //     component: ViewCentersComponent
+                    // }
                 ]
             },
             {
@@ -160,23 +160,12 @@ export const routes: Routes = [
                 children: [
                     {
                         path: '',
-                        component: CentersDashbordComponent
+                        component: ViewCentersComponent
                     },
                     {
-                        path: 'view-center-officers',
-                        component: CenterViewOfficersComponent
-                    },
-                    
-                ]
-            },
-            {
-                path: 'centers',
-                children: [
-                    {
-                        path: '',
+                        path: 'center-shashbord/:id',
                         component: CentersDashbordComponent
                     },
-                    
                 ]
             }
 

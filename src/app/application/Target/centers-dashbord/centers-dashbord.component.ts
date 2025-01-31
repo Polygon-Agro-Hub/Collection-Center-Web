@@ -20,6 +20,7 @@ export class CentersDashbordComponent implements OnInit {
   transCount: number = 0;
   transAmount: number = 0.00;
   totExpences: number = 0.00;
+  expencePrecentage: number = -22.00;
 
 
   constructor(
@@ -42,6 +43,7 @@ export class CentersDashbordComponent implements OnInit {
       this.transAmount = res.transAmountCount.transAmountCount;
       this.resentCollectionArr = res.limitedResentCollection;
       this.totExpences = res.totExpences.totExpences;
+      this.expencePrecentage = res.difExpences
 
 
       console.log(res);
@@ -58,7 +60,7 @@ export class CentersDashbordComponent implements OnInit {
   }
 
   navigateAddTarget() {
-    this.router.navigate([`/centers/add-target/${this.centerId}`]);
+    this.router.navigate([`/centers/add-target/${this.centerId}/${this.centerNameObj.centerName}`]);
   }
 
 }

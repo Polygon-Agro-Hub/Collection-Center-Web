@@ -163,7 +163,7 @@ export const routes: Routes = [
                         component: CentersDashbordComponent
                     },
                     {
-                        path: 'add-target/:id',
+                        path: 'add-target/:id/:name',
                         component: AddDailyTargetComponent
                     },
                 ]

@@ -19,6 +19,7 @@ export class AddDailyTargetComponent implements OnInit {
   cropsObj: Crop[] = [];
   selectedVarieties!: Variety[];
   centerId!: number;
+  centerName!: string;
 
   dailyTartgetObj: DailyTarget = new DailyTarget();
   InputObj: TargetItem = new TargetItem();
@@ -48,8 +49,8 @@ export class AddDailyTargetComponent implements OnInit {
 
 
   ngOnInit(): void {
-    // this.dailyTartgetObj.centerId = this.route.snapshot.params['id'];
-    this.dailyTartgetObj.centerId = 1;
+    this.dailyTartgetObj.centerId = this.route.snapshot.params['id'];
+    this.centerName = this.route.snapshot.params['name'];
     this.getAllCropVerity();
   }
 

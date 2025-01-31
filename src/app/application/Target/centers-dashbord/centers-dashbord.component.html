@@ -74,8 +74,9 @@
 
     <div class="w-2/5 pb-1 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg">
         <div class="flex flex-row items-end justify-end">
-            <i class="fa-solid fa-arrow-trend-up text-[#0D9488] mx-2"></i>
-            <p class="text-[#0D9488] mx-2 mt-1">34.7%</p>
+            <i *ngIf="expencePrecentage >= 0" class="fa-solid fa-arrow-trend-up text-[#0D9488] mx-2"></i>
+            <i *ngIf="expencePrecentage < 0" class="fa-solid fa-arrow-trend-down text-[#D70000] mx-2"></i>
+            <p class="text-[#0D9488] mx-2 mt-1" [ngClass]="{ 'text-[#D70000]': expencePrecentage < 0 }">{{expencePrecentage}}</p>
         </div>
         <div class="flex flex-row items-center justify-start mx-5 gap-5">
             <div class="bg-[#CCFBF1] p-3 rounded-full">
@@ -142,7 +143,8 @@
             </thead>
             <tbody class="bg-white dark:bg-[#1E293B]">
                 <tr *ngFor="let item of resentCollectionArr; let i = index">
-                    <td class="px-6 py-4 text-gray-900 dark:text-gray-300"> {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }} </td>
+                    <td class="px-6 py-4 text-gray-900 dark:text-gray-300"> {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }}
+                            </td>
                     <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.cropNameEnglish}}</td>
                     <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.varietyNameEnglish}}</td>
                     <td class="px-6 py-4 text-gray-900 text-center dark:text-gray-300">{{item.grade}}</td>

@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/Auth-service/auth.service';
 import { CommonModule } from '@angular/common';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-profile',
@@ -12,7 +13,7 @@ import { CommonModule } from '@angular/common';
 export class ProfileComponent implements OnInit {
   officerObj: Officer = new Officer();
 
-  constructor(private AuthSrv: AuthService) {}
+  constructor(private AuthSrv: AuthService, private router: Router) {}
 
   ngOnInit(): void {
     this.fetchLoggedInUser();
@@ -23,6 +24,10 @@ export class ProfileComponent implements OnInit {
       this.officerObj = res.officerData.collectionOfficer;
       console.log(this.officerObj);
     });
+  }
+
+  goToChangePassword() {
+    this.router.navigate(['/change-password']); // Navigate to the Change Password page
   }
 }
 

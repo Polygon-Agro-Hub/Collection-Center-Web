@@ -166,6 +166,14 @@ export const routes: Routes = [
                         path: 'add-target/:id/:name',
                         component: AddDailyTargetComponent
                     },
+                    {
+                        path: 'edit-officer/:id',
+                        component: EditOfficerComponent
+                    },
+                    {
+                        path: 'officer-profile/:id',
+                        component: OfficerProfileComponent
+                    },
                 ]
             }
 

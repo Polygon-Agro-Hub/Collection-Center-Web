@@ -166,19 +166,16 @@ export const routes: Routes = [
                         path: 'view-center-officers',
                         component: CenterViewOfficersComponent
                     },
-                    
+                    {
+                        path: 'edit-officer/:id',
+                        component: EditOfficerComponent
+                    },
+                    {
+                        path: 'officer-profile/:id',
+                        component: OfficerProfileComponent
+                    },
                 ]
             },
-            {
-                path: 'centers',
-                children: [
-                    {
-                        path: '',
-                        component: CentersDashbordComponent
-                    },
-                    
-                ]
-            }
 
         ]
     },

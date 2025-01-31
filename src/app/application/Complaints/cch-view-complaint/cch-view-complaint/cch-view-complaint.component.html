@@ -1,0 +1,42 @@
+<div class="w-full px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg mt-6">
+    <div class="flex flex-row justify-between items-center">
+        <div class="flex flex-row gap-6">
+            <div 
+            class="flex flex-row items-center gap-2 border-[2px] rounded-2xl px-4 py-2"
+            [ngClass]="{'text-[#415CFF] border-[#415CFF]': isSelectRecevied}"
+            (click)="selectRecevied()"
+            >
+                <i *ngIf="isSelectRecevied" class="fa-solid fa-check"></i>
+                <p>Received</p>
+            </div>
+
+            <div 
+            class="flex flex-row items-center gap-2 border-[2px] rounded-2xl px-4 py-2"
+            [ngClass]="{'text-[#415CFF] border-[#415CFF]': isSelectSent}"
+            (click)="selectSent()"
+            >
+                <i *ngIf="isSelectSent" class="fa-solid fa-check"></i>
+                <p>Sent</p>
+            </div>
+        </div>
+
+        <button class="bg-[#415CFF] text-white font-semibold px-4 py-2 rounded-lg" (click)="openAddComplaint()">Add Complaint</button>
+
+    </div>
+
+    <hr class="my-8 border-[1px] border-[#7F7F7F]" />
+
+    <app-cch-recevied-complaint *ngIf="isSelectRecevied"/>
+
+    <app-cch-send-complaint *ngIf="isSelectSent"/>
+</div>
+
+<div *ngIf="isAddComplaintOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white dark:bg-[#272F45] shadow-lg rounded-lg p-6 w-1/2">
+        <div class="flex justify-end items-center mb-4">
+            <button class="text-red-500 font-bold text-xl" (click)="closeAddComplaint()">&times;</button>
+        </div>
+        <!-- <app-add-complaint/> -->
+    </div>
+</div>
+

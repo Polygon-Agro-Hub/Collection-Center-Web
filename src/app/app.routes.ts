@@ -25,6 +25,7 @@ import { ViewCentersComponent } from './application/Target/view-centers/view-cen
 import { CentersDashbordComponent } from './application/Target/centers-dashbord/centers-dashbord.component';
 import { ProfileComponent } from './application/Auth/profile/profile.component';
 import { CenterViewOfficersComponent } from './application/Target/center-view-officers/center-view-officers.component';
+import { CchViewComplaintComponent } from './application/Complaints/cch-view-complaint/cch-view-complaint/cch-view-complaint.component';
 
 
 export const routes: Routes = [
@@ -175,7 +176,20 @@ export const routes: Routes = [
                         component: OfficerProfileComponent
                     },
                 ]
-            }
+            },
+            {
+                path: 'cch-complaints',
+                children: [
+                    {
+                        path: '',
+                        component: CchViewComplaintComponent
+                    },
+                    {
+                        path: 'view-recive-reply/:id',
+                        component: ViewRecivedComplaintComponent
+                    }
+                ]
+            },
 
         ]
     },

@@ -93,4 +93,49 @@ export class ComplaintsService {
     return this.http.post<any>(url, data, { headers });
   }
 
+  getAllCCHReciveComplaints(page: number = 1, limit: number = 10, status: string = '', searchText: string = ''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+
+    let url = `${this.apiUrl}/get-recived-cch-complaints?page=${page}&limit=${limit}`;
+    if (status) {
+      url += `&status=${status}`
+    }
+
+    if (searchText) {
+      url += `&searchText=${searchText}`
+
+    }
+
+    return this.http.get<any>(url, { headers });
+  }
+
+
+  getAllSentCCHComplains(page: number = 1, limit: number = 10, status: string = '', emptype: string = '', searchText: string = ''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+
+    let url = `${this.apiUrl}/get-all-sent-cch-complaint?page=${page}&limit=${limit}`;
+    if (status) {
+      url += `&status=${status}`
+    }
+
+    if (emptype) {
+      url += `&emptype=${emptype}`
+    }
+
+    if (searchText) {
+      url += `&searchText=${searchText}`
+    }
+
+    return this.http.get<any>(url, { headers });
+  }
+
 }
+
+
+

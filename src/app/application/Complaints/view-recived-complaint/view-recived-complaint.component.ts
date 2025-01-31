@@ -79,7 +79,7 @@ export class ViewRecivedComplaintComponent implements OnInit {
           (res) => {
             if (res.status) {
               this.toastSrv.success(res.message)
-              this.router.navigate(['/complaints']);
+              this.router.navigate(['/cch-complaints']);
             } else {
               this.toastSrv.error(res.message)
 
@@ -109,7 +109,7 @@ export class ViewRecivedComplaintComponent implements OnInit {
       (res) => {
         if (res.status) {
           this.toastSrv.success(res.message)
-          this.router.navigate(['/complaints']);
+          this.router.navigate(['/cch-complaints']);
         } else {
           this.toastSrv.error(res.message)
 

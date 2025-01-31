@@ -3,6 +3,8 @@ import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { CchReceviedComplaintComponent } from '../cch-recevied-complaint/cch-recevied-complaint.component';
 import { CchSendComplaintComponent } from '../cch-send-complaint/cch-send-complaint.component';
+import { ComplaintsService } from '../../../../services/Complaints-Service/complaints.service';
+import { ToastAlertService } from '../../../../services/toast-alert/toast-alert.service';
 
 @Component({
   selector: 'app-cch-view-complaint',
@@ -15,6 +17,44 @@ export class CchViewComplaintComponent {
   isSelectRecevied: boolean = true;
   isSelectSent: boolean = false;
   isAddComplaintOpen: boolean = false;
+
+  category: string = '';
+  complaint: string = '';
+
+  constructor(
+    private complaintsService: ComplaintsService,
+    private toastSrv: ToastAlertService
+  ) { }
+
+  onSubmit() {
+    if (this.category === '' || this.complaint.trim() === '') {
+      this.toastSrv.warning('Please fill out all fields.')
+      return;
+    }
+
+    const formData = {
+      category: this.category,
+      complaint: this.complaint,
+    };
+
+    this.complaintsService.submitCCHComplaint(formData).subscribe(
+      (response) => {
+        if (response.status) {
+          console.log('Complaint submitted successfully:', response);
+          this.toastSrv.success('Your complaint has been submitted successfully!');
+          this.isAddComplaintOpen = false;
+          this.category = '';
+          this.complaint = '';
+        } else {
+          this.toastSrv.warning('Please try again')
+        }
+      },
+      (error) => {
+        console.error('Error submitting complaint:', error);
+        this.toastSrv.error('An error occurred while submitting your complaint. Please try again.');
+      }
+    );
+  }
 
   selectRecevied() {
     this.isSelectRecevied = true;

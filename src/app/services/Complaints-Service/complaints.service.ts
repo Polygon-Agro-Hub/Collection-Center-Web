@@ -108,6 +108,8 @@ export class ComplaintsService {
       url += `&searchText=${searchText}`
 
     }
+    console.log(url);
+    
 
     return this.http.get<any>(url, { headers });
   }
@@ -133,6 +135,26 @@ export class ComplaintsService {
     }
 
     return this.http.get<any>(url, { headers });
+  }
+
+
+  forwordCCHComplain(id: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/forword-complain-admin/${id}`;
+    return this.http.patch<any>(url,{}, { headers });
+  }
+
+
+  submitCCHComplaint(data: { category: string; complaint: string }): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/add-complain-cch`;
+    return this.http.post<any>(url, data, { headers });
   }
 
 }

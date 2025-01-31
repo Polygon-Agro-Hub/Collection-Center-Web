@@ -161,7 +161,7 @@ export class CenterViewOfficersComponent implements OnInit{
           .getElementById('rejectButton')
           ?.addEventListener('click', () => {
             // this.isPopupVisible = false;
-            // this.isLoading = true;
+            
             this.ManageOficerSrv.ChangeStatus(officer.id, 'Rejected').subscribe(
               (res) => {
                 // this.isLoading = false;

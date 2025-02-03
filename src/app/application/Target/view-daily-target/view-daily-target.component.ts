@@ -24,6 +24,9 @@ export class ViewDailyTargetComponent implements OnInit {
   totalItems: number = 0;
   itemsPerPage: number = 4;
 
+  isSelectPrograss=true;
+  isSelectAssign= false;
+
   constructor(
     private router: Router,
     private datePipe: DatePipe,
@@ -112,6 +115,16 @@ export class ViewDailyTargetComponent implements OnInit {
    }
   navigate(path: string) {
     this.router.navigate([path]);
+  }
+
+  selectPrograss(){
+    this.isSelectPrograss=true;
+    this.isSelectAssign= false;
+  }
+
+  selectAssign(){
+    this.isSelectPrograss=false;
+    this.isSelectAssign= true;
   }
 }
 

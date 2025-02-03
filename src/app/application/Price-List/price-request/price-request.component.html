@@ -1,26 +1,26 @@
-<p class="font-semibold text[#424242] mb-8 mx-5">Price Update Requests</p>
+<p class="font-semibold text[#424242] mb-8 mx-5 dark:text-[#FFFFFF] dark:bg-[#0F0F0F]">Price Update Requests</p>
 
-<div class="w-full px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg">
+<div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg ">
     <div class="flex flex-row items-center justify-between">
         <div class="flex flex-col justify-between">
-            <p class="font-semibold text-lg mb-1">Market Price on {{today}}</p>
+            <p class="font-semibold text-lg mb-1 dark:text-white">Market Price on {{today}}</p>
         </div>
         <div class="flex flex-row items-center gap-8 ">
-            <i class="fa-solid fa-list text-2xl"></i>
+            <i class="fa-solid fa-list text-2xl dark:text-white"></i>
 
-            <p class="text-lg">Filter By</p>
+            <p class="text-lg dark:text-white">Filter By</p>
 
             <div class="relative w-46">
                 <div
-                    class="border-2 rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center">
+                    class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
                     <select [(ngModel)]="selectGrade" (change)="filterGrade()"
-                        class="block w-full appearance-none  dark:bg-[#272F45] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
+                        class="block w-full appearance-none  dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
                         <option value="" selected disabled>Grade</option>
-                        <option class=" dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
+                        <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
                             value="A">A</option>
-                        <option class=" dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
+                        <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
                             value="B">B</option>
-                        <option class=" dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
+                        <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
                             value="C">C</option>
                     </select>
                     <button *ngIf="!selectGrade">
@@ -35,15 +35,15 @@
 
             <div class="relative w-46">
                 <div
-                    class="border-2 rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center">
+                    class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
                     <select [(ngModel)]="selectStatus" (change)="filterStatus()"
-                        class="block w-full appearance-none  dark:bg-[#272F45] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
+                        class="block w-full appearance-none  dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
                         <option value="" selected disabled>Status</option>
-                        <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
+                        <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
                             value="Pending">Pending</option>
-                        <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
+                        <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
                             value="Approved">Approved</option>
-                        <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
+                        <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
                             value="Rejected	">Rejected</option>
 
                     </select>
@@ -58,7 +58,7 @@
             </div>
 
 
-            <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#272F45]">
+            <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#4B5563]">
                 <input type="text" placeholder="Search by Crop / Variety name.." [(ngModel)]="searchText"
                     class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
                 <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
@@ -87,9 +87,9 @@
         <p class="text-3xl text-center font-semibold">No Data Availabale</p>
     </div>
 
-    <div *ngIf="hasData" class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg">
+    <div *ngIf="hasData" class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
         <table class="w-full divide-y-2 overflow-hidden">
-            <thead class=" dark:bg-[#272F45] text-gray-700 dark:text-gray-300">
+            <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
                 <tr>
                     <th class="px-6 py-3 text-left font-medium">No</th>
                     <th class="px-6 py-3 text-left font-medium">Crop Name</th>
@@ -101,7 +101,7 @@
                     <th class="px-6 py-3 text-left font-medium">Time</th>
                 </tr>
             </thead>
-            <tbody class="bg-white dark:bg-[#1E293B]">
+            <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
                 <tr
                     *ngFor="let item of reqPriceArr | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index">
                     <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
@@ -112,15 +112,15 @@
                     <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.requestPrice}}</td>
                     <td class="px-6 py-4 text-gray-900 dark:text-gray-300 flex justify-center items-center" (click)="openPopup(item)">
                         <span *ngIf="item.status === 'Pending'"
-                            class="bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-6 py-1">
+                            class="bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-6 py-1 ">
                             Pending
                         </span>
                         <span *ngIf="item.status === 'Approved'"
-                            class="bg-[#C8E0FF] text-[#415CFF] text-center rounded-lg px-4 py-1">
+                            class="bg-[#C8E0FF] text-[#415CFF] text-center rounded-lg px-4 py-1 ">
                             Approved
                         </span>
                         <span *ngIf="item.status === 'Rejected'"
-                            class="bg-[#FFB9B7] text-[#D16D6A] text-center rounded-lg px-5 py-1">
+                            class="bg-[#FFB9B7] text-[#D16D6A] text-center rounded-lg px-5 py-1 ">
                             Rejected
                         </span>
                     </td>

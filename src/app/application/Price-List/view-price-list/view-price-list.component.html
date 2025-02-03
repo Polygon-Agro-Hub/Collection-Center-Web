@@ -1,44 +1,44 @@
-<p class="font-semibold text[#424242] mb-8 mx-5">Price List</p>
+<p class="font-semibold text[#424242] mb-8 mx-5 dark:text-white dark:bg-black">Price List</p>
 
-<div class="w-full px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg">
+<div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-l">
     <div class="flex flex-row items-center justify-between">
         <div class="flex flex-col justify-between">
-            <p class="font-semibold text-lg mb-1 dark:text-rose-500">Market Price on {{today}}</p>
-            <p class="text-[#636D81]">Last upload at {{ priceListArr[0].createdAt | date: 'hh:mm a' }} on {{priceListArr[0].createdAt | date: 'yyyy/MM/dd' }}</p>
+            <p class="font-semibold text-lg mb-1 dark:text-white">Market Price on {{today}}</p>
+            <p class="text-[#636D81] dark:text-[#D1D1D1]">Last upload at {{ priceListArr[0].createdAt | date: 'hh:mm a' }} on {{priceListArr[0].createdAt | date: 'yyyy/MM/dd' }}</p>
         </div>
         <div class="flex flex-row items-center gap-8 ">
-            <i class="fa-solid fa-list text-2xl"></i>
+            <i class="fa-solid fa-list text-2xl dark:text-white"></i>
 
-            <p class="text-lg">Filter By</p>
+            <p class="text-lg dark:text-white">Filter By</p>
 
-            <div class="relative w-46">
+            <div class="relative w-46 ">
                 <div
-                class="border-2 rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center">
+                class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-white flex flex-row justify-between items-center ">
                     <select [(ngModel)]="selectGrade" (change)="filterGrade()"
-                    class="block w-full appearance-none  dark:bg-[#272F45] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
+                    class="block w-full appearance-none  dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
                         <option value="" selected disabled>Grade</option>
-                        <option class=" dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
+                        <option class=" dark:bg-[#292929] text-textLight dark:text-white hover:bg-gray-300 dark:hover:bg-[#292929]"
                             value="A">A</option>
-                        <option class=" dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
+                        <option class=" dark:bg-[#292929] text-textLight dark:text-white hover:bg-gray-300 dark:hover:bg-[#292929]"
                             value="B">B</option>
-                        <option class=" dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
+                        <option class=" dark:bg-[#292929] text-textLight dark:text-white hover:bg-gray-300 dark:hover:bg-[#292929]"
                             value="C">C</option>
 
                     </select>
                     <button *ngIf="!selectGrade">
-                        <i class="fa-solid fa-angle-down text-lg mr-3"></i>
+                        <i class="fa-solid fa-angle-down text-lg mr-3 dark:bg-[#292929]"></i>
                     </button>
                     <button *ngIf="selectGrade" (click)="cancelGrade()">
-                        <i class="fa-solid fa-xmark text-lg mr-3"></i>
+                        <i class="fa-solid fa-xmark text-lg mr-3 dark:bg-[#292929]"></i>
                     </button>
 
                 </div>
             </div>
 
 
-            <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#272F45]">
+            <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#4B5563]">
                 <input type="text" placeholder="Search by Crop / Variety name.." [(ngModel)]="searchText"
-                    class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
+                    class="bg-transparent outline-none w-full text-textLight dark:text-textDark " />
                 <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                     (click)="onSearch()">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -62,29 +62,29 @@
     </div>
 
 
-    <div class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg">
-        <table class="w-full divide-y-2 overflow-hidden">
-            <thead class=" dark:bg-[#272F45] text-gray-700 dark:text-gray-300">
+    <div class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+        <table class="w-full divide-y-2 overflow-hidden ">
+            <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
                 <tr>
-                    <th class="px-6 py-3 text-left text-sm font-medium">No</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium">Crop Name</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium">Variety Name</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium">Grade</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium">Average Price (Rs.)</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium">Price (Rs.)</th>
-                    <th class="px-6 py-3 text-center text-sm font-medium"></th>
+                    <th class=" px-6 py-3 text-left text-sm font-medium">No</th>
+                    <th class=" px-6 py-3 text-left text-sm font-medium">Crop Name</th>
+                    <th class=" px-6 py-3 text-left text-sm font-medium">Variety Name</th>
+                    <th class=" px-6 py-3 text-left text-sm font-medium">Grade</th>
+                    <th class=" px-6 py-3 text-left text-sm font-medium">Average Price (Rs.)</th>
+                    <th class=" px-6 py-3 text-left text-sm font-medium">Price (Rs.)</th>
+                    <th class=" px-6 py-3 text-center text-sm font-medium"></th>
                 </tr>
             </thead>
-            <tbody class="bg-white dark:bg-[#1E293B]">
+            <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
                 <tr *ngFor="let item of priceListArr | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index">
-                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
+                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5]">
                     {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }}
                   </td>
-                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{ item.cropNameEnglish }}</td>
-                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{ item.varietyNameEnglish }}</td>
-                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{ item.grade }}</td>
-                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{ item.averagePrice }}</td>
-                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
+                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5]">{{ item.cropNameEnglish }}</td>
+                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5]">{{ item.varietyNameEnglish }}</td>
+                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5]">{{ item.grade }}</td>
+                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5]">{{ item.averagePrice }}</td>
+                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5]">
                     <span *ngIf="editingIndex !== i">
                       {{ item.updatedPrice }}
                     </span>

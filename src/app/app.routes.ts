@@ -25,6 +25,8 @@ import { ViewCentersComponent } from './application/Target/view-centers/view-cen
 import { CentersDashbordComponent } from './application/Target/centers-dashbord/centers-dashbord.component';
 import { ProfileComponent } from './application/Auth/profile/profile.component';
 import { CenterViewOfficersComponent } from './application/Target/center-view-officers/center-view-officers.component';
+import { CenterViewPriceListComponent} from './application/Target/center-view-price-list/center-view-price-list.component';
+
 
 
 export const routes: Routes = [
@@ -128,6 +130,7 @@ export const routes: Routes = [
                         path: 'view-target',
                         component: ViewDailyTargetComponent
                     },
+                    
                     {
                         path: 'download-target',
                         component: DownloadTargetComponent
@@ -173,6 +176,14 @@ export const routes: Routes = [
                     {
                         path: 'officer-profile/:id',
                         component: OfficerProfileComponent
+                    },
+                    {
+                        path: 'center-view-price-list/:id',
+                        component: CenterViewPriceListComponent
+                    },
+                    {
+                        path: 'center-view-officers',
+                        component: CenterViewOfficersComponent
                     },
                 ]
             }

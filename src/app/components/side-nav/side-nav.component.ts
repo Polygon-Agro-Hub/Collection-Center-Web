@@ -12,6 +12,7 @@ import { ThemeService } from '../../theme.service';
 })
 export class SideNavComponent {
   isCollapsed = false;
+  role:string | null = localStorage.getItem('role:')
 
   constructor(
     private themeService: ThemeService,

@@ -112,6 +112,29 @@ export class TargetService {
     });
   }
 
+  getAllPriceList(centerId: number, page: number = 1, limit: number = 10, grade: string = '', searchText: string = ''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    let url = `${this.apiUrl}/get-all-price?centerId=${centerId}&page=${page}&limit=${limit}`;
+
+
+
+    if (grade) {
+      url += `&grade=${grade}`
+    }
+
+    if (searchText) {
+      url += `&searchText=${searchText}`
+    }
+
+    return this.http.get(url, {
+      headers,
+    });
+  }
+
 
 }
 

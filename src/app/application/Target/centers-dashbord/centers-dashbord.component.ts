@@ -58,11 +58,14 @@ export class CentersDashbordComponent implements OnInit {
   navigatePath(path: string) {
     this.router.navigate([path]);
   }
-
+ 
   navigateAddTarget() {
     this.router.navigate([`/centers/add-target/${this.centerId}/${this.centerNameObj.centerName}`]);
   }
 
+  navigateToMarketPrice() {
+    this.router.navigate([`centers/center-view-price-list/${this.centerId}`]);
+  }
 }
 
 class CenterName {

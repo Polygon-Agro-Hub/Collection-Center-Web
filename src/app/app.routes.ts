@@ -138,7 +138,7 @@ export const routes: Routes = [
                         component: DownloadTargetComponent
                     },
                     {
-                        path: 'assing-target',
+                        path: 'assing-target/:id',
                         component: AssignOfficerTargetComponent
                     }
                 ]

@@ -128,11 +128,11 @@
             Cancel
         </button>
         <button 
-        class="bg-[#95A1AC] text-[#6B7D8C] rounded-lg px-7 py-2" 
-        [ngClass]="+totTargetA === +targetVerity.qtyA && +totTargetB === +targetVerity.qtyB && +totTargetC === +targetVerity.qtyC ? 'bg-[#415CFF] text-[#FFFFFF]' : 'bg-[#95A1AC] text-[#6B7D8C]'"
-        (click)="+totTargetA === +targetVerity.qtyA && +totTargetB === +targetVerity.qtyB && +totTargetC === +targetVerity.qtyC && onSubmit()">
+          class="rounded-lg px-7 py-2" 
+          [ngClass]="isFormValid ? 'bg-[#415CFF] text-[#FFFFFF]' : 'bg-[#95A1AC] text-[#6B7D8C]'"
+          (click)="isFormValid && onSubmit()">
             Save
         </button>
-
-    </div>
+     </div>
+     
 </div>

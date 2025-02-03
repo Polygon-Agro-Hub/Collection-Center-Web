@@ -168,10 +168,53 @@
             </pagination-controls>
         </div>
     </div>
-
-
     <div *ngIf="isSelectAssign">
-        do here 
-    </div>
 
+        <div *ngIf="!assignHasData" class="flex justify-center items-center mt-8 mr-5 w-full h-[500px]">
+            <p class="text-3xl text-center font-semibold">No Data Availabale</p>
+        </div>
+        <div *ngIf="hasData" class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg">
+            <table class="w-full divide-y-2 overflow-hidden">
+                <thead class=" dark:bg-[#272F45] text-gray-700 dark:text-gray-300">
+                    <tr>
+                        <th class="px-6 py-3 text-left font-medium">No</th>
+                        <th class="px-6 py-3 text-left font-medium">Crop Name</th>
+                        <th class="px-6 py-3 text-left font-medium">Variety Name</th>
+                        <th class="px-6 py-3 text-left font-medium">Target (A)</th>
+                        <th class="px-6 py-3 text-left font-medium">Target (B)</th>
+                        <th class="px-6 py-3 text-left font-medium">Target (C)</th>
+                        <th class="px-6 py-3 text-left font-medium">Ends At</th>
+                        <th class="px-6 py-3 text-left font-medium">Assign</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white dark:bg-[#1E293B]">
+                    <tr
+                        *ngFor="let item of assignTargetArr | paginate : { itemsPerPage: assignItemsPerPage, currentPage: page, totalItems: assignTotalItems }; let i = index">
+                        <!--  -->
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
+                            {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }} </td>
+                        <td class="px-6 py-4 text-black dark:text-black-300 ">{{item.cropNameEnglish}}</td>
+                        <td class="px-6 py-4 text-black dark:text-black-300 ">{{item.varietyNameEnglish}}</td>
+                        <td class="px-6 py-4 text-black dark:text-black-300 ">{{item.qtyA}}</td>
+                        <td class="px-6 py-4 text-black dark:text-black-300 ">{{item.qtyB}}</td>
+                        <td class="px-6 py-4 text-black dark:text-black-300 ">{{item.qtyC}}</td>
+                        <td class="px-6 py-4 text-black dark:text-black-300  text-lg">
+                            <p class="text-[#646464] text-sm">{{ item.toDate | date: 'yyyy/MM/dd' }}</p>
+                            <p class="text-[#646464] text-sm">{{ item.toDate | date: 'hh:mm a' }}</p>
+                        </td>
+                        <td class="px-6 py-4 text-black-900 dark:text-black-300 "><i class="fa-solid fa-users-gear text-blue-600 text-xl"></i></td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+        <div class="flex items-center justify-end my-5 mr-5">
+            <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
+                [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
+                [screenReaderCurrentLabel]="'Youre on page'">
+            </pagination-controls>
+        </div>
+    </div>
+    
 </div>
+

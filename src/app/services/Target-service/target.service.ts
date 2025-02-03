@@ -135,6 +135,15 @@ export class TargetService {
     });
   }
 
+  AssignAllDailyTarget(page: number = 1, limit: number = 10): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/assign-all-daily-target?page=${page}&limit=${limit}`;
+
+    return this.http.get<any>(url, { headers });
+  }
 
 }
 

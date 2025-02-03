@@ -15,14 +15,22 @@ import { TargetService } from '../../../services/Target-service/target.service';
 })
 export class ViewDailyTargetComponent implements OnInit {
   targetArr!: DailyTargets[];
+  assignTargetArr!: AssignDailyTarget[];
   searchText: string = '';
   selectStatus: string = '';
   selectValidity: string = '';
   today!: string;
+
   hasData: boolean = true;
   page: number = 1;
   totalItems: number = 0;
   itemsPerPage: number = 4;
+
+  assignHasData: boolean = true;
+  assignPage: number = 1;
+  assignTotalItems: number = 0;
+  assignItemsPerPage: number = 10;
+
 
   isSelectPrograss=true;
   isSelectAssign= false;
@@ -36,6 +44,7 @@ export class ViewDailyTargetComponent implements OnInit {
   ngOnInit(): void {
     this.today = this.datePipe.transform(new Date(), 'yyyy/MM/dd') || '';
     this.fetchAllTarget();
+    this.AssignAllDailyTarget()
   }
 
   fetchAllTarget(page: number = 1, limit: number = this.itemsPerPage, search: string = this.searchText) {
@@ -126,6 +135,31 @@ export class ViewDailyTargetComponent implements OnInit {
     this.isSelectPrograss=false;
     this.isSelectAssign= true;
   }
+
+  AssignAllDailyTarget(page: number = 1, limit: number = this.itemsPerPage) {
+    this.TargetSrv.AssignAllDailyTarget(page, limit).subscribe(
+      (res) => {
+        this.assignTargetArr = res.items;
+        this.assignTotalItems = res.total;
+        if (res.items.length>0) {
+          this.assignHasData = true;
+        } else {
+          this.assignHasData = false;
+        }
+      }
+    );
+  }
+}
+
+class AssignDailyTarget {
+  cropNameEnglish!: string;
+  varietyNameEnglish!: string;
+  qtyA!: string;
+  qtyB!: string;
+  qtyC!: string;
+  toDate!: Date;
+  toTime!: Date;
+  fromTime!: Date;
 }
 
 class DailyTargets {

@@ -76,9 +76,9 @@ export class TargetService {
     }
 
     return this.http.get(url, { headers });
-    }
+  }
 
-  getDashbordDetails(id:number): Observable<any> {
+  getDashbordDetails(id: number): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
@@ -133,6 +133,28 @@ export class TargetService {
     return this.http.get(url, {
       headers,
     });
+  }
+
+
+  getTargetVerity(id: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/get-target-verity/${id}`;
+
+    return this.http.get<any>(url, { headers });
+  }
+
+
+  assignOfficerTartget(data: any): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/assing-officer-target`;
+
+    return this.http.post<any>(url, data, { headers });
   }
 
 

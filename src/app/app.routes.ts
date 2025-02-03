@@ -28,6 +28,7 @@ import { CenterViewOfficersComponent } from './application/Target/center-view-of
 import { CchViewComplaintComponent } from './application/Complaints/cch-view-complaint/cch-view-complaint/cch-view-complaint.component';
 import { CchRecivedComplaintComponent } from './application/Complaints/cch-recived-complaint/cch-recived-complaint.component';
 import { CenterViewPriceListComponent} from './application/Target/center-view-price-list/center-view-price-list.component';
+import { AssignOfficerTargetComponent } from './application/Target/assign-officer-target/assign-officer-target.component';
 
 
 
@@ -132,15 +133,14 @@ export const routes: Routes = [
                         path: 'view-target',
                         component: ViewDailyTargetComponent
                     },
-                    
                     {
                         path: 'download-target',
                         component: DownloadTargetComponent
                     },
-                    // {
-                    //     path: 'view-centers',
-                    //     component: ViewCentersComponent
-                    // }
+                    {
+                        path: 'assing-target',
+                        component: AssignOfficerTargetComponent
+                    }
                 ]
             },
             {

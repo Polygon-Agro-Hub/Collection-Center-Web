@@ -35,8 +35,7 @@ export class AssignOfficerTargetComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // this.targetId = this.route.snapshot.params['id'];
-    this.targetId = 2;
+    this.targetId = this.route.snapshot.params['id'];
     this.fetchTargetVerity();
   }
 
@@ -55,6 +54,16 @@ export class AssignOfficerTargetComponent implements OnInit {
       }
     );
   }
+
+
+  get isFormValid(): boolean {
+    return (
+      +this.totTargetA === +this.targetVerity.qtyA &&
+      +this.totTargetB === +this.targetVerity.qtyB &&
+      +this.totTargetC === +this.targetVerity.qtyC
+    );
+  }
+  
 
   onSubmit() {
     this.AssignTargetObj.varietyId = this.targetVerity.varietyId;

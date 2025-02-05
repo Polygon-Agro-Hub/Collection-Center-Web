@@ -202,7 +202,7 @@
                             <p class="text-[#646464] text-sm">{{ item.toDate | date: 'yyyy/MM/dd' }}</p>
                             <p class="text-[#646464] text-sm">{{ item.toDate | date: 'hh:mm a' }}</p>
                         </td>
-                        <td class="px-6 py-4 text-black-900 dark:text-black-300 "><i class="fa-solid fa-users-gear text-blue-600 text-xl"></i></td>
+                        <td class="px-6 py-4 text-black-900 dark:text-black-300 "><i class="fa-solid fa-users-gear text-blue-600 text-xl" (click)="navigateToAssignTarget(item.id)"></i></td>
                     </tr>
                 </tbody>
 

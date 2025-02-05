@@ -32,8 +32,8 @@ export class ViewDailyTargetComponent implements OnInit {
   assignItemsPerPage: number = 10;
 
 
-  isSelectPrograss=true;
-  isSelectAssign= false;
+  isSelectPrograss = true;
+  isSelectAssign = false;
 
   constructor(
     private router: Router,
@@ -52,7 +52,7 @@ export class ViewDailyTargetComponent implements OnInit {
       (res) => {
         this.targetArr = res.items;
         this.totalItems = res.totalPages
-        if (res.items.length>0) {
+        if (res.items.length > 0) {
           this.hasData = true;
         } else {
           this.hasData = false;
@@ -74,8 +74,8 @@ export class ViewDailyTargetComponent implements OnInit {
 
   onSearch() {
     this.fetchAllTarget();
-   }
-  offSearch() { 
+  }
+  offSearch() {
     this.searchText = '';
     this.fetchAllTarget()
   }
@@ -121,27 +121,29 @@ export class ViewDailyTargetComponent implements OnInit {
     this.page = event;
     this.fetchAllTarget(this.page, this.itemsPerPage);
 
-   }
+  }
   navigate(path: string) {
     this.router.navigate([path]);
   }
 
-  selectPrograss(){
-    this.isSelectPrograss=true;
-    this.isSelectAssign= false;
+  selectPrograss() {
+    this.isSelectPrograss = true;
+    this.isSelectAssign = false;
   }
 
-  selectAssign(){
-    this.isSelectPrograss=false;
-    this.isSelectAssign= true;
+  selectAssign() {
+    this.isSelectPrograss = false;
+    this.isSelectAssign = true;
   }
 
   AssignAllDailyTarget(page: number = 1, limit: number = this.itemsPerPage) {
     this.TargetSrv.AssignAllDailyTarget(page, limit).subscribe(
       (res) => {
+        console.log(res);
+
         this.assignTargetArr = res.items;
         this.assignTotalItems = res.total;
-        if (res.items.length>0) {
+        if (res.items.length > 0) {
           this.assignHasData = true;
         } else {
           this.assignHasData = false;
@@ -149,9 +151,14 @@ export class ViewDailyTargetComponent implements OnInit {
       }
     );
   }
+
+  navigateToAssignTarget(id: number) {
+    this.router.navigate([`/target/assing-target/${id}`]);
+  }
 }
 
 class AssignDailyTarget {
+  id!: number;
   cropNameEnglish!: string;
   varietyNameEnglish!: string;
   qtyA!: string;

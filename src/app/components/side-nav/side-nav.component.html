@@ -75,11 +75,11 @@
                 </span>
             </li>
 
-            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]" (click)="navigate('/cch-complaints')">
+            <li *ngIf="role=== 'Collection Center Head'" class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]" (click)="navigate('/cch-complaints')">
                 <i class="fa-solid fa-triangle-exclamation text-[#6B6B6B] dark:text-white text-xl group-hover:text-[#415CFF]"></i>
                 <span [ngClass]="isCollapsed ? 'hidden' : 'block'"
                     class="text-[#6B6B6B] dark:text-white text-lg font-normal group-hover:text-[#415CFF]">
-                    cch-Complaints
+                    Complaints
                 </span>
             </li>
 

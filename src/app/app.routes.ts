@@ -29,7 +29,7 @@ import { CchViewComplaintComponent } from './application/Complaints/cch-view-com
 import { CchRecivedComplaintComponent } from './application/Complaints/cch-recived-complaint/cch-recived-complaint.component';
 import { CenterViewPriceListComponent} from './application/Target/center-view-price-list/center-view-price-list.component';
 import { AssignOfficerTargetComponent } from './application/Target/assign-officer-target/assign-officer-target.component';
-
+import {ViewMyTargetComponent} from './application/Target/view-my-target/view-my-target.component';
 
 
 export const routes: Routes = [
@@ -140,6 +140,10 @@ export const routes: Routes = [
                     {
                         path: 'assing-target',
                         component: AssignOfficerTargetComponent
+                    },
+                    {
+                        path: 'view-my-target.component',
+                        component: ViewMyTargetComponent
                     }
                 ]
             },

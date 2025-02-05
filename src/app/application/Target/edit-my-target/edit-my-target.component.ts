@@ -19,7 +19,8 @@ export class EditMyTargetComponent implements OnInit {
   officerArr: Officers[] = [];
   filteredOfficers: Officers[] = [];
 
-  passAmount:number = 0.00;
+  passAmount: number = 0.00;
+  amount: number = 0.00;
 
   searchTerm: string = '';
   selectedOfficerId!: number | null;
@@ -28,10 +29,10 @@ export class EditMyTargetComponent implements OnInit {
     private router: Router,
     private TargetSrv: TargetService,
     private toastSrv: ToastAlertService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-    this.targetItemId = 6;
+    this.targetItemId = 4;
     this.fetchTargetDetalis();
   }
 
@@ -41,6 +42,7 @@ export class EditMyTargetComponent implements OnInit {
         console.log(res);
         this.targetObj = res.resultTarget;
         this.passAmount = res.resultTarget.todo;
+        this.amount = res.resultTarget.todo;
         this.officerArr = res.resultOfficer;
         this.filteredOfficers = [...this.officerArr];
       }
@@ -61,8 +63,27 @@ export class EditMyTargetComponent implements OnInit {
     if (selectedOfficer) {
       this.searchTerm = `${selectedOfficer.firstNameEnglish} ${selectedOfficer.lastNameEnglish}`;
       this.selectedOfficerId = id;
-      this.filteredOfficers = []; // Hide dropdown after selection
+      this.filteredOfficers = [];
     }
+  }
+
+  onSubmit() {
+    console.log(this.selectedOfficerId, this.passAmount);
+    if (!this.selectedOfficerId) {
+      this.toastSrv.warning('Pleace fill all feild!')
+      return;
+    }
+
+    if (this.passAmount > this.amount) {
+      this.toastSrv.warning(`The maximum amount you can pass <b>${this.amount}</b>Kg`)
+      return;
+    }
+
+    this.TargetSrv.passToTargetToOfficer(this.selectedOfficerId, this.targetItemId, this.passAmount).subscribe(
+      (res) => {
+        this.toastSrv.success('Pleace fill all feild!');
+      }
+    )
   }
 }
 

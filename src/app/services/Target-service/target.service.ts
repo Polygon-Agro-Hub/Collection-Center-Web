@@ -166,7 +166,7 @@ export class TargetService {
     return this.http.post<any>(url, data, { headers });
   }
 
-  getOfficerTartgetItem(id:number): Observable<any> {
+  getOfficerTartgetItem(id: number): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
@@ -174,6 +174,19 @@ export class TargetService {
     let url = `${this.apiUrl}/get-officer-target-by-id/${id}`;
 
     return this.http.get<any>(url, { headers });
+  }
+
+
+  passToTargetToOfficer(id: number | null, targetItemId: number, amount: number): Observable<any> {
+    console.log(id, targetItemId, amount, "--dwdwd--");
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/pass-target-to-officer`;
+
+    return this.http.patch<any>(url, { officerId: id, target: targetItemId, amount: amount }, { headers });
   }
 
 

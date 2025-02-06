@@ -155,6 +155,30 @@ export class ManageOfficersService {
       headers,
     });
   }
+
+
+  editOfficerTarget(id: number | null, targetItemId: number, amount: number): Observable<any> {
+    console.log(id, targetItemId, amount, "--dwdwd--");
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/manage-officers/edit-officer-target`;
+
+    return this.http.patch<any>(url, { officerId: id, target: targetItemId, amount: amount }, { headers });
+  }
+
+
+  getTargetDetails(id: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/manage-officers/get-target-details/${id}`;
+
+    return this.http.get<any>(url, { headers });
+  }
 }
 
 

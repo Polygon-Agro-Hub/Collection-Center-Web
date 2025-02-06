@@ -32,6 +32,7 @@ import { AssignOfficerTargetComponent } from './application/Target/assign-office
 import { EditMyTargetComponent } from './application/Target/edit-my-target/edit-my-target.component';
 import {ViewMyTargetComponent} from './application/Target/view-my-target/view-my-target.component';
 import {ViewOfficerTargetComponent} from './application/manage-officers/view-officer-target/view-officer-target.component';
+import { EditOfficerTargetComponent } from './application/manage-officers/edit-officer-target/edit-officer-target.component';
 
 export const routes: Routes = [
     {
@@ -82,6 +83,10 @@ export const routes: Routes = [
                     {
                         path: 'view-officer-target/:officerId',
                         component: ViewOfficerTargetComponent
+                    },
+                    {
+                        path: 'edit-officer-target/:id',
+                        component: EditOfficerTargetComponent
                     }
 
                 ]

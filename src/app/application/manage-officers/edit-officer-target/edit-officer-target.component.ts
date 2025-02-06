@@ -1,19 +1,19 @@
-import { CommonModule, DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
-import { TargetService } from '../../../services/Target-service/target.service';
+import { ManageOfficersService } from '../../../services/manage-officers-service/manage-officers.service';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
+import { TargetService } from '../../../services/Target-service/target.service';
 
 @Component({
-  selector: 'app-edit-my-target',
+  selector: 'app-edit-officer-target',
   standalone: true,
-  imports: [CommonModule, FormsModule],
-  templateUrl: './edit-my-target.component.html',
-  styleUrl: './edit-my-target.component.css',
-  providers: [DatePipe]
+  imports: [FormsModule, CommonModule],
+  templateUrl: './edit-officer-target.component.html',
+  styleUrl: './edit-officer-target.component.css'
 })
-export class EditMyTargetComponent implements OnInit {
+export class EditOfficerTargetComponent {
   targetItemId!: number;
   targetObj: TargetDetalis = new TargetDetalis();
   officerArr: Officers[] = [];
@@ -27,9 +27,9 @@ export class EditMyTargetComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private TargetSrv: TargetService,
+    private ManageOficerSrv: ManageOfficersService,
     private toastSrv: ToastAlertService,
-    private route:ActivatedRoute
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -38,7 +38,7 @@ export class EditMyTargetComponent implements OnInit {
   }
 
   fetchTargetDetalis() {
-    this.TargetSrv.getOfficerTartgetItem(this.targetItemId).subscribe(
+    this.ManageOficerSrv.getTargetDetails(this.targetItemId).subscribe(
       (res) => {
         console.log(res);
         this.targetObj = res.resultTarget;
@@ -80,11 +80,11 @@ export class EditMyTargetComponent implements OnInit {
       return;
     }
 
-    this.TargetSrv.passToTargetToOfficer(this.selectedOfficerId, this.targetItemId, this.passAmount).subscribe(
+    this.ManageOficerSrv.editOfficerTarget(this.selectedOfficerId, this.targetItemId, this.passAmount).subscribe(
       (res) => {
         if (res.status) {
           this.toastSrv.success(res.message);
-          this.router.navigate(['/targets'])
+          this.router.navigate([`/manage-officers/view-officer-target/${this.targetItemId}`])
         } else {
           this.toastSrv.error(res.message);
         }

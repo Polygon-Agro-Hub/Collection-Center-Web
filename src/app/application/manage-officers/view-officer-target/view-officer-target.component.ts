@@ -17,7 +17,7 @@ export class ViewOfficerTargetComponent implements OnInit {
   officerId!: number;
 
   selectedOfficerDataArr!: SelectedOfficerTarget[];
-  
+
   hasData: boolean = true;
   selectStatus: string = '';
   searchText: string = '';
@@ -39,12 +39,12 @@ export class ViewOfficerTargetComponent implements OnInit {
     this.TargetSrv.getSelectedOfficerTargetData(officerId, status, search).subscribe(
       (res) => {
         console.log(res);
-        
+
         this.selectedOfficerDataArr = res.items;
         console.log(res.items.length);
         if (res.items.length === 0) {
           this.hasData = false;
-        }else{
+        } else {
           this.hasData = true;
         }
       }
@@ -66,9 +66,8 @@ export class ViewOfficerTargetComponent implements OnInit {
   //   )
   // }
 
-  navigateToNewPage(): void {
-    // Navigate to the new page when the status is not 'Pending'
-    this.router.navigate(['/change-password']);  // Assuming you want to pass the `item.id` to the new page
+  navigateToNewPage(id: number): void {
+    this.router.navigate([`/manage-officers/edit-officer-target/${id}`]);  // Assuming you want to pass the `item.id` to the new page
   }
 
   cancelStatus() {
@@ -92,6 +91,7 @@ export class ViewOfficerTargetComponent implements OnInit {
 }
 
 class SelectedOfficerTarget {
+  id!: number;
   dailyTargetId!: number
   varietyNameEnglish!: string
   cropNameEnglish!: string

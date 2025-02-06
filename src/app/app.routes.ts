@@ -143,11 +143,11 @@ export const routes: Routes = [
                         component: AssignOfficerTargetComponent
                     },
                     {
-                        path: 'view-my-target.component',
+                        path: 'view-my-target',
                         component: ViewMyTargetComponent
                     },
                     {
-                        path: 'edit-my-target',
+                        path: 'edit-my-target/:id',
                         component: EditMyTargetComponent
                     },
                     {

@@ -13,7 +13,7 @@ import { TargetService } from '../../../services/Target-service/target.service';
   styleUrl: './view-my-target.component.css',
   providers: [DatePipe]
 })
-export class ViewMyTargetComponent implements OnInit{
+export class ViewMyTargetComponent implements OnInit {
   officerDataArr!: OfficerTarget[];
 
   hasData: boolean = true;
@@ -38,7 +38,7 @@ export class ViewMyTargetComponent implements OnInit{
         console.log(res.items.length);
         if (res.items.length === 0) {
           this.hasData = false;
-        }else{
+        } else {
           this.hasData = true;
 
         }
@@ -46,9 +46,8 @@ export class ViewMyTargetComponent implements OnInit{
     )
   }
 
-  navigateToNewPage(): void {
-    // Navigate to the new page when the status is not 'Pending'
-    this.router.navigate(['/change-password']);  // Assuming you want to pass the `item.id` to the new page
+  navigateToNewPage(id: number) {
+    this.router.navigate([`/target/edit-my-target/${id}`]);
   }
 
   cancelStatus() {
@@ -72,6 +71,7 @@ export class ViewMyTargetComponent implements OnInit{
 }
 
 class OfficerTarget {
+  id!:number
   dailyTargetId!: number
   varietyNameEnglish!: string
   cropNameEnglish!: string

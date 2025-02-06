@@ -72,7 +72,7 @@ export class OfficerProfileComponent implements OnInit {
   }
 
   viewOfficerTarget(officerId: number) {
-    this.router.navigate([`/target/view-officer-target/${officerId}`])
+    this.router.navigate([`/manage-officers/view-officer-target/${officerId}`])
   }
 
   cancelDisclaim() {

@@ -166,6 +166,28 @@ export class TargetService {
     return this.http.post<any>(url, data, { headers });
   }
 
+  getOfficerTargetData(status: string = '', search: string = ''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    let url = `${this.apiUrl}/get-officer-target-data?limit=1`;
+
+    // If status is provided, append it as a query parameter.
+    if (status) {
+      url += `&status=${status}`;
+    }
+
+    if (search) {
+      url += `&search=${search}`
+    }
+
+    return this.http.get(url, {
+      headers,
+    });
+  }
+
 
 }
 

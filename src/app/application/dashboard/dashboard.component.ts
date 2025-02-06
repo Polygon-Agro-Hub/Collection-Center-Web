@@ -90,7 +90,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
                   borderColor: "#4E97FD",
                   backgroundColor: "#6F64A766",
                   fill: true,
-                  tension: 0.4
+                  tension: 0.4,
+
                 },
               ]
             },
@@ -100,25 +101,28 @@ export class DashboardComponent implements OnInit, AfterViewInit {
                 legend: {
                   display: true,
                   labels: {
-                    color: 'black'
+                    color: '#FFFFFF'
                   }
                 }
               },
               scales: {
                 x: {
                   ticks: {
-                    color: 'balck'
+                    color: '#FFFFFF'
                   },
                   grid: {
-                    display: false
+                    display: true,
+                    color: '#060606',
+
                   }
                 },
                 y: {
                   ticks: {
-                    color: 'balck'
+                    color: '#FFFFFF'
                   },
                   grid: {
-                    color: '#CCCCCC'
+                    display: true,
+                    color: '#060606'
                   }
                 }
               }

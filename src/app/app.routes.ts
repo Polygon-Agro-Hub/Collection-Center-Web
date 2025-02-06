@@ -30,7 +30,7 @@ import { CchRecivedComplaintComponent } from './application/Complaints/cch-reciv
 import { CenterViewPriceListComponent} from './application/Target/center-view-price-list/center-view-price-list.component';
 import { AssignOfficerTargetComponent } from './application/Target/assign-officer-target/assign-officer-target.component';
 import { EditMyTargetComponent } from './application/Target/edit-my-target/edit-my-target.component';
-
+import {ViewMyTargetComponent} from './application/Target/view-my-target/view-my-target.component';
 
 
 export const routes: Routes = [
@@ -141,6 +141,10 @@ export const routes: Routes = [
                     {
                         path: 'assing-target/:id',
                         component: AssignOfficerTargetComponent
+                    },
+                    {
+                        path: 'view-my-target.component',
+                        component: ViewMyTargetComponent
                     },
                     {
                         path: 'edit-my-target',

@@ -29,6 +29,10 @@ export class ProfileComponent implements OnInit {
   goToChangePassword() {
     this.router.navigate(['/change-password']); // Navigate to the Change Password page
   }
+
+  navigateToTarget() {
+    this.router.navigate(['/target/view-my-target.component']);
+  }
 }
 
 class Officer {

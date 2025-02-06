@@ -1,18 +1,18 @@
 <div class="flex flex-row items-center justify-end gap-8 ">
-    <i class="fa-solid fa-list text-2xl"></i>
+    <i class="fa-solid fa-list text-2xl dark:text-white"></i>
 
-    <p class="text-lg">Filter By</p>
+    <p class="text-lg dark:text-white">Filter By</p>
 
 
     <div class="relative w-46">
         <div
-            class="border-2 rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center">
+            class="border-2 rounded-xl dark:bg-[#292929 text-textLight dark:text-textDark flex flex-row justify-between items-center">
             <select [(ngModel)]="selectEmployee" (change)="filterEmployee()" name="selectEmployee"
-                class="block w-full appearance-none  dark:bg-[#272F45] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
+                class="block w-full appearance-none  dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
                 <option value="" selected disabled>Employee</option>
-                <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300" value="Own">
+                <option class="dark:bg-[#292929 text-textLight dark:text-textDark hover:bg-gray-300" value="Own">
                     Own Complaints</option>
-                <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300" value="Other">
+                <option class="dark:bg-[#292929 text-textLight dark:text-textDark hover:bg-gray-300" value="Other">
                     Other Complaints</option>
                 
 
@@ -30,13 +30,13 @@
 
     <div class="relative w-46">
         <div
-            class="border-2 rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center">
+            class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
             <select [(ngModel)]="selectStatus" (change)="filterStatus()"
-                class="block w-full appearance-none  dark:bg-[#272F45] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
+                class="block w-full appearance-none  dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
                 <option value="" selected disabled>Status</option>
-                <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300" value="Assigned">
+                <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300" value="Assigned">
                     Opend</option>
-                <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300" value="Closed">
+                <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300" value="Closed">
                     Closed</option>
 
             </select>
@@ -51,7 +51,7 @@
     </div>
 
 
-    <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#272F45]">
+    <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
         <input type="text" placeholder="Search by Ref No, EMP ID" [(ngModel)]="searchText"
             class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
         <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2" (click)="onSearch()">
@@ -72,9 +72,9 @@
 </div>
 
 
-<div class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg">
+<div class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
     <table class="w-full divide-y-2 overflow-hidden">
-        <thead class=" dark:bg-[#272F45] text-gray-700 dark:text-gray-300">
+        <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
             <tr>
                 <th class="px-6 py-3 text-left text-sm font-medium">Ref. No</th>
                 <th class="px-6 py-3 text-left text-sm font-medium">EMP ID</th>
@@ -85,7 +85,7 @@
                 <th class="px-6 py-3 text-left text-sm font-medium">Action</th>
             </tr>
         </thead>
-        <tbody class="bg-white dark:bg-[#1E293B]">
+        <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
             <tr *ngFor="let item of complainArr | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index">
                 <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.refNo}}</td>
                 <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
@@ -96,8 +96,8 @@
                 <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.complain}}</td>
                 <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
                     <div class="flex flex-col items-center justify-center">
-                        <p class="text-[#3E3E3E]">{{item.createdAt | date:'yyyy/mm/dd'}}</p>
-                        <p class="text-[#3E3E3E]">{{item.createdAt | date:'hh:mm a'}}</p>
+                        <p class="text-[#3E3E3E] dark:text-gray-300">{{item.createdAt | date:'yyyy/mm/dd'}}</p>
+                        <p class="text-[#3E3E3E] dark:text-gray-300">{{item.createdAt | date:'hh:mm a'}}</p>
                     </div>
                 </td>
                 <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300 flex items-center justify-center">

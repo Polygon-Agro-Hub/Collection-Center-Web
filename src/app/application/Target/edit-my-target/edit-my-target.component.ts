@@ -81,7 +81,12 @@ export class EditMyTargetComponent implements OnInit {
 
     this.TargetSrv.passToTargetToOfficer(this.selectedOfficerId, this.targetItemId, this.passAmount).subscribe(
       (res) => {
-        this.toastSrv.success('Pleace fill all feild!');
+        if (res.status) {
+          this.toastSrv.success(res.message);
+          this.router.navigate(['/targets'])
+        } else {
+          this.toastSrv.error(res.message);
+        }
       }
     )
   }

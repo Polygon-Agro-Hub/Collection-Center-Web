@@ -211,6 +211,29 @@ export class TargetService {
     return this.http.patch<any>(url, { officerId: id, target: targetItemId, amount: amount }, { headers });
   }
 
+  getSelectedOfficerTargetData(officerId: number, status: string = '', search: string = ''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    let url = `${this.apiUrl}/get-selected-officer-target-data?officerId=${officerId}`;
+    
+    if (status) {
+      url += `&status=${status}`;
+    }
+
+    if (search) {
+      url += `&search=${search}`
+    }
+
+    return this.http.get(url, {
+      headers,
+    });
+  }
+
 
 }
+
+
 

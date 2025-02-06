@@ -31,7 +31,7 @@ import { CenterViewPriceListComponent} from './application/Target/center-view-pr
 import { AssignOfficerTargetComponent } from './application/Target/assign-officer-target/assign-officer-target.component';
 import { EditMyTargetComponent } from './application/Target/edit-my-target/edit-my-target.component';
 import {ViewMyTargetComponent} from './application/Target/view-my-target/view-my-target.component';
-
+import {ViewOfficerTargetComponent} from './application/Target/view-officer-target/view-officer-target.component';
 
 export const routes: Routes = [
     {
@@ -149,6 +149,10 @@ export const routes: Routes = [
                     {
                         path: 'edit-my-target',
                         component: EditMyTargetComponent
+                    },
+                    {
+                        path: 'view-officer-target/:officerId',
+                        component: ViewOfficerTargetComponent
                     }
                 ]
             },

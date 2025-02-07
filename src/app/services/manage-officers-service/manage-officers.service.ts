@@ -35,8 +35,6 @@ export class ManageOfficersService {
   }
 
   createCollectiveOfficer(person: any, selectedImage: any): Observable<any> {
-    console.log(selectedImage);
-
     const formData = new FormData();
     formData.append('officerData', JSON.stringify(person)); 
     formData.append('file', selectedImage);
@@ -123,11 +121,15 @@ export class ManageOfficersService {
     });
   }
 
-  updateCollectiveOfficer(person: any, id: number): Observable<any> {
+  updateCollectiveOfficer(person: any, id: number, image:any): Observable<any> {
+    const formData = new FormData();
+    formData.append('officerData', JSON.stringify(person)); 
+    formData.append('file', image);
+
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
     });
-    return this.http.put(`${this.apiUrl}/manage-officers/update-officer/${id}`, person, {
+    return this.http.put(`${this.apiUrl}/manage-officers/update-officer/${id}`, formData, {
       headers,
     });
   }

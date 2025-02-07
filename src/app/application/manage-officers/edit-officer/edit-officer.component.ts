@@ -88,6 +88,9 @@ export class EditOfficerComponent implements OnInit {
         this.personalData = res.officerData.collectionOfficer;
         console.log(res.officerData.collectionOfficer);
         this.getUpdateLastID(res.officerData.collectionOfficer.jobRole);
+        this.personalData.previousQR = this.personalData.QRcode;
+        this.personalData.previousImage = this.personalData.image;
+
 
         // Initialize languages as a comma-separated string if it's not already in that format
         if (Array.isArray(this.personalData.languages)) {
@@ -253,7 +256,7 @@ export class EditOfficerComponent implements OnInit {
 
 
     } else {
-      this.ManageOficerSrv.updateCollectiveOfficer(this.personalData, this.editOfficerId).subscribe(
+      this.ManageOficerSrv.updateCollectiveOfficer(this.personalData, this.editOfficerId, this.selectedImage).subscribe(
         (res: any) => {
           this.officerId = res.officerId;
           this.toastSrv.success('Collective Officer Updated Successfully')
@@ -320,6 +323,7 @@ class Personal {
   province!: string;
   country: string = 'Sri Lanka';
   languages: string = '';
+  QRcode!: string;
 
   accHolderName!: string;
   accNumber!: string;
@@ -331,6 +335,9 @@ class Personal {
   employeeType!: string;
 
   image!: any
+
+  previousQR!:string
+  previousImage!:string
 }
 
 

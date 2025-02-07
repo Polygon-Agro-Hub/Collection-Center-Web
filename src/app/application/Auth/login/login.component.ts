@@ -19,75 +19,78 @@ export class LoginComponent {
   disError: any;
 
 
-  constructor(private authService: AuthService, private http: HttpClient, private router: Router){
+  constructor(private authService: AuthService, private http: HttpClient, private router: Router) {
     this.loginObj = new Login();
-}
-
-ngOnInit() {
-  localStorage.removeItem('Login Token:');
-}
-
-
-
-onLogin(){
-  console.log("Successfully click the button");
-
-  if (!this.loginObj.userName) {
-    Swal.fire({
-      icon: 'error',
-      title: 'Unsuccessful',
-      text: 'User Name is required',
-    });
-  } 
-
-  if(!this.loginObj.password){
-    Swal.fire({
-      icon: 'error',
-      title: 'Unsuccessful',
-      text: 'Password is required',
-    });
-
   }
 
-  if(!this.loginObj.userName && !this.loginObj.password){
-    Swal.fire({
-      icon: 'error',
-      title: 'Unsuccessful',
-      text: 'User Name and Password is required',
-    });
-
+  ngOnInit() {
+    localStorage.removeItem('Login Token:');
   }
 
-  if(this.loginObj.password && this.loginObj.userName){
-    this.authService.login(this.loginObj.userName, this.loginObj.password).subscribe(
 
-      (res: any) => {
-        
-        
-        Swal.fire({
-          icon: 'success',
-          title: 'Logged',
-          text: 'Successfully Logged In',
-          showConfirmButton: false,
-          timer: 1500
-        });
-        localStorage.setItem('Login Token:', res.token);
-  
-        localStorage.setItem('userName:', res.userName);
-        localStorage.setItem('userId:', res.userId);
-        localStorage.setItem('role:', res.role);
-        localStorage.setItem('updatedPassword:', res.updatedPassword);
+
+  onLogin() {
+    console.log("Successfully click the button");
+
+    if (!this.loginObj.userName) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Unsuccessful',
+        text: 'User Name is required',
+      });
+    }
+
+    if (!this.loginObj.password) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Unsuccessful',
+        text: 'Password is required',
+      });
+
+    }
+
+    if (!this.loginObj.userName && !this.loginObj.password) {
+      Swal.fire({
+        icon: 'error',
+        title: 'Unsuccessful',
+        text: 'User Name and Password is required',
+      });
+
+    }
+
+    if (this.loginObj.password && this.loginObj.userName) {
+      this.authService.login(this.loginObj.userName, this.loginObj.password).subscribe(
+
+        (res: any) => {
+          console.log(res);
+          
+
+
+          Swal.fire({
+            icon: 'success',
+            title: 'Logged',
+            text: 'Successfully Logged In',
+            showConfirmButton: false,
+            timer: 1500
+          });
+          localStorage.setItem('Login Token:', res.token);
+
+          localStorage.setItem('userName:', res.userName);
+          localStorage.setItem('userId:', res.userId);
+          localStorage.setItem('role:', res.role);
+          localStorage.setItem('updatedPassword:', res.updatedPassword);
+          localStorage.setItem('profileImage', res.image)
           localStorage.setItem('Token Expiration', String(new Date().getTime() + (res.expiresIn * 20)));
           // console.log("hi..",res.token);
           // console.log("hi..",res.userName);
           // console.log("hi..",res.role);
           // console.log("hi..",res.userId);
-         
-          if(res.updatedPassword==0){
+
+          if (res.updatedPassword == 0) {
             this.router.navigate(['/change-password']);
-          }else if(res.updatedPassword==1){
+          } else if (res.updatedPassword == 1) {
             this.router.navigate(['/dashbord']);
-          }else{
+          } else {
             Swal.fire({
               icon: 'error',
               title: 'Unsuccessful',
@@ -95,21 +98,21 @@ onLogin(){
             });
           }
 
-          
-        
-      },
-      (error) => {
-        console.error('Error updating Market Price', error);
-        this.disError = error.error?.error || 'An error occurred. Please try again.';
-        Swal.fire({
-          icon: 'error',
-          title: 'Unsuccessful',
-          text: this.disError,
-        });
-      }
-  );
+
+
+        },
+        (error) => {
+          console.error('Error updating Market Price', error);
+          this.disError = error.error?.error || 'An error occurred. Please try again.';
+          Swal.fire({
+            icon: 'error',
+            title: 'Unsuccessful',
+            text: this.disError,
+          });
+        }
+      );
+    }
   }
- }
 
 
 
@@ -119,13 +122,13 @@ onLogin(){
 }
 
 
-export class Login{
+export class Login {
   userName: string;
   password: string;
-  
-  constructor(){
-    this.userName='';
-    this.password='';
+
+  constructor() {
+    this.userName = '';
+    this.password = '';
   }
 
 }

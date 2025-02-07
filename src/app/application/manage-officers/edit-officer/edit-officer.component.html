@@ -10,7 +10,7 @@
 
                         <!-- Display default image if no file is selected -->
                         <img *ngIf="!selectedImage" class="rounded-full w-60 h-60" (click)="triggerFileInput($event)"
-                            src="https://images.pexels.com/photos/845457/pexels-photo-845457.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
+                            [src]='personalData.image'
                             alt="Profile Picture" />
 
                         <!-- Display the selected image if available -->

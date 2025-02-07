@@ -7,11 +7,12 @@
                     <div class="relative">
                         <input type="file" id="imageUpload" accept="image/*" class="hidden"
                             (change)="onFileSelected($event)" />
-
+                        
                         <!-- Display default image if no file is selected -->
-                        <img *ngIf="!selectedImage" class="rounded-full w-60 h-60" (click)="triggerFileInput($event)"
-                            src="https://images.pexels.com/photos/845457/pexels-photo-845457.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1"
-                            alt="Profile Picture" />
+                        <div *ngIf="!selectedImage" (click)="triggerFileInput($event)"
+                            class="flex rounded-full border-solid border-2 justify-center items-center w-60 h-60">
+                            <i class="fa-regular fa-user text-8xl"></i>
+                        </div>
 
                         <!-- Display the selected image if available -->
                         <img *ngIf="selectedImage" class="rounded-full w-60 h-60" [src]="selectedImage"
@@ -57,21 +58,6 @@
                                 disabled>
                         </div>
                     </div>
-
-                    <!-- <div>
-                        <label for="centerId" class="block text-sm font-medium text-gray-700 dark:text-textDark">
-                            Collection Center Name
-                        </label>
-                        <select id="centerId" [(ngModel)]="personalData.centerId" (change)="getAllmanagers()"
-                            name="centerId"
-                            class="form-control mt-1 block w-full p-2 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-100 dark:bg-gray-800 appearance-none focus:ring-indigo-500 focus:border-indigo-500">
-                            <option selected disabled>--Select---</option>
-                            <option *ngFor="let center of collectionCenterData" [value]="center.id"
-                                class="p-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800">
-                                {{ center.centerName }}
-                            </option>
-                        </select>
-                    </div> -->
 
                     <div>
                         <label for="languages" class="block text-sm font-medium text-gray-700 dark:text-textDark">
@@ -318,8 +304,8 @@
             <div class="flex justify-end m-10">
                 <button (click)="nextForm('pageOne')" type="button"
                     class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md mr-2">Back</button>
-                <button type="submit" class="px-4 py-2 bg-[#3980C0] text-white rounded-md"
-                    (click)="onSubmit()">Sent to Approve</button>
+                <button type="submit" class="px-4 py-2 bg-[#3980C0] text-white rounded-md" (click)="onSubmit()">Sent to
+                    Approve</button>
             </div>
         </div>
 

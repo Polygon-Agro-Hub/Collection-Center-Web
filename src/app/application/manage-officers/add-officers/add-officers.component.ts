@@ -128,7 +128,6 @@ export class AddOfficersComponent implements OnInit {
 
       this.selectedFile = file;
       this.selectedFileName = file.name;
-      // this.officerForm.patchValue({ image: file });
 
       const reader = new FileReader();
       reader.onload = (e: any) => {
@@ -187,13 +186,14 @@ export class AddOfficersComponent implements OnInit {
   }
 
   onSubmit() {
+    // this.personalData.image = this.selectedFile;
     console.log(this.personalData); // Logs the personal data with updated languages
 
     if (!this.personalData.accHolderName || !this.personalData.accNumber || !this.personalData.bankName || !this.personalData.branchName) {
       this.toastSrv.warning('Pleace fill all required feilds')
 
     } else {
-      this.ManageOficerSrv.createCollectiveOfficer(this.personalData).subscribe(
+      this.ManageOficerSrv.createCollectiveOfficer(this.personalData, this.selectedImage).subscribe(
         (res: any) => {
           this.officerId = res.officerId;
           this.toastSrv.success('Collective Officer Created Successfully')

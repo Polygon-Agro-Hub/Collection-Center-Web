@@ -34,11 +34,16 @@ export class ManageOfficersService {
     });
   }
 
-  createCollectiveOfficer(person: any): Observable<any> {
+  createCollectiveOfficer(person: any, selectedImage: any): Observable<any> {
+    console.log(selectedImage);
+
+    const formData = new FormData();
+    formData.append('officerData', JSON.stringify(person)); 
+    formData.append('file', selectedImage);
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
     });
-    return this.http.post(`${this.apiUrl}/manage-officers/create-officer`, person, {
+    return this.http.post(`${this.apiUrl}/manage-officers/create-officer`, formData, {
       headers,
     });
   }

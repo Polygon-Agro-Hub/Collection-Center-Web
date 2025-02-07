@@ -4,8 +4,10 @@
     <div class="flex flex-col gap-7 px-2 py-2" id="reportcontainer">
         <div class="flex flex-row justify-between items-center border-[#F1F7FA] border-[3px] rounded-lg shadowmd p-6">
             <div class="flex flex-row items-center">
+                <!-- <img class="w-28 h-28 rounded-full"
+                    src="https://images.pexels.com/photos/845457/pexels-photo-845457.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" /> -->
                 <img class="w-28 h-28 rounded-full"
-                    src="https://images.pexels.com/photos/845457/pexels-photo-845457.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" />
+                    [src]="officerObj.image" />
 
                 <div class="ml-6">
                     <p class="text-lg font-semibold">{{officerObj.firstNameEnglish}} {{officerObj.lastNameEnglish}}</p>

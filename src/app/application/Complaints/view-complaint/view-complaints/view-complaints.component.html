@@ -20,7 +20,7 @@
             </div>
         </div>
 
-        <button class="bg-[#415CFF] text-white font-semibold px-4 py-2 rounded-lg" (click)="openAddComplaint()">Add Complaint</button>
+        <button class="bg-[#415CFF] text-white font-semibold px-4 py-2 rounded-lg " (click)="openAddComplaint()">Add Complaint</button>
 
     </div>
 
@@ -31,8 +31,8 @@
     <app-sended-complaint *ngIf="isSelectSent"/>
 </div>
 
-<div *ngIf="isAddComplaintOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-    <div class="bg-white dark:bg-[#272F45] shadow-lg rounded-lg p-6 w-1/2">
+<div *ngIf="isAddComplaintOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50 ">
+    <div class="bg-white  shadow-lg rounded-lg p-6 w-1/2 dark:bg-[#363636]">
         <div class="flex justify-end items-center mb-4">
             <button class="text-red-500 font-bold text-xl" (click)="closeAddComplaint()">&times;</button>
         </div>

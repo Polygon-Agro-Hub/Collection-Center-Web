@@ -94,12 +94,16 @@
 
         <div class="flex flex-row items-center justify-center gap-[15%]">
             <div class="flex flex-col gap-2">
-                <img src="../../../../assets/images/logo.png" class="w-36 h-auto" />
+                
+                <img class="w-36 h-auto" [src]="userObj.farmerQr" />
+                <!-- <img src="../../../../assets/images/logo.png" class="w-36 h-auto" /> -->
                 <p class="text-lg font-medium">Farmer’s QR Code</p>
             </div>
 
             <div class="flex flex-col gap-2">
-                <img src="../../../../assets/images/logo.png" class="w-36 h-auto" />
+                
+                <img [src]="userObj.officerQr" class="w-36 h-auto" />
+                <!-- <img src="../../../../assets/images/logo.png" class="w-36 h-auto" /> -->
                 <p class="text-lg font-medium">Officer’s QR Code</p>
             </div>
 

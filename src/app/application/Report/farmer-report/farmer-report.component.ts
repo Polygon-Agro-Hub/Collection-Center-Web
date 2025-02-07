@@ -40,6 +40,7 @@ export class FarmerReportComponent implements OnInit {
   fetchFarmerDetails(id: number) {
     this.ReportSrv.getFarmerReport(id).subscribe(
       (res) => {
+        console.log(res);
         if (res.status) {
           this.userObj = res.user;
           this.CropArr = res.crops;
@@ -91,6 +92,8 @@ class User {
   city!: string
   district!: string
   accNumber!: string
+  farmerQr!: string
+  officerQr!: string
   accHolderName!: string
   bankName!: string
   branchName!: string

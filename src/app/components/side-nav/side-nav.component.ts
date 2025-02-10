@@ -13,6 +13,7 @@ import { ThemeService } from '../../theme.service';
 export class SideNavComponent {
   isCollapsed = false;
   role:string | null = localStorage.getItem('role:')
+  isSelectTab:string = 'dashbord'
 
   constructor(
     private themeService: ThemeService,
@@ -31,7 +32,8 @@ export class SideNavComponent {
     return this.themeService.getActiveTheme() === 'dark';
   }
 
-  navigate(path:string){
+  navigate(path:string, selectTab:string){
+    this.isSelectTab = selectTab;
     this.router.navigate([`${path}`])
   }
 }

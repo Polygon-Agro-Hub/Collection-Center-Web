@@ -10,7 +10,7 @@
 
         <!-- Menu -->
         <ul class="flex-1 space-y-1 p-4">
-            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]" (click)="navigate('/dashbord')">
+            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]" (click)="navigate('/dashbord','dashbord')">
                 <i class="fas fa-th-large text-[#6B6B6B] dark:text-white text-xl group-hover:text-[#415CFF]"></i>
                 <span [ngClass]="isCollapsed ? 'hidden' : 'block'"
                     class="text-[#6B6B6B] dark:text-white text-lg font-normal group-hover:text-[#415CFF]">
@@ -18,7 +18,7 @@
                 </span>
             </li>
 
-            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]" (click)="navigate('/target/view-target')">
+            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]" (click)="navigate('/target/view-target','target')">
             
                 <i class="fa-solid fa-bullseye text-[#6B6B6B] dark:text-white text-xl group-hover:text-[#415CFF]"></i>
                 <span [ngClass]="isCollapsed ? 'hidden' : 'block'"
@@ -27,7 +27,7 @@
                 </span>
             </li>
 
-            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]" (click)="navigate('/centers')">
+            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]" (click)="navigate('/centers','centers')">
                 <i class="fa-solid fa-bullseye text-[#6B6B6B] dark:text-white text-xl group-hover:text-[#415CFF]"></i>
                 <span [ngClass]="isCollapsed ? 'hidden' : 'block'"
                     class="text-[#6B6B6B] dark:text-white text-lg font-normal group-hover:text-[#415CFF]">
@@ -35,7 +35,7 @@
                 </span>
             </li>
 
-            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]" (click)="navigate('/price-list/view-prices')">
+            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]" (click)="navigate('/price-list/view-prices','pricelist')">
                 <i class="fas fa-tags text-[#6B6B6B] dark:text-white text-xl group-hover:text-[#415CFF]"></i>
                 <span [ngClass]="isCollapsed ? 'hidden' : 'block'"
                     class="text-[#6B6B6B] dark:text-white text-lg font-normal group-hover:text-[#415CFF]">
@@ -43,7 +43,7 @@
                 </span>
             </li>
 
-            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]" (click)="navigate('/price-request/view-request')">
+            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]" (click)="navigate('/price-request/view-request','pricerequest')">
                 <i class="fas fa-hand-holding-usd text-[#6B6B6B] dark:text-white text-xl group-hover:text-[#415CFF]"></i>
                 <span [ngClass]="isCollapsed ? 'hidden' : 'block'"
                     class="text-[#6B6B6B] dark:text-white text-lg font-normal group-hover:text-[#415CFF]">
@@ -51,7 +51,7 @@
                 </span>
             </li>
 
-            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]" (click)="navigate('/reports/select-report')">
+            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]" (click)="navigate('/reports/select-report','reports')">
                 <i class="fas fa-chart-bar text-[#6B6B6B] dark:text-white text-xl group-hover:text-[#415CFF]"></i>
                 <span [ngClass]="isCollapsed ? 'hidden' : 'block'"
                     class="text-[#6B6B6B] dark:text-white text-lg font-normal group-hover:text-[#415CFF]">
@@ -59,7 +59,7 @@
                 </span>
             </li>
 
-            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]" (click)="navigate('/manage-officers/view-officer')">
+            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]" (click)="navigate('/manage-officers/view-officer','manageofficer')">
                 <i class="fas fa-user-cog text-[#6B6B6B] dark:text-white text-xl group-hover:text-[#415CFF]"></i>
                 <span [ngClass]="isCollapsed ? 'hidden' : 'block'"
                     class="text-[#6B6B6B] dark:text-white text-lg font-normal group-hover:text-[#415CFF]">
@@ -67,7 +67,7 @@
                 </span>
             </li>
 
-            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]" (click)="navigate('/complaints')">
+            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]" (click)="navigate('/complaints','complaints')">
                 <i class="fa-solid fa-triangle-exclamation text-[#6B6B6B] dark:text-white text-xl group-hover:text-[#415CFF]"></i>
                 <span [ngClass]="isCollapsed ? 'hidden' : 'block'"
                     class="text-[#6B6B6B] dark:text-white text-lg font-normal group-hover:text-[#415CFF]">
@@ -75,7 +75,7 @@
                 </span>
             </li>
 
-            <li *ngIf="role=== 'Collection Center Head'" class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]" (click)="navigate('/cch-complaints')">
+            <li *ngIf="role=== 'Collection Center Head'" class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]" (click)="navigate('/cch-complaints','CCHcomplaints')">
                 <i class="fa-solid fa-triangle-exclamation text-[#6B6B6B] dark:text-white text-xl group-hover:text-[#415CFF]"></i>
                 <span [ngClass]="isCollapsed ? 'hidden' : 'block'"
                     class="text-[#6B6B6B] dark:text-white text-lg font-normal group-hover:text-[#415CFF]">

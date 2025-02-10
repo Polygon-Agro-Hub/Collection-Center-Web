@@ -33,6 +33,7 @@ import { EditMyTargetComponent } from './application/Target/edit-my-target/edit-
 import {ViewMyTargetComponent} from './application/Target/view-my-target/view-my-target.component';
 import {ViewOfficerTargetComponent} from './application/manage-officers/view-officer-target/view-officer-target.component';
 import { EditOfficerTargetComponent } from './application/manage-officers/edit-officer-target/edit-officer-target.component';
+import { RoleGuardService } from './services/RoleGuard/role-guard.service';
 
 export const routes: Routes = [
     {
@@ -177,6 +178,7 @@ export const routes: Routes = [
             },
             {
                 path: 'centers',
+                canActivate: [RoleGuardService],
                 children: [
                     {
                         path: '',
@@ -210,6 +212,7 @@ export const routes: Routes = [
             },
             {
                 path: 'cch-complaints',
+                canActivate: [RoleGuardService],
                 children: [
                     {
                         path: '',

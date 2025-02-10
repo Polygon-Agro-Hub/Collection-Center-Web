@@ -1,52 +1,54 @@
-<div class="w-full px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg mt-6">
+<div class="w-full px-10 py-7 bg-tileLight  shadow-lg rounded-lg mt-6 dark:bg-[#363636]">
     <div id="reportContainer">
         <div>
-            <p class="font-semibold">INV NO : Coo32242</p>
-            <p>Date : {{userObj.createdAt }}</p>
+            <p class="font-semibold dark:text-white">INV NO : Coo32242</p>
+            <p class="dark:text-textDark">Date : {{userObj.createdAt }}</p>
         </div>
 
         <div class="mt-6 mb-4">
-            <p class="font-medium mb-3">Personal Details</p>
+            <p class=" mb-3 dark:text-textDark font-semibold">Personal Details</p>
             <table>
                 <thead>
                     <tr>
-                        <th class="border-[2px] border-black text-center py-2 px-8">First Name</th>
-                        <th class="border-[2px] border-black text-center py-2 px-8">Last Name</th>
-                        <th class="border-[2px] border-black text-center py-2 px-8">NIC Number</th>
-                        <th class="border-[2px] border-black text-center py-2 px-8">Phone Number</th>
-                        <th class="border-[2px] border-black text-center py-2 px-8">Address</th>
+                        <th class="border-[2px] border-[#b3b1b1] text-center py-2 px-8 dark:text-white">First Name</th>
+                        <th class="border-[2px] border-[#b3b1b1] text-center py-2 px-8 dark:text-white">Last Name</th>
+                        <th class="border-[2px] border-[#b3b1b1] text-center py-2 px-8 dark:text-white">NIC Number</th>
+                        <th class="border-[2px] border-[#b3b1b1] text-center py-2 px-8 dark:text-white">Phone Number</th>
+                        <th class="border-[2px] border-[#b3b1b1] text-center py-2 px-8 dark:text-white">Address</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <td class="border-[2px] border-black text-center py-2 px-8">{{userObj.firstName}}</td>
-                    <td class="border-[2px] border-black text-center py-2 px-8">{{userObj.lastName}}</td>
-                    <td class="border-[2px] border-black text-center py-2 px-8">{{userObj.NICnumber}}</td>
-                    <td class="border-[2px] border-black text-center py-2 px-8">{{userObj.phoneNumber}}</td>
-                    <td class="border-[2px] border-black text-center py-2 px-8">{{userObj.houseNo}},
-                        {{userObj.streetName}},
-                        {{userObj.city}}</td>
+                    <tr>
+                        <td class="border-[2px] border-[#b3b1b1] text-center py-2 px-8 dark:text-textDark">{{userObj.firstName}}</td>
+                        <td class="border-[2px] border-[#b3b1b1] text-center py-2 px-8 dark:text-textDark">{{userObj.lastName}}</td>
+                        <td class="border-[2px] border-[#b3b1b1] text-center py-2 px-8 dark:text-textDark">{{userObj.NICnumber}}</td>
+                        <td class="border-[2px] border-[#b3b1b1] text-center py-2 px-8 dark:text-textDark">{{userObj.phoneNumber}}</td>
+                        <td class="border-[2px] border-[#b3b1b1] text-center py-2 px-8 dark:text-textDark">{{userObj.houseNo}}, 
+                            {{userObj.streetName}}, {{userObj.city}}</td>
+                    </tr>
                 </tbody>
             </table>
+            
 
         </div>
 
 
         <div class="mt-10 mb-4">
-            <p class="font-medium mb-3">Bank Details</p>
+            <p class="dark:text-textDark font-semibold mb-3">Bank Details</p>
             <table>
                 <thead>
                     <tr>
-                        <th class="border-[2px] border-black text-center py-2 px-8">Account Number</th>
-                        <th class="border-[2px] border-black text-center py-2 px-8">Account Holder’s Name</th>
-                        <th class="border-[2px] border-black text-center py-2 px-8">Bank Name</th>
-                        <th class="border-[2px] border-black text-center py-2 px-8">Branch Name</th>
+                        <th class="border-[2px] border-[#b3b1b1] text-center py-2 px-8 dark:text-white">Account Number</th>
+                        <th class="border-[2px] border-[#b3b1b1] text-center py-2 px-8 dark:text-white">Account Holder’s Name</th>
+                        <th class="border-[2px] border-[#b3b1b1] text-center py-2 px-8 dark:text-white">Bank Name</th>
+                        <th class="border-[2px] border-[#b3b1b1] text-center py-2 px-8 dark:text-white">Branch Name</th>
                     </tr>
                 </thead>
                 <tbody>
-                    <td class="border-[2px] border-black text-center py-2 px-8">{{userObj.accNumber}}</td>
-                    <td class="border-[2px] border-black text-center py-2 px-8">{{userObj.accHolderName}}</td>
-                    <td class="border-[2px] border-black text-center py-2 px-8">{{userObj.bankName}}</td>
-                    <td class="border-[2px] border-black text-center py-2 px-8">{{userObj.branchName}}</td>
+                    <td class="border-[2px] border-[#b3b1b1] text-center py-2 px-8 dark:text-textDark">{{userObj.accNumber}}</td>
+                    <td class="border-[2px] border-[#b3b1b1] text-center py-2 px-8 dark:text-textDark">{{userObj.accHolderName}}</td>
+                    <td class="border-[2px] border-[#b3b1b1] text-center py-2 px-8 dark:text-textDark">{{userObj.bankName}}</td>
+                    <td class="border-[2px] border-[#b3b1b1] text-center py-2 px-8 dark:text-textDark">{{userObj.branchName}}</td>
                 </tbody>
             </table>
 
@@ -54,33 +56,33 @@
 
 
         <div class="mt-10">
-            <p class="font-medium mb-3">Crop Details</p>
+            <p class="dark:text-textDark font-semibold mb-3">Crop Details</p>
             <table>
                 <thead>
                     <tr>
-                        <th class="border-[2px] border-black text-center py-2 px-4">Crop Name</th>
-                        <th class="border-[2px] border-black text-center py-2 px-4">Variety</th>
-                        <th class="border-[2px] border-black text-center py-2 px-4">Unit Price (A)</th>
-                        <th class="border-[2px] border-black text-center py-2 px-4">Quantity</th>
-                        <th class="border-[2px] border-black text-center py-2 px-4">Unit Price (A)</th>
-                        <th class="border-[2px] border-black text-center py-2 px-4">Quantity</th>
-                        <th class="border-[2px] border-black text-center py-2 px-4">Unit Price (C)</th>
-                        <th class="border-[2px] border-black text-center py-2 px-4">Quantity</th>
-                        <th class="border-[2px] border-black text-center py-2 px-4">Total</th>
+                        <th class="border-[2px] border-[#b3b1b1] text-center py-2 px-4 dark:text-white">Crop Name</th>
+                        <th class="border-[2px] border-[#b3b1b1] text-center py-2 px-4 dark:text-white">Variety</th>
+                        <th class="border-[2px] border-[#b3b1b1] text-center py-2 px-4 dark:text-white">Unit Price (A)</th>
+                        <th class="border-[2px] border-[#b3b1b1] text-center py-2 px-4 dark:text-white">Quantity</th>
+                        <th class="border-[2px] border-[#b3b1b1] text-center py-2 px-4 dark:text-white">Unit Price (A)</th>
+                        <th class="border-[2px] border-[#b3b1b1] text-center py-2 px-4 dark:text-white">Quantity</th>
+                        <th class="border-[2px] border-[#b3b1b1] text-center py-2 px-4 dark:text-white">Unit Price (C)</th>
+                        <th class="border-[2px] border-[#b3b1b1] text-center py-2 px-4 dark:text-white">Quantity</th>
+                        <th class="border-[2px] border-[#b3b1b1] text-center py-2 px-4 dark:text-white">Total</th>
 
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of CropArr">
-                        <td class="border-[2px] border-black text-center py-2 px-4">{{item.cropNameEnglish}}</td>
-                        <td class="border-[2px] border-black text-center py-2 px-4">{{item.varietyNameEnglish}}</td>
-                        <td class="border-[2px] border-black text-center py-2 px-4">{{item.gradeAprice}}</td>
-                        <td class="border-[2px] border-black text-center py-2 px-4">{{item.gradeAquan}}</td>
-                        <td class="border-[2px] border-black text-center py-2 px-4">{{item.gradeBprice}}</td>
-                        <td class="border-[2px] border-black text-center py-2 px-4">{{item.gradeBquan}}</td>
-                        <td class="border-[2px] border-black text-center py-2 px-4">{{item.gradeCprice}}</td>
-                        <td class="border-[2px] border-black text-center py-2 px-4">{{item.gradeCquan}}</td>
-                        <td class="border-[2px] border-black text-center py-2 px-4">
+                        <td class="border-[2px] border-[#b3b1b1] text-center py-2 px-4 dark:text-textDark">{{item.cropNameEnglish}}</td>
+                        <td class="border-[2px] border-[#b3b1b1] text-center py-2 px-4 dark:text-textDark">{{item.varietyNameEnglish}}</td>
+                        <td class="border-[2px] border-[#b3b1b1] text-center py-2 px-4 dark:text-textDark">{{item.gradeAprice}}</td>
+                        <td class="border-[2px] border-[#b3b1b1] text-center py-2 px-4 dark:text-textDark">{{item.gradeAquan}}</td>
+                        <td class="border-[2px] border-[#b3b1b1] text-center py-2 px-4 dark:text-textDark">{{item.gradeBprice}}</td>
+                        <td class="border-[2px] border-[#b3b1b1] text-center py-2 px-4 dark:text-textDark">{{item.gradeBquan}}</td>
+                        <td class="border-[2px] border-[#b3b1b1] text-center py-2 px-4 dark:text-textDark">{{item.gradeCprice}}</td>
+                        <td class="border-[2px] border-[#b3b1b1] text-center py-2 px-4 dark:text-textDark">{{item.gradeCquan}}</td>
+                        <td class="border-[2px] border-[#b3b1b1] text-center py-2 px-4 dark:text-textDark">
                             {{calculeteTotal(item.gradeAprice, item.gradeAquan, item.gradeBprice, item.gradeBquan,
                             item.gradeCprice, item.gradeCquan)}}
                         </td>
@@ -90,21 +92,21 @@
             </table>
         </div>
 
-        <p class="text-lg font-medium my-8"> Full Total(Rs.) : {{totalAmount}}</p>
+        <p class="text-lg font-medium my-8 dark:text-white"> Full Total(Rs.) : <span class="dark:text-textDark"> {{totalAmount}} </span></p>
 
         <div class="flex flex-row items-center justify-center gap-[15%]">
             <div class="flex flex-col gap-2">
                 
                 <img class="w-36 h-auto" [src]="userObj.farmerQr" />
                 <!-- <img src="../../../../assets/images/logo.png" class="w-36 h-auto" /> -->
-                <p class="text-lg font-medium">Farmer’s QR Code</p>
+                <p class="text-lg font-medium dark:text-textDark">Farmer’s QR Code</p>
             </div>
 
             <div class="flex flex-col gap-2">
                 
                 <img [src]="userObj.officerQr" class="w-36 h-auto" />
                 <!-- <img src="../../../../assets/images/logo.png" class="w-36 h-auto" /> -->
-                <p class="text-lg font-medium">Officer’s QR Code</p>
+                <p class="text-lg font-medium dark:text-textDark">Officer’s QR Code</p>
             </div>
 
         </div>

@@ -101,14 +101,14 @@ export class DashboardComponent implements OnInit, AfterViewInit {
                 legend: {
                   display: true,
                   labels: {
-                    color: '#FFFFFF'
+                    color: ''
                   }
                 }
               },
               scales: {
                 x: {
                   ticks: {
-                    color: '#FFFFFF'
+                    color: 'black'
                   },
                   grid: {
                     display: true,
@@ -118,7 +118,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
                 },
                 y: {
                   ticks: {
-                    color: '#FFFFFF'
+                    color: 'black'           //#FFFFFF
                   },
                   grid: {
                     display: true,

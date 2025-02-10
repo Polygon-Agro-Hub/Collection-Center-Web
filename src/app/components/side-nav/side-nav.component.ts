@@ -13,12 +13,14 @@ import { ThemeService } from '../../theme.service';
 export class SideNavComponent {
   isCollapsed = false;
   role:string | null = localStorage.getItem('role:')
-  isSelectTab:string = 'dashbord'
+  isSelectTab:string = 'dashboard'
 
   constructor(
     private themeService: ThemeService,
     private router: Router
   ) {}
+
+  
 
   toggleSidebar() {
     this.isCollapsed = !this.isCollapsed;
@@ -34,6 +36,11 @@ export class SideNavComponent {
 
   navigate(path:string, selectTab:string){
     this.isSelectTab = selectTab;
+    console.log(this.isSelectTab);
     this.router.navigate([`${path}`])
+  }
+
+  isTabSelected(tab: string): boolean {
+    return this.isSelectTab === tab;
   }
 }

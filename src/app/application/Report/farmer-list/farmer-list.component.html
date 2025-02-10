@@ -1,18 +1,18 @@
-<div class="w-full px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg mt-6">
+<div class="w-full px-10 py-7 bg-tileLight dark:text-white dark:bg-[#363636] shadow-lg rounded-lg mt-6">
     <div class="flex flex-row items-center justify-end gap-8 ">
         <div class="flex flex-row items-center gap-4">
-            <p class="text-xl font-semibold">Date :</p>
+            <p class="text-xl font-semibold dark:text-white">Date :</p>
             <div class="relative w-48 mr-6">
                 <div
-                    class="border-2 rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
+                    class="border-2 rounded-xl  text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
                     <input type="date" [(ngModel)]="selectDate" (change)="filterDate()"
-                        class="block w-full appearance-none dark:bg-[#272F45] text-textLight dark:text-textDark px-3 py-1 rounded-xl focus:outline-none" />
+                        class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-1 rounded-xl focus:outline-none" />
                 </div>
             </div>
 
         </div>
 
-        <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#272F45]">
+        <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
             <input type="text" placeholder="Search by EMP ID, First / Last name" [(ngModel)]="searchText"
                 class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
             <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
@@ -33,14 +33,14 @@
     </div>
 
     <div class="flex flex-col justify-center items-center mt-7">
-        <p class="text-[#292929] font-semibold text-lg">Officer Name</p>
-        <p class="text-[#494949] text-lg my-2">On 2024/05/05</p>
+        <p class="text-[#292929] font-semibold text-lg dark:text-white">Officer Name</p>
+        <p class="text-[#494949] text-lg my-2 dark:text-textDark">On 2024/05/05</p>
     </div>
 
     <div *ngIf="hasData">
-        <div  class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg">
+        <div  class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
             <table class="w-full divide-y-2 border-[1px] border-gray-300 rounded-lg overflow-hidden">
-                <thead class=" dark:bg-[#272F45] text-gray-700 dark:text-gray-300">
+                <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
                     <tr>
                         <th class="px-5 py-3 text-left  font-medium">No</th>
                         <th class="px-5 py-3 text-left  font-medium">First Name</th>
@@ -50,7 +50,7 @@
                         <th class="px-5 py-3 text-left  font-medium">Collection</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white dark:bg-[#1E293B]">
+                <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
                     <tr *ngFor="let item of farmerListArr | paginate
                 : {
                     itemsPerPage: itemsPerPage,

@@ -10,67 +10,90 @@
 
         <!-- Menu -->
         <ul class="flex-1 space-y-1 p-4">
-            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]" (click)="navigate('/dashbord','dashbord')">
-                <i class="fas fa-th-large text-[#6B6B6B] dark:text-white text-xl group-hover:text-[#415CFF]"></i>
-                <span [ngClass]="isCollapsed ? 'hidden' : 'block'"
-                    class="text-[#6B6B6B] dark:text-white text-lg font-normal group-hover:text-[#415CFF]">
+            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]"
+                [ngClass]="{'bg-[#EDF5FC]': isTabSelected('dashboard')}"
+                (click)="navigate('/dashbord','dashboard')">
+                <i class="fas fa-th-large text-xl"
+                   [ngClass]="{'text-[#415CFF]': isTabSelected('dashboard'), 'text-[#6B6B6B] dark:text-white': !isTabSelected('dashboard'), 'group-hover:text-[#415CFF]': true}"></i>
+                <span [ngClass]="{'hidden': isCollapsed, 'text-[#415CFF]': isTabSelected('dashboard'), 'text-[#6B6B6B] dark:text-white': !isTabSelected('dashboard'), 'group-hover:text-[#415CFF]': true}"
+                    class="text-lg font-normal">
                     Dashboard
                 </span>
             </li>
 
-            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]" (click)="navigate('/target/view-target','target')">
-            
-                <i class="fa-solid fa-bullseye text-[#6B6B6B] dark:text-white text-xl group-hover:text-[#415CFF]"></i>
-                <span [ngClass]="isCollapsed ? 'hidden' : 'block'"
-                    class="text-[#6B6B6B] dark:text-white text-lg font-normal group-hover:text-[#415CFF]">
+            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]"
+                [ngClass]="{'bg-[#EDF5FC]': isTabSelected('target')}"
+                (click)="navigate('/target/view-target','target')">
+                <i class="fa-solid fa-bullseye text-xl"
+                   [ngClass]="{'text-[#415CFF]': isTabSelected('target'), 'text-[#6B6B6B] dark:text-white': !isTabSelected('target'), 'group-hover:text-[#415CFF]': true}"></i>
+                <span [ngClass]="{'hidden': isCollapsed, 'text-[#415CFF]': isTabSelected('target'), 'text-[#6B6B6B] dark:text-white': !isTabSelected('target'), 'group-hover:text-[#415CFF]': true}"
+                    class="text-lg font-normal">
                     Collection Target
                 </span>
             </li>
 
-            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]" (click)="navigate('/centers','centers')">
-                <i class="fa-solid fa-bullseye text-[#6B6B6B] dark:text-white text-xl group-hover:text-[#415CFF]"></i>
-                <span [ngClass]="isCollapsed ? 'hidden' : 'block'"
-                    class="text-[#6B6B6B] dark:text-white text-lg font-normal group-hover:text-[#415CFF]">
+            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]"
+                [ngClass]="{'bg-[#EDF5FC]': isTabSelected('centers')}"
+                (click)="navigate('/centers','centers')">
+                <i class="fa-solid fa-bullseye text-xl"
+                   [ngClass]="{'text-[#415CFF]': isTabSelected('centers'), 'text-[#6B6B6B] dark:text-white': !isTabSelected('centers'), 'group-hover:text-[#415CFF]': true}"></i>
+                <span [ngClass]="{'hidden': isCollapsed, 'text-[#415CFF]': isTabSelected('centers'), 'text-[#6B6B6B] dark:text-white': !isTabSelected('centers'), 'group-hover:text-[#415CFF]': true}"
+                    class="text-lg font-normal">
                     Centers
                 </span>
             </li>
 
-            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]" (click)="navigate('/price-list/view-prices','pricelist')">
-                <i class="fas fa-tags text-[#6B6B6B] dark:text-white text-xl group-hover:text-[#415CFF]"></i>
-                <span [ngClass]="isCollapsed ? 'hidden' : 'block'"
-                    class="text-[#6B6B6B] dark:text-white text-lg font-normal group-hover:text-[#415CFF]">
+            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]"
+                [ngClass]="{'bg-[#EDF5FC]': isTabSelected('pricelist')}"
+                (click)="navigate('/price-list/view-prices','pricelist')">
+                <i class="fa-solid fa-bullseye text-xl"
+                   [ngClass]="{'text-[#415CFF]': isTabSelected('pricelist'), 'text-[#6B6B6B] dark:text-white': !isTabSelected('pricelist'), 'group-hover:text-[#415CFF]': true}"></i>
+                <span [ngClass]="{'hidden': isCollapsed, 'text-[#415CFF]': isTabSelected('pricelist'), 'text-[#6B6B6B] dark:text-white': !isTabSelected('pricelist'), 'group-hover:text-[#415CFF]': true}"
+                    class="text-lg font-normal">
                     Price List
                 </span>
             </li>
 
-            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]" (click)="navigate('/price-request/view-request','pricerequest')">
-                <i class="fas fa-hand-holding-usd text-[#6B6B6B] dark:text-white text-xl group-hover:text-[#415CFF]"></i>
-                <span [ngClass]="isCollapsed ? 'hidden' : 'block'"
-                    class="text-[#6B6B6B] dark:text-white text-lg font-normal group-hover:text-[#415CFF]">
+            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]"
+                [ngClass]="{'bg-[#EDF5FC]': isTabSelected('pricerequest')}"
+                (click)="navigate('/price-request/view-request','pricerequest')">
+                <i class="fas fa-hand-holding-usd text-xl"
+                [ngClass]="{'text-[#415CFF]': isTabSelected('pricerequest'), 'text-[#6B6B6B] dark:text-white': !isTabSelected('pricerequest'), 'group-hover:text-[#415CFF]': true}"></i>
+                <span [ngClass]="{'hidden': isCollapsed, 'text-[#415CFF]': isTabSelected('pricerequest'), 'text-[#6B6B6B] dark:text-white': !isTabSelected('pricerequest'), 'group-hover:text-[#415CFF]': true}"
+                    class="text-lg font-normal">
                     Price Requests
                 </span>
             </li>
 
-            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]" (click)="navigate('/reports/select-report','reports')">
-                <i class="fas fa-chart-bar text-[#6B6B6B] dark:text-white text-xl group-hover:text-[#415CFF]"></i>
-                <span [ngClass]="isCollapsed ? 'hidden' : 'block'"
-                    class="text-[#6B6B6B] dark:text-white text-lg font-normal group-hover:text-[#415CFF]">
+            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]"
+                [ngClass]="{'bg-[#EDF5FC]': isTabSelected('reports')}"
+                (click)="navigate('/reports/select-report','reports')">
+                <i class="fas fa-chart-bar text-xl"
+                [ngClass]="{'text-[#415CFF]': isTabSelected('reports'), 'text-[#6B6B6B] dark:text-white': !isTabSelected('reports'), 'group-hover:text-[#415CFF]': true}"></i>
+                <span [ngClass]="{'hidden': isCollapsed, 'text-[#415CFF]': isTabSelected('reports'), 'text-[#6B6B6B] dark:text-white': !isTabSelected('reports'), 'group-hover:text-[#415CFF]': true}"
+                    class="text-lg font-normal">
                     Reports
                 </span>
             </li>
 
-            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]" (click)="navigate('/manage-officers/view-officer','manageofficer')">
-                <i class="fas fa-user-cog text-[#6B6B6B] dark:text-white text-xl group-hover:text-[#415CFF]"></i>
-                <span [ngClass]="isCollapsed ? 'hidden' : 'block'"
-                    class="text-[#6B6B6B] dark:text-white text-lg font-normal group-hover:text-[#415CFF]">
+            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]"
+                [ngClass]="{'bg-[#EDF5FC]': isTabSelected('manageofficer')}"
+                (click)="navigate('/manage-officers/view-officer','manageofficer')">
+                <i class="fas fa-user-cog text-xl"
+                [ngClass]="{'text-[#415CFF]': isTabSelected('manageofficer'), 'text-[#6B6B6B] dark:text-white': !isTabSelected('manageofficer'), 'group-hover:text-[#415CFF]': true}"></i>
+                <span [ngClass]="{'hidden': isCollapsed, 'text-[#415CFF]': isTabSelected('manageofficer'), 'text-[#6B6B6B] dark:text-white': !isTabSelected('manageofficer'), 'group-hover:text-[#415CFF]': true}"
+                    class="text-lg font-normal">
                     Manage Officers
                 </span>
             </li>
 
-            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]" (click)="navigate('/complaints','complaints')">
-                <i class="fa-solid fa-triangle-exclamation text-[#6B6B6B] dark:text-white text-xl group-hover:text-[#415CFF]"></i>
-                <span [ngClass]="isCollapsed ? 'hidden' : 'block'"
-                    class="text-[#6B6B6B] dark:text-white text-lg font-normal group-hover:text-[#415CFF]">
+            <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]"
+                [ngClass]="{'bg-[#EDF5FC]': isTabSelected('complaints')}"
+                (click)="navigate('/complaints','complaints')">
+                <i class="fa-solid fa-triangle-exclamation text-xl"
+                [ngClass]="{'text-[#415CFF]': isTabSelected('complaints'), 'text-[#6B6B6B] dark:text-white': !isTabSelected('complaints'), 'group-hover:text-[#415CFF]': true}"></i>
+                <span [ngClass]="{'hidden': isCollapsed, 'text-[#415CFF]': isTabSelected('complaints'), 'text-[#6B6B6B] dark:text-white': !isTabSelected('complaints'), 'group-hover:text-[#415CFF]': true}"
+                    class="text-lg font-normal">
                     Complaints
                 </span>
             </li>

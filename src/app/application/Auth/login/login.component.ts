@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../../services/Auth-service/auth.service';
+import { TokenServiceService } from '../../../services/Token/token-service.service';
 
 @Component({
   selector: 'app-login',
@@ -19,7 +20,7 @@ export class LoginComponent {
   disError: any;
 
 
-  constructor(private authService: AuthService, private http: HttpClient, private router: Router) {
+  constructor(private authService: AuthService, private http: HttpClient, private router: Router, private tokenService: TokenServiceService) {
     this.loginObj = new Login();
   }
 
@@ -62,10 +63,7 @@ export class LoginComponent {
       this.authService.login(this.loginObj.userName, this.loginObj.password).subscribe(
 
         (res: any) => {
-          console.log(res);
-          
-
-
+          // console.log(res);
           Swal.fire({
             icon: 'success',
             title: 'Logged',
@@ -73,18 +71,18 @@ export class LoginComponent {
             showConfirmButton: false,
             timer: 1500
           });
-          localStorage.setItem('Login Token:', res.token);
 
+          localStorage.setItem('Login Token:', res.token);
           localStorage.setItem('userName:', res.userName);
           localStorage.setItem('userId:', res.userId);
           localStorage.setItem('role:', res.role);
           localStorage.setItem('updatedPassword:', res.updatedPassword);
           localStorage.setItem('profileImage', res.image)
           localStorage.setItem('Token Expiration', String(new Date().getTime() + (res.expiresIn * 20)));
-          // console.log("hi..",res.token);
-          // console.log("hi..",res.userName);
-          // console.log("hi..",res.role);
-          // console.log("hi..",res.userId);
+
+          //added new tiken service after complete process remove directly set local storage items
+          // this.tokenService.saveLoginDetails(res.token, res.userName, res.userId, res.role, res.expiresIn, res.image);
+
 
           if (res.updatedPassword == 0) {
             this.router.navigate(['/change-password']);

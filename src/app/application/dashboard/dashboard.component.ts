@@ -64,7 +64,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       (response: any) => {
         
         this.totals = response;
-        console.log("--Responce--", response);
 
        
         const labels = this.totals.map(item => item.date);

@@ -35,7 +35,6 @@ export class PriceListService {
 
 
   updatePrice(id: number, value: number): Observable<any> {
-    console.log("hii", id, value);
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,

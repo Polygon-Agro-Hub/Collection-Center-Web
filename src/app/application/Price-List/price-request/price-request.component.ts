@@ -47,7 +47,7 @@ export class PriceRequestComponent implements OnInit {
       (res) => {
         this.reqPriceArr = res.items;
         this.totalItems = res.total;
-        console.log(res.items.length);
+        
         if (res.items.length === 0) {
           this.hasData = false;
         }else{

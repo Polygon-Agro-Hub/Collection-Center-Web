@@ -35,7 +35,7 @@ export class ChangePasswordComponent {
    * Update the user's password with SweetAlert for notifications
    */
   updatePassword(): void {
-    console.log(this.conformPassword,this.changePassword);
+    
     
 
     if (!this.changePassword || !this.conformPassword) {

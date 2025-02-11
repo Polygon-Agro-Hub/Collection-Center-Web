@@ -43,7 +43,7 @@ complainArr!: RecivedComplaint[];
       (res) => {
         this.complainArr = res.items
         this.totalItems = res.total;
-        console.log(res.items.length);
+        
         if (res.items.length === 0) {
           this.hasData = false;
         } else {

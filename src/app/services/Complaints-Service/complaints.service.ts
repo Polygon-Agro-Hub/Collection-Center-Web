@@ -108,7 +108,7 @@ export class ComplaintsService {
       url += `&searchText=${searchText}`
 
     }
-    console.log(url);
+  
     
 
     return this.http.get<any>(url, { headers });

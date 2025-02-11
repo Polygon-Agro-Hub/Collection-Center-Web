@@ -63,7 +63,7 @@ export class LoginComponent {
       this.authService.login(this.loginObj.userName, this.loginObj.password).subscribe(
 
         (res: any) => {
-          // console.log(res);
+          
           Swal.fire({
             icon: 'success',
             title: 'Logged',

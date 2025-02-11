@@ -61,7 +61,7 @@ export class CchSendComplaintComponent implements OnInit {
   fetchGetReply(id: number) {
     this.ComplainSrv.getComplainById(id).subscribe(
       (res) => {
-        console.log(res);
+        
         this.replyObj = res.data;
       }
     )

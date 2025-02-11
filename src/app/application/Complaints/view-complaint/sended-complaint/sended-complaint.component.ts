@@ -48,7 +48,7 @@ export class SendedComplaintComponent implements OnInit {
         this.totalItems = res.total;
         this.officerId = res.userId
 
-        console.log("wdwdwdwdwd",res);
+        
         if (res.items.length === 0) {
           this.hasData = false;
         } else {
@@ -63,7 +63,7 @@ export class SendedComplaintComponent implements OnInit {
   fetchGetReply(id: number) {
     this.ComplainSrv.getComplainById(id).subscribe(
       (res) => {
-        console.log(res);
+        
         this.replyObj = res.data;
       }
     )

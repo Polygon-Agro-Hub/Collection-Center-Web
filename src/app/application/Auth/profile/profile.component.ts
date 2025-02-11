@@ -22,7 +22,7 @@ export class ProfileComponent implements OnInit {
   fetchLoggedInUser() {
     this.AuthSrv.getLoggedInUser().subscribe((res: any) => {
       this.officerObj = res.officerData.collectionOfficer;
-      console.log(this.officerObj);
+      
     });
   }
 

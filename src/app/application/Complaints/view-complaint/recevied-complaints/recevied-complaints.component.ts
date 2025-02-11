@@ -43,7 +43,7 @@ export class ReceviedComplaintsComponent implements OnInit {
       (res) => {
         this.complainArr = res.items
         this.totalItems = res.total;
-        console.log(res.items.length);
+        
         if (res.items.length === 0) {
           this.hasData = false;
         } else {
@@ -58,7 +58,7 @@ export class ReceviedComplaintsComponent implements OnInit {
   fetchGetReply(id: number) {
     this.ComplainSrv.getComplainById(id).subscribe(
       (res) => {
-        console.log(res);
+        
         this.replyObj = res.data;
       }
     )

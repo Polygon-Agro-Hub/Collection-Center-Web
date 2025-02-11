@@ -51,7 +51,7 @@ export class ViewRecivedComplaintComponent implements OnInit {
         this.phone1 = this.compalintObj.phoneCode01 + " - " + this.compalintObj.phoneNumber01;
         this.phone2 = this.compalintObj.phoneCode02 + " - " + this.compalintObj.phoneNumber02;
 
-        console.log(res.items.length);
+        
         if (res.items.length === 0) {
           this.hasData = false;
         } else {

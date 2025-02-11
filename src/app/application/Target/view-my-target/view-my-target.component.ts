@@ -35,7 +35,7 @@ export class ViewMyTargetComponent implements OnInit {
     this.TargetSrv.getOfficerTargetData(status, search).subscribe(
       (res) => {
         this.officerDataArr = res.items;
-        console.log(res.items.length);
+
         if (res.items.length === 0) {
           this.hasData = false;
         } else {

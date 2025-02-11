@@ -81,3 +81,4 @@ class OfficerDetails {
   centerName!: string
   image!: string
 }
+

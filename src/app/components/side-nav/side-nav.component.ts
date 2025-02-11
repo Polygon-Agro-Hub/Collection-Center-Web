@@ -36,7 +36,7 @@ export class SideNavComponent {
 
   navigate(path:string, selectTab:string){
     this.isSelectTab = selectTab;
-    console.log(this.isSelectTab);
+    // console.log(this.isSelectTab);
     this.router.navigate([`${path}`])
   }
 

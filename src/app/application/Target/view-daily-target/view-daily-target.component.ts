@@ -139,7 +139,7 @@ export class ViewDailyTargetComponent implements OnInit {
   AssignAllDailyTarget(page: number = 1, limit: number = this.itemsPerPage) {
     this.TargetSrv.AssignAllDailyTarget(page, limit).subscribe(
       (res) => {
-        console.log(res);
+
 
         this.assignTargetArr = res.items;
         this.assignTotalItems = res.total;

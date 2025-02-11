@@ -44,7 +44,6 @@ export class CenterViewPriceListComponent implements OnInit{
   fetchAllPriceList(centerId: number, page: number = 1, limit: number = this.itemsPerPage, grade: string = this.selectGrade, search: string = this.searchText) {
     this.TargetSrv.getAllPriceList(centerId, page, limit, grade, search).subscribe((res) => {
 
-      console.log(res);
       this.priceListArr = res.items;
       this.totalItems = res.total;
       if (res.items.length === 0) {

@@ -83,7 +83,7 @@ export class OfficerProfileComponent implements OnInit {
     
     this.ManageOficerSrv.disclaimOfficer(id).subscribe(
       (response) => {
-        console.log('Officer ID sent successfully:', response);
+        
         this.toastSrv.success('Officer ID sent successfully!');
         this.showDisclaimView = false;
         this.router.navigate(['/manage-officers/view-officer']);
@@ -125,3 +125,6 @@ class Officer {
   centerName!: string;
 
 }
+
+
+

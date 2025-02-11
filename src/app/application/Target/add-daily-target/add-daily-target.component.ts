@@ -58,10 +58,10 @@ export class AddDailyTargetComponent implements OnInit {
     this.TargetSrv.getCropVerity().subscribe(
       (res) => {
         this.cropsObj = res;
-        console.log("Crops fetched successfully:", res);
+        
       },
       (error) => {
-        console.log("Error: Crop variety fetching issue", error);
+        
       }
     );
   }
@@ -75,10 +75,10 @@ export class AddDailyTargetComponent implements OnInit {
     if (sample.length > 0 && selectedCrop) {
       this.InputObj.cropName = selectedCrop.cropNameEnglish;
       this.selectedVarieties = sample[0].variety;
-      console.log(selectedCrop.cropNameEnglish, "Selected crop varieties:", this.selectedVarieties);
+      
       this.isVerityVisible = false;
     } else {
-      console.log("No crop found with selectId:", this.selectCropId);
+      // console.log("No crop found with selectId:", this.selectCropId);
     }
   }
 
@@ -88,9 +88,9 @@ export class AddDailyTargetComponent implements OnInit {
 
     if (sample) {
       this.InputObj.VarietyName = sample.varietyEnglish;
-      console.log("Selected crop varieties:", this.selectedVarieties);
+      
     } else {
-      console.log("No crop found with selectId:", this.selectCropId);
+      // console.log("No crop found with selectId:", this.selectCropId);
     }
 
   }

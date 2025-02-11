@@ -157,7 +157,7 @@ export class EditOfficerComponent implements OnInit {
     this.getUpdateLastID(rolePrefix)
       .then((lastId) => {
         this.upateEmpID = rolePrefix + lastId;
-        console.log("Updated EMP ID:", this.upateEmpID);
+        
       })
       .catch((error) => {
         console.error('Error fetching updated last ID:', error);
@@ -248,7 +248,7 @@ export class EditOfficerComponent implements OnInit {
 
 
   onSubmit() {
-    console.log(this.personalData); // Logs the personal data with updated languages
+    
     this.personalData.empId = this.upateEmpID;
 
     if (!this.personalData.accHolderName || !this.personalData.accNumber || !this.personalData.bankName || !this.personalData.branchName || !this.personalData.city || !this.personalData.country || !this.personalData.district || !this.personalData.houseNumber) {
@@ -339,6 +339,8 @@ class Personal {
   previousQR!:string
   previousImage!:string
 }
+
+
 
 
 

@@ -82,8 +82,7 @@ export class DownloadTargetComponent {
     saveAs(data, `Target-Report (${this.fromDate} - ${this.toDate}).xlsx`);
     this.toastSrv.success(`Target-Report (${this.fromDate} - ${this.toDate}).xlsx DownLoaded`)
   }
-
-  
+ 
 }
 
 class DailyTargets {

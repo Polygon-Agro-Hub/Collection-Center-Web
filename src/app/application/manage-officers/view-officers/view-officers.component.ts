@@ -189,12 +189,12 @@ export class ViewOfficersComponent implements OnInit {
   }
 
   applyStatusFilters() {
-    console.log(this.selectStatus);
+    
     this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectStatus, this.selectRole)
   }
 
   applyRoleFilters() {
-    console.log(this.selectRole);
+    
     this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectStatus, this.selectRole)
 
   }
@@ -245,3 +245,4 @@ class CollectionOfficers {
 class Company {
   companyNameEnglish!: string
 }
+

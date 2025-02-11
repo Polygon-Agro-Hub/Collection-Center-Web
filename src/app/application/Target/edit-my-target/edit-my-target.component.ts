@@ -40,7 +40,7 @@ export class EditMyTargetComponent implements OnInit {
   fetchTargetDetalis() {
     this.TargetSrv.getOfficerTartgetItem(this.targetItemId).subscribe(
       (res) => {
-        console.log(res);
+
         this.targetObj = res.resultTarget;
         this.passAmount = res.resultTarget.todo;
         this.amount = res.resultTarget.todo;
@@ -69,7 +69,7 @@ export class EditMyTargetComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log(this.selectedOfficerId, this.passAmount);
+    
     if (!this.selectedOfficerId) {
       this.toastSrv.warning('Pleace fill all feild!')
       return;

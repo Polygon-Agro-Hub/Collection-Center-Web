@@ -42,7 +42,7 @@ export class AssignOfficerTargetComponent implements OnInit {
   fetchTargetVerity() {
     this.targetSrv.getTargetVerity(this.targetId).subscribe(
       (res) => {
-        console.log(res);
+        
         this.targetVerity = res.crop;
 
         this.officerArr = res.officer.map((officer: Officer) => ({

@@ -56,7 +56,7 @@ export class CenterViewOfficersComponent implements OnInit{
   getAllOfficers(centerId: number, page: number = 1, limit: number = this.itemsPerPage, role: string = '', status: string = '', searchText: string = '') {
     this.targetSrv.getOfficers(centerId, page, limit, role, status, searchText).subscribe(
       (res) => {
-        console.log(res);
+        
         
         // console.log(res.items);
         // console.log(res.total);
@@ -187,7 +187,7 @@ export class CenterViewOfficersComponent implements OnInit{
   }
 
   applyRoleFilters() {
-    console.log(this.selectRole);
+    
     this.getAllOfficers(this.centerId, this.page, this.itemsPerPage, this.selectRole, this.selectStatus, this.searchText)
 
   }
@@ -198,7 +198,7 @@ export class CenterViewOfficersComponent implements OnInit{
   }
 
   applyStatusFilters() {
-    console.log(this.selectStatus);
+    
     this.getAllOfficers(this.centerId, this.page, this.itemsPerPage, this.selectRole, this.selectStatus, this.searchText)
   }
 

@@ -46,7 +46,6 @@ export class CentersDashbordComponent implements OnInit {
       this.expencePrecentage = res.difExpences
 
 
-      console.log(res);
 
     });
   }

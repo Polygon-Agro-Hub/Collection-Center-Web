@@ -38,7 +38,7 @@ export class ViewCentersComponent implements OnInit {
                 this.itemsArr = res.items;
                 this.totalItems = res.totalItems;
                 this.countOfOfficers = res.items.length;
-                console.log(res);
+
             }
         );
     }

@@ -35,7 +35,7 @@ export class OfficerProfileComponent implements OnInit {
   fetchOfficer(id: number) {
     this.ManageOficerSrv.getOfficerById(id).subscribe((res: any) => {
       this.officerObj = res.officerData.collectionOfficer;
-      console.log(this.officerObj);
+      
     });
   }
 

@@ -44,7 +44,7 @@ export class CollectionMonthlyReportComponent implements OnInit {
   fetchOfficerData() {
     this.ReportSrv.getCollectionmonthlyReportOfficerData(this.officerId,this.startDate,this.endDate).subscribe(
       (res) => {
-        console.log(res);
+        
         
         this.officerDataObj = res.officer;
         this.farmerDataArr = res.dates;
@@ -64,7 +64,7 @@ export class CollectionMonthlyReportComponent implements OnInit {
   }
 
   filterDate(){
-    console.log(this.startDate,this.endDate);
+    
     this.fetchOfficerData();
   }
 

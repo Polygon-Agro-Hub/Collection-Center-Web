@@ -86,7 +86,7 @@ export class EditOfficerComponent implements OnInit {
     this.ManageOficerSrv.getOfficerById(id).subscribe(
       (res: any) => {
         this.personalData = res.officerData.collectionOfficer;
-        console.log(res.officerData.collectionOfficer);
+        
         this.getUpdateLastID(res.officerData.collectionOfficer.jobRole);
         this.personalData.previousQR = this.personalData.QRcode;
         this.personalData.previousImage = this.personalData.image;
@@ -100,7 +100,7 @@ export class EditOfficerComponent implements OnInit {
         }
 
         this.selectJobRole = res.officerData.collectionOfficer.jobRole;
-        console.log(res.officerData.collectionOfficer.empId, "empid");
+        
 
         this.UpdateEpmloyeIdCreate();
         // this.getAllmanagers();
@@ -117,12 +117,12 @@ export class EditOfficerComponent implements OnInit {
           if (this.selectJobRole === this.personalData.jobRole) {
             lastId = this.personalData.empId;
             this.UpdatelastID = lastId;
-            console.log(lastId);
+            
 
           } else {
             this.UpdatelastID = res.result.empId;
             lastId = res.result.empId
-            console.log(lastId);
+            
 
           }
           ;

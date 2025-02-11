@@ -34,7 +34,7 @@
 
             <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]"
                 [ngClass]="{'bg-[#EDF5FC]': isTabSelected('centers')}"
-                (click)="navigate('/centers','centers')">
+                (click)="navigate('centers','centers')">
                 <i class="fa-solid fa-bullseye text-xl"
                    [ngClass]="{'text-[#415CFF]': isTabSelected('centers'), 'text-[#6B6B6B] dark:text-white': !isTabSelected('centers'), 'group-hover:text-[#415CFF]': true}"></i>
                 <span [ngClass]="{'hidden': isCollapsed, 'text-[#415CFF]': isTabSelected('centers'), 'text-[#6B6B6B] dark:text-white': !isTabSelected('centers'), 'group-hover:text-[#415CFF]': true}"

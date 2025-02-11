@@ -38,10 +38,10 @@ export class ViewOfficerTargetComponent implements OnInit {
   fetchSelectedOfficerTarget(officerId: number, status: string = this.selectStatus, search: string = this.searchText) {
     this.TargetSrv.getSelectedOfficerTargetData(officerId, status, search).subscribe(
       (res) => {
-        console.log(res);
+        
 
         this.selectedOfficerDataArr = res.items;
-        console.log(res.items.length);
+        
         if (res.items.length === 0) {
           this.hasData = false;
         } else {

@@ -32,7 +32,7 @@ export class FarmerListComponent implements OnInit {
 
   ngOnInit(): void {
     this.officerId = this.route.snapshot.params['id']
-    console.log(this.officerId);
+    
     this.fetchFarmerList();
 
     

@@ -187,7 +187,7 @@ export class AddOfficersComponent implements OnInit {
 
   onSubmit() {
     // this.personalData.image = this.selectedFile;
-    console.log(this.personalData); // Logs the personal data with updated languages
+    
 
     if (!this.personalData.accHolderName || !this.personalData.accNumber || !this.personalData.bankName || !this.personalData.branchName) {
       this.toastSrv.warning('Pleace fill all required feilds')

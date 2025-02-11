@@ -73,7 +73,7 @@ export class ViewOfficersComponent implements OnInit {
   getAllcompany() {
     this.ManageOficerSrv.getCompanyNames().subscribe(
       (res) => {
-        console.log("company:", res);
+        
         this.companyArr = res
       }
     )

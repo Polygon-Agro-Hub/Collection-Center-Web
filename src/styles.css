@@ -4,3 +4,9 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+body {
+    overflow: hidden;
+    margin: 0;
+    padding: 0;
+  }

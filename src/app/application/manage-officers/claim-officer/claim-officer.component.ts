@@ -15,7 +15,7 @@ import { ToastAlertService } from '../../../services/toast-alert/toast-alert.ser
 export class ClaimOfficerComponent implements OnInit {
   officerObj: OfficerDetails = new OfficerDetails();
 
-  selectJobRole: string = 'Collection Officer';
+  selectJobRole!: string
   inputId: string = '';
   isOfficerExist: boolean = false;
   hasData!: boolean
@@ -28,7 +28,7 @@ export class ClaimOfficerComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    throw new Error('Method not implemented.');
+    this.selectJobRole = 'Collection Officer'
   }
 
   fetchOfficer() {

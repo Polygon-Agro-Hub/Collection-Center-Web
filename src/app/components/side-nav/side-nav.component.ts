@@ -6,59 +6,70 @@ import { FormsModule } from '@angular/forms';
 
 export const MENU_ITEMS = [
   {
+    id:1,
     key: 'dashboard',
     path: '/dashbord',
     label: 'Dashbord',
     icon: 'fas fa-th-large'
   },
   {
+    id:2,
     key: 'target',
     path: '/target/view-target',
     label: 'Collection Target',
     icon: 'fa-solid fa-bullseye'
   },
   {
+    id:3,
     key: 'centers',
     path: '/centers',
     label: 'Centers',
     icon: 'fa-solid fa-bullseye'
   },
   {
+    id:3,
     key: 'pricelist',
     path: '/price-list/view-prices',
     label: 'Price List',
     icon: 'fa-solid fa-tag'
   },
   {
+    id:4,
     key: 'pricerequest',
     path: '/price-request/view-request',
     label: 'Price Requests',
     icon: 'fas fa-hand-holding-usd'
   },
   {
+    id:5,
     key: 'reports',
     path: '/reports/select-report',
     label: 'Reports',
     icon: 'fa-solid fa-chart-pie'
   },
   {
+    id:6,
     key: 'manageofficer',
     path: '/manage-officers/view-officer',
     label: 'Manage Officers',
     icon: 'fas fa-user-cog'
   },
   {
+    id:7,
     key: 'complaints',
     path: '/complaints',
     label: 'Complaints',
-    icon: 'fa-solid fa-triangle-exclamation'
+    icon: 'fa-solid fa-triangle-exclamation',
+    permission:'Collection Center Manager'
+
   },
   {
+    id:8,
     key: 'complaints',
     path: '/cch-complaints',
     label: 'Complaints',
     icon: 'fa-solid fa-triangle-exclamation',
-    permission:'Colection Center Head'
+    permission:'Collection Center Head'
   }
 ];
 
@@ -69,9 +80,9 @@ export const MENU_ITEMS = [
   templateUrl: './side-nav.component.html',
   styleUrls: ['./side-nav.component.css']
 })
-export class SideNavComponent {
+export class SideNavComponent{
   isCollapsed = false;
-  role: string | null = localStorage.getItem('role');
+  role: string | null = localStorage.getItem('role:');
   isSelectTab: string = 'dashboard';
   menuItems = MENU_ITEMS;
 

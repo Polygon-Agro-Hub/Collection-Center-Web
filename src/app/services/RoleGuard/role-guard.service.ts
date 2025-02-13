@@ -10,7 +10,7 @@ export class RoleGuardService {
   { }
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
-    const userRole = localStorage.getItem('role'); // Retrieve role from local storage
+    const userRole = localStorage.getItem('role:');
 
     if (userRole === 'Collection Center Head') {
       return true; 

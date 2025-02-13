@@ -72,21 +72,25 @@ export class LoginComponent {
             timer: 1500
           });
 
-          localStorage.setItem('Login Token:', res.token);
-          localStorage.setItem('userName:', res.userName);
-          localStorage.setItem('userId:', res.userId);
-          localStorage.setItem('role:', res.role);
-          localStorage.setItem('updatedPassword:', res.updatedPassword);
-          localStorage.setItem('profileImage', res.image)
-          localStorage.setItem('Token Expiration', String(new Date().getTime() + (res.expiresIn * 20)));
+          // localStorage.setItem('Login Token:', res.token);
+          // localStorage.setItem('userName:', res.userName);
+          // localStorage.setItem('userId:', res.userId);
+          // localStorage.setItem('role:', res.role);
+          // localStorage.setItem('updatedPassword:', res.updatedPassword);
+          // localStorage.setItem('profileImage', res.image)
+          // localStorage.setItem('Token Expiration', String(new Date().getTime() + (res.expiresIn * 20)));
 
           //added new tiken service after complete process remove directly set local storage items
-          // this.tokenService.saveLoginDetails(res.token, res.userName, res.userId, res.role, res.expiresIn, res.image);
+          // console.log("start");
+          
+          this.tokenService.saveLoginDetails(res.token, res.userName, res.userId, res.role, res.expiresIn, res.image);
 
+          // console.log("end");
 
           if (res.updatedPassword == 0) {
             this.router.navigate(['/change-password']);
           } else if (res.updatedPassword == 1) {
+            console.log("route",res.updatedPassword);
             this.router.navigate(['/dashbord']);
           } else {
             Swal.fire({

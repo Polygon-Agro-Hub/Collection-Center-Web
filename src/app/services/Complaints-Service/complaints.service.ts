@@ -2,17 +2,22 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { TokenServiceService } from '../Token/token-service.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ComplaintsService {
   private apiUrl = `${environment.API_BASE_URL}/complaint`;
-  private token = `${environment.TOKEN}`;
+  // private token = `${environment.TOKEN}`;
+  private token!:string | null;
 
 
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private tokenSrv:TokenServiceService) {
+    this.token = this.tokenSrv.getToken()
+   }
+
 
   getAllReciveComplaints(page: number = 1, limit: number = 10, status: string = '', searchText: string = ''): Observable<any> {
     const headers = new HttpHeaders({

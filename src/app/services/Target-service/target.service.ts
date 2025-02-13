@@ -2,15 +2,20 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { TokenServiceService } from '../Token/token-service.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class TargetService {
   private apiUrl = `${environment.API_BASE_URL}/target`;
-  private token = `${environment.TOKEN}`;
+  // private token = `${environment.TOKEN}`;
 
-  constructor(private http: HttpClient) { }
+  private token!: string | null;
+
+  constructor(private http: HttpClient, private tokenSrv: TokenServiceService) {
+    this.token = this.tokenSrv.getToken()
+  }
 
   getCropVerity(): Observable<any> {
     const headers = new HttpHeaders({
@@ -200,7 +205,7 @@ export class TargetService {
 
 
   passToTargetToOfficer(id: number | null, targetItemId: number, amount: number): Observable<any> {
-    
+
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
@@ -217,7 +222,7 @@ export class TargetService {
     });
 
     let url = `${this.apiUrl}/get-selected-officer-target-data?officerId=${officerId}`;
-    
+
     if (status) {
       url += `&status=${status}`;
     }

@@ -2,16 +2,20 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { TokenServiceService } from '../Token/token-service.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ReportServiceService {
   private apiUrl = `${environment.API_BASE_URL}/report`;
-  private token = `${environment.TOKEN}`;
+  // private token = `${environment.TOKEN}`;
 
+  private token!: string | null;
 
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private tokenSrv: TokenServiceService) {
+    this.token = this.tokenSrv.getToken()
+  }
 
   getAllCollectionReport(page: number = 1, limit: number = 10, searchText: string = ''): Observable<any> {
     const headers = new HttpHeaders({
@@ -60,7 +64,7 @@ export class ReportServiceService {
       url += `&searchText=${searchText}`
     }
 
-    if(date){
+    if (date) {
       url += `&date=${date}`
     }
 
@@ -69,7 +73,7 @@ export class ReportServiceService {
     });
   }
 
-  getCollectionDailyReport(id:number, date:string): Observable<any> {
+  getCollectionDailyReport(id: number, date: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
@@ -83,7 +87,7 @@ export class ReportServiceService {
   }
 
 
-  getCollectionmonthlyReportOfficerData(id:number,startDate:Date, endDate:Date): Observable<any> {
+  getCollectionmonthlyReportOfficerData(id: number, startDate: Date, endDate: Date): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
@@ -96,12 +100,12 @@ export class ReportServiceService {
     });
   }
 
-  getFarmerReport(id:number): Observable<any> {
+  getFarmerReport(id: number): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
     });
-    
+
     let url = `${this.apiUrl}/get-farmer-report-details/${id}`
 
     return this.http.get(url, {

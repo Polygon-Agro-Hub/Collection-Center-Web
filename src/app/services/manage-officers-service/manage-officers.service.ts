@@ -2,17 +2,20 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders, } from '@angular/common/http';
+import { TokenServiceService } from '../Token/token-service.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class ManageOfficersService {
   private apiUrl = `${environment.API_BASE_URL}`;
-  private token = `${environment.TOKEN}`;
+  // private token = `${environment.TOKEN}`;
 
+  private token!: string | null;
 
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private tokenSrv: TokenServiceService) {
+    this.token = this.tokenSrv.getToken()
+  }
 
   getForCreateId(role: string): Observable<any> {
     const headers = new HttpHeaders({

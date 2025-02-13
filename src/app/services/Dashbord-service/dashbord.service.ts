@@ -2,15 +2,20 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, } from '@angular/common/http';
 import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
+import { TokenServiceService } from '../Token/token-service.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DashboardService {
   private apiUrl = `${environment.API_BASE_URL}/dashboard`;
-  private token = `${environment.TOKEN}`;
+  // private token = `${environment.TOKEN}`;
 
-  constructor(private http: HttpClient) {}
+  private token!: string | null;
+
+  constructor(private http: HttpClient, private tokenSrv: TokenServiceService) {
+    this.token = this.tokenSrv.getToken()
+  }
 
   getOfficerCounts(): Observable<any> {
     const headers = new HttpHeaders({
@@ -42,7 +47,7 @@ export class DashboardService {
       headers,
     });
   }
-  
+
 }
 
 

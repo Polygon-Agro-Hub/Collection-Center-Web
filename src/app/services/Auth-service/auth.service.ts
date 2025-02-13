@@ -2,17 +2,19 @@ import { Injectable } from '@angular/core';
 import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
+import { TokenServiceService } from '../Token/token-service.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
   private apiUrl = `${environment.API_BASE_URL}`;
-  private token = `${environment.TOKEN}`;
+  // private token = `${environment.TOKEN}`;
+  private token!: string | null;
 
-
-
-  constructor(private http: HttpClient) { }
+  constructor(private http: HttpClient, private tokenSrv: TokenServiceService) {
+    this.token = this.tokenSrv.getToken()
+  }
 
 
   login(userName: string, password: string): Observable<any> {
@@ -21,7 +23,7 @@ export class AuthService {
   }
 
   changePassword(password: string): Observable<any> {
-    
+
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',

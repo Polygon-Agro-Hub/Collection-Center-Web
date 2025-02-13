@@ -240,6 +240,7 @@ class CollectionOfficers {
   nic!: string;
   status!: string;
   created_at!: string;
+  phoneCode01!:string;
 }
 
 class Company {

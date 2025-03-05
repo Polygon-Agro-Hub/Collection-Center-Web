@@ -1,20 +1,23 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders, } from '@angular/common/http';
-import { environment } from '../../environments/environment';
 import { Observable } from 'rxjs';
 import { TokenServiceService } from '../Token/token-service.service';
+import { ConfigService } from '../config.service';
 
 @Injectable({
   providedIn: 'root',
 })
 export class DashboardService {
-  private apiUrl = `${environment.API_BASE_URL}/dashboard`;
-  // private token = `${environment.TOKEN}`;
-
+  private apiUrl: string;
   private token!: string | null;
 
-  constructor(private http: HttpClient, private tokenSrv: TokenServiceService) {
-    this.token = this.tokenSrv.getToken()
+  constructor(
+    private http: HttpClient, 
+    private tokenSrv: TokenServiceService,
+    private config: ConfigService
+  ) {
+    this.token = this.tokenSrv.getToken();
+    this.apiUrl = `${this.config.getApiUrl()}/dashboard`;
   }
 
   getOfficerCounts(): Observable<any> {
@@ -42,14 +45,8 @@ export class DashboardService {
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
     });
-    // Pass the dynamic endpoint into the URL
     return this.http.get<any[]>(`${this.apiUrl}/get-chart?filter=${filter}`, {
       headers,
     });
   }
-
 }
-
-
-
-

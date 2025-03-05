@@ -1,20 +1,23 @@
 import { Injectable } from '@angular/core';
-import { environment } from '../../environments/environment';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { TokenServiceService } from '../Token/token-service.service';
+import { ConfigService } from '../config.service';
 
 @Injectable({
   providedIn: 'root'
 })
 export class PriceListService {
-  private apiUrl = `${environment.API_BASE_URL}/price-list`;
-  // private token = `${environment.TOKEN}`;
-
+  private apiUrl: string;
   private token!: string | null;
 
-  constructor(private http: HttpClient, private tokenSrv: TokenServiceService) {
-    this.token = this.tokenSrv.getToken()
+  constructor(
+    private http: HttpClient, 
+    private tokenSrv: TokenServiceService,
+    private config: ConfigService
+  ) {
+    this.token = this.tokenSrv.getToken();
+    this.apiUrl = `${this.config.getApiUrl()}/price-list`;
   }
 
   getAllPriceList(page: number = 1, limit: number = 10, grade: string = '', searchText: string = ''): Observable<any> {
@@ -23,21 +26,20 @@ export class PriceListService {
       'Content-Type': 'application/json',
     });
 
-    let url = `${this.apiUrl}/view-all-price?page=${page}&limit=${limit}`
+    let url = `${this.apiUrl}/view-all-price?page=${page}&limit=${limit}`;
 
     if (grade) {
-      url += `&grade=${grade}`
+      url += `&grade=${grade}`;
     }
 
     if (searchText) {
-      url += `&searchText=${searchText}`
+      url += `&searchText=${searchText}`;
     }
 
     return this.http.get(url, {
       headers,
     });
   }
-
 
   updatePrice(id: number, value: number): Observable<any> {
 
@@ -83,6 +85,4 @@ export class PriceListService {
       headers,
     });
   }
-
-
 }

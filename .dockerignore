@@ -1,0 +1,31 @@
+# Dependencies
+node_modules
+npm-debug.log
+
+# Build output
+dist
+tmp
+out-tsc
+
+# Git
+.git
+.gitignore
+
+# IDE - VSCode
+.vscode/*
+!.vscode/settings.json
+!.vscode/tasks.json
+!.vscode/launch.json
+!.vscode/extensions.json
+
+# System Files
+.DS_Store
+Thumbs.db
+
+# Environment files (we'll inject these at runtime)
+# src/environments/*
+
+# Test files
+coverage
+*.spec.ts
+karma.conf.js

@@ -1,0 +1,6 @@
+{
+  "production": false,
+  "apiUrl": "/agro-api/collection-center-api",
+  "authUrl": "/agro-api/auth",
+  "marketPriceUrl": "/agro-api/market-price"
+}

@@ -1,7 +1,5 @@
 name: Docker image build and publish
 on:
-  push:
-    tags: ['*']  # This will trigger on any tag
   workflow_dispatch:
     inputs:
       target_env:
@@ -43,9 +41,7 @@ jobs:
       packages: write
 
     outputs:
-      dev_image: ${{ steps.build-and-push-dev.outputs.dev_image }}
-      prod_image: ${{ steps.build-and-push-prod.outputs.prod_image }}
-      manual_image: ${{ steps.build-and-push-manual.outputs.image }}
+      image: ${{ steps.build-and-push.outputs.image }}
 
     steps:
       - uses: actions/checkout@v3
@@ -56,14 +52,6 @@ jobs:
           role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/github-actions-rmodi
           aws-region: ${{ inputs.aws_region || 'ap-southeast-2' }}
 
-      - name: Set Image Tag
-        run: |
-          if [[ "${{ github.event_name }}" == "push" && "${{ github.ref_type }}" == "tag" ]]; then
-            echo "IMAGE_TAG=${GITHUB_REF#refs/tags/}" >> $GITHUB_ENV
-          else
-            echo "IMAGE_TAG=${{ inputs.image_tag || 'latest' }}" >> $GITHUB_ENV
-          fi
-
       - name: Login to Amazon ECR
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v2
@@ -72,48 +60,17 @@ jobs:
           registries: |
             ${{ secrets.AWS_ACCOUNT_ID }}
 
-      - name: Build and push development image
-        id: build-and-push-dev
-        if: github.event_name == 'push' && github.ref_type == 'tag'
+      - name: Build and push image
+        id: build-and-push
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
           ECR_REPOSITORY: ${{ env.ECR_REPO_NAME }}
-          IMAGE_TAG: ${{ env.IMAGE_TAG }}
-        run: |
-          docker build "${{ inputs.docker_build_dir || '.' }}" \
-            -f "${{ inputs.path_to_dockerfile || 'Dockerfile' }}" \
-            --build-arg ENVIRONMENT=development \
-            -t "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG-development"
-          docker push "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG-development"
-          echo "dev_image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG-development" >> $GITHUB_OUTPUT
-
-      - name: Build and push production image
-        id: build-and-push-prod
-        if: github.event_name == 'push' && github.ref_type == 'tag'
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ env.ECR_REPO_NAME }}
-          IMAGE_TAG: ${{ env.IMAGE_TAG }}
-        run: |
-          docker build "${{ inputs.docker_build_dir || '.' }}" \
-            -f "${{ inputs.path_to_dockerfile || 'Dockerfile' }}" \
-            --build-arg ENVIRONMENT=production \
-            -t "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG-production"
-          docker push "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG-production"
-          echo "prod_image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG-production" >> $GITHUB_OUTPUT
-
-      - name: Build and push manual trigger image
-        id: build-and-push-manual
-        if: github.event_name == 'workflow_dispatch'
-        env:
-          ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          ECR_REPOSITORY: ${{ env.ECR_REPO_NAME }}
-          IMAGE_TAG: ${{ env.IMAGE_TAG }}
-          TARGET_ENV: ${{ inputs.target_env || 'development' }}
+          IMAGE_TAG: ${{ inputs.image_tag }}
+          TARGET_ENV: ${{ inputs.target_env }}
         run: |
           docker build "${{ inputs.docker_build_dir || '.' }}" \
             -f "${{ inputs.path_to_dockerfile || 'Dockerfile' }}" \
             --build-arg ENVIRONMENT=$TARGET_ENV \
-            -t "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG-$TARGET_ENV"
-          docker push "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG-$TARGET_ENV"
-          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG-$TARGET_ENV" >> $GITHUB_OUTPUT
+            -t "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+          docker push "$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG"
+          echo "image=$ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG" >> $GITHUB_OUTPUT

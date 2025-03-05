@@ -1,3 +1,9 @@
+<div class="flex flex-row items-center gap-6 font-semibold text[#424242] mb-5 mx-5">
+    <p>Report</p>
+    <p>Farmer List</p>
+  </div>
+  
+
 <div class="w-full px-10 py-7 bg-tileLight dark:text-white dark:bg-[#363636] shadow-lg rounded-lg mt-6">
     <div class="flex flex-row items-center justify-end gap-8 ">
         <div class="flex flex-row items-center gap-4">
@@ -33,8 +39,8 @@
     </div>
 
     <div class="flex flex-col justify-center items-center mt-7">
-        <p class="text-[#292929] font-semibold text-lg dark:text-white">Officer Name</p>
-        <p class="text-[#494949] text-lg my-2 dark:text-textDark">On 2024/05/05</p>
+        <p class="text-[#292929] font-semibold text-lg dark:text-white">{{officerName}}</p>
+        <p class="text-[#494949] text-lg my-2 dark:text-textDark">On {{selectDate}}</p>
     </div>
 
     <div *ngIf="hasData">

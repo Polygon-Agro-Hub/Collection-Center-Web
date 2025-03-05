@@ -1,4 +1,7 @@
-<p class="font-semibold text[#424242] mb-5 mx-5">Report</p>
+<div class="flex flex-row items-center gap-6 font-semibold text[#424242] mb-5 mx-5">
+    <p>Report</p>
+    <p>Monthly Report</p>
+</div>
 
 <div class="w-full px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg">
     <div class="flex flex-row items-center justify-center">
@@ -39,7 +42,8 @@
     <img src="../../../../assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
 </div>
 
-<div *ngIf="hasData" id="reportContainer" class="w-full px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg mt-6">
+<div *ngIf="hasData" id="reportContainer"
+    class="w-full px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg mt-6">
     <div class="flex flex-col justify-center items-center">
         <p class="text-[#292929] font-semibold text-xl my-4">Collection Officer Report</p>
     </div>

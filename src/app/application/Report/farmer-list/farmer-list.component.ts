@@ -15,6 +15,7 @@ import { ReportServiceService } from '../../../services/Report-service/report-se
 export class FarmerListComponent implements OnInit {
   farmerListArr!: FarmerList[];
   officerId!: number;
+  officerName:string = ''
 
   page: number = 1;
   totalItems: number = 0;
@@ -31,7 +32,9 @@ export class FarmerListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.officerId = this.route.snapshot.params['id']
+    this.officerId = this.route.snapshot.params['id'];
+    this.officerName = this.route.snapshot.params['officer'];
+    this.selectDate = new Date().toISOString().slice(0, 10);
     
     this.fetchFarmerList();
 

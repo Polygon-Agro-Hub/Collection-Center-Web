@@ -20,7 +20,8 @@
         </div>
     </div>
 
-    <div *ngIf="hasData" class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+    <div *ngIf="hasData"
+        class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
         <table class="w-full divide-y-2 border-[1px] border-gray-300 rounded-lg overflow-hidden">
             <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
                 <tr>
@@ -59,7 +60,7 @@
                     </td>
                     <td class="px-5 py-4  text-gray-900 dark:text-gray-300">
                         <button class="flex items-center justify-center text-[#415CFF] hover:text-blue-500 w-10 h-10"
-                            (click)="viewFarmerList(item.id)">
+                            (click)="viewFarmerList(item.id,item.firstNameEnglish,item.lastNameEnglish)">
                             <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>
                         </button>
                     </td>

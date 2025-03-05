@@ -48,7 +48,7 @@ export class CollectionReportComponentComponent implements OnInit {
   }
 
   onSearch() {
-    this.fetchAllOfficers(this.page, this.itemsPerPage,this.searchText);
+    this.fetchAllOfficers(this.page, this.itemsPerPage, this.searchText);
 
   }
 
@@ -67,15 +67,18 @@ export class CollectionReportComponentComponent implements OnInit {
     this.router.navigate([`reports/collection-monthly-report/${id}`])
   }
 
-  viewFarmerList(id: number) {
-    this.router.navigate([`reports/farmer-list/${id}`])
+  viewFarmerList(id: number, fname: string, lname: string) {
+    const name = fname+ ' ' + lname;
+    console.log("full name",name);
+    
+    this.router.navigate([`reports/farmer-list/${id}/${name}`])
   }
 
   viewDailyReport(id: number, fname: string, lname: string, empid: string) {
     let name = `${fname} ${lname}`
     this.router.navigate([`reports/daily-report/${id}/${name}/${empid}`])
   }
-  
+
 }
 
 class CollectionOfficers {

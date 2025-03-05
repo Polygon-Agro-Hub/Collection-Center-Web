@@ -122,7 +122,7 @@ export const routes: Routes = [
                         component: CollectionMonthlyReportComponent
                     },
                     {
-                        path: 'farmer-list/:id',
+                        path: 'farmer-list/:id/:officer',
                         component: FarmerListComponent
                     },
                     {

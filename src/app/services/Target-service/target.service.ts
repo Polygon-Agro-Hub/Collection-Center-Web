@@ -40,10 +40,10 @@ export class TargetService {
       Authorization: `Bearer ${this.token}`
     });
 
-    let url = `${this.apiUrl}/get-daily-target?page=${page}&limit=${limit}`;
+    let url = `${this.apiUrl}/get-daily-target`;
 
     if (searchText) {
-      url += `&searchText=${searchText}`
+      url += `?searchText=${searchText}`
     }
 
     return this.http.get<any>(url, { headers });

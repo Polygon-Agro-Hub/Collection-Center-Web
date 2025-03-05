@@ -27,6 +27,7 @@ export class AddDailyTargetComponent implements OnInit {
   isVerityVisible = true;
   isAddColumn = false;
   selectCropId: number | string = '';
+  isAddButton:boolean = true;
 
 
   totalTime = 10;
@@ -106,6 +107,11 @@ export class AddDailyTargetComponent implements OnInit {
   }
 
   AddButton() {
+    if(this.isAddButton){
+      this.toastSrv.warning("Please add at least one weight value for this item.");
+      return;
+    }
+    
     if (!this.InputObj.varietyId || this.InputObj.qtyA < 0 || this.InputObj.qtyB < 0 || this.InputObj.qtyC < 0) {
       // this.toastSrv.warning("")
       Swal.fire({
@@ -260,6 +266,12 @@ export class AddDailyTargetComponent implements OnInit {
   ngOnDestroy() {
     if (this.intervalId) {
       clearInterval(this.intervalId);
+    }
+  }
+
+  checkAddButton(){
+    if(this.InputObj.qtyA > 0 || this.InputObj.qtyB > 0 ||this.InputObj.qtyC > 0){
+      this.isAddButton = false;
     }
   }
 

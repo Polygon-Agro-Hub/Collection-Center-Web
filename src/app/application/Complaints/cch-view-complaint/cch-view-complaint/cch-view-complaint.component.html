@@ -1,13 +1,13 @@
 <div class="w-full px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg mt-6">
     <div class="flex flex-row justify-between items-center">
         <div class="flex flex-row gap-6">
-            <div class="flex flex-row items-center gap-2 border-[2px] rounded-2xl px-4 py-2"
+            <div class="flex flex-row items-center gap-2 border-[2px] rounded-2xl px-4 py-2 cursor-pointer"
                 [ngClass]="{'text-[#415CFF] border-[#415CFF]': isSelectRecevied}" (click)="selectRecevied()">
                 <i *ngIf="isSelectRecevied" class="fa-solid fa-check"></i>
                 <p>Received</p>
             </div>
 
-            <div class="flex flex-row items-center gap-2 border-[2px] rounded-2xl px-4 py-2"
+            <div class="flex flex-row items-center gap-2 border-[2px] rounded-2xl px-4 py-2 cursor-pointer"
                 [ngClass]="{'text-[#415CFF] border-[#415CFF]': isSelectSent}" (click)="selectSent()">
                 <i *ngIf="isSelectSent" class="fa-solid fa-check"></i>
                 <p>Sent</p>

@@ -3,6 +3,8 @@ import { Component } from '@angular/core';
 import { Router } from '@angular/router';
 import { ThemeService } from '../../theme.service';
 import { FormsModule } from '@angular/forms';
+import { TokenServiceService } from '../../services/Token/token-service.service';
+import { ToastAlertService } from '../../services/toast-alert/toast-alert.service';
 
 export const MENU_ITEMS = [
   {
@@ -92,7 +94,12 @@ export class SideNavComponent{
     );
   }
 
-  constructor(private themeService: ThemeService, private router: Router) {}
+  constructor(
+    private themeService: ThemeService, 
+    private router: Router,
+    private tokenSrv:TokenServiceService,
+    private toastSrv:ToastAlertService
+  ) {}
 
   toggleSidebar() {
     this.isCollapsed = !this.isCollapsed;
@@ -113,6 +120,12 @@ export class SideNavComponent{
 
   isTabSelected(tab: string): boolean {
     return this.isSelectTab === tab;
+  }
+
+  logOut(){
+    this.tokenSrv.clearLoginDetails();
+    this.toastSrv.success(`<b>Logout !`);
+    this.router.navigate(['/'])
   }
 }
 

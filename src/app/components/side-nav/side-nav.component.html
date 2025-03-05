@@ -84,7 +84,7 @@
             <hr />
 
             <!-- Logout Button (Always visible) -->
-            <button *ngIf="!isCollapsed" class="flex items-center gap-4 text-gray-700 dark:text-white hover:text-red-500 pb-4 pl-5">
+            <button *ngIf="!isCollapsed" class="flex items-center gap-4 text-gray-700 dark:text-white hover:text-red-500 pb-4 pl-5" (click)="logOut()">
                 <i class="fas fa-sign-out-alt text-lg"></i>
                 <span class="block">Logout</span>
             </button>

@@ -35,11 +35,11 @@ jobs:
     env:
       ECR_REPO_NAME: "agroworld/aw-collection-center-ui"
 
+    # Add explicit permissions
     permissions:
       id-token: write
       contents: read
       packages: write
-      security-events: read
 
     outputs:
       dev_image: ${{ steps.build-and-push-dev.outputs.dev_image }}
@@ -52,8 +52,8 @@ jobs:
       - name: Configure AWS Credentials
         uses: aws-actions/configure-aws-credentials@v2
         with:
-          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/${{ vars.AWS_IAM_ROLE || 'github-actions-rmodi' }}
-          aws-region: ${{ inputs.aws_region || 'ap-southeast-2' }}
+          role-to-assume: arn:aws:iam::${{ secrets.AWS_ACCOUNT_ID }}:role/github-actions-rmodi
+          aws-region: ${{ inputs.aws_region }}
 
       - name: Set Image Tag
         run: |

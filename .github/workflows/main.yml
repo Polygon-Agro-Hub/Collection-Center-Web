@@ -1,11 +1,7 @@
 name: Docker image build and publish
 on:
-  create:
-    tags:
-      - 'v*'  # This will trigger on version tags
   push:
-    tags:
-      - 'v*'  # This will trigger on version tags
+    tags: ['*']  # This will trigger on any tag
   workflow_dispatch:
     inputs:
       target_env:

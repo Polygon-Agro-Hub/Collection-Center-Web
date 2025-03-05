@@ -96,6 +96,12 @@ export class AddDailyTargetComponent implements OnInit {
   }
 
   goButton() {
+    if (this.dailyTartgetObj.TargetItems.some(item => item.varietyId === this.InputObj.varietyId)) {
+      this.toastSrv.warning(`The variety has already been added.`);
+      this.selectCropId = '';
+      this.InputObj = new TargetItem();
+      return;
+    }
     this.isAddColumn = true;
   }
 

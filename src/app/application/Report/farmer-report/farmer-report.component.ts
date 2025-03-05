@@ -12,7 +12,7 @@ import jsPDF from 'jspdf';
   imports: [CommonModule, FormsModule],
   templateUrl: './farmer-report.component.html',
   styleUrl: './farmer-report.component.css',
-  // providers: [DatePipe]
+  providers: [DatePipe]
 
 })
 export class FarmerReportComponent implements OnInit {
@@ -40,23 +40,40 @@ export class FarmerReportComponent implements OnInit {
   fetchFarmerDetails(id: number) {
     this.ReportSrv.getFarmerReport(id).subscribe(
       (res) => {
-        
         if (res.status) {
           this.userObj = res.user;
           this.CropArr = res.crops;
           this.hasData = true;
+          this.calculateOverallTotal(); // Calculate total here
         } else {
           this.hasData = false;
         }
       }
-    )
+    );
   }
+  
+  calculateOverallTotal(): void {
+    // Reset totalAmount before calculating
+    this.totalAmount = this.CropArr.reduce((sum, item) => {
+      return sum + this.calculateRowTotal(item);
+    }, 0);
+  }
+  
 
   calculeteTotal(priceA: number, qtyA: number, priceB: number, qtyB: number, priceC: number, qtyC: number) :number{
     let tot = priceA * qtyA + priceB * qtyB + priceC * qtyC
     this.totalAmount += tot;
+    console.log(this.totalAmount);
+    
     return tot;
   }
+
+  calculateRowTotal(item: Crop): number {
+    return item.gradeAprice * item.gradeAquan +
+           item.gradeBprice * item.gradeBquan +
+           item.gradeCprice * item.gradeCquan;
+  }
+  
 
   downloadReport() {
     const element = document.getElementById('reportContainer'); // Ensure this selector matches the report container
@@ -72,7 +89,7 @@ export class FarmerReportComponent implements OnInit {
       const imgHeight = (canvas.height * imgWidth) / canvas.width;
 
       pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
-      pdf.save(`Farmer_Report_${this.reportId}.pdf`);
+      pdf.save(`Farmer_Report_${this.userObj.invNo}.pdf`);
     }).catch((error) => {
       console.error('Error generating PDF:', error);
       alert('An error occurred while generating the report. Please try again.');
@@ -98,6 +115,7 @@ class User {
   bankName!: string
   branchName!: string
   createdAt!: string
+  invNo!:string
 }
 
 class Crop {

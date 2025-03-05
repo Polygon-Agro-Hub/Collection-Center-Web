@@ -24,8 +24,8 @@
             "server": "src/main.server.ts",
             "prerender": false,
             "ssr": false,
-            "baseHref": "/collection-center/",
-            "deployUrl": "/collection-center/"
+            "baseHref": "/collection/",
+            "deployUrl": "/collection/"
           },
           "configurations": {
             "production": {
@@ -61,8 +61,8 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true,
-              "baseHref": "/collection-center/",
-              "deployUrl": "/collection-center/"
+              "baseHref": "/collection/",
+              "deployUrl": "/collection/"
             }
           },
           "defaultConfiguration": "production"

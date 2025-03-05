@@ -48,8 +48,8 @@
                 }
               ],
               "outputHashing": "all",
-              "baseHref": "/collection-center/",
-              "deployUrl": "/collection-center/"
+              "baseHref": "/collection/",
+              "deployUrl": "/collection/"
             },
             "development": {
               "fileReplacements": [

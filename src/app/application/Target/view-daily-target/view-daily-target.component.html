@@ -193,7 +193,8 @@
                         *ngFor="let item of assignTargetArr | paginate : { itemsPerPage: assignItemsPerPage, currentPage: page, totalItems: assignTotalItems }; let i = index">
                         <!--  -->
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
-                            {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }} </td>
+                            {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i + 1)
+                                : (((page - 1) * itemsPerPage) + i + 1) }} </td>
                         <td class="px-6 py-4 text-black dark:text-gray-300 ">{{item.cropNameEnglish}}</td>
                         <td class="px-6 py-4 text-black dark:text-gray-300 ">{{item.varietyNameEnglish}}</td>
                         <td class="px-6 py-4 text-black dark:text-gray-300 ">{{item.qtyA}}</td>

@@ -41,8 +41,9 @@
                     currentPage: page,
                     totalItems: totalItems
                   };  let i = index">
-                    <td class="px-5 py-4  text-gray-900 dark:text-gray-300">{{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1)
-                            }}</td>
+                    <td class="px-5 py-4  text-gray-900 dark:text-gray-300">
+                        {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i + 1) : (((page - 1) * itemsPerPage) + i + 1) }}
+                            </td>
                     <td class="px-5 py-4  text-gray-900 dark:text-gray-300">{{item.empId}}</td>
                     <td class="px-5 py-4  text-gray-900 dark:text-gray-300">{{item.firstNameEnglish}}</td>
                     <td class="px-5 py-4  text-gray-900 dark:text-gray-300">{{item.lastNameEnglish}}</td>

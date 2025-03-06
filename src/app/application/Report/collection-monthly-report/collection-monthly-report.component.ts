@@ -27,11 +27,8 @@ export class CollectionMonthlyReportComponent implements OnInit {
   hasData: boolean = false;
 
   constructor(
-    private router: Router,
     private ReportSrv: ReportServiceService,
-    private route: ActivatedRoute,
-    private datePipe: DatePipe
-
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -44,18 +41,13 @@ export class CollectionMonthlyReportComponent implements OnInit {
   fetchOfficerData() {
     this.ReportSrv.getCollectionmonthlyReportOfficerData(this.officerId,this.startDate,this.endDate).subscribe(
       (res) => {
-        
-        
         this.officerDataObj = res.officer;
         this.farmerDataArr = res.dates;
-
         if(res.dates.length > 0){
           this.hasData = true;
         }else{
           this.hasData = false;
-        }
-
-        
+        } 
       },
       (err) => {
         this.hasData = false;
@@ -64,7 +56,6 @@ export class CollectionMonthlyReportComponent implements OnInit {
   }
 
   filterDate(){
-    
     this.fetchOfficerData();
   }
 

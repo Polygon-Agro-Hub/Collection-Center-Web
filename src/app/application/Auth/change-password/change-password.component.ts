@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/Auth-service/auth.service';
 import { HttpClient } from '@angular/common/http';
 import { Router } from '@angular/router';
@@ -13,7 +13,7 @@ import Swal from 'sweetalert2';
   templateUrl: './change-password.component.html',
   styleUrls: ['./change-password.component.css'], // Corrected styleUrl to styleUrls
 })
-export class ChangePasswordComponent {
+export class ChangePasswordComponent implements OnInit{
   showPassword: boolean = false;
   showPassword1: boolean = false;
   changePassword:string = '';
@@ -21,6 +21,9 @@ export class ChangePasswordComponent {
 
   constructor(private authService: AuthService, private http: HttpClient, private router: Router) {
     // this.changePassword = new ChangePassword();
+  }
+  ngOnInit(): void {
+    // window.location.reload();
   }
 
   togglePasswordVisibility(): void {

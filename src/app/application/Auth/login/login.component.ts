@@ -25,7 +25,7 @@ export class LoginComponent {
   }
 
   ngOnInit() {
-    localStorage.removeItem('Login Token:');
+    // localStorage.removeItem('Login Token:');
   }
 
 
@@ -61,9 +61,7 @@ export class LoginComponent {
 
     if (this.loginObj.password && this.loginObj.userName) {
       this.authService.login(this.loginObj.userName, this.loginObj.password).subscribe(
-
         (res: any) => {
-          
           Swal.fire({
             icon: 'success',
             title: 'Logged',
@@ -72,36 +70,30 @@ export class LoginComponent {
             timer: 1500
           });
 
-          // localStorage.setItem('Login Token:', res.token);
-          // localStorage.setItem('userName:', res.userName);
-          // localStorage.setItem('userId:', res.userId);
-          // localStorage.setItem('role:', res.role);
-          // localStorage.setItem('updatedPassword:', res.updatedPassword);
-          // localStorage.setItem('profileImage', res.image)
-          // localStorage.setItem('Token Expiration', String(new Date().getTime() + (res.expiresIn * 20)));
+          // Save token details synchronously
+          this.tokenService.saveLoginDetails(
+            res.token,
+            res.userName,
+            res.userId,
+            res.role,
+            res.expiresIn,
+            res.image
+          );
 
-          //added new tiken service after complete process remove directly set local storage items
-          // console.log("start");
-          
-          this.tokenService.saveLoginDetails(res.token, res.userName, res.userId, res.role, res.expiresIn, res.image);
-
-          // console.log("end");
-
-          if (res.updatedPassword == 0) {
-            this.router.navigate(['/change-password']);
-          } else if (res.updatedPassword == 1) {
-            console.log("route",res.updatedPassword);
-            this.router.navigate(['/dashbord']);
-          } else {
-            Swal.fire({
-              icon: 'error',
-              title: 'Unsuccessful',
-              text: 'Error Occur. Please contact Agro World Admin',
-            });
-          }
-
-
-
+          // Defer navigation to allow the token to be saved properly
+          setTimeout(() => {
+            if (res.updatedPassword == 0) {
+              this.router.navigate(['/change-password']);
+            } else if (res.updatedPassword == 1) {
+              this.router.navigate(['/dashbord']);
+            } else {
+              Swal.fire({
+                icon: 'error',
+                title: 'Unsuccessful',
+                text: 'Error occurred. Please contact Agro World Admin',
+              });
+            }
+          }, 0);
         },
         (error) => {
           console.error('Error updating Market Price', error);
@@ -114,6 +106,7 @@ export class LoginComponent {
         }
       );
     }
+
   }
 
 

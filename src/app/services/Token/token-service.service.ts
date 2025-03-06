@@ -15,16 +15,18 @@ export class TokenServiceService {
 
   constructor() { }
 
-  saveLoginDetails(token: string, userName: string, userId: string, role: string, expiresIn: number, image:string): void {
+  saveLoginDetails(token: string, userName: string, userId: string, role: string, expiresIn: number, image: string): Promise<void> {
+  return new Promise((resolve) => {
     const expirationTime = new Date().getTime() + expiresIn * 1000; // Convert seconds to milliseconds
     localStorage.setItem(this.TOKEN_KEY, token);
     localStorage.setItem(this.USERNAME_KEY, userName);
     localStorage.setItem(this.USERID_KEY, userId);
     localStorage.setItem(this.ROLE_KEY, role);
-    localStorage.setItem(this.PROFILE_IMAGE, image)
+    localStorage.setItem(this.PROFILE_IMAGE, image);
     localStorage.setItem(this.EXPIRATION_KEY, expirationTime.toString());
+    resolve(); // Ensure function completes before continuing
+  });
 
-    
   }
 
   getToken(): string | null {

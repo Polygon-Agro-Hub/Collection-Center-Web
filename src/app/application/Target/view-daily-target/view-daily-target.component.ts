@@ -1,4 +1,4 @@
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -11,7 +11,7 @@ import { TargetService } from '../../../services/Target-service/target.service';
   imports: [CommonModule, FormsModule, NgxPaginationModule],
   templateUrl: './view-daily-target.component.html',
   styleUrls: ['./view-daily-target.component.css'],
-  providers: [DatePipe]
+  // providers: [DatePipe]
 })
 export class ViewDailyTargetComponent implements OnInit {
   targetArr!: DailyTargets[];
@@ -37,12 +37,17 @@ export class ViewDailyTargetComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private datePipe: DatePipe,
+    // private datePipe: DatePipe,
     private TargetSrv: TargetService
   ) { }
 
   ngOnInit(): void {
-    this.today = this.datePipe.transform(new Date(), 'yyyy/MM/dd') || '';
+    const date = new Date();
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const day = ('0' + date.getDate()).slice(-2);
+    this.today = `${year}/${month}/${day}`;
+
     this.fetchAllTarget();
     this.AssignAllDailyTarget()
   }
@@ -50,6 +55,8 @@ export class ViewDailyTargetComponent implements OnInit {
   fetchAllTarget(page: number = 1, limit: number = this.itemsPerPage, search: string = this.searchText) {
     this.TargetSrv.getAllDailyTarget(page, limit, search).subscribe(
       (res) => {
+        console.log(res.items);
+
         this.targetArr = res.items;
         this.totalItems = res.totalPages
         if (res.items.length > 0) {
@@ -139,8 +146,6 @@ export class ViewDailyTargetComponent implements OnInit {
   AssignAllDailyTarget(page: number = 1, limit: number = this.itemsPerPage) {
     this.TargetSrv.AssignAllDailyTarget(page, limit).subscribe(
       (res) => {
-
-
         this.assignTargetArr = res.items;
         this.assignTotalItems = res.total;
         if (res.items.length > 0) {
@@ -155,6 +160,17 @@ export class ViewDailyTargetComponent implements OnInit {
   navigateToAssignTarget(id: number) {
     this.router.navigate([`/target/assing-target/${id}`]);
   }
+
+  formatTime(time: string): string {
+    const [hoursStr, minutesStr] = time.split(':');
+    let hours = parseInt(hoursStr, 10);
+    const minutes = minutesStr; // use as is, assuming it's already 2-digit
+    const period = hours >= 12 ? 'PM' : 'AM';
+    hours = hours % 12 || 12; // convert '0' to 12 for midnight and adjust hours >12
+    return `${hours}:${minutes} ${period}`;
+  }
+  
+  
 }
 
 class AssignDailyTarget {
@@ -165,7 +181,7 @@ class AssignDailyTarget {
   qtyB!: string;
   qtyC!: string;
   toDate!: Date;
-  toTime!: Date;
+  toTime!: string;
   fromTime!: Date;
 }
 

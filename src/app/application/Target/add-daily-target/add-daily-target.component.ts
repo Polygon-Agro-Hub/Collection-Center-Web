@@ -108,7 +108,7 @@ export class AddDailyTargetComponent implements OnInit {
 
   AddButton() {
     if(this.isAddButton){
-      this.toastSrv.warning("Please add at least one weight value for this item.");
+      this.toastSrv.warning("You have already added a weight value. Please delete the existing one and re-enter a new value.");
       return;
     }
     

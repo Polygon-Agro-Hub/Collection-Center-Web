@@ -57,7 +57,7 @@
 
                 <div class="relative w-46">
                     <div
-                    class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
+                        class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
                         <select [(ngModel)]="selectValidity" (change)="filterValidity()"
                             class="block w-full appearance-none  dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
                             <option value="" selected disabled>Validity</option>
@@ -121,7 +121,7 @@
                 </thead>
                 <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
                     <!-- <tr *ngFor="let item of targetArr | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index"> -->
-                        <tr *ngFor="let item of targetArr; let i = index">
+                    <tr *ngFor="let item of targetArr; let i = index">
                         <!--  -->
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
                             {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }} </td>
@@ -142,8 +142,8 @@
                         </td>
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
                             <div class="flex flex-col items-start justify-start">
-                                <p class="text-sm text-[#646464]">{{item.toDate | date :'yyyy/mm/dd'}}</p>
-                                <p class="text-sm text-[#646464] my-1">{{item.toTime }}</p>
+                                <p class="text-sm text-[#646464]">{{item.toDate}}</p>
+                                <p class="text-sm text-[#646464] my-1">{{formatTime(item.toTime) }}</p>
                             </div>
                         </td>
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
@@ -173,7 +173,8 @@
         <div *ngIf="!assignHasData" class="flex justify-center items-center mt-8 mr-5 w-full h-[500px]">
             <p class="text-3xl text-center font-semibold">No Data Availabale</p>
         </div>
-        <div *ngIf="hasData" class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+        <div *ngIf="hasData"
+            class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
             <table class="w-full divide-y-2 overflow-hidden">
                 <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
                     <tr>
@@ -198,11 +199,13 @@
                         <td class="px-6 py-4 text-black dark:text-gray-300 ">{{item.qtyA}}</td>
                         <td class="px-6 py-4 text-black dark:text-gray-300 ">{{item.qtyB}}</td>
                         <td class="px-6 py-4 text-black dark:text-gray-300 ">{{item.qtyC}}</td>
-                        <td class="px-6 py-4 text-black dark:text-gray-300  text-lg">
-                            <p class="text-[#646464] text-sm">{{ item.toDate | date: 'yyyy/MM/dd' }}</p>
-                            <p class="text-[#646464] text-sm">{{ item.toDate | date: 'hh:mm a' }}</p>
+                        <td class="px-6 py-4 text-black dark:text-gray-300 text-lg">
+                            <p class="text-[#646464] text-sm">{{ item.toDate }}</p>
+                            <p class="text-[#646464] text-sm">{{ formatTime(item.toTime) }}</p>
                         </td>
-                        <td class="px-6 py-4 text-black-900 dark:text-gray-300 "><i class="fa-solid fa-users-gear text-blue-600 text-xl" (click)="navigateToAssignTarget(item.id)"></i></td>
+                        <td class="px-6 py-4 text-black-900 dark:text-gray-300 "><i
+                                class="fa-solid fa-users-gear text-blue-600 text-xl"
+                                (click)="navigateToAssignTarget(item.id)"></i></td>
                     </tr>
                 </tbody>
 
@@ -215,6 +218,5 @@
             </pagination-controls>
         </div>
     </div>
-    
-</div>
 
+</div>

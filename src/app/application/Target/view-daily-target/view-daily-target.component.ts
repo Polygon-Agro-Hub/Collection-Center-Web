@@ -55,8 +55,6 @@ export class ViewDailyTargetComponent implements OnInit {
   fetchAllTarget(page: number = 1, limit: number = this.itemsPerPage, search: string = this.searchText) {
     this.TargetSrv.getAllDailyTarget(page, limit, search).subscribe(
       (res) => {
-        console.log(res.items);
-
         this.targetArr = res.items;
         this.totalItems = res.totalPages
         if (res.items.length > 0) {
@@ -169,8 +167,8 @@ export class ViewDailyTargetComponent implements OnInit {
     hours = hours % 12 || 12; // convert '0' to 12 for midnight and adjust hours >12
     return `${hours}:${minutes} ${period}`;
   }
-  
-  
+
+
 }
 
 class AssignDailyTarget {

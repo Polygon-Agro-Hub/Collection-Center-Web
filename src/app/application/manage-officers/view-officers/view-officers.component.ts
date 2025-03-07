@@ -7,6 +7,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { ManageOfficersService } from '../../../services/manage-officers-service/manage-officers.service';
 import Swal from 'sweetalert2';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
+import { TokenServiceService } from '../../../services/Token/token-service.service';
 
 @Component({
   selector: 'app-view-officers',
@@ -18,6 +19,7 @@ import { ToastAlertService } from '../../../services/toast-alert/toast-alert.ser
 export class ViewOfficersComponent implements OnInit {
   OfficerArr!: CollectionOfficers[];
   companyArr!: Company[];
+  centerArr: Center[] = [];
 
   page: number = 1;
   totalItems: number = 0;
@@ -27,30 +29,39 @@ export class ViewOfficersComponent implements OnInit {
   selectStatus: string = '';
   selectRole: string = '';
   searchText: string = '';
+  selectCenters: string = '';
   isPopupVisible: boolean = false
+
+  logingRole: string | null = null;
+
 
 
   constructor(
     private router: Router,
     private ManageOficerSrv: ManageOfficersService,
-    private toastSrv: ToastAlertService
-    
-
-  ) { }
+    private toastSrv: ToastAlertService,
+    private tokenSrv: TokenServiceService
+  ) {
+    this.logingRole = tokenSrv.getUserDetails().role
+  }
 
   ngOnInit(): void {
-    this.fetchAllOfficers();
+    // this.fetchAllOfficers();
     this.getAllcompany();
+    console.log(this.logingRole);
+    this.getAllCenters();
+    this.fetchByRole();
+
   }
 
   navigate(path: string) {
     this.router.navigate([`${path}`])
   }
 
-  navigateToEdit(id:number){
+  navigateToEdit(id: number) {
     this.router.navigate([`/manage-officers/edit-officer/${id}`])
   }
-  navigateToProfile(id:number){
+  navigateToProfile(id: number) {
     this.router.navigate([`/manage-officers/officer-profile/${id}`])
 
   }
@@ -62,7 +73,7 @@ export class ViewOfficersComponent implements OnInit {
         this.totalItems = res.total
         if (res.items.length === 0) {
           this.hasData = false;
-        }else{
+        } else {
           this.hasData = true;
         }
 
@@ -70,10 +81,37 @@ export class ViewOfficersComponent implements OnInit {
     )
   }
 
+
+  //add to center filter
+  fetchAllOfficersForCCH(page: number = 1, limit: number = this.itemsPerPage, status: string = '', role: string = '', searchText: string = '', selectCompany:string = this.selectCenters) {
+    this.ManageOficerSrv.getAllOfficersForCCH(page, limit, status, role, searchText, selectCompany).subscribe(
+      (res) => {
+        this.OfficerArr = res.items
+        this.totalItems = res.total
+        if (res.items.length === 0) {
+          this.hasData = false;
+        } else {
+          this.hasData = true;
+        }
+
+      }
+    )
+  }
+
+  fetchByRole(){
+    if(this.logingRole === 'Collection Center Head'){
+      this.fetchAllOfficersForCCH();
+    }else if(this.logingRole === 'Collection Center Manager'){
+      this.fetchAllOfficers();
+    }else{
+      this.hasData = true;
+    }
+  }
+
   getAllcompany() {
     this.ManageOficerSrv.getCompanyNames().subscribe(
       (res) => {
-        
+
         this.companyArr = res
       }
     )
@@ -115,7 +153,7 @@ export class ViewOfficersComponent implements OnInit {
 
   openPopup(item: any) {
     this.isPopupVisible = true;
-  
+
     // HTML structure for the popup
     const tableHtml = `
       <div class="container mx-auto">
@@ -129,7 +167,7 @@ export class ViewOfficersComponent implements OnInit {
         </div>
       </div>
     `;
-  
+
     Swal.fire({
       html: tableHtml,
       showConfirmButton: false, // Hide default confirm button
@@ -143,7 +181,7 @@ export class ViewOfficersComponent implements OnInit {
             // this.isLoading = true;
             this.ManageOficerSrv.ChangeStatus(item.id, 'Approved').subscribe(
               (res) => {
-                
+
                 // this.isLoading = false;
                 if (res.status) {
                   this.toastSrv.success('The collection was approved successfully.')
@@ -158,7 +196,7 @@ export class ViewOfficersComponent implements OnInit {
               }
             );
           });
-  
+
         // Handle the "Reject" button click
         document
           .getElementById('rejectButton')
@@ -173,7 +211,7 @@ export class ViewOfficersComponent implements OnInit {
 
                   this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectStatus, this.selectRole, this.searchText);
                 } else {
-                this.toastSrv.error(res.message)
+                  this.toastSrv.error(res.message)
 
                 }
               },
@@ -189,12 +227,12 @@ export class ViewOfficersComponent implements OnInit {
   }
 
   applyStatusFilters() {
-    
+
     this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectStatus, this.selectRole)
   }
 
   applyRoleFilters() {
-    
+
     this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectStatus, this.selectRole)
 
   }
@@ -225,6 +263,25 @@ export class ViewOfficersComponent implements OnInit {
     this.fetchAllOfficers(this.page, this.itemsPerPage);
   }
 
+  applyCompanyFilters() {
+    this.fetchAllOfficersForCCH()
+  }
+
+  clearCompanyFilter() {
+    this.selectCenters = '';
+    this.fetchAllOfficersForCCH()
+
+  }
+
+  getAllCenters() {
+    this.ManageOficerSrv.getCCHOwnCenters().subscribe(
+      (res) => {
+        this.centerArr = res
+
+      }
+    )
+  }
+
 }
 
 
@@ -240,10 +297,18 @@ class CollectionOfficers {
   nic!: string;
   status!: string;
   created_at!: string;
-  phoneCode01!:string;
+  phoneCode01!: string;
+
+  // cch
+  centerName!: string;
 }
 
 class Company {
   companyNameEnglish!: string
 }
 
+
+class Center {
+  id!: number
+  centerName!: string
+}

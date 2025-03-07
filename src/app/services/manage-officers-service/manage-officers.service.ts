@@ -39,7 +39,7 @@ export class ManageOfficersService {
 
   createCollectiveOfficer(person: any, selectedImage: any): Observable<any> {
     const formData = new FormData();
-    formData.append('officerData', JSON.stringify(person)); 
+    formData.append('officerData', JSON.stringify(person));
     formData.append('file', selectedImage);
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
@@ -124,9 +124,9 @@ export class ManageOfficersService {
     });
   }
 
-  updateCollectiveOfficer(person: any, id: number, image:any): Observable<any> {
+  updateCollectiveOfficer(person: any, id: number, image: any): Observable<any> {
     const formData = new FormData();
-    formData.append('officerData', JSON.stringify(person)); 
+    formData.append('officerData', JSON.stringify(person));
     formData.append('file', image);
 
     const headers = new HttpHeaders({
@@ -141,7 +141,7 @@ export class ManageOfficersService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
     });
-    return this.http.put(`${this.apiUrl}/manage-officers/disclaim-officer/${id}`,{}, {
+    return this.http.put(`${this.apiUrl}/manage-officers/disclaim-officer/${id}`, {}, {
       headers,
     });
   }
@@ -187,6 +187,47 @@ export class ManageOfficersService {
     let url = `${this.apiUrl}/manage-officers/get-target-details/${id}`;
 
     return this.http.get<any>(url, { headers });
+  }
+
+  getCCHOwnCenters(): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+    return this.http.get(`${this.apiUrl}/manage-officers/get-centers-cch-own`, {
+      headers,
+    });
+  }
+
+  getAllOfficersForCCH(page: number = 1, limit: number = 10, status: string = '', role: string = '', searchText: string = '', selectcenter:string = ''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    let url = `${this.apiUrl}/manage-officers/get-all-officers-for-cch?page=${page}&limit=${limit}`
+
+    if (status) {
+      url += `&status=${status}`
+    }
+
+    if (selectcenter) {
+      url += `&center=${selectcenter}`
+    }
+
+    if (role) {
+      url += `&role=${role}`
+    }
+
+    if (searchText) {
+      url += `&searchText=${searchText}`
+    }
+
+
+
+    return this.http.get(url, {
+      headers,
+    });
   }
 }
 

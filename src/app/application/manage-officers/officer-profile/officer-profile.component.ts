@@ -6,6 +6,7 @@ import html2canvas from 'html2canvas';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
+import { TokenServiceService } from '../../../services/Token/token-service.service';
 
 @Component({
   selector: 'app-officer-profile',
@@ -18,14 +19,20 @@ export class OfficerProfileComponent implements OnInit {
   officerObj: Officer = new Officer();
   officerId!: number;
   showDisclaimView = false;
+  logingRole: string | null = null;
+
 
   constructor(
     private ManageOficerSrv: ManageOfficersService,
     private router: Router,
     private route: ActivatedRoute,
-    private toastSrv: ToastAlertService
+    private toastSrv: ToastAlertService,
+    private tokenSrv: TokenServiceService
 
-  ) { }
+  ) {
+    this.logingRole = tokenSrv.getUserDetails().role
+
+  }
 
   ngOnInit(): void {
     this.officerId = this.route.snapshot.params['id'];
@@ -35,7 +42,7 @@ export class OfficerProfileComponent implements OnInit {
   fetchOfficer(id: number) {
     this.ManageOficerSrv.getOfficerById(id).subscribe((res: any) => {
       this.officerObj = res.officerData.collectionOfficer;
-      
+
     });
   }
 
@@ -78,12 +85,12 @@ export class OfficerProfileComponent implements OnInit {
   cancelDisclaim() {
     this.showDisclaimView = false;
   }
-  
+
   confirmDisclaim(id: number) {
-    
+
     this.ManageOficerSrv.disclaimOfficer(id).subscribe(
       (response) => {
-        
+
         this.toastSrv.success('Officer ID sent successfully!');
         this.showDisclaimView = false;
         this.router.navigate(['/manage-officers/view-officer']);
@@ -93,7 +100,7 @@ export class OfficerProfileComponent implements OnInit {
         this.toastSrv.error('Failed to send Officer ID!');
       }
     );
-    
+
   }
 
 }

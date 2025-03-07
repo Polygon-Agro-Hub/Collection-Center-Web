@@ -8,10 +8,12 @@
                 Add Officer
             </button>
 
-            <button class="bg-[#415CFF] text-white rounded-lg shadow-lg px-4 py-2"
-                (click)="navigate('/manage-officers/claim-officer')">
-                Claim Officer
-            </button>
+            <span *ngIf="logingRole === 'Collection Center Manager'">
+                <button class="bg-[#415CFF] text-white rounded-lg shadow-lg px-4 py-2"
+                    (click)="navigate('/manage-officers/claim-officer')">
+                    Claim Officer
+                </button>
+            </span>
         </div>
         <div class="flex flex-row items-center gap-5 ">
             <i class="fa-solid fa-list text-2xl dark:text-white"></i>
@@ -61,6 +63,23 @@
                 </div>
             </div>
 
+            <div class="relative w-46" *ngIf="logingRole ==='Collection Center Head'">
+                <div
+                    class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
+                    <select (change)="applyCompanyFilters()" [(ngModel)]="selectCenters"
+                        class="block w-full appearance-none  dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
+                        <option value="" selected disabled>Centers</option>
+                        <option *ngFor="let item of centerArr"
+                            class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                            [value]="item.id">{{item.centerName}}</option>
+                    </select>
+                    <button *ngIf="selectCenters" (click)="clearCompanyFilter()">
+                        <i class="fa-solid fa-xmark text-lg mr-3"></i>
+                    </button>
+
+                </div>
+            </div>
+
 
 
 
@@ -98,7 +117,8 @@
         <p class="text-3xl text-center font-semibold dark:text-white">No Data Availabale</p>
     </div>
 
-    <div *ngIf="hasData" class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+    <div *ngIf="hasData"
+        class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
         <table class="w-full divide-y-2 border-[1px] border-gray-300 rounded-lg overflow-hidden">
             <thead class=" dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
                 <tr>
@@ -106,7 +126,8 @@
                     <th class="px-3 py-3 text-left text-sm font-medium">EMP ID</th>
                     <th class="px-3 py-3 text-left text-sm font-medium">First Name</th>
                     <th class="px-3 py-3 text-left text-sm font-medium">Last Name</th>
-                    <th class="px-3 py-3 text-left text-sm font-medium">Company</th>
+                    <th class="px-3 py-3 text-left text-sm font-medium" *ngIf="logingRole ==='Collection Center Head'">
+                        Centers</th>
                     <th class="px-3 py-3 text-left text-sm font-medium">Role</th>
                     <th class="px-3 py-3 text-left text-sm font-medium">Status</th>
                     <th class="px-3 py-3 text-left text-sm font-medium">Phone</th>
@@ -121,12 +142,14 @@
                     currentPage: page,
                     totalItems: totalItems
                   };  let i = index">
-                    <td class="px-2 py-4 text-sm text-gray-900 dark:text-gray-300">{{ (i + 1) < 10 ? '0' + (i + 1) : (i
-                            + 1) }}</td>
+                    <td class="px-2 py-4 text-sm text-gray-900 dark:text-gray-300">
+                        {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i + 1) : (((page - 1) * itemsPerPage) + i + 1) }}
+                            </td>
                     <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.empId}}</td>
                     <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.firstNameEnglish}}</td>
                     <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.lastNameEnglish}}</td>
-                    <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.companyNameEnglish}}</td>
+                    <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300"
+                        *ngIf="logingRole ==='Collection Center Head'">{{item.centerName}}</td>
                     <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.jobRole}}</td>
                     <td class="px-3 py-4">
                         <div class="flex justify-center items-center" (click)="openPopup(item)">
@@ -144,7 +167,8 @@
                             </span>
                         </div>
                     </td>
-                    <td class="px-3  py-4 text-sm text-gray-900 dark:text-gray-300">{{item.phoneCode01}}{{item.phoneNumber01}}</td>
+                    <td class="px-3  py-4 text-sm text-gray-900 dark:text-gray-300">
+                        {{item.phoneCode01}}{{item.phoneNumber01}}</td>
                     <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.nic}}</td>
                     <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">
                         <button class="text-gray-400 hover:text-gray-600 px-2" (click)="navigateToProfile(item.id)">
@@ -153,7 +177,8 @@
                         <button class="text-[#415CFF] hover:text-blue-500 px-2" (click)="navigateToEdit(item.id)">
                             <i class="fa-solid fa-pen-to-square text-lg"></i>
                         </button>
-                        <button class="text-[#FF415C] hover:text-red-500 px-2" (click)="deleteCollectionOfficer(item.id)">
+                        <button class="text-[#FF415C] hover:text-red-500 px-2"
+                            (click)="deleteCollectionOfficer(item.id)">
                             <i class="fa-solid fa-trash text-lg"></i>
                         </button>
 

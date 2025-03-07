@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { ManageOfficersService } from '../../../services/manage-officers-service/manage-officers.service';
 import { Router } from '@angular/router';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
+import { TokenServiceService } from '../../../services/Token/token-service.service';
 
 @Component({
   selector: 'app-add-officers',
@@ -18,6 +19,9 @@ export class AddOfficersComponent implements OnInit {
   personalData: Personal = new Personal();
   collectionCenterData: CollectionCenter[] = []
   ManagerArr!: ManagerDetails[]
+  centerArr: Center[] = [];
+  managerArr: Manager[] = [];
+
 
 
   languages: string[] = ['Sinhala', 'English', 'Tamil'];
@@ -32,12 +36,18 @@ export class AddOfficersComponent implements OnInit {
   selectedImage: string | ArrayBuffer | null = null;
   selectedFile: File | null = null;
 
+  logingRole: string | null = null;
+
+
   constructor(
     private ManageOficerSrv: ManageOfficersService,
     private router: Router,
-    private toastSrv: ToastAlertService
+    private toastSrv: ToastAlertService,
+    private tokenSrv: TokenServiceService
+  ) {
+    this.logingRole = tokenSrv.getUserDetails().role
 
-  ) { }
+  }
 
   districts = [
     { name: 'Ampara', province: 'Eastern' },
@@ -69,6 +79,7 @@ export class AddOfficersComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.getAllCenters();
     this.getLastID('COO');
     this.EpmloyeIdCreate();
   }
@@ -155,8 +166,9 @@ export class AddOfficersComponent implements OnInit {
 
   EpmloyeIdCreate() {
     let rolePrefix: string;
-
-    if (this.personalData.jobRole === 'Customer Officer') {
+    if (this.personalData.jobRole === 'Collection Center Manager') {
+      rolePrefix = 'CCM';
+    } else if (this.personalData.jobRole === 'Customer Officer') {
       rolePrefix = 'CUO';
     } else {
       rolePrefix = 'COO';
@@ -187,22 +199,47 @@ export class AddOfficersComponent implements OnInit {
 
   onSubmit() {
     // this.personalData.image = this.selectedFile;
-    
+
 
     if (!this.personalData.accHolderName || !this.personalData.accNumber || !this.personalData.bankName || !this.personalData.branchName) {
       this.toastSrv.warning('Pleace fill all required feilds')
 
     } else {
-      this.ManageOficerSrv.createCollectiveOfficer(this.personalData, this.selectedImage).subscribe(
-        (res: any) => {
-          this.officerId = res.officerId;
-          this.toastSrv.success('Collective Officer Created Successfully')
-          this.router.navigate(['/manage-officers/view-officer'])
-        },
-        (error: any) => {
-          this.toastSrv.error('There was an error creating the collective officer')
-        }
-      );
+      if (this.logingRole === 'Collection Center Manager') {
+        this.ManageOficerSrv.createCollectiveOfficer(this.personalData, this.selectedImage).subscribe(
+          (res: any) => {
+            if (res.status) {
+              this.officerId = res.officerId;
+              this.toastSrv.success('Collective Officer Created Successfully')
+              this.router.navigate(['/manage-officers/view-officer'])
+            } else {
+              this.toastSrv.error('There was an error creating the collective officer')
+
+            }
+          },
+          (error: any) => {
+            this.toastSrv.error('There was an error creating the collective officer')
+          }
+        );
+      } else if (this.logingRole === 'Collection Center Head') {
+        this.ManageOficerSrv.createCollectiveOfficer(this.personalData, this.selectedImage).subscribe(
+          (res: any) => {
+            if (res.status) {
+              this.officerId = res.officerId;
+              this.toastSrv.success('Collective Officer Created Successfully')
+              this.router.navigate(['/manage-officers/view-officer'])
+            } else {
+              this.toastSrv.error('There was an error creating the collective officer')
+
+            }
+          },
+          (error: any) => {
+            this.toastSrv.error('There was an error creating the collective officer')
+          }
+        );
+      } else {
+        this.toastSrv.error('There was an error creating the collective officer')
+      }
 
     }
 
@@ -227,7 +264,33 @@ export class AddOfficersComponent implements OnInit {
     });
   }
 
+  getAllCenters() {
+    this.ManageOficerSrv.getCCHOwnCenters().subscribe(
+      (res) => {
+        this.centerArr = res
 
+      }
+    )
+  }
+
+  getAllManagers() {
+    this.ManageOficerSrv.getCenterManagers(this.personalData.centerId).subscribe(
+      (res) => {
+        console.log(res);
+
+        this.managerArr = res
+
+      }
+    )
+  }
+
+  checkManager() {
+    if(!this.personalData.centerId){
+      this.toastSrv.warning('Pleace select center before select manager')
+      this.personalData.irmId = ''
+      return;
+    }
+  }
 
 
 
@@ -267,6 +330,9 @@ class Personal {
   employeeType!: string;
 
   image!: any
+
+  centerId: number | string = '';
+  irmId: number | string = '';
 }
 
 
@@ -282,6 +348,18 @@ class ManagerDetails {
   firstNameEnglish!: string
   lastNameEnglish!: string
 }
+
+class Center {
+  id!: number
+  centerName!: string
+}
+
+class Manager {
+  id!: number;
+  firstNameEnglish!: string;
+  lastNameEnglish!: string;
+}
+
 
 
 

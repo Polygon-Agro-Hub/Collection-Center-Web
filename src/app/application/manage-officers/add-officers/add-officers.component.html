@@ -7,7 +7,7 @@
                     <div class="relative">
                         <input type="file" id="imageUpload" accept="image/*" class="hidden"
                             (change)="onFileSelected($event)" />
-                        
+
                         <!-- Display default image if no file is selected -->
                         <div *ngIf="!selectedImage" (click)="triggerFileInput($event)"
                             class="flex rounded-full border-solid border-2 justify-center items-center w-60 h-60">
@@ -22,6 +22,25 @@
 
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                    <div *ngIf="logingRole === 'Collection Center Head'" (change)="getAllManagers()">
+                        <label for="centerId" class="block text-sm font-medium text-gray-700 dark:text-textDark">
+                            Collection Center
+                        </label>
+                        <select id="centerId" [(ngModel)]="personalData.centerId" name="centerId" placeholder="select"
+                            class="form-control mt-1 block w-full p-2 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-100 dark:bg-gray-800 appearance-none focus:ring-indigo-500 focus:border-indigo-500">
+                            <option disabled selected
+                                class="p-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800" value="">
+                                -- select center--
+                            </option>
+                            <option *ngFor="let item of centerArr" [value]="item.id"
+                                class="p-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800">
+                                {{item.centerName}}
+                            </option>
+
+                        </select>
+                    </div>
+
+                    <div *ngIf="logingRole === 'Collection Center Head'"></div>
 
                     <div>
                         <label for="jobRole" class="block text-sm font-medium text-gray-700 dark:text-textDark">
@@ -32,6 +51,10 @@
                             class="form-control mt-1 block w-full p-2 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-100 dark:bg-gray-800 appearance-none focus:ring-indigo-500 focus:border-indigo-500">
                             <option disabled class="p-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800">
                                 -- select --
+                            </option>
+                            <option selected value="Collection Center Manager" *ngIf="logingRole === 'Collection Center Head'"
+                                class="p-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800">
+                                Collection Center Manager
                             </option>
                             <option selected value="Collection Officer"
                                 class="p-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800">
@@ -50,6 +73,9 @@
                         <div class="flex mt-1">
                             <span
                                 class="inline-flex items-center px-3 py-3 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+                                <span *ngIf="logingRole === 'Collection Center Head'">
+                                    <p *ngIf="personalData.jobRole === 'Collection Center Manager'">CCM</p>
+                                </span>
                                 <p *ngIf="personalData.jobRole === 'Collection Officer'">COO</p>
                                 <p *ngIf="personalData.jobRole === 'Customer Officer'">CUO</p>
                             </span>
@@ -57,6 +83,28 @@
                                 class="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm pl-4  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 disabled>
                         </div>
+                    </div>
+
+                    
+                    <div *ngIf="logingRole === 'Collection Center Head' && (personalData.jobRole === 'Collection Officer' || personalData.jobRole === 'Customer Officer')">
+                        <label for="centerId" class="block text-sm font-medium text-gray-700 dark:text-textDark">
+                            Manager
+                        </label>
+                        <select id="irmId" [(ngModel)]="personalData.irmId" name="irmId" placeholder="select" (change)="checkManager()" [disabled]="!personalData.centerId"
+                            class="form-control mt-1 block w-full p-2 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-100 dark:bg-gray-800 appearance-none focus:ring-indigo-500 focus:border-indigo-500">
+                            <option disabled selected
+                                class="p-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800" value="">
+                                -- select manager--
+                            </option>
+                            <option *ngFor="let item of managerArr" [value]="item.id"
+                                class="p-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800">
+                                {{item.firstNameEnglish}} {{item.lastNameEnglish}}
+                            </option>
+
+                        </select>
+                    </div>
+
+                    <div *ngIf="logingRole === 'Collection Center Head' && (personalData.jobRole === 'Collection Officer' || personalData.jobRole === 'Customer Officer')">
                     </div>
 
                     <div>
@@ -79,6 +127,7 @@
                             </div>
                         </div>
                     </div>
+
 
 
 

@@ -199,7 +199,7 @@ export class ManageOfficersService {
     });
   }
 
-  getAllOfficersForCCH(page: number = 1, limit: number = 10, status: string = '', role: string = '', searchText: string = '', selectcenter:string = ''): Observable<any> {
+  getAllOfficersForCCH(page: number = 1, limit: number = 10, status: string = '', role: string = '', searchText: string = '', selectcenter: string = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
@@ -222,10 +222,30 @@ export class ManageOfficersService {
     if (searchText) {
       url += `&searchText=${searchText}`
     }
-
-
-
     return this.http.get(url, {
+      headers,
+    });
+  }
+
+  getCenterManagers(id: number | string): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+    
+    return this.http.get(`${this.apiUrl}/manage-officers/get-center-managers/${id}`, {
+      headers,
+    });
+  }
+
+  CCHcreateCollectiveOfficer(person: any, selectedImage: any): Observable<any> {
+    const formData = new FormData();
+    formData.append('officerData', JSON.stringify(person));
+    formData.append('file', selectedImage);
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
+    return this.http.post(`${this.apiUrl}/manage-officers/cch-create-officer`, formData, {
       headers,
     });
   }

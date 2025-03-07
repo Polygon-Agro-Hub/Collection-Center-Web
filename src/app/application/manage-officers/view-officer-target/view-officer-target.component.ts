@@ -4,6 +4,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { TargetService } from '../../../services/Target-service/target.service';
 import { DropdownModule } from 'primeng/dropdown';
+import { TokenServiceService } from '../../../services/Token/token-service.service';
 
 @Component({
   selector: 'app-view-officer-target',
@@ -22,13 +23,19 @@ export class ViewOfficerTargetComponent implements OnInit {
   selectStatus: string = '';
   searchText: string = '';
 
+  logingRole: string | null = null;
+
   constructor(
     private TargetSrv: TargetService,
     private router: Router,
     private route: ActivatedRoute,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private tokenSrv: TokenServiceService
 
-  ) { }
+  ) {
+    this.logingRole = tokenSrv.getUserDetails().role
+
+  }
 
   ngOnInit(): void {
     this.officerId = this.route.snapshot.params['officerId'];
@@ -38,10 +45,10 @@ export class ViewOfficerTargetComponent implements OnInit {
   fetchSelectedOfficerTarget(officerId: number, status: string = this.selectStatus, search: string = this.searchText) {
     this.TargetSrv.getSelectedOfficerTargetData(officerId, status, search).subscribe(
       (res) => {
-        
+
 
         this.selectedOfficerDataArr = res.items;
-        
+
         if (res.items.length === 0) {
           this.hasData = false;
         } else {

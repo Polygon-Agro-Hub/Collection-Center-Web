@@ -19,28 +19,36 @@ export const MENU_ITEMS = [
     key: 'target',
     path: '/target/view-target',
     label: 'Collection Target',
-    icon: 'fa-solid fa-bullseye'
+    icon: 'fa-solid fa-bullseye',
+    permission:'Collection Center Manager'
+
   },
   {
     id:3,
     key: 'centers',
     path: '/centers',
     label: 'Centers',
-    icon: 'fa-solid fa-bullseye'
+    icon: 'fa-solid fa-bullseye',
+    permission:'Collection Center Head'
+
   },
   {
     id:3,
     key: 'pricelist',
     path: '/price-list/view-prices',
     label: 'Price List',
-    icon: 'fa-solid fa-tag'
+    icon: 'fa-solid fa-tag',
+    permission:'Collection Center Manager'
+
   },
   {
     id:4,
     key: 'pricerequest',
     path: '/price-request/view-request',
     label: 'Price Requests',
-    icon: 'fas fa-hand-holding-usd'
+    icon: 'fas fa-hand-holding-usd',
+    permission:'Collection Center Manager'
+
   },
   {
     id:5,

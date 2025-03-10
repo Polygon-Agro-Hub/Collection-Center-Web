@@ -4,6 +4,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ReportServiceService } from '../../../../services/Report-service/report-service.service';
+import { TokenServiceService } from '../../../../services/Token/token-service.service';
 
 @Component({
   selector: 'app-collection-report-component',
@@ -22,18 +23,30 @@ export class CollectionReportComponentComponent implements OnInit {
 
   searchText: string = '';
 
+  logingRole: string | null = null;
+
+
   constructor(
     private router: Router,
     private ReportSrv: ReportServiceService,
-
-  ) { }
+    private tokenSrv: TokenServiceService
+  ) {
+    this.logingRole = tokenSrv.getUserDetails().role
+  }
 
   ngOnInit(): void {
     this.fetchAllOfficers();
   }
 
   fetchAllOfficers(page: number = 1, limit: number = this.itemsPerPage, searchText: string = '') {
-    this.ReportSrv.getAllCollectionReport(page, limit, searchText).subscribe(
+    let role: string;
+    if (this.logingRole === 'Collection Center Head') {
+      role = "CCH"
+    } else {
+      role = "CCM"
+    }
+
+    this.ReportSrv.getAllCollectionReport(role, page, limit, searchText).subscribe(
       (res) => {
         this.OfficerArr = res.items
         this.totalItems = res.total
@@ -68,9 +81,9 @@ export class CollectionReportComponentComponent implements OnInit {
   }
 
   viewFarmerList(id: number, fname: string, lname: string) {
-    const name = fname+ ' ' + lname;
-    console.log("full name",name);
-    
+    const name = fname + ' ' + lname;
+    console.log("full name", name);
+
     this.router.navigate([`reports/farmer-list/${id}/${name}`])
   }
 
@@ -86,4 +99,5 @@ class CollectionOfficers {
   firstNameEnglish!: string;
   lastNameEnglish!: string;
   empId!: string;
+  centerName!: string;
 }

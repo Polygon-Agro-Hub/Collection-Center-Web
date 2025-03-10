@@ -222,7 +222,7 @@ export class AddOfficersComponent implements OnInit {
           }
         );
       } else if (this.logingRole === 'Collection Center Head') {
-        this.ManageOficerSrv.createCollectiveOfficer(this.personalData, this.selectedImage).subscribe(
+        this.ManageOficerSrv.CCHcreateCollectiveOfficer(this.personalData, this.selectedImage).subscribe(
           (res: any) => {
             if (res.status) {
               this.officerId = res.officerId;

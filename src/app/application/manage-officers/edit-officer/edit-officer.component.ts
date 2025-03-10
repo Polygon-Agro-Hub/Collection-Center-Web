@@ -5,6 +5,7 @@ import Swal from 'sweetalert2';
 import { ManageOfficersService } from '../../../services/manage-officers-service/manage-officers.service';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
+import { TokenServiceService } from '../../../services/Token/token-service.service';
 
 @Component({
   selector: 'app-edit-officer',
@@ -16,6 +17,9 @@ import { ToastAlertService } from '../../../services/toast-alert/toast-alert.ser
 export class EditOfficerComponent implements OnInit {
   personalData: Personal = new Personal();
   // ManagerArr!: ManagerDetails[]
+  centerArr: Center[] = [];
+  managerArr: Manager[] = [];
+
 
 
   languages: string[] = ['Sinhala', 'English', 'Tamil'];
@@ -38,13 +42,22 @@ export class EditOfficerComponent implements OnInit {
   selectedImage: string | ArrayBuffer | null = null;
   selectedFile: File | null = null;
 
+  logingRole: string | null = null;
+  ExistirmId!: number;
+
+
   constructor(
     private ManageOficerSrv: ManageOfficersService,
     private router: Router,
     private route: ActivatedRoute,
-    private toastSrv: ToastAlertService
+    private toastSrv: ToastAlertService,
+    private tokenSrv: TokenServiceService
 
-  ) { }
+
+  ) {
+    this.logingRole = tokenSrv.getUserDetails().role
+
+  }
 
   districts = [
     { name: 'Ampara', province: 'Eastern' },
@@ -77,6 +90,7 @@ export class EditOfficerComponent implements OnInit {
 
   ngOnInit(): void {
     // this.getAllCollectionCetnter();
+    this.getAllCenters();
     this.editOfficerId = this.route.snapshot.params['id'];
     this.fetchOffierById(this.editOfficerId);
     this.UpdateEpmloyeIdCreate();
@@ -85,8 +99,11 @@ export class EditOfficerComponent implements OnInit {
   fetchOffierById(id: number) {
     this.ManageOficerSrv.getOfficerById(id).subscribe(
       (res: any) => {
+        console.log(res.officerData.collectionOfficer);
+
         this.personalData = res.officerData.collectionOfficer;
-        
+        this.ExistirmId = res.officerData.irmId;
+
         this.getUpdateLastID(res.officerData.collectionOfficer.jobRole);
         this.personalData.previousQR = this.personalData.QRcode;
         this.personalData.previousImage = this.personalData.image;
@@ -100,7 +117,8 @@ export class EditOfficerComponent implements OnInit {
         }
 
         this.selectJobRole = res.officerData.collectionOfficer.jobRole;
-        
+        this.getAllManagers();
+
 
         this.UpdateEpmloyeIdCreate();
         // this.getAllmanagers();
@@ -117,12 +135,12 @@ export class EditOfficerComponent implements OnInit {
           if (this.selectJobRole === this.personalData.jobRole) {
             lastId = this.personalData.empId;
             this.UpdatelastID = lastId;
-            
+
 
           } else {
             this.UpdatelastID = res.result.empId;
             lastId = res.result.empId
-            
+
 
           }
           ;
@@ -141,10 +159,14 @@ export class EditOfficerComponent implements OnInit {
     let rolePrefix: string | undefined;
 
     // Map job roles to their respective prefixes
-    if (this.personalData.jobRole === 'Customer Officer') {
+    if (this.personalData.jobRole === 'Collection Center Manager') {
+      rolePrefix = 'CCM';
+    } else if (this.personalData.jobRole === 'Customer Officer') {
       rolePrefix = 'CUO';
+
     } else {
       rolePrefix = 'COO';
+
     }
 
 
@@ -157,7 +179,7 @@ export class EditOfficerComponent implements OnInit {
     this.getUpdateLastID(rolePrefix)
       .then((lastId) => {
         this.upateEmpID = rolePrefix + lastId;
-        
+
       })
       .catch((error) => {
         console.error('Error fetching updated last ID:', error);
@@ -248,7 +270,7 @@ export class EditOfficerComponent implements OnInit {
 
 
   onSubmit() {
-    
+
     this.personalData.empId = this.upateEmpID;
 
     if (!this.personalData.accHolderName || !this.personalData.accNumber || !this.personalData.bankName || !this.personalData.branchName || !this.personalData.city || !this.personalData.country || !this.personalData.district || !this.personalData.houseNumber) {
@@ -256,21 +278,39 @@ export class EditOfficerComponent implements OnInit {
 
 
     } else {
-      this.ManageOficerSrv.updateCollectiveOfficer(this.personalData, this.editOfficerId, this.selectedImage).subscribe(
-        (res: any) => {
-          this.officerId = res.officerId;
-          this.toastSrv.success('Collective Officer Updated Successfully')
-          this.router.navigate(['/manage-officers/view-officer'])
-        },
-        (error: any) => {
-          this.toastSrv.error('There was an error creating the collective officer')
 
+      if (this.logingRole === 'Collection Center Manager') {
+        this.ManageOficerSrv.updateCollectiveOfficer(this.personalData, this.editOfficerId, this.selectedImage).subscribe(
+          (res: any) => {
+            this.officerId = res.officerId;
+            this.toastSrv.success('Collective Officer Updated Successfully')
+            this.router.navigate(['/manage-officers/view-officer'])
+          },
+          (error: any) => {
+            this.toastSrv.error('There was an error creating the collective officer')
+
+          }
+        );
+      } else if (this.logingRole === 'Collection Center Head') {
+        if (this.personalData.jobRole === 'Collection Center Manager') {
+          this.personalData.irmId = null;
         }
-      );
+        this.ManageOficerSrv.CCHupdateCollectiveOfficer(this.personalData, this.editOfficerId, this.selectedImage).subscribe(
+          (res: any) => {
+            this.officerId = res.officerId;
+            this.toastSrv.success('Collective Officer Updated Successfully')
+            this.router.navigate(['/manage-officers/view-officer'])
+          },
+          (error: any) => {
+            this.toastSrv.error('There was an error creating the collective officer')
+
+          }
+        );
+      }
+
+
 
     }
-
-
   }
 
   onCancel() {
@@ -295,6 +335,33 @@ export class EditOfficerComponent implements OnInit {
   }
 
 
+  getAllCenters() {
+    this.ManageOficerSrv.getCCHOwnCenters().subscribe(
+      (res) => {
+        this.centerArr = res
+
+      }
+    )
+  }
+
+  getAllManagers() {
+    this.ManageOficerSrv.getCenterManagers(this.personalData.centerId).subscribe(
+      (res) => {
+        console.log(res);
+
+        this.managerArr = res
+
+      }
+    )
+  }
+
+  checkManager() {
+    if (!this.personalData.centerId) {
+      this.toastSrv.warning('Pleace select center before select manager')
+      this.personalData.irmId = ''
+      return;
+    }
+  }
 
 
 
@@ -336,8 +403,25 @@ class Personal {
 
   image!: any
 
-  previousQR!:string
-  previousImage!:string
+  previousQR!: string
+  previousImage!: string
+
+
+  centerId: number | string = '';
+  irmId: number | string | null = '';
+
+}
+
+
+class Center {
+  id!: number
+  centerName!: string
+}
+
+class Manager {
+  id!: number;
+  firstNameEnglish!: string;
+  lastNameEnglish!: string;
 }
 
 

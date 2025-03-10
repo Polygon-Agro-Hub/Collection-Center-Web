@@ -17,13 +17,13 @@ export class ReportServiceService {
     this.token = this.tokenSrv.getToken()
   }
 
-  getAllCollectionReport(page: number = 1, limit: number = 10, searchText: string = ''): Observable<any> {
+  getAllCollectionReport(role:string, page: number = 1, limit: number = 10, searchText: string = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
     });
 
-    let url = `${this.apiUrl}/get-collection-reports-details?page=${page}&limit=${limit}`
+    let url = `${this.apiUrl}/get-collection-reports-details?page=${page}&limit=${limit}&role=${role}`
 
     if (searchText) {
       url += `&searchText=${searchText}`

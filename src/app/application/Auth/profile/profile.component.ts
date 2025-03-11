@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../../services/Auth-service/auth.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
+import { TokenServiceService } from '../../../services/Token/token-service.service';
 
 @Component({
   selector: 'app-profile',
@@ -13,7 +14,17 @@ import { Router } from '@angular/router';
 export class ProfileComponent implements OnInit {
   officerObj: Officer = new Officer();
 
-  constructor(private AuthSrv: AuthService, private router: Router) {}
+  logingRole: string | null = null;
+
+
+  constructor(
+    private AuthSrv: AuthService,
+    private router: Router,
+    private tokenSrv: TokenServiceService
+
+  ) {
+    this.logingRole = tokenSrv.getUserDetails().role
+  }
 
   ngOnInit(): void {
     this.fetchLoggedInUser();
@@ -22,7 +33,7 @@ export class ProfileComponent implements OnInit {
   fetchLoggedInUser() {
     this.AuthSrv.getLoggedInUser().subscribe((res: any) => {
       this.officerObj = res.officerData.collectionOfficer;
-      
+
     });
   }
 

@@ -21,7 +21,7 @@
             </div>
             
             <!-- Buttons with consistent size and styling -->
-            <div class="flex flex-row space-x-4 self-start mt-2">
+            <div class="flex flex-row space-x-4 self-start mt-2" *ngIf="logingRole === 'Collection Center Manager'">
                 <button (click)="goToChangePassword()" class="bg-[#3B82F6] text-white font-semibold rounded-lg shadow-md px-4 py-2">Change Password</button>
                 <button class="bg-[#3B82F6] text-white font-semibold rounded-lg shadow-md px-4 py-2" (click)="navigateToTarget()">View My Target</button>
             </div>
@@ -60,8 +60,11 @@
 
                 <div>
                     <p class="text-[#627189]">Phone Number - 2</p>
-                    <p class="font-semibold text-black">{{officerObj.phoneCode02}}{{officerObj.phoneNumber02}}</p>
+                    <p class="font-semibold text-black">
+                        {{ officerObj.phoneCode02 ? officerObj.phoneCode02 + officerObj.phoneNumber02 : ' - ' }}
+                    </p>
                 </div>
+                
 
             </div>
 

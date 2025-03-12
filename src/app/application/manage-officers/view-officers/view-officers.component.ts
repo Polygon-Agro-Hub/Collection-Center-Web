@@ -83,7 +83,7 @@ export class ViewOfficersComponent implements OnInit {
 
 
   //add to center filter
-  fetchAllOfficersForCCH(page: number = 1, limit: number = this.itemsPerPage, status: string = '', role: string = '', searchText: string = '', selectCompany:string = this.selectCenters) {
+  fetchAllOfficersForCCH(page: number = 1, limit: number = this.itemsPerPage, status: string = '', role: string = '', searchText: string = '', selectCompany: string = this.selectCenters) {
     this.ManageOficerSrv.getAllOfficersForCCH(page, limit, status, role, searchText, selectCompany).subscribe(
       (res) => {
         this.OfficerArr = res.items
@@ -98,12 +98,12 @@ export class ViewOfficersComponent implements OnInit {
     )
   }
 
-  fetchByRole(){
-    if(this.logingRole === 'Collection Center Head'){
+  fetchByRole() {
+    if (this.logingRole === 'Collection Center Head') {
       this.fetchAllOfficersForCCH();
-    }else if(this.logingRole === 'Collection Center Manager'){
+    } else if (this.logingRole === 'Collection Center Manager') {
       this.fetchAllOfficers();
-    }else{
+    } else {
       this.hasData = true;
     }
   }
@@ -185,7 +185,7 @@ export class ViewOfficersComponent implements OnInit {
                 // this.isLoading = false;
                 if (res.status) {
                   this.toastSrv.success('The collection was approved successfully.')
-                  this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectStatus, this.selectRole, this.searchText);
+                  this.fetchByRole();
                 } else {
                   this.toastSrv.error(res.message)
                 }
@@ -209,7 +209,7 @@ export class ViewOfficersComponent implements OnInit {
                 if (res.status) {
                   this.toastSrv.success('The collection was rejected successfully.')
 
-                  this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectStatus, this.selectRole, this.searchText);
+                  this.fetchByRole();
                 } else {
                   this.toastSrv.error(res.message)
 
@@ -227,50 +227,40 @@ export class ViewOfficersComponent implements OnInit {
   }
 
   applyStatusFilters() {
-
-    this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectStatus, this.selectRole)
+    this.fetchByRole();
   }
 
   applyRoleFilters() {
-
-    this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectStatus, this.selectRole)
-
+    this.fetchByRole();
   }
 
   clearStatusFilter() {
     this.selectStatus = ''
-    this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectStatus, this.selectRole)
-
+    this.fetchByRole();
   }
 
   clearRoleFilter() {
     this.selectRole = ''
-    this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectStatus, this.selectRole)
-  }
+    this.fetchByRole();  }
 
   onSearch() {
-    this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectStatus, this.selectRole, this.searchText)
-
+    this.fetchByRole();
   }
 
   offSearch() {
     this.searchText = ''
-    this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectStatus, this.selectRole, this.searchText)
-  }
+    this.fetchByRole();  }
 
   onPageChange(event: number) {
     this.page = event;
-    this.fetchAllOfficers(this.page, this.itemsPerPage);
-  }
+    this.fetchByRole();  }
 
   applyCompanyFilters() {
-    this.fetchAllOfficersForCCH()
-  }
+    this.fetchByRole();  }
 
   clearCompanyFilter() {
     this.selectCenters = '';
-    this.fetchAllOfficersForCCH()
-
+    this.fetchByRole();
   }
 
   getAllCenters() {

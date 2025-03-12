@@ -55,6 +55,7 @@ export class TokenServiceService {
       userName: localStorage.getItem(this.USERNAME_KEY),
       userId: localStorage.getItem(this.USERID_KEY),
       role: localStorage.getItem(this.ROLE_KEY),
+      image: localStorage.getItem(this.PROFILE_IMAGE),
     };
   }
 }

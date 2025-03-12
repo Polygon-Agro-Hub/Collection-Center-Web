@@ -11,8 +11,10 @@
                 <div class="ml-6">
                     <p class="text-lg font-semibold">{{officerObj.firstNameEnglish}} {{officerObj.lastNameEnglish}}</p>
                     <p class="text-[#627189]">{{officerObj.jobRole}} - <span class="text-black font-semibold">
-                            <span *ngIf="officerObj.jobRole ==='Customer Officer'">CUO</span><span
-                                *ngIf="officerObj.jobRole ==='Collection Officer'">COO</span>{{officerObj.empId}}</span>
+                            <span *ngIf="officerObj.jobRole ==='Customer Officer'">CUO</span>
+                            <span *ngIf="officerObj.jobRole ==='Collection Center Manager'">CCM</span>
+                            <span *ngIf="officerObj.jobRole ==='Collection Center Head'">CCH</span>
+                            <span *ngIf="officerObj.jobRole ==='Collection Officer'">COO</span>{{officerObj.empId}}</span>
                     </p>
                     <p class="font-semibold">{{officerObj.centerName}}</p>
                     <p class="text-[#627189]">{{officerObj.companyNameEnglish}}</p>
@@ -66,7 +68,10 @@
 
                 <div>
                     <p class="text-[#627189]">Phone Number - 2</p>
-                    <p class="font-semibold">{{officerObj.phoneCode02}}{{officerObj.phoneNumber02}}</p>
+                    <!-- <p class="font-semibold">{{officerObj.phoneCode02}}{{officerObj.phoneNumber02}}</p> -->
+                    <p class="font-semibold">
+                        {{ officerObj.phoneCode02 ? officerObj.phoneCode02 + officerObj.phoneNumber02 : ' - ' }}
+                    </p>
                 </div>
 
             </div>

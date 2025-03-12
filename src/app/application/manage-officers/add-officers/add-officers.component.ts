@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { ManageOfficersService } from '../../../services/manage-officers-service/manage-officers.service';
 import { Router } from '@angular/router';
@@ -102,7 +102,36 @@ export class AddOfficersComponent implements OnInit {
       }
       this.personalData.languages = languagesArray.join(',');
     }
+
+    this.validateLanguages();
+
   }
+
+  languagesRequired: boolean = false;
+
+// onCheckboxChange(lang: string, event: any) {
+//     if (event.target.checked) {
+//         if (!this.personalData.languages) {
+//             this.personalData.languages = lang;
+//         } else if (!this.personalData.languages.includes(lang)) {
+//             this.personalData.languages += `,${lang}`;
+//         }
+//     } else {
+//         const languagesArray = this.personalData.languages.split(',');
+//         const index = languagesArray.indexOf(lang);
+//         if (index !== -1) {
+//             languagesArray.splice(index, 1);
+//         }
+//         this.personalData.languages = languagesArray.join(',');
+//     }
+
+//     // Validate when a change occurs
+//     this.validateLanguages();
+// }
+
+validateLanguages() {
+    this.languagesRequired = !this.personalData.languages || this.personalData.languages.trim() === '';
+}
 
 
   nextForm(page: 'pageOne' | 'pageTwo') {
@@ -291,6 +320,17 @@ export class AddOfficersComponent implements OnInit {
       return;
     }
   }
+
+  isAtLeastOneLanguageSelected(): boolean {
+    return (
+      !this.personalData.languages && this.personalData.languages.length > 0
+    );
+  }
+
+  onSubmitForm(form: NgForm) {
+    form.form.markAllAsTouched();
+}
+
 
 
 

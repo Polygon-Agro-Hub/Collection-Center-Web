@@ -187,9 +187,6 @@ export class CollectionDailyReportComponent implements OnInit {
     doc.save(`Daily_Report_${this.officerName}_${this.selectDate}.pdf`);
   }
   
-  
-  
-  
 }
 
 class DailyReport {

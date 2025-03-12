@@ -61,7 +61,7 @@ export class TargetService {
     return this.http.get<any>(url, { headers });
   }
 
-  getCenterDetails(province: string = '', district: string = '', search: string = '', page: number = 1, limit: number = 10): Observable<any> {
+  getCenterDetails(page: number = 1, limit: number = 10, province: string = '', district: string = '', search: string = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });

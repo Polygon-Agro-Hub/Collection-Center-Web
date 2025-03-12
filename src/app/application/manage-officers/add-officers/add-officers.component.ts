@@ -37,6 +37,8 @@ export class AddOfficersComponent implements OnInit {
   selectedFile: File | null = null;
 
   logingRole: string | null = null;
+  languagesRequired: boolean = false;
+
 
 
   constructor(
@@ -107,31 +109,30 @@ export class AddOfficersComponent implements OnInit {
 
   }
 
-  languagesRequired: boolean = false;
 
-// onCheckboxChange(lang: string, event: any) {
-//     if (event.target.checked) {
-//         if (!this.personalData.languages) {
-//             this.personalData.languages = lang;
-//         } else if (!this.personalData.languages.includes(lang)) {
-//             this.personalData.languages += `,${lang}`;
-//         }
-//     } else {
-//         const languagesArray = this.personalData.languages.split(',');
-//         const index = languagesArray.indexOf(lang);
-//         if (index !== -1) {
-//             languagesArray.splice(index, 1);
-//         }
-//         this.personalData.languages = languagesArray.join(',');
-//     }
+  // onCheckboxChange(lang: string, event: any) {
+  //     if (event.target.checked) {
+  //         if (!this.personalData.languages) {
+  //             this.personalData.languages = lang;
+  //         } else if (!this.personalData.languages.includes(lang)) {
+  //             this.personalData.languages += `,${lang}`;
+  //         }
+  //     } else {
+  //         const languagesArray = this.personalData.languages.split(',');
+  //         const index = languagesArray.indexOf(lang);
+  //         if (index !== -1) {
+  //             languagesArray.splice(index, 1);
+  //         }
+  //         this.personalData.languages = languagesArray.join(',');
+  //     }
 
-//     // Validate when a change occurs
-//     this.validateLanguages();
-// }
+  //     // Validate when a change occurs
+  //     this.validateLanguages();
+  // }
 
-validateLanguages() {
+  validateLanguages() {
     this.languagesRequired = !this.personalData.languages || this.personalData.languages.trim() === '';
-}
+  }
 
 
   nextForm(page: 'pageOne' | 'pageTwo') {
@@ -228,6 +229,9 @@ validateLanguages() {
 
   onSubmit() {
     // this.personalData.image = this.selectedFile;
+    if (this.personalData.accNumber === this.personalData.conformAccNumber) {
+      return;
+    }
 
 
     if (!this.personalData.accHolderName || !this.personalData.accNumber || !this.personalData.bankName || !this.personalData.branchName) {
@@ -314,7 +318,7 @@ validateLanguages() {
   }
 
   checkManager() {
-    if(!this.personalData.centerId){
+    if (!this.personalData.centerId) {
       this.toastSrv.warning('Pleace select center before select manager')
       this.personalData.irmId = ''
       return;
@@ -329,7 +333,7 @@ validateLanguages() {
 
   onSubmitForm(form: NgForm) {
     form.form.markAllAsTouched();
-}
+  }
 
 
 
@@ -364,6 +368,7 @@ class Personal {
   accNumber!: string;
   bankName!: string;
   branchName!: string;
+  conformAccNumber!: string;
 
   jobRole: string = 'Collection Officer'
   empId!: string

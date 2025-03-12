@@ -143,9 +143,9 @@
                                     class="block text-sm font-medium text-gray-700 dark:text-textDark">Permanent</label>
                             </div>
                             <div class="flex items-center space-x-2">
-                                <input class="w-5 h-5" type="radio" id="employeeType" name="employeeType"
+                                <input class="w-5 h-5" type="radio" id="employeeTypetemp" name="employeeType"
                                     value="Temporary" [(ngModel)]="personalData.employeeType">
-                                <label for="english"
+                                <label for="employeeTypetemp"
                                     class="block text-sm font-medium text-gray-700 dark:text-textDark">Temporary</label>
                             </div>
                         </div>
@@ -157,32 +157,30 @@
 
                     <div>
                         <label for="languages" class="block text-sm font-medium text-gray-700 dark:text-textDark">
-                            Preferred Languages
+                          Preferred Languages
                         </label>
-                    
                         <div class="flex items-center space-x-4 mt-3">
-                            <div class="flex items-center space-x-2">
-                                <input class="w-5 h-5" type="checkbox" id="sinhala" name="languages" value="Sinhala"
-                                    (change)="onCheckboxChange('Sinhala', $event)" />
-                                <label for="sinhala" class="text-gray-700">Sinhala</label>
-                            </div>
-                            <div class="flex items-center space-x-2">
-                                <input class="w-5 h-5" type="checkbox" id="english" name="languages" value="English"
-                                    (change)="onCheckboxChange('English', $event)" />
-                                <label for="english" class="text-gray-700">English</label>
-                            </div>
-                            <div class="flex items-center space-x-2">
-                                <input class="w-5 h-5" type="checkbox" id="tamil" name="languages" value="Tamil"
-                                    (change)="onCheckboxChange('Tamil', $event)" />
-                                <label for="tamil" class="text-gray-700">Tamil</label>
-                            </div>
+                          <div class="flex items-center space-x-2">
+                            <input class="w-5 h-5" type="checkbox" id="sinhala" name="languages" value="Sinhala"
+                              (change)="onCheckboxChange('Sinhala', $event)" [checked]="personalData.languages.includes('Sinhala')" />
+                            <label for="sinhala" class="text-gray-700">Sinhala</label>
+                          </div>
+                          <div class="flex items-center space-x-2">
+                            <input class="w-5 h-5" type="checkbox" id="english" name="languages" value="English"
+                              (change)="onCheckboxChange('English', $event)" [checked]="personalData.languages.includes('English')" />
+                            <label for="english" class="text-gray-700">English</label>
+                          </div>
+                          <div class="flex items-center space-x-2">
+                            <input class="w-5 h-5" type="checkbox" id="tamil" name="languages" value="Tamil"
+                              (change)="onCheckboxChange('Tamil', $event)" [checked]="personalData.languages.includes('Tamil')" />
+                            <label for="tamil" class="text-gray-700">Tamil</label>
+                          </div>
                         </div>
-                    
                         <!-- Error Message -->
                         <p *ngIf="languagesRequired" class="text-red-600 text-sm mt-2">
-                            Please select at least one preferred language.
+                          Please select at least one preferred language.
                         </p>
-                    </div>
+                      </div>
                     
 
 
@@ -446,12 +444,25 @@
                 <div class="pb-6">
                     <label for="accNumber" class="block text-sm font-medium text-gray-700 dark:text-textDark">Account
                         Number</label>
-                    <input id="accNumber" name="accNumber" [(ngModel)]="personalData.accNumber"
+                    <input type="number" id="accNumber" name="accNumber" [(ngModel)]="personalData.accNumber"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack"
                         #accNumberInput="ngModel" required />
                     <div *ngIf="accNumberInput.touched && !personalData.accNumber" class="text-red-500 text-sm mt-1">
                         <div>Account Number is required</div>
                     </div>
+                </div>
+
+                <div class="pb-6">
+                    <label for="accNumber" class="block text-sm font-medium text-gray-700 dark:text-textDark">Confirm Account Number</label>
+                    <input type="number" id="accNumber" name="accNumber" [(ngModel)]="personalData.conformAccNumber"
+                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack"
+                        #conformAccNumberInput="ngModel" required />
+                    <div *ngIf="conformAccNumberInput.touched && !personalData.conformAccNumber" class="text-red-500 text-sm mt-1">
+                        <div>Account Number is required</div>
+                    </div>
+                    <div *ngIf="personalData.conformAccNumber && personalData.accNumber !== personalData.conformAccNumber" class="text-red-500 text-sm mt-1">
+                        <div>Confirm Account Number should be the same as Account Number.</div>
+                      </div>
                 </div>
 
                 <div class="pb-6">

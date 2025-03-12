@@ -1,4 +1,9 @@
-<div class="flex flex-row items-center justify-center gap-16 dark:bg-black">
+<div class="flex flex-row items-center gap-6 font-semibold text[#424242] mb-5 mx-5">
+    <p>Centers</p>
+    <p>Center Dashboard</p>
+</div>
+
+<div class="flex flex-row items-center justify-center gap-16 dark:bg-black cursor-default">
     <div class="flex justify-center items-center w-1/5 py-4 bg-tileLight dark:bg-[#363636]  shadow-lg rounded-lg">
         <p class="font-bold text-black text-lg dark:text-white">{{centerNameObj.centerName}}</p>
     </div>
@@ -20,7 +25,7 @@
     <div
         class="flex flex-col justify-center items-center gap-y-3 w-1/5 py-4 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg">
         <i class="fa-solid fa-bullseye text-[#415CFF] text-5xl"></i>
-        <div class="flex flex-col justify-center items-center">
+        <div class="flex flex-col justify-center items-center cursor-default">
             <p class="font-bold text-black text-lg dark:text-white">Current</p>
             <p class="font-bold text-black text-lg dark:text-white">Target</p>
         </div>
@@ -31,9 +36,9 @@
 
     </div>
 
-    <div class="flex flex-col items-center justify-center w-2/5 py-5 bg-[#FB923C] shadow-lg rounded-lg ">
+    <div class="flex flex-col items-center justify-center w-2/5 py-5 bg-[#FB923C] shadow-lg rounded-lg cursor-default">
         <i class="fa-solid fa-layer-group text-2xl text-white"></i>
-        <div class="flex flex-col justify-center items-center">
+        <div class="flex flex-col justify-center items-center ">
             <p class="font-bold text-white text-lg">Today Collection</p>
             <p class="font-bold text-white text-lg">{{transCount < 10 ? '0' + transCount : transCount}} Transactions</p>
         </div>
@@ -44,7 +49,7 @@
 
     </div>
 
-    <div class="flex flex-col items-center justify-center w-2/5 py-5 bg-[#619DFF] shadow-lg rounded-lg">
+    <div class="flex flex-col items-center justify-center w-2/5 py-5 bg-[#619DFF] shadow-lg rounded-lg cursor-default">
         <i class="fa-solid fa-layer-group text-2xl text-white"></i>
         <div class="flex flex-col justify-center items-center">
             <p class="font-bold text-white text-lg">Today Sales</p>
@@ -56,7 +61,7 @@
 
 
 <div class="flex flex-row items-center justify-center gap-16 my-8">
-    <div class="w-1/5 pt-6 pb-1 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg">
+    <div class="w-1/5 pt-6 pb-1 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg cursor-default">
         <div class="flex flex-row items-center justify-start mx-5 gap-5 ">
             <div class="bg-[#CCFBF1] p-3 rounded-full">
                 <i class="fa-solid fa-users text-3xl"></i>
@@ -73,7 +78,7 @@
         </div>
     </div>
 
-    <div class="w-2/5 pb-1 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg ">
+    <div class="w-2/5 pb-1 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg cursor-default">
         <div class="flex flex-row items-end justify-end">
             <i *ngIf="expencePrecentage >= 0" class="fa-solid fa-arrow-trend-up text-[#0D9488] mx-2 "></i>
             <i *ngIf="expencePrecentage < 0" class="fa-solid fa-arrow-trend-down text-[#D70000] mx-2 "></i>
@@ -94,7 +99,7 @@
         </div>
     </div>
 
-    <div class="w-2/5 pb-1 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg">
+    <div class="w-2/5 pb-1 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg cursor-default">
         <div class="flex flex-row items-end justify-end">
             <i class="fa-solid fa-arrow-trend-down text-[#D70000] mx-2"></i>
             <p class="text-[#D70000] mx-2 mt-1 dark:text-white">34.7%</p>

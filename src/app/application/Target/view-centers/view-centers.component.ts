@@ -1,3 +1,4 @@
+// view-centers.component.ts
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
@@ -22,6 +23,51 @@ export class ViewCentersComponent implements OnInit {
     itemsPerPage: number = 10;
     totalItems: number = 0;
     countOfOfficers: number = 0;
+    
+    // Define all Sri Lanka provinces
+    provinces: string[] = [
+        'Western',
+        'Central',
+        'Southern',
+        'Northern',
+        'Eastern',
+        'North Western',
+        'North Central',
+        'Uva',
+        'Sabaragamuwa'
+    ];
+    
+    // Define all districts with their provinces
+    allDistricts = [
+        { name: 'Ampara', province: 'Eastern' },
+        { name: 'Anuradhapura', province: 'North Central' },
+        { name: 'Badulla', province: 'Uva' },
+        { name: 'Batticaloa', province: 'Eastern' },
+        { name: 'Colombo', province: 'Western' },
+        { name: 'Galle', province: 'Southern' },
+        { name: 'Gampaha', province: 'Western' },
+        { name: 'Hambantota', province: 'Southern' },
+        { name: 'Jaffna', province: 'Northern' },
+        { name: 'Kalutara', province: 'Western' },
+        { name: 'Kandy', province: 'Central' },
+        { name: 'Kegalle', province: 'Sabaragamuwa' },
+        { name: 'Kilinochchi', province: 'Northern' },
+        { name: 'Kurunegala', province: 'North Western' },
+        { name: 'Mannar', province: 'Northern' },
+        { name: 'Matale', province: 'Central' },
+        { name: 'Matara', province: 'Southern' },
+        { name: 'Monaragala', province: 'Uva' },
+        { name: 'Mullaitivu', province: 'Northern' },
+        { name: 'Nuwara Eliya', province: 'Central' },
+        { name: 'Polonnaruwa', province: 'North Central' },
+        { name: 'Puttalam', province: 'North Western' },
+        { name: 'Rathnapura', province: 'Sabaragamuwa' },
+        { name: 'Trincomalee', province: 'Eastern' },
+        { name: 'Vavuniya', province: 'Northern' },
+    ];
+    
+    // Districts filtered by selected province
+    filteredDistricts: {name: string, province: string}[] = [];
 
     constructor(
         private router: Router,
@@ -29,53 +75,76 @@ export class ViewCentersComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
+        this.updateFilteredDistricts();
         this.fetchAllCenterDetails();
+        // Initialize with all districts
     }
 
-    fetchAllCenterDetails(province: string = this.selectProvince, district: string = this.selectDistrict, search: string = this.searchText) {
-        this.TargetSrv.getCenterDetails(province, district, search, this.currentPage, this.itemsPerPage).subscribe(
+    fetchAllCenterDetails(page: number = this.currentPage, limit: number = this.itemsPerPage, province: string = this.selectProvince, district: string = this.selectDistrict, search: string = this.searchText) {
+        this.TargetSrv.getCenterDetails(page, limit, province, district, search).subscribe(
             (res) => {
+                console.log(res);
                 this.itemsArr = res.items;
                 this.totalItems = res.totalItems;
                 this.countOfOfficers = res.items.length;
-
             }
         );
     }
 
     onPageChange(page: number) {
         this.currentPage = page;
-        this.fetchAllCenterDetails();
+        this.fetchAllCenterDetails(this.currentPage, this.itemsPerPage);
     }
 
     onSearch() {
         this.currentPage = 1; // Reset to first page on new search
-        this.fetchAllCenterDetails(this.selectProvince, this.selectDistrict, this.searchText);
+        this.fetchAllCenterDetails(this.currentPage, this.itemsPerPage, this.selectProvince, this.selectDistrict, this.searchText);
     }
 
     offSearch() {
         this.searchText = '';
-        this.fetchAllCenterDetails(this.selectProvince, this.selectDistrict, this.searchText);
+        this.fetchAllCenterDetails(this.currentPage, this.itemsPerPage, this.selectProvince, this.selectDistrict, this.searchText);
     }
 
     cancelProvince() {
         this.selectProvince = '';
-        this.fetchAllCenterDetails(this.selectProvince, this.selectDistrict);
+        this.selectDistrict = ''; // Also clear district when province is cleared
+        this.updateFilteredDistricts(); // Update district list
+        this.fetchAllCenterDetails(this.currentPage, this.itemsPerPage, this.selectProvince, this.selectDistrict);
     }
 
     filterProvince() {
-        this.fetchAllCenterDetails(this.selectProvince, this.selectDistrict);
+        this.selectDistrict = ''; // Clear district selection when province changes
+        this.updateFilteredDistricts(); // Update district list based on selected province
+        this.fetchAllCenterDetails(this.currentPage, this.itemsPerPage, this.selectProvince, this.selectDistrict);
     }
 
     cancelDistrict() {
         this.selectDistrict = '';
-        this.fetchAllCenterDetails(this.selectProvince, this.selectDistrict);
+        this.fetchAllCenterDetails(this.currentPage, this.itemsPerPage, this.selectProvince, this.selectDistrict);
     }
 
     filterDistrict() {
-        this.fetchAllCenterDetails(this.selectProvince, this.selectDistrict);
+        // When district is selected, automatically set the province
+        if (this.selectDistrict) {
+            const district = this.allDistricts.find(d => d.name === this.selectDistrict);
+            if (district) {
+                this.selectProvince = district.province;
+                // Update filtered districts based on the selected province
+                this.updateFilteredDistricts();
+            }
+        }
+        this.fetchAllCenterDetails(this.currentPage, this.itemsPerPage, this.selectProvince, this.selectDistrict);
     }
 
+    // Update the filtered districts based on selected province
+    updateFilteredDistricts() {
+        if (this.selectProvince) {
+            this.filteredDistricts = this.allDistricts.filter(d => d.province === this.selectProvince);
+        } else {
+            this.filteredDistricts = this.allDistricts;
+        }
+    }
 
     getTotalPages(): number {
         return Math.ceil(this.totalItems / this.itemsPerPage);

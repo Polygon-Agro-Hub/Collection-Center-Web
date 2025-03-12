@@ -10,56 +10,49 @@
 
             <p class="text-lg dark:text-white">Filter By</p>
 
-            <div class="relative w-46">
-                <div
-                class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
-                    <select [(ngModel)]="selectProvince" (change)="filterProvince()"
-                    class="block w-full appearance-none  dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
-                        <option value="" selected disabled>Province</option>
-                        <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                            value="Western">Western</option>
-                        <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                            value="Eastern">Eastern</option>
-                        <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                            value="Central">Central</option>
-                    </select>
-                    <button *ngIf="!selectProvince">
-                        <i class="fa-solid fa-angle-down text-lg mr-3"></i>
-                    </button>
-                    <button *ngIf="selectProvince" (click)="cancelProvince()">
-                        <i class="fa-solid fa-xmark text-lg mr-3"></i>
-                    </button>
-
+            <div class="flex gap-4">
+                <div class="relative w-46">
+                    <div
+                        class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
+                        <select [(ngModel)]="selectProvince" (change)="filterProvince()"
+                            class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
+                            <option value="" selected disabled>Province</option>
+                            <option *ngFor="let province of provinces"
+                                class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                                [value]="province">{{ province }}</option>
+                        </select>
+                        <button *ngIf="!selectProvince">
+                            <i class="fa-solid fa-angle-down text-lg mr-3"></i>
+                        </button>
+                        <button *ngIf="selectProvince" (click)="cancelProvince()">
+                            <i class="fa-solid fa-xmark text-lg mr-3"></i>
+                        </button>
+                    </div>
                 </div>
-            </div>
 
-            <div class="relative w-46">
-                <div
-                class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
-                    <select [(ngModel)]="selectDistrict" (change)="filterDistrict()" 
-                    class="block w-full appearance-none  dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
-                        <option value="" selected disabled>District</option>
-                        <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                            value="Gampaha">Gampaha</option>
-                        <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                            value="Colombo">Colombo</option>
-                        <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                            value="Kandy">Kandy</option>
-
-                    </select>
-                    <button *ngIf="!selectDistrict">
-                        <i class="fa-solid fa-angle-down text-lg mr-3"></i>
-                    </button>
-                    <button *ngIf="selectDistrict" (click)="cancelDistrict()">
-                        <i class="fa-solid fa-xmark text-lg mr-3"></i>
-                    </button>
-
+                <div class="relative w-46">
+                    <div
+                        class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
+                        <select [(ngModel)]="selectDistrict" (change)="filterDistrict()"
+                            class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
+                            <option value="" selected disabled>District</option>
+                            <option *ngFor="let district of filteredDistricts"
+                                class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                                [value]="district.name">{{ district.name }}</option>
+                        </select>
+                        <button *ngIf="!selectDistrict">
+                            <i class="fa-solid fa-angle-down text-lg mr-3"></i>
+                        </button>
+                        <button *ngIf="selectDistrict" (click)="cancelDistrict()">
+                            <i class="fa-solid fa-xmark text-lg mr-3"></i>
+                        </button>
+                    </div>
                 </div>
             </div>
 
             <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
-                <input type="text" placeholder="Search by Crop / Variety name.." [(ngModel)]="searchText"
-                class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
+                <input type="text" placeholder="Search by Reg Code / Center Name.." [(ngModel)]="searchText"
+                    class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
                 <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                     (click)="onSearch()">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -81,36 +74,38 @@
         </div>
 
     </div>
-    
-    
+
+
     <div class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
         <table class="w-full divide-y-2 overflow-hidden">
             <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
                 <tr>
-                    <th class="px-6 py-3 text-left font-medium">No</th>
-                    <th class="px-6 py-3 text-left font-medium">Reg Code</th>
-                    <th class="px-6 py-3 text-left font-medium">Center Name</th>
-                    <th class="px-6 py-3 text-left font-medium">Province</th>
-                    <th class="px-6 py-3 text-left font-medium">District</th>
-                    <th class="px-6 py-3 text-left font-medium">City</th>
-                    <th class="px-6 py-3 text-center font-medium">Contact number 1</th>
-                    <th class="px-6 py-3 text-left font-medium">CCM profiles</th>
-                    <th class="px-6 py-3 text-left font-medium">CCO profiles</th>
+                    <th class="px-6 py-3 text-left font-normal">No</th>
+                    <th class="px-6 py-3 text-left font-normal">Reg Code</th>
+                    <th class="px-6 py-3 text-left font-normal">Center Name</th>
+                    <th class="px-6 py-3 text-center font-normal">Province</th>
+                    <th class="px-6 py-3 text-center font-normal">District</th>
+                    <th class="px-6 py-3 text-center font-normal">City</th>
+                    <th class="px-6 py-3 text-center font-normal">Contact number-1</th>
+                    <th class="px-6 py-3 text-center font-normal">CCM Profiles</th>
+                    <th class="px-6 py-3 text-center font-normal">COO Profiles</th>
                 </tr>
             </thead>
             <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
-                <tr class="hover:bg-[#415CFF]" *ngFor="let item of itemsArr | paginate : { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index"
-                (click)="navigateToDashboard(item.id)"
-                >
-                    <td class="px-6 py-3 text-gray-900 dark:text-gray-300">{{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }}</td>
-                    <td class="px-6 py-3 text-gray-900 dark:text-gray-300">{{ item.regCode }}</td>
-                    <td class="px-6 py-3 text-gray-900 dark:text-gray-300">{{ item.centerName }}</td>
-                    <td class="px-6 py-3 text-gray-900 dark:text-gray-300">{{ item.province }}</td>
-                    <td class="px-6 py-3 text-gray-900 dark:text-gray-300">{{ item.district }}</td>
-                    <td class="px-6 py-3 text-gray-900 dark:text-gray-300">{{ item.city }}</td>
-                    <td class="px-6 py-3 text-center text-gray-900 dark:text-gray-300">{{ item.contact01 }}</td>
-                    <td class="px-6 py-3 text-gray-900 dark:text-gray-300">{{ item.CollectionOfficer }}</td>
-                    <td class="px-6 py-3 text-gray-900 dark:text-gray-300">{{ item.CustomerOfficer }}</td>
+                <tr class="hover:bg-[#415CFF] hover:text-white dark:text-gray-300"
+                    *ngFor="let item of itemsArr | paginate : { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index"
+                    (click)="navigateToDashboard(item.id)">
+                    <td class="px-6 py-3 font-medium ">
+                        {{ ('0' + (i + 1)).slice(-2) }}
+                    </td>
+                    <td class="px-6 py-3 font-medium ">{{ item.regCode }}</td>
+                    <td class="px-6 py-3 font-medium ">{{ item.centerName }}</td>
+                    <td class="px-6 py-3 font-medium text-center">{{ item.province }}</td>
+                    <td class="px-6 py-3 font-medium text-center">{{ item.district }}</td>
+                    <td class="px-6 py-3 font-medium text-center">{{ item.city }}</td>
+                    <td class="px-6 py-3 font-medium text-center ">{{ '+94' + item.contact01 }}</td>
+                    <td class="px-6 py-3 font-medium text-center">{{ item.CollectionCenterManager }}</td>
+                    <td class="px-6 py-3 font-medium text-center text-gray-900 dark:text-gray-300">{{ item.CollectionOfficer }}</td>
                 </tr>
             </tbody>
         </table>
@@ -122,10 +117,6 @@
         </pagination-controls>
     </div>
 
-    
+
 
 </div>
-
-
-
-            

@@ -6,11 +6,12 @@ import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { AuthService } from '../../../services/Auth-service/auth.service';
 import { TokenServiceService } from '../../../services/Token/token-service.service';
+import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css',
 })
@@ -18,14 +19,21 @@ export class LoginComponent {
   showPassword: boolean = false;
   loginObj: Login;
   disError: any;
+  isLoading: boolean = false;
 
 
-  constructor(private authService: AuthService, private http: HttpClient, private router: Router, private tokenService: TokenServiceService) {
+  constructor(
+    private authService: AuthService,
+    private http: HttpClient,
+    private router: Router,
+    private tokenService: TokenServiceService
+  ) {
     this.loginObj = new Login();
   }
 
   ngOnInit() {
-    // localStorage.removeItem('Login Token:');
+    this.tokenService.clearLoginDetails();
+    // localStorage.removeItem('LoginToken');
   }
 
 
@@ -60,6 +68,7 @@ export class LoginComponent {
     }
 
     if (this.loginObj.password && this.loginObj.userName) {
+      this.isLoading = true;
       this.authService.login(this.loginObj.userName, this.loginObj.password).subscribe(
         (res: any) => {
           Swal.fire({
@@ -70,6 +79,9 @@ export class LoginComponent {
             timer: 1500
           });
 
+
+          localStorage.setItem("CCLoginToken", res.token)
+
           // Save token details synchronously
           this.tokenService.saveLoginDetails(
             res.token,
@@ -79,6 +91,8 @@ export class LoginComponent {
             res.expiresIn,
             res.image
           );
+          this.isLoading = true;
+
 
           // Defer navigation to allow the token to be saved properly
           setTimeout(() => {

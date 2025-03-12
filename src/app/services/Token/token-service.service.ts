@@ -4,12 +4,12 @@ import { Injectable } from '@angular/core';
   providedIn: 'root'
 })
 export class TokenServiceService {
-  private readonly TOKEN_KEY = 'Login Token:';
-  private readonly USERNAME_KEY = 'userName:';
-  private readonly USERID_KEY = 'userId:';
-  private readonly ROLE_KEY = 'role:';
-  private readonly PROFILE_IMAGE = 'profileImage';
-  private readonly EXPIRATION_KEY = 'Token Expiration';
+  private readonly TOKEN_KEY = 'CCLoginToken';
+  private readonly USERNAME_KEY = 'CCuserName:';
+  private readonly USERID_KEY = 'CCuserId:';
+  private readonly ROLE_KEY = 'CCrole:';
+  private readonly PROFILE_IMAGE = 'CCprofileImage';
+  private readonly EXPIRATION_KEY = 'CCTokenExpiration';
 
 
 

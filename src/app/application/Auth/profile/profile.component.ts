@@ -3,11 +3,12 @@ import { AuthService } from '../../../services/Auth-service/auth.service';
 import { CommonModule } from '@angular/common';
 import { Router } from '@angular/router';
 import { TokenServiceService } from '../../../services/Token/token-service.service';
+import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-profile',
   standalone: true,
-  imports: [CommonModule],
+  imports: [CommonModule, LoadingSpinnerComponent],
   templateUrl: './profile.component.html',
   styleUrl: './profile.component.css',
 })
@@ -15,7 +16,7 @@ export class ProfileComponent implements OnInit {
   officerObj: Officer = new Officer();
 
   logingRole: string | null = null;
-
+  isLoading:boolean = true;
 
   constructor(
     private AuthSrv: AuthService,
@@ -33,6 +34,7 @@ export class ProfileComponent implements OnInit {
   fetchLoggedInUser() {
     this.AuthSrv.getLoggedInUser().subscribe((res: any) => {
       this.officerObj = res.officerData.collectionOfficer;
+      this.isLoading = false;
 
     });
   }

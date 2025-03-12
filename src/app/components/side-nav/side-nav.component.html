@@ -1,78 +1,75 @@
+<div class="flex flex-col h-full bg-white dark:bg-[#272F45] border-r transition-all">
+    <!-- Header -->
+    <div class="flex items-center gap-3 p-5 cursor-pointer" (click)="toggleSidebar()">
+        <img src="../../../assets/images/logo.png" class="w-10 h-10" />
+        <span [ngClass]="isCollapsed ? 'hidden' : 'block'" class="text-xl font-bold text-gray-800 dark:text-white">
+            4C Operator
+        </span>
+    </div>
 
-<div class="flex h-screen">
-    <!-- Sidebar -->
-    <div [ngClass]="isCollapsed ? 'w-20' : 'w-64'"
-        class="flex flex-col bg-white dark:bg-[#272F45] border-r transition-all duration-300">
-        <!-- Header -->
-        <div class="flex items-center gap-3 p-5 cursor-pointer" (click)="toggleSidebar()">
-            <img src="../../../assets/images/logo.png" class="w-10 h-10" />
-            <span [ngClass]="isCollapsed ? 'hidden' : 'block'" class="text-xl font-bold text-gray-800 dark:text-white">
-                4C Operator
-            </span>
-        </div>
-
-        <!-- Dynamic Menu -->
-        <ul class="flex-1 space-y-1 p-4">
+    <!-- Dynamic Menu -->
+    <div class="flex-1 overflow-y-auto scrollbar-none">
+        <ul class="space-y-1 p-4">
             <ng-container *ngFor="let item of filteredMenuItems">
                 <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]"
-                    [ngClass]="{ 'bg-[#EDF5FC]': isTabSelected(item.key) }"
-                    (click)="navigate(item.path, item.key)">
-                  
-                  <i [class]="item.icon + ' text-xl'" [ngClass]="{
+                    [ngClass]="{ 'bg-[#EDF5FC]': isTabSelected(item.key) }" (click)="navigate(item.path, item.key)">
+                    <i [class]="item.icon + ' text-xl'" [ngClass]="{
                         'text-[#415CFF]': isTabSelected(item.key),
                         'text-[#6B6B6B] dark:text-white': !isTabSelected(item.key),
                         'group-hover:text-[#415CFF]': true
                     }"></i>
-                    
-                  <span [ngClass]="{
+                    <span [ngClass]="{
                         'hidden': isCollapsed,
                         'text-[#415CFF]': isTabSelected(item.key),
                         'text-[#6B6B6B] dark:text-white': !isTabSelected(item.key),
                         'group-hover:text-[#415CFF]': true
                     }" class="text-lg font-normal">
-                    {{ item.label }}
-                  </span>
+                        {{ item.label }}
+                    </span>
                 </li>
-              </ng-container>
+            </ng-container>
         </ul>
+    </div>
 
-        <!-- Theme Toggle & Logout -->
-        <div class="mx-5 space-y-4">
-            <div *ngIf="!isCollapsed && isDarkTheme()" (click)="toggleTheme()"
-                class="flex flex-row justify-center items-center bg-[#303030] px-1 py-2 rounded-lg">
-                <div class="flex flex-row justify-center items-center shadow-lg px-3 py-1 rounded-lg mr-1">
-                    <i class="fas fa-sun text-gray-600 text-lg mx-2"></i>
-                    <p class="text-white">Light</p>
-                </div>
-                <div class="flex flex-row justify-center items-center bg-white shadow-lg px-3 py-1 rounded-lg ml-1">
-                    <i class="fas fa-moon text-gray-600 text-lg mx-2"></i>
-                    <p class="">Dark</p>
-                </div>
+    <!-- Theme Toggle & Logout -->
+    <div class="mx-5 space-y-4 pb-5">
+        <!-- Theme Toggle -->
+        <div *ngIf="!isCollapsed && isDarkTheme()" (click)="toggleTheme()"
+            class="flex flex-row justify-center items-center bg-[#303030] px-1 py-2 rounded-lg">
+            <div class="flex flex-row justify-center items-center shadow-lg px-3 py-1 rounded-lg mr-1">
+                <i class="fas fa-sun text-gray-600 text-lg mx-2"></i>
+                <p class="text-white">Light</p>
             </div>
-
-            <div *ngIf="!isCollapsed && !isDarkTheme()" (click)="toggleTheme()"
-                class="flex flex-row justify-center items-center bg-gray-100 px-1 py-2 rounded-lg">
-                <div class="flex flex-row justify-center items-center bg-white shadow-lg px-3 py-1 rounded-lg mr-1">
-                    <i class="fas fa-sun text-gray-600 text-lg mx-2"></i>
-                    <p class="">Light</p>
-                </div>
-                <div class="flex flex-row justify-center items-center shadow-lg px-3 py-1 rounded-lg ml-1">
-                    <i class="fas fa-moon text-gray-600 text-lg mx-2"></i>
-                    <p class="">Dark</p>
-                </div>
+            <div class="flex flex-row justify-center items-center bg-white shadow-lg px-3 py-1 rounded-lg ml-1">
+                <i class="fas fa-moon text-gray-600 text-lg mx-2"></i>
+                <p class="">Dark</p>
             </div>
-
-            <div *ngIf="isCollapsed && isDarkTheme()" (click)="toggleTheme()" class="flex flex-col justify-center items-center bg-[#303030] px-3 py-2 rounded-lg">
-                <div class="flex justify-center items-center bg-[#303030] shadow-lg px-1 py-1 rounded-lg mb-1">
-                    <i class="fas fa-sun text-white text-lg mx-1"></i>
-                </div>
-                <div class="flex justify-center items-center bg-white shadow-lg px-1 py-1 rounded-lg mt-1">
-                    <i class="fas fa-moon text-gray-600 text-lg mx-2"></i>
-                </div>
         </div>
 
+        <div *ngIf="!isCollapsed && !isDarkTheme()" (click)="toggleTheme()"
+            class="flex flex-row justify-center items-center bg-gray-100 px-1 py-2 rounded-lg">
+            <div class="flex flex-row justify-center items-center bg-white shadow-lg px-3 py-1 rounded-lg mr-1">
+                <i class="fas fa-sun text-gray-600 text-lg mx-2"></i>
+                <p class="">Light</p>
+            </div>
+            <div class="flex flex-row justify-center items-center shadow-lg px-3 py-1 rounded-lg ml-1">
+                <i class="fas fa-moon text-gray-600 text-lg mx-2"></i>
+                <p class="">Dark</p>
+            </div>
+        </div>
 
-        <div *ngIf="isCollapsed && !isDarkTheme()" (click)="toggleTheme()" class="flex flex-col justify-center items-center bg-gray-100 px-3 py-2 rounded-lg">
+        <div *ngIf="isCollapsed && isDarkTheme()" (click)="toggleTheme()"
+            class="flex flex-col justify-center items-center bg-[#303030] px-3 py-2 rounded-lg">
+            <div class="flex justify-center items-center bg-[#303030] shadow-lg px-1 py-1 rounded-lg mb-1">
+                <i class="fas fa-sun text-white text-lg mx-1"></i>
+            </div>
+            <div class="flex justify-center items-center bg-white shadow-lg px-1 py-1 rounded-lg mt-1">
+                <i class="fas fa-moon text-gray-600 text-lg mx-2"></i>
+            </div>
+        </div>
+
+        <div *ngIf="isCollapsed && !isDarkTheme()" (click)="toggleTheme()"
+            class="flex flex-col justify-center items-center bg-gray-100 px-3 py-2 rounded-lg">
             <div class="flex justify-center items-center bg-white shadow-lg px-1 py-1 rounded-lg mb-1">
                 <i class="fas fa-sun text-gray-600 text-lg mx-1"></i>
             </div>
@@ -81,14 +78,19 @@
             </div>
         </div>
 
-            <hr />
+        <hr />
 
-            <!-- Logout Button (Always visible) -->
-            <button *ngIf="!isCollapsed" class="flex items-center gap-4 text-gray-700 dark:text-white hover:text-red-500 pb-4 pl-5" (click)="logOut()">
+        <!-- Logout Button -->
+        <div>
+            <button *ngIf="!isCollapsed"
+                class="flex items-center gap-x-4 text-gray-700 dark:text-white hover:text-red-500 pb-4 pl-5"
+                (click)="logOut()">
                 <i class="fas fa-sign-out-alt text-lg"></i>
                 <span class="block">Logout</span>
             </button>
-            <button *ngIf="isCollapsed" class="flex items-center gap-4 text-gray-700 dark:text-white hover:text-red-500 pb-4 pl-5">
+            <button *ngIf="isCollapsed"
+                class="flex items-center gap-4 text-gray-700 dark:text-white hover:text-red-500 pb-4 pl-5"
+                (click)="logOut()">
                 <i class="fas fa-sign-out-alt text-lg"></i>
             </button>
         </div>

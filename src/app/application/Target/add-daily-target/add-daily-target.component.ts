@@ -5,11 +5,12 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
+import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-add-daily-target',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent],
   templateUrl: './add-daily-target.component.html',
   styleUrl: './add-daily-target.component.css',
   providers: [DatePipe]
@@ -27,16 +28,17 @@ export class AddDailyTargetComponent implements OnInit {
   isVerityVisible = true;
   isAddColumn = false;
   selectCropId: number | string = '';
-  isAddButton:boolean = true;
+  isAddButton: boolean = true;
 
 
-  totalTime = 10;
+  totalTime = 300;
   remainingTime = this.totalTime;
   intervalId: any;
   progress = 283;
 
   isSaveButtonDisabled = false;
   iscountDown = true;
+  isLoading: boolean = false;
 
 
   constructor(
@@ -56,13 +58,16 @@ export class AddDailyTargetComponent implements OnInit {
   }
 
   getAllCropVerity() {
+    this.isLoading = true;
     this.TargetSrv.getCropVerity().subscribe(
       (res) => {
         this.cropsObj = res;
-        
+        this.isLoading = false;
+
       },
       (error) => {
-        
+        this.isLoading = false;
+        this.toastSrv.error("Try Again Later!")
       }
     );
   }
@@ -76,7 +81,7 @@ export class AddDailyTargetComponent implements OnInit {
     if (sample.length > 0 && selectedCrop) {
       this.InputObj.cropName = selectedCrop.cropNameEnglish;
       this.selectedVarieties = sample[0].variety;
-      
+
       this.isVerityVisible = false;
     } else {
       // console.log("No crop found with selectId:", this.selectCropId);
@@ -89,7 +94,7 @@ export class AddDailyTargetComponent implements OnInit {
 
     if (sample) {
       this.InputObj.VarietyName = sample.varietyEnglish;
-      
+
     } else {
       // console.log("No crop found with selectId:", this.selectCropId);
     }
@@ -97,21 +102,28 @@ export class AddDailyTargetComponent implements OnInit {
   }
 
   goButton() {
+    this.isLoading = true;
     if (this.dailyTartgetObj.TargetItems.some(item => item.varietyId === this.InputObj.varietyId)) {
       this.toastSrv.warning(`The variety has already been added.`);
       this.selectCropId = '';
       this.InputObj = new TargetItem();
+      this.isLoading = false;
+
       return;
     }
     this.isAddColumn = true;
+    this.isLoading = false;
+
   }
 
   AddButton() {
-    if(this.isAddButton){
+    this.isLoading = true;
+    if (this.isAddButton) {
       this.toastSrv.warning("You have already added a weight value. Please delete the existing one and re-enter a new value.");
+      this.isLoading = false;
       return;
     }
-    
+
     if (!this.InputObj.varietyId || this.InputObj.qtyA < 0 || this.InputObj.qtyB < 0 || this.InputObj.qtyC < 0) {
       // this.toastSrv.warning("")
       Swal.fire({
@@ -119,6 +131,7 @@ export class AddDailyTargetComponent implements OnInit {
         title: 'Invalid Input',
         text: 'Please ensure all fields are filled and quantities are non-negative.',
       });
+      this.isLoading = false;
       return;
     } else {
       this.dailyTartgetObj.TargetItems.push(
@@ -136,6 +149,8 @@ export class AddDailyTargetComponent implements OnInit {
       this.InputObj = new TargetItem();
       this.selectCropId = ''
       this.isAddColumn = false;
+      this.isLoading = false;
+
 
     }
   }
@@ -153,9 +168,10 @@ export class AddDailyTargetComponent implements OnInit {
         cancelButtonText: 'No, keep it'
       }).then((result) => {
         if (result.isConfirmed) {
+          this.isLoading = true;
           this.dailyTartgetObj.TargetItems.splice(index, 1);
           this.toastSrv.success('The item has been removed.')
-
+          this.isLoading = false;
         }
       });
     }
@@ -168,22 +184,28 @@ export class AddDailyTargetComponent implements OnInit {
       this.startTimer();
       return;
     }
-
+    this.isLoading = true;
     console.log(this.dailyTartgetObj);
     if (this.dailyTartgetObj.TargetItems.length === 0) {
       Swal.fire('warning', 'Pleace fill all required feilds', 'warning')
+      this.isLoading = false;
+      return;
+
     } else {
       this.TargetSrv.createDailyTarget(this.dailyTartgetObj).subscribe(
         (res: any) => {
           if (res.status) {
             this.toastSrv.success(res.message)
+            this.isLoading = false;
             this.router.navigate(['/target/view-target'])
           } else {
+            this.isLoading = false;
             this.toastSrv.error(res.message)
 
           }
         },
         (error: any) => {
+          this.isLoading = false;
           this.toastSrv.error('There was an error creating the Daily Targets')
         }
       );
@@ -238,7 +260,7 @@ export class AddDailyTargetComponent implements OnInit {
         this.selectCropId = '';
         this.isVerityVisible = true;
         this.isAddColumn = false;
-        this.router.navigate(['/target/view-target'])
+        this.router.navigate(['/centers'])
 
       }
     });
@@ -248,14 +270,14 @@ export class AddDailyTargetComponent implements OnInit {
     this.intervalId = setInterval(() => {
       if (this.remainingTime > 0) {
         this.remainingTime--;
-        this.progress = (this.remainingTime / this.totalTime) * 283; 
+        this.progress = (this.remainingTime / this.totalTime) * 283;
       } else {
         clearInterval(this.intervalId);
         this.isSaveButtonDisabled = false;
       }
     }, 1000);
   }
-  
+
 
   getFormattedTime(): string {
     const minutes = Math.floor(this.remainingTime / 60);
@@ -269,8 +291,8 @@ export class AddDailyTargetComponent implements OnInit {
     }
   }
 
-  checkAddButton(){
-    if(this.InputObj.qtyA > 0 || this.InputObj.qtyB > 0 ||this.InputObj.qtyC > 0){
+  checkAddButton() {
+    if (this.InputObj.qtyA > 0 || this.InputObj.qtyB > 0 || this.InputObj.qtyC > 0) {
       this.isAddButton = false;
     }
   }

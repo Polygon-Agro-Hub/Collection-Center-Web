@@ -1,172 +1,180 @@
-<p class="font-semibold text-[#424242] mx-5 flex space-x-8 ml-2 mb-3 dark:text-white">
-    <span >Centers</span>
-    <span>Center Dashboard</span>
-    <span>Center Officers</span>
-</p>
+<app-loading-spinner *ngIf="isLoading"/>
 
-<div class="w-full px-10 py-7 bg-tileLight shadow-lg rounded-lg dark:bg-[#363636]">
-    <div class="flex flex-row items-center justify-between">
-        <div class="flex flex-row gap-3">
-            <h1 class="font-semibold text-black dark:text-white">All ({{ totalItems }})</h1>
-        </div>
-        <div class="flex flex-row items-center gap-5 ">
-            <i class="fa-solid fa-list text-2xl dark:text-white"></i>
+<div *ngIf="!isLoading">
+    <p class="font-semibold text-[#424242] mx-5 flex space-x-8 ml-2 mb-3 dark:text-white">
+        <span>Centers</span>
+        <span>Center Dashboard</span>
+        <span>Center Officers</span>
+    </p>
 
-            <p class="font-normal dark:text-white">Filter By</p>
+    <div class="w-full px-10 py-7 bg-tileLight shadow-lg rounded-lg dark:bg-[#363636]">
+        <div class="flex flex-row items-center justify-between">
+            <div class="flex flex-row gap-3">
+                <h1 class="font-semibold text-black dark:text-white">All ({{ totalItems }})</h1>
+            </div>
+            <div class="flex flex-row items-center gap-5 ">
+                <i class="fa-solid fa-list text-2xl dark:text-white"></i>
 
-            <div class="relative w-46">
-                <div
-                    class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
-                    <select (change)="applyRoleFilters()" [(ngModel)]="selectRole"
-                        class="block w-full appearance-none  dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
-                        <option value="" selected disabled>Role</option>
-                        <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                            value="Collection Officer">Collection Officer</option>
-                        <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                            value="Customer Officer">Customer Officer</option>
-                        <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                            value="Collection Center Manager">Collection Center Officer</option>
+                <p class="font-normal dark:text-white">Filter By</p>
 
-                    </select>
-                    <button *ngIf="!selectRole">
-                        <i class="fa-solid fa-angle-down text-lg mr-3"></i>
-                    </button>
-                    <button *ngIf="selectRole" (click)="clearRoleFilter()">
-                        <i class="fa-solid fa-xmark text-lg mr-3"></i>
-                    </button>
+                <div class="relative w-46">
+                    <div
+                        class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
+                        <select (change)="applyRoleFilters()" [(ngModel)]="selectRole"
+                            class="block w-full appearance-none  dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
+                            <option value="" selected disabled>Role</option>
+                            <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                                value="Collection Officer">Collection Officer</option>
+                            <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                                value="Customer Officer">Customer Officer</option>
+                            <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                                value="Collection Center Manager">Collection Center Officer</option>
 
+                        </select>
+                        <button *ngIf="!selectRole">
+                            <i class="fa-solid fa-angle-down text-lg mr-3"></i>
+                        </button>
+                        <button *ngIf="selectRole" (click)="clearRoleFilter()">
+                            <i class="fa-solid fa-xmark text-lg mr-3"></i>
+                        </button>
+
+                    </div>
                 </div>
-            </div>
 
-            <div class="relative w-36">
-                <div
-                    class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
-                    <select (change)="applyStatusFilters()" [(ngModel)]="selectStatus"
-                        class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
-                        <option value="" selected disabled>Status</option>
-                        <option value="Approved"
-                            class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">
-                            Approved</option>
-                        <option value="Not Approved"
-                            class=" V text-textLight dark:text-textDark hover:bg-gray-300">
-                            Not Approved</option>
-                        <option value="Rejected"
-                            class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">
-                            Rejected</option>
+                <div class="relative w-36">
+                    <div
+                        class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
+                        <select (change)="applyStatusFilters()" [(ngModel)]="selectStatus"
+                            class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
+                            <option value="" selected disabled>Status</option>
+                            <option value="Approved"
+                                class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">
+                                Approved</option>
+                            <option value="Not Approved" class=" V text-textLight dark:text-textDark hover:bg-gray-300">
+                                Not Approved</option>
+                            <option value="Rejected"
+                                class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">
+                                Rejected</option>
 
-                    </select>
-                    <button *ngIf="!selectStatus">
-                        <i class="fa-solid fa-angle-down text-lg mr-3"></i>
-                    </button>
-                    <button *ngIf="selectStatus" (click)="clearStatusFilter()">
-                        <i class="fa-solid fa-xmark text-lg mr-3"></i>
-                    </button>
+                        </select>
+                        <button *ngIf="!selectStatus">
+                            <i class="fa-solid fa-angle-down text-lg mr-3"></i>
+                        </button>
+                        <button *ngIf="selectStatus" (click)="clearStatusFilter()">
+                            <i class="fa-solid fa-xmark text-lg mr-3"></i>
+                        </button>
 
+                    </div>
                 </div>
+
+
+                <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+                    <input type="text" placeholder="Search by EMP ID, First / Last name,NIC" [(ngModel)]="searchText"
+                        class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
+                    <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
+                        (click)="onSearch()">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
+                        </svg>
+                    </button>
+                    <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none"
+                        (click)="offSearch()">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
             </div>
 
+        </div>
 
-            <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
-                <input type="text" placeholder="Search by EMP ID, First / Last name,NIC" [(ngModel)]="searchText"
-                    class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
-                <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
-                    (click)="onSearch()">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
-                    </svg>
-                </button>
-                <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none"
-                    (click)="offSearch()">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
+        <div *ngIf="!hasData" class="flex justify-center items-center mt-8 mr-5 w-full h-[500px]">
+            <p class="text-3xl text-center font-semibold dark:text-white">No Data Availabale</p>
+        </div>
+
+        <div *ngIf="hasData">
+            <div class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+                <table class="w-full divide-y-2 border-[1px] border-gray-300 rounded-lg overflow-hidden">
+                    <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
+                        <tr>
+                            <th class="px-2 py-3 text-left text-sm font-medium">No</th>
+                            <th class="px-3 py-3 text-left text-sm font-medium">EMP ID</th>
+                            <th class="px-3 py-3 text-left text-sm font-medium">First Name</th>
+                            <th class="px-3 py-3 text-left text-sm font-medium">Last Name</th>
+
+                            <th class="px-3 py-3 text-left text-sm font-medium">Role</th>
+                            <th class="px-3 py-3 text-left text-sm font-medium">Status</th>
+                            <th class="px-3 py-3 text-left text-sm font-medium">Phone</th>
+                            <th class="px-3 py-3 text-left text-sm font-medium">NIC</th>
+                            <th class="px-3 py-3 text-center text-sm font-medium">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
+                        <tr *ngFor="let officer of OfficerArr | paginate
+                    : {
+                        itemsPerPage: itemsPerPage,
+                        currentPage: page,
+                        totalItems: totalItems
+                      };  let i = index">
+                            <td class="px-2 py-4 text-sm text-gray-900 dark:text-textDark">{{ (i + 1) < 10 ? '0' + (i +
+                                    1) : (i + 1) }}</td>
+                            <td class="px-3 py-4 text-sm text-gray-900 dark:text-textDark">{{ officer.empId }}</td>
+                            <td class="px-3 py-4 text-sm text-gray-900 dark:text-textDark0">{{ officer.firstNameEnglish
+                                }}
+                            </td>
+                            <td class="px-3 py-4 text-sm text-gray-900 dark:text-textDark">{{ officer.lastNameEnglish }}
+                            </td>
+
+                            <td class="px-3 py-4 text-sm text-gray-900 dark:text-textDark">{{ officer.jobRole }}</td>
+                            <td class="px-3 py-4">
+                                <div class="flex justify-center items-center w-full" (click)="openPopup(officer)">
+                                    <span *ngIf="officer.status === 'Approved'"
+                                        class="inline-block w-[120px] text-center px-3 py-2 bg-[#C8E0FF] text-[#415CFF] text-sm font-medium rounded-md">
+                                        Approved
+                                    </span>
+                                    <span *ngIf="officer.status === 'Not Approved'"
+                                        class="inline-block w-[120px] text-center px-3 py-2 bg-[#F8FFA6] text-[#A8A100] text-sm font-medium rounded-md">
+                                        Not Approved
+                                    </span>
+                                    <span *ngIf="officer.status === 'Rejected'"
+                                        class="inline-block w-[120px] text-center px-3 py-2 bg-[#FFB9B7] text-[#D16D6A] text-sm font-medium rounded-md">
+                                        Rejected
+                                    </span>
+                                </div>
+                            </td>
+                            <td class="px-3  py-4 text-sm text-gray-900 dark:text-gray-300">{{officer.phoneNumber01}}
+                            </td>
+                            <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{officer.nic}}</td>
+                            <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300 flex flex-row gap-4">
+                                <button class="text-gray-400 hover:text-gray-600"
+                                    (click)="navigateToProfile(officer.id)">
+                                    <i class="fa-regular fa-file text-lg"></i>
+                                </button>
+                                <button class="text-[#415CFF] hover:text-blue-500" (click)="navigateToEdit(officer.id)">
+                                    <i class="fa-solid fa-pen-to-square text-lg"></i>
+                                </button>
+                                <button class="text-[#FF415C] hover:text-red-500"
+                                    (click)="deleteCollectionOfficer(officer.id)">
+                                    <i class="fa-solid fa-trash text-lg"></i>
+                                </button>
+
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
             </div>
 
-        </div>
-
-    </div>
-
-    <div *ngIf="!hasData" class="flex justify-center items-center mt-8 mr-5 w-full h-[500px]">
-        <p class="text-3xl text-center font-semibold dark:text-white">No Data Availabale</p>
-    </div>
-
-    <div *ngIf="hasData">
-        <div class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
-            <table class="w-full divide-y-2 border-[1px] border-gray-300 rounded-lg overflow-hidden">
-                <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
-                    <tr>
-                        <th class="px-2 py-3 text-left text-sm font-medium">No</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium">EMP ID</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium">First Name</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium">Last Name</th>
-
-                        <th class="px-3 py-3 text-left text-sm font-medium">Role</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium">Status</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium">Phone</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium">NIC</th>
-                        <th class="px-3 py-3 text-center text-sm font-medium">Actions</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
-                    <tr *ngFor="let officer of OfficerArr | paginate
-                : {
-                    itemsPerPage: itemsPerPage,
-                    currentPage: page,
-                    totalItems: totalItems
-                  };  let i = index">
-                        <td class="px-2 py-4 text-sm text-gray-900 dark:text-textDark">{{ (i + 1) < 10 ? '0' + (i + 1) :
-                                (i + 1) }}</td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-textDark">{{ officer.empId }}</td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-textDark0">{{ officer.firstNameEnglish }}
-                        </td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-textDark">{{ officer.lastNameEnglish }}
-                        </td>
-
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-textDark">{{ officer.jobRole }}</td>
-                        <td class="px-3 py-4">
-                            <div class="flex justify-center items-center w-full" (click)="openPopup(officer)">
-                                <span *ngIf="officer.status === 'Approved'"
-                                    class="inline-block w-[120px] text-center px-3 py-2 bg-[#C8E0FF] text-[#415CFF] text-sm font-medium rounded-md">
-                                    Approved
-                                </span>
-                                <span *ngIf="officer.status === 'Not Approved'"
-                                    class="inline-block w-[120px] text-center px-3 py-2 bg-[#F8FFA6] text-[#A8A100] text-sm font-medium rounded-md">
-                                    Not Approved
-                                </span>
-                                <span *ngIf="officer.status === 'Rejected'"
-                                    class="inline-block w-[120px] text-center px-3 py-2 bg-[#FFB9B7] text-[#D16D6A] text-sm font-medium rounded-md">
-                                    Rejected
-                                </span>
-                            </div>
-                        </td>
-                        <td class="px-3  py-4 text-sm text-gray-900 dark:text-gray-300">{{officer.phoneNumber01}}</td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{officer.nic}}</td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300 flex flex-row gap-4">
-                            <button class="text-gray-400 hover:text-gray-600" (click)="navigateToProfile(officer.id)">
-                                <i class="fa-regular fa-file text-lg"></i>
-                            </button>
-                            <button class="text-[#415CFF] hover:text-blue-500" (click)="navigateToEdit(officer.id)">
-                                <i class="fa-solid fa-pen-to-square text-lg"></i>
-                            </button>
-                            <button class="text-[#FF415C] hover:text-red-500" (click)="deleteCollectionOfficer(officer.id)">
-                                <i class="fa-solid fa-trash text-lg"></i>
-                            </button>
-
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="flex items-center justify-end my-5 mr-5">
-            <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
-                [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
-                [screenReaderCurrentLabel]="'Youre on page'">
-            </pagination-controls>
+            <div class="flex items-center justify-end my-5 mr-5">
+                <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true"
+                    [previousLabel]="'Previous'" [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'"
+                    [screenReaderPageLabel]="'page'" [screenReaderCurrentLabel]="'Youre on page'">
+                </pagination-controls>
+            </div>
         </div>
     </div>
+</div>

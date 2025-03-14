@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TargetService } from '../../../services/Target-service/target.service';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
+import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-edit-my-target',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent],
   templateUrl: './edit-my-target.component.html',
   styleUrl: './edit-my-target.component.css',
   providers: [DatePipe]
@@ -25,11 +26,14 @@ export class EditMyTargetComponent implements OnInit {
   searchTerm: string = '';
   selectedOfficerId!: number | null;
 
+
+  isLoading: boolean = true;
+
   constructor(
     private router: Router,
     private TargetSrv: TargetService,
     private toastSrv: ToastAlertService,
-    private route:ActivatedRoute
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
@@ -38,6 +42,7 @@ export class EditMyTargetComponent implements OnInit {
   }
 
   fetchTargetDetalis() {
+    this.isLoading = true;
     this.TargetSrv.getOfficerTartgetItem(this.targetItemId).subscribe(
       (res) => {
 
@@ -46,6 +51,8 @@ export class EditMyTargetComponent implements OnInit {
         this.amount = res.resultTarget.todo;
         this.officerArr = res.resultOfficer;
         this.filteredOfficers = [...this.officerArr];
+
+        this.isLoading = false;
       }
     );
   }
@@ -69,13 +76,16 @@ export class EditMyTargetComponent implements OnInit {
   }
 
   onSubmit() {
-    
+    this.isLoading = true;
+
     if (!this.selectedOfficerId) {
+      this.isLoading = false;
       this.toastSrv.warning('Pleace fill all feild!')
       return;
     }
 
     if (this.passAmount > this.amount) {
+      this.isLoading = false;
       this.toastSrv.warning(`The maximum amount you can pass <b>${this.amount}</b>Kg`)
       return;
     }
@@ -84,15 +94,17 @@ export class EditMyTargetComponent implements OnInit {
       (res) => {
         if (res.status) {
           this.toastSrv.success(res.message);
+          this.isLoading = false;
           this.router.navigate(['/targets'])
         } else {
+          this.isLoading = false;
           this.toastSrv.error(res.message);
         }
       }
     )
   }
 
-  onCancel(){
+  onCancel() {
     this.searchTerm = '';
     this.fetchTargetDetalis();
     this.toastSrv.warning("Cancel this process")

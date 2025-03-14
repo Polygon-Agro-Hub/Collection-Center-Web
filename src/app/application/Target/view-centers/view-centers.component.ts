@@ -86,50 +86,48 @@ export class ViewCentersComponent implements OnInit {
 
     fetchAllCenterDetails(province: string = this.selectProvince, district: string = this.selectDistrict, search: string = this.searchText) {
         this.isLoading = true;
-        this.TargetSrv.getCenterDetails(province, district, search, this.currentPage, this.itemsPerPage).subscribe(
+        this.TargetSrv.getCenterDetails(this.currentPage, this.itemsPerPage, province, district, search).subscribe(
             (res) => {
                 console.log(res);
                 this.itemsArr = res.items;
                 this.totalItems = res.totalItems;
                 this.countOfOfficers = res.items.length;
                 this.isLoading = false;
-
-
             }
         );
     }
 
     onPageChange(page: number) {
         this.currentPage = page;
-        this.fetchAllCenterDetails(this.currentPage, this.itemsPerPage);
+        this.fetchAllCenterDetails();
     }
 
     onSearch() {
         this.currentPage = 1; // Reset to first page on new search
-        this.fetchAllCenterDetails(this.currentPage, this.itemsPerPage, this.selectProvince, this.selectDistrict, this.searchText);
+        this.fetchAllCenterDetails();
     }
 
     offSearch() {
         this.searchText = '';
-        this.fetchAllCenterDetails(this.currentPage, this.itemsPerPage, this.selectProvince, this.selectDistrict, this.searchText);
+        this.fetchAllCenterDetails();
     }
 
     cancelProvince() {
         this.selectProvince = '';
         this.selectDistrict = ''; // Also clear district when province is cleared
         this.updateFilteredDistricts(); // Update district list
-        this.fetchAllCenterDetails(this.currentPage, this.itemsPerPage, this.selectProvince, this.selectDistrict);
+        this.fetchAllCenterDetails();
     }
 
     filterProvince() {
         this.selectDistrict = ''; // Clear district selection when province changes
         this.updateFilteredDistricts(); // Update district list based on selected province
-        this.fetchAllCenterDetails(this.currentPage, this.itemsPerPage, this.selectProvince, this.selectDistrict);
+        this.fetchAllCenterDetails();
     }
 
     cancelDistrict() {
         this.selectDistrict = '';
-        this.fetchAllCenterDetails(this.currentPage, this.itemsPerPage, this.selectProvince, this.selectDistrict);
+        this.fetchAllCenterDetails();
     }
 
     filterDistrict() {
@@ -142,7 +140,7 @@ export class ViewCentersComponent implements OnInit {
                 this.updateFilteredDistricts();
             }
         }
-        this.fetchAllCenterDetails(this.currentPage, this.itemsPerPage, this.selectProvince, this.selectDistrict);
+        this.fetchAllCenterDetails();
     }
 
     // Update the filtered districts based on selected province

@@ -5,11 +5,12 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import Swal from 'sweetalert2';
+import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-view-recived-complaint',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent],
   templateUrl: './view-recived-complaint.component.html',
   styleUrl: './view-recived-complaint.component.css',
   providers: [DatePipe]
@@ -28,6 +29,7 @@ export class ViewRecivedComplaintComponent implements OnInit {
   phone2!: string;
 
   isReplyView: boolean = false;
+  isLoading: boolean = true;
 
 
   constructor(
@@ -44,6 +46,7 @@ export class ViewRecivedComplaintComponent implements OnInit {
   }
 
   fetchComplainById(id: number) {
+    this.isLoading = true;
     this.ComplainSrv.getComplainById(id).subscribe(
       (res) => {
         this.compalintObj = res.data
@@ -51,13 +54,14 @@ export class ViewRecivedComplaintComponent implements OnInit {
         this.phone1 = this.compalintObj.phoneCode01 + " - " + this.compalintObj.phoneNumber01;
         this.phone2 = this.compalintObj.phoneCode02 + " - " + this.compalintObj.phoneNumber02;
 
-        
+
         if (res.items.length === 0) {
           this.hasData = false;
         } else {
           this.hasData = true;
 
         }
+        this.isLoading = false;
 
       }
     )
@@ -75,12 +79,15 @@ export class ViewRecivedComplaintComponent implements OnInit {
       cancelButtonText: 'No, cancel'
     }).then((result) => {
       if (result.isConfirmed) {
+        this.isLoading = true
         this.ComplainSrv.forwordComplain(this.compalinId).subscribe(
           (res) => {
             if (res.status) {
+              this.isLoading = false;
               this.toastSrv.success(res.message)
               this.router.navigate(['/cch-complaints']);
             } else {
+              this.isLoading = false;
               this.toastSrv.error(res.message)
 
             }
@@ -99,18 +106,20 @@ export class ViewRecivedComplaintComponent implements OnInit {
   }
 
   sendReply() {
-    if(!this.replyObj.reply){
+    if (!this.replyObj.reply) {
       return this.toastSrv.warning('Pleace fill reply before send!')
     }
-
+    this.isLoading = true
     this.replyObj.id = this.compalinId;
 
     this.ComplainSrv.replyToComplain(this.replyObj).subscribe(
       (res) => {
         if (res.status) {
+          this.isLoading = false;
           this.toastSrv.success(res.message)
           this.router.navigate(['/cch-complaints']);
         } else {
+          this.isLoading = false;
           this.toastSrv.error(res.message)
 
         }

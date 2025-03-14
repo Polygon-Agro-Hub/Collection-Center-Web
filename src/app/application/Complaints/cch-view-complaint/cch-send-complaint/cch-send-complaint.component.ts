@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ComplaintsService } from '../../../../services/Complaints-Service/complaints.service';
+import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-cch-send-complaint',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxPaginationModule],
+  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent],
   templateUrl: './cch-send-complaint.component.html',
   styleUrl: './cch-send-complaint.component.css',
   providers: [DatePipe]
@@ -31,6 +32,8 @@ export class CchSendComplaintComponent implements OnInit {
   itemsPerPage: number = 10;
   hasData: boolean = true;
 
+  isLoading: boolean = true;
+
 
   constructor(
     private router: Router,
@@ -42,6 +45,7 @@ export class CchSendComplaintComponent implements OnInit {
   }
 
   fetchAllreciveComplaint(page: number = 1, limit: number = this.itemsPerPage, status: string = this.selectStatus, emptype: string = this.selectEmployee, search: string = this.searchText) {
+    this.isLoading = true;
     this.ComplainSrv.getAllSentCCHComplains(page, limit, status, emptype, search).subscribe(
       (res) => {
         this.complainArr = res.items
@@ -53,16 +57,19 @@ export class CchSendComplaintComponent implements OnInit {
           this.hasData = true;
 
         }
+        this.isLoading = false;
+
 
       }
     )
   }
 
   fetchGetReply(id: number) {
+    this.isLoading = true;
     this.ComplainSrv.getComplainById(id).subscribe(
       (res) => {
-        
         this.replyObj = res.data;
+        this.isLoading = false;
       }
     )
   }

@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ComplaintsService } from '../../../../services/Complaints-Service/complaints.service';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-sended-complaint',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxPaginationModule],
+  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent],
   templateUrl: './sended-complaint.component.html',
   styleUrl: './sended-complaint.component.css',
   providers: [DatePipe]
@@ -30,6 +31,8 @@ export class SendedComplaintComponent implements OnInit {
   totalItems: number = 0;
   itemsPerPage: number = 10;
   hasData: boolean = true;
+  
+isLoading:boolean = true;
 
 
   constructor(
@@ -42,6 +45,7 @@ export class SendedComplaintComponent implements OnInit {
   }
 
   fetchAllreciveComplaint(page: number = 1, limit: number = this.itemsPerPage, status: string = this.selectStatus, emptype: string = this.selectEmployee, search: string = this.searchText) {
+    this.isLoading = true;
     this.ComplainSrv.getAllSentComplains(page, limit, status, emptype, search).subscribe(
       (res) => {
         this.complainArr = res.items
@@ -53,8 +57,9 @@ export class SendedComplaintComponent implements OnInit {
           this.hasData = false;
         } else {
           this.hasData = true;
-
         }
+
+        this.isLoading = false;
 
       }
     )
@@ -63,7 +68,6 @@ export class SendedComplaintComponent implements OnInit {
   fetchGetReply(id: number) {
     this.ComplainSrv.getComplainById(id).subscribe(
       (res) => {
-        
         this.replyObj = res.data;
       }
     )

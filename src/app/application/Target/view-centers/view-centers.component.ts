@@ -6,11 +6,12 @@ import { Router } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { DropdownModule } from 'primeng/dropdown';
 import { TargetService } from '../../../services/Target-service/target.service'
+import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
     selector: 'app-view-centers',
     standalone: true,
-    imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule],
+    imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, LoadingSpinnerComponent],
     templateUrl: './view-centers.component.html',
     styleUrl: './view-centers.component.css'
 })
@@ -23,6 +24,9 @@ export class ViewCentersComponent implements OnInit {
     itemsPerPage: number = 10;
     totalItems: number = 0;
     countOfOfficers: number = 0;
+
+    isLoading: boolean = true;
+
     
     // Define all Sri Lanka provinces
     provinces: string[] = [
@@ -80,13 +84,17 @@ export class ViewCentersComponent implements OnInit {
         // Initialize with all districts
     }
 
-    fetchAllCenterDetails(page: number = this.currentPage, limit: number = this.itemsPerPage, province: string = this.selectProvince, district: string = this.selectDistrict, search: string = this.searchText) {
-        this.TargetSrv.getCenterDetails(page, limit, province, district, search).subscribe(
+    fetchAllCenterDetails(province: string = this.selectProvince, district: string = this.selectDistrict, search: string = this.searchText) {
+        this.isLoading = true;
+        this.TargetSrv.getCenterDetails(province, district, search, this.currentPage, this.itemsPerPage).subscribe(
             (res) => {
                 console.log(res);
                 this.itemsArr = res.items;
                 this.totalItems = res.totalItems;
                 this.countOfOfficers = res.items.length;
+                this.isLoading = false;
+
+
             }
         );
     }

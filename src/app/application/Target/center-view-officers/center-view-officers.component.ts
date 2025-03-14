@@ -8,15 +8,16 @@ import { TargetService } from '../../../services/Target-service/target.service';
 import { ManageOfficersService } from '../../../services/manage-officers-service/manage-officers.service';
 import Swal from 'sweetalert2';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
+import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-center-view-officers',
   standalone: true,
-  imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule],
+  imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, LoadingSpinnerComponent],
   templateUrl: './center-view-officers.component.html',
   styleUrl: './center-view-officers.component.css'
 })
-export class CenterViewOfficersComponent implements OnInit{
+export class CenterViewOfficersComponent implements OnInit {
   centerId: number = 1;
   OfficerArr!: CollectionOfficers[];
   hasData: boolean = true;
@@ -29,6 +30,9 @@ export class CenterViewOfficersComponent implements OnInit{
   page: number = 1;
   totalItems: number = 0;
   itemsPerPage: number = 10;
+
+
+  isLoading: boolean = true;
 
   constructor(
     private router: Router,
@@ -45,28 +49,31 @@ export class CenterViewOfficersComponent implements OnInit{
     this.router.navigate([`${path}`])
   }
 
-  navigateToEdit(id:number){
+  navigateToEdit(id: number) {
     this.router.navigate([`/centers/edit-officer/${id}`])
   }
-  navigateToProfile(id:number){
+  navigateToProfile(id: number) {
     this.router.navigate([`/centers/officer-profile/${id}`])
 
   }
 
   getAllOfficers(centerId: number, page: number = 1, limit: number = this.itemsPerPage, role: string = '', status: string = '', searchText: string = '') {
+    this.isLoading = true;
     this.targetSrv.getOfficers(centerId, page, limit, role, status, searchText).subscribe(
       (res) => {
-        
-        
+
+
         // console.log(res.items);
         // console.log(res.total);
         this.OfficerArr = res.items
         this.totalItems = res.total
         if (res.items.length === 0) {
           this.hasData = false;
-        }else{
+        } else {
           this.hasData = true;
         }
+    this.isLoading = false;
+
 
       },
       (error) => {
@@ -111,7 +118,7 @@ export class CenterViewOfficersComponent implements OnInit{
 
   openPopup(officer: any) {
     this.isPopupVisible = true;
-  
+
     // HTML structure for the popup
     const tableHtml = `
       <div class="container mx-auto">
@@ -125,7 +132,7 @@ export class CenterViewOfficersComponent implements OnInit{
         </div>
       </div>
     `;
-  
+
     Swal.fire({
       html: tableHtml,
       showConfirmButton: false, // Hide default confirm button
@@ -139,7 +146,7 @@ export class CenterViewOfficersComponent implements OnInit{
             // this.isLoading = true;
             this.ManageOficerSrv.ChangeStatus(officer.id, 'Approved').subscribe(
               (res) => {
-                
+
                 // this.isLoading = false;
                 if (res.status) {
                   this.toastSrv.success('The collection was approved successfully.')
@@ -155,13 +162,13 @@ export class CenterViewOfficersComponent implements OnInit{
               }
             );
           });
-  
+
         // Handle the "Reject" button click
         document
           .getElementById('rejectButton')
           ?.addEventListener('click', () => {
             // this.isPopupVisible = false;
-            
+
             this.ManageOficerSrv.ChangeStatus(officer.id, 'Rejected').subscribe(
               (res) => {
                 // this.isLoading = false;
@@ -171,7 +178,7 @@ export class CenterViewOfficersComponent implements OnInit{
                   this.getAllOfficers(this.centerId, this.page, this.itemsPerPage, this.selectStatus, this.selectRole, this.searchText);
                   Swal.close();
                 } else {
-                this.toastSrv.error(res.message)
+                  this.toastSrv.error(res.message)
 
                 }
               },
@@ -187,7 +194,7 @@ export class CenterViewOfficersComponent implements OnInit{
   }
 
   applyRoleFilters() {
-    
+
     this.getAllOfficers(this.centerId, this.page, this.itemsPerPage, this.selectRole, this.selectStatus, this.searchText)
 
   }
@@ -198,7 +205,7 @@ export class CenterViewOfficersComponent implements OnInit{
   }
 
   applyStatusFilters() {
-    
+
     this.getAllOfficers(this.centerId, this.page, this.itemsPerPage, this.selectRole, this.selectStatus, this.searchText)
   }
 

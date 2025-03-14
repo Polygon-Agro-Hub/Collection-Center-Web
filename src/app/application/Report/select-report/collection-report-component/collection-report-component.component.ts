@@ -5,11 +5,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ReportServiceService } from '../../../../services/Report-service/report-service.service';
 import { TokenServiceService } from '../../../../services/Token/token-service.service';
+import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-collection-report-component',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxPaginationModule],
+  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent],
   templateUrl: './collection-report-component.component.html',
   styleUrl: './collection-report-component.component.css'
 })
@@ -24,6 +25,7 @@ export class CollectionReportComponentComponent implements OnInit {
   searchText: string = '';
 
   logingRole: string | null = null;
+  isLoading: boolean = true;
 
 
   constructor(
@@ -55,6 +57,7 @@ export class CollectionReportComponentComponent implements OnInit {
         } else {
           this.hasData = true;
         }
+        this.isLoading = false;
 
       }
     )
@@ -62,13 +65,11 @@ export class CollectionReportComponentComponent implements OnInit {
 
   onSearch() {
     this.fetchAllOfficers(this.page, this.itemsPerPage, this.searchText);
-
   }
 
   offSearch() {
     this.searchText = '';
     this.fetchAllOfficers(this.page, this.itemsPerPage, this.searchText);
-
   }
 
   onPageChange(event: number) {

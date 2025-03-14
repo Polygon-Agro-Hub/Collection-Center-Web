@@ -1,4 +1,7 @@
-<div class="w-full px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg">
+<app-loading-spinner *ngIf="isLoading"/>
+
+
+<div *ngIf="!isLoading" class="w-full px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg">
     <div class="flex flex-col items-center justify-center my-4">
         <p class="text-lg text-black font-bold my-2">EMP ID : {{targetObj.empId}}</p>
         <p class="text-black font-semibold">Ends At : {{targetObj.toDate | date:'yyyy/mm/dd' }} {{targetObj.toTime}}</p>
@@ -24,7 +27,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">
         <div>
             <label for="variety" class="block text-sm font-medium text-gray-700 dark:text-textDark my-1">
-                The maximum amount you can pass (kg):
+                Select Short Stock Assignee : 
             </label>
             <div class="relative">
                 <input 

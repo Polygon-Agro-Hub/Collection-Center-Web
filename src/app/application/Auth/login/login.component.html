@@ -1,4 +1,6 @@
-<div class="flex flex-col md:flex-row justify-between items-center min-h-full box-border relative">
+<app-loading-spinner *ngIf="isLoading"/>
+
+<div *ngIf="!isLoading" class="flex flex-col md:flex-row justify-between items-center min-h-full box-border relative">
     <!-- Left Section -->
     <div class="mobile-header w-full md:hidden flex flex-col items-center mb-6">
         <img src="" alt="">

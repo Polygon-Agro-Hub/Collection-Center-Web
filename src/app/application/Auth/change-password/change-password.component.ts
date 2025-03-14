@@ -5,19 +5,22 @@ import { Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
+import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-change-password',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent],
   templateUrl: './change-password.component.html',
   styleUrls: ['./change-password.component.css'], // Corrected styleUrl to styleUrls
 })
-export class ChangePasswordComponent implements OnInit{
+export class ChangePasswordComponent implements OnInit {
   showPassword: boolean = false;
   showPassword1: boolean = false;
-  changePassword:string = '';
-  conformPassword:string = '';
+  changePassword: string = '';
+  conformPassword: string = '';
+
+  isLoading: boolean = false;
 
   constructor(private authService: AuthService, private http: HttpClient, private router: Router) {
     // this.changePassword = new ChangePassword();
@@ -38,9 +41,6 @@ export class ChangePasswordComponent implements OnInit{
    * Update the user's password with SweetAlert for notifications
    */
   updatePassword(): void {
-    
-    
-
     if (!this.changePassword || !this.conformPassword) {
       Swal.fire({
         icon: 'error',
@@ -50,14 +50,13 @@ export class ChangePasswordComponent implements OnInit{
       return;
     }
 
-    if(this.changePassword !== this.conformPassword){
+    if (this.changePassword !== this.conformPassword) {
       Swal.fire({
         icon: 'error',
         title: 'Error',
         text: 'New Password and Conform Password does not match!',
       });
       return;
-
     }
 
     Swal.fire({
@@ -70,8 +69,10 @@ export class ChangePasswordComponent implements OnInit{
       confirmButtonText: 'Yes, update it!',
     }).then((result) => {
       if (result.isConfirmed) {
+        this.isLoading = true;
         this.authService.changePassword(this.changePassword).subscribe(
           (response) => {
+            this.isLoading = false;
             Swal.fire({
               icon: 'success',
               title: 'Success',
@@ -81,13 +82,13 @@ export class ChangePasswordComponent implements OnInit{
             });
           },
           (error) => {
+            this.isLoading = false;
             Swal.fire({
               icon: 'error',
               title: 'Error',
               text: 'Failed to update password. Please try again.',
             });
             console.log(error);
-            
           }
         );
       }

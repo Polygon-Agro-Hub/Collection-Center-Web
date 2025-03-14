@@ -8,11 +8,12 @@ import { saveAs } from 'file-saver';
 import { ToastrService } from 'ngx-toastr';  // Import ToastrService
 import { ToastrModule } from 'ngx-toastr';   // Import ToastrModule
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
+import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-download-target',
   standalone: true,
-  imports: [CommonModule, FormsModule, ToastrModule], 
+  imports: [CommonModule, FormsModule, ToastrModule, LoadingSpinnerComponent],
   templateUrl: './download-target.component.html',
   styleUrls: ['./download-target.component.css'],
   providers: [DatePipe]
@@ -24,6 +25,8 @@ export class DownloadTargetComponent {
   toDate: Date | string = '';
 
   hasData: boolean = false;
+  isLoading: boolean = false;
+
 
   // toaster = inject(ToastrService); 
 
@@ -34,6 +37,7 @@ export class DownloadTargetComponent {
   ) { }
 
   fetchDownloadTarget() {
+    this.isLoading = true
     this.TargetSrv.downloadDailyTarget(this.fromDate, this.toDate).subscribe(
       (res) => {
         if (res.status) {
@@ -42,14 +46,15 @@ export class DownloadTargetComponent {
         } else {
           this.hasData = false;
         }
+        this.isLoading = false;
       }
     );
   }
 
   goBtn() {
     if (!this.fromDate || !this.toDate) {
-      this.toastSrv.warning("Please fill in all fields"); 
-      return; 
+      this.toastSrv.warning("Please fill in all fields");
+      return;
     }
 
     this.fetchDownloadTarget();
@@ -82,7 +87,7 @@ export class DownloadTargetComponent {
     saveAs(data, `Target-Report (${this.fromDate} - ${this.toDate}).xlsx`);
     this.toastSrv.success(`Target-Report (${this.fromDate} - ${this.toDate}).xlsx DownLoaded`)
   }
- 
+
 }
 
 class DailyTargets {

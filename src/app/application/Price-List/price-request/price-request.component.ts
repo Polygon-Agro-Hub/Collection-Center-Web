@@ -6,11 +6,12 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { DropdownModule } from 'primeng/dropdown';
 import { PriceListService } from '../../../services/Price-List-Service/price-list.service';
 import Swal from 'sweetalert2';
+import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-price-request',
   standalone: true,
-  imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule],
+  imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, LoadingSpinnerComponent],
   templateUrl: './price-request.component.html',
   styleUrl: './price-request.component.css',
   providers: [DatePipe]
@@ -29,7 +30,7 @@ export class PriceRequestComponent implements OnInit {
   selectStatus: string = '';
   today!: string;
   isPopupVisible: boolean = false
-
+  isLoading:boolean = true;
 
   constructor(
     private router: Router,
@@ -54,6 +55,7 @@ export class PriceRequestComponent implements OnInit {
           this.hasData = true;
 
         }
+        this.isLoading = false;
       }
     )
   }
@@ -93,6 +95,7 @@ export class PriceRequestComponent implements OnInit {
             this.isPopupVisible = false;
             this.PriceListSrv.ChangeRequestStatus(item.id, 'Approved').subscribe(
               (res) => {
+                this.isLoading = true;
                 if (res.status) {
                   Swal.fire({
                     icon: 'success',
@@ -101,8 +104,9 @@ export class PriceRequestComponent implements OnInit {
                     showConfirmButton: false,
                     timer: 3000,
                   });
-                  this.fetchAllRequestPrice(this.page, this.itemsPerPage);
+                  this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade, this.selectStatus, this.searchText);
                 } else {
+                this.isLoading = false;
                   Swal.fire({
                     icon: 'error',
                     title: 'Error!',
@@ -113,7 +117,7 @@ export class PriceRequestComponent implements OnInit {
                 }
               },
               (err) => {
-                // this.isLoading = false;
+                this.isLoading = false;
                 Swal.fire({
                   icon: 'error',
                   title: 'Error!',
@@ -130,10 +134,9 @@ export class PriceRequestComponent implements OnInit {
           .getElementById('rejectButton')
           ?.addEventListener('click', () => {
             // this.isPopupVisible = false;
-            // this.isLoading = true;
+            this.isLoading = true;
             this.PriceListSrv.ChangeRequestStatus(item.id, 'Rejected').subscribe(
               (res) => {
-                // this.isLoading = false;
                 if (res.status) {
                   Swal.fire({
                     icon: 'success',
@@ -142,8 +145,9 @@ export class PriceRequestComponent implements OnInit {
                     showConfirmButton: false,
                     timer: 3000,
                   });
-                  this.fetchAllRequestPrice(this.page, this.itemsPerPage);
+                  this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade, this.selectStatus, this.searchText);
                 } else {
+                this.isLoading = false;
                   Swal.fire({
                     icon: 'error',
                     title: 'Error!',
@@ -154,7 +158,7 @@ export class PriceRequestComponent implements OnInit {
                 }
               },
               (err) => {
-                // this.isLoading = false;
+                this.isLoading = false;
                 Swal.fire({
                   icon: 'error',
                   title: 'Error!',

@@ -1,31 +1,52 @@
+/* Spinner Overlay */
 .spinner-overlay {
     position: fixed;
     top: 0;
     left: 0;
     width: 100%;
     height: 100%;
+    background-color: transparent; /* Transparent background */
     display: flex;
     justify-content: center;
     align-items: center;
-    background: rgba(255, 255, 255, 0.7);
-    z-index: 1000;
-    /* Ensures the spinner is on top of other content */
+    z-index: 1000; /* Ensure it's on top */
 }
 
-.spinner {
-    border: 8px solid #f3f3f3;
+/* Wave Spinner Container */
+.wave-spinner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 60px;
+    height: 40px;
+}
+
+/* Dots */
+.wave-spinner .dot {
+    width: 12px;
+    height: 12px;
+    background-color: #007bff; /* Blue color */
     border-radius: 50%;
-    border-top: 8px solid #3980C0;
-    width: 100px;
-    height: 100px;
-    animation: spin 1s linear infinite;
+    animation: wave 1.2s ease-in-out infinite;
 }
 
-@keyframes spin {
-    0% {
-        transform: rotate(0deg);
+/* Delays for Each Dot */
+.wave-spinner .dot:nth-child(1) {
+    animation-delay: 0s;
+}
+.wave-spinner .dot:nth-child(2) {
+    animation-delay: 0.2s;
+}
+.wave-spinner .dot:nth-child(3) {
+    animation-delay: 0.4s;
+}
+
+/* Keyframes for Wave Animation */
+@keyframes wave {
+    0%, 60%, 100% {
+        transform: translateY(0);
     }
-    100% {
-        transform: rotate(360deg);
+    30% {
+        transform: translateY(-15px); /* Move dots upward */
     }
 }

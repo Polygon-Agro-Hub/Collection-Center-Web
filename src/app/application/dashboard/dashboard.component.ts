@@ -3,11 +3,12 @@ import { DashboardService } from '../../services/Dashbord-service/dashbord.servi
 import { CommonModule, DatePipe } from '@angular/common';
 import { Chart } from 'chart.js/auto';
 import { FormsModule } from '@angular/forms';
+import { LoadingSpinnerComponent } from '../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent],
   templateUrl: './dashboard.component.html',
   styleUrls: ['./dashboard.component.css'],
   providers: [DatePipe],
@@ -20,6 +21,9 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   activityLogs!: ActiveData[];
   chart: any;
   activeButton: string = 'week';
+
+  isLoading: boolean = true;
+
 
   constructor(
     private dashboardService: DashboardService,
@@ -37,44 +41,49 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   }
 
   fetchOfficerCounts(): void {
+    this.isLoading = true;
     this.dashboardService.getOfficerCounts().subscribe(
       (data) => {
         this.COOCount = data.COOCount.COOCount;
         this.CUOCount = data.CUOCount.CUOCount;
         this.activityLogs = data.activities.map((log: any) => {
-          log.updateAt = this.formatDate(log.updateAt);  // Time only format
+          log.updateAt = this.formatDate(log.updateAt); 
+          this.isLoading = false; // Time only format
           return log;
         });
+        this.isLoading = false; 
+        
       },
       (error) => {
+        this.isLoading = false;
         console.error('Error fetching officer counts', error);
       }
     );
   }
-  
+
   formatDate(dateString: string, format: string = 'h:mm a'): string {
     const formattedDate = this.datePipe.transform(dateString, format);
     return formattedDate ? formattedDate : 'Unknown time';
   }
-  
+
 
   fetchChart(filter: string) {
     this.activeButton = filter;
-    
+
     this.dashboardService.getChartData(filter).subscribe(
       (response: any) => {
-        
+
         this.totals = response;
 
-       
+
         const labels = this.totals.map(item => item.date);
         const data = this.totals.map(item => item.totCount);
 
-        
+
         const canvas = document.getElementById('MyChart') as HTMLCanvasElement;
 
         if (canvas) {
-         
+
           if (this.chart) {
             this.chart.destroy();
           }
@@ -82,11 +91,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           this.chart = new Chart(canvas, {
             type: 'line',
             data: {
-              labels: labels, 
+              labels: labels,
               datasets: [
                 {
                   label: "",
-                  data: data, 
+                  data: data,
                   borderColor: "#4E97FD",
                   backgroundColor: "#6F64A766",
                   fill: true,
@@ -130,9 +139,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
           });
         } else {
           console.error('Canvas element not found');
+          this.isLoading = false
         }
       },
       (error) => {
+        this.isLoading = false
         console.error('Error fetching chart data:', error);
       }
     );
@@ -142,9 +153,11 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   updateChart() {
     if (this.chart) {
+      this.isLoading = true
       this.chart.data.labels = this.totals.map((item) => item.date);
       this.chart.data.datasets[0].data = this.totals.map((item) => item.totCount);
       this.chart.update();
+      this.isLoading = false;
     }
   }
 }

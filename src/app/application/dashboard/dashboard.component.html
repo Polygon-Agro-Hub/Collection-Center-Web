@@ -1,77 +1,86 @@
 
-<div class="my-5 dark:bg-blacks">
-    <h2 class="text-lg font-semibold mb-4 dark:text-[#FFFFFF]">Dashboard</h2>
-    <div class="flex space-x-4">
-        <div class="bg-white shadow-md rounded-lg p-6 text-center border dark:bg-[#363636]">
-            <h3 class="text-sm font-medium text-gray-500 dark:text-white ">Total COO</h3>
-            <p class="text-2xl font-bold text-black mt-2 dark:text-white">{{ COOCount }}</p>
-        </div>
-        <div class="bg-white shadow-md rounded-lg p-6 text-center border dark:bg-[#363636]">
-            <h3 class="text-sm font-medium text-gray-500 dark:text-white">Total CUO</h3>
-            <p class="text-2xl font-bold text-black mt-2 dark:text-white">{{ CUOCount }}</p>
+<app-loading-spinner *ngIf="isLoading"/>
+
+<div *ngIf="!isLoading">
+    <div class="my-5 dark:bg-blacks">
+        <h2 class="text-lg font-semibold mb-4 dark:text-[#FFFFFF]">Dashboard</h2>
+        <div class="flex space-x-4">
+            <div class="bg-white shadow-md rounded-lg p-6 text-center border dark:bg-[#363636]">
+                <h3 class="text-sm font-medium text-gray-500 dark:text-white ">Total COO</h3>
+                <p class="text-2xl font-bold text-black mt-2 dark:text-white">{{ COOCount }}</p>
+            </div>
+            <div class="bg-white shadow-md rounded-lg p-6 text-center border dark:bg-[#363636]">
+                <h3 class="text-sm font-medium text-gray-500 dark:text-white">Total CUO</h3>
+                <p class="text-2xl font-bold text-black mt-2 dark:text-white">{{ CUOCount }}</p>
+            </div>
         </div>
     </div>
-</div>
 
-<div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-xl">
-    <div class="flex flex-row items-center justify-between mb-8">
-        <h2 class="text-lg font-semibold mb-4 dark:text-white" >Collection Statistics</h2>
+    <div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-xl">
+        <div class="flex flex-row items-center justify-between mb-8">
+            <h2 class="text-lg font-semibold mb-4 dark:text-white">Collection Statistics</h2>
 
-        <div class="flex flex-row items-center gap-1 bg-[#F5F6F6] rounded-lg dark:bg-[#1D1D1F] dark:text-[#FFFFFF]">
-            <button 
-              [ngClass]="{'bg-[#E0E0E0] shadow-lg rounded-lg border-[2px] border-gray-300 dark:border-gray-600 dark-border-[3px] dark:bg-[#2B2B2B] dark:text-[#FFFFFF]': activeButton === 'week', 'bg-[#F5F6F6]': activeButton !== 'week'}" 
-              class="px-3 py-2 font-semibold w-18 dark:bg-[#1D1D1F] dark:text-[#FFFFFF]" 
-              (click)="fetchChart('week')">
-              week
-            </button>
-            <button 
-              [ngClass]="{'bg-[#E0E0E0] shadow-lg rounded-lg border-[2px] border-gray-300 dark:border-gray-600 dark-border-[3px] dark:bg-[#2B2B2B] dark:text-[#FFFFFF]': activeButton === 'month', 'bg-[#F5F6F6]': activeButton !== 'month'}" 
-              class="px-3 py-2 font-semibold w-18 dark:bg-[#1D1D1F] dark:text-[#FFFFFF]" 
-              (click)="fetchChart('month')">
-              month
-            </button>
-            <button 
-              [ngClass]="{'bg-[#E0E0E0] shadow-lg rounded-lg border-[2px] border-gray-300 dark:border-gray-600 dark-border-[3px] dark:bg-[#2B2B2B] dark:text-[#FFFFFF]': activeButton === 'year', 'bg-[#F5F6F6]': activeButton !== 'year'}" 
-              class="px-3 py-2 font-semibold w-18 dark:bg-[#1D1D1F] dark:text-[#FFFFFF]" 
-              (click)="fetchChart('year')">
-              year
-            </button>
-          </div>
-          
+            <div class="flex flex-row items-center gap-1 bg-[#F5F6F6] rounded-lg dark:bg-[#1D1D1F] dark:text-[#FFFFFF]">
+                <button
+                    [ngClass]="{'bg-[#E0E0E0] shadow-lg rounded-lg border-[2px] border-gray-300 dark:border-gray-600 dark-border-[3px] dark:bg-[#2B2B2B] dark:text-[#FFFFFF]': activeButton === 'week', 'bg-[#F5F6F6]': activeButton !== 'week'}"
+                    class="px-3 py-2 font-semibold w-18 dark:bg-[#1D1D1F] dark:text-[#FFFFFF]"
+                    (click)="fetchChart('week')">
+                    week
+                </button>
+                <button
+                    [ngClass]="{'bg-[#E0E0E0] shadow-lg rounded-lg border-[2px] border-gray-300 dark:border-gray-600 dark-border-[3px] dark:bg-[#2B2B2B] dark:text-[#FFFFFF]': activeButton === 'month', 'bg-[#F5F6F6]': activeButton !== 'month'}"
+                    class="px-3 py-2 font-semibold w-18 dark:bg-[#1D1D1F] dark:text-[#FFFFFF]"
+                    (click)="fetchChart('month')">
+                    month
+                </button>
+                <button
+                    [ngClass]="{'bg-[#E0E0E0] shadow-lg rounded-lg border-[2px] border-gray-300 dark:border-gray-600 dark-border-[3px] dark:bg-[#2B2B2B] dark:text-[#FFFFFF]': activeButton === 'year', 'bg-[#F5F6F6]': activeButton !== 'year'}"
+                    class="px-3 py-2 font-semibold w-18 dark:bg-[#1D1D1F] dark:text-[#FFFFFF]"
+                    (click)="fetchChart('year')">
+                    year
+                </button>
+            </div>
 
-    </div>
 
-    <div class="dashboard">
+        </div>
 
-        <!-- <div class="flex justify-center space-x-4 mt-6">
+        <div class="dashboard">
+
+            <!-- <div class="flex justify-center space-x-4 mt-6">
             <button class="bg-blue-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" (click)="fetchChart('week')">Last 7 Days</button>
             <button class="bg-blue-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" (click)="fetchChart('month')">Last 30 Days</button>
             <button class="bg-blue-500 hover:bg-green-700 text-white font-bold py-2 px-4 rounded" (click)="fetchChart('year')">By Month</button>
         </div> -->
-  
 
-    <div>
-        <div>
-            
-            <div class=" bg-[#FFFFFF] dark:bg-[#363638] p-5 rounded-lg text-center text-[#888888] dark:text-[#FFFFFF]">
-                <canvas id="MyChart" class="w-full"></canvas>
+
+            <div>
+                <div>
+
+                    <div
+                        class=" bg-[#FFFFFF] dark:bg-[#363638] p-5 rounded-lg text-center text-[#888888] dark:text-[#FFFFFF]">
+                        <canvas id="MyChart" class="w-full"></canvas>
+                    </div>
+                </div>
             </div>
-          </div>
-    </div>
 
-    <div class="p-4">
-        <h3 class="text-blue-500 underline decoration-offset-custom my-3 dark:text-[#FFFFFF] dark:decoration-[#FFFFFF]">Activity</h3>
-        <hr class="my-2 dark:border-gray-400 border-[1px]" />
-        <ul class="my-2 list-disc pl-12">
-            <li class="text-[#636D81] dark:text-[#636D81] my-3" *ngFor="let log of activityLogs">
-                You changed the price of
-                <span class="text-black font-bold dark:text-gray-300">{{ log.cropNameEnglish }} {{ log.varietyNameEnglish }}</span> grade
-                <span class="font-bold text-black dark:text-gray-300">{{ log.grade }} </span> from
-                <span class="font-bold text-black dark:text-gray-300"> Rs.{{ log.price }}</span> to
-                <span class="font-bold text-black dark:text-gray-300">Rs.{{ log.updatedPrice }}</span>
-                <br />
-                {{ log.updateAt }}
-            </li>
-        </ul>
+            <div class="p-4">
+                <h3
+                    class="text-blue-500 underline decoration-offset-custom my-3 dark:text-[#FFFFFF] dark:decoration-[#FFFFFF]">
+                    Activity</h3>
+                <hr class="my-2 dark:border-gray-400 border-[1px]" />
+                <ul class="my-2 list-disc pl-12">
+                    <li class="text-[#636D81] dark:text-[#636D81] my-3" *ngFor="let log of activityLogs">
+                        You changed the price of
+                        <span class="text-black font-bold dark:text-gray-300">{{ log.cropNameEnglish }} {{
+                            log.varietyNameEnglish }}</span> grade
+                        <span class="font-bold text-black dark:text-gray-300">{{ log.grade }} </span> from
+                        <span class="font-bold text-black dark:text-gray-300"> Rs.{{ log.price }}</span> to
+                        <span class="font-bold text-black dark:text-gray-300">Rs.{{ log.updatedPrice }}</span>
+                        <br />
+                        {{ log.updateAt }}
+                    </li>
+                </ul>
+            </div>
+        </div>
+
     </div>
-</div>

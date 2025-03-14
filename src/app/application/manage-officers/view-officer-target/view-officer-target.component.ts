@@ -5,11 +5,12 @@ import { FormsModule } from '@angular/forms';
 import { TargetService } from '../../../services/Target-service/target.service';
 import { DropdownModule } from 'primeng/dropdown';
 import { TokenServiceService } from '../../../services/Token/token-service.service';
+import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-view-officer-target',
   standalone: true,
-  imports: [CommonModule, FormsModule, DropdownModule],
+  imports: [CommonModule, FormsModule, DropdownModule, LoadingSpinnerComponent],
   templateUrl: './view-officer-target.component.html',
   styleUrl: './view-officer-target.component.css',
   providers: [DatePipe]
@@ -24,6 +25,7 @@ export class ViewOfficerTargetComponent implements OnInit {
   searchText: string = '';
 
   logingRole: string | null = null;
+  isLoading: boolean = true;
 
   constructor(
     private TargetSrv: TargetService,
@@ -43,17 +45,16 @@ export class ViewOfficerTargetComponent implements OnInit {
   }
 
   fetchSelectedOfficerTarget(officerId: number, status: string = this.selectStatus, search: string = this.searchText) {
+    this.isLoading = true;
     this.TargetSrv.getSelectedOfficerTargetData(officerId, status, search).subscribe(
       (res) => {
-
-
         this.selectedOfficerDataArr = res.items;
-
         if (res.items.length === 0) {
           this.hasData = false;
         } else {
           this.hasData = true;
         }
+        this.isLoading = false;
       }
     )
   }

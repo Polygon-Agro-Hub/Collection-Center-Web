@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { ManageOfficersService } from '../../../services/manage-officers-service/manage-officers.service';
 import { Router } from '@angular/router';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
+import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-claim-officer',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent],
   templateUrl: './claim-officer.component.html',
   styleUrl: './claim-officer.component.css'
 })
@@ -19,6 +20,8 @@ export class ClaimOfficerComponent implements OnInit {
   inputId: string = '';
   isOfficerExist: boolean = false;
   hasData!: boolean
+
+  isLoading:boolean = false;
 
 
   constructor(
@@ -35,6 +38,8 @@ export class ClaimOfficerComponent implements OnInit {
     if (!this.inputId) {
       return this.toastSrv.warning('Pleace enter valid employee id!');
     }
+
+    this.isLoading = true;
     let empId;
     if (this.selectJobRole === 'Customer Officer') {
       empId = 'CUO' + this.inputId
@@ -47,21 +52,27 @@ export class ClaimOfficerComponent implements OnInit {
           this.officerObj = res.data
           this.isOfficerExist = true
           this.hasData = false
+          this.isLoading = false;
         } else {
           this.isOfficerExist = false;
           this.hasData = true
+          this.isLoading = false;
+
         }
       }
     )
   }
 
   cliamBtn(id: number) {
+    this.isLoading = true;
     this.ManageOficerSrv.claimOfficer(id).subscribe(
       (res) => {
         if (res.status) {
+          this.isLoading = false;
           this.toastSrv.success(`${this.officerObj.firstNameEnglish} ${this.officerObj.lastNameEnglish} (${this.officerObj.empId}) Claim Succcessfull`);
           this.router.navigate(['/manage-officers/view-officer'])
         } else {
+          this.isLoading = false;
           this.toastSrv.error(`${this.officerObj.firstNameEnglish} ${this.officerObj.lastNameEnglish} (${this.officerObj.empId}) Claim Unscccessfull!`);
         }
       }

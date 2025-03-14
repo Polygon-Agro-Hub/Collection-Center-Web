@@ -1,4 +1,6 @@
-<div class="mx-auto p-6 bg-white dark:bg-tileBlack rounded-lg shadow-mg">
+<app-loading-spinner *ngIf="isLoading"/>
+
+<div *ngIf="!isLoading" class="mx-auto p-6 bg-white dark:bg-tileBlack rounded-lg shadow-mg">
     <form #PageOneForm="ngForm" (ngSubmit)="onSubmitForm(PageOneForm)">
 
         <div *ngIf="selectedPage === 'pageOne'">

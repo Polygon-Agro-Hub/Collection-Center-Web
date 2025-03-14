@@ -5,11 +5,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ManageOfficersService } from '../../../services/manage-officers-service/manage-officers.service';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { TargetService } from '../../../services/Target-service/target.service';
+import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-edit-officer-target',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, LoadingSpinnerComponent],
   templateUrl: './edit-officer-target.component.html',
   styleUrl: './edit-officer-target.component.css'
 })
@@ -24,6 +25,7 @@ export class EditOfficerTargetComponent {
 
   searchTerm: string = '';
   selectedOfficerId!: number | null;
+  isLoading: boolean = true;
 
   constructor(
     private router: Router,
@@ -38,14 +40,17 @@ export class EditOfficerTargetComponent {
   }
 
   fetchTargetDetalis() {
+    this.isLoading = true;
     this.ManageOficerSrv.getTargetDetails(this.targetItemId).subscribe(
       (res) => {
-       
+
         this.targetObj = res.resultTarget;
         this.passAmount = res.resultTarget.todo;
         this.amount = res.resultTarget.todo;
         this.officerArr = res.resultOfficer;
         this.filteredOfficers = [...this.officerArr];
+        this.isLoading = false;
+
       }
     );
   }
@@ -69,13 +74,15 @@ export class EditOfficerTargetComponent {
   }
 
   onSubmit() {
-    
+
     if (!this.selectedOfficerId) {
       this.toastSrv.warning('Pleace fill all feild!')
       return;
     }
+    this.isLoading = true;
 
     if (this.passAmount > this.amount) {
+      this.isLoading = false;
       this.toastSrv.warning(`The maximum amount you can pass <b>${this.amount}</b>Kg`)
       return;
     }
@@ -83,16 +90,18 @@ export class EditOfficerTargetComponent {
     this.ManageOficerSrv.editOfficerTarget(this.selectedOfficerId, this.targetItemId, this.passAmount).subscribe(
       (res) => {
         if (res.status) {
+          this.isLoading = false;
           this.toastSrv.success(res.message);
           this.router.navigate([`/manage-officers/view-officer-target/${this.targetItemId}`])
         } else {
+          this.isLoading = false;
           this.toastSrv.error(res.message);
         }
       }
     )
   }
 
-  onCancel(){
+  onCancel() {
     this.searchTerm = '';
     this.fetchTargetDetalis();
     this.toastSrv.warning("Cancel this process")

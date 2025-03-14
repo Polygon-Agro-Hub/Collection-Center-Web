@@ -6,11 +6,12 @@ import { ManageOfficersService } from '../../../services/manage-officers-service
 import { Router } from '@angular/router';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { TokenServiceService } from '../../../services/Token/token-service.service';
+import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-add-officers',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, LoadingSpinnerComponent],
   templateUrl: './add-officers.component.html',
   styleUrl: './add-officers.component.css'
 })
@@ -26,7 +27,6 @@ export class AddOfficersComponent implements OnInit {
 
   languages: string[] = ['Sinhala', 'English', 'Tamil'];
   selectedPage: 'pageOne' | 'pageTwo' = 'pageOne';
-  isLoading = false;
   lastID!: number
   itemId: number | null = null;
   officerId!: number
@@ -38,6 +38,9 @@ export class AddOfficersComponent implements OnInit {
 
   logingRole: string | null = null;
   languagesRequired: boolean = false;
+
+  isLoading: boolean = false;
+
 
 
 
@@ -232,9 +235,11 @@ export class AddOfficersComponent implements OnInit {
     if (this.personalData.accNumber === this.personalData.conformAccNumber) {
       return;
     }
+    this.isLoading = true;
 
 
     if (!this.personalData.accHolderName || !this.personalData.accNumber || !this.personalData.bankName || !this.personalData.branchName) {
+      this.isLoading = false;
       this.toastSrv.warning('Pleace fill all required feilds')
 
     } else {
@@ -243,14 +248,17 @@ export class AddOfficersComponent implements OnInit {
           (res: any) => {
             if (res.status) {
               this.officerId = res.officerId;
+              this.isLoading = false;
               this.toastSrv.success('Collective Officer Created Successfully')
               this.router.navigate(['/manage-officers/view-officer'])
             } else {
+              this.isLoading = false;
               this.toastSrv.error('There was an error creating the collective officer')
 
             }
           },
           (error: any) => {
+            this.isLoading = false;
             this.toastSrv.error('There was an error creating the collective officer')
           }
         );
@@ -259,18 +267,22 @@ export class AddOfficersComponent implements OnInit {
           (res: any) => {
             if (res.status) {
               this.officerId = res.officerId;
+              this.isLoading = false;
               this.toastSrv.success('Collective Officer Created Successfully')
               this.router.navigate(['/manage-officers/view-officer'])
             } else {
+              this.isLoading = false;
               this.toastSrv.error('There was an error creating the collective officer')
 
             }
           },
           (error: any) => {
+            this.isLoading = false;
             this.toastSrv.error('There was an error creating the collective officer')
           }
         );
       } else {
+        this.isLoading = false;
         this.toastSrv.error('There was an error creating the collective officer')
       }
 
@@ -298,20 +310,23 @@ export class AddOfficersComponent implements OnInit {
   }
 
   getAllCenters() {
+    this.isLoading = true;
     this.ManageOficerSrv.getCCHOwnCenters().subscribe(
       (res) => {
         this.centerArr = res
+        this.isLoading = false;
 
       }
     )
   }
 
   getAllManagers() {
+    this.isLoading = true;
     this.ManageOficerSrv.getCenterManagers(this.personalData.centerId).subscribe(
       (res) => {
-        console.log(res);
-
         this.managerArr = res
+        this.isLoading = false;
+
 
       }
     )

@@ -6,11 +6,12 @@ import { ManageOfficersService } from '../../../services/manage-officers-service
 import { ActivatedRoute, Router } from '@angular/router';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { TokenServiceService } from '../../../services/Token/token-service.service';
+import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-edit-officer',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, LoadingSpinnerComponent],
   templateUrl: './edit-officer.component.html',
   styleUrl: './edit-officer.component.css'
 })
@@ -24,7 +25,6 @@ export class EditOfficerComponent implements OnInit {
 
   languages: string[] = ['Sinhala', 'English', 'Tamil'];
   selectedPage: 'pageOne' | 'pageTwo' = 'pageOne';
-  isLoading = false;
   lastID!: number
   itemId: number | null = null;
   officerId!: number
@@ -36,14 +36,13 @@ export class EditOfficerComponent implements OnInit {
 
 
 
-
-
   selectedFileName!: string
   selectedImage: string | ArrayBuffer | null = null;
   selectedFile: File | null = null;
 
   logingRole: string | null = null;
   ExistirmId!: number;
+  isLoading: boolean = true;
 
 
   constructor(
@@ -97,6 +96,7 @@ export class EditOfficerComponent implements OnInit {
   }
 
   fetchOffierById(id: number) {
+    this.isLoading = true;
     this.ManageOficerSrv.getOfficerById(id).subscribe(
       (res: any) => {
         console.log(res.officerData.collectionOfficer);
@@ -122,6 +122,8 @@ export class EditOfficerComponent implements OnInit {
 
         this.UpdateEpmloyeIdCreate();
         // this.getAllmanagers();
+        this.isLoading = false;
+
       }
     );
   }
@@ -278,15 +280,18 @@ export class EditOfficerComponent implements OnInit {
 
 
     } else {
+      this.isLoading = true;
 
       if (this.logingRole === 'Collection Center Manager') {
         this.ManageOficerSrv.updateCollectiveOfficer(this.personalData, this.editOfficerId, this.selectedImage).subscribe(
           (res: any) => {
             this.officerId = res.officerId;
+      this.isLoading = false;
             this.toastSrv.success('Collective Officer Updated Successfully')
             this.router.navigate(['/manage-officers/view-officer'])
           },
           (error: any) => {
+            this.isLoading = false;
             this.toastSrv.error('There was an error creating the collective officer')
 
           }
@@ -298,10 +303,12 @@ export class EditOfficerComponent implements OnInit {
         this.ManageOficerSrv.CCHupdateCollectiveOfficer(this.personalData, this.editOfficerId, this.selectedImage).subscribe(
           (res: any) => {
             this.officerId = res.officerId;
+            this.isLoading = false;
             this.toastSrv.success('Collective Officer Updated Successfully')
             this.router.navigate(['/manage-officers/view-officer'])
           },
           (error: any) => {
+            this.isLoading = false;
             this.toastSrv.error('There was an error creating the collective officer')
 
           }

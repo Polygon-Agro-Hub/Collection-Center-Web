@@ -7,11 +7,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { TokenServiceService } from '../../../services/Token/token-service.service';
+import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-officer-profile',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent],
   templateUrl: './officer-profile.component.html',
   styleUrls: ['./officer-profile.component.css']
 })
@@ -20,6 +21,9 @@ export class OfficerProfileComponent implements OnInit {
   officerId!: number;
   showDisclaimView = false;
   logingRole: string | null = null;
+
+  isLoading: boolean = true;
+
 
 
   constructor(
@@ -40,9 +44,10 @@ export class OfficerProfileComponent implements OnInit {
   }
 
   fetchOfficer(id: number) {
+    this.isLoading = true;
     this.ManageOficerSrv.getOfficerById(id).subscribe((res: any) => {
       this.officerObj = res.officerData.collectionOfficer;
-
+      this.isLoading = false;
     });
   }
 
@@ -87,16 +92,18 @@ export class OfficerProfileComponent implements OnInit {
   }
 
   confirmDisclaim(id: number) {
+    this.isLoading = true;
 
     this.ManageOficerSrv.disclaimOfficer(id).subscribe(
       (response) => {
-
         this.toastSrv.success('Officer ID sent successfully!');
+        this.isLoading = false;
         this.showDisclaimView = false;
         this.router.navigate(['/manage-officers/view-officer']);
       },
       (error) => {
         console.error('Error sending Officer ID:', error);
+        this.isLoading = false;
         this.toastSrv.error('Failed to send Officer ID!');
       }
     );

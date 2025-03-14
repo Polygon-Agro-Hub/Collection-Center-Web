@@ -5,11 +5,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TargetService } from '../../../services/Target-service/target.service';
 import { ManageOfficersService } from '../../../services/manage-officers-service/manage-officers.service';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
+import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-assign-officer-target',
   standalone: true,
-  imports: [FormsModule, CommonModule],
+  imports: [FormsModule, CommonModule, LoadingSpinnerComponent],
   templateUrl: './assign-officer-target.component.html',
   styleUrl: './assign-officer-target.component.css',
   providers: [DatePipe]
@@ -26,6 +27,9 @@ export class AssignOfficerTargetComponent implements OnInit {
 
   targetId!: number;
 
+  isLoading: boolean = true;
+
+
   constructor(
     private router: Router,
     private targetSrv: TargetService,
@@ -40,9 +44,10 @@ export class AssignOfficerTargetComponent implements OnInit {
   }
 
   fetchTargetVerity() {
+    this.isLoading = true;
     this.targetSrv.getTargetVerity(this.targetId).subscribe(
       (res) => {
-        
+
         this.targetVerity = res.crop;
 
         this.officerArr = res.officer.map((officer: Officer) => ({
@@ -51,6 +56,9 @@ export class AssignOfficerTargetComponent implements OnInit {
           targetB: officer.targetB ?? 0,
           targetC: officer.targetC ?? 0,
         }));
+
+        this.isLoading = false;
+
       }
     );
   }
@@ -63,21 +71,26 @@ export class AssignOfficerTargetComponent implements OnInit {
       +this.totTargetC === +this.targetVerity.qtyC
     );
   }
-  
+
 
   onSubmit() {
+    this.isLoading = true;
     this.AssignTargetObj.varietyId = this.targetVerity.varietyId;
     this.AssignTargetObj.OfficerData = this.officerArr;
     this.AssignTargetObj.id = this.targetVerity.id;
-    if(+this.totTargetA !== +this.targetVerity.qtyA || +this.totTargetB !== +this.targetVerity.qtyB || +this.totTargetC !== +this.targetVerity.qtyC){
+    if (+this.totTargetA !== +this.targetVerity.qtyA || +this.totTargetB !== +this.targetVerity.qtyB || +this.totTargetC !== +this.targetVerity.qtyC) {
       this.toastSrv.warning('Please assign the correct target!');
+      this.isLoading = false;
       return;
     }
     this.targetSrv.assignOfficerTartget(this.AssignTargetObj).subscribe(
-      (res)=>{
-        if(res.status){
+      (res) => {
+        if (res.status) {
+          this.isLoading = false;
           this.toastSrv.success('Successfully assigned the target!');
-        }else{
+          this.router.navigate(['/target/view-target'])
+        } else {
+          this.isLoading = false;
           this.toastSrv.error('Failed to assign the target!');
         }
       }
@@ -88,35 +101,35 @@ export class AssignOfficerTargetComponent implements OnInit {
     this.totTargetA = this.officerArr.reduce((sum, officer) => sum + (officer.targetA || 0), 0);
     this.totTargetB = this.officerArr.reduce((sum, officer) => sum + (officer.targetB || 0), 0);
     this.totTargetC = this.officerArr.reduce((sum, officer) => sum + (officer.targetC || 0), 0);
-  
+
     let remainingA = this.targetVerity.qtyA - (this.totTargetA - this.officerArr[index].targetA);
     let remainingB = this.targetVerity.qtyB - (this.totTargetB - this.officerArr[index].targetB);
     let remainingC = this.targetVerity.qtyC - (this.totTargetC - this.officerArr[index].targetC);
-  
+
     if (grade === 'A' && this.totTargetA > this.targetVerity.qtyA) {
       this.toastSrv.warning(`Total Grade A target cannot exceed ${this.targetVerity.qtyA}!`);
-      this.officerArr[index].targetA = Math.max(0, remainingA); 
+      this.officerArr[index].targetA = Math.max(0, remainingA);
     }
-  
+
     if (grade === 'B' && this.totTargetB > this.targetVerity.qtyB) {
       this.toastSrv.warning(`Total Grade B target cannot exceed ${this.targetVerity.qtyB}!`);
-      this.officerArr[index].targetB = Math.max(0, remainingB); 
+      this.officerArr[index].targetB = Math.max(0, remainingB);
     }
-  
+
     if (grade === 'C' && this.totTargetC > this.targetVerity.qtyC) {
       this.toastSrv.warning(`Total Grade C target cannot exceed ${this.targetVerity.qtyC}!`);
-      this.officerArr[index].targetC = Math.max(0, remainingC); 
+      this.officerArr[index].targetC = Math.max(0, remainingC);
     }
-  
+
     this.totTargetA = this.officerArr.reduce((sum, officer) => sum + (officer.targetA || 0), 0);
     this.totTargetB = this.officerArr.reduce((sum, officer) => sum + (officer.targetB || 0), 0);
     this.totTargetC = this.officerArr.reduce((sum, officer) => sum + (officer.targetC || 0), 0);
 
     this.cdRef.detectChanges();
   }
-  
-  
-  
+
+
+
 
 }
 
@@ -149,7 +162,7 @@ class AssignTarget {
   OfficerData!: Officer[];
 }
 
-class InputData{
+class InputData {
   targetA: number = 0;
   targetB: number = 0;
   targetC: number = 0;

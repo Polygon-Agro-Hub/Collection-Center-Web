@@ -3,11 +3,12 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TargetService } from '../../../services/Target-service/target.service';
+import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-centers-dashbord',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent],
   templateUrl: './centers-dashbord.component.html',
   styleUrl: './centers-dashbord.component.css'
 })
@@ -20,7 +21,10 @@ export class CentersDashbordComponent implements OnInit {
   transCount: number = 0;
   transAmount: number = 0.00;
   totExpences: number = 0.00;
-  expencePrecentage: number = -22.00;
+  expencePrecentage: number = 0.00;
+
+
+  isLoading: boolean = true;
 
 
   constructor(
@@ -37,13 +41,18 @@ export class CentersDashbordComponent implements OnInit {
   }
 
   fetchCenterDashbordDetails() {
+    this.isLoading = true;
     this.TargetSrv.getDashbordDetails(this.centerId).subscribe((res) => {
+      console.log(res.transCount);
+      
       this.centerNameObj = res.officerCount
       this.transCount = res.transCount.transactionCount;
       this.transAmount = res.transAmountCount.transAmountCount;
       this.resentCollectionArr = res.limitedResentCollection;
       this.totExpences = res.totExpences.totExpences;
       this.expencePrecentage = res.difExpences
+      this.isLoading = false;
+
 
 
 
@@ -57,7 +66,7 @@ export class CentersDashbordComponent implements OnInit {
   navigatePath(path: string) {
     this.router.navigate([path]);
   }
- 
+
   navigateAddTarget() {
     this.router.navigate([`/centers/add-target/${this.centerId}/${this.centerNameObj.centerName}`]);
   }

@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TargetService } from '../../../services/Target-service/target.service';
+import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-view-daily-target',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxPaginationModule],
+  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent],
   templateUrl: './view-daily-target.component.html',
   styleUrls: ['./view-daily-target.component.css'],
   // providers: [DatePipe]
@@ -35,6 +36,8 @@ export class ViewDailyTargetComponent implements OnInit {
   isSelectPrograss = true;
   isSelectAssign = false;
 
+  isLoading: boolean = true;
+
   constructor(
     private router: Router,
     // private datePipe: DatePipe,
@@ -53,6 +56,7 @@ export class ViewDailyTargetComponent implements OnInit {
   }
 
   fetchAllTarget(page: number = 1, limit: number = this.itemsPerPage, search: string = this.searchText) {
+    this.isLoading = true;
     this.TargetSrv.getAllDailyTarget(page, limit, search).subscribe(
       (res) => {
         this.targetArr = res.items;
@@ -62,6 +66,8 @@ export class ViewDailyTargetComponent implements OnInit {
         } else {
           this.hasData = false;
         }
+        this.isLoading = false;
+
       }
     );
   }
@@ -142,6 +148,7 @@ export class ViewDailyTargetComponent implements OnInit {
   }
 
   AssignAllDailyTarget(page: number = 1, limit: number = this.itemsPerPage) {
+    this.isLoading = true;
     this.TargetSrv.AssignAllDailyTarget(page, limit).subscribe(
       (res) => {
         this.assignTargetArr = res.items;
@@ -151,6 +158,8 @@ export class ViewDailyTargetComponent implements OnInit {
         } else {
           this.assignHasData = false;
         }
+        this.isLoading = false;
+
       }
     );
   }

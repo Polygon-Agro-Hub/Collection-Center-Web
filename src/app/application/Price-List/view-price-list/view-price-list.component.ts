@@ -6,11 +6,12 @@ import { DropdownModule } from "primeng/dropdown";
 import { NgxPaginationModule } from "ngx-pagination";
 import { Component, OnInit } from "@angular/core";
 import Swal from "sweetalert2";
+import { LoadingSpinnerComponent } from "../../../components/loading-spinner/loading-spinner.component";
 
 @Component({
   selector: 'app-view-price-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule],
+  imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, LoadingSpinnerComponent],
   templateUrl: './view-price-list.component.html',
   styleUrl: './view-price-list.component.css',
   providers: [DatePipe]
@@ -27,7 +28,10 @@ export class ViewPriceListComponent implements OnInit {
   searchText: string = '';
   today!: string;
   editingIndex: number | null = null;
-  editValue!: number
+  editValue!: number;
+
+  isLoading: boolean = true;
+
 
   constructor(
     private router: Router,
@@ -46,10 +50,10 @@ export class ViewPriceListComponent implements OnInit {
       this.totalItems = res.total;
       if (res.items.length === 0) {
         this.hasData = false;
-      }else{
+      } else {
         this.hasData = true;
-
       }
+      this.isLoading = false;
     });
   }
 
@@ -84,7 +88,7 @@ export class ViewPriceListComponent implements OnInit {
     this.editingIndex = index; // Set the row index being edited
     this.editValue = currentValue; // Initialize editValue with the current price
   }
-  
+
   saveRow(id: number) {
     // if (this.editValue != null) {
     //   Swal.fire({
@@ -170,8 +174,8 @@ export class ViewPriceListComponent implements OnInit {
       }).then((result) => {
         if (result.dismiss === Swal.DismissReason.cancel) {
           Swal.fire('warning', 'Price updated cancel', 'warning');
-          
-        }else{
+
+        } else {
           this.PriceListSrv.updatePrice(id, this.editValue).subscribe(
             (res) => {
               if (res.status) {
@@ -193,9 +197,9 @@ export class ViewPriceListComponent implements OnInit {
       this.editingIndex = null;
     }
   }
-  
-  
-}  
+
+
+}
 
 class PriceList {
   id!: number;

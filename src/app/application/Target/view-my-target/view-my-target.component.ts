@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DropdownModule } from 'primeng/dropdown';
 import { TargetService } from '../../../services/Target-service/target.service';
+import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-view-my-target',
   standalone: true,
-  imports: [CommonModule, FormsModule, DropdownModule],
+  imports: [CommonModule, FormsModule, DropdownModule, LoadingSpinnerComponent],
   templateUrl: './view-my-target.component.html',
   styleUrl: './view-my-target.component.css',
   providers: [DatePipe]
@@ -19,6 +20,8 @@ export class ViewMyTargetComponent implements OnInit {
   hasData: boolean = true;
   selectStatus: string = '';
   searchText: string = '';
+
+  isLoading: boolean = true;
 
   constructor(
     private router: Router,
@@ -32,6 +35,7 @@ export class ViewMyTargetComponent implements OnInit {
   }
 
   fetchOfficerTarget(status: string = this.selectStatus, search: string = this.searchText) {
+    this.isLoading = true;
     this.TargetSrv.getOfficerTargetData(status, search).subscribe(
       (res) => {
         this.officerDataArr = res.items;
@@ -40,8 +44,8 @@ export class ViewMyTargetComponent implements OnInit {
           this.hasData = false;
         } else {
           this.hasData = true;
-
         }
+        this.isLoading = false;
       }
     )
   }
@@ -71,7 +75,7 @@ export class ViewMyTargetComponent implements OnInit {
 }
 
 class OfficerTarget {
-  id!:number
+  id!: number
   dailyTargetId!: number
   varietyNameEnglish!: string
   cropNameEnglish!: string

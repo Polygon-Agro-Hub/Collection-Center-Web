@@ -197,46 +197,46 @@ export class FarmerReportComponent implements OnInit {
   // }
 
   // Helper function to draw tables
-  private drawTable(doc: jsPDF, x: number, y: number, data: string[][]): void {
-    // Calculate column widths based on number of columns
-    const pageWidth = doc.internal.pageSize.width - 28; // Margins on both sides
-    const colWidth = pageWidth / data[0].length;
+  // private drawTable(doc: jsPDF, x: number, y: number, data: string[][]): void {
+  //   // Calculate column widths based on number of columns
+  //   const pageWidth = doc.internal.pageSize.width - 28; // Margins on both sides
+  //   const colWidth = pageWidth / data[0].length;
     
-    // Draw headers
-    doc.setFillColor(240, 240, 240);
-    doc.rect(x, y, pageWidth, 7, 'F');
-    doc.setFont('bold');
+  //   // Draw headers
+  //   doc.setFillColor(240, 240, 240);
+  //   doc.rect(x, y, pageWidth, 7, 'F');
+  //   doc.setFont('bold');
     
-    data[0].forEach((header, i) => {
-      doc.text(header, x + i * colWidth + colWidth / 2, y + 5, { align: 'center' });
-    });
+  //   data[0].forEach((header, i) => {
+  //     doc.text(header, x + i * colWidth + colWidth / 2, y + 5, { align: 'center' });
+  //   });
     
-    // Draw data rows
-    doc.setFont('normal');
-    for (let i = 1; i < data.length; i++) {
-      const rowY = y + 7 * i;
+  //   // Draw data rows
+  //   doc.setFont('normal');
+  //   for (let i = 1; i < data.length; i++) {
+  //     const rowY = y + 7 * i;
       
-      // Draw row background (alternating colors for better readability)
-      if (i % 2 === 0) {
-        doc.setFillColor(252, 252, 252);
-        doc.rect(x, rowY, pageWidth, 7, 'F');
-      }
+  //     // Draw row background (alternating colors for better readability)
+  //     if (i % 2 === 0) {
+  //       doc.setFillColor(252, 252, 252);
+  //       doc.rect(x, rowY, pageWidth, 7, 'F');
+  //     }
       
-      // Draw cell borders
-      doc.setDrawColor(200, 200, 200);
-      doc.rect(x, rowY, pageWidth, 7);
+  //     // Draw cell borders
+  //     doc.setDrawColor(200, 200, 200);
+  //     doc.rect(x, rowY, pageWidth, 7);
       
-      // Draw vertical lines for columns
-      for (let j = 1; j < data[0].length; j++) {
-        doc.line(x + j * colWidth, rowY, x + j * colWidth, rowY + 7);
-      }
+  //     // Draw vertical lines for columns
+  //     for (let j = 1; j < data[0].length; j++) {
+  //       doc.line(x + j * colWidth, rowY, x + j * colWidth, rowY + 7);
+  //     }
       
-      // Draw cell contents
-      data[i].forEach((cell, j) => {
-        doc.text(cell, x + j * colWidth + colWidth / 2, rowY + 5, { align: 'center' });
-      });
-    }
-  }
+  //     // Draw cell contents
+  //     data[i].forEach((cell, j) => {
+  //       doc.text(cell, x + j * colWidth + colWidth / 2, rowY + 5, { align: 'center' });
+  //     });
+  //   }
+  // }
 
 }
 

@@ -31,7 +31,7 @@ export class LoginComponent {
     this.loginObj = new Login();
   }
 
-  ngOnInit() {
+  async ngOnInit() {
     this.tokenService.clearLoginDetails();
     // localStorage.removeItem('LoginToken');
   }
@@ -70,7 +70,7 @@ export class LoginComponent {
     if (this.loginObj.password && this.loginObj.userName) {
       this.isLoading = true;
       this.authService.login(this.loginObj.userName, this.loginObj.password).subscribe(
-        (res: any) => {
+        async (res: any) => {
           Swal.fire({
             icon: 'success',
             title: 'Logged',
@@ -80,10 +80,10 @@ export class LoginComponent {
           });
 
 
-          localStorage.setItem("CCLoginToken", res.token)
+          // localStorage.setItem("CCLoginToken", res.token)
 
           // Save token details synchronously
-          this.tokenService.saveLoginDetails(
+          await this.tokenService.saveLoginDetails(
             res.token,
             res.userName,
             res.userId,
@@ -110,6 +110,7 @@ export class LoginComponent {
           }, 0);
         },
         (error) => {
+          this.isLoading = false;
           console.error('Error updating Market Price', error);
           this.disError = error.error?.error || 'An error occurred. Please try again.';
           Swal.fire({

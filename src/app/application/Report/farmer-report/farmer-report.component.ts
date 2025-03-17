@@ -3,13 +3,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ReportServiceService } from '../../../services/Report-service/report-service.service';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-farmer-report',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent],
   templateUrl: './farmer-report.component.html',
   styleUrl: './farmer-report.component.css',
   providers: [DatePipe]
@@ -23,6 +23,7 @@ export class FarmerReportComponent implements OnInit {
   hasData: boolean = false
   totalAmount: number = 0
   totalAmountforReport: number = 0;
+  isLoading:boolean = true;
 
 
   constructor(
@@ -39,6 +40,7 @@ export class FarmerReportComponent implements OnInit {
   }
 
   fetchFarmerDetails(id: number) {
+    this.isLoading = true
     this.ReportSrv.getFarmerReport(id).subscribe(
       (res) => {
         if (res.status) {
@@ -49,6 +51,7 @@ export class FarmerReportComponent implements OnInit {
         } else {
           this.hasData = false;
         }
+        this.isLoading = false;
       }
     );
   }
@@ -92,6 +95,7 @@ export class FarmerReportComponent implements OnInit {
   // this code works correctly but did not had time to fix the address display
   async downloadReport() {
     // Create new PDF document
+    this.isLoading= true;
     const doc = new jsPDF();
     
     // Helper function to format null values
@@ -315,6 +319,7 @@ export class FarmerReportComponent implements OnInit {
         doc.text(cell, x + j * colWidth + colWidth / 2, rowY + 5, { align: 'center' });
       });
     }
+    this.isLoading = false
   }
 
 }

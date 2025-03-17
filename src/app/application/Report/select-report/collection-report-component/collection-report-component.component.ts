@@ -41,6 +41,7 @@ export class CollectionReportComponentComponent implements OnInit {
   }
 
   fetchAllOfficers(page: number = 1, limit: number = this.itemsPerPage, searchText: string = '') {
+    this.isLoading = true;
     let role: string;
     if (this.logingRole === 'Collection Center Head') {
       role = "CCH"

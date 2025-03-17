@@ -6,11 +6,12 @@ import { ReportServiceService } from '../../../services/Report-service/report-se
 import Swal from 'sweetalert2';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-collection-monthly-report',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent],
   templateUrl: './collection-monthly-report.component.html',
   styleUrl: './collection-monthly-report.component.css',
   providers: [DatePipe]
@@ -25,6 +26,7 @@ export class CollectionMonthlyReportComponent implements OnInit {
   endDate: Date = new Date();
 
   hasData: boolean = false;
+  isLoading: boolean = false;
 
   constructor(
     private ReportSrv: ReportServiceService,
@@ -39,6 +41,7 @@ export class CollectionMonthlyReportComponent implements OnInit {
   }
 
   fetchOfficerData() {
+    this.isLoading = true
     this.ReportSrv.getCollectionmonthlyReportOfficerData(this.officerId, this.startDate, this.endDate).subscribe(
       (res) => {
         this.officerDataObj = res.officer;
@@ -48,9 +51,12 @@ export class CollectionMonthlyReportComponent implements OnInit {
         } else {
           this.hasData = false;
         }
+        this.isLoading = false;
       },
       (err) => {
         this.hasData = false;
+        this.isLoading = false;
+
       }
     )
   }
@@ -105,7 +111,7 @@ export class CollectionMonthlyReportComponent implements OnInit {
   }
 
 
-  
+
   downloadReport(): void {
     console.log('downloading', this.startDate, this.endDate)
     // Create new jsPDF instance

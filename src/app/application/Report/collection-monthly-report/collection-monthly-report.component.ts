@@ -105,47 +105,7 @@ export class CollectionMonthlyReportComponent implements OnInit {
   }
 
 
-  // downloadReport() {
-  //   const element = document.getElementById('reportContainer'); // Ensure the report div has this ID
-  //   if (!element) {
-  //     Swal.fire({
-  //       icon: 'error',
-  //       title: 'Error',
-  //       text: 'Unable to find report content to download.',
-  //       confirmButtonText: 'OK',
-  //     });
-  //     return;
-  //   }
-
-  //   // Increase the scale for better clarity and size
-  //   const scaleFactor = 3; // Adjust this value for higher clarity and larger size
-
-  //   html2canvas(element, { scale: scaleFactor }).then((canvas) => {
-  //     const imgData = canvas.toDataURL('image/png');
-  //     const pdf = new jsPDF('p', 'mm', 'a4');
-
-  //     // Dynamically calculate dimensions based on the canvas size and desired A4 format
-  //     const imgWidth = 210; // A4 width in mm
-  //     const imgHeight = (canvas.height * imgWidth) / canvas.width; // Maintain aspect ratio
-
-  //     // Add the image to the PDF
-  //     pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
-
-  //     // Save the PDF with a descriptive filename
-  //     const fileName = `${this.officerDataObj.empId}_Collection_Monthly_Report(${this.startDate}to${this.endDate}).pdf`;
-  //     pdf.save(fileName);
-  //   }).catch((error) => {
-  //     console.error('Error generating PDF:', error);
-  //     Swal.fire({
-  //       icon: 'error',
-  //       title: 'Download Failed',
-  //       text: 'An error occurred while generating the report. Please try again.',
-  //       confirmButtonText: 'OK',
-  //     });
-  //   });
-  // }
-
-
+  
   downloadReport(): void {
     console.log('downloading', this.startDate, this.endDate)
     // Create new jsPDF instance

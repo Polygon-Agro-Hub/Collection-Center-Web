@@ -89,27 +89,6 @@ export class FarmerReportComponent implements OnInit {
   }
   
 
-  // downloadReport() {
-  //   const element = document.getElementById('reportContainer'); // Ensure this selector matches the report container
-  //   if (!element) {
-  //     alert('Report content not found.');
-  //     return;
-  //   }
-
-  //   html2canvas(element, { scale: 3 }).then((canvas) => {
-  //     const imgData = canvas.toDataURL('image/png');
-  //     const pdf = new jsPDF('p', 'mm', 'a4');
-  //     const imgWidth = 190; // A4 width minus margins
-  //     const imgHeight = (canvas.height * imgWidth) / canvas.width;
-
-  //     pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
-  //     pdf.save(`Farmer_Report_${this.userObj.invNo}.pdf`);
-  //   }).catch((error) => {
-  //     console.error('Error generating PDF:', error);
-  //     alert('An error occurred while generating the report. Please try again.');
-  //   });
-  // }
-
   // this code works correctly but did not had time to fix the address display
   async downloadReport() {
     // Create new PDF document

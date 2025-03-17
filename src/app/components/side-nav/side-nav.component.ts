@@ -75,7 +75,7 @@ export const MENU_ITEMS = [
   },
   {
     id:8,
-    key: 'complaints',
+    key: 'cch-complaints',
     path: '/cch-complaints',
     label: 'Complaints',
     icon: 'fa-solid fa-triangle-exclamation',

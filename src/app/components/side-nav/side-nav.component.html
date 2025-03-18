@@ -1,6 +1,6 @@
 <div class="flex flex-col h-full bg-white dark:bg-[#272F45] border-r transition-all">
     <!-- Header -->
-    <div class="flex items-center gap-3 p-5 cursor-pointer" (click)="toggleSidebar()">
+    <div class="flex items-center gap-3 p-5 cursor-pointer mx-2" (click)="toggleSidebar()">
         <img src="../../../assets/images/logo.png" class="w-10 h-10" />
         <span [ngClass]="isCollapsed ? 'hidden' : 'block'" class="text-xl font-bold text-gray-800 dark:text-white">
             4C Operator
@@ -11,9 +11,9 @@
     <div class="flex-1 overflow-y-auto scrollbar-none">
         <ul class="space-y-1 p-4">
             <ng-container *ngFor="let item of filteredMenuItems">
-                <li class="group flex items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]"
+                <li class="flex flex-row items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]"
                     [ngClass]="{ 'bg-[#EDF5FC]': isTabSelected(item.key) }" (click)="navigate(item.path, item.key)">
-                    <i [class]="item.icon + ' text-xl'" [ngClass]="{
+                    <i [class]="item.icon + ' text-xl px-2'" [ngClass]="{
                         'text-[#415CFF]': isTabSelected(item.key),
                         'text-[#6B6B6B] dark:text-white': !isTabSelected(item.key),
                         'group-hover:text-[#415CFF]': true
@@ -83,13 +83,13 @@
         <!-- Logout Button -->
         <div>
             <button *ngIf="!isCollapsed"
-                class="flex items-center gap-x-4 text-gray-700 dark:text-white hover:text-red-500 pb-4 pl-5"
+                class="flex flex-row items-center gap-x-4 dark:text-white text-red-500 pb-4 pl-5"
                 (click)="logOut()">
                 <i class="fas fa-sign-out-alt text-lg"></i>
-                <span class="block">Logout</span>
+                <span class="block mb-1">Logout</span>
             </button>
             <button *ngIf="isCollapsed"
-                class="flex items-center gap-4 text-gray-700 dark:text-white hover:text-red-500 pb-4 pl-5"
+                class="flex items-center gap-4 dark:text-white text-red-500 pb-4 pl-5"
                 (click)="logOut()">
                 <i class="fas fa-sign-out-alt text-lg"></i>
             </button>

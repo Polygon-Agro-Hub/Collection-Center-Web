@@ -232,7 +232,7 @@ export class AddOfficersComponent implements OnInit {
 
   onSubmit() {
     // this.personalData.image = this.selectedFile;
-    if (this.personalData.accNumber === this.personalData.conformAccNumber) {
+    if (this.personalData.accNumber !== this.personalData.conformAccNumber) {
       return;
     }
     this.isLoading = true;

@@ -20,6 +20,7 @@ export class LoginComponent {
   loginObj: Login;
   disError: any;
   isLoading: boolean = false;
+  role!: string;
 
 
   constructor(
@@ -81,7 +82,7 @@ export class LoginComponent {
 
 
           // localStorage.setItem("CCLoginToken", res.token)
-
+          this.role = res.role;
           // Save token details synchronously
           await this.tokenService.saveLoginDetails(
             res.token,
@@ -99,7 +100,13 @@ export class LoginComponent {
             if (res.updatedPassword == 0) {
               this.router.navigate(['/change-password']);
             } else if (res.updatedPassword == 1) {
-              this.router.navigate(['/dashbord']);
+              if (this.role === 'Collection Center Manager') {
+                this.router.navigate(['/dashbord']);
+              }else if(this.role === 'Collection Center Head'){
+                this.router.navigate(['/centers'])
+              }else{
+                this.router.navigate(['/'])
+              }
             } else {
               Swal.fire({
                 icon: 'error',

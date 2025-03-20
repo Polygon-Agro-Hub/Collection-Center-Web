@@ -12,7 +12,9 @@ export const MENU_ITEMS = [
     key: 'dashboard',
     path: '/dashbord',
     label: 'Dashbord',
-    icon: 'fas fa-th-large'
+    icon: 'fas fa-th-large',
+    permission: 'Collection Center Manager'
+
   },
   {
     id: 2,
@@ -109,6 +111,7 @@ export class SideNavComponent {
     private toastSrv: ToastAlertService
   ) {
     this.role = tokenSrv.getUserDetails().role
+    this.selectIdealTab();
    }
 
   toggleSidebar() {
@@ -138,6 +141,14 @@ export class SideNavComponent {
       this.router.navigate(['/'])
     })
 
+  }
+
+  selectIdealTab(){
+    if(this.role === 'Collection Center Manager'){
+      this.isSelectTab = 'dashboard'
+    }else{
+      this.isSelectTab = 'centers'
+    }
   }
 }
 

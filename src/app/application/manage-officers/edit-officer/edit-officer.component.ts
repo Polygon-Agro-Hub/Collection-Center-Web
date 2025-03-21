@@ -7,6 +7,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { TokenServiceService } from '../../../services/Token/token-service.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
+import { HttpClient } from '@angular/common/http';
 
 @Component({
   selector: 'app-edit-officer',
@@ -44,14 +45,22 @@ export class EditOfficerComponent implements OnInit {
   ExistirmId!: number;
   isLoading: boolean = true;
 
+  banks: Bank[] = [];
+  branches: Branch[] = [];
+  selectedBankId: number | null = null;
+  selectedBranchId: number | null = null;
+  allBranches: BranchesData = {};
+
+  invalidFields: Set<string> = new Set();
+
 
   constructor(
     private ManageOficerSrv: ManageOfficersService,
     private router: Router,
     private route: ActivatedRoute,
     private toastSrv: ToastAlertService,
-    private tokenSrv: TokenServiceService
-
+    private tokenSrv: TokenServiceService,
+    private http: HttpClient,
 
   ) {
     this.logingRole = tokenSrv.getUserDetails().role
@@ -89,6 +98,8 @@ export class EditOfficerComponent implements OnInit {
 
   ngOnInit(): void {
     // this.getAllCollectionCetnter();
+    this.loadBanks();
+    this.loadBranches();
     this.getAllCenters();
     this.editOfficerId = this.route.snapshot.params['id'];
     this.fetchOffierById(this.editOfficerId);
@@ -122,6 +133,7 @@ export class EditOfficerComponent implements OnInit {
 
         this.UpdateEpmloyeIdCreate();
         // this.getAllmanagers();
+        this.matchExistingBankToDropdown();
         this.isLoading = false;
 
       }
@@ -286,7 +298,7 @@ export class EditOfficerComponent implements OnInit {
         this.ManageOficerSrv.updateCollectiveOfficer(this.personalData, this.editOfficerId, this.selectedImage).subscribe(
           (res: any) => {
             this.officerId = res.officerId;
-      this.isLoading = false;
+            this.isLoading = false;
             this.toastSrv.success('Collective Officer Updated Successfully')
             this.router.navigate(['/manage-officers/view-officer'])
           },
@@ -370,6 +382,99 @@ export class EditOfficerComponent implements OnInit {
     }
   }
 
+  loadBanks() {
+    this.http.get<Bank[]>('assets/json/banks.json').subscribe(
+      data => {
+        this.banks = data.sort((a, b) => a.name.localeCompare(b.name)); // Sort alphabetically
+      },
+      error => {
+        console.error('Error loading banks:', error);
+      }
+    );
+  }
+
+
+  loadBranches() {
+    this.http.get<BranchesData>('assets/json/branches.json').subscribe(
+      data => {
+        Object.keys(data).forEach(bankID => {
+          data[bankID].sort((a, b) => a.name.localeCompare(b.name));
+        });
+        this.allBranches = data;
+      },
+      error => {
+        console.error('Error loading branches:', error);
+      }
+    );
+  }
+
+
+
+  matchExistingBankToDropdown() {
+    console.log("matchExistingBankToDropdown",this.banks.length, this.allBranches);
+    
+    // Only proceed if both banks and branches are loaded and we have existing data
+    if (this.banks.length > 0 && Object.keys(this.allBranches).length > 0 &&
+      this.personalData && this.personalData.bankName) {
+      console.log('hit 01', this.personalData.bankName);
+
+      // Find the bank ID that matches the existing bank name
+      const matchedBank = this.banks.find(bank => bank.name === this.personalData.bankName);
+
+      if (matchedBank) {
+        this.selectedBankId = matchedBank.ID;
+        // Load branches for this bank
+        this.branches = this.allBranches[this.selectedBankId.toString()] || [];
+
+        // If we also have a branch name, try to match it
+        if (this.personalData.branchName) {
+          const matchedBranch = this.branches.find(branch => branch.name === this.personalData.branchName);
+          if (matchedBranch) {
+            this.selectedBranchId = matchedBranch.ID;
+          }
+        }
+      }
+    }
+    console.log('hit 02');
+  }
+
+
+  onBankChange() {
+    if (this.selectedBankId) {
+      // Update branches based on selected bank
+      this.branches = this.allBranches[this.selectedBankId.toString()] || [];
+
+      // Update company data with bank name
+      const selectedBank = this.banks.find(bank => bank.ID === this.selectedBankId);
+      if (selectedBank) {
+        this.personalData.bankName = selectedBank.name;
+      }
+
+      // Reset branch selection if the current selection doesn't belong to this bank
+      const currentBranch = this.branches.find(branch => branch.ID === this.selectedBranchId);
+      if (!currentBranch) {
+        this.selectedBranchId = null;
+        this.personalData.branchName = '';
+      }
+    } else {
+      this.branches = [];
+      this.personalData.bankName = '';
+    }
+  }
+
+  onBranchChange() {
+    if (this.selectedBranchId) {
+      // Update company data with branch name
+      const selectedBranch = this.branches.find(branch => branch.ID === this.selectedBranchId);
+      if (selectedBranch) {
+        this.personalData.branchName = selectedBranch.name;
+      }
+    } else {
+      this.personalData.branchName = '';
+    }
+  }
+
+
 
 
 }
@@ -431,6 +536,23 @@ class Manager {
   lastNameEnglish!: string;
 }
 
+
+interface Bank {
+  ID: number;
+  name: string;
+}
+
+interface Branch {
+  bankID: number;
+  ID: number;
+  name: string;
+}
+
+
+
+interface BranchesData {
+  [key: string]: Branch[];
+}
 
 
 

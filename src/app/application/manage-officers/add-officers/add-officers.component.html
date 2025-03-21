@@ -1,4 +1,4 @@
-<app-loading-spinner *ngIf="isLoading"/>
+<app-loading-spinner *ngIf="isLoading" />
 
 <div *ngIf="!isLoading" class="mx-auto p-6 bg-white dark:bg-tileBlack rounded-lg shadow-mg">
     <form #PageOneForm="ngForm" (ngSubmit)="onSubmitForm(PageOneForm)">
@@ -9,7 +9,7 @@
                 <div class="flex justify-center pt-3">
                     <div class="relative">
                         <input type="file" id="imageUpload" accept="image/*" class="hidden"
-                            (change)="onFileSelected($event)" #fileInput/>
+                            (change)="onFileSelected($event)" #fileInput />
 
                         <!-- Display default image if no file is selected -->
                         <div *ngIf="!selectedImage" (click)="triggerFileInput($event)"
@@ -38,7 +38,8 @@
                         <label for="centerId" class="block text-sm font-medium text-gray-700 dark:text-textDark">
                             Collection Center
                         </label>
-                        <select id="centerId" [(ngModel)]="personalData.centerId" name="centerId" placeholder="select" #centerIdInput="ngModel" required
+                        <select id="centerId" [(ngModel)]="personalData.centerId" name="centerId" placeholder="select"
+                            #centerIdInput="ngModel" required
                             class="form-control mt-1 block w-full p-2 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-100 dark:bg-gray-800 appearance-none focus:ring-indigo-500 focus:border-indigo-500">
                             <option disabled selected
                                 class="p-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800" value="">
@@ -50,7 +51,8 @@
                             </option>
 
                         </select>
-                        <div *ngIf="centerIdInput.touched && !personalData.centerId && logingRole === 'Collection Center Head'" class="text-red-500 text-sm mt-1">
+                        <div *ngIf="centerIdInput.touched && !personalData.centerId && logingRole === 'Collection Center Head'"
+                            class="text-red-500 text-sm mt-1">
                             <div>Collection Center is required</div>
                         </div>
                     </div>
@@ -107,12 +109,12 @@
 
 
                     <div
-                        *ngIf="logingRole === 'Collection Center Head' && (personalData.jobRole === 'Collection Officer' || personalData.jobRole === 'Customer Officer')" >
+                        *ngIf="logingRole === 'Collection Center Head' && (personalData.jobRole === 'Collection Officer' || personalData.jobRole === 'Customer Officer')">
                         <label for="centerId" class="block text-sm font-medium text-gray-700 dark:text-textDark">
                             Manager
                         </label>
-                        <select id="irmId" [(ngModel)]="personalData.irmId" name="irmId" placeholder="select" #irmIdInput="ngModel" required
-                            (change)="checkManager()" [disabled]="!personalData.centerId"
+                        <select id="irmId" [(ngModel)]="personalData.irmId" name="irmId" placeholder="select"
+                            #irmIdInput="ngModel" required (change)="checkManager()" [disabled]="!personalData.centerId"
                             class="form-control mt-1 block w-full p-2 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-100 dark:bg-gray-800 appearance-none focus:ring-indigo-500 focus:border-indigo-500">
                             <option disabled selected
                                 class="p-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800" value="">
@@ -123,7 +125,8 @@
                                 {{item.firstNameEnglish}} {{item.lastNameEnglish}}
                             </option>
                         </select>
-                        <div *ngIf="irmIdInput.touched && !personalData.irmId && logingRole === 'Collection Center Head' && (personalData.jobRole === 'Collection Officer' || personalData.jobRole === 'Customer Officer')" class="text-red-500 text-sm mt-1">
+                        <div *ngIf="irmIdInput.touched && !personalData.irmId && logingRole === 'Collection Center Head' && (personalData.jobRole === 'Collection Officer' || personalData.jobRole === 'Customer Officer')"
+                            class="text-red-500 text-sm mt-1">
                             <div>Collection Center is required</div>
                         </div>
                     </div>
@@ -159,31 +162,34 @@
 
                     <div>
                         <label for="languages" class="block text-sm font-medium text-gray-700 dark:text-textDark">
-                          Preferred Languages
+                            Preferred Languages
                         </label>
                         <div class="flex items-center space-x-4 mt-3">
-                          <div class="flex items-center space-x-2">
-                            <input class="w-5 h-5" type="checkbox" id="sinhala" name="languages" value="Sinhala"
-                              (change)="onCheckboxChange('Sinhala', $event)" [checked]="personalData.languages.includes('Sinhala')" />
-                            <label for="sinhala" class="text-gray-700">Sinhala</label>
-                          </div>
-                          <div class="flex items-center space-x-2">
-                            <input class="w-5 h-5" type="checkbox" id="english" name="languages" value="English"
-                              (change)="onCheckboxChange('English', $event)" [checked]="personalData.languages.includes('English')" />
-                            <label for="english" class="text-gray-700">English</label>
-                          </div>
-                          <div class="flex items-center space-x-2">
-                            <input class="w-5 h-5" type="checkbox" id="tamil" name="languages" value="Tamil"
-                              (change)="onCheckboxChange('Tamil', $event)" [checked]="personalData.languages.includes('Tamil')" />
-                            <label for="tamil" class="text-gray-700">Tamil</label>
-                          </div>
+                            <div class="flex items-center space-x-2">
+                                <input class="w-5 h-5" type="checkbox" id="sinhala" name="languages" value="Sinhala"
+                                    (change)="onCheckboxChange('Sinhala', $event)"
+                                    [checked]="personalData.languages.includes('Sinhala')" />
+                                <label for="sinhala" class="text-gray-700">Sinhala</label>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <input class="w-5 h-5" type="checkbox" id="english" name="languages" value="English"
+                                    (change)="onCheckboxChange('English', $event)"
+                                    [checked]="personalData.languages.includes('English')" />
+                                <label for="english" class="text-gray-700">English</label>
+                            </div>
+                            <div class="flex items-center space-x-2">
+                                <input class="w-5 h-5" type="checkbox" id="tamil" name="languages" value="Tamil"
+                                    (change)="onCheckboxChange('Tamil', $event)"
+                                    [checked]="personalData.languages.includes('Tamil')" />
+                                <label for="tamil" class="text-gray-700">Tamil</label>
+                            </div>
                         </div>
                         <!-- Error Message -->
                         <p *ngIf="languagesRequired" class="text-red-600 text-sm mt-2">
-                          Please select at least one preferred language.
+                            Please select at least one preferred language.
                         </p>
-                      </div>
-                    
+                    </div>
+
 
 
                     <div>
@@ -455,47 +461,62 @@
                 </div>
 
                 <div class="pb-6">
-                    <label for="accNumber" class="block text-sm font-medium text-gray-700 dark:text-textDark">Confirm Account Number</label>
+                    <label for="accNumber" class="block text-sm font-medium text-gray-700 dark:text-textDark">Confirm
+                        Account Number</label>
                     <input type="number" id="accNumber" name="accNumber" [(ngModel)]="personalData.conformAccNumber"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack"
                         #conformAccNumberInput="ngModel" required />
-                    <div *ngIf="conformAccNumberInput.touched && !personalData.conformAccNumber" class="text-red-500 text-sm mt-1">
+                    <div *ngIf="conformAccNumberInput.touched && !personalData.conformAccNumber"
+                        class="text-red-500 text-sm mt-1">
                         <div>Account Number is required</div>
                     </div>
-                    <div *ngIf="personalData.conformAccNumber && personalData.accNumber !== personalData.conformAccNumber" class="text-red-500 text-sm mt-1">
+                    <div *ngIf="personalData.conformAccNumber && personalData.accNumber !== personalData.conformAccNumber"
+                        class="text-red-500 text-sm mt-1">
                         <div>Confirm Account Number should be the same as Account Number.</div>
-                      </div>
-                </div>
-
-                <div class="pb-6">
-                    <label for="bankName" class="block text-sm font-medium text-gray-700 dark:text-textDark">Bank
-                        Name</label>
-                    <input id="bankName" name="bankName" [(ngModel)]="personalData.bankName"
-                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack"
-                        #bankNameInput="ngModel" required />
-                    <div *ngIf="bankNameInput.touched && !personalData.bankName" class="text-red-500 text-sm mt-1">
-                        <div>Bank Name is required</div>
                     </div>
                 </div>
 
                 <div class="pb-6">
-                    <label for="branchName" class="block text-sm font-medium text-gray-700 dark:text-textDark">Branch
-                        Name</label>
-                    <input id="branchName" name="branchName" [(ngModel)]="personalData.branchName"
-                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack"
-                        #branchNameInput="ngModel" required />
-                    <div *ngIf="branchNameInput.touched && !personalData.branchName" class="text-red-500 text-sm mt-1">
-                        <div>Branch Name is required</div>
-                    </div>
+                    <label for="bankDropdown" class="block text-sm font-medium text-gray-700 dark:text-textDark">
+                        Bank Name
+                    </label>
+                    <select id="bankDropdown" name="bankDropdown" [(ngModel)]="selectedBankId" (change)="onBankChange()"
+                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack">
+                        <option [ngValue]="null" disabled>Select a bank</option>
+                        <option *ngFor="let bank of banks" [ngValue]="bank.ID">
+                            {{ bank.name }}
+                        </option>
+                    </select>
+                    <!-- <span *ngIf="isFieldInvalid('bankName')" class="text-red-600 text-sm">
+                      Bank Name is required.
+                    </span> -->
+                </div>
+
+                <div class="pb-6">
+                    <label for="branchDropdown" class="block text-sm font-medium text-gray-700 dark:text-textDark">
+                        Branch Name
+                    </label>
+                    <select id="branchDropdown" name="branchDropdown" [(ngModel)]="selectedBranchId"
+                        (change)="onBranchChange()" [disabled]="!selectedBankId"
+                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack">
+                        <option [ngValue]="null" disabled>Select a branch</option>
+                        <option *ngFor="let branch of branches" [ngValue]="branch.ID">
+                            {{ branch.name }}
+                        </option>
+                    </select>
+                    <!-- <span *ngIf="isFieldInvalid('branchName')" class="text-red-600 text-sm">
+                        Branch Name is required.
+                    </span> -->
                 </div>
             </div>
 
             <div class="flex justify-end m-10">
                 <button (click)="nextForm('pageOne')" type="button"
                     class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md mr-2">Back</button>
-                <button type="submit" class="px-4 py-2 bg-[#3980C0] text-white rounded-md" (click)="!PageTwoForm.invalid ? onSubmit() : nextForm('pageTwo')">Sent to
+                <button type="submit" class="px-4 py-2 bg-[#3980C0] text-white rounded-md"
+                    (click)="!PageTwoForm.invalid ? onSubmit() : nextForm('pageTwo')">Sent to
                     Approve</button>
-                    <!-- <button type="submit" class="px-4 py-2 bg-[#3980C0] text-white rounded-md" (click)="onSubmit()">Sent to
+                <!-- <button type="submit" class="px-4 py-2 bg-[#3980C0] text-white rounded-md" (click)="onSubmit()">Sent to
                         Approve</button> -->
             </div>
         </div>

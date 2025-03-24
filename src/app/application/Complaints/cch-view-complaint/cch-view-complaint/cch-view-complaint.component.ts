@@ -83,4 +83,6 @@ export class CchViewComplaintComponent {
     this.isAddComplaintOpen = true;
   }
 
+  
+
 }

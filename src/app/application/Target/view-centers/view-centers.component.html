@@ -2,9 +2,13 @@
 
 
 <div *ngIf="!isLoading">
-    <p class="font-semibold text[#424242] mb-8 mx-5 dark:text-[#FFFFFF] dark:bg-blacks">Centers</p>
+    <div class="flex gap-0">
+        <p class="font-semibold text[#424242] mb-8 mx-5 dark:text-[#FFFFFF] dark:bg-blacks" (click)="viewCenters()">Centers</p>
+        <p class="font-semibold text[#424242] mb-8 mx-5 dark:text-[#FFFFFF] dark:bg-blacks" (click)="addCenters()">Add A Center</p>
+    </div>
 
-    <div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg ">
+    <app-add-center *ngIf="isAddCentersOpen" />
+    <div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg " *ngIf="isviewCentersOpen">
         <div class="flex flex-row items-center justify-between">
             <div class="flex flex-col justify-between">
                 <p class="font-semibold text-lg mb-1 dark:text-white">Total Centers ({{countOfOfficers}})</p>

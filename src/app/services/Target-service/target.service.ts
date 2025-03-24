@@ -236,6 +236,40 @@ export class TargetService {
     });
   }
 
+  createCenter(centerData: any): Observable<any> {
+    const formData = new FormData();
+    formData.append('centerData', JSON.stringify(centerData));
+    
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
+    return this.http.post(`${this.apiUrl}/create-center`, formData, {
+      headers,
+    });
+  }
+
+
+  getExistTargetVerity(id: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/get-exist-veriety-target/${id}`;
+
+    return this.http.get<any>(url, { headers });
+  }
+
+
+  editAssignedOfficerTartget(data: any): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/edit-assigned-officer-target`;
+
+    return this.http.post<any>(url, data, { headers });
+  }
+
 
 }
 

@@ -34,6 +34,7 @@ import {ViewMyTargetComponent} from './application/Target/view-my-target/view-my
 import {ViewOfficerTargetComponent} from './application/manage-officers/view-officer-target/view-officer-target.component';
 import { EditOfficerTargetComponent } from './application/manage-officers/edit-officer-target/edit-officer-target.component';
 import { RoleGuardService } from './services/RoleGuard/role-guard.service';
+import { EditAssignOfficerTargetComponent } from './application/Target/edit-assign-officer-target/edit-assign-officer-target.component';
 
 export const routes: Routes = [
     {
@@ -160,6 +161,10 @@ export const routes: Routes = [
                         path: 'edit-my-target/:id',
                         component: EditMyTargetComponent
                     },
+                    {
+                        path: 'edit-assing-target/:id',
+                        component: EditAssignOfficerTargetComponent
+                    }
                     
                 ]
             },

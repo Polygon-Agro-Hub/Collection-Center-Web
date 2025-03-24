@@ -168,6 +168,10 @@ export class ViewDailyTargetComponent implements OnInit {
     this.router.navigate([`/target/assing-target/${id}`]);
   }
 
+  navigateToEditAssignTarget(id: number) {
+    this.router.navigate([`/target/edit-assing-target/${id}`]);
+  }
+
   formatTime(time: string): string {
     const [hoursStr, minutesStr] = time.split(':');
     let hours = parseInt(hoursStr, 10);
@@ -190,6 +194,7 @@ class AssignDailyTarget {
   toDate!: Date;
   toTime!: string;
   fromTime!: Date;
+  isAssign!:number
 }
 
 class DailyTargets {

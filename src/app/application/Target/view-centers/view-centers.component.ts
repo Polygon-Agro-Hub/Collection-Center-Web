@@ -7,11 +7,12 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { DropdownModule } from 'primeng/dropdown';
 import { TargetService } from '../../../services/Target-service/target.service'
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
+import { AddCenterComponent } from '../add-center/add-center.component';
 
 @Component({
     selector: 'app-view-centers',
     standalone: true,
-    imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, LoadingSpinnerComponent],
+    imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, LoadingSpinnerComponent, AddCenterComponent],
     templateUrl: './view-centers.component.html',
     styleUrl: './view-centers.component.css'
 })
@@ -27,7 +28,9 @@ export class ViewCentersComponent implements OnInit {
 
     isLoading: boolean = true;
 
-    
+    isAddCentersOpen: boolean = false;
+    isviewCentersOpen: boolean = true;
+
     // Define all Sri Lanka provinces
     provinces: string[] = [
         'Western',
@@ -158,6 +161,16 @@ export class ViewCentersComponent implements OnInit {
 
     navigateToDashboard(id: number) {
         this.router.navigate([`/centers/center-shashbord/${id}`]);
+    }
+
+    addCenters() {
+        this.isAddCentersOpen = true;
+        this.isviewCentersOpen = false;
+    }
+
+    viewCenters() {
+        this.isviewCentersOpen = true;
+        this.isAddCentersOpen = false;
     }
 }
 

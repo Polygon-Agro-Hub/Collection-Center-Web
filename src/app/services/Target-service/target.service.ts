@@ -236,6 +236,18 @@ export class TargetService {
     });
   }
 
+  createCenter(centerData: any): Observable<any> {
+    const formData = new FormData();
+    formData.append('centerData', JSON.stringify(centerData));
+    
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
+    return this.http.post(`${this.apiUrl}/create-center`, formData, {
+      headers,
+    });
+  }
+
 
   getExistTargetVerity(id: number): Observable<any> {
     const headers = new HttpHeaders({

@@ -1,14 +1,21 @@
-<div class="flex flex-row justify-end items-center w-full bg-white dark:bg-[#272F45] shadow-lg py-4 px-4 sm:px-6 md:px-8 lg:px-10"
-     style="box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1);">
-    
-    <i class="fa-solid fa-bell text-xl sm:text-2xl text-gray-500 mx-4 sm:mx-6 md:mx-8 lg:mx-10"></i>
-    
-    <i *ngIf="userImage === null" 
-       class="fa-solid fa-user text-lg sm:text-xl mx-4 sm:mx-6 md:mx-8 lg:mx-10" 
-       (click)="navigate('/profile')"></i>
-    
-    <img *ngIf="userImage !== null" 
-         [src]="userImage" 
-         class="w-10 h-10 sm:w-12 sm:h-12 rounded-full cursor-pointer" 
-         (click)="navigate('/profile')"/>
+<div
+  class="flex flex-row justify-end items-center w-full bg-white dark:bg-[#272F45] shadow-lg py-4 px-4 sm:px-6 md:px-8 lg:px-10"
+  style="box-shadow: 0px 2px 15px rgba(0, 0, 0, 0.1)"
+>
+  <i
+    class="fa-solid fa-bell text-xl sm:text-2xl text-gray-500 mx-4 sm:mx-6 md:mx-8 lg:mx-10"
+  ></i>
+
+  <i
+    *ngIf="userImage === null"
+    class="fa-solid fa-user text-lg sm:text-xl mx-4 sm:mx-6 md:mx-8 lg:mx-10"
+    (click)="navigate('/profile')"
+  ></i>
+
+  <img
+    *ngIf="userImage !== null"
+    [src]="userImage"
+    class="w-10 h-10 sm:w-12 sm:h-12 rounded-full cursor-pointer"
+    (click)="navigate('/profile')"
+  />
 </div>

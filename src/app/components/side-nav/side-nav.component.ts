@@ -1,10 +1,11 @@
-import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { Router } from '@angular/router';
 import { ThemeService } from '../../theme.service';
 import { FormsModule } from '@angular/forms';
 import { TokenServiceService } from '../../services/Token/token-service.service';
 import { ToastAlertService } from '../../services/toast-alert/toast-alert.service';
+import Swal from 'sweetalert2';
 
 export const MENU_ITEMS = [
   {
@@ -105,6 +106,7 @@ export class SideNavComponent {
   }
 
   constructor(
+    @Inject(PLATFORM_ID) private platformId: Object,
     private themeService: ThemeService,
     private router: Router,
     private tokenSrv: TokenServiceService,
@@ -135,12 +137,37 @@ export class SideNavComponent {
     return this.isSelectTab === tab;
   }
 
-  logOut() {
-    this.tokenSrv.clearLoginDetails().then(() => {
-      this.toastSrv.success(`<b>Logout !`);
-      this.router.navigate(['/'])
-    })
+  // logOut() {
+  //   this.tokenSrv.clearLoginDetails().then(() => {
+  //     this.toastSrv.success(`<b>Logout !`);
+  //     this.router.navigate(['/'])
+  //   })
 
+  // }
+
+
+  logOut(): void {
+    if (isPlatformBrowser(this.platformId)) {
+      
+
+      // Show a logout confirmation
+      Swal.fire({
+        icon: 'warning',
+        title: 'Logged Out',
+        text: 'Are you sure, you want to logged out.',
+        showCancelButton: true,
+        confirmButtonColor: '#3085d6',
+        cancelButtonColor: '#d33',
+        confirmButtonText: 'Yes',
+        cancelButtonText: 'No',
+      }).then((result) => {
+        if (result.isConfirmed) {
+          this.tokenSrv.clearLoginDetails();
+          this.router.navigate(['login']);
+          this.toastSrv.success(`<b>Logout !`);
+        }
+      });
+    }
   }
 
   selectIdealTab(){

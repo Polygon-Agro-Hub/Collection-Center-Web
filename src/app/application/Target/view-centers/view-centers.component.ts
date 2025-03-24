@@ -181,9 +181,9 @@ class CenterData {
     district!: string
     city!: string
     contact01!: string
-    CollectionOfficer!: number
-    CustomerOfficer!: number
-    CollectionCenterManager!: number
-    CustomerService!: number
+    collectionOfficerCount!: number
+    customerOfficerCount!: number
+    collectionCenterManagerCount!: number
+    customerServiceCount!: number
     regCode!: string
 }

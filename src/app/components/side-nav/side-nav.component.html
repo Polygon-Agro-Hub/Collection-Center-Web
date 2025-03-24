@@ -20,7 +20,7 @@
     <ul class="space-y-1 p-4">
       <ng-container *ngFor="let item of filteredMenuItems">
         <li
-          class="flex flex-row items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC]"
+          class="flex flex-row items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC] group"
           [ngClass]="{ 'bg-[#EDF5FC]': isTabSelected(item.key) }"
           (click)="navigate(item.path, item.key)"
         >
@@ -29,7 +29,7 @@
             [ngClass]="{
               'text-[#415CFF]': isTabSelected(item.key),
               'text-[#6B6B6B] dark:text-white': !isTabSelected(item.key),
-              'group-hover:text-[#415CFF]': true
+              'group-hover:text-[#415CFF] dark:group-hover:text-[#272F45]': true
             }"
           ></i>
           <span
@@ -37,7 +37,7 @@
               hidden: isCollapsed,
               'text-[#415CFF]': isTabSelected(item.key),
               'text-[#6B6B6B] dark:text-white': !isTabSelected(item.key),
-              'group-hover:text-[#415CFF]': true
+              'group-hover:text-[#415CFF] dark:group-hover:text-[#272F45]': true
             }"
             class="text-lg font-normal"
           >
@@ -126,10 +126,10 @@
     <hr />
 
     <!-- Logout Button -->
-    <div>
+    <div class="flex items-center dark:hover:text-black">
       <button
         *ngIf="!isCollapsed"
-        class="flex flex-row items-center gap-x-4 dark:text-white text-red-500 pb-4 pl-5"
+        class="hover:bg-[#EDF5FC] w-full rounded-lg flex flex-row items-center gap-x-4 dark:text-white text-red-500 p-4 pl-5 dark:hover:text-[#272F45]"
         (click)="logOut()"
       >
         <i class="fas fa-sign-out-alt text-lg"></i>
@@ -137,7 +137,7 @@
       </button>
       <button
         *ngIf="isCollapsed"
-        class="flex items-center gap-4 dark:text-white text-red-500 pb-4 pl-5"
+        class="hover:bg-[#EDF5FC] w-full flex items-center gap-4 rounded-lg dark:text-white text-red-500 p-4 pl-5 dark:hover:text-[#272F45]"
         (click)="logOut()"
       >
         <i class="fas fa-sign-out-alt text-lg"></i>

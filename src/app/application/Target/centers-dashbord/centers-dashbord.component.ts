@@ -79,6 +79,7 @@ export class CentersDashbordComponent implements OnInit {
 class CenterName {
   id!: number;
   centerName!: string;
+  regCode!: string;
   officerCount!: number;
 }
 

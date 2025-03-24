@@ -1,8 +1,8 @@
+<app-loading-spinner *ngIf="isLoading" />
 
-<app-loading-spinner *ngIf="isLoading"/>
 
-
-<div *ngIf="!isLoading" class="w-full px-10 py-7 bg-tileLight shadow-lg rounded-lg dark:text-[#FFFFFF] dark:bg-[#363636]">
+<div *ngIf="!isLoading"
+    class="w-full px-10 py-7 bg-tileLight shadow-lg rounded-lg dark:text-[#FFFFFF] dark:bg-[#363636]">
     <div class="flex flex-row gap-6">
         <div class="flex flex-row items-center gap-2 border-[2px] rounded-2xl px-4 py-2 cursor-pointer"
             [ngClass]="{'text-[#415CFF] border-[#415CFF]': isSelectPrograss}" (click)="selectPrograss()">
@@ -190,6 +190,7 @@
                         <th class="px-6 py-3 text-left font-medium">Target (C)</th>
                         <th class="px-6 py-3 text-left font-medium">Ends At</th>
                         <th class="px-6 py-3 text-left font-medium">Assign</th>
+                        <th class="px-6 py-3 text-left font-medium"></th>
                     </tr>
                 </thead>
                 <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
@@ -208,9 +209,19 @@
                             <p class="text-[#646464] text-sm">{{ item.toDate }}</p>
                             <p class="text-[#646464] text-sm">{{ formatTime(item.toTime) }}</p>
                         </td>
-                        <td class="px-6 py-4 text-black-900 dark:text-gray-300 "><i
-                                class="fa-solid fa-users-gear text-blue-600 text-xl"
-                                (click)="navigateToAssignTarget(item.id)"></i></td>
+                        <td class="px-6 py-4 text-black-900 dark:text-gray-300 ">
+                            <span *ngIf="item.isAssign === 0">
+                                <i class="fa-solid fa-users-gear text-blue-600 text-xl"
+                                    (click)="navigateToAssignTarget(item.id)"></i>
+                            </span>
+                            <span *ngIf="item.isAssign === 1">
+                                <i class="fa-solid fa-pen-to-square text-xl text-blue-600"
+                                    (click)="navigateToAssignTarget(item.id)"></i>
+                            </span>
+                        </td>
+                        <td>
+                            <i class="fa-solid fa-circle-check text-2xl text-blue-600" *ngIf="item.isAssign === 1"></i>
+                        </td>
                     </tr>
                 </tbody>
 

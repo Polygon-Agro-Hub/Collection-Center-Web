@@ -190,6 +190,7 @@ class AssignDailyTarget {
   toDate!: Date;
   toTime!: string;
   fromTime!: Date;
+  isAssign!:number
 }
 
 class DailyTargets {

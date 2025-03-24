@@ -32,9 +32,25 @@ export class LoginComponent {
     this.loginObj = new Login();
   }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.tokenService.clearLoginDetails();
     // localStorage.removeItem('LoginToken');
+    this.clearAllCookies();
+  }
+
+
+
+  clearAllCookies() {
+    const cookies = document.cookie.split(";");
+    
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i];
+      const eqPos = cookie.indexOf("=");
+      const name = eqPos > -1 ? cookie.substring(0, eqPos).trim() : cookie.trim();
+      document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+    }
+
+   
   }
 
 
@@ -71,7 +87,15 @@ export class LoginComponent {
     if (this.loginObj.password && this.loginObj.userName) {
       this.isLoading = true;
       this.authService.login(this.loginObj.userName, this.loginObj.password).subscribe(
-        async (res: any) => {
+        (res: any) => {
+          this.tokenService.saveLoginDetails(
+            res.token,
+            res.userName,
+            res.userId,
+            res.role,
+            res.expiresIn,
+            res.image
+          );
           Swal.fire({
             icon: 'success',
             title: 'Logged',
@@ -80,32 +104,29 @@ export class LoginComponent {
             timer: 1500
           });
 
-
+          
           // localStorage.setItem("CCLoginToken", res.token)
           this.role = res.role;
           // Save token details synchronously
-          await this.tokenService.saveLoginDetails(
-            res.token,
-            res.userName,
-            res.userId,
-            res.role,
-            res.expiresIn,
-            res.image
-          );
-          this.isLoading = true;
+          
+          
 
 
           // Defer navigation to allow the token to be saved properly
           setTimeout(() => {
             if (res.updatedPassword == 0) {
               this.router.navigate(['/change-password']);
+              this.isLoading = false;
             } else if (res.updatedPassword == 1) {
               if (this.role === 'Collection Center Manager') {
                 this.router.navigate(['/dashbord']);
+                this.isLoading = false;
               }else if(this.role === 'Collection Center Head'){
-                this.router.navigate(['/centers'])
+                this.router.navigate(['/centers']);
+                this.isLoading = false;
               }else{
                 this.router.navigate(['/'])
+                this.isLoading = false;
               }
             } else {
               Swal.fire({
@@ -113,6 +134,7 @@ export class LoginComponent {
                 title: 'Unsuccessful',
                 text: 'Error occurred. Please contact Agro World Admin',
               });
+              this.isLoading = false;
             }
           }, 0);
         },

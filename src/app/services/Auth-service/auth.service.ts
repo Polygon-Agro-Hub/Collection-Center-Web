@@ -23,9 +23,9 @@ export class AuthService {
   }
 
   changePassword(password: string): Observable<any> {
-
+    
     const headers = new HttpHeaders({
-      Authorization: `Bearer ${this.token}`,
+      Authorization: `Bearer ${this.tokenSrv.getToken()}`,
       'Content-Type': 'application/json',
     });
 

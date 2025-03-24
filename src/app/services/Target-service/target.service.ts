@@ -237,5 +237,27 @@ export class TargetService {
   }
 
 
+  getExistTargetVerity(id: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/get-exist-veriety-target/${id}`;
+
+    return this.http.get<any>(url, { headers });
+  }
+
+
+  editAssignedOfficerTartget(data: any): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/edit-assigned-officer-target`;
+
+    return this.http.post<any>(url, data, { headers });
+  }
+
+
 }
 

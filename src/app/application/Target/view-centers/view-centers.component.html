@@ -95,7 +95,7 @@
                     <th class="px-6 py-3 text-center font-normal">COO Profiles</th>
                 </tr>
             </thead>
-            <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
+            <tbody *ngIf="this.countOfOfficers != 0" class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
                 <tr class="hover:bg-[#415CFF] hover:text-white dark:text-gray-300"
                     *ngFor="let item of itemsArr | paginate : { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index"
                     (click)="navigateToDashboard(item.id)">
@@ -112,7 +112,15 @@
                     <td class="px-6 py-3 font-medium text-center text-gray-900 dark:text-gray-300">{{ item.CollectionOfficer }}</td>
                 </tr>
             </tbody>
+           
         </table>
+
+        <div *ngIf="this.countOfOfficers === 0" class="flex items-center justify-center py-10 h-full">
+            <p class="text-lg dark:text-white text-center">No Data Found</p>
+
+        </div>
+
+
     </div>
     <div class="flex items-center justify-end my-5 mr-5">
         <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"

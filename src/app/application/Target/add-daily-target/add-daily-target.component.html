@@ -1,8 +1,8 @@
-<app-loading-spinner *ngIf="isLoading"/>
+<app-loading-spinner *ngIf="isLoading" />
 
 <div *ngIf="!isLoading">
     <div class="w-full px-10 py-3 bg-tileLight  shadow-lg rounded-lg mt-6 dark:bg-[#363636]">
-        <p class="text-center text-black text-lg font-bold  dark:text-white">{{centerName}}</p>
+        <p class="text-center text-black text-lg font-bold  dark:text-white">{{regCode}} : {{centerName}}</p>
     </div>
 
     <div *ngIf="isSaveButtonDisabled"
@@ -41,28 +41,32 @@
             <div class="flex flex-col">
                 <p class="font-semibold text-lg my-1 ml-1 dark:text-white">From</p>
                 <div class="flex flex-row gap-3">
-                    <div class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg ">
+                    <div
+                        class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg ">
                         <input type="date" #fromDateInput [(ngModel)]="dailyTartgetObj.fromDate" name="fromDate"
                             (change)="checkFromDate(fromDateInput)"
                             class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-1 rounded-xl focus:outline-none" />
                     </div>
-                    <div class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
+                    <div
+                        class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
                         <input type="time" #fromTimeInput [(ngModel)]="dailyTartgetObj.fromTime" name="fromTime"
                             (change)="checkFromTime(fromTimeInput)"
                             class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-1 rounded-xl focus:outline-none" />
                     </div>
                 </div>
             </div>
-        
+
             <div class="flex flex-col">
                 <p class="font-semibold text-lg my-1 ml-1 dark:text-white">To</p>
                 <div class="flex flex-row gap-3">
-                    <div class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
+                    <div
+                        class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
                         <input type="date" #toDateInput [(ngModel)]="dailyTartgetObj.toDate" name="toDate"
                             (change)="checkToDate(toDateInput)"
                             class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-1 rounded-xl focus:outline-none" />
                     </div>
-                    <div class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
+                    <div
+                        class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
                         <input type="time" #toTimeInput [(ngModel)]="dailyTartgetObj.toTime" name="toTime"
                             (change)="checkToTime(toTimeInput)"
                             class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-1 rounded-xl focus:outline-none" />
@@ -124,8 +128,11 @@
             </div>
 
             <div>
-                <button class="bg-[#415CFF] text-white border-[2px] text-lg rounded-lg  px-4 py-1 mt-5"
-                    (click)="goButton()">
+                <button class="text-white border-[2px] text-lg rounded-lg px-4 py-1 mt-5" 
+                [ngClass]="{
+                        'bg-[#415CFF]': selectCropId && InputObj.VarietyName,
+                        'bg-gray-400': !selectCropId || !InputObj.VarietyName
+                    }" [disabled]="!selectCropId || !InputObj.VarietyName" (click)="goButton()">
                     Go
                 </button>
             </div>
@@ -183,8 +190,12 @@
                                 class="border-[#415CFF] border-[2px] border-dotted rounded-lg w-20 px-2 py-1" />
                         </td>
                         <td class="px-3 py-4">
-                            <button class="bg-[#F6F7F9] text-[#6B7D8C] border-[2px] rounded-lg px-4 py-2"
-                                (click)="AddButton()">
+                            <button class="text-white border-[2px] rounded-lg px-4 py-2"
+                            [ngClass]="{
+                                'bg-[#415CFF]': (InputObj.qtyA > 0 || InputObj.qtyB > 0 || InputObj.qtyC > 0),
+                                'bg-gray-400': !(InputObj.qtyA > 0 || InputObj.qtyB > 0 || InputObj.qtyC > 0)
+                            }" [disabled]="!selectCropId || !InputObj.VarietyName"
+                            (click)="(InputObj.qtyA > 0 || InputObj.qtyB > 0 || InputObj.qtyC > 0) && AddButton()">
                                 Add
                             </button>
                         </td>

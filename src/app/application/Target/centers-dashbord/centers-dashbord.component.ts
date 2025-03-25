@@ -68,7 +68,7 @@ export class CentersDashbordComponent implements OnInit {
   }
 
   navigateAddTarget() {
-    this.router.navigate([`/centers/add-target/${this.centerId}/${this.centerNameObj.centerName}`]);
+    this.router.navigate([`/centers/add-target/${this.centerId}/${this.centerNameObj.centerName}/${this.centerNameObj.regCode}`]);
   }
 
   navigateToMarketPrice() {

@@ -21,6 +21,7 @@ export class AddDailyTargetComponent implements OnInit {
   selectedVarieties!: Variety[];
   centerId!: number;
   centerName!: string;
+  regCode!: string;
 
   dailyTartgetObj: DailyTarget = new DailyTarget();
   InputObj: TargetItem = new TargetItem();
@@ -54,6 +55,7 @@ export class AddDailyTargetComponent implements OnInit {
   ngOnInit(): void {
     this.dailyTartgetObj.centerId = this.route.snapshot.params['id'];
     this.centerName = this.route.snapshot.params['name'];
+    this.regCode = this.route.snapshot.params['regCode'];
     this.getAllCropVerity();
   }
 
@@ -73,6 +75,8 @@ export class AddDailyTargetComponent implements OnInit {
   }
 
   onCropChange() {
+    this.InputObj.VarietyName = ''
+    this.isAddColumn = false;
     const sample = this.cropsObj.filter(crop => crop.cropId === +this.selectCropId);
     const selectedCrop = this.cropsObj.find(crop => crop.cropId === +this.selectCropId);
 
@@ -108,7 +112,6 @@ export class AddDailyTargetComponent implements OnInit {
       this.selectCropId = '';
       this.InputObj = new TargetItem();
       this.isLoading = false;
-
       return;
     }
     this.isAddColumn = true;
@@ -125,12 +128,7 @@ export class AddDailyTargetComponent implements OnInit {
     }
 
     if (!this.InputObj.varietyId || this.InputObj.qtyA < 0 || this.InputObj.qtyB < 0 || this.InputObj.qtyC < 0) {
-      // this.toastSrv.warning("")
-      Swal.fire({
-        icon: 'error',
-        title: 'Invalid Input',
-        text: 'Please ensure all fields are filled and quantities are non-negative.',
-      });
+      this.toastSrv.error('Please ensure all fields are filled and quantities are non-negative.')
       this.isLoading = false;
       return;
     } else {
@@ -187,7 +185,8 @@ export class AddDailyTargetComponent implements OnInit {
     this.isLoading = true;
     console.log(this.dailyTartgetObj);
     if (this.dailyTartgetObj.TargetItems.length === 0) {
-      Swal.fire('warning', 'Pleace fill all required feilds', 'warning')
+      // Swal.fire('warning', 'Pleace fill all required feilds', 'warning')
+      this.toastSrv.success('Pleace fill all required feilds')
       this.isLoading = false;
       return;
 
@@ -293,6 +292,15 @@ export class AddDailyTargetComponent implements OnInit {
 
   checkAddButton() {
     if (this.InputObj.qtyA > 0 || this.InputObj.qtyB > 0 || this.InputObj.qtyC > 0) {
+      if (this.InputObj.qtyA < 0) {
+        this.InputObj.qtyA = 0;
+      }
+      if (this.InputObj.qtyB < 0) {
+        this.InputObj.qtyB = 0;
+      }
+      if (this.InputObj.qtyC < 0) {
+        this.InputObj.qtyC = 0;
+      }
       this.isAddButton = false;
     }
   }
@@ -301,18 +309,18 @@ export class AddDailyTargetComponent implements OnInit {
     if (!this.dailyTartgetObj.fromTime || !this.dailyTartgetObj.toTime) {
       return true; // Let required validation handle empty fields
     }
-  
+
     // If dates are different, times don't need comparison
     if (this.dailyTartgetObj.fromDate !== this.dailyTartgetObj.toDate) {
       return true;
     }
-  
+
     const fromTime = this.dailyTartgetObj.fromTime.toString();
     const toTime = this.dailyTartgetObj.toTime.toString();
-  
+
     return fromTime <= toTime;
   }
-  
+
   checkFromTime(inputField: HTMLInputElement) {
     if (!this.validateTimes()) {
       this.toastSrv.warning('The <b>From Time</b> cannot be after the <b>To Time</b>');
@@ -320,9 +328,9 @@ export class AddDailyTargetComponent implements OnInit {
       inputField.value = '';
     }
   }
-  
+
   checkToTime(inputField: HTMLInputElement) {
-    if(this.dailyTartgetObj.fromTime === ''){
+    if (this.dailyTartgetObj.fromTime === '') {
       this.toastSrv.warning('Pleace Enter 1st <b>From Time</b>')
       this.dailyTartgetObj.toTime = '';
       return;

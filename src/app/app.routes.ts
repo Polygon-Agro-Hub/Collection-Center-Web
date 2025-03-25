@@ -194,7 +194,7 @@ export const routes: Routes = [
                         component: CentersDashbordComponent
                     },
                     {
-                        path: 'add-target/:id/:name',
+                        path: 'add-target/:id/:name/:regCode',
                         component: AddDailyTargetComponent
                     },
                     {

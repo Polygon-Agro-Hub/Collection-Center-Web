@@ -28,9 +28,6 @@ export class ViewCentersComponent implements OnInit {
 
     isLoading: boolean = true;
 
-    isAddCentersOpen: boolean = false;
-    isviewCentersOpen: boolean = true;
-
     // Define all Sri Lanka provinces
     provinces: string[] = [
         'Western',
@@ -164,15 +161,10 @@ export class ViewCentersComponent implements OnInit {
         this.router.navigate([`/centers/center-shashbord/${id}`]);
     }
 
-    addCenters() {
-        this.isAddCentersOpen = true;
-        this.isviewCentersOpen = false;
-    }
 
-    viewCenters() {
-        this.isviewCentersOpen = true;
-        this.isAddCentersOpen = false;
-    }
+    addCenter() {
+        this.router.navigate([`/centers/add-a-center`]);
+      }
 }
 
 class CenterData {

@@ -3,17 +3,18 @@
 
 <div *ngIf="!isLoading">
     <div class="flex gap-0">
-        <p class="font-semibold text[#424242] mb-8 mx-5 dark:text-[#FFFFFF] dark:bg-blacks" (click)="viewCenters()">Centers</p>
-        <p class="font-semibold text[#424242] mb-8 mx-5 dark:text-[#FFFFFF] dark:bg-blacks" (click)="addCenters()">Add A Center</p>
+        <p class="font-semibold text[#424242] mb-8 mx-5 dark:text-[#FFFFFF] dark:bg-blacks" >Centers</p>
+        
     </div>
 
-    <app-add-center *ngIf="isAddCentersOpen" />
-    <div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg " *ngIf="isviewCentersOpen">
+    <!-- <app-add-center *ngIf="isAddCentersOpen" /> -->
+    <div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg ">
         <div class="flex flex-row items-center justify-between">
             <div class="flex flex-col justify-between">
                 <p class="font-semibold text-lg mb-1 dark:text-white">Total Centers ({{countOfOfficers}})</p>
             </div>
             <div class="flex flex-row items-center gap-8 ">
+                
                 <i class="fa-solid fa-list text-2xl dark:text-white"></i>
 
                 <p class="text-lg dark:text-white">Filter By</p>
@@ -113,8 +114,13 @@
 
     </div>
 
+    <div class="flex flex-row mt-3 mb-0">
+        <button class="bg-[#415CFF] text-white font-semibold px-4 py-2 rounded-lg" (click)="addCenter()">Add
+            a Center</button>
+    </div>
 
-    <div class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+
+    <div class="overflow-x-auto mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
         <table class="w-full divide-y-2 overflow-hidden">
             <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
                 <tr>
@@ -132,7 +138,7 @@
             <tbody *ngIf="this.countOfOfficers != 0" class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
                 <tr class="hover:bg-[#415CFF] hover:text-white dark:text-gray-300"
                     *ngFor="let item of itemsArr | paginate : { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index"
-                    (click)="navigateToDashboard(item.id)">
+                    (click)="navigateToDashboard(item.centerId)">
                     <td class="px-6 py-3 font-medium ">
                         {{ ('0' + (i + 1)).slice(-2) }}
                     </td>

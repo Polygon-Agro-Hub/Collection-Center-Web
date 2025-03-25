@@ -35,6 +35,8 @@ import {ViewOfficerTargetComponent} from './application/manage-officers/view-off
 import { EditOfficerTargetComponent } from './application/manage-officers/edit-officer-target/edit-officer-target.component';
 import { RoleGuardService } from './services/RoleGuard/role-guard.service';
 import { EditAssignOfficerTargetComponent } from './application/Target/edit-assign-officer-target/edit-assign-officer-target.component';
+import { AddCenterComponent } from './application/Target/add-center/add-center.component';
+import { ViewCenterTargetComponent } from './application/Target/view-center-target/view-center-target.component';
 
 export const routes: Routes = [
     {
@@ -212,6 +214,14 @@ export const routes: Routes = [
                     {
                         path: 'center-view-officers',
                         component: CenterViewOfficersComponent
+                    },
+                    {
+                        path: 'add-a-center',
+                        component: AddCenterComponent
+                    },
+                    {
+                        path: 'view-center-target/:id',
+                        component: ViewCenterTargetComponent
                     },
                 ]
             },

@@ -160,6 +160,7 @@ export class ViewCentersComponent implements OnInit {
     }
 
     navigateToDashboard(id: number) {
+        console.log('this is id: ', id);
         this.router.navigate([`/centers/center-shashbord/${id}`]);
     }
 
@@ -175,7 +176,7 @@ export class ViewCentersComponent implements OnInit {
 }
 
 class CenterData {
-    id!: number
+    centerId!: number
     centerName!: string
     province!: string
     district!: string

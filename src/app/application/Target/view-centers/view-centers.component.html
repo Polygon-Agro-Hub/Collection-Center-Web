@@ -102,7 +102,7 @@
             <tbody *ngIf="this.countOfOfficers != 0" class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
                 <tr class="hover:bg-[#415CFF] hover:text-white dark:text-gray-300"
                     *ngFor="let item of itemsArr | paginate : { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index"
-                    (click)="navigateToDashboard(item.id)">
+                    (click)="navigateToDashboard(item.centerId)">
                     <td class="px-6 py-3 font-medium ">
                         {{ ('0' + (i + 1)).slice(-2) }}
                     </td>

@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TargetService } from '../../../services/Target-service/target.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
@@ -15,6 +15,8 @@ import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loa
   // providers: [DatePipe]
 })
 export class ViewDailyTargetComponent implements OnInit {
+
+  
   targetArr!: DailyTargets[];
   assignTargetArr!: AssignDailyTarget[];
   searchText: string = '';
@@ -40,11 +42,13 @@ export class ViewDailyTargetComponent implements OnInit {
 
   constructor(
     private router: Router,
-    // private datePipe: DatePipe,
+
     private TargetSrv: TargetService
   ) { }
 
   ngOnInit(): void {
+    
+    
     const date = new Date();
     const year = date.getFullYear();
     const month = ('0' + (date.getMonth() + 1)).slice(-2);

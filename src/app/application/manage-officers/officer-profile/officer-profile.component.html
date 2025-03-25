@@ -3,7 +3,7 @@
 <div *ngIf="!isLoading">
     <p class="font-semibold text[#424242] mb-8 mx-5">Officer Profile</p>
 
-<div class="w-full px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg">
+<div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] dark:text-white shadow-lg rounded-lg">
     <div class="flex flex-col gap-7 px-2 py-2" id="reportcontainer">
         <div class="flex flex-row justify-between items-center border-[#F1F7FA] border-[3px] rounded-lg shadowmd p-6">
             <div class="flex flex-row items-center">
@@ -13,14 +13,14 @@
 
                 <div class="ml-6">
                     <p class="text-lg font-semibold">{{officerObj.firstNameEnglish}} {{officerObj.lastNameEnglish}}</p>
-                    <p class="text-[#627189]">{{officerObj.jobRole}} - <span class="text-black font-semibold">
+                    <p class="text-[#627189] dark:text-textDark">{{officerObj.jobRole}} - <span class="text-black font-semibold dark:text-white">
                             <span *ngIf="officerObj.jobRole ==='Customer Officer'">CUO</span>
                             <span *ngIf="officerObj.jobRole ==='Collection Center Manager'">CCM</span>
                             <span *ngIf="officerObj.jobRole ==='Collection Center Head'">CCH</span>
                             <span *ngIf="officerObj.jobRole ==='Collection Officer'">COO</span>{{officerObj.empId}}</span>
                     </p>
-                    <p class="font-semibold">{{officerObj.centerName}}</p>
-                    <p class="text-[#627189]">{{officerObj.companyNameEnglish}}</p>
+                    <p class="font-semibold ">{{officerObj.centerName}}</p>
+                    <p class="text-[#627189] dark:text-textDark">{{officerObj.companyNameEnglish}}</p>
                 </div>
             </div>
 
@@ -45,34 +45,34 @@
 
             <div class="grid grid-cols-2 gap-4 text-[#627189] my-4">
                 <div>
-                    <p class="text-[#627189]">First Name</p>
-                    <p class="font-semibold">{{officerObj.firstNameEnglish}}</p>
+                    <p class="text-[#627189] dark:text-textDark">First Name</p>
+                    <p class="font-semibold dark:text-white">{{officerObj.firstNameEnglish}}</p>
                 </div>
 
                 <div>
-                    <p class="text-[#627189]">Last Name</p>
-                    <p class="font-semibold">{{officerObj.lastNameEnglish}}</p>
+                    <p class="text-[#627189] dark:text-textDark">Last Name</p>
+                    <p class="font-semibold dark:text-white">{{officerObj.lastNameEnglish}}</p>
                 </div>
 
                 <div>
-                    <p class="text-[#627189]">NIC Number</p>
-                    <p class="font-semibold">{{officerObj.nic}}</p>
+                    <p class="text-[#627189] dark:text-textDark">NIC Number</p>
+                    <p class="font-semibold dark:text-white">{{officerObj.nic}}</p>
                 </div>
 
                 <div>
-                    <p class="text-[#627189]">Email</p>
-                    <p class="font-semibold">{{officerObj.email}}</p>
+                    <p class="text-[#627189] dark:text-textDark">Email</p>
+                    <p class="font-semibold dark:text-white">Gayashan</p>
                 </div>
 
                 <div>
-                    <p class="text-[#627189]">Phone Number - 1 </p>
-                    <p class="font-semibold">{{officerObj.phoneCode01}}{{officerObj.phoneNumber01}}</p>
+                    <p class="text-[#627189] dark:text-textDark">Phone Number - 1 </p>
+                    <p class="font-semibold dark:text-white">{{officerObj.phoneCode01}}{{officerObj.phoneNumber01}}</p>
                 </div>
 
                 <div>
-                    <p class="text-[#627189]">Phone Number - 2</p>
+                    <p class="text-[#627189] dark:text-textDark">Phone Number - 2</p>
                     <!-- <p class="font-semibold">{{officerObj.phoneCode02}}{{officerObj.phoneNumber02}}</p> -->
-                    <p class="font-semibold">
+                    <p class="font-semibold dark:text-white">
                         {{ officerObj.phoneCode02 ? officerObj.phoneCode02 + officerObj.phoneNumber02 : ' - ' }}
                     </p>
                 </div>
@@ -87,33 +87,33 @@
 
             <div class="grid grid-cols-2 gap-4 text-[#627189] my-4">
                 <div>
-                    <p class="text-[#627189]">House / Plot Number</p>
-                    <p class="font-semibold">{{officerObj.houseNumber}}</p>
+                    <p class="text-[#627189] dark:text-textDark">House / Plot Number</p>
+                    <p class="font-semibold dark:text-white">{{officerObj.houseNumber}}</p>
                 </div>
 
                 <div>
-                    <p class="text-[#627189]">Street Name</p>
-                    <p class="font-semibold">{{officerObj.streetName}}</p>
+                    <p class="text-[#627189] dark:text-textDark">Street Name</p>
+                    <p class="font-semibold dark:text-white">{{officerObj.streetName}}</p>
                 </div>
 
                 <div>
-                    <p class="text-[#627189]">City</p>
-                    <p class="font-semibold">{{officerObj.city}}</p>
+                    <p class="text-[#627189] dark:text-textDark">City</p>
+                    <p class="font-semibold dark:text-white">{{officerObj.city}}</p>
                 </div>
 
                 <div>
-                    <p class="text-[#627189]">Country</p>
-                    <p class="font-semibold">{{officerObj.country}}</p>
+                    <p class="text-[#627189] dark:text-textDark">Country</p>
+                    <p class="font-semibold dark:text-white">{{officerObj.country}}</p>
                 </div>
 
                 <div>
-                    <p class="text-[#627189]">Province</p>
-                    <p class="font-semibold">{{officerObj.province}}</p>
+                    <p class="text-[#627189] dark:text-textDark">Province</p>
+                    <p class="font-semibold dark:text-white">{{officerObj.province}}</p>
                 </div>
 
                 <div>
-                    <p class="text-[#627189]">District</p>
-                    <p class="font-semibold">{{officerObj.district}}</p>
+                    <p class="text-[#627189] dark:text-textDark">District</p>
+                    <p class="font-semibold dark:text-white">{{officerObj.district}}</p>
                 </div>
 
             </div>
@@ -126,23 +126,23 @@
 
             <div class="grid grid-cols-2 gap-4 text-[#627189] my-4">
                 <div>
-                    <p class="text-[#627189]">Account Holder’s Name</p>
-                    <p class="font-semibold">{{officerObj.accHolderName}}</p>
+                    <p class="text-[#627189] dark:text-textDark">Account Holder’s Name</p>
+                    <p class="font-semibold dark:text-white">{{officerObj.accHolderName}}</p>
                 </div>
 
                 <div>
-                    <p class="text-[#627189]">Account Number</p>
-                    <p class="font-semibold">{{officerObj.accNumber}}</p>
+                    <p class="text-[#627189] dark:text-textDark">Account Number</p>
+                    <p class="font-semibold dark:text-white">{{officerObj.accNumber}}</p>
                 </div>
 
                 <div>
-                    <p class="text-[#627189]">Bank Name</p>
-                    <p class="font-semibold">{{officerObj.bankName}}</p>
+                    <p class="text-[#627189] dark:text-textDark">Bank Name</p>
+                    <p class="font-semibold dark:text-white">{{officerObj.bankName}}</p>
                 </div>
 
                 <div>
-                    <p class="text-[#627189]">Branch Name</p>
-                    <p class="font-semibold">{{officerObj.branchName}}</p>
+                    <p class="text-[#627189] dark:text-textDark">Branch Name</p>
+                    <p class="font-semibold dark:text-white">{{officerObj.branchName}}</p>
                 </div>
 
             </div>
@@ -154,7 +154,7 @@
 </div>
 
 <div *ngIf="showDisclaimView" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-white dark:bg-[#272F45] shadow-lg rounded-lg p-6 w-1/2">
+    <div class="bg-white dark:bg-[#363636] shadow-lg rounded-lg p-6 w-1/2">
 
         <div>
             <!-- Icon -->
@@ -162,11 +162,11 @@
                 <i class="fa-solid fa-triangle-exclamation"></i>
             </div>
 
-            <div class="mb-4 text-center">
+            <div class="mb-4 text-center dark:text-textDark">
                 <p class="text-lg mb-2">
                     Are you sure you want to Discharge the officer
                 </p>
-                <p class="font-semibold text-lg">
+                <p class="font-semibold text-lg dark:text-white">
                     "{{officerObj.firstNameEnglish}} {{officerObj.lastNameEnglish}}"" (EMP ID -
                     "CCO{{officerObj.empId}}")
                     <span class="font-normal">from center</span> <br>

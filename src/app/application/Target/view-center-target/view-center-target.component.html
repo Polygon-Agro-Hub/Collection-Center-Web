@@ -1,1 +1,181 @@
-<p>view-center-target works!</p>
+<app-loading-spinner *ngIf="isLoading" />
+
+<div class="flex flex-row items-center gap-6 font-semibold text[#424242] mb-5 mx-5">
+    <p>Centers</p>
+    <p>Center Dashboard</p>
+    <p>View Center Target</p>
+</div>
+
+<div *ngIf="!isLoading"
+    class="w-full px-10 py-7 bg-tileLight shadow-lg rounded-lg dark:text-[#FFFFFF] dark:bg-[#363636]">
+    <!-- <div class="flex flex-row gap-6">
+        <div class="flex flex-row items-center gap-2 border-[2px] rounded-2xl px-4 py-2 cursor-pointer"
+            [ngClass]="{'text-[#415CFF] border-[#415CFF]': isSelectPrograss}" (click)="selectPrograss()">
+            <i *ngIf="isSelectPrograss" class="fa-solid fa-check"></i>
+            <p>Progress</p>
+        </div>
+
+        <div class="flex flex-row items-center gap-2 border-[2px] rounded-2xl px-4 py-2 cursor-pointer"
+            [ngClass]="{'text-[#415CFF] border-[#415CFF]': isSelectAssign}" (click)="selectAssign()">
+            <i *ngIf="isSelectAssign" class="fa-solid fa-check"></i>
+            <p>Assign</p>
+        </div>
+    </div> -->
+
+    <!-- <hr class="my-8 border-[1px] border-[black]" /> -->
+
+
+    <div >
+        <!-- <div class="flex flex-row gap-6">
+            <button class="bg-[#415CFF] text-white font-normal rounded-lg shadow-md px-3 py-2"
+                (click)="navigate('/target/download-target')">
+                Download Collection
+            </button>
+        </div> -->
+
+
+        <div class="flex flex-row items-center justify-between mt-5">
+            <div class="flex flex-col justify-between">
+                <p class="font-semibold text-lg mb-1">Center Target on {{today}} </p>
+            </div>
+            <div class="flex flex-row items-center gap-8 ">
+                <i class="fa-solid fa-list text-2xl"></i>
+
+                <p class="text-lg">Filter By</p>
+
+                <div class="relative w-46">
+                    <div
+                        class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
+                        <select [(ngModel)]="selectStatus" (change)="filterStatus()"
+                            class="block w-full appearance-none  dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
+                            <option value="" selected disabled>Status</option>
+                            <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                                value="Pending">Pending</option>
+                            <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                                value="Completed">Completed</option>
+                        </select>
+                        <button *ngIf="!selectStatus">
+                            <i class="fa-solid fa-angle-down text-lg mr-3"></i>
+                        </button>
+                        <button *ngIf="selectStatus" (click)="cancelStatus()">
+                            <i class="fa-solid fa-xmark text-lg mr-3"></i>
+                        </button>
+
+                    </div>
+                </div>
+
+                <div class="relative w-46">
+                    <div
+                        class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
+                        <select [(ngModel)]="selectValidity" (change)="filterValidity()"
+                            class="block w-full appearance-none  dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
+                            <option value="" selected disabled>Validity</option>
+                            <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                                value="Active">Active</option>
+                            <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                                value="Expired">Expired</option>
+                        </select>
+                        <button *ngIf="!selectValidity">
+                            <i class="fa-solid fa-angle-down text-lg mr-3"></i>
+                        </button>
+                        <button *ngIf="selectValidity" (click)="cancelValidity()">
+                            <i class="fa-solid fa-xmark text-lg mr-3"></i>
+                        </button>
+
+                    </div>
+                </div>
+
+
+                <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+                    <input type="text" placeholder="Search by Variety Name" [(ngModel)]="searchText"
+                        class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
+                    <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
+                        (click)="onSearch()">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
+                        </svg>
+                    </button>
+                    <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none"
+                        (click)="offSearch()">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div *ngIf="!hasData" class="flex justify-center items-center mt-8 mr-5 w-full h-[500px]">
+        <p class="text-3xl text-center font-semibold">No Data Availabale</p>
+    </div> -->
+
+        <div class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+            <table class="w-full divide-y-2 overflow-hidden">
+                <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
+                    <tr>
+                        <th class="px-6 py-3 text-left font-medium">No</th>
+                        <th class="px-6 py-3 text-left font-medium">Crop Name</th>
+                        <th class="px-6 py-3 text-left font-medium">Variety Name</th>
+                        <th class="px-6 py-3 text-left font-medium">Grade</th>
+                        <th class="px-6 py-3 text-left font-medium">Target (kg)</th>
+                        <th class="px-6 py-3 text-left font-medium">Completed (kg)</th>
+                        <th class="px-6 py-3 text-center font-medium">Status</th>
+                        <th class="px-6 py-3 text-left font-medium">Ends At</th>
+                        <th class="px-6 py-3 text-left font-medium">Validity</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
+                    <!-- <tr *ngFor="let item of targetArr | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index"> -->
+                    <tr *ngFor="let item of targetArr; let i = index">
+                        <!--  -->
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
+                            {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }} </td>
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.cropNameEnglish}}</td>
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.varietyNameEnglish}}</td>
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.grade}}</td>
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.TargetQty}}</td>
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.CompleteQty}}</td>
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300 flex justify-center items-center">
+                            <span *ngIf="item.status === 'Pending'"
+                                class="bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-6 py-1">
+                                Pending
+                            </span>
+                            <span *ngIf="item.status === 'Completed'"
+                                class="bg-[#C8E0FF] text-[#415CFF] text-center rounded-lg px-4 py-1">
+                                Completed
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
+                            <div class="flex flex-col items-start justify-start">
+                                <p class="text-sm text-[#646464]">{{item.toDate}}</p>
+                                <p class="text-sm text-[#646464] my-1">{{formatTime(item.toTime) }}</p>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
+                            <span *ngIf="checkValidity(item.toDate) === 'Active'"
+                                class="bg-[#B7FFBE] text-[#02BB3D] text-center rounded-lg px-4 py-1">
+                                Active
+                            </span>
+                            <span *ngIf="checkValidity(item.toDate) === 'Expired'"
+                                class="bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-4 py-1">
+                                Expired
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+
+            </table>
+        </div>
+        <!-- <div class="flex items-center justify-end my-5 mr-5">
+            <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
+                [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
+                [screenReaderCurrentLabel]="'Youre on page'">
+            </pagination-controls>
+        </div> -->
+    </div>
+
+</div>

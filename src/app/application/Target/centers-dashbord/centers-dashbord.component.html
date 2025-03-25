@@ -2,7 +2,7 @@
 
 <div *ngIf="!isLoading">
     <div class="flex flex-row items-center gap-6 font-semibold text[#424242] mb-5 mx-5">
-        <p>Centers</p>
+        <p onclick="history.back()">Centers</p>
         <p>Center Dashboard</p>
     </div>
 
@@ -81,7 +81,7 @@
             </div>
             <div class="flex flex-row items-end justify-end">
                 <i class="fa-solid fa-arrow-up-right-from-square text-[#415CFF] mx-4"
-                    (click)="navigatePath('/centers/center-view-officers')"></i>
+                    (click)="navigateCenterOfficers()"></i>
             </div>
         </div>
 

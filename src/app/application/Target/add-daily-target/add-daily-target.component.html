@@ -1,8 +1,14 @@
-<app-loading-spinner *ngIf="isLoading"/>
+<app-loading-spinner *ngIf="isLoading" />
 
 <div *ngIf="!isLoading">
+    <div class="flex flex-row items-center gap-6 font-semibold text[#424242] mb-5 mx-5 cursor-pointer">
+        <p>Centers</p>
+        <p onclick="history.back()">Center Dashboard</p>
+        <p>Assign Center Target</p>
+    </div>
+
     <div class="w-full px-10 py-3 bg-tileLight  shadow-lg rounded-lg mt-6 dark:bg-[#363636]">
-        <p class="text-center text-black text-lg font-bold  dark:text-white">{{centerName}}</p>
+        <p class="text-center text-black text-lg font-bold  dark:text-white">{{regCode}} : {{centerName}}</p>
     </div>
 
     <div *ngIf="isSaveButtonDisabled"
@@ -49,10 +55,10 @@
                     </div>
                     <div
                         class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
-                        <input type="time" [(ngModel)]="dailyTartgetObj.fromTime" name="fromTime"
+                        <input type="time" #fromTimeInput [(ngModel)]="dailyTartgetObj.fromTime" name="fromTime"
+                            (change)="checkFromTime(fromTimeInput)"
                             class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-1 rounded-xl focus:outline-none" />
                     </div>
-
                 </div>
             </div>
 
@@ -67,10 +73,10 @@
                     </div>
                     <div
                         class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
-                        <input type="time" [(ngModel)]="dailyTartgetObj.toTime" name="toTime"
+                        <input type="time" #toTimeInput [(ngModel)]="dailyTartgetObj.toTime" name="toTime"
+                            (change)="checkToTime(toTimeInput)"
                             class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-1 rounded-xl focus:outline-none" />
                     </div>
-
                 </div>
             </div>
         </div>
@@ -84,11 +90,12 @@
 
     <div *ngIf="(dailyTartgetObj.fromDate && dailyTartgetObj.toDate && dailyTartgetObj.fromTime && dailyTartgetObj.toTime)"
         class="w-full px-10 py-7 bg-tileLight  shadow-lg rounded-lg mt-6 dark:bg-[#363636]">
-        <p class="font-semibold dark:text-textDark">Daily Target from {{dailyTartgetObj.fromDate}} <span
-                class="text-[#415CFF] dark:text-textDark">{{dailyTartgetObj.fromTime}}</span> to
-            {{dailyTartgetObj.toDate}}
-            <span class="text-[#415CFF] dark:text-textDark">{{dailyTartgetObj.toTime}}</span>
-        </p>
+        <p class="font-semibold dark:text-textDark">
+            Daily Target from {{formatDate(dailyTartgetObj.fromDate)}} 
+            <span class="text-[#415CFF] dark:text-textDark">{{formatTime(dailyTartgetObj.fromTime)}}</span> 
+            to {{formatDate(dailyTartgetObj.toDate)}}
+            <span class="text-[#415CFF] dark:text-textDark">{{formatTime(dailyTartgetObj.toTime)}}</span>
+          </p>
 
         <div class="flex flex-row justify-between items-center my-5 dark:bg-[#363636]">
             <div class="w-[40%]">
@@ -128,8 +135,11 @@
             </div>
 
             <div>
-                <button class="bg-[#415CFF] text-white border-[2px] text-lg rounded-lg  px-4 py-1 mt-5"
-                    (click)="goButton()">
+                <button class="text-white border-[2px] text-lg rounded-lg px-4 py-1 mt-5" 
+                [ngClass]="{
+                        'bg-[#415CFF]': selectCropId && InputObj.VarietyName,
+                        'bg-gray-400': !selectCropId || !InputObj.VarietyName
+                    }" [disabled]="!selectCropId || !InputObj.VarietyName" (click)="goButton()">
                     Go
                 </button>
             </div>
@@ -187,8 +197,12 @@
                                 class="border-[#415CFF] border-[2px] border-dotted rounded-lg w-20 px-2 py-1" />
                         </td>
                         <td class="px-3 py-4">
-                            <button class="bg-[#F6F7F9] text-[#6B7D8C] border-[2px] rounded-lg px-4 py-2"
-                                (click)="AddButton()">
+                            <button class="text-white border-[2px] rounded-lg px-4 py-2"
+                            [ngClass]="{
+                                'bg-[#415CFF]': (InputObj.qtyA > 0 || InputObj.qtyB > 0 || InputObj.qtyC > 0),
+                                'bg-gray-400': !(InputObj.qtyA > 0 || InputObj.qtyB > 0 || InputObj.qtyC > 0)
+                            }" [disabled]="!selectCropId || !InputObj.VarietyName"
+                            (click)="(InputObj.qtyA > 0 || InputObj.qtyB > 0 || InputObj.qtyC > 0) && AddButton()">
                                 Add
                             </button>
                         </td>
@@ -221,9 +235,9 @@
                                 1) }}</td>
                         <td class="px-5 py-4  text-gray-900 dark:text-textDark">{{item.cropName}}</td>
                         <td class="px-5 py-4  text-gray-900 dark:text-textDark">{{item.VarietyName}}</td>
-                        <td class="px-5 py-4  text-gray-900 dark:text-textDark">{{item.qtyA}}</td>
-                        <td class="px-5 py-4  text-gray-900 dark:text-textDark">{{item.qtyB}}</td>
-                        <td class="px-5 py-4  text-gray-900 dark:text-textDark">{{item.qtyC}}</td>
+                        <td class="px-5 py-4  text-gray-900 dark:text-textDark">{{item.qtyA === 0 ? '---' : item.qtyA +'Kg' }}</td>
+                        <td class="px-5 py-4  text-gray-900 dark:text-textDark">{{item.qtyB === 0 ? '---' : item.qtyB +'Kg' }}</td>
+                        <td class="px-5 py-4  text-gray-900 dark:text-textDark">{{item.qtyC === 0 ? '---' : item.qtyC +'Kg' }}</td>
                         <td class="px-5 py-4  text-gray-900 dark:text-textDark">
                             <button class="flex items-center justify-center text-red-600 hover:text-rose-900 w-10 h-10"
                                 (click)="removeItem(i)">

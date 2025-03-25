@@ -211,10 +211,10 @@
                         <th class="px-3 py-3 text-left text-sm font-medium"
                             *ngIf="logingRole ==='Collection Center Head'">
                             Centers</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium">Role</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium">Status</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium">Phone</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium">NIC</th>
+                        <th class="px-3 py-3 text-left text-sm font-medium ">Role</th>
+                        <th class="px-3 py-3 text-center text-sm font-medium ">Status</th>
+                        <th class="px-3 py-3 text-center text-sm font-medium">Phone</th>
+                        <th class="px-3 py-3 text-center text-sm font-medium">NIC</th>
                         <th class="px-3 py-3 text-center text-sm font-medium"></th>
                     </tr>
                 </thead>
@@ -225,7 +225,7 @@
                     currentPage: page,
                     totalItems: totalItems
                   };  let i = index">
-                        <td class="px-2 py-4 text-sm text-gray-900 dark:text-gray-300">
+                        <td class="px-2 py-4 text-sm text-gray-900 dark:text-gray-300 ">
                             {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i + 1)
                                 : (((page - 1) * itemsPerPage) + i + 1) }} </td>
                         <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.empId}}</td>
@@ -234,8 +234,8 @@
                         <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300"
                             *ngIf="logingRole ==='Collection Center Head'">{{item.centerName}}</td>
                         <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.jobRole}}</td>
-                        <td class="px-3 py-4">
-                            <div class="flex justify-center items-center" (click)="openPopup(item)">
+                        <td class="px-3 py-4 text-center ">
+                            <div class="flex justify-center items-center cursor-pointer" (click)="openPopup(item)">
                                 <span *ngIf="item.status === 'Approved'"
                                     class="inline-block px-6 py-1 bg-[#C8E0FF] text-[#415CFF] text-sm font-medium rounded-md shadow-md">
                                     Approved
@@ -250,10 +250,10 @@
                                 </span>
                             </div>
                         </td>
-                        <td class="px-3  py-4 text-sm text-gray-900 dark:text-gray-300">
+                        <td class="px-3  py-4 text-sm text-gray-900 dark:text-gray-300 text-center">
                             {{item.phoneCode01}}{{item.phoneNumber01}}</td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.nic}}</td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">
+                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300 text-center">{{item.nic}}</td>
+                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300 text-center">
                             <button class="text-gray-400 hover:text-gray-600 px-2" (click)="navigateToProfile(item.id)">
                                 <i class="fa-regular fa-file text-lg"></i>
                             </button>

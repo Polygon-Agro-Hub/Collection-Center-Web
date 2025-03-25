@@ -21,6 +21,7 @@ export class AddDailyTargetComponent implements OnInit {
   selectedVarieties!: Variety[];
   centerId!: number;
   centerName!: string;
+  regCode!: string;
 
   dailyTartgetObj: DailyTarget = new DailyTarget();
   InputObj: TargetItem = new TargetItem();
@@ -46,14 +47,13 @@ export class AddDailyTargetComponent implements OnInit {
     private TargetSrv: TargetService,
     private toastSrv: ToastAlertService,
     private route: ActivatedRoute,
-
-
   ) { }
 
 
   ngOnInit(): void {
     this.dailyTartgetObj.centerId = this.route.snapshot.params['id'];
     this.centerName = this.route.snapshot.params['name'];
+    this.regCode = this.route.snapshot.params['regCode'];
     this.getAllCropVerity();
   }
 
@@ -73,6 +73,8 @@ export class AddDailyTargetComponent implements OnInit {
   }
 
   onCropChange() {
+    this.InputObj.VarietyName = ''
+    this.isAddColumn = false;
     const sample = this.cropsObj.filter(crop => crop.cropId === +this.selectCropId);
     const selectedCrop = this.cropsObj.find(crop => crop.cropId === +this.selectCropId);
 
@@ -108,7 +110,6 @@ export class AddDailyTargetComponent implements OnInit {
       this.selectCropId = '';
       this.InputObj = new TargetItem();
       this.isLoading = false;
-
       return;
     }
     this.isAddColumn = true;
@@ -125,12 +126,7 @@ export class AddDailyTargetComponent implements OnInit {
     }
 
     if (!this.InputObj.varietyId || this.InputObj.qtyA < 0 || this.InputObj.qtyB < 0 || this.InputObj.qtyC < 0) {
-      // this.toastSrv.warning("")
-      Swal.fire({
-        icon: 'error',
-        title: 'Invalid Input',
-        text: 'Please ensure all fields are filled and quantities are non-negative.',
-      });
+      this.toastSrv.error('Please ensure all fields are filled and quantities are non-negative.')
       this.isLoading = false;
       return;
     } else {
@@ -187,7 +183,8 @@ export class AddDailyTargetComponent implements OnInit {
     this.isLoading = true;
     console.log(this.dailyTartgetObj);
     if (this.dailyTartgetObj.TargetItems.length === 0) {
-      Swal.fire('warning', 'Pleace fill all required feilds', 'warning')
+      // Swal.fire('warning', 'Pleace fill all required feilds', 'warning')
+      this.toastSrv.success('Pleace fill all required feilds')
       this.isLoading = false;
       return;
 
@@ -293,9 +290,94 @@ export class AddDailyTargetComponent implements OnInit {
 
   checkAddButton() {
     if (this.InputObj.qtyA > 0 || this.InputObj.qtyB > 0 || this.InputObj.qtyC > 0) {
+      if (this.InputObj.qtyA < 0) {
+        this.InputObj.qtyA = 0;
+      }
+      if (this.InputObj.qtyB < 0) {
+        this.InputObj.qtyB = 0;
+      }
+      if (this.InputObj.qtyC < 0) {
+        this.InputObj.qtyC = 0;
+      }
       this.isAddButton = false;
     }
   }
+
+  validateTimes() {
+    if (!this.dailyTartgetObj.fromTime || !this.dailyTartgetObj.toTime) {
+      return true; // Let required validation handle empty fields
+    }
+
+    // If dates are different, times don't need comparison
+    if (this.dailyTartgetObj.fromDate !== this.dailyTartgetObj.toDate) {
+      return true;
+    }
+
+    const fromTime = this.dailyTartgetObj.fromTime.toString();
+    const toTime = this.dailyTartgetObj.toTime.toString();
+
+    return fromTime <= toTime;
+  }
+
+  checkFromTime(inputField: HTMLInputElement) {
+    if (!this.validateTimes()) {
+      this.toastSrv.warning('The <b>From Time</b> cannot be after the <b>To Time</b>');
+      this.dailyTartgetObj.fromTime = '';
+      inputField.value = '';
+    }
+  }
+
+  checkToTime(inputField: HTMLInputElement) {
+    if (this.dailyTartgetObj.fromTime === '') {
+      this.toastSrv.warning('Pleace Enter 1st <b>From Time</b>')
+      this.dailyTartgetObj.toTime = '';
+      return;
+    }
+    if (!this.validateTimes()) {
+      this.toastSrv.warning('The <b>To Time</b> cannot be before the <b>From Time</b>');
+      this.dailyTartgetObj.toTime = '';
+      inputField.value = '';
+    }
+  }
+
+
+  formatDate(dateString: string | Date): string {
+  if (!dateString) return '';
+  
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return ''; // Invalid date
+  
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  const year = date.getFullYear();
+  
+  return `${month}/${day}/${year}`;
+}
+
+formatTime(timeString: string | Date): string {
+  if (!timeString) return '';
+  
+  // Handle both Date objects and time strings
+  let hours: number, minutes: string;
+  
+  if (typeof timeString === 'string') {
+    const [h, m] = timeString.split(':');
+    hours = parseInt(h, 10);
+    minutes = m?.padStart(2, '0') || '00';
+  } else {
+    const date = new Date(timeString);
+    if (isNaN(date.getTime())) return '';
+    hours = date.getHours();
+    minutes = date.getMinutes().toString().padStart(2, '0');
+  }
+
+  // Convert to 12-hour format with AM/PM
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12;
+  hours = hours || 12; // Convert 0 to 12 for 12-hour format
+  
+  return `${hours}:${minutes} ${ampm}`;
+}
 
 
 

@@ -47,8 +47,6 @@ export class AddDailyTargetComponent implements OnInit {
     private TargetSrv: TargetService,
     private toastSrv: ToastAlertService,
     private route: ActivatedRoute,
-
-
   ) { }
 
 
@@ -341,6 +339,46 @@ export class AddDailyTargetComponent implements OnInit {
       inputField.value = '';
     }
   }
+
+
+  formatDate(dateString: string | Date): string {
+  if (!dateString) return '';
+  
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return ''; // Invalid date
+  
+  const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  const day = date.getDate().toString().padStart(2, '0');
+  const year = date.getFullYear();
+  
+  return `${month}/${day}/${year}`;
+}
+
+formatTime(timeString: string | Date): string {
+  if (!timeString) return '';
+  
+  // Handle both Date objects and time strings
+  let hours: number, minutes: string;
+  
+  if (typeof timeString === 'string') {
+    const [h, m] = timeString.split(':');
+    hours = parseInt(h, 10);
+    minutes = m?.padStart(2, '0') || '00';
+  } else {
+    const date = new Date(timeString);
+    if (isNaN(date.getTime())) return '';
+    hours = date.getHours();
+    minutes = date.getMinutes().toString().padStart(2, '0');
+  }
+
+  // Convert to 12-hour format with AM/PM
+  const ampm = hours >= 12 ? 'PM' : 'AM';
+  hours = hours % 12;
+  hours = hours || 12; // Convert 0 to 12 for 12-hour format
+  
+  return `${hours}:${minutes} ${ampm}`;
+}
+
 
 
 }

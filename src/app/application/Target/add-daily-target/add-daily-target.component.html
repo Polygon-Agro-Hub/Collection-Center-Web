@@ -1,6 +1,12 @@
 <app-loading-spinner *ngIf="isLoading" />
 
 <div *ngIf="!isLoading">
+    <div class="flex flex-row items-center gap-6 font-semibold text[#424242] mb-5 mx-5 cursor-pointer">
+        <p>Centers</p>
+        <p onclick="history.back()">Center Dashboard</p>
+        <p>Assign Center Target</p>
+    </div>
+
     <div class="w-full px-10 py-3 bg-tileLight  shadow-lg rounded-lg mt-6 dark:bg-[#363636]">
         <p class="text-center text-black text-lg font-bold  dark:text-white">{{regCode}} : {{centerName}}</p>
     </div>
@@ -84,11 +90,12 @@
 
     <div *ngIf="(dailyTartgetObj.fromDate && dailyTartgetObj.toDate && dailyTartgetObj.fromTime && dailyTartgetObj.toTime)"
         class="w-full px-10 py-7 bg-tileLight  shadow-lg rounded-lg mt-6 dark:bg-[#363636]">
-        <p class="font-semibold dark:text-textDark">Daily Target from {{dailyTartgetObj.fromDate}} <span
-                class="text-[#415CFF] dark:text-textDark">{{dailyTartgetObj.fromTime}}</span> to
-            {{dailyTartgetObj.toDate}}
-            <span class="text-[#415CFF] dark:text-textDark">{{dailyTartgetObj.toTime}}</span>
-        </p>
+        <p class="font-semibold dark:text-textDark">
+            Daily Target from {{formatDate(dailyTartgetObj.fromDate)}} 
+            <span class="text-[#415CFF] dark:text-textDark">{{formatTime(dailyTartgetObj.fromTime)}}</span> 
+            to {{formatDate(dailyTartgetObj.toDate)}}
+            <span class="text-[#415CFF] dark:text-textDark">{{formatTime(dailyTartgetObj.toTime)}}</span>
+          </p>
 
         <div class="flex flex-row justify-between items-center my-5 dark:bg-[#363636]">
             <div class="w-[40%]">
@@ -228,9 +235,9 @@
                                 1) }}</td>
                         <td class="px-5 py-4  text-gray-900 dark:text-textDark">{{item.cropName}}</td>
                         <td class="px-5 py-4  text-gray-900 dark:text-textDark">{{item.VarietyName}}</td>
-                        <td class="px-5 py-4  text-gray-900 dark:text-textDark">{{item.qtyA}}</td>
-                        <td class="px-5 py-4  text-gray-900 dark:text-textDark">{{item.qtyB}}</td>
-                        <td class="px-5 py-4  text-gray-900 dark:text-textDark">{{item.qtyC}}</td>
+                        <td class="px-5 py-4  text-gray-900 dark:text-textDark">{{item.qtyA === 0 ? '---' : item.qtyA +'Kg' }}</td>
+                        <td class="px-5 py-4  text-gray-900 dark:text-textDark">{{item.qtyB === 0 ? '---' : item.qtyB +'Kg' }}</td>
+                        <td class="px-5 py-4  text-gray-900 dark:text-textDark">{{item.qtyC === 0 ? '---' : item.qtyC +'Kg' }}</td>
                         <td class="px-5 py-4  text-gray-900 dark:text-textDark">
                             <button class="flex items-center justify-center text-red-600 hover:text-rose-900 w-10 h-10"
                                 (click)="removeItem(i)">

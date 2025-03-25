@@ -297,6 +297,42 @@ export class AddDailyTargetComponent implements OnInit {
     }
   }
 
+  validateTimes() {
+    if (!this.dailyTartgetObj.fromTime || !this.dailyTartgetObj.toTime) {
+      return true; // Let required validation handle empty fields
+    }
+  
+    // If dates are different, times don't need comparison
+    if (this.dailyTartgetObj.fromDate !== this.dailyTartgetObj.toDate) {
+      return true;
+    }
+  
+    const fromTime = this.dailyTartgetObj.fromTime.toString();
+    const toTime = this.dailyTartgetObj.toTime.toString();
+  
+    return fromTime <= toTime;
+  }
+  
+  checkFromTime(inputField: HTMLInputElement) {
+    if (!this.validateTimes()) {
+      this.toastSrv.warning('The <b>From Time</b> cannot be after the <b>To Time</b>');
+      this.dailyTartgetObj.fromTime = '';
+      inputField.value = '';
+    }
+  }
+  
+  checkToTime(inputField: HTMLInputElement) {
+    if(this.dailyTartgetObj.fromTime === ''){
+      this.toastSrv.warning('Pleace Enter 1st <b>From Time</b>')
+      this.dailyTartgetObj.toTime = '';
+      return;
+    }
+    if (!this.validateTimes()) {
+      this.toastSrv.warning('The <b>To Time</b> cannot be before the <b>From Time</b>');
+      this.dailyTartgetObj.toTime = '';
+      inputField.value = '';
+    }
+  }
 
 
 }

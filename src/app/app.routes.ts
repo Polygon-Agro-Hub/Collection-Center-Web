@@ -210,7 +210,7 @@ export const routes: Routes = [
                         component: CenterViewPriceListComponent
                     },
                     {
-                        path: 'center-view-officers',
+                        path: 'center-view-officers/:id',
                         component: CenterViewOfficersComponent
                     },
                 ]

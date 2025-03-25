@@ -74,6 +74,10 @@ export class CentersDashbordComponent implements OnInit {
   navigateToMarketPrice() {
     this.router.navigate([`centers/center-view-price-list/${this.centerId}`]);
   }
+
+  navigateCenterOfficers(){
+    this.router.navigate([`centers/center-view-officers/${this.centerId}`]);
+  }
 }
 
 class CenterName {

@@ -165,76 +165,69 @@ export class ViewOfficersComponent implements OnInit {
 
   openPopup(item: any) {
     this.isPopupVisible = true;
-
-    // HTML structure for the popup
+  
     const tableHtml = `
       <div class="container mx-auto">
-        <h1 class="text-center text-2xl font-bold mb-4">Officer Name : ${item.firstNameEnglish}</h1>
-        <div >
+        <h1 class="text-center text-2xl font-bold mb-4">Officer Name: ${item.firstNameEnglish}</h1>
+        <div>
           <p class="text-center">Are you sure you want to approve or reject this collection?</p>
         </div>
         <div class="flex justify-center mt-4">
-          <button id="rejectButton" class="bg-red-500 text-white px-6 py-2 rounded-lg mr-2">Reject</button>
-          <button id="approveButton" class="bg-green-500 text-white px-4 py-2 rounded-lg">Approve</button>
+          <button id="rejectButton" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg mr-2">
+            Reject
+          </button>
+          <button id="approveButton" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
+            Approve
+          </button>
         </div>
       </div>
     `;
-
-    Swal.fire({
+  
+    const swalInstance = Swal.fire({
       html: tableHtml,
-      showConfirmButton: false, // Hide default confirm button
+      showConfirmButton: false,
       width: 'auto',
+      allowOutsideClick: false, // Prevent closing by clicking outside
       didOpen: () => {
-        // Handle the "Approve" button click
-        document
-          .getElementById('approveButton')
-          ?.addEventListener('click', () => {
-            this.isPopupVisible = false;
-            // this.isLoading = true;
-            this.ManageOficerSrv.ChangeStatus(item.id, 'Approved').subscribe(
-              (res) => {
-
-                // this.isLoading = false;
-                if (res.status) {
-                  this.toastSrv.success('The collection was approved successfully.')
-                  this.fetchByRole();
-                } else {
-                  this.toastSrv.error(res.message)
-                }
-              },
-              (err) => {
-                // this.isLoading = false;
-                this.toastSrv.error('An error occurred while approving. Please try again.')
-              }
-            );
-          });
-
-        // Handle the "Reject" button click
-        document
-          .getElementById('rejectButton')
-          ?.addEventListener('click', () => {
-            // this.isPopupVisible = false;
-            // this.isLoading = true;
-            this.ManageOficerSrv.ChangeStatus(item.id, 'Rejected').subscribe(
-              (res) => {
-                // this.isLoading = false;
-                if (res.status) {
-                  this.toastSrv.success('The collection was rejected successfully.')
-
-                  this.fetchByRole();
-                } else {
-                  this.toastSrv.error(res.message)
-
-                }
-              },
-              (err) => {
-                // this.isLoading = false;
-                this.toastSrv.error('An error occurred while rejecting. Please try again.')
-
-              }
-            );
-          });
+        // Approve Button
+        document.getElementById('approveButton')?.addEventListener('click', () => {
+          this.handleStatusChange(swalInstance, item.id, 'Approved');
+        });
+  
+        // Reject Button
+        document.getElementById('rejectButton')?.addEventListener('click', () => {
+          this.handleStatusChange(swalInstance, item.id, 'Rejected');
+        });
+      }
+    });
+  }
+  
+  private handleStatusChange(swalInstance: any, id: number, status: 'Approved' | 'Rejected') {
+    // Show loading state
+    swalInstance.update({
+      showConfirmButton: false,
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+  
+    this.ManageOficerSrv.ChangeStatus(id, status).subscribe({
+      next: (res) => {
+        swalInstance.close();
+        if (res.status) {
+          const action = status === 'Approved' ? 'approved' : 'rejected';
+          this.toastSrv.success(`The collection was ${action} successfully.`);
+          this.fetchByRole();
+        } else {
+          this.toastSrv.error(res.message || `Failed to ${status.toLowerCase()} the collection.`);
+        }
       },
+      error: (err) => {
+        swalInstance.close();
+        this.toastSrv.error(`An error occurred while ${status.toLowerCase()}ing. Please try again.`);
+      }
     });
   }
 

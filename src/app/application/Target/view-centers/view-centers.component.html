@@ -19,7 +19,9 @@
                 <p class="text-lg dark:text-white">Filter By</p>
 
             <div class="flex gap-4">
-                <div class="relative w-46">
+
+
+                <!-- <div class="relative w-46">
                     <div
                         class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
                         <select [(ngModel)]="selectProvince" (change)="filterProvince()"
@@ -29,33 +31,61 @@
                                 class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
                                 [value]="province">{{ province }}</option>
                         </select>
-                        <button *ngIf="!selectProvince">
-                            <i class="fa-solid fa-angle-down text-lg mr-3"></i>
-                        </button>
-                        <button *ngIf="selectProvince" (click)="cancelProvince()">
-                            <i class="fa-solid fa-xmark text-lg mr-3"></i>
-                        </button>
                     </div>
-                </div>
+                </div> -->
+
 
                 <div class="relative w-46">
-                    <div
-                        class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
-                        <select [(ngModel)]="selectDistrict" (change)="filterDistrict()"
-                            class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
-                            <option value="" selected disabled>District</option>
-                            <option *ngFor="let district of filteredDistricts"
-                                class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                                [value]="district.name">{{ district.name }}</option>
-                        </select>
-                        <button *ngIf="!selectDistrict">
-                            <i class="fa-solid fa-angle-down text-lg mr-3"></i>
-                        </button>
-                        <button *ngIf="selectDistrict" (click)="cancelDistrict()">
-                            <i class="fa-solid fa-xmark text-lg mr-3"></i>
-                        </button>
+                    <div class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
+                      <select [(ngModel)]="selectProvince" (change)="filterProvince()"
+                        class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer">
+                        <option value="" selected disabled>Province</option>
+                        <option *ngFor="let province of provinces"
+                          class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                          [value]="province">{{ province }}</option>
+                      </select>
+                      
+                      <!-- Down arrow icon -->
+                      <div *ngIf="!selectProvince" class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
+                        <i class="fa-solid fa-angle-down text-lg mr-3"></i>
+                      </div>
+                  
+                      <!-- Cancel icon -->
+                      <div (click)="cancelProvince()" *ngIf="selectProvince" 
+                           class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300 cursor-pointer z-10">
+                        <i class="fa-solid fa-xmark text-lg mr-3"></i>
+                      </div>
                     </div>
-                </div>
+                  </div>
+
+
+
+
+                  <div class="relative w-46">
+                    <div class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
+                      <select [(ngModel)]="selectDistrict" (change)="filterDistrict()"
+                        class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer">
+                        <option value="" selected disabled>District</option>
+                        <option *ngFor="let district of filteredDistricts"
+                          class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                          [value]="district.name">{{ district.name }}</option>
+                      </select>
+                      
+                      <!-- Down arrow icon -->
+                      <div *ngIf="!selectDistrict" class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
+                        <i class="fa-solid fa-angle-down text-lg mr-3"></i>
+                      </div>
+                  
+                      <!-- Cancel icon -->
+                      <div (click)="cancelDistrict()" *ngIf="selectDistrict" 
+                           class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300 cursor-pointer z-10">
+                        <i class="fa-solid fa-xmark text-lg mr-3"></i>
+                      </div>
+                    </div>
+                  </div>
+
+
+                
             </div>
 
             <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">

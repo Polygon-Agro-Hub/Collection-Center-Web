@@ -193,13 +193,19 @@ export class OfficerProfileComponent implements OnInit {
     doc.setFont("Inter", "normal");
     doc.text("Phone Number - 1", 14, startY + 42);
     doc.setFont("Inter", "bold");
-    doc.text(getValueOrNA(this.officerObj.phoneNumber01), 14, startY + 48);
+    doc.text(getValueOrNA(this.officerObj.phoneNumber01), 22, startY + 48);
+
+    doc.setFont("Inter", "bold");
+    doc.text(getValueOrNA(this.officerObj.phoneCode02), 14, startY + 48);
 
     // Phone Number 2
     doc.setFont("Inter", "normal");
     doc.text("Phone Number - 2", 100, startY + 42);
     doc.setFont("Inter", "bold");
-    doc.text(getValueOrNA(this.officerObj.phoneNumber02), 100, startY + 48);
+    doc.text(getValueOrNA(this.officerObj.phoneNumber02), 108, startY + 48);
+
+    doc.setFont("Inter", "bold");
+    doc.text(getValueOrNA(this.officerObj.phoneCode02), 100, startY + 48);
 
     // Address Details Section
     doc.setFontSize(16);

@@ -1,6 +1,6 @@
 <app-loading-spinner *ngIf="isLoading" />
 
-<div class="flex flex-row items-center gap-6 font-semibold text[#424242] mb-5 mx-5">
+<div class="flex flex-row items-center gap-6 font-semibold text[#424242] dark:text-white mb-5 mx-5">
   <p>Centers</p>
   <p>Add a Center</p>
 </div>
@@ -14,7 +14,7 @@
       <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-textDark">Collection Center Name</label>
       <input
         type="text"
-        class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#292929] "
+        class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F] "
         [(ngModel)]="centerData.centerName"
         name="centerName"
         required
@@ -28,7 +28,7 @@
     <div>
       <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-textDark">Country</label>
       <select
-      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#292929]"
+      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
         [(ngModel)]="centerData.country"
         name="country"
         required
@@ -45,7 +45,7 @@
     <div>
       <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-textDark">Province</label>
       <select
-      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#292929]"
+      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
         [(ngModel)]="centerData.province"
         (change)="updateFilteredDistricts()"
         name="province"
@@ -65,7 +65,7 @@
     <div>
       <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-textDark">District</label>
       <select
-      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#292929]"
+      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
         [(ngModel)]="centerData.district"
         name="district"
         required
@@ -85,7 +85,7 @@
       <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-textDark">Building No</label>
       <input
         type="text"
-        class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#292929]"
+        class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
         [(ngModel)]="centerData.buildingNumber"
         name="buildingNumber"
         required
@@ -100,7 +100,7 @@
       <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-textDark">Street Name</label>
       <input
         type="text"
-        class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#292929]"
+        class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
         [(ngModel)]="centerData.street"
         name="street"
         required
@@ -115,7 +115,7 @@
       <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-textDark">City</label>
       <input
         type="text"
-        class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#292929]"
+        class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
         [(ngModel)]="centerData.city"
         name="city"
         required
@@ -130,7 +130,7 @@
       <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-textDark">Collection Center Reg Code</label>
       <input
         type="text"
-        class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#292929]"
+        class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
         [(ngModel)]="centerData.regCode"
         name="regCode"
         placeholder=" ----- "

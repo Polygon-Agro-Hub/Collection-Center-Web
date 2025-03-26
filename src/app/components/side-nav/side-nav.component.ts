@@ -1,6 +1,6 @@
 import { CommonModule, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
-import { Router } from '@angular/router';
+import { NavigationEnd, Router } from '@angular/router';
 import { ThemeService } from '../../theme.service';
 import { FormsModule } from '@angular/forms';
 import { TokenServiceService } from '../../services/Token/token-service.service';
@@ -14,8 +14,7 @@ export const MENU_ITEMS = [
     path: '/dashbord',
     label: 'Dashbord',
     icon: 'fas fa-th-large',
-    permission: 'Collection Center Manager'
-
+    permission: 'Collection Center Manager',
   },
   {
     id: 2,
@@ -23,8 +22,7 @@ export const MENU_ITEMS = [
     path: '/target/view-target',
     label: 'Collection Target',
     icon: 'fa-solid fa-bullseye',
-    permission: 'Collection Center Manager'
-
+    permission: 'Collection Center Manager',
   },
   {
     id: 3,
@@ -32,8 +30,7 @@ export const MENU_ITEMS = [
     path: '/centers',
     label: 'Centers',
     icon: 'fa-solid fa-bullseye',
-    permission: 'Collection Center Head'
-
+    permission: 'Collection Center Head',
   },
   {
     id: 3,
@@ -41,8 +38,7 @@ export const MENU_ITEMS = [
     path: '/price-list/view-prices',
     label: 'Price List',
     icon: 'fa-solid fa-tag',
-    permission: 'Collection Center Manager'
-
+    permission: 'Collection Center Manager',
   },
   {
     id: 4,
@@ -50,22 +46,21 @@ export const MENU_ITEMS = [
     path: '/price-request/view-request',
     label: 'Price Requests',
     icon: 'fas fa-hand-holding-usd',
-    permission: 'Collection Center Manager'
-
+    permission: 'Collection Center Manager',
   },
   {
     id: 5,
     key: 'reports',
     path: '/reports/select-report',
     label: 'Reports',
-    icon: 'fa-solid fa-chart-pie'
+    icon: 'fa-solid fa-chart-pie',
   },
   {
     id: 6,
     key: 'manageofficer',
     path: '/manage-officers/view-officer',
     label: 'Manage Officers',
-    icon: 'fas fa-user-cog'
+    icon: 'fas fa-user-cog',
   },
   {
     id: 7,
@@ -73,8 +68,7 @@ export const MENU_ITEMS = [
     path: '/complaints',
     label: 'Complaints',
     icon: 'fa-solid fa-triangle-exclamation',
-    permission: 'Collection Center Manager'
-
+    permission: 'Collection Center Manager',
   },
   {
     id: 8,
@@ -82,8 +76,8 @@ export const MENU_ITEMS = [
     path: '/cch-complaints',
     label: 'Complaints',
     icon: 'fa-solid fa-triangle-exclamation',
-    permission: 'Collection Center Head'
-  }
+    permission: 'Collection Center Head',
+  },
 ];
 
 @Component({
@@ -91,7 +85,7 @@ export const MENU_ITEMS = [
   standalone: true,
   imports: [CommonModule, FormsModule],
   templateUrl: './side-nav.component.html',
-  styleUrls: ['./side-nav.component.css']
+  styleUrls: ['./side-nav.component.css'],
 })
 export class SideNavComponent {
   isCollapsed = false;
@@ -100,8 +94,8 @@ export class SideNavComponent {
   menuItems = MENU_ITEMS;
 
   get filteredMenuItems() {
-    return this.menuItems.filter(item =>
-      !item.permission || item.permission === this.role
+    return this.menuItems.filter(
+      (item) => !item.permission || item.permission === this.role
     );
   }
 
@@ -112,9 +106,28 @@ export class SideNavComponent {
     private tokenSrv: TokenServiceService,
     private toastSrv: ToastAlertService
   ) {
-    this.role = tokenSrv.getUserDetails().role
-    this.selectIdealTab();
-   }
+    this.role = tokenSrv.getUserDetails().role;
+    this.setActiveTabFromRoute();
+
+    this.router.events.subscribe((event) => {
+      if (event instanceof NavigationEnd) {
+        this.setActiveTabFromRoute();
+      }
+    });
+  }
+
+  private setActiveTabFromRoute(): void {
+    const currentPath = this.router.url.split('?')[0];
+
+    const activeItem = this.menuItems.find(
+      (item) => currentPath.startsWith(item.path) || currentPath === item.path
+    );
+    if (activeItem) {
+      this.isSelectTab = activeItem.key;
+    } else {
+      this.selectIdealTab();
+    }
+  }
 
   toggleSidebar() {
     this.isCollapsed = !this.isCollapsed;
@@ -130,7 +143,9 @@ export class SideNavComponent {
 
   navigate(path: string, selectTab: string) {
     this.isSelectTab = selectTab;
-    this.router.navigate([path]);
+    this.router.navigate([path]).then(() => {
+      this.setActiveTabFromRoute();
+    });
   }
 
   isTabSelected(tab: string): boolean {
@@ -145,11 +160,8 @@ export class SideNavComponent {
 
   // }
 
-
   logOut(): void {
     if (isPlatformBrowser(this.platformId)) {
-      
-
       // Show a logout confirmation
       Swal.fire({
         icon: 'warning',
@@ -170,12 +182,11 @@ export class SideNavComponent {
     }
   }
 
-  selectIdealTab(){
-    if(this.role === 'Collection Center Manager'){
-      this.isSelectTab = 'dashboard'
-    }else{
-      this.isSelectTab = 'centers'
+  selectIdealTab() {
+    if (this.role === 'Collection Center Manager') {
+      this.isSelectTab = 'dashboard';
+    } else {
+      this.isSelectTab = 'centers';
     }
   }
 }
-

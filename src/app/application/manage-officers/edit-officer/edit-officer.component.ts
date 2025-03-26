@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
+import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { ManageOfficersService } from '../../../services/manage-officers-service/manage-officers.service';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -224,11 +224,13 @@ export class EditOfficerComponent implements OnInit {
 
 
   nextForm(page: 'pageOne' | 'pageTwo') {
-    if (!this.personalData.firstNameEnglish || !this.personalData.firstNameSinhala || !this.personalData.firstNameTamil || !this.personalData.email || !this.personalData.languages || !this.personalData.lastNameEnglish || !this.personalData.lastNameSinhala || !this.personalData.lastNameTamil || !this.personalData.nic || !this.personalData.phoneNumber01 || !this.personalData.phoneCode01) {
-      Swal.fire('warning', 'Pleace fill all required feilds', 'warning')
-    } else {
-      this.selectedPage = page;
-    }
+    // if (!this.personalData.firstNameEnglish || !this.personalData.firstNameSinhala || !this.personalData.firstNameTamil || !this.personalData.email || !this.personalData.languages || !this.personalData.lastNameEnglish || !this.personalData.lastNameSinhala || !this.personalData.lastNameTamil || !this.personalData.nic || !this.personalData.phoneNumber01 || !this.personalData.phoneCode01) {
+    //   Swal.fire('warning', 'Pleace fill all required feilds', 'warning')
+    // } else {
+    //   this.selectedPage = page;
+    // }
+    this.selectedPage = page;
+
 
   }
 
@@ -508,6 +510,11 @@ export class EditOfficerComponent implements OnInit {
       this.imageLoadError = true;
       this.personalData.image = ''; // Clear the invalid image URL
   }
+
+   onSubmitForm(form: NgForm) {
+      form.form.markAllAsTouched();
+    }
+  
 
 
 }

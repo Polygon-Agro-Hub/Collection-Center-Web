@@ -187,8 +187,8 @@ export class OfficerProfileComponent implements OnInit {
     doc.setFont("Inter", "normal");
     doc.text("Email", 100, startY + 26);
     doc.setFont("Inter", "bold");
-    doc.text(getValueOrNA(this.officerObj.email), 100, startY + 32);
 
+    doc.text(getValueOrNA(this.officerObj.email), 100, startY + 32);
     // Phone Number 1
     doc.setFont("Inter", "normal");
     doc.text("Phone Number - 1", 14, startY + 42);

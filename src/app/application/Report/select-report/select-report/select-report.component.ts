@@ -7,17 +7,25 @@ import { SalesReportComponentComponent } from '../sales-report-component/sales-r
 @Component({
   selector: 'app-select-report',
   standalone: true,
-  imports: [CommonModule, FormsModule, CollectionReportComponentComponent, SalesReportComponentComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    CollectionReportComponentComponent,
+    SalesReportComponentComponent,
+  ],
   templateUrl: './select-report.component.html',
-  styleUrl: './select-report.component.css'
+  styleUrl: './select-report.component.css',
 })
 export class SelectReportComponent {
-  selectedtype: string = ''
-  type:string = '';
+  selectedtype: string = '';
+  type: string = '';
 
-  GoBtn(){
-    this.type = this.selectedtype
+  GoBtn() {
+    this.type = this.selectedtype;
   }
-  
 
+  clearSelection() {
+    this.selectedtype = '';
+    this.type = '';
+  }
 }

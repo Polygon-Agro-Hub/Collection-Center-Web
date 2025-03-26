@@ -13,12 +13,12 @@ import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loa
   templateUrl: './view-center-target.component.html',
   styleUrl: './view-center-target.component.css'
 })
-export class ViewCenterTargetComponent implements OnInit{
+export class ViewCenterTargetComponent implements OnInit {
 
   centerId!: number;
 
   targetArr!: DailyTargets[];
-  assignTargetArr!: AssignDailyTarget[];
+
   searchText: string = '';
   selectStatus: string = '';
   selectValidity: string = '';
@@ -29,10 +29,6 @@ export class ViewCenterTargetComponent implements OnInit{
   totalItems: number = 0;
   itemsPerPage: number = 10;
 
-  assignHasData: boolean = true;
-  assignPage: number = 1;
-  assignTotalItems: number = 0;
-  assignItemsPerPage: number = 10;
 
   isLoading: boolean = false;
 
@@ -75,16 +71,16 @@ export class ViewCenterTargetComponent implements OnInit{
     );
   }
 
-  checkValidity(toDate: string): string {
-    const currentDate = new Date();
-    const targetDate = new Date(toDate);
+  // checkValidity(toDate: string): string {
+  //   const currentDate = new Date();
+  //   const targetDate = new Date(toDate);
 
-    if (targetDate >= currentDate) {
-      return 'Active';
-    } else {
-      return 'Expired';
-    }
-  }
+  //   if (targetDate >= currentDate) {
+  //     return 'Active';
+  //   } else {
+  //     return 'Expired';
+  //   }
+  // }
 
   onSearch() {
     this.fetchAllTarget();
@@ -109,21 +105,57 @@ export class ViewCenterTargetComponent implements OnInit{
   }
 
 
-  filterValidity() {
-    if (!this.selectValidity) {
-      this.fetchAllTarget();
-      return;
-    }
+  // filterValidity() {
+  //   if (!this.selectValidity) {
+  //     this.fetchAllTarget();
+  //     return;
+  //   }
 
-    this.targetArr = this.targetArr.filter(item => {
-      if (this.selectValidity === 'Active') {
-        return this.checkValidity(item.toDate) === 'Active';
-      } else if (this.selectValidity === 'Expired') {
-        return this.checkValidity(item.toDate) === 'Expired';
-      }
-      return true;
-    });
+  //   this.targetArr = this.targetArr.filter(item => {
+  //     if (this.selectValidity === 'Active') {
+  //       return this.checkValidity(item.toDate) === 'Active';
+  //     } else if (this.selectValidity === 'Expired') {
+  //       return this.checkValidity(item.toDate) === 'Expired';
+  //     }
+  //     return true;
+  //   });
+  // }
+
+  getTimeRemaining(toDate: string, toTime: string): string {
+    // Split date into parts and create a Date object in YYYY-MM-DD format (which is unambiguous)
+    const [day, month, year] = toDate.split('/').map(Number);
+    const targetDateTime = new Date(`${year}-${month}-${day} ${toTime}`);
+  
+    const currentDate = new Date();
+  
+    // If target date is invalid or in the past, return 'Expired'
+    if (isNaN(targetDateTime.getTime()) || targetDateTime < currentDate) {
+      return 'Expired';
+    }
+  
+    // Calculate time difference in milliseconds
+    const timeDiff = targetDateTime.getTime() - currentDate.getTime();
+  
+    // Convert to days, hours, and minutes
+    const daysDiff = Math.floor(timeDiff / (1000 * 60 * 60 * 24));
+    const hoursDiff = Math.floor((timeDiff % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+    const minutesDiff = Math.floor((timeDiff % (1000 * 60 * 60)) / (1000 * 60));
+  
+    // Only handle the first three conditions
+    if (daysDiff > 0) {
+      return `Expires in ${daysDiff} day${daysDiff > 1 ? 's' : ''}`;
+    }
+    if (hoursDiff > 0) {
+      return `Expires in ${hoursDiff} hour${hoursDiff > 1 ? 's' : ''}`;
+    }
+    if (minutesDiff > 0) {
+      return `Expires in ${minutesDiff} minute${minutesDiff > 1 ? 's' : ''}`;
+    }
+  
+    // Default return 'Expired'
+    return 'Expired';
   }
+  
 
   cancelValidity() {
     this.selectValidity = '';
@@ -140,23 +172,6 @@ export class ViewCenterTargetComponent implements OnInit{
     this.router.navigate([path]);
   }
 
-
-  // AssignAllDailyTarget(page: number = 1, limit: number = this.itemsPerPage) {
-  //   this.isLoading = true;
-  //   this.TargetSrv.AssignAllDailyTarget(page, limit).subscribe(
-  //     (res) => {
-  //       this.assignTargetArr = res.items;
-  //       this.assignTotalItems = res.total;
-  //       if (res.items.length > 0) {
-  //         this.assignHasData = true;
-  //       } else {
-  //         this.assignHasData = false;
-  //       }
-  //       this.isLoading = false;
-
-  //     }
-  //   );
-  // }
 
   navigateToAssignTarget(id: number) {
     this.router.navigate([`/target/assing-target/${id}`]);
@@ -177,18 +192,6 @@ export class ViewCenterTargetComponent implements OnInit{
 
 }
 
-class AssignDailyTarget {
-  id!: number;
-  cropNameEnglish!: string;
-  varietyNameEnglish!: string;
-  qtyA!: string;
-  qtyB!: string;
-  qtyC!: string;
-  toDate!: Date;
-  toTime!: string;
-  fromTime!: Date;
-  isAssign!:number
-}
 
 class DailyTargets {
   cropNameEnglish!: string;

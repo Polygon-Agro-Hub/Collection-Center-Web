@@ -1,6 +1,6 @@
 <app-loading-spinner *ngIf="isLoading" />
 
-<div class="flex flex-row items-center gap-6 font-semibold text[#424242] mb-5 mx-5">
+<div class="flex flex-row items-center gap-6 font-semibold text[#424242] mb-5 mx-5 dark:text-white">
     <p>Centers</p>
     <p>Center Dashboard</p>
     <p>View Center Target</p>
@@ -8,31 +8,8 @@
 
 <div *ngIf="!isLoading"
     class="w-full px-10 py-7 bg-tileLight shadow-lg rounded-lg dark:text-[#FFFFFF] dark:bg-[#363636]">
-    <!-- <div class="flex flex-row gap-6">
-        <div class="flex flex-row items-center gap-2 border-[2px] rounded-2xl px-4 py-2 cursor-pointer"
-            [ngClass]="{'text-[#415CFF] border-[#415CFF]': isSelectPrograss}" (click)="selectPrograss()">
-            <i *ngIf="isSelectPrograss" class="fa-solid fa-check"></i>
-            <p>Progress</p>
-        </div>
 
-        <div class="flex flex-row items-center gap-2 border-[2px] rounded-2xl px-4 py-2 cursor-pointer"
-            [ngClass]="{'text-[#415CFF] border-[#415CFF]': isSelectAssign}" (click)="selectAssign()">
-            <i *ngIf="isSelectAssign" class="fa-solid fa-check"></i>
-            <p>Assign</p>
-        </div>
-    </div> -->
-
-    <!-- <hr class="my-8 border-[1px] border-[black]" /> -->
-
-
-    <div >
-        <!-- <div class="flex flex-row gap-6">
-            <button class="bg-[#415CFF] text-white font-normal rounded-lg shadow-md px-3 py-2"
-                (click)="navigate('/target/download-target')">
-                Download Collection
-            </button>
-        </div> -->
-
+    <div>
 
         <div class="flex flex-row items-center justify-between mt-5">
             <div class="flex flex-col justify-between">
@@ -64,7 +41,7 @@
                     </div>
                 </div>
 
-                <div class="relative w-46">
+                <!-- <div class="relative w-46">
                     <div
                         class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
                         <select [(ngModel)]="selectValidity" (change)="filterValidity()"
@@ -83,7 +60,7 @@
                         </button>
 
                     </div>
-                </div>
+                </div> -->
 
 
                 <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
@@ -125,7 +102,10 @@
                         <th class="px-6 py-3 text-left font-medium">Completed (kg)</th>
                         <th class="px-6 py-3 text-center font-medium">Status</th>
                         <th class="px-6 py-3 text-left font-medium">Ends At</th>
-                        <th class="px-6 py-3 text-left font-medium">Validity</th>
+                        <!-- <th class="px-6 py-3 text-left font-medium">Validity</th> -->
+                        <th class="px-6 py-3 text-center font-medium">Expiration Status</th>
+
+                        <th class="px-6 py-3 text-center font-medium"></th>
                     </tr>
                 </thead>
                 <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
@@ -155,27 +135,76 @@
                                 <p class="text-sm text-[#646464] my-1">{{formatTime(item.toTime) }}</p>
                             </div>
                         </td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
+                        <!-- <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
                             <span *ngIf="checkValidity(item.toDate) === 'Active'"
-                                class="bg-[#B7FFBE] text-[#02BB3D] text-center rounded-lg px-4 py-1">
+                                class="bg-[#FFD5D1] text-[#02BB3D] text-center rounded-lg px-4 py-1">
                                 Active
                             </span>
                             <span *ngIf="checkValidity(item.toDate) === 'Expired'"
                                 class="bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-4 py-1">
                                 Expired
                             </span>
+                        </td> -->
+
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300 text-center">
+                            <!-- Hours Left -->
+                            <span *ngIf="getTimeRemaining(item.toDate, item.toTime).includes('hour')"
+                                class="bg-[#FFD5D1] text-[#EB3223] text-center rounded-lg px-4 py-1">
+                                {{ getTimeRemaining(item.toDate, item.toTime) }}
+                            </span>
+
+                            <!-- Exactly One Day Left -->
+                            <span *ngIf="getTimeRemaining(item.toDate, item.toTime).includes('1 day')"
+                                class="bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-4 py-1">
+                                {{ getTimeRemaining(item.toDate, item.toTime) }}
+                            </span>
+
+                            <!-- More than One Day Left -->
+                            <span *ngIf="getTimeRemaining(item.toDate, item.toTime).includes('days')"
+                                class="bg-[#C8E0FF] text-[#415CFF] text-center rounded-lg px-4 py-1">
+                                {{ getTimeRemaining(item.toDate, item.toTime) }}
+                            </span>
+
+                            <!-- Expired -->
+                            <span *ngIf="getTimeRemaining(item.toDate, item.toTime) === 'Expired'"
+                                class="bg-gray-300 text-gray-700 text-center rounded-lg px-4 py-1">
+                                {{ getTimeRemaining(item.toDate, item.toTime) }}
+                            </span>
+
+                            <span
+                                *ngIf="getTimeRemaining(item.toDate, item.toTime).includes('minute') && !getTimeRemaining(item.toDate, item.toTime).includes('hour')"
+                                class="bg-[#FFD5D1] text-[#EB3223] text-center rounded-lg px-4 py-1 ">
+                                {{ getTimeRemaining(item.toDate, item.toTime) }}
+                            </span>
+
                         </td>
+
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300 text-center">
+                            <button
+                            class="w-6 h-6 text-blue-500 hover:text-blue-700"
+
+                          >
+                            <svg
+                              viewBox="0 0 24 24"
+                              fill="none"
+                              xmlns="http://www.w3.org/2000/svg"
+                            >
+                              <path
+                                d="M3 14C3 9.02944 7.02944 5 12 5C16.9706 5 21 9.02944 21 14M17 14C17 16.7614 14.7614 19 12 19C9.23858 19 7 16.7614 7 14C7 11.2386 9.23858 9 12 9C14.7614 9 17 11.2386 17 14Z"
+                                stroke="currentColor"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round"
+                              />
+                            </svg>
+                          </button>
+                        </td>
+
                     </tr>
                 </tbody>
 
             </table>
         </div>
-        <!-- <div class="flex items-center justify-end my-5 mr-5">
-            <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
-                [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
-                [screenReaderCurrentLabel]="'Youre on page'">
-            </pagination-controls>
-        </div> -->
     </div>
 
 </div>

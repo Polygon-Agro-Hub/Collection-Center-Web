@@ -239,32 +239,60 @@ export class EditOfficerComponent implements OnInit {
   }
 
 
+  // onFileSelected(event: any): void {
+  //   const file: File = event.target.files[0];
+  //   if (file) {
+  //     if (file.size > 5000000) {
+  //       this.toastSrv.error('File size should not exceed 5MB')
+  //       return;
+  //     }
+
+  //     const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+  //     if (!allowedTypes.includes(file.type)) {
+  //       this.toastSrv.error('Only JPEG, JPG and PNG files are allowed')
+  //       return;
+  //     }
+
+  //     this.selectedFile = file;
+  //     this.selectedFileName = file.name;
+  //     // this.officerForm.patchValue({ image: file });
+
+  //     const reader = new FileReader();
+  //     reader.onload = (e: any) => {
+  //       this.selectedImage = e.target.result; // Set selectedImage to the base64 string or URL
+  //     };
+  //     reader.readAsDataURL(file); // Read the file as a data URL
+  //   }
+  // }
+
   onFileSelected(event: any): void {
+    this.imageLoadError = false; // Reset error state when new file is selected
     const file: File = event.target.files[0];
+    
     if (file) {
-      if (file.size > 5000000) {
-        this.toastSrv.error('File size should not exceed 5MB')
-        return;
-      }
+        if (file.size > 5000000) {
+            this.toastSrv.error('File size should not exceed 5MB');
+            return;
+        }
 
-      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-      if (!allowedTypes.includes(file.type)) {
-        this.toastSrv.error('Only JPEG, JPG and PNG files are allowed')
-        return;
-      }
+        const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+        if (!allowedTypes.includes(file.type)) {
+            this.toastSrv.error('Only JPEG, JPG and PNG files are allowed');
+            return;
+        }
 
-      this.selectedFile = file;
-      this.selectedFileName = file.name;
-      // this.officerForm.patchValue({ image: file });
+        this.selectedFile = file;
+        this.selectedFileName = file.name;
 
-      const reader = new FileReader();
-      reader.onload = (e: any) => {
-        this.selectedImage = e.target.result; // Set selectedImage to the base64 string or URL
-      };
-      reader.readAsDataURL(file); // Read the file as a data URL
+        const reader = new FileReader();
+        reader.onload = (e: any) => {
+            this.selectedImage = e.target.result;
+            // Clear any previous image error
+            this.imageLoadError = false;
+        };
+        reader.readAsDataURL(file);
     }
-  }
-
+}
 
   updateProvince(event: Event): void {
     const target = event.target as HTMLSelectElement;
@@ -474,7 +502,12 @@ export class EditOfficerComponent implements OnInit {
     }
   }
 
+  imageLoadError = false;
 
+  handleImageError() {
+      this.imageLoadError = true;
+      this.personalData.image = ''; // Clear the invalid image URL
+  }
 
 
 }

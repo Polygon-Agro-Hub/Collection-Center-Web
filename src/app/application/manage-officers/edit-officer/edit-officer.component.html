@@ -9,14 +9,34 @@
                     <div class="relative">
                         <input type="file" id="imageUpload" accept="image/*" class="hidden"
                             (change)="onFileSelected($event)" />
-
-                        <!-- Display default image if no file is selected -->
-                        <img *ngIf="!selectedImage" class="rounded-full w-60 h-60 object-cover" (click)="triggerFileInput($event)"
-                            [src]='personalData.image' alt="Profile Picture" />
-
-                        <!-- Display the selected image if available -->
-                        <img *ngIf="selectedImage" class="rounded-full w-60 h-60 object-cover" [src]="selectedImage"
-                            (click)="triggerFileInput($event)" alt="Profile Picture" />
+                    
+                        <!-- Default user icon - shows when no image exists -->
+                        <div *ngIf="(!personalData.image && !selectedImage) || imageLoadError" 
+                             (click)="triggerFileInput($event)"
+                             class="flex rounded-full border-solid border-2 justify-center items-center w-60 h-60 bg-gray-100">
+                            <i class="fa-regular fa-user text-8xl text-gray-400"></i>
+                        </div>
+                    
+                        <!-- Existing profile image - shows only when no new image is selected -->
+                        <img *ngIf="personalData.image && !selectedImage && !imageLoadError" 
+                             class="rounded-full w-60 h-60 object-cover"
+                             (click)="triggerFileInput($event)" 
+                             [src]="personalData.image" 
+                             alt="Profile Picture"
+                             (error)="handleImageError()" />
+                    
+                        <!-- Newly selected image - shows only when selected -->
+                        <img *ngIf="selectedImage" 
+                             class="rounded-full w-60 h-60 object-cover" 
+                             [src]="selectedImage"
+                             (click)="triggerFileInput($event)" 
+                             alt="Profile Picture" 
+                             (error)="handleImageError()" />
+                    
+                        <span (click)="triggerFileInput($event)"
+                              class="absolute bottom-5 right-5 transform translate-x-1/4 translate-y-1/4 px-4 py-3 bg-[#3980C0] rounded-full cursor-pointer">
+                            <i class="fa-solid fa-pen text-3xl text-white"></i>
+                        </span>
                     </div>
                 </div>
 

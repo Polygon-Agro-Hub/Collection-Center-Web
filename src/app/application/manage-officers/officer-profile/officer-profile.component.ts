@@ -130,7 +130,7 @@ export class OfficerProfileComponent implements OnInit {
     }
 
     // Adjust starting Y position for text content based on image presence
-    const startY = imagebase64 ? 60 : 20;
+    const startY = imagebase64 ? 60 : 50;
 
     // Title
     doc.setFontSize(16);

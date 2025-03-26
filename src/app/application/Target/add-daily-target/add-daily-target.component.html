@@ -1,7 +1,7 @@
 <app-loading-spinner *ngIf="isLoading" />
 
 <div *ngIf="!isLoading">
-    <div class="flex flex-row items-center gap-6 font-semibold text[#424242] mb-5 mx-5 cursor-pointer">
+    <div class="flex flex-row items-center gap-6 font-semibold text[#424242] mb-5 mx-5 cursor-pointer dark:text-white">
         <p>Centers</p>
         <p onclick="history.back()">Center Dashboard</p>
         <p>Assign Center Target</p>
@@ -124,7 +124,7 @@
                 <select id="jobRole" name="jobRole" placeholder="select" [disabled]="isVerityVisible"
                     [(ngModel)]="InputObj.varietyId" name="varietyId" (change)="onVariatyChange()"
                     class="form-control mt-1 block w-[100%] p-2 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md dark:bg-gray-800 appearance-none focus:ring-indigo-500 focus:border-indigo-500">
-                    <option disabled selected class="p-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800">
+                    <option disabled selected value="" class="p-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800">
                         -- select --
                     </option>
                     <option *ngFor="let variety of selectedVarieties" [value]="variety.id"

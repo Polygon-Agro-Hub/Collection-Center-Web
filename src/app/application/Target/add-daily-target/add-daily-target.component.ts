@@ -227,18 +227,27 @@ export class AddDailyTargetComponent implements OnInit {
 
   checkToDate(inputField: HTMLInputElement) {
     const today = new Date();
-    today.setHours(0, 0, 0, 0);
-
-    const selectedDate = new Date(this.dailyTartgetObj.toDate);
-
-    if (selectedDate < today) {
-      this.toastSrv.warning('The selected <b>To Date</b> cannot be in the past.')
-
-
+    today.setHours(0, 0, 0, 0); // Reset time for accurate date-only comparison
+  
+    const fromDate = new Date(this.dailyTartgetObj.fromDate);
+    const toDate = new Date(this.dailyTartgetObj.toDate);
+  
+    if (toDate < today) {
+      this.toastSrv.warning('The selected <b>To Date</b> cannot be in the past.');
+  
       this.dailyTartgetObj.toDate = '';
       inputField.value = '';
     }
+
+    if (toDate < fromDate) {
+      this.toastSrv.warning('The <b>To Date</b> cannot be before the <b>From Date</b>.');
+  
+      this.dailyTartgetObj.toDate = ''; // Reset to null (instead of empty string)
+      inputField.value = '';
+      return;
+    }
   }
+  
 
   onCancel() {
     Swal.fire({
@@ -395,7 +404,7 @@ class Variety {
 }
 
 class TargetItem {
-  varietyId!: number
+  varietyId: number | string = ''
   qtyA: number = 0
   qtyB: number = 0
   qtyC: number = 0

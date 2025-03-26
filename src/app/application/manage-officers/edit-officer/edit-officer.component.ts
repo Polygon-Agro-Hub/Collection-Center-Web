@@ -8,6 +8,7 @@ import { ToastAlertService } from '../../../services/toast-alert/toast-alert.ser
 import { TokenServiceService } from '../../../services/Token/token-service.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { HttpClient } from '@angular/common/http';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-edit-officer',
@@ -61,6 +62,7 @@ export class EditOfficerComponent implements OnInit {
     private toastSrv: ToastAlertService,
     private tokenSrv: TokenServiceService,
     private http: HttpClient,
+    private location: Location
 
   ) {
     this.logingRole = tokenSrv.getUserDetails().role
@@ -340,14 +342,12 @@ export class EditOfficerComponent implements OnInit {
       showCancelButton: true,
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, clear it!',
+      confirmButtonText: 'Yes, Cancel it!',
       cancelButtonText: 'Cancel'
     }).then((result) => {
       if (result.isConfirmed) {
-        this.personalData = new Personal();
-        // this.personalData = new Bank();
-        // this.personalData = new Company();
-        this.toastSrv.error('The form has been cleared.')
+        this.toastSrv.warning('Officer Edit Canceled.')
+        this.location.back(); 
 
       }
     });

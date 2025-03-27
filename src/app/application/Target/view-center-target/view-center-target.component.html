@@ -41,28 +41,6 @@
                     </div>
                 </div>
 
-                <!-- <div class="relative w-46">
-                    <div
-                        class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
-                        <select [(ngModel)]="selectValidity" (change)="filterValidity()"
-                            class="block w-full appearance-none  dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
-                            <option value="" selected disabled>Validity</option>
-                            <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                                value="Active">Active</option>
-                            <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                                value="Expired">Expired</option>
-                        </select>
-                        <button *ngIf="!selectValidity">
-                            <i class="fa-solid fa-angle-down text-lg mr-3"></i>
-                        </button>
-                        <button *ngIf="selectValidity" (click)="cancelValidity()">
-                            <i class="fa-solid fa-xmark text-lg mr-3"></i>
-                        </button>
-
-                    </div>
-                </div> -->
-
-
                 <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
                     <input type="text" placeholder="Search by Variety Name" [(ngModel)]="searchText"
                         class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
@@ -146,37 +124,36 @@
                             </span>
                         </td> -->
 
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300 text-center">
+                        <td class="px-4 py-4 text-gray-900 dark:text-gray-300 text-center whitespace-nowrap min-w-[120px]">
                             <!-- Hours Left -->
                             <span *ngIf="getTimeRemaining(item.toDate, item.toTime).includes('hour')"
-                                class="bg-[#FFD5D1] text-[#EB3223] text-center rounded-lg px-4 py-1">
+                                class="bg-[#FFD5D1] text-[#EB3223] text-center rounded-lg px-2 py-1 inline-block">
                                 {{ getTimeRemaining(item.toDate, item.toTime) }}
                             </span>
-
+                        
                             <!-- Exactly One Day Left -->
                             <span *ngIf="getTimeRemaining(item.toDate, item.toTime).includes('1 day')"
-                                class="bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-4 py-1">
+                                class="bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-2 py-1 inline-block">
                                 {{ getTimeRemaining(item.toDate, item.toTime) }}
                             </span>
-
+                        
                             <!-- More than One Day Left -->
                             <span *ngIf="getTimeRemaining(item.toDate, item.toTime).includes('days')"
-                                class="bg-[#C8E0FF] text-[#415CFF] text-center rounded-lg px-4 py-1">
+                                class="bg-[#C8E0FF] text-[#415CFF] text-center rounded-lg px-2 py-1 inline-block">
                                 {{ getTimeRemaining(item.toDate, item.toTime) }}
                             </span>
-
+                        
                             <!-- Expired -->
                             <span *ngIf="getTimeRemaining(item.toDate, item.toTime) === 'Expired'"
-                                class="bg-gray-300 text-gray-700 text-center rounded-lg px-4 py-1">
+                                class="bg-gray-300 text-gray-700 text-center rounded-lg px-2 py-1 inline-block">
                                 {{ getTimeRemaining(item.toDate, item.toTime) }}
                             </span>
-
+                        
                             <span
                                 *ngIf="getTimeRemaining(item.toDate, item.toTime).includes('minute') && !getTimeRemaining(item.toDate, item.toTime).includes('hour')"
-                                class="bg-[#FFD5D1] text-[#EB3223] text-center rounded-lg px-4 py-1 ">
+                                class="bg-[#FFD5D1] text-[#EB3223] text-center rounded-lg px-2 py-1 inline-block">
                                 {{ getTimeRemaining(item.toDate, item.toTime) }}
                             </span>
-
                         </td>
 
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300 text-center">

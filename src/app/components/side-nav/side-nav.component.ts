@@ -19,7 +19,7 @@ export const MENU_ITEMS = [
   {
     id: 2,
     key: 'target',
-    path: '/target/view-target',
+    path: '/target',
     label: 'Collection Target',
     icon: 'fa-solid fa-bullseye',
     permission: 'Collection Center Manager',
@@ -33,37 +33,37 @@ export const MENU_ITEMS = [
     permission: 'Collection Center Head',
   },
   {
-    id: 3,
+    id: 4,
     key: 'price-list',
-    path: '/price-list/view-prices',
+    path: '/price-list',
     label: 'Price List',
     icon: 'fa-solid fa-tag',
     permission: 'Collection Center Manager',
   },
   {
-    id: 4,
+    id: 5,
     key: 'price-request',
-    path: '/price-request/view-request',
+    path: '/price-request',
     label: 'Price Requests',
     icon: 'fas fa-hand-holding-usd',
     permission: 'Collection Center Manager',
   },
   {
-    id: 5,
+    id: 6,
     key: 'reports',
-    path: '/reports/select-report',
+    path: '/reports',
     label: 'Reports',
     icon: 'fa-solid fa-chart-pie',
   },
   {
-    id: 6,
+    id: 7,
     key: 'manage-officers',
-    path: '/manage-officers/view-officer',
+    path: '/manage-officers',
     label: 'Manage Officers',
     icon: 'fas fa-user-cog',
   },
   {
-    id: 7,
+    id: 8,
     key: 'complaints',
     path: '/complaints',
     label: 'Complaints',
@@ -71,7 +71,7 @@ export const MENU_ITEMS = [
     permission: 'Collection Center Manager',
   },
   {
-    id: 8,
+    id: 9,
     key: 'cch-complaints',
     path: '/cch-complaints',
     label: 'Complaints',
@@ -118,10 +118,12 @@ export class SideNavComponent {
 
   private setActiveTabFromRoute(): void {
     const currentPath = this.router.url.split('?')[0];
+    
+    // Find the menu item with the longest path that matches the current route
+    const activeItem = this.menuItems
+      .filter(item => currentPath.startsWith(item.path))
+      .sort((a, b) => b.path.length - a.path.length)[0];
 
-    const activeItem = this.menuItems.find(
-      (item) => currentPath.startsWith(item.path) || currentPath === item.path
-    );
     if (activeItem) {
       this.isSelectTab = activeItem.key;
     } else {
@@ -152,17 +154,8 @@ export class SideNavComponent {
     return this.isSelectTab === tab;
   }
 
-  // logOut() {
-  //   this.tokenSrv.clearLoginDetails().then(() => {
-  //     this.toastSrv.success(`<b>Logout !`);
-  //     this.router.navigate(['/'])
-  //   })
-
-  // }
-
   logOut(): void {
     if (isPlatformBrowser(this.platformId)) {
-      // Show a logout confirmation
       Swal.fire({
         icon: 'warning',
         title: 'Logged Out',

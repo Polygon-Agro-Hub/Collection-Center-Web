@@ -69,7 +69,8 @@ export const routes: Routes = [
                         component: AddOfficersComponent
                     },
                     {
-                        path: 'view-officer',
+                        // view-officer removed
+                        path: '',
                         component: ViewOfficersComponent
                     },
                     {
@@ -99,7 +100,7 @@ export const routes: Routes = [
                 path: 'price-list',
                 children: [
                     {
-                        path: 'view-prices',
+                        path: '',
                         component: ViewPriceListComponent
                     }
                 ]
@@ -108,7 +109,7 @@ export const routes: Routes = [
                 path: 'price-request',
                 children: [
                     {
-                        path: 'view-request',
+                        path: '',
                         component: PriceRequestComponent
                     }
                 ]
@@ -117,7 +118,7 @@ export const routes: Routes = [
                 path: 'reports',
                 children: [
                     {
-                        path: 'select-report',
+                        path: '',
                         component: SelectReportComponent
                     },
                     {
@@ -144,7 +145,7 @@ export const routes: Routes = [
                 path: 'target',
                 children: [
                     {
-                        path: 'view-target',
+                        path: '',
                         component: ViewDailyTargetComponent
                     },
                     {

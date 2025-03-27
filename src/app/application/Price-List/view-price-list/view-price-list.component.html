@@ -1,9 +1,9 @@
 <app-loading-spinner *ngIf="isLoading"/>
 
 <div *ngIf="!isLoading">
-    <p class="font-semibold text[#424242] mb-8 mx-5 dark:text-white dark:bg-black">Price List</p>
+    <p class="font-semibold text[#424242] mb-8 mx-5 dark:text-white dark:bg-black ">Price List</p>
 
-    <div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-l">
+    <div class="w-full overflow-x-auto px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-l">
         <div class="flex flex-row items-center justify-between">
             <div class="flex flex-col justify-between">
                 <p class="font-semibold text-lg mb-1 dark:text-white">Market Price on {{today}}</p>
@@ -110,8 +110,8 @@
         </div>
 
         <div *ngIf="hasData"
-            class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
-            <table class="w-full divide-y-2 overflow-hidden ">
+            class="min-w-max mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+            <table class="w-full min-w-max divide-y-2 overflow-hidden ">
                 <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
                     <tr>
                         <th class=" px-6 py-3 text-left text-sm font-medium">No</th>

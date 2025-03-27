@@ -117,7 +117,7 @@ export class OfficerProfileComponent implements OnInit {
         console.error('Error loading image:', error);
     }
 
-    // Add the image at the top
+    // Add the image at the top if it exists
     if (imagebase64) {
         doc.addImage(
             imagebase64,
@@ -129,20 +129,22 @@ export class OfficerProfileComponent implements OnInit {
         );
     }
 
-    // Adjust starting Y position for text content based on image presence
-    const startY = imagebase64 ? 60 : 50;
+    // Adjust starting positions based on image presence
+    const startX = imagebase64 ? 60 : 14; // If no image, start from left margin
+    const startY = imagebase64 ? 60 : 50; // Adjust Y position based on image presence
 
     // Title
     doc.setFontSize(16);
     doc.setFont("Inter", "bold");
     doc.text("Personal Information", 14, startY);
 
+    // Name and position info - position adjusted based on image presence
     doc.setFontSize(12);
     doc.setFont("Inter", "bold");
-
-    doc.text(getValueOrNA(this.officerObj.firstNameEnglish) + ' ' + getValueOrNA(this.officerObj.lastNameEnglish), 60, 15);
+    doc.text(getValueOrNA(this.officerObj.firstNameEnglish) + ' ' + getValueOrNA(this.officerObj.lastNameEnglish), startX, 15);
+    
     doc.setFont("Inter", "normal");
-    doc.text('Customer Officer  - ', 60, 22);
+    doc.text('Customer Officer  - ', startX, 22);
 
     let empCode = '';
     if (this.officerObj.jobRole === 'Customer Officer') {
@@ -157,11 +159,11 @@ export class OfficerProfileComponent implements OnInit {
 
     // Apply bold font for the empCode + empId
     doc.setFont("Inter", "bold");
-    doc.text(getValueOrNA(empCode + this.officerObj.empId), 95, 22);
+    doc.text(getValueOrNA(empCode + this.officerObj.empId), startX + 35, 22);
     
-    doc.text(getValueOrNA(this.officerObj.city), 60, 29);
+    doc.text(getValueOrNA(this.officerObj.city), startX, 29);
     doc.setFont("Inter", "normal");
-    doc.text(getValueOrNA(this.officerObj.companyNameEnglish), 60, 36);
+    doc.text(getValueOrNA(this.officerObj.companyNameEnglish), startX, 36);
 
     doc.setFontSize(12);
     doc.setFont("Inter", "normal");
@@ -187,14 +189,13 @@ export class OfficerProfileComponent implements OnInit {
     doc.setFont("Inter", "normal");
     doc.text("Email", 100, startY + 26);
     doc.setFont("Inter", "bold");
-
     doc.text(getValueOrNA(this.officerObj.email), 100, startY + 32);
+
     // Phone Number 1
     doc.setFont("Inter", "normal");
     doc.text("Phone Number - 1", 14, startY + 42);
     doc.setFont("Inter", "bold");
     doc.text(getValueOrNA(this.officerObj.phoneNumber01), 22, startY + 48);
-
     doc.setFont("Inter", "bold");
     doc.text(getValueOrNA(this.officerObj.phoneCode02), 14, startY + 48);
 
@@ -203,7 +204,6 @@ export class OfficerProfileComponent implements OnInit {
     doc.text("Phone Number - 2", 100, startY + 42);
     doc.setFont("Inter", "bold");
     doc.text(getValueOrNA(this.officerObj.phoneNumber02), 108, startY + 48);
-
     doc.setFont("Inter", "bold");
     doc.text(getValueOrNA(this.officerObj.phoneCode02), 100, startY + 48);
 

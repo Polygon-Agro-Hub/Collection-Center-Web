@@ -5,7 +5,7 @@
 </div>
 
 <div class="w-full overflow-x-auto px-10 py-7 bg-tileLight shadow-lg rounded-lg dark:bg-[#363636]">
-    <div class="flex flex-row items-center justify-between ">
+    <div class="flex flex-row items-center justify-between min-w-max">
         <div class="h-[100px]">  <!-- Set a fixed height to prevent layout shifts -->
             <ng-container *ngIf="priceListArr.length > 0">
               <p class="font-semibold text-black text-base dark:text-white" >
@@ -20,7 +20,7 @@
             </ng-container>
         </div>
         <div class="flex flex-row items-center gap-8 ">
-            <i class="fa-solid fa-list text-2xl dark:text-white"></i>
+            <i class="fa-solid fa-list text-2xl dark:text-white ml-8"></i>
 
             <p class="text-lg dark:text-white">Filter By</p>
 
@@ -80,8 +80,8 @@
     </div>
 
 
-    <div *ngIf="hasData" class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
-        <table class="w-full divide-y-2 overflow-hidden">
+    <div *ngIf="hasData" class=" min-w-max mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+        <table class="w-full min-w-max divide-y-2 overflow-hidden">
             <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
                 <tr>
                     <th class="px-6 py-3 text-left text-sm font-medium">No</th>

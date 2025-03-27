@@ -7,13 +7,13 @@
         <p class="font-semibold text-sm text-[#424242] dark:text-white">Center Officers</p>
     </div>
 
-    <div class="w-full px-10 py-7 bg-tileLight shadow-lg rounded-lg dark:bg-[#363636]">
+    <div class="w-full overflow-x-auto px-10 py-7 bg-tileLight shadow-lg rounded-lg dark:bg-[#363636]">
         <div class="flex flex-row items-center justify-between">
             <div class="flex flex-row gap-3">
                 <h1 class="font-semibold text-black dark:text-white">All ({{ totalItems }})</h1>
             </div>
             <div class="flex flex-row items-center gap-5 ">
-                <i class="fa-solid fa-list text-2xl dark:text-white"></i>
+                <i class="fa-solid fa-list text-2xl dark:text-white ml-8"></i>
 
                 <p class="font-normal dark:text-white">Filter By</p>
 
@@ -98,8 +98,8 @@
         </div>
 
         <div *ngIf="hasData">
-            <div class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
-                <table class="w-full divide-y-2 border-[1px] border-gray-300 rounded-lg overflow-hidden">
+            <div class="min-w-max mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+                <table class="w-full min-w-max divide-y-2 border-[1px] border-gray-300 rounded-lg overflow-hidden">
                     <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
                         <tr>
                             <th class="px-2 py-3 text-left text-sm font-medium">No</th>

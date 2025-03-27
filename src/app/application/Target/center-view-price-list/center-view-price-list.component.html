@@ -24,29 +24,30 @@
 
             <p class="text-lg dark:text-white">Filter By</p>
 
-            <div class="relative w-46 ">
+            <div class="relative w-46">
                 <div
-                class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
-                    <select [(ngModel)]="selectGrade" (change)="filterGrade()"
-                    class="block w-full appearance-none  dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
-                        <option value="" selected disabled>Grade</option>
-                        <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                            value="A">A</option>
-                        <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                            value="B">B</option>
-                        <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                            value="C">C</option>
-
-                    </select>
-                    <button *ngIf="!selectGrade">
-                        <i class="fa-solid fa-angle-down text-lg mr-3"></i>
-                    </button>
-                    <button *ngIf="selectGrade" (click)="cancelGrade()">
-                        <i class="fa-solid fa-xmark text-lg mr-3"></i>
-                    </button>
-
+                  class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center cursor-pointer"
+                  (click)="toggleGradeDropdown()">
+                  <select [(ngModel)]="selectGrade" (change)="filterGrade()"
+                    class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none opacity-0 absolute inset-0 cursor-pointer">
+                    <option value="" selected disabled>Grade</option>
+                    <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300" value="A">A</option>
+                    <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300" value="B">B</option>
+                    <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300" value="C">C</option>
+                  </select>
+                  
+                  <span class="px-3 py-2 w-full">
+                    {{selectGrade || 'Grade'}}
+                  </span>
+                  
+                  <button *ngIf="!selectGrade">
+                    <i class="fa-solid fa-angle-down text-lg mr-3"></i>
+                  </button>
+                  <button *ngIf="selectGrade" (click)="cancelGrade($event)">
+                    <i class="fa-solid fa-xmark text-lg mr-3"></i>
+                  </button>
                 </div>
-            </div>
+              </div>
 
 
             <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">

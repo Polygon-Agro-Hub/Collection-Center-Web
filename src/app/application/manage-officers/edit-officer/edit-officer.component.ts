@@ -53,6 +53,8 @@ export class EditOfficerComponent implements OnInit {
   allBranches: BranchesData = {};
 
   invalidFields: Set<string> = new Set();
+  naviPath!:string
+
 
 
   constructor(
@@ -106,6 +108,7 @@ export class EditOfficerComponent implements OnInit {
     this.editOfficerId = this.route.snapshot.params['id'];
     this.fetchOffierById(this.editOfficerId);
     this.UpdateEpmloyeIdCreate();
+    this.setActiveTabFromRoute()
   }
 
   fetchOffierById(id: number) {
@@ -140,6 +143,12 @@ export class EditOfficerComponent implements OnInit {
 
       }
     );
+  }
+
+  private setActiveTabFromRoute(): void {
+    const currentPath = this.router.url.split('?')[0];
+    // Extract the first segment after the initial slash
+    this.naviPath = currentPath.split('/')[1];   
   }
 
 

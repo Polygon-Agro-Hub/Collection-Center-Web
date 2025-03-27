@@ -21,6 +21,7 @@ export class OfficerProfileComponent implements OnInit {
   officerId!: number;
   showDisclaimView = false;
   logingRole: string | null = null;
+  naviPath!:string
 
   isLoading: boolean = true;
 
@@ -41,6 +42,7 @@ export class OfficerProfileComponent implements OnInit {
   ngOnInit(): void {
     this.officerId = this.route.snapshot.params['id'];
     this.fetchOfficer(this.officerId);
+    this.setActiveTabFromRoute()
   }
 
   fetchOfficer(id: number) {
@@ -314,6 +316,12 @@ export class OfficerProfileComponent implements OnInit {
       }
     );
 
+  }
+
+  private setActiveTabFromRoute(): void {
+    const currentPath = this.router.url.split('?')[0];
+    // Extract the first segment after the initial slash
+    this.naviPath = currentPath.split('/')[1];   
   }
 
 }

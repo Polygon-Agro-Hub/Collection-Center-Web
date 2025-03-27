@@ -1,5 +1,17 @@
 <app-loading-spinner *ngIf="isLoading" />
 
+<div *ngIf="naviPath ==='centers' && !isLoading" class="flex flex-row pt-0 mb-7 gap-5 cursor-pointer">
+    <p class="font-semibold text-sm text-[#424242] dark:text-white">Centers</p>
+    <p class="font-semibold text-sm text-[#424242] dark:text-white">Center Dashboard</p>
+    <p class="font-semibold text-sm text-[#424242] dark:text-white" onclick="history.back()">Center Officers</p>
+    <p class="font-semibold text-sm text-[#424242] dark:text-white">Edit Profile Profile</p>
+</div>
+
+<div *ngIf="naviPath ==='manage-officers' && !isLoading" class="flex flex-row pt-0 mb-7 gap-5 cursor-pointer">
+    <p class="font-semibold text-sm text-[#424242] dark:text-white" onclick="history.back()">Manage Officers</p>
+    <p class="font-semibold text-sm text-[#424242] dark:text-white">Edit Profile</p>
+</div>
+
 <div *ngIf="!isLoading" class="mx-auto p-6 bg-white dark:bg-[#363636] rounded-lg shadow-mg">
     <form #PageOneForm="ngForm" (ngSubmit)="onSubmitForm(PageOneForm)">
         <div *ngIf="selectedPage === 'pageOne'">

@@ -7,6 +7,7 @@ import Swal from 'sweetalert2';
 import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
+import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 
 @Component({
   selector: 'app-collection-monthly-report',
@@ -30,7 +31,8 @@ export class CollectionMonthlyReportComponent implements OnInit {
 
   constructor(
     private ReportSrv: ReportServiceService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private toastSrv:ToastAlertService
   ) { }
 
   ngOnInit(): void {
@@ -71,13 +73,13 @@ export class CollectionMonthlyReportComponent implements OnInit {
     const selectedDate = new Date(this.startDate);
 
     if (selectedDate > today) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Invalid Date',
-        text: 'Start date cannot be a future date.',
-        confirmButtonText: 'OK',
-      });
-
+      // Swal.fire({
+      //   icon: 'error',
+      //   title: 'Invalid Date',
+      //   text: 'Start date cannot be a future date.',
+      //   confirmButtonText: 'OK',
+      // });
+      this.toastSrv.warning('<b>Start date</b> cannot be a future date.')
       this.startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     }
   }
@@ -87,25 +89,27 @@ export class CollectionMonthlyReportComponent implements OnInit {
     const selectedEndDate = new Date(this.endDate);
 
     if (!this.startDate) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Missing Start Date',
-        text: 'Please select a start date before selecting an end date.',
-        confirmButtonText: 'OK',
-      });
+      // Swal.fire({
+      //   icon: 'warning',
+      //   title: 'Missing Start Date',
+      //   text: 'Please select a start date before selecting an end date.',
+      //   confirmButtonText: 'OK',
+      // });
+      this.toastSrv.success('Please select a <b>start date</b> before selecting an end date.')
 
       this.endDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());;
       return;
     }
 
     if (selectedEndDate > today) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Invalid End Date',
-        text: 'End date cannot be a future date.',
-        confirmButtonText: 'OK',
-      });
+      // Swal.fire({
+      //   icon: 'error',
+      //   title: 'Invalid End Date',
+      //   text: 'End date cannot be a future date.',
+      //   confirmButtonText: 'OK',
+      // });
 
+      this.toastSrv.error('<b>End date cannot be a future date.')
       this.endDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());;
     }
   }

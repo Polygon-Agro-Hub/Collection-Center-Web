@@ -1,8 +1,8 @@
 <app-loading-spinner *ngIf="isLoading"/>
 
 <div *ngIf="!isLoading">
-    <div class="flex flex-row items-center gap-6 font-semibold text[#424242] dark:text-white mb-5 mx-5">
-        <p>Report</p>
+    <div class="flex flex-row items-center gap-6 font-semibold text[#424242] dark:text-white mb-5 mx-5 cursor-pointer">
+        <p onclick="history.back()">Report</p>
         <p>Monthly Report</p>
     </div>
 

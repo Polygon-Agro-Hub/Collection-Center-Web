@@ -1,0 +1,47 @@
+/* Center the pagination controls */
+.custom-pagination {
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    font-family: Arial, sans-serif;
+  }
+  
+  /* Style individual page links */
+  .custom-pagination .ngx-pagination li {
+    list-style: none;
+    display: inline-block;
+    margin: 0 5px;
+  }
+  
+  .custom-pagination .ngx-pagination a,
+  .custom-pagination .ngx-pagination span {
+    padding: 8px 12px;
+    text-decoration: none;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    color: #000;
+    font-weight: 500;
+    cursor: pointer;
+    transition: background-color 0.3s, color 0.3s;
+  }
+  
+  /* Active page link */
+  .custom-pagination .ngx-pagination .current {
+    background-color: #000;
+    color: #fff;
+    font-weight: bold;
+    pointer-events: none;
+  }
+  
+  /* Hover effect for links */
+  .custom-pagination .ngx-pagination a:hover {
+    background-color: #f0f0f0;
+    color: #000;
+  }
+  
+  /* Disable previous/next buttons */
+  .custom-pagination .ngx-pagination .disabled a {
+    color: #ccc;
+    cursor: not-allowed;
+  }
+  

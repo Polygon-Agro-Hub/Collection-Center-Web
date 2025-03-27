@@ -48,6 +48,8 @@
                         class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer">
                         <option value="" selected disabled>Role</option>
                         <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                            value="Collection Center Manager">Collection Center Manager</option>
+                        <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
                             value="Collection Officer">Collection Officer</option>
                         <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
                             value="Customer Officer">Customer Officer</option>
@@ -146,7 +148,7 @@
                         <option value="" selected disabled>Centers</option>
                         <option *ngFor="let item of centerArr"
                             class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                            [value]="item.id">{{item.centerName}}</option>
+                            [value]="item.id">{{item.regCode}} - {{item.centerName}}</option>
                       </select>
                       
                       <!-- Down arrow icon -->

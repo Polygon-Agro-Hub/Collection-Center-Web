@@ -34,7 +34,7 @@ export const MENU_ITEMS = [
   },
   {
     id: 3,
-    key: 'pricelist',
+    key: 'price-list',
     path: '/price-list/view-prices',
     label: 'Price List',
     icon: 'fa-solid fa-tag',
@@ -42,7 +42,7 @@ export const MENU_ITEMS = [
   },
   {
     id: 4,
-    key: 'pricerequest',
+    key: 'price-request',
     path: '/price-request/view-request',
     label: 'Price Requests',
     icon: 'fas fa-hand-holding-usd',
@@ -57,7 +57,7 @@ export const MENU_ITEMS = [
   },
   {
     id: 6,
-    key: 'manageofficer',
+    key: 'manage-officers',
     path: '/manage-officers/view-officer',
     label: 'Manage Officers',
     icon: 'fas fa-user-cog',

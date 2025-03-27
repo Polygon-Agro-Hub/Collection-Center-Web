@@ -207,6 +207,8 @@ export class ManageOfficersService {
 
     let url = `${this.apiUrl}/manage-officers/get-all-officers-for-cch?page=${page}&limit=${limit}`
 
+    console.log(status);
+    
     if (status) {
       url += `&status=${status}`
     }

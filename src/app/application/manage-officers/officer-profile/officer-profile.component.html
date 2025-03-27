@@ -1,4 +1,4 @@
-<app-loading-spinner *ngIf="isLoading"/>
+<app-loading-spinner *ngIf="isLoading" />
 
 <div *ngIf="!isLoading">
     <div class="flex flex-row pt-0 mb-7 gap-5 cursor-pointer">
@@ -8,194 +8,200 @@
         <p class="font-semibold text-sm text-[#424242] dark:text-white">Officer Profile</p>
     </div>
 
-<div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] dark:text-white shadow-lg rounded-lg">
-    <div class="flex flex-col gap-7 px-2 py-2" id="reportcontainer">
-        <div class="flex flex-row justify-between items-center border-[#F1F7FA] border-[3px] rounded-lg shadowmd p-6">
-            <div class="flex flex-row items-center">
-                <!-- <img class="w-28 h-28 rounded-full"
+    <div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] dark:text-white shadow-lg rounded-lg">
+        <div class="flex flex-col gap-7 px-2 py-2" id="reportcontainer">
+            <div
+                class="flex flex-row justify-between items-center border-[#F1F7FA] border-[3px] rounded-lg shadowmd p-6">
+                <div class="flex flex-row items-center">
+                    <!-- <img class="w-28 h-28 rounded-full"
                     src="https://images.pexels.com/photos/845457/pexels-photo-845457.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" /> -->
-                <img class="w-28 h-28 rounded-full object-cover" [src]="officerObj.image" />
+                    <img class="w-28 h-28 rounded-full object-cover" [src]="officerObj.image" />
 
-                <div class="ml-6">
-                    <p class="text-lg font-semibold">{{officerObj.firstNameEnglish}} {{officerObj.lastNameEnglish}}</p>
-                    <p class="text-[#627189] dark:text-textDark">{{officerObj.jobRole}} - <span class="text-black font-semibold dark:text-white">
-                            <span *ngIf="officerObj.jobRole ==='Customer Officer'">CUO</span>
-                            <span *ngIf="officerObj.jobRole ==='Collection Center Manager'">CCM</span>
-                            <span *ngIf="officerObj.jobRole ==='Collection Center Head'">CCH</span>
-                            <span *ngIf="officerObj.jobRole ==='Collection Officer'">COO</span>{{officerObj.empId}}</span>
-                    </p>
-                    <p class="font-semibold ">{{officerObj.centerName}}</p>
-                    <p class="text-[#627189] dark:text-textDark">{{officerObj.companyNameEnglish}}</p>
-                </div>
-            </div>
-
-            <div class="flex space-x-4">
-                <span *ngIf="logingRole === 'Collection Center Manager'">
-                    <button class="bg-[#E20000] text-white font-semibold rounded-lg shadow-md px-5 py-2"
-                        (click)="toggleDisclaimView()">Disclaim</button>
-                </span>
-                <button class="bg-blue-600 text-white font-semibold rounded-lg shadow-md px-5 py-2"
-                    (click)="viewOfficerTarget(officerId)">View Target</button>
-            </div>
-
-        </div>
-
-        <div class="border-[#F1F7FA] border-[3px] rounded-lg shadowmd p-6">
-            <div class="flex flex-row justify-between">
-                <p class="font-semibold">Personal Infomation</p>
-                <button class="bg-[#415CFF] text-white px-6 py-1 text-xl rounded-lg shadow-md" (click)="generatePDF()">
-                    <i class="fa-solid fa-download"></i>
-                </button>
-            </div>
-
-            <div class="grid grid-cols-2 gap-4 text-[#627189] my-4">
-                <div>
-                    <p class="text-[#627189] dark:text-textDark">First Name</p>
-                    <p class="font-semibold dark:text-white">{{officerObj.firstNameEnglish}}</p>
+                    <div class="ml-6">
+                        <p class="text-lg font-semibold">{{officerObj.firstNameEnglish}} {{officerObj.lastNameEnglish}}
+                        </p>
+                        <p class="text-[#627189] dark:text-textDark">{{officerObj.jobRole}} - <span
+                                class="text-black font-semibold dark:text-white">
+                                <span *ngIf="officerObj.jobRole ==='Customer Officer'">CUO</span>
+                                <span *ngIf="officerObj.jobRole ==='Collection Center Manager'">CCM</span>
+                                <span *ngIf="officerObj.jobRole ==='Collection Center Head'">CCH</span>
+                                <span
+                                    *ngIf="officerObj.jobRole ==='Collection Officer'">COO</span>{{officerObj.empId}}</span>
+                        </p>
+                        <p class="font-semibold ">{{officerObj.centerName}}</p>
+                        <p class="text-[#627189] dark:text-textDark">{{officerObj.companyNameEnglish}}</p>
+                    </div>
                 </div>
 
-                <div>
-                    <p class="text-[#627189] dark:text-textDark">Last Name</p>
-                    <p class="font-semibold dark:text-white">{{officerObj.lastNameEnglish}}</p>
-                </div>
-
-                <div>
-                    <p class="text-[#627189] dark:text-textDark">NIC Number</p>
-                    <p class="font-semibold dark:text-white">{{officerObj.nic}}</p>
-                </div>
-
-                <div>
-                    <p class="text-[#627189] dark:text-textDark">Email</p>
-                    <p class="font-semibold dark:text-white">Gayashan</p>
-                </div>
-
-                <div>
-                    <p class="text-[#627189] dark:text-textDark">Phone Number - 1 </p>
-                    <p class="font-semibold dark:text-white">{{officerObj.phoneCode01}}{{officerObj.phoneNumber01}}</p>
-                </div>
-
-                <div>
-                    <p class="text-[#627189] dark:text-textDark">Phone Number - 2</p>
-                    <!-- <p class="font-semibold">{{officerObj.phoneCode02}}{{officerObj.phoneNumber02}}</p> -->
-                    <p class="font-semibold dark:text-white">
-                        {{ officerObj.phoneCode02 ? officerObj.phoneCode02 + officerObj.phoneNumber02 : ' - ' }}
-                    </p>
+                <div class="flex space-x-4">
+                    <span *ngIf="logingRole === 'Collection Center Manager'">
+                        <button class="bg-[#E20000] text-white font-semibold rounded-lg shadow-md px-5 py-2"
+                            (click)="toggleDisclaimView()">Disclaim</button>
+                    </span>
+                    <button class="bg-blue-600 text-white font-semibold rounded-lg shadow-md px-5 py-2"
+                        (click)="viewOfficerTarget(officerId)">View Target</button>
                 </div>
 
             </div>
 
-        </div>
-
-        <div class="border-[#F1F7FA] border-[3px] rounded-lg shadowmd p-6">
-            <p class="font-semibold">Address Details</p>
-
-
-            <div class="grid grid-cols-2 gap-4 text-[#627189] my-4">
-                <div>
-                    <p class="text-[#627189] dark:text-textDark">House / Plot Number</p>
-                    <p class="font-semibold dark:text-white">{{officerObj.houseNumber}}</p>
+            <div class="border-[#F1F7FA] border-[3px] rounded-lg shadowmd p-6">
+                <div class="flex flex-row justify-between">
+                    <p class="font-semibold">Personal Infomation</p>
+                    <button class="bg-[#415CFF] text-white px-6 py-1 text-xl rounded-lg shadow-md"
+                        (click)="generatePDF()">
+                        <i class="fa-solid fa-download"></i>
+                    </button>
                 </div>
 
-                <div>
-                    <p class="text-[#627189] dark:text-textDark">Street Name</p>
-                    <p class="font-semibold dark:text-white">{{officerObj.streetName}}</p>
-                </div>
+                <div class="grid grid-cols-2 gap-4 text-[#627189] my-4">
+                    <div>
+                        <p class="text-[#627189] dark:text-textDark">First Name</p>
+                        <p class="font-semibold dark:text-white">{{officerObj.firstNameEnglish}}</p>
+                    </div>
 
-                <div>
-                    <p class="text-[#627189] dark:text-textDark">City</p>
-                    <p class="font-semibold dark:text-white">{{officerObj.city}}</p>
-                </div>
+                    <div>
+                        <p class="text-[#627189] dark:text-textDark">Last Name</p>
+                        <p class="font-semibold dark:text-white">{{officerObj.lastNameEnglish}}</p>
+                    </div>
 
-                <div>
-                    <p class="text-[#627189] dark:text-textDark">Country</p>
-                    <p class="font-semibold dark:text-white">{{officerObj.country}}</p>
-                </div>
+                    <div>
+                        <p class="text-[#627189] dark:text-textDark">NIC Number</p>
+                        <p class="font-semibold dark:text-white">{{officerObj.nic}}</p>
+                    </div>
 
-                <div>
-                    <p class="text-[#627189] dark:text-textDark">Province</p>
-                    <p class="font-semibold dark:text-white">{{officerObj.province}}</p>
-                </div>
+                    <div>
+                        <p class="text-[#627189] dark:text-textDark">Email</p>
+                        <p class="font-semibold dark:text-white">{{officerObj.email}}</p>
+                    </div>
 
-                <div>
-                    <p class="text-[#627189] dark:text-textDark">District</p>
-                    <p class="font-semibold dark:text-white">{{officerObj.district}}</p>
-                </div>
+                    <div>
+                        <p class="text-[#627189] dark:text-textDark">Phone Number - 1 </p>
+                        <p class="font-semibold dark:text-white">{{officerObj.phoneCode01}}{{officerObj.phoneNumber01}}
+                        </p>
+                    </div>
 
-            </div>
+                    <div>
+                        <p class="text-[#627189] dark:text-textDark">Phone Number - 2</p>
+                        <!-- <p class="font-semibold">{{officerObj.phoneCode02}}{{officerObj.phoneNumber02}}</p> -->
+                        <p class="font-semibold dark:text-white">
+                            {{ officerObj.phoneCode02 ? officerObj.phoneCode02 + officerObj.phoneNumber02 : ' - ' }}
+                        </p>
+                    </div>
 
-        </div>
-
-        <div class="border-[#F1F7FA] border-[3px] rounded-lg shadowmd p-6">
-            <p class="font-semibold">Bank Details</p>
-
-
-            <div class="grid grid-cols-2 gap-4 text-[#627189] my-4">
-                <div>
-                    <p class="text-[#627189] dark:text-textDark">Account Holder’s Name</p>
-                    <p class="font-semibold dark:text-white">{{officerObj.accHolderName}}</p>
-                </div>
-
-                <div>
-                    <p class="text-[#627189] dark:text-textDark">Account Number</p>
-                    <p class="font-semibold dark:text-white">{{officerObj.accNumber}}</p>
-                </div>
-
-                <div>
-                    <p class="text-[#627189] dark:text-textDark">Bank Name</p>
-                    <p class="font-semibold dark:text-white">{{officerObj.bankName}}</p>
-                </div>
-
-                <div>
-                    <p class="text-[#627189] dark:text-textDark">Branch Name</p>
-                    <p class="font-semibold dark:text-white">{{officerObj.branchName}}</p>
                 </div>
 
             </div>
 
-        </div>
+            <div class="border-[#F1F7FA] border-[3px] rounded-lg shadowmd p-6">
+                <p class="font-semibold">Address Details</p>
 
 
-    </div>
-</div>
+                <div class="grid grid-cols-2 gap-4 text-[#627189] my-4">
+                    <div>
+                        <p class="text-[#627189] dark:text-textDark">House / Plot Number</p>
+                        <p class="font-semibold dark:text-white">{{officerObj.houseNumber}}</p>
+                    </div>
 
-<div *ngIf="showDisclaimView" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-white dark:bg-[#363636] shadow-lg rounded-lg p-6 w-1/2">
+                    <div>
+                        <p class="text-[#627189] dark:text-textDark">Street Name</p>
+                        <p class="font-semibold dark:text-white">{{officerObj.streetName}}</p>
+                    </div>
 
-        <div>
-            <!-- Icon -->
-            <div class="mb-4 flex justify-center">
-                <i class="fa-solid fa-triangle-exclamation"></i>
+                    <div>
+                        <p class="text-[#627189] dark:text-textDark">City</p>
+                        <p class="font-semibold dark:text-white">{{officerObj.city}}</p>
+                    </div>
+
+                    <div>
+                        <p class="text-[#627189] dark:text-textDark">Country</p>
+                        <p class="font-semibold dark:text-white">{{officerObj.country}}</p>
+                    </div>
+
+                    <div>
+                        <p class="text-[#627189] dark:text-textDark">Province</p>
+                        <p class="font-semibold dark:text-white">{{officerObj.province}}</p>
+                    </div>
+
+                    <div>
+                        <p class="text-[#627189] dark:text-textDark">District</p>
+                        <p class="font-semibold dark:text-white">{{officerObj.district}}</p>
+                    </div>
+
+                </div>
+
             </div>
 
-            <div class="mb-4 text-center dark:text-textDark">
-                <p class="text-lg mb-2">
-                    Are you sure you want to Discharge the officer
-                </p>
-                <p class="font-semibold text-lg dark:text-white">
-                    "{{officerObj.firstNameEnglish}} {{officerObj.lastNameEnglish}}"" (EMP ID -
-                    "CCO{{officerObj.empId}}")
-                    <span class="font-normal">from center</span> <br>
-                    "{{officerObj.centerName}}"?
-                </p>
+            <div class="border-[#F1F7FA] border-[3px] rounded-lg shadowmd p-6">
+                <p class="font-semibold">Bank Details</p>
 
-                <p class="text-red-500 mb-6 italic">
-                    Please note that the officer will no longer be under your monitoring.
-                </p>
+
+                <div class="grid grid-cols-2 gap-4 text-[#627189] my-4">
+                    <div>
+                        <p class="text-[#627189] dark:text-textDark">Account Holder’s Name</p>
+                        <p class="font-semibold dark:text-white">{{officerObj.accHolderName}}</p>
+                    </div>
+
+                    <div>
+                        <p class="text-[#627189] dark:text-textDark">Account Number</p>
+                        <p class="font-semibold dark:text-white">{{officerObj.accNumber}}</p>
+                    </div>
+
+                    <div>
+                        <p class="text-[#627189] dark:text-textDark">Bank Name</p>
+                        <p class="font-semibold dark:text-white">{{officerObj.bankName}}</p>
+                    </div>
+
+                    <div>
+                        <p class="text-[#627189] dark:text-textDark">Branch Name</p>
+                        <p class="font-semibold dark:text-white">{{officerObj.branchName}}</p>
+                    </div>
+
+                </div>
+
             </div>
 
-            <!-- Buttons -->
-            <div class="flex justify-center gap-4">
-                <button class="bg-[#E8E8E8] border-[1px] border-[#6B7D8C] px-10 py-0.35 rounded-lg shadow-md"
-                    (click)="confirmDisclaim(officerId)"><span class="font-semibold text-[#6B7D8C]">Yes,</span> <br>
-                    <span class="text-light text-whight-700 button-text text-[#6B7D8C]">Discharge</span>
-                </button>
-                <button class="bg-[#415CFF] border-[1px] border-[#415CFF] px-10 py-0.35 rounded-lg shadow-md"
-                    (click)="cancelDisclaim()"><span class="font-semibold text-white">No,</span> <br>
-                    <span class="text-light text-whight-700 button-text text-white">Go Back</span>
-                </button>
-            </div>
+
         </div>
     </div>
 
-</div>
+    <div *ngIf="showDisclaimView" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+        <div class="bg-white dark:bg-[#363636] shadow-lg rounded-lg p-6 w-1/2">
+
+            <div>
+                <!-- Icon -->
+                <div class="mb-4 flex justify-center">
+                    <i class="fa-solid fa-triangle-exclamation"></i>
+                </div>
+
+                <div class="mb-4 text-center dark:text-textDark">
+                    <p class="text-lg mb-2">
+                        Are you sure you want to Discharge the officer
+                    </p>
+                    <p class="font-semibold text-lg dark:text-white">
+                        "{{officerObj.firstNameEnglish}} {{officerObj.lastNameEnglish}}"" (EMP ID -
+                        "CCO{{officerObj.empId}}")
+                        <span class="font-normal">from center</span> <br>
+                        "{{officerObj.centerName}}"?
+                    </p>
+
+                    <p class="text-red-500 mb-6 italic">
+                        Please note that the officer will no longer be under your monitoring.
+                    </p>
+                </div>
+
+                <!-- Buttons -->
+                <div class="flex justify-center gap-4">
+                    <button class="bg-[#E8E8E8] border-[1px] border-[#6B7D8C] px-10 py-0.35 rounded-lg shadow-md"
+                        (click)="confirmDisclaim(officerId)"><span class="font-semibold text-[#6B7D8C]">Yes,</span> <br>
+                        <span class="text-light text-whight-700 button-text text-[#6B7D8C]">Discharge</span>
+                    </button>
+                    <button class="bg-[#415CFF] border-[1px] border-[#415CFF] px-10 py-0.35 rounded-lg shadow-md"
+                        (click)="cancelDisclaim()"><span class="font-semibold text-white">No,</span> <br>
+                        <span class="text-light text-whight-700 button-text text-white">Go Back</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+    </div>
 </div>

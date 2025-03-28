@@ -112,7 +112,14 @@
                         <td class="px-6 py-3 font-medium text-center">{{ item.province }}</td>
                         <td class="px-6 py-3 font-medium text-center">{{ item.district }}</td>
                         <td class="px-6 py-3 font-medium text-center">{{ item.city }}</td>
-                        <td class="px-6 py-3 font-medium text-center">{{ '+94' + item.contact01 }}</td>
+                        <td class="px-6 py-3 font-medium text-center">
+                            <ng-container *ngIf="item.contact01; else noContact">
+                              {{ '+94' + item.contact01 }}
+                            </ng-container>
+                            <ng-template #noContact>
+                              N/A
+                            </ng-template>
+                          </td>
                         <td class="px-6 py-3 font-medium text-center">{{ item.collectionCenterManagerCount }}</td>
                         <td class="px-6 py-3 font-medium text-center">{{ item.collectionOfficerCount }}</td>
                     </tr>

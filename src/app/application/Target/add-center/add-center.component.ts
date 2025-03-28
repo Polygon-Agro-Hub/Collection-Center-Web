@@ -124,18 +124,42 @@ export class AddCenterComponent implements OnInit {
           this.toastSrv.success('Center Created Successfully');
           this.router.navigate(['/centers']);
         } else {
-          this.toastSrv.error('There was an error creating the center');
+          this.toastSrv.error(res.message || 'There was an error creating the center');
         }
       },
       error: (error: any) => {
-        const errorMessage = error?.error?.message || 'There was an error creating the center';
-        this.toastSrv.error(errorMessage);
+        this.isLoading = false;
+  
+        // Handle different types of errors based on error status or message
+        if (error.status === 400) {
+          // Validation error or bad request
+          const errorMessage =
+            error?.error?.message ||
+            'Invalid input. Please check the data and try again.';
+          this.toastSrv.error(errorMessage);
+        } else if (error.status === 409) {
+          // Conflict error, e.g., duplicate regCode
+          const errorMessage =
+            error?.error?.message ||
+            'A center with this registration code already exists.';
+          this.toastSrv.error(errorMessage);
+        } else if (error.status === 500) {
+          // Server error
+          this.toastSrv.error('An internal server error occurred. Please try again later.');
+        } else {
+          // Generic error
+          const errorMessage =
+            error?.error?.message ||
+            'There was an error creating the center. Please try again.';
+          this.toastSrv.error(errorMessage);
+        }
       },
       complete: () => {
         this.isLoading = false;
       },
     });
   }
+  
   
 
   onCancel() {

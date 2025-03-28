@@ -20,23 +20,29 @@
 
                 <p class="text-lg">Filter By</p>
 
-                <div class="relative w-46">
+
+
+                <div class="relative w-48">
                     <div
                         class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
                         <select [(ngModel)]="selectStatus" (change)="filterStatus()"
-                            class="block w-full appearance-none  dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
+                            class="block w-full appearance-none  dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none cursor-pointer whitespace-nowrap">
                             <option value="" selected disabled>Status</option>
                             <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
                                 value="Pending">Pending</option>
                             <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
                                 value="Completed">Completed</option>
                         </select>
-                        <button *ngIf="!selectStatus">
+
+                        <div *ngIf="!selectStatus"
+                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
                             <i class="fa-solid fa-angle-down text-lg mr-3"></i>
-                        </button>
-                        <button *ngIf="selectStatus" (click)="cancelStatus()">
+                        </div>
+
+                        <div *ngIf="selectStatus" (click)="cancelStatus()"
+                            class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300 cursor-pointer z-10">
                             <i class="fa-solid fa-xmark text-lg mr-3"></i>
-                        </button>
+                        </div>
 
                     </div>
                 </div>
@@ -124,31 +130,32 @@
                             </span>
                         </td> -->
 
-                        <td class="px-4 py-4 text-gray-900 dark:text-gray-300 text-center whitespace-nowrap min-w-[120px]">
+                        <td
+                            class="px-4 py-4 text-gray-900 dark:text-gray-300 text-center whitespace-nowrap min-w-[120px]">
                             <!-- Hours Left -->
                             <span *ngIf="getTimeRemaining(item.toDate, item.toTime).includes('hour')"
                                 class="bg-[#FFD5D1] text-[#EB3223] text-center rounded-lg px-2 py-1 inline-block">
                                 {{ getTimeRemaining(item.toDate, item.toTime) }}
                             </span>
-                        
+
                             <!-- Exactly One Day Left -->
                             <span *ngIf="getTimeRemaining(item.toDate, item.toTime).includes('1 day')"
                                 class="bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-2 py-1 inline-block">
                                 {{ getTimeRemaining(item.toDate, item.toTime) }}
                             </span>
-                        
+
                             <!-- More than One Day Left -->
                             <span *ngIf="getTimeRemaining(item.toDate, item.toTime).includes('days')"
                                 class="bg-[#C8E0FF] text-[#415CFF] text-center rounded-lg px-2 py-1 inline-block">
                                 {{ getTimeRemaining(item.toDate, item.toTime) }}
                             </span>
-                        
+
                             <!-- Expired -->
                             <span *ngIf="getTimeRemaining(item.toDate, item.toTime) === 'Expired'"
                                 class="bg-gray-300 text-gray-700 text-center rounded-lg px-2 py-1 inline-block">
                                 {{ getTimeRemaining(item.toDate, item.toTime) }}
                             </span>
-                        
+
                             <span
                                 *ngIf="getTimeRemaining(item.toDate, item.toTime).includes('minute') && !getTimeRemaining(item.toDate, item.toTime).includes('hour')"
                                 class="bg-[#FFD5D1] text-[#EB3223] text-center rounded-lg px-2 py-1 inline-block">
@@ -157,24 +164,14 @@
                         </td>
 
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300 text-center">
-                            <button
-                            class="w-6 h-6 text-blue-500 hover:text-blue-700"
-
-                          >
-                            <svg
-                              viewBox="0 0 24 24"
-                              fill="none"
-                              xmlns="http://www.w3.org/2000/svg"
-                            >
-                              <path
-                                d="M3 14C3 9.02944 7.02944 5 12 5C16.9706 5 21 9.02944 21 14M17 14C17 16.7614 14.7614 19 12 19C9.23858 19 7 16.7614 7 14C7 11.2386 9.23858 9 12 9C14.7614 9 17 11.2386 17 14Z"
-                                stroke="currentColor"
-                                stroke-width="2"
-                                stroke-linecap="round"
-                                stroke-linejoin="round"
-                              />
-                            </svg>
-                          </button>
+                            <button class="w-6 h-6 text-blue-500 hover:text-blue-700">
+                                <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                    <path
+                                        d="M3 14C3 9.02944 7.02944 5 12 5C16.9706 5 21 9.02944 21 14M17 14C17 16.7614 14.7614 19 12 19C9.23858 19 7 16.7614 7 14C7 11.2386 9.23858 9 12 9C14.7614 9 17 11.2386 17 14Z"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" />
+                                </svg>
+                            </button>
                         </td>
 
                     </tr>

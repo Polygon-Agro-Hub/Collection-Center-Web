@@ -11,7 +11,7 @@
   <form class="grid grid-cols-2 gap-4" #centerForm="ngForm">
     <!-- Collection Center Name -->
     <div>
-      <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-textDark">Collection Center Name</label>
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Collection Center Name</label>
       <input
         type="text"
         class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F] "
@@ -26,7 +26,7 @@
     </div>
     <!-- Country -->
     <div>
-      <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-textDark">Country</label>
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Country</label>
       <select
       class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
         [(ngModel)]="centerData.country"
@@ -43,7 +43,7 @@
     </div>
     <!-- Province -->
     <div>
-      <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-textDark">Province</label>
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Province</label>
       <select
       class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
         [(ngModel)]="centerData.province"
@@ -63,7 +63,7 @@
     </div>
     <!-- District -->
     <div>
-      <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-textDark">District</label>
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">District</label>
       <select
       class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
         [(ngModel)]="centerData.district"
@@ -82,7 +82,7 @@
     </div>
     <!-- Building Number -->
     <div>
-      <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-textDark">Building No</label>
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Building No</label>
       <input
         type="text"
         class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
@@ -97,7 +97,7 @@
     </div>
     <!-- Street Name -->
     <div>
-      <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-textDark">Street Name</label>
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Street Name</label>
       <input
         type="text"
         class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
@@ -112,7 +112,7 @@
     </div>
     <!-- City -->
     <div>
-      <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-textDark">City</label>
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">City</label>
       <input
         type="text"
         class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
@@ -127,7 +127,7 @@
     </div>
     <!-- Registration Code -->
     <div>
-      <label class="mb-1 block text-sm font-medium text-gray-700 dark:text-textDark">Collection Center Reg Code</label>
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Collection Center Reg Code</label>
       <input
         type="text"
         class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
@@ -145,14 +145,14 @@
   <div class="flex justify-end mt-6 space-x-4">
     <button
       type="button"
-      class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md mr-2"
+      class="px-4 py-2 bg-gray-300 #6B7D8C rounded-md mr-2"
       (click)="onCancel()"
     >
       Cancel
     </button>
     <button
       type="submit"
-      class="px-4 py-2 bg-[#3980C0] text-white rounded-md"
+      class="px-4 py-2 bg-[#3980C0] text-[#FFFFFF] rounded-md"
       [disabled]="!centerForm.valid"
       (click)="onSubmit()"
     >

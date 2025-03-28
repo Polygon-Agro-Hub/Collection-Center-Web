@@ -6,6 +6,7 @@ import { ToastAlertService } from '../../../services/toast-alert/toast-alert.ser
 import { TargetService } from '../../../services/Target-service/target.service'
 import Swal from 'sweetalert2';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-add-center',
@@ -68,7 +69,8 @@ export class AddCenterComponent implements OnInit {
   constructor(
     private router: Router,
     private toastSrv: ToastAlertService,
-    private targetService: TargetService
+    private targetService: TargetService,
+    private location: Location
   ) { }
 
   ngOnInit(): void {
@@ -170,21 +172,22 @@ export class AddCenterComponent implements OnInit {
       showCancelButton: true,
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, clear it!',
-      cancelButtonText: 'Cancel',
+      confirmButtonText: 'Yes, cancel it!',
+      cancelButtonText: 'No, Stay On Page',
       customClass: {
         popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
         title: 'dark:text-white',
 
-        icon: '!border-gray-200 dark:!border-gray-500',
-        confirmButton: 'hover:bg-red-600 dark:hover:bg-red-700 focus:ring-red-500 dark:focus:ring-red-800',
+        icon: '',
+        confirmButton: 'hover:bg-red-600 dark:hover:bg-red-700 focus:ring-red-500 dark:focus:ring-red-800' ,
         cancelButton: 'hover:bg-blue-600 dark:hover:bg-blue-700 focus:ring-blue-500 dark:focus:ring-blue-800',
         actions: 'gap-2'
       }
     }).then((result) => {
       if (result.isConfirmed) {
-        this.centerData = new CenterData();
-        this.toastSrv.success('The form has been cleared.');
+
+        this.toastSrv.warning('Center Add Operation Canceled.')
+        this.location.back(); 
       }
     });
   }

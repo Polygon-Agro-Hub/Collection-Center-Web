@@ -82,6 +82,11 @@
                                 class="p-2 text-gray-700 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
                                 Customer Officer
                             </option>
+                            <option value="Driver" *ngIf="logingRole === 'Collection Center Head'"
+                                class="p-2 text-gray-700 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
+                                Driver
+                            </option>
+
                         </select>
                         <!-- Error: Required Field -->
                         <div *ngIf="jobRoleInput.touched && !personalData.jobRole" class="text-red-500 text-sm mt-1">
@@ -97,6 +102,9 @@
                                 class="inline-flex items-center px-3 py-3 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-[#1D1D1F] dark:text-gray-400 ">
                                 <span *ngIf="logingRole === 'Collection Center Head'">
                                     <p *ngIf="personalData.jobRole === 'Collection Center Manager'">CCM</p>
+                                </span>
+                                <span *ngIf="logingRole === 'Collection Center Head'">
+                                    <p *ngIf="personalData.jobRole === 'Driver'">DVR</p>
                                 </span>
                                 <p *ngIf="personalData.jobRole === 'Collection Officer'">COO</p>
                                 <p *ngIf="personalData.jobRole === 'Customer Officer'">CUO</p>
@@ -166,20 +174,20 @@
                         </label>
                         <div class="flex items-center space-x-4 mt-3">
                             <div class="flex items-center space-x-2">
-                                <input class="w-5 h-5 dark:bg-[gray]" type="checkbox" id="sinhala" name="languages" value="Sinhala"
-                                    (change)="onCheckboxChange('Sinhala', $event)"
+                                <input class="w-5 h-5 dark:bg-[gray]" type="checkbox" id="sinhala" name="languages"
+                                    value="Sinhala" (change)="onCheckboxChange('Sinhala', $event)"
                                     [checked]="personalData.languages.includes('Sinhala')" />
                                 <label for="sinhala" class="text-gray-700 dark:text-textDark">Sinhala</label>
                             </div>
                             <div class="flex items-center space-x-2">
-                                <input class="w-5 h-5 dark:bg-[gray]" type="checkbox" id="english" name="languages" value="English"
-                                    (change)="onCheckboxChange('English', $event)"
+                                <input class="w-5 h-5 dark:bg-[gray]" type="checkbox" id="english" name="languages"
+                                    value="English" (change)="onCheckboxChange('English', $event)"
                                     [checked]="personalData.languages.includes('English')" />
                                 <label for="english" class="text-gray-700 dark:text-textDark">English</label>
                             </div>
                             <div class="flex items-center space-x-2">
-                                <input class="w-5 h-5 dark:bg-[gray]" type="checkbox" id="tamil" name="languages" value="Tamil"
-                                    (change)="onCheckboxChange('Tamil', $event)"
+                                <input class="w-5 h-5 dark:bg-[gray]" type="checkbox" id="tamil" name="languages"
+                                    value="Tamil" (change)="onCheckboxChange('Tamil', $event)"
                                     [checked]="personalData.languages.includes('Tamil')" />
                                 <label for="tamil" class="text-gray-700 dark:text-textDark">Tamil</label>
                             </div>
@@ -512,6 +520,286 @@
 
             <div class="flex justify-end m-10">
                 <button (click)="nextForm('pageOne')" type="button"
+                    class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md mr-2">Back</button>
+                <button type="submit" class="px-4 py-2 bg-[#3980C0] text-white rounded-md"
+                    (click)="(!PageTwoForm.invalid && personalData.jobRole !== 'Driver') ? onSubmit() : (!PageTwoForm.invalid && personalData.jobRole === 'Driver') ? nextForm('pageThree') : nextForm('pageTwo')">
+                    <span *ngIf="personalData.jobRole ==='Driver'">Next</span>
+                    <span *ngIf="personalData.jobRole !=='Driver'">Sent to Approve</span>
+                </button>
+                <!-- <button type="submit" class="px-4 py-2 bg-[#3980C0] text-white rounded-md" (click)="onSubmit()">Sent to
+                        Approve</button> -->
+            </div>
+        </div>
+    </form>
+
+    <form #PageThreeForm="ngForm" (ngSubmit)="onSubmitForm(PageThreeForm)">
+
+        <div *ngIf="selectedPage === 'pageThree'">
+
+            <h2 class="text-xl mb-6 text-textLight dark:text-textDark font-bold">Driving Details</h2>
+            <div>
+                <label for="firstNameEnglish" class="block text-sm font-medium text-gray-700 dark:text-textDark">Driving
+                    License ID</label>
+                <input id="firstNameEnglish" name="firstNameEnglish"
+                    class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+                    required />
+                <!-- <div *ngIf="firstNameEnglishInput.touched && !personalData.firstNameEnglish"
+                    class="text-red-500 text-sm mt-1">
+                    <div>First Name (in English) is required</div>
+                </div> -->
+            </div>
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-11 my-5">
+                <div>
+                    <label for="licenseFrontImageUpload"
+                        class="block text-sm font-medium text-gray-700 dark:text-textDark my-2">
+                        License's Front Image
+                    </label>
+
+                    <input id="licenseFrontImageUpload" type="file" accept="image/*"
+                        (change)="onLicenseFrontImageSelected($event)" class="hidden">
+
+                    <div (click)="triggerFileInputForDriver($event, 'licenseFrontImageUpload')"
+                        class="flex flex-row items-center justify-center bg-[#D2DADD] rounded-lg shadow-md gap-x-3 form-control mt-1 w-full p-2 border border-gray-300 cursor-pointer hover:bg-gray-200 transition-colors">
+                        <i class="fa-solid fa-upload text-[#534E4E] text-lg"></i>
+                        <p>Upload License Front Image</p>
+                    </div>
+
+                    <div *ngIf="licenseFrontImageFileName" class="mt-2 flex items-center gap-2">
+                        <span class="text-sm font-semibold">Attached: <span class="text-[#415CFF] font-normal">{{
+                                licenseFrontImageFileName }}</span></span>
+                        <button (click)="clearLicenseFrontImage()" class="text-red-500 hover:text-red-700 text-sm">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+
+                    <!-- <div *ngIf="licenseFrontImagePreview" class="mt-2">
+                      <img [src]="licenseFrontImagePreview" alt="License Front Preview" class="max-w-[200px] max-h-[200px] rounded border">
+                    </div> -->
+                </div>
+
+                <div>
+                    <label for="licenseBackImageUpload"
+                        class="block text-sm font-medium text-gray-700 dark:text-textDark my-2">License’s Back
+                        Image</label>
+
+                    <input id="licenseBackImageUpload" type="file" accept="image/*"
+                        (change)="onLicenseBackImageSelected($event)" class="hidden">
+
+                    <div (click)="triggerFileInputForDriver($event, 'licenseBackImageUpload')"
+                        class="flex flex-row items-center justify-center bg-[#D2DADD] rounded-lg shadow-md gap-x-3 form-control mt-1 w-full p-2 border border-gray-300 cursor-pointer">
+                        <i class="fa-solid fa-upload text-[#534E4E] text-lg"></i>
+                        <p>Upload Back Image</p>
+                    </div>
+                    <div *ngIf="licenseBackImageFileName" class="mt-2 flex items-center gap-2">
+                        <span class="text-sm font-semibold">Attached: <span class="text-[#415CFF] font-normal">{{
+                                licenseBackImageFileName }}</span></span>
+                        <button (click)="clearLicenseBackImage()" class="text-red-500 hover:text-red-700 text-sm">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <h2 class="text-xl mt-16 mb-6 text-textLight dark:text-textDark font-bold">Vehicle Insurance Details</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-11 my-5">
+                <div>
+                    <label for="firstNameEnglish"
+                        class="block text-sm font-medium text-gray-700 dark:text-textDark">Insurance Number</label>
+                    <input id="firstNameEnglish" name="firstNameEnglish"
+                        class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+                        required />
+                    <!-- <div *ngIf="firstNameEnglishInput.touched && !personalData.firstNameEnglish"
+                        class="text-red-500 text-sm mt-1">
+                        <div>First Name (in English) is required</div>
+                    </div> -->
+                </div>
+
+                <div>
+                    <label for="firstNameEnglish"
+                        class="block text-sm font-medium text-gray-700 dark:text-textDark">Insurance Expire Date</label>
+                    <input id="firstNameEnglish" name="firstNameEnglish" type="date"
+                        class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+                        required />
+                    <!-- <div *ngIf="firstNameEnglishInput.touched && !personalData.firstNameEnglish"
+                        class="text-red-500 text-sm mt-1">
+                        <div>First Name (in English) is required</div>
+                    </div> -->
+                </div>
+
+                <div>
+                    <label for="insurenceFrontImageUpload"
+                        class="block text-sm font-medium text-gray-700 dark:text-textDark my-2">Insurance’s Front
+                        Image</label>
+                    <input id="insurenceFrontImageUpload" type="file" accept="image/*"
+                        (change)="onInsurenceFrontImageSelected($event)" class="hidden">
+
+                    <div (click)="triggerFileInputForDriver($event, 'insurenceFrontImageUpload')"
+                        class="flex flex-row items-center justify-center bg-[#D2DADD] rounded-lg shadow-md gap-x-3 form-control mt-1 w-full p-2 border border-gray-300 cursor-pointer">
+                        <i class="fa-solid fa-upload text-[#534E4E] text-lg"></i>
+                        <p>Upload Front Image</p>
+                    </div>
+                    <div *ngIf="insurenceFrontImageFileName" class="mt-2 flex items-center gap-2">
+                        <span class="text-sm font-semibold">Attached: <span class="text-[#415CFF] font-normal">{{
+                                insurenceFrontImageFileName }}</span></span>
+                        <button (click)="clearInsurenceFrontImage()" class="text-red-500 hover:text-red-700 text-sm">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="firstNameEnglish"
+                        class="block text-sm font-medium text-gray-700 dark:text-textDark my-2">Insurance’s Back
+                        Image</label>
+                    <input id="insuranceBackImageUpload" type="file" accept="image/*"
+                        (change)="onInsurenceBackImageSelected($event)" class="hidden">
+
+
+                    <div (click)="triggerFileInputForDriver($event, 'insuranceBackImageUpload')"
+                        class="flex flex-row items-center justify-center bg-[#D2DADD] rounded-lg shadow-md gap-x-3 form-control mt-1 w-full p-2 border border-gray-300 cursor-pointer">
+                        <i class="fa-solid fa-upload text-[#534E4E] text-lg"></i>
+                        <p>Upload Back Image</p>
+                    </div>
+                    <div *ngIf="insurenceBackImageFileName" class="mt-2 flex items-center gap-2">
+                        <span class="text-sm font-semibold">Attached: <span class="text-[#415CFF] font-normal">{{
+                                insurenceBackImageFileName }}</span></span>
+                        <button (click)="clearInsurenceBackImage()" class="text-red-500 hover:text-red-700 text-sm">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
+            <h2 class="text-xl mt-16 mb-6 text-textLight dark:text-textDark font-bold">Vehicle Details</h2>
+            <div>
+                <label for="firstNameEnglish" class="block text-sm font-medium text-gray-700 dark:text-textDark">Vehicle
+                    Registration Number</label>
+                <input id="firstNameEnglish" name="firstNameEnglish"
+                    class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+                    required />
+                <!-- <div *ngIf="firstNameEnglishInput.touched && !personalData.firstNameEnglish"
+                    class="text-red-500 text-sm mt-1">
+                    <div>First Name (in English) is required</div>
+                </div> -->
+            </div>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-11 my-5">
+                <div>
+                    <label for="firstNameEnglish"
+                        class="block text-sm font-medium text-gray-700 dark:text-textDark">Vehicle Type</label>
+                    <input id="firstNameEnglish" name="firstNameEnglish"
+                        class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+                        required />
+                    <!-- <div *ngIf="firstNameEnglishInput.touched && !personalData.firstNameEnglish"
+                        class="text-red-500 text-sm mt-1">
+                        <div>First Name (in English) is required</div>
+                    </div> -->
+                </div>
+
+                <div>
+                    <label for="firstNameEnglish"
+                        class="block text-sm font-medium text-gray-700 dark:text-textDark">Vehicle Capacity</label>
+                    <input id="firstNameEnglish" name="firstNameEnglish" placeholder="------------"
+                        class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+                        required />
+                    <!-- <div *ngIf="firstNameEnglishInput.touched && !personalData.firstNameEnglish"
+                        class="text-red-500 text-sm mt-1">
+                        <div>First Name (in English) is required</div>
+                    </div> -->
+                </div>
+
+                <div>
+                    <label for="vehicleFrontImageUpload"
+                        class="block text-sm font-medium text-gray-700 dark:text-textDark my-2">Vehicle’s Front
+                        Image</label>
+                    <input id="vehicleFrontImageUpload" type="file" accept="image/*"
+                        (change)="onVehicleFrontImageSelected($event)" class="hidden">
+
+                    <div (click)="triggerFileInputForDriver($event, 'vehicleFrontImageUpload')"
+                        class="flex flex-row items-center justify-center bg-[#D2DADD] rounded-lg shadow-md gap-x-3 form-control mt-1 w-full p-2 border border-gray-300 cursor-pointer">
+                        <i class="fa-solid fa-upload text-[#534E4E] text-lg"></i>
+                        <p>Upload Front Image</p>
+                    </div>
+                    <div *ngIf="vehicleFrontImageFileName" class="mt-2 flex items-center gap-2">
+                        <span class="text-sm font-semibold">Attached: <span class="text-[#415CFF] font-normal">{{
+                                vehicleFrontImageFileName }}</span></span>
+                        <button (click)="clearVehicleFrontImage()" class="text-red-500 hover:text-red-700 text-sm">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="vehicleBackImageUpload"
+                        class="block text-sm font-medium text-gray-700 dark:text-textDark my-2">Vehicle’s Back
+                        Image</label>
+                    <input id="vehicleBackImageUpload" type="file" accept="image/*"
+                        (change)="onVehicleBackImageSelected($event)" class="hidden">
+
+                    <div (click)="triggerFileInputForDriver($event, 'vehicleBackImageUpload')"
+                        class="flex flex-row items-center justify-center bg-[#D2DADD] rounded-lg shadow-md gap-x-3 form-control mt-1 w-full p-2 border border-gray-300 cursor-pointer">
+                        <i class="fa-solid fa-upload text-[#534E4E] text-lg"></i>
+                        <p>Upload Back Image</p>
+                    </div>
+                    <div *ngIf="vehicleBackImageFileName" class="mt-2 flex items-center gap-2">
+                        <span class="text-sm font-semibold">Attached: <span class="text-[#415CFF] font-normal">{{
+                                vehicleBackImageFileName }}</span></span>
+                        <button (click)="clearVehicleBackImage()" class="text-red-500 hover:text-red-700 text-sm">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="vehicleSideAImageUpload"
+                        class="block text-sm font-medium text-gray-700 dark:text-textDark my-2">Vehicle’s Side Image -
+                        1</label>
+                        <input id="vehicleSideAImageUpload" type="file" accept="image/*"
+                        (change)="onVehicleSideAImageSelected($event)" class="hidden">
+
+                    <div
+                    (click)="triggerFileInputForDriver($event, 'vehicleSideAImageUpload')"
+                        class="flex flex-row items-center justify-center bg-[#D2DADD] rounded-lg shadow-md gap-x-3 form-control mt-1 w-full p-2 border border-gray-300 cursor-pointer">
+                        <i class="fa-solid fa-upload text-[#534E4E] text-lg"></i>
+                        <p>Upload Side Image - 1</p>
+                    </div>
+                    <div *ngIf="vehicleSideAImageFileName" class="mt-2 flex items-center gap-2">
+                        <span class="text-sm font-semibold">Attached: <span class="text-[#415CFF] font-normal">{{
+                                vehicleSideAImageFileName }}</span></span>
+                        <button (click)="clearVehicleSideAImage()" class="text-red-500 hover:text-red-700 text-sm">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="vehicleSideBImageUpload"
+                        class="block text-sm font-medium text-gray-700 dark:text-textDark my-2">Vehicle’s Side Image -
+                        2</label>
+                        <input id="vehicleSideBImageUpload" type="file" accept="image/*"
+                        (change)="onVehicleSideBImageSelected($event)" class="hidden">
+
+                    <div
+                    (click)="triggerFileInputForDriver($event, 'vehicleSideBImageUpload')"
+                        class="flex flex-row items-center justify-center bg-[#D2DADD] rounded-lg shadow-md gap-x-3 form-control mt-1 w-full p-2 border border-gray-300 cursor-pointer">
+                        <i class="fa-solid fa-upload text-[#534E4E] text-lg"></i>
+                        <p>Upload Side Image - 2</p>
+                    </div>
+                    <div *ngIf="vehicleSideBImageFileName" class="mt-2 flex items-center gap-2">
+                        <span class="text-sm font-semibold">Attached: <span class="text-[#415CFF] font-normal">{{
+                                vehicleSideBImageFileName }}</span></span>
+                        <button (click)="clearVehicleSideBImage()" class="text-red-500 hover:text-red-700 text-sm">
+                            <i class="fas fa-times"></i>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="flex justify-end m-10">
+                <button (click)="nextForm('pageTwo')" type="button"
                     class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md mr-2">Back</button>
                 <button type="submit" class="px-4 py-2 bg-[#3980C0] text-white rounded-md"
                     (click)="!PageTwoForm.invalid ? onSubmit() : nextForm('pageTwo')">Sent to

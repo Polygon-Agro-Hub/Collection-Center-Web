@@ -119,6 +119,12 @@ export class SideNavComponent {
   private setActiveTabFromRoute(): void {
     const currentPath = this.router.url.split('?')[0];
     
+    // Specific handling for profile route
+    if (currentPath === '/profile') {
+      this.isSelectTab = '';
+      return;
+    }
+    
     // Find the menu item with the longest path that matches the current route
     const activeItem = this.menuItems
       .filter(item => currentPath.startsWith(item.path))
@@ -144,6 +150,8 @@ export class SideNavComponent {
   }
 
   navigate(path: string, selectTab: string) {
+    console.log(path);
+    console.log(selectTab);
     this.isSelectTab = selectTab;
     this.router.navigate([path]).then(() => {
       this.setActiveTabFromRoute();

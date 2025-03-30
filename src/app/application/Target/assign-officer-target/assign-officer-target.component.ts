@@ -6,6 +6,8 @@ import { TargetService } from '../../../services/Target-service/target.service';
 import { ManageOfficersService } from '../../../services/manage-officers-service/manage-officers.service';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
+import Swal from 'sweetalert2';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-assign-officer-target',
@@ -35,7 +37,9 @@ export class AssignOfficerTargetComponent implements OnInit {
     private targetSrv: TargetService,
     private route: ActivatedRoute,
     private toastSrv: ToastAlertService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private location: Location,
+    private datePipe: DatePipe
   ) { }
 
   ngOnInit(): void {
@@ -48,7 +52,13 @@ export class AssignOfficerTargetComponent implements OnInit {
     this.targetSrv.getTargetVerity(this.targetId).subscribe(
       (res) => {
 
+        console.log(res);
+
         this.targetVerity = res.crop;
+
+        if (this.targetVerity && this.targetVerity.toDate) {
+          this.targetVerity.formattedToDate = this.datePipe.transform(this.targetVerity.toDate, 'yyyy/MM/dd')!;
+        }
 
         this.officerArr = res.officer.map((officer: Officer) => ({
           ...officer,
@@ -88,13 +98,41 @@ export class AssignOfficerTargetComponent implements OnInit {
         if (res.status) {
           this.isLoading = false;
           this.toastSrv.success('Successfully assigned the target!');
-          this.router.navigate(['/target/view-target'])
+          this.router.navigate(['/target'])
         } else {
           this.isLoading = false;
           this.toastSrv.error('Failed to assign the target!');
         }
       }
     )
+  }
+
+  onCancel() {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you really want to clear the operation?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, cancel it!',
+      cancelButtonText: 'No, Stay On Page',
+      customClass: {
+        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+        title: 'dark:text-white',
+
+        icon: '',
+        confirmButton: 'hover:bg-red-600 dark:hover:bg-red-700 focus:ring-red-500 dark:focus:ring-red-800' ,
+        cancelButton: 'hover:bg-blue-600 dark:hover:bg-blue-700 focus:ring-blue-500 dark:focus:ring-blue-800',
+        actions: 'gap-2'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        this.toastSrv.warning('Assign Officer Target Operation Canceled.')
+        this.location.back(); 
+      }
+    });
   }
 
   updateTotals(index: number, grade: 'A' | 'B' | 'C') {
@@ -143,6 +181,7 @@ class TargetVerity {
   qtyC!: number;
   toDate!: Date;
   toTime!: Date;
+  formattedToDate!: string;
 }
 
 class Officer {

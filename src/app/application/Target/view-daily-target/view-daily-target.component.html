@@ -31,7 +31,7 @@
 
         <div class="flex flex-row items-center justify-between mt-5">
             <div class="flex flex-col justify-between">
-                <p class="font-semibold text-lg mb-1">Daily Target on {{today}} </p>
+                <p class="font-semibold text-lg mb-1">Center Target on {{today}} </p>
             </div>
             <div class="flex flex-row items-center gap-8 ">
                 <i class="fa-solid fa-list text-2xl ml-8"></i>
@@ -89,7 +89,7 @@
 
 
 
-
+<!-- 
                 <div class="relative w-52">
                     <div class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
                       <select [(ngModel)]="selectValidity" (change)="filterValidity()"
@@ -101,22 +101,21 @@
                             value="Expired">Expired</option>
                       </select>
                       
-                      <!-- Down arrow icon -->
+
                       <div *ngIf="!selectValidity" class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
                         <i class="fa-solid fa-angle-down text-lg mr-3"></i>
                       </div>
-                  
-                      <!-- Cancel icon -->
+
                       <div (click)="cancelValidity()" *ngIf="selectValidity" 
                            class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300 cursor-pointer z-10">
                         <i class="fa-solid fa-xmark text-lg mr-3"></i>
                       </div>
                     </div>
-                  </div>
+                  </div> -->
 
 
                 <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
-                    <input type="text" placeholder="Search by Variety Name" [(ngModel)]="searchText"
+                    <input type="text" placeholder="Search by Variety Name" [(ngModel)]="searchText" (keyup.enter)="onSearch()" (keyup.esc)="offSearch()"
                         class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
                     <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                         (click)="onSearch()">
@@ -154,7 +153,7 @@
                         <th class="px-6 py-3 text-left font-medium">Completed (kg)</th>
                         <th class="px-6 py-3 text-center font-medium">Status</th>
                         <th class="px-6 py-3 text-left font-medium">Ends At</th>
-                        <th class="px-6 py-3 text-left font-medium">Validity</th>
+                        <!-- <th class="px-6 py-3 text-left font-medium">Validity</th> -->
                     </tr>
                 </thead>
                 <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
@@ -166,8 +165,13 @@
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.cropNameEnglish}}</td>
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.varietyNameEnglish}}</td>
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.grade}}</td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.TargetQty}}</td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.CompleteQty}}</td>
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
+                            {{ item.TargetQty === '0.00' ? 'Not Set' : item.TargetQty }}
+                        </td>
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
+                            {{ item.CompleteQty === '0.00' ? 'Empty' : item.CompleteQty }}
+                        </td>
+                        
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300 flex justify-center items-center">
                             <span *ngIf="item.status === 'Pending'"
                                 class="bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-6 py-1">
@@ -184,7 +188,7 @@
                                 <p class="text-sm text-[#646464] my-1">{{formatTime(item.toTime) }}</p>
                             </div>
                         </td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
+                        <!-- <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
                             <span *ngIf="checkValidity(item.toDate) === 'Active'"
                                 class="bg-[#B7FFBE] text-[#02BB3D] text-center rounded-lg px-4 py-1">
                                 Active
@@ -193,7 +197,7 @@
                                 class="bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-4 py-1">
                                 Expired
                             </span>
-                        </td>
+                        </td> -->
                     </tr>
                 </tbody>
 
@@ -245,11 +249,11 @@
                         </td>
                         <td class="px-6 py-4 text-black-900 dark:text-gray-300 ">
                             <span *ngIf="item.isAssign === 0">
-                                <i class="fa-solid fa-users-gear text-blue-600 text-xl"
+                                <i class="fa-solid fa-users-gear text-blue-600 text-xl cursor-pointer"
                                     (click)="navigateToAssignTarget(item.id)"></i>
                             </span>
                             <span *ngIf="item.isAssign === 1">
-                                <i class="fa-solid fa-pen-to-square text-xl text-blue-600"
+                                <i class="fa-solid fa-pen-to-square text-xl text-blue-600 cursor-pointer"
                                     (click)="navigateToEditAssignTarget(item.id)"></i>
                             </span>
                         </td>
@@ -261,12 +265,12 @@
 
             </table>
         </div>
-        <div class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#262f45] text-right">
+        <!-- <div class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#262f45] text-right">
             <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
                 [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
                 [screenReaderCurrentLabel]="'Youre on page'">
             </pagination-controls>
-        </div>
+        </div> -->
     </div>
 
 </div>

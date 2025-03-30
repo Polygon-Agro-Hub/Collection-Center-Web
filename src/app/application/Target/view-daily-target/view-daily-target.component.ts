@@ -64,6 +64,7 @@ export class ViewDailyTargetComponent implements OnInit {
     this.TargetSrv.getAllDailyTarget(page, limit, search).subscribe(
       (res) => {
         this.targetArr = res.items;
+        console.log(res.items);
         this.totalItems = res.totalPages
         if (res.items.length > 0) {
           this.hasData = true;
@@ -76,16 +77,16 @@ export class ViewDailyTargetComponent implements OnInit {
     );
   }
 
-  checkValidity(toDate: string): string {
-    const currentDate = new Date();
-    const targetDate = new Date(toDate);
+  // checkValidity(toDate: string): string {
+  //   const currentDate = new Date();
+  //   const targetDate = new Date(toDate);
 
-    if (targetDate >= currentDate) {
-      return 'Active';
-    } else {
-      return 'Expired';
-    }
-  }
+  //   if (targetDate >= currentDate) {
+  //     return 'Active';
+  //   } else {
+  //     return 'Expired';
+  //   }
+  // }
 
   onSearch() {
     this.fetchAllTarget();
@@ -110,26 +111,26 @@ export class ViewDailyTargetComponent implements OnInit {
   }
 
 
-  filterValidity() {
-    if (!this.selectValidity) {
-      this.fetchAllTarget();
-      return;
-    }
+  // filterValidity() {
+  //   if (!this.selectValidity) {
+  //     this.fetchAllTarget();
+  //     return;
+  //   }
 
-    this.targetArr = this.targetArr.filter(item => {
-      if (this.selectValidity === 'Active') {
-        return this.checkValidity(item.toDate) === 'Active';
-      } else if (this.selectValidity === 'Expired') {
-        return this.checkValidity(item.toDate) === 'Expired';
-      }
-      return true;
-    });
-  }
+  //   this.targetArr = this.targetArr.filter(item => {
+  //     if (this.selectValidity === 'Active') {
+  //       return this.checkValidity(item.toDate) === 'Active';
+  //     } else if (this.selectValidity === 'Expired') {
+  //       return this.checkValidity(item.toDate) === 'Expired';
+  //     }
+  //     return true;
+  //   });
+  // }
 
-  cancelValidity() {
-    this.selectValidity = '';
-    this.fetchAllTarget();
-  }
+  // cancelValidity() {
+  //   this.selectValidity = '';
+  //   this.fetchAllTarget();
+  // }
 
 
   onPageChange(event: number) {

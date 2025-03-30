@@ -55,8 +55,10 @@ isLoading:boolean = true;
         
         if (res.items.length === 0) {
           this.hasData = false;
+          console.log('checkhasdata', this.hasData)
         } else {
           this.hasData = true;
+          console.log('checkhasdata', this.hasData)
         }
 
         this.isLoading = false;

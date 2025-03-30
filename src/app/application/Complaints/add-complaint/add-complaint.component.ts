@@ -5,6 +5,10 @@ import { FormsModule } from '@angular/forms';
 import { ComplaintsService } from '../../../services/Complaints-Service/complaints.service';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
+import Swal from 'sweetalert2';
+import { Location } from '@angular/common';
+import { Router } from '@angular/router';
+
 
 @Component({
   selector: 'app-add-complaint',
@@ -14,10 +18,13 @@ import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loa
   styleUrls: ['./add-complaint.component.css'], // Corrected the typo
 })
 export class AddComplaintComponent {
+
+  
   // Variables for two-way binding
   category: string = '';
   complaint: string = '';
   isLoading: boolean = false;
+
 
   refreshScreen() {
     window.location.reload();
@@ -25,7 +32,9 @@ export class AddComplaintComponent {
 
   constructor(
     private complaintsService: ComplaintsService,
-    private toastSrv: ToastAlertService
+    private toastSrv: ToastAlertService,
+    private location: Location,
+    private router: Router
   ) { }
 
   // Function to handle form submission
@@ -68,4 +77,34 @@ export class AddComplaintComponent {
       }
     );
   }
+
+
+  onCancel() {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you really want to cancel this form?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, cancel it!',
+      cancelButtonText: 'No, Stay On Page',
+      customClass: {
+        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+        title: 'dark:text-white',
+        confirmButton: 'hover:bg-red-600 dark:hover:bg-red-700 focus:ring-red-500 dark:focus:ring-red-800',
+        cancelButton: 'hover:bg-blue-600 dark:hover:bg-blue-700 focus:ring-blue-500 dark:focus:ring-blue-800',
+        actions: 'gap-2'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.toastSrv.warning('Add Complaint Canceled.');
+        
+        setTimeout(() => {
+          this.router.navigate(['/collection/complaints']); // Navigate to the specific route
+        }, 500); // Delay to allow the toast to display
+      }
+    });
+  }
+  
 }

@@ -305,13 +305,13 @@ export class AddOfficersComponent implements OnInit {
   onCancel() {
     Swal.fire({
       title: 'Are you sure?',
-      text: 'Do you really want to clear this form?',
+      text: 'Do you really want to cancel this form?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, clear it!',
-      cancelButtonText: 'Cancel',
+      confirmButtonText: 'Yes, cancel it!',
+      cancelButtonText: 'No, Stay On Page',
       customClass: {
         popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
         title: 'dark:text-white',
@@ -324,7 +324,7 @@ export class AddOfficersComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.personalData = new Personal();
-        this.toastSrv.success('The form has been cleared.')
+        this.toastSrv.success('Officer edit canceled.')
       }
     });
   }

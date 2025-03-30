@@ -324,7 +324,7 @@ export class AddOfficersComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.personalData = new Personal();
-        this.toastSrv.success('Officer edit canceled.')
+        this.toastSrv.warning('Officer edit canceled.')
       }
     });
   }

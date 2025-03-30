@@ -7,6 +7,8 @@ import { NgxPaginationModule } from "ngx-pagination";
 import { Component, OnInit } from "@angular/core";
 import Swal from "sweetalert2";
 import { LoadingSpinnerComponent } from "../../../components/loading-spinner/loading-spinner.component";
+import { TargetService } from '../../../services/Target-service/target.service';
+import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 
 @Component({
   selector: 'app-view-price-list',
@@ -30,13 +32,16 @@ export class ViewPriceListComponent implements OnInit {
   editingIndex: number | null = null;
   editValue!: number;
 
+  originalValue!: number;
+
   isLoading: boolean = true;
 
 
   constructor(
     private router: Router,
     private PriceListSrv: PriceListService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private toastSrv: ToastAlertService,
   ) { }
 
   ngOnInit(): void {
@@ -84,115 +89,58 @@ export class ViewPriceListComponent implements OnInit {
     this.fetchAllPriceList(this.page, this.itemsPerPage, this.selectGrade, this.searchText);
   }
 
-  editRow(index: number, currentValue: number) {
-    this.editingIndex = index; // Set the row index being edited
-    this.editValue = currentValue; // Initialize editValue with the current price
+  isInvalidInput(): boolean {
+    // Return true if input is invalid (to disable the button)
+    return this.editValue === null ||
+      this.editValue === undefined ||
+      isNaN(this.editValue) ||
+      this.editValue <= 0;
   }
 
-  saveRow(id: number) {
-    // if (this.editValue != null) {
-    //   Swal.fire({
-    //     html: `
-    //       <div style="text-align: center; font-family: Arial, sans-serif;">
-    //         <div style="
-    //           margin-bottom: 16px;
-    //           display: flex;
-    //           justify-content: center;
-    //           align-items: center;
-    //           width: 48px;
-    //           height: 48px;
-    //           border-radius: 50%;
-    //           background-color: #F4F4F4;
-    //           margin: 0 auto;
-    //         ">
-    //           <i class="fa-solid fa-exclamation" style="color: #415CFF; font-size: 24px;"></i>
-    //         </div>
-    //         <h3 style="font-size: 18px; color: #333; margin-bottom: 8px;">You have unsaved changes.</h3>
-    //         <p style="font-size: 14px; color: #666; margin: 0;">
-    //           If you leave this page now, your changes will be lost.<br>
-    //           Do you want to continue without saving?
-    //         </p>
-    //       </div>
-    //     `,
-    //     showCancelButton: true,
-    //     confirmButtonColor: '#415CFF',
-    //     cancelButtonColor: '#F4F4F4',
-    //     confirmButtonText: `
-    //       <span style="
-    //         display: inline-block;
-    //         background-color: #415CFF;
-    //         color: white;
-    //         border: none;
-    //         padding: 8px 16px;
-    //         border-radius: 8px;
-    //         font-size: 14px;">
-    //         Stay on page
-    //       </span>
-    //     `,
-    //     cancelButtonText: `
-    //       <span style="
-    //         display: inline-block;
-    //         background-color: #F4F4F4;
-    //         color: #333;
-    //         border: 1px solid #E5E5E5;
-    //         padding: 8px 16px;
-    //         border-radius: 8px;
-    //         font-size: 14px;">
-    //         Leave without saving
-    //       </span>
-    //     `,
-    //     reverseButtons: true,
-    //   }).then((result) => {
-    //     if (result.dismiss === Swal.DismissReason.cancel) {
-    //       this.PriceListSrv.updatePrice(id, this.editValue).subscribe(
-    //         (res) => {
-    //           if (res.status) {
-    //             Swal.fire('Success', 'Price updated successfully', 'success');
-    //           } else {
-    //             Swal.fire('Error', 'Price update failed', 'error');
-    //           }
-    //           this.fetchAllPriceList(this.page, this.itemsPerPage);
-    //         },
-    //         (error) => {
-    //           console.error('Error updating price:', error);
-    //           Swal.fire('Error', 'Failed to update price', 'error');
-    //         }
-    //       );
-    //       this.editingIndex = null;
-    //     }
-    //   });
-    // } else {
-    //   this.editingIndex = null;
-    // }
+  validateInput() {
+    // Optional: Additional validation logic if needed
+    // For example, formatting or additional checks
+    if (this.editValue < 0) {
+      this.editValue = 0;
+    }
+  }
+
+  editRow(index: number, currentValue: number) {
+    this.editingIndex = index; // Set the row index being edited
+    this.editValue = currentValue;
+ // Initialize editValue with the current price
+    this.originalValue = currentValue; // Store the original value for comparison
+  }
+
+  saveRow(id: number, crop: string, variety: string, grade: string) {
+
+    console.log(this.originalValue);
+
 
     if (this.editValue != null) {
-      Swal.fire({
-        title: 'Are you sure?',
-        showCancelButton: true,
-        confirmButtonColor: '#415CFF',
-        reverseButtons: true,
-      }).then((result) => {
-        if (result.dismiss === Swal.DismissReason.cancel) {
-          Swal.fire('warning', 'Price updated cancel', 'warning');
-
-        } else {
-          this.PriceListSrv.updatePrice(id, this.editValue).subscribe(
-            (res) => {
-              if (res.status) {
-                Swal.fire('Success', 'Price updated successfully', 'success');
-              } else {
-                Swal.fire('Error', 'Price update failed', 'error');
-              }
-              this.fetchAllPriceList(this.page, this.itemsPerPage);
-            },
-            (error) => {
-              console.error('Error updating price:', error);
-              Swal.fire('Error', 'Failed to update price', 'error');
-            }
-          );
-          this.editingIndex = null;
+      console.log('edit', this.editValue);
+      this.PriceListSrv.updatePrice(id, this.editValue).subscribe(
+        (res) => {
+          if (res.status) {
+            this.isLoading = false;
+            this.toastSrv.success(
+              `Successfully changed price of <b style="color:black;">${crop}-${variety}-${grade}</b><br>
+               from <b style="color:black;">Rs.${this.originalValue}</b> to 
+               <b style="color:black;">Rs.${this.editValue.toFixed(2)}</b>`, 
+              { enableHtml: true }
+            );
+          } else {
+            this.isLoading = false;
+            this.toastSrv.error('Failed to assign the target!');
+          }
+          this.fetchAllPriceList(this.page, this.itemsPerPage);
+        },
+        (error) => {
+          console.error('Error updating price:', error);
+          Swal.fire('Error', 'Failed to update price', 'error');
         }
-      });
+      );
+      this.editingIndex = null;
     } else {
       this.editingIndex = null;
     }
@@ -200,6 +148,8 @@ export class ViewPriceListComponent implements OnInit {
 
 
 }
+
+
 
 class PriceList {
   id!: number;

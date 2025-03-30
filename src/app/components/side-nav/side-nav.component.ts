@@ -20,7 +20,7 @@ export const MENU_ITEMS = [
     id: 2,
     key: 'target',
     path: '/target',
-    label: 'Collection Target',
+    label: 'Center Target',
     icon: 'fa-solid fa-bullseye',
     permission: 'Collection Center Manager',
   },

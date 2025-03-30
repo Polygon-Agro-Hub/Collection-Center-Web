@@ -81,7 +81,7 @@
 
                     <div>
                         <p class="text-[#627189] dark:text-textDark">Phone Number - 1 </p>
-                        <p class="font-semibold dark:text-white">{{officerObj.phoneCode01}}{{officerObj.phoneNumber01}}
+                        <p class="font-semibold dark:text-white">{{ officerObj.phoneNumber01 ? officerObj.phoneCode01 + officerObj.phoneNumber01 : ' - ' }}
                         </p>
                     </div>
 
@@ -89,7 +89,7 @@
                         <p class="text-[#627189] dark:text-textDark">Phone Number - 2</p>
                         <!-- <p class="font-semibold">{{officerObj.phoneCode02}}{{officerObj.phoneNumber02}}</p> -->
                         <p class="font-semibold dark:text-white">
-                            {{ officerObj.phoneCode02 ? officerObj.phoneCode02 + officerObj.phoneNumber02 : ' - ' }}
+                            {{ officerObj.phoneNumber02 ? officerObj.phoneCode02 + officerObj.phoneNumber02 : ' - ' }}
                         </p>
                     </div>
 

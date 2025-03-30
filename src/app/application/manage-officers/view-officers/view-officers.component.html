@@ -261,8 +261,9 @@
                             </div>
                         </td>
 
-                        <td class="px-3  py-4 text-sm text-gray-900 dark:text-gray-300 text-center">
-                            {{item.phoneCode01}}{{item.phoneNumber01}}</td>
+                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300 text-center">
+                            {{ item.phoneNumber01 ? item.phoneCode01 + item.phoneNumber01 : 'N/A' }}
+                        </td>
                         <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300 text-center">{{item.nic}}</td>
                         <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300 text-center">
                             <button class="text-gray-400 hover:text-gray-600 px-2" (click)="navigateToProfile(item.id)">

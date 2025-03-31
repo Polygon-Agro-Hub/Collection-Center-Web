@@ -208,7 +208,7 @@ export class ManageOfficersService {
     let url = `${this.apiUrl}/manage-officers/get-all-officers-for-cch?page=${page}&limit=${limit}`
 
     console.log(status);
-    
+
     if (status) {
       url += `&status=${status}`
     }
@@ -234,16 +234,32 @@ export class ManageOfficersService {
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
     });
-    
+
     return this.http.get(`${this.apiUrl}/manage-officers/get-center-managers/${id}`, {
       headers,
     });
   }
 
-  CCHcreateCollectiveOfficer(person: any, selectedImage: any): Observable<any> {
+  CCHcreateCollectiveOfficer(person: any, selectedImage: any, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
     const formData = new FormData();
+
+    if (person.jobRole === 'Driver') {
+      formData.append('driverData', JSON.stringify(driver));
+      formData.append('licFront', licFront);
+      formData.append('licBack', licBack);
+      formData.append('insFront', insFront);
+      formData.append('insBack', insBack);
+      formData.append('vehiFront', vehiFront);
+      formData.append('vehiBack', vehiBack);
+      formData.append('vehiSideA', vehiSideA);
+      formData.append('vehiSideB', vehiSideB);
+    }
+
     formData.append('officerData', JSON.stringify(person));
     formData.append('file', selectedImage);
+
+    console.log(formData);
+    
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
     });

@@ -28,12 +28,12 @@ export class AddOfficersComponent implements OnInit {
 
 
   languages: string[] = ['Sinhala', 'English', 'Tamil'];
-  selectedPage: 'pageOne' | 'pageTwo' | 'pageThree' = 'pageOne';
+  selectedPage: 'pageOne' | 'pageTwo' | 'pageThree' = 'pageThree';
   lastID!: number
   itemId: number | null = null;
   officerId!: number
 
-  selectVehicletype: any = {name: '', capacity: ''};
+  selectVehicletype: any = { name: '', capacity: '' };
 
 
   selectedFileName!: string
@@ -299,7 +299,11 @@ export class AddOfficersComponent implements OnInit {
         );
       } else if (this.logingRole === 'Collection Center Head') {
 
-        if(this.personalData.jobRole === 'Driver'){
+        if (this.personalData.jobRole === 'Driver') {
+          if (!this.licenseFrontImageFileName|| !this.licenseBackImageFileName || !this.insurenceFrontImageFileName || !this.insurenceBackImageFileName || !this.vehicleFrontImageFileName || !this.vehicleBackImageFileName || !this.vehicleSideAImageFileName || !this.vehicleSideBImageFileName) {
+            return;
+          }
+
           this.driverObj.licFrontName = this.licenseFrontImageFileName
           this.driverObj.licBackName = this.licenseBackImageFileName
           this.driverObj.insFrontName = this.insurenceFrontImageFileName
@@ -782,9 +786,9 @@ export class AddOfficersComponent implements OnInit {
     if (fileInput) fileInput.value = '';
   }
 
-  vehicleChange(){
+  vehicleChange() {
     this.driverObj.vType = this.selectVehicletype.name
-    this.driverObj.vCapacity = this.selectVehicletype.capacity  
+    this.driverObj.vCapacity = this.selectVehicletype.capacity
   }
 
 
@@ -875,14 +879,14 @@ class Drivers {
   vCapacity!: string;
   vRegNo!: string;
 
-  licFrontName!:string;
-  licBackName!:string;
-  insFrontName!:string;
-  insBackName!:string;
-  vFrontName!:string;
-  vBackName!:string;
-  vSideAName!:string;
-  vSideBName!:string;
+  licFrontName!: string;
+  licBackName!: string;
+  insFrontName!: string;
+  insBackName!: string;
+  vFrontName!: string;
+  vBackName!: string;
+  vSideAName!: string;
+  vSideBName!: string;
 }
 
 

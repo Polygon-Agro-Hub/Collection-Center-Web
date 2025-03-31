@@ -572,9 +572,9 @@
                         </button>
                     </div>
 
-                    <!-- <div *ngIf="licenseFrontImagePreview" class="mt-2">
-                      <img [src]="licenseFrontImagePreview" alt="License Front Preview" class="max-w-[200px] max-h-[200px] rounded border">
-                    </div> -->
+                    <div *ngIf="!licenseFrontImageFileName" class="text-red-500 text-sm mt-1">
+                        <div>License Front Image is required</div>
+                    </div>
                 </div>
 
                 <div>
@@ -596,6 +596,9 @@
                         <button (click)="clearLicenseBackImage()" class="text-red-500 hover:text-red-700 text-sm">
                             <i class="fas fa-times"></i>
                         </button>
+                    </div>
+                    <div *ngIf="!licenseBackImageFileName" class="text-red-500 text-sm mt-1">
+                        <div>License Back Image is required</div>
                     </div>
                 </div>
             </div>
@@ -643,6 +646,9 @@
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
+                    <div *ngIf="!insurenceFrontImageFileName" class="text-red-500 text-sm mt-1">
+                        <div>Insurance’s Front Image is required</div>
+                    </div>
                 </div>
 
                 <div>
@@ -664,6 +670,9 @@
                         <button (click)="clearInsurenceBackImage()" class="text-red-500 hover:text-red-700 text-sm">
                             <i class="fas fa-times"></i>
                         </button>
+                    </div>
+                    <div *ngIf="!insurenceBackImageFileName" class="text-red-500 text-sm mt-1">
+                        <div>Insurance’s Back Image is required</div>
                     </div>
                 </div>
             </div>
@@ -734,6 +743,9 @@
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
+                    <div *ngIf="!vehicleFrontImageFileName" class="text-red-500 text-sm mt-1">
+                        <div>Vehicle’s Front Image is required</div>
+                    </div>
                 </div>
 
                 <div>
@@ -754,6 +766,9 @@
                         <button (click)="clearVehicleBackImage()" class="text-red-500 hover:text-red-700 text-sm">
                             <i class="fas fa-times"></i>
                         </button>
+                    </div>
+                    <div *ngIf="!vehicleBackImageFileName" class="text-red-500 text-sm mt-1">
+                        <div>Vehicle’s Back Image is required</div>
                     </div>
                 </div>
 
@@ -776,6 +791,9 @@
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
+                    <div *ngIf="!vehicleSideAImageFileName" class="text-red-500 text-sm mt-1">
+                        <div>Vehicle’s Side Image - 1 is required</div>
+                    </div>
                 </div>
 
                 <div>
@@ -796,6 +814,9 @@
                         <button (click)="clearVehicleSideBImage()" class="text-red-500 hover:text-red-700 text-sm">
                             <i class="fas fa-times"></i>
                         </button>
+                    </div>
+                    <div *ngIf="!vehicleSideBImageFileName" class="text-red-500 text-sm mt-1">
+                        <div>Vehicle’s Side Image - 2 is required</div>
                     </div>
                 </div>
             </div>

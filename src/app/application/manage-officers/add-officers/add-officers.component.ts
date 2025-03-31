@@ -28,7 +28,7 @@ export class AddOfficersComponent implements OnInit {
 
 
   languages: string[] = ['Sinhala', 'English', 'Tamil'];
-  selectedPage: 'pageOne' | 'pageTwo' | 'pageThree' = 'pageThree';
+  selectedPage: 'pageOne' | 'pageTwo' | 'pageThree' = 'pageOne';
   lastID!: number
   itemId: number | null = null;
   officerId!: number
@@ -236,7 +236,7 @@ export class AddOfficersComponent implements OnInit {
     } else if (this.personalData.jobRole === 'Customer Officer') {
       rolePrefix = 'CUO';
     } else if (this.personalData.jobRole === 'Driver') {
-      rolePrefix = 'DRV';
+      rolePrefix = 'DVR';
     } else {
       rolePrefix = 'COO';
     }
@@ -284,10 +284,11 @@ export class AddOfficersComponent implements OnInit {
               this.officerId = res.officerId;
               this.isLoading = false;
               this.toastSrv.success('Collective Officer Created Successfully')
-              this.router.navigate(['/manage-officers/view-officer'])
+              this.router.navigate(['/manage-officers'])
             } else {
               this.isLoading = false;
               this.toastSrv.error('There was an error creating the collective officer')
+              // this.toastSrv.error(res.message)
 
             }
           },
@@ -315,10 +316,12 @@ export class AddOfficersComponent implements OnInit {
               this.officerId = res.officerId;
               this.isLoading = false;
               this.toastSrv.success('Collective Officer Created Successfully')
-              this.router.navigate(['/manage-officers/view-officer'])
+              this.router.navigate(['/manage-officers'])
             } else {
               this.isLoading = false;
               this.toastSrv.error('There was an error creating the collective officer')
+              this.toastSrv.error(res.message)
+
 
             }
           },

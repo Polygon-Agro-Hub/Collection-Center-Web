@@ -538,15 +538,14 @@
 
             <h2 class="text-xl mb-6 text-textLight dark:text-textDark font-bold">Driving Details</h2>
             <div>
-                <label for="firstNameEnglish" class="block text-sm font-medium text-gray-700 dark:text-textDark">Driving
+                <label for="licNo" class="block text-sm font-medium text-gray-700 dark:text-textDark">Driving
                     License ID</label>
-                <input id="firstNameEnglish" name="firstNameEnglish"
-                    class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                    required />
-                <!-- <div *ngIf="firstNameEnglishInput.touched && !personalData.firstNameEnglish"
-                    class="text-red-500 text-sm mt-1">
-                    <div>First Name (in English) is required</div>
-                </div> -->
+                <input id="licNo" name="licNo" [(ngModel)]="driverObj.licNo"
+                    class="form-licNo mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+                    #licNoInput="ngModel" required />
+                <div *ngIf="licNoInput.touched && !driverObj.licNo" class="text-red-500 text-sm mt-1">
+                    <div>Driving License ID is required</div>
+                </div>
             </div>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-11 my-5">
@@ -604,27 +603,25 @@
             <h2 class="text-xl mt-16 mb-6 text-textLight dark:text-textDark font-bold">Vehicle Insurance Details</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-11 my-5">
                 <div>
-                    <label for="firstNameEnglish"
-                        class="block text-sm font-medium text-gray-700 dark:text-textDark">Insurance Number</label>
-                    <input id="firstNameEnglish" name="firstNameEnglish"
+                    <label for="insNo" class="block text-sm font-medium text-gray-700 dark:text-textDark">Insurance
+                        Number</label>
+                    <input id="insNo" name="insNo" [(ngModel)]="driverObj.insNo"
                         class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                        required />
-                    <!-- <div *ngIf="firstNameEnglishInput.touched && !personalData.firstNameEnglish"
-                        class="text-red-500 text-sm mt-1">
-                        <div>First Name (in English) is required</div>
-                    </div> -->
+                        #insNoInput="ngModel" required />
+                    <div *ngIf="insNoInput.touched && !driverObj.insNo" class="text-red-500 text-sm mt-1">
+                        <div>Insurance Number is required</div>
+                    </div>
                 </div>
 
                 <div>
-                    <label for="firstNameEnglish"
-                        class="block text-sm font-medium text-gray-700 dark:text-textDark">Insurance Expire Date</label>
-                    <input id="firstNameEnglish" name="firstNameEnglish" type="date"
+                    <label for="insExpDate" class="block text-sm font-medium text-gray-700 dark:text-textDark">Insurance
+                        Expire Date</label>
+                    <input id="insExpDate" name="insExpDate" type="date" [(ngModel)]="driverObj.insExpDate"
                         class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                        required />
-                    <!-- <div *ngIf="firstNameEnglishInput.touched && !personalData.firstNameEnglish"
-                        class="text-red-500 text-sm mt-1">
-                        <div>First Name (in English) is required</div>
-                    </div> -->
+                        #insExpDateInput="ngModel" required />
+                    <div *ngIf="insExpDateInput.touched && !driverObj.insExpDate" class="text-red-500 text-sm mt-1">
+                        <div>Insurance Expire Date is required</div>
+                    </div>
                 </div>
 
                 <div>
@@ -674,35 +671,44 @@
 
             <h2 class="text-xl mt-16 mb-6 text-textLight dark:text-textDark font-bold">Vehicle Details</h2>
             <div>
-                <label for="firstNameEnglish" class="block text-sm font-medium text-gray-700 dark:text-textDark">Vehicle
+                <label for="vRegNo" class="block text-sm font-medium text-gray-700 dark:text-textDark">Vehicle
                     Registration Number</label>
-                <input id="firstNameEnglish" name="firstNameEnglish"
+                <input id="vRegNo" name="vRegNo" [(ngModel)]="driverObj.vRegNo"  #vRegNoInput="ngModel" required
                     class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                     required />
-                <!-- <div *ngIf="firstNameEnglishInput.touched && !personalData.firstNameEnglish"
+                <div *ngIf="vRegNoInput.touched && !driverObj.vRegNo"
                     class="text-red-500 text-sm mt-1">
-                    <div>First Name (in English) is required</div>
-                </div> -->
+                    <div>Vehicle Registration Number is required</div>
+                </div>
             </div>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-11 my-5">
                 <div>
-                    <label for="firstNameEnglish"
+                    <label for="selectVehicletype"
                         class="block text-sm font-medium text-gray-700 dark:text-textDark">Vehicle Type</label>
-                    <input id="firstNameEnglish" name="firstNameEnglish"
-                        class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                        required />
-                    <!-- <div *ngIf="firstNameEnglishInput.touched && !personalData.firstNameEnglish"
+                    <select id="selectVehicletype" [(ngModel)]="selectVehicletype" name="selectVehicletype"
+                        placeholder="select" (change)="vehicleChange()" required #selectVehicletypeInput="ngModel"
+                        class="form-control mt-1 block w-full p-2 text-gray-700 dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500">
+                        <option disabled selected
+                            class="p-2 text-gray-700 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]" [value]="{name: '', capacity: ''}">
+                            -- select Vehicle Type--
+                        </option>
+                        <option *ngFor="let item of VehicleTypes" [ngValue]="item"
+                            class="p-2 text-gray-700 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
+                            {{item.name}}
+                        </option>
+                    </select>
+                    <div *ngIf="selectVehicletypeInput.touched && !driverObj.vType"
                         class="text-red-500 text-sm mt-1">
-                        <div>First Name (in English) is required</div>
-                    </div> -->
+                        <div>Vehicle Type is required</div>
+                    </div>
                 </div>
 
                 <div>
-                    <label for="firstNameEnglish"
-                        class="block text-sm font-medium text-gray-700 dark:text-textDark">Vehicle Capacity</label>
-                    <input id="firstNameEnglish" name="firstNameEnglish" placeholder="------------"
+                    <label for="capacity" class="block text-sm font-medium text-gray-700 dark:text-textDark">Vehicle
+                        Capacity</label>
+                    <input id="capacity" placeholder="------------" [value]="selectVehicletype?.capacity"
                         class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                        required />
+                        readonly />
                     <!-- <div *ngIf="firstNameEnglishInput.touched && !personalData.firstNameEnglish"
                         class="text-red-500 text-sm mt-1">
                         <div>First Name (in English) is required</div>
@@ -755,11 +761,10 @@
                     <label for="vehicleSideAImageUpload"
                         class="block text-sm font-medium text-gray-700 dark:text-textDark my-2">Vehicle’s Side Image -
                         1</label>
-                        <input id="vehicleSideAImageUpload" type="file" accept="image/*"
+                    <input id="vehicleSideAImageUpload" type="file" accept="image/*"
                         (change)="onVehicleSideAImageSelected($event)" class="hidden">
 
-                    <div
-                    (click)="triggerFileInputForDriver($event, 'vehicleSideAImageUpload')"
+                    <div (click)="triggerFileInputForDriver($event, 'vehicleSideAImageUpload')"
                         class="flex flex-row items-center justify-center bg-[#D2DADD] rounded-lg shadow-md gap-x-3 form-control mt-1 w-full p-2 border border-gray-300 cursor-pointer">
                         <i class="fa-solid fa-upload text-[#534E4E] text-lg"></i>
                         <p>Upload Side Image - 1</p>
@@ -777,11 +782,10 @@
                     <label for="vehicleSideBImageUpload"
                         class="block text-sm font-medium text-gray-700 dark:text-textDark my-2">Vehicle’s Side Image -
                         2</label>
-                        <input id="vehicleSideBImageUpload" type="file" accept="image/*"
+                    <input id="vehicleSideBImageUpload" type="file" accept="image/*"
                         (change)="onVehicleSideBImageSelected($event)" class="hidden">
 
-                    <div
-                    (click)="triggerFileInputForDriver($event, 'vehicleSideBImageUpload')"
+                    <div (click)="triggerFileInputForDriver($event, 'vehicleSideBImageUpload')"
                         class="flex flex-row items-center justify-center bg-[#D2DADD] rounded-lg shadow-md gap-x-3 form-control mt-1 w-full p-2 border border-gray-300 cursor-pointer">
                         <i class="fa-solid fa-upload text-[#534E4E] text-lg"></i>
                         <p>Upload Side Image - 2</p>
@@ -802,7 +806,7 @@
                 <button (click)="nextForm('pageTwo')" type="button"
                     class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md mr-2">Back</button>
                 <button type="submit" class="px-4 py-2 bg-[#3980C0] text-white rounded-md"
-                    (click)="!PageTwoForm.invalid ? onSubmit() : nextForm('pageTwo')">Sent to
+                    (click)="!PageThreeForm.invalid ? onSubmit() : nextForm('pageThree')">Sent to
                     Approve</button>
                 <!-- <button type="submit" class="px-4 py-2 bg-[#3980C0] text-white rounded-md" (click)="onSubmit()">Sent to
                         Approve</button> -->

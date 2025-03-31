@@ -23,6 +23,7 @@ export class AddOfficersComponent implements OnInit {
   ManagerArr!: ManagerDetails[]
   centerArr: Center[] = [];
   managerArr: Manager[] = [];
+  driverObj: Drivers = new Drivers()
 
 
 
@@ -31,6 +32,8 @@ export class AddOfficersComponent implements OnInit {
   lastID!: number
   itemId: number | null = null;
   officerId!: number
+
+  selectVehicletype: any = {name: '', capacity: ''};
 
 
   selectedFileName!: string
@@ -127,6 +130,14 @@ export class AddOfficersComponent implements OnInit {
     { name: 'Trincomalee', province: 'Eastern' },
     { name: 'Vavuniya', province: 'Northern' },
   ];
+
+  VehicleTypes = [
+    { name: 'Lorry', capacity: '1.5T' },
+    { name: 'Dimo Batta', capacity: '3.5T' },
+    { name: 'Van', capacity: '2.5T' },
+    { name: 'Cab', capacity: '0.5T' },
+  ]
+
 
 
   ngOnInit(): void {
@@ -286,7 +297,19 @@ export class AddOfficersComponent implements OnInit {
           }
         );
       } else if (this.logingRole === 'Collection Center Head') {
-        this.ManageOficerSrv.CCHcreateCollectiveOfficer(this.personalData, this.selectedImage).subscribe(
+
+        if(this.personalData.jobRole === 'Driver'){
+          this.driverObj.licFrontName = this.licenseFrontImageFileName
+          this.driverObj.licBackName = this.licenseBackImageFileName
+          this.driverObj.insFrontName = this.insurenceFrontImageFileName
+          this.driverObj.insBackName = this.insurenceBackImageFileName
+          this.driverObj.vFrontName = this.vehicleFrontImageFileName
+          this.driverObj.vBackName = this.vehicleBackImageFileName
+          this.driverObj.vSideAName = this.vehicleSideAImageFileName
+          this.driverObj.vSideBName = this.vehicleSideBImageFileName
+        }
+
+        this.ManageOficerSrv.CCHcreateCollectiveOfficer(this.personalData, this.selectedImage, this.driverObj, this.licenseFrontImagePreview, this.licenseBackImagePreview, this.insurenceFrontImagePreview, this.insurenceBackImagePreview, this.vehicleFrontImagePreview, this.vehicleBackImagePreview, this.vehicleSideAImagePreview, this.vehicleSideBImagePreview).subscribe(
           (res: any) => {
             if (res.status) {
               this.officerId = res.officerId;
@@ -668,7 +691,7 @@ export class AddOfficersComponent implements OnInit {
         this.vehicleBackImagePreview = e.target.result;
       };
       reader.readAsDataURL(file);
-    } 
+    }
   }
 
   // Clear license image
@@ -705,7 +728,7 @@ export class AddOfficersComponent implements OnInit {
         this.vehicleSideAImagePreview = e.target.result;
       };
       reader.readAsDataURL(file);
-    } 
+    }
   }
 
   // Clear license image
@@ -744,7 +767,7 @@ export class AddOfficersComponent implements OnInit {
         this.vehicleSideBImagePreview = e.target.result;
       };
       reader.readAsDataURL(file);
-    } 
+    }
   }
 
   // Clear license image
@@ -754,6 +777,11 @@ export class AddOfficersComponent implements OnInit {
     this.vehicleSideBImagePreview = null;
     const fileInput = document.getElementById('vehicleSideBImageUpload') as HTMLInputElement;
     if (fileInput) fileInput.value = '';
+  }
+
+  vehicleChange(){
+    this.driverObj.vType = this.selectVehicletype.name
+    this.driverObj.vCapacity = this.selectVehicletype.capacity  
   }
 
 
@@ -834,6 +862,24 @@ interface Branch {
   bankID: number;
   ID: number;
   name: string;
+}
+
+class Drivers {
+  licNo!: string;
+  insNo!: string;
+  insExpDate!: string;
+  vType!: string;
+  vCapacity!: string;
+  vRegNo!: string;
+
+  licFrontName!:string;
+  licBackName!:string;
+  insFrontName!:string;
+  insBackName!:string;
+  vFrontName!:string;
+  vBackName!:string;
+  vSideAName!:string;
+  vSideBName!:string;
 }
 
 

@@ -358,7 +358,7 @@ export class EditOfficerComponent implements OnInit {
             this.officerId = res.officerId;
             this.isLoading = false;
             this.toastSrv.success('Collective Officer Updated Successfully')
-            this.router.navigate(['/manage-officers/view-officer'])
+            this.router.navigate(['/manage-officers'])
           },
           (error: any) => {
             this.isLoading = false;

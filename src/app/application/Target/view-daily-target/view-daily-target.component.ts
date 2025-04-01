@@ -111,27 +111,6 @@ export class ViewDailyTargetComponent implements OnInit {
   }
 
 
-  // filterValidity() {
-  //   if (!this.selectValidity) {
-  //     this.fetchAllTarget();
-  //     return;
-  //   }
-
-  //   this.targetArr = this.targetArr.filter(item => {
-  //     if (this.selectValidity === 'Active') {
-  //       return this.checkValidity(item.toDate) === 'Active';
-  //     } else if (this.selectValidity === 'Expired') {
-  //       return this.checkValidity(item.toDate) === 'Expired';
-  //     }
-  //     return true;
-  //   });
-  // }
-
-  // cancelValidity() {
-  //   this.selectValidity = '';
-  //   this.fetchAllTarget();
-  // }
-
 
   onPageChange(event: number) {
     this.page = event;

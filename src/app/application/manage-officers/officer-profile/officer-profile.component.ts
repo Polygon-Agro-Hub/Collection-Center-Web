@@ -21,7 +21,7 @@ export class OfficerProfileComponent implements OnInit {
   officerId!: number;
   showDisclaimView = false;
   logingRole: string | null = null;
-  naviPath!:string
+  naviPath!: string
 
   isLoading: boolean = true;
 
@@ -59,76 +59,76 @@ export class OfficerProfileComponent implements OnInit {
 
     // Helper function to check for empty, null, or undefined values
     const getValueOrNA = (value: string | null | undefined): string => {
-        return value ? value : 'N/A';
+      return value ? value : 'N/A';
     };
 
     function loadImageAsBase64(url: string): Promise<string> {
-        return new Promise((resolve, reject) => {
-            const xhr = new XMLHttpRequest();
-            xhr.onload = function () {
-                const reader = new FileReader();
-                reader.onloadend = function () {
-                    resolve(reader.result as string);
-                };
-                reader.readAsDataURL(xhr.response);
-            };
-            xhr.onerror = function () {
-                // If XHR fails, try loading image directly
-                const img = new Image();
-                img.crossOrigin = 'Anonymous';
-                img.onload = function () {
-                    const canvas = document.createElement('canvas');
-                    const ctx = canvas.getContext('2d');
-                    canvas.width = img.width;
-                    canvas.height = img.height;
-                    ctx?.drawImage(img, 0, 0);
-                    resolve(canvas.toDataURL('image/png'));
-                };
-                img.onerror = function () {
-                    console.warn('Image load failed:', url);
-                    resolve(''); // Resolve with empty string if image fails to load
-                };
-                img.src = url;
-            };
-            xhr.open('GET', url);
-            xhr.responseType = 'blob';
-            xhr.setRequestHeader('Accept', 'image/png;image/*');
-            try {
-                xhr.send();
-            } catch (error) {
-                console.error('XHR send error:', error);
-                reject(error);
-            }
-        });
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+          const reader = new FileReader();
+          reader.onloadend = function () {
+            resolve(reader.result as string);
+          };
+          reader.readAsDataURL(xhr.response);
+        };
+        xhr.onerror = function () {
+          // If XHR fails, try loading image directly
+          const img = new Image();
+          img.crossOrigin = 'Anonymous';
+          img.onload = function () {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx?.drawImage(img, 0, 0);
+            resolve(canvas.toDataURL('image/png'));
+          };
+          img.onerror = function () {
+            console.warn('Image load failed:', url);
+            resolve(''); // Resolve with empty string if image fails to load
+          };
+          img.src = url;
+        };
+        xhr.open('GET', url);
+        xhr.responseType = 'blob';
+        xhr.setRequestHeader('Accept', 'image/png;image/*');
+        try {
+          xhr.send();
+        } catch (error) {
+          console.error('XHR send error:', error);
+          reject(error);
+        }
+      });
     }
 
     const appendCacheBuster = (url: string) => {
-        if (!url) return '';
-        const separator = url.includes('?') ? '&' : '?';
-        return `${url}${separator}t=${new Date().getTime()}`;
+      if (!url) return '';
+      const separator = url.includes('?') ? '&' : '?';
+      return `${url}${separator}t=${new Date().getTime()}`;
     };
 
     // Load the image first
     let imagebase64 = '';
     try {
-        if (this.officerObj.image) {
-            const modifiedImageUrl = appendCacheBuster(this.officerObj.image);
-            imagebase64 = await loadImageAsBase64(modifiedImageUrl);
-        }
+      if (this.officerObj.image) {
+        const modifiedImageUrl = appendCacheBuster(this.officerObj.image);
+        imagebase64 = await loadImageAsBase64(modifiedImageUrl);
+      }
     } catch (error) {
-        console.error('Error loading image:', error);
+      console.error('Error loading image:', error);
     }
 
     // Add the image at the top if it exists
     if (imagebase64) {
-        doc.addImage(
-            imagebase64,
-            'PNG',
-            14, // X position
-            10, // Y position (moved to top)
-            40, // Width
-            40  // Height
-        );
+      doc.addImage(
+        imagebase64,
+        'PNG',
+        14, // X position
+        10, // Y position (moved to top)
+        40, // Width
+        40  // Height
+      );
     }
 
     // Adjust starting positions based on image presence
@@ -144,25 +144,25 @@ export class OfficerProfileComponent implements OnInit {
     doc.setFontSize(12);
     doc.setFont("Inter", "bold");
     doc.text(getValueOrNA(this.officerObj.firstNameEnglish) + ' ' + getValueOrNA(this.officerObj.lastNameEnglish), startX, 15);
-    
+
     doc.setFont("Inter", "normal");
     doc.text('Customer Officer  - ', startX, 22);
 
     let empCode = '';
     if (this.officerObj.jobRole === 'Customer Officer') {
-        empCode = 'CUO';
+      empCode = 'CUO';
     } else if (this.officerObj.jobRole === 'Collection Center Manager') {
-        empCode = 'CCM';
+      empCode = 'CCM';
     } else if (this.officerObj.jobRole === 'Collection Center Head') {
-        empCode = 'CCH';
+      empCode = 'CCH';
     } else if (this.officerObj.jobRole === 'Collection Officer') {
-        empCode = 'COO';
+      empCode = 'COO';
     }
 
     // Apply bold font for the empCode + empId
     doc.setFont("Inter", "bold");
     doc.text(getValueOrNA(empCode + this.officerObj.empId), startX + 35, 22);
-    
+
     doc.text(getValueOrNA(this.officerObj.city), startX, 29);
     doc.setFont("Inter", "normal");
     doc.text(getValueOrNA(this.officerObj.companyNameEnglish), startX, 36);
@@ -285,7 +285,7 @@ export class OfficerProfileComponent implements OnInit {
 
     // Save PDF
     doc.save(`Personal_Details_${getValueOrNA(this.officerObj.firstNameEnglish)}.pdf`);
-}
+  }
 
   toggleDisclaimView() {
     this.showDisclaimView = !this.showDisclaimView; // Toggle the boolean value
@@ -321,7 +321,10 @@ export class OfficerProfileComponent implements OnInit {
   private setActiveTabFromRoute(): void {
     const currentPath = this.router.url.split('?')[0];
     // Extract the first segment after the initial slash
-    this.naviPath = currentPath.split('/')[1];   
+    this.naviPath = currentPath.split('/')[1];
+  }
+
+  viewImage(imageUrl: string) {
   }
 
 }
@@ -351,6 +354,22 @@ class Officer {
   branchName!: string;
   companyNameEnglish!: string;
   centerName!: string;
+
+  //driver
+  licNo!: string;
+  insNo!: string;
+  insExpDate!: string;
+  vType!: string;
+  vCapacity!: string;
+  vRegNo!: string;
+  licFrontImg!: string;
+  licBackImg!: string;
+  insFrontImg!: string;
+  insBackImg!: string;
+  vehFrontImg!: string;
+  vehBackImg!: string;
+  vehSideImgA!: string;
+  vehSideImgB!: string;
 
 }
 

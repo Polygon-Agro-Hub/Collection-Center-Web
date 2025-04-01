@@ -53,14 +53,14 @@
                             Collection Center
                         </label>
                         <select id="centerId" [(ngModel)]="personalData.centerId" name="centerId" placeholder="select"
-                            class="form-control mt-1 block w-full p-2 text-[#534E4E] mb-1 dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500"
+                            class="form-control mt-1 block w-full p-2 text-[#292929] mb-1 dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500"
                             #centerIdInput="ngModel" required>
                             <option disabled selected
-                                class="p-2 text-[#534E4E] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]" value="">
+                                class="p-2 text-[#292929] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]" value="">
                                 -- select center--
                             </option>
                             <option *ngFor="let item of centerArr" [value]="item.id"
-                                class="p-2 text-[#534E4E] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
+                                class="p-2 text-[#292929] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
                                 {{item.centerName}}
                             </option>
 
@@ -80,21 +80,21 @@
                         </label>
                         <select id="jobRole" [(ngModel)]="personalData.jobRole" (change)="UpdateEpmloyeIdCreate()"
                             name="jobRole" placeholder="select" #jobRoleInput="ngModel" required
-                            class="form-control mt-1 block w-full p-2 text-[#534E4E] mb-1 dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500">
-                            <option disabled class="p-2 text-[#534E4E] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
+                            class="form-control mt-1 block w-full p-2 text-[#292929] mb-1 dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500">
+                            <option disabled class="p-2 text-[#292929] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
                                 -- select --
                             </option>
                             <option selected value="Collection Center Manager"
                                 *ngIf="logingRole === 'Collection Center Head'"
-                                class="p-2 text-[#534E4E] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
+                                class="p-2 text-[#292929] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
                                 Collection Center Manager
                             </option>
                             <option selected value="Collection Officer"
-                                class="p-2 text-[#534E4E] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
+                                class="p-2 text-[#292929] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
                                 Collection Officer
                             </option>
                             <option value="Customer Officer"
-                                class="p-2 text-[#534E4E] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
+                                class="p-2 text-[#292929] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
                                 Customer Officer
                             </option>
                         </select>
@@ -108,7 +108,7 @@
                             name</label>
                         <div class="flex mt-1">
                             <span
-                                class="inline-flex items-center px-3 py-3 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-[#1D1D1F] dark:text-gray-400 ">
+                                class="inline-flex items-center px-3 py-3 text-sm text-[#534E4E] bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-[#1D1D1F] dark:text-gray-400 ">
                                 <span *ngIf="logingRole === 'Collection Center Head'">
                                     <p *ngIf="personalData.jobRole === 'Collection Center Manager'">CCM</p>
                                 </span>
@@ -116,7 +116,7 @@
                                 <p *ngIf="personalData.jobRole === 'Customer Officer'">CUO</p>
                             </span>
                             <input type="text" [value]="UpdatelastID" name="empId"
-                                class="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm pl-4  dark:bg-[#1D1D1F]  dark:placeholder-gray-400 dark:text-textDark dark:focus:ring-blue-500 dark:focus:border-blue-500"
+                                class="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-[#534E4E] focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm pl-4  dark:bg-[#1D1D1F]  dark:placeholder-gray-400 dark:text-textDark dark:focus:ring-blue-500 dark:focus:border-blue-500"
                                 disabled>
                         </div>
                     </div>
@@ -128,13 +128,13 @@
                         </label>
                         <select id="irmId" [(ngModel)]="personalData.irmId" name="irmId" placeholder="select"
                             (change)="checkManager()" [disabled]="!personalData.centerId" #irmIdInput="ngModel" required
-                            class="form-control mt-1 block w-full p-2 text-[#534E4E] mb-1 dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500">
+                            class="form-control mt-1 block w-full p-2 text-[#292929] mb-1 dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500">
                             <option disabled selected
-                                class="p-2 text-[#534E4E] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]" value="">
+                                class="p-2 text-[#292929] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]" value="">
                                 -- select manager--
                             </option>
                             <option *ngFor="let item of managerArr" [value]="item.id"
-                                class="p-2 text-[#534E4E] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
+                                class="p-2 text-[#292929] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
                                 {{item.firstNameEnglish}} {{item.lastNameEnglish}}
                             </option>
                             <div *ngIf="irmIdInput.touched && !personalData.irmId && logingRole === 'Collection Center Head' && (personalData.jobRole === 'Collection Officer' || personalData.jobRole === 'Customer Officer')"

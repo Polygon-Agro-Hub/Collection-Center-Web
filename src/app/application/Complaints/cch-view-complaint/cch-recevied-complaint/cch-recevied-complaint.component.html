@@ -153,25 +153,27 @@
 
 
     <div *ngIf="isReplyView" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-        <div class="bg-white dark:bg-[#272F45] shadow-lg rounded-lg p-6 w-1/2">
-            <div class="flex flex-col items-center justify-center gap-5">
-                <div class="bg-[#F6F6F6] rounded-full shadow-md p-5">
-                    <i class="fa-regular fa-envelope text-4xl"></i>
+        <div class="bg-white dark:bg-[#272F45] shadow-lg rounded-lg p-6 w-2/5">
+            <div class="flex flex-col items-center gap-4">
+                <!-- Envelope Icon -->
+                <div class="bg-[#F6F6F6] rounded-full shadow-md p-4 flex items-center justify-center">
+                    <i class="fa-regular fa-envelope text-3xl text-gray-700"></i>
                 </div>
-
-                <p class="text-3xl font-bold">Your Response</p>
-
-                <div class="border-[1px] border-[#D9D9D9] rounded-lg p-5">
-                    <p>{{replyObj.reply}}</p>
+    
+                <!-- Title -->
+                <p class="text-2xl font-semibold text-gray-900 dark:text-white">Your Response</p>
+    
+                <!-- Message Container -->
+                <div class="border border-gray-300 rounded-lg p-4 w-full max-h-[50vh] overflow-auto">
+                    <p class="text-gray-800 dark:text-gray-300 whitespace-pre-line break-words">{{ replyObj.reply }}</p>
                 </div>
-
-                <button class="text-xl text-[#6B7D8C] border-[2px] font-semibold rounded-lg shadow-lg px-6 py-2"
+    
+                <!-- Close Button -->
+                <button class="text-lg text-gray-600 border-2 border-gray-400 rounded-lg px-6 py-2 font-medium shadow-md hover:bg-gray-100"
                     (click)="cancelViewReply()">
                     Close
                 </button>
-
             </div>
-
         </div>
     </div>
 </div>

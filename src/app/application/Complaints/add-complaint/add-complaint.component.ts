@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { HttpClient } from '@angular/common/http';
 import { FormsModule } from '@angular/forms';
 import { ComplaintsService } from '../../../services/Complaints-Service/complaints.service';
@@ -13,11 +13,13 @@ import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loa
   templateUrl: './add-complaint.component.html',
   styleUrls: ['./add-complaint.component.css'], // Corrected the typo
 })
-export class AddComplaintComponent {
+export class AddComplaintComponent implements OnInit {
   // Variables for two-way binding
   category: string = '';
   complaint: string = '';
   isLoading: boolean = false;
+  categoryArr: Category[] = [];
+
 
   refreshScreen() {
     window.location.reload();
@@ -27,6 +29,10 @@ export class AddComplaintComponent {
     private complaintsService: ComplaintsService,
     private toastSrv: ToastAlertService
   ) { }
+
+  ngOnInit(): void {
+    this.fetchAllCategory();
+  }
 
   // Function to handle form submission
   onSubmit() {
@@ -68,4 +74,21 @@ export class AddComplaintComponent {
       }
     );
   }
+
+
+  fetchAllCategory(){
+    this.complaintsService.getComplainCategory().subscribe(
+      (res)=>{
+        this.categoryArr = res;
+        console.log(this.categoryArr);
+      }
+    )
+  }
+  
+
+}
+
+class Category {
+  id!: number;
+  categoryEnglish!:string
 }

@@ -4,7 +4,7 @@
     <form #PageOneForm="ngForm" (ngSubmit)="onSubmitForm(PageOneForm)">
 
         <div *ngIf="selectedPage === 'pageOne'">
-            <h2 class="text-2xl mb-6 text-textLight dark:text-textDark">Add Personal Details</h2>
+            <h2 class="text-xl mb-6 text-textLight dark:text-textDark font-bold">Add Personal Details</h2>
             <div>
                 <div class="flex justify-center pt-3">
                     <div class="relative">
@@ -358,10 +358,10 @@
                 </div>
 
                 <div class="flex justify-end m-10">
-                    <button type="button" class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md mr-2"
+                    <button type="button" class="px-6 py-2 bg-[#F6F7F9] border-gray-400 border-[2px] text-[#6B7D8C] rounded-lg mr-2"
                         (click)="onCancel()">Cancel</button>
                     <button (click)="!PageOneForm.invalid ? nextForm('pageTwo') :  nextForm('pageOne')" type="submit"
-                        class="px-4 py-2 bg-[#3980C0] text-white rounded-md">Next</button>
+                    class="px-6 py-1 bg-[#415CFF] text-white rounded-lg">Next</button>
                 </div>
 
 
@@ -373,7 +373,7 @@
 
         <div *ngIf="selectedPage === 'pageTwo'">
 
-            <h2 class="text-2xl mb-6 text-textLight dark:text-textDark">Residential Details</h2>
+            <h2 class="text-xl mb-6 text-textLight dark:text-textDark font-bold">Residential Details</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
                     <label for="house" class="block text-sm font-medium text-gray-700 dark:text-textDark">House /
@@ -520,8 +520,8 @@
 
             <div class="flex justify-end m-10">
                 <button (click)="nextForm('pageOne')" type="button"
-                    class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md mr-2">Back</button>
-                <button type="submit" class="px-4 py-2 bg-[#3980C0] text-white rounded-md"
+                class="px-6 py-2 bg-[#F6F7F9] border-gray-400 border-[2px] text-[#6B7D8C] rounded-lg mr-2">Back</button>
+                <button type="submit" class="px-6 py-1 bg-[#415CFF] text-white rounded-lg"
                     (click)="(!PageTwoForm.invalid && personalData.jobRole !== 'Driver') ? onSubmit() : (!PageTwoForm.invalid && personalData.jobRole === 'Driver') ? nextForm('pageThree') : nextForm('pageTwo')">
                     <span *ngIf="personalData.jobRole ==='Driver'">Next</span>
                     <span *ngIf="personalData.jobRole !=='Driver'">Sent to Approve</span>
@@ -825,8 +825,8 @@
 
             <div class="flex justify-end m-10">
                 <button (click)="nextForm('pageTwo')" type="button"
-                    class="px-4 py-2 bg-gray-300 text-gray-700 rounded-md mr-2">Back</button>
-                <button type="submit" class="px-4 py-2 bg-[#3980C0] text-white rounded-md"
+                class="px-6 py-2 bg-[#F6F7F9] border-gray-400 border-[2px] text-[#6B7D8C] rounded-lg mr-2">Back</button>
+                <button type="submit" class="px-6 py-1 bg-[#415CFF] text-white rounded-lg"
                     (click)="!PageThreeForm.invalid ? onSubmit() : nextForm('pageThree')">Sent to
                     Approve</button>
                 <!-- <button type="submit" class="px-4 py-2 bg-[#3980C0] text-white rounded-md" (click)="onSubmit()">Sent to

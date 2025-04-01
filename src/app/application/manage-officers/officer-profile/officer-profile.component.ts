@@ -297,6 +297,7 @@ export class OfficerProfileComponent implements OnInit {
 
   cancelDisclaim() {
     this.showDisclaimView = false;
+    this.router.navigate(['/manage-officers']);
   }
 
   confirmDisclaim(id: number) {
@@ -304,15 +305,17 @@ export class OfficerProfileComponent implements OnInit {
 
     this.ManageOficerSrv.disclaimOfficer(id).subscribe(
       (response) => {
-        this.toastSrv.success('Officer ID sent successfully!');
+        
         this.isLoading = false;
         this.showDisclaimView = false;
-        this.router.navigate(['/manage-officers/view-officer']);
+        this.router.navigate(['/manage-officers']);
+        this.toastSrv.success('Officer ID sent successfully!');
       },
       (error) => {
         console.error('Error sending Officer ID:', error);
         this.isLoading = false;
         this.toastSrv.error('Failed to send Officer ID!');
+        this.router.navigate(['/manage-officers']);
       }
     );
 

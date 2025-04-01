@@ -37,6 +37,7 @@ import { RoleGuardService } from './services/RoleGuard/role-guard.service';
 import { EditAssignOfficerTargetComponent } from './application/Target/edit-assign-officer-target/edit-assign-officer-target.component';
 import { AddCenterComponent } from './application/Target/add-center/add-center.component';
 import { ViewCenterTargetComponent } from './application/Target/view-center-target/view-center-target.component';
+import { PendingChangesGuard } from './guards/can-deactivate.guard';
 
 export const routes: Routes = [
     {
@@ -101,7 +102,8 @@ export const routes: Routes = [
                 children: [
                     {
                         path: '',
-                        component: ViewPriceListComponent
+                        component: ViewPriceListComponent,
+                        canDeactivate: [PendingChangesGuard]
                     }
                 ]
             },

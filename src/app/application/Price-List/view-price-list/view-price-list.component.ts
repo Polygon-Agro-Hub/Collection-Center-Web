@@ -35,6 +35,7 @@ export class ViewPriceListComponent implements OnInit {
   originalValue!: number;
 
   isLoading: boolean = true;
+  isExit: boolean = false;
 
 
   constructor(
@@ -108,17 +109,19 @@ export class ViewPriceListComponent implements OnInit {
   editRow(index: number, currentValue: number) {
     this.editingIndex = index; // Set the row index being edited
     this.editValue = currentValue;
- // Initialize editValue with the current price
+    // Initialize editValue with the current price
     this.originalValue = currentValue; // Store the original value for comparison
   }
 
+  // Add this method to check if there are pending changes
+  hasUnsavedChanges(): boolean {
+    return this.editingIndex !== null;
+  }
+  
+  // Modified saveRow method to reset the editing state
   saveRow(id: number, crop: string, variety: string, grade: string) {
-
-    console.log(this.originalValue);
-
-
     if (this.editValue != null) {
-      console.log('edit', this.editValue);
+      this.isLoading = true; // Show loading while saving
       this.PriceListSrv.updatePrice(id, this.editValue).subscribe(
         (res) => {
           if (res.status) {
@@ -126,30 +129,41 @@ export class ViewPriceListComponent implements OnInit {
             this.toastSrv.success(
               `Successfully changed price of <b style="color:black;">${crop}-${variety}-${grade}</b><br>
                from <b style="color:black;">Rs.${this.originalValue}</b> to 
-               <b style="color:black;">Rs.${this.editValue.toFixed(2)}</b>`, 
+               <b style="color:black;">Rs.${this.editValue}</b>`,
               { enableHtml: true }
             );
           } else {
             this.isLoading = false;
             this.toastSrv.error('Failed to assign the target!');
           }
+          this.editingIndex = null; // Reset editing state after successful save
           this.fetchAllPriceList(this.page, this.itemsPerPage);
         },
         (error) => {
           console.error('Error updating price:', error);
           Swal.fire('Error', 'Failed to update price', 'error');
+          this.isLoading = false;
         }
       );
-      this.editingIndex = null;
     } else {
       this.editingIndex = null;
     }
   }
+  
+  cancelEdit() {
+    this.editingIndex = null;
+  }
 
-
+  leaveWithoutSaving() { 
+    this.isExit = false;
+    this.editingIndex = null;
+    this.router.navigate(['/dashbord'])
+  }
+  
+  stayOnPage() { 
+    this.isExit = false;
+  }
 }
-
-
 
 class PriceList {
   id!: number;

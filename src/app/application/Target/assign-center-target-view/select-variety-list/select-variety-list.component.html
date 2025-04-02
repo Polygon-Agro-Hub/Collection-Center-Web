@@ -1,0 +1,47 @@
+<div class="h-screen py-8">
+    <div class="flex flex-row justify-between items-center">
+        <p class="text-xl font-bold dark:text-white text-[#030308]">WPCK-02 Kollupitiya Central</p>
+        <p>search bar</p>
+    </div>
+
+    <div *ngIf="hasData" class="min-w-max mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+        <table class="w-full min-w-max divide-y-2 overflow-hidden ">
+            <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
+                <tr>
+                    <th class=" px-6 py-3 text-left  font-medium">ITEM ({{cropCount < 10 ? '0' + cropCount :
+                            cropCount}})</th>
+                    <th class=" px-6 py-3 text-left  font-medium">Crop</th>
+                    <th class=" px-6 py-3 text-left  font-medium">Variety</th>
+                    <th class=" px-6 py-3 text-left  font-medium">Status</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
+                <!-- <tr
+                    *ngFor="let item of priceListArr | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index"> -->
+                <tr *ngFor="let item of cropsArr | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index">
+                    <td class="px-6 py-4  text-gray-900 dark:text-[#C5C5C5]">
+                        {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i + 1) :
+                            (((page - 1) * itemsPerPage) + i + 1) }} </td>
+                    <td class="px-6 py-4  text-gray-900 dark:text-[#C5C5C5]">{{item.cropNameEnglish}}</td>
+                    <td class="px-6 py-4  text-gray-900 dark:text-[#C5C5C5]">{{item.varietyNameEnglish}}</td>
+                    <td class="px-6 py-4  text-gray-900 dark:text-[#C5C5C5]">
+                        <label class="inline-flex items-center cursor-pointer">
+                            <input type="checkbox" class="sr-only peer" [ngModel]="item.isAssign === 1" (click)="onAdd(item.isAssign, item.cropId)"
+                                (ngModelChange)="item.isAssign = $event ? 1 : 0" name="isAssign" />
+                            <div
+                                class="relative w-14 h-7 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-blue-300 dark:peer-focus:ring-blue-800 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full rtl:peer-checked:after:-translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-0.5 after:start-[4px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-6 after:w-6 after:transition-all dark:border-gray-600 peer-checked:bg-blue-600 dark:peer-checked:bg-blue-600">
+                            </div>
+                        </label>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#262f45] text-right">
+        <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
+            [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
+            [screenReaderCurrentLabel]="'Youre on page'">
+        </pagination-controls>
+    </div>
+
+</div>

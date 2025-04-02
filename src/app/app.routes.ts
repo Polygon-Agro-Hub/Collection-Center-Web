@@ -38,6 +38,7 @@ import { EditAssignOfficerTargetComponent } from './application/Target/edit-assi
 import { AddCenterComponent } from './application/Target/add-center/add-center.component';
 import { ViewCenterTargetComponent } from './application/Target/view-center-target/view-center-target.component';
 import { PendingChangesGuard } from './guards/can-deactivate.guard';
+import { AssignCenterTargetViewComponent } from './application/Target/assign-center-target-view/assign-center-target-view/assign-center-target-view.component';
 
 export const routes: Routes = [
     {
@@ -200,7 +201,7 @@ export const routes: Routes = [
                     },
                     {
                         path: 'add-target/:id/:name/:regCode',
-                        component: AddDailyTargetComponent
+                        component: AssignCenterTargetViewComponent
                     },
                     {
                         path: 'edit-officer/:id',

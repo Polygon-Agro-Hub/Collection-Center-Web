@@ -101,11 +101,12 @@ export class AddComplaintComponent implements OnInit {
       }
     }).then((result) => {
       if (result.isConfirmed) {
-        this.toastSrv.warning('Add Complaint Canceled.');
-        
-        setTimeout(() => {
-          this.router.navigate(['/collection/complaints']); // Navigate to the specific route
-        }, 500); // Delay to allow the toast to display
+        // this.toastSrv.warning('Add Complaint Canceled.');
+
+        location.reload();
+        // setTimeout(() => {
+        //   this.router.navigate(['/collection/complaints']); // Navigate to the specific route
+        // }, 500); // Delay to allow the toast to display
       }
     });
   }

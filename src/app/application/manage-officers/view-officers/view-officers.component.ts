@@ -73,6 +73,7 @@ export class ViewOfficersComponent implements OnInit {
     this.isLoading = true;
     this.ManageOficerSrv.getAllOfficers(page, limit, status, role, searchText).subscribe(
       (res) => {
+        console.log(res);
         this.OfficerArr = res.items
         this.totalItems = res.total
         if (res.items.length === 0) {

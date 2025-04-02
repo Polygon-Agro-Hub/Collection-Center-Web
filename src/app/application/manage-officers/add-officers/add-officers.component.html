@@ -40,55 +40,55 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div *ngIf="logingRole === 'Collection Center Head'" (change)="getAllManagers()">
-                        <label for="centerId" class="block text-sm font-medium text-gray-700 dark:text-textDark">
+                        <label for="centerId" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
                             Collection Center
                         </label>
                         <select id="centerId" [(ngModel)]="personalData.centerId" name="centerId" placeholder="select"
                             #centerIdInput="ngModel" required
-                            class="form-control mt-1 block w-full p-2 text-gray-700 dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500">
+                            class="form-control mt-1 block w-full p-2 text-[#534E4E] dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500">
                             <option disabled selected
-                                class="p-2 text-gray-700 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]" value="">
+                                class="p-2 text-[#959595] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]" value="">
                                 -- select center--
                             </option>
                             <option *ngFor="let item of centerArr" [value]="item.id"
-                                class="p-2 text-gray-700 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
+                                class="p-2 text-[#534E4E] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
                                 {{item.centerName}}
                             </option>
 
                         </select>
                         <div *ngIf="centerIdInput.touched && !personalData.centerId && logingRole === 'Collection Center Head'"
-                            class="text-red-500 text-sm mt-1">
-                            <div>Collection Center is required</div>
+                            clas="text-red-500 text-sm mt-1">
+                            <div>Collection Center is requireds</div>
                         </div>
                     </div>
 
                     <div *ngIf="logingRole === 'Collection Center Head'"></div>
 
                     <div>
-                        <label for="jobRole" class="block text-sm font-medium text-gray-700 dark:text-textDark">
+                        <label for="jobRole" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
                             Job Role
                         </label>
                         <select id="jobRole" [(ngModel)]="personalData.jobRole" (change)="EpmloyeIdCreate()"
                             name="jobRole" placeholder="select" #jobRoleInput="ngModel" required
-                            class="form-control mt-1 block w-full p-2 text-[#534E4E] dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500">
+                            class="form-control mt-1 block w-full p-2 text-[#030308] dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500">
                             <option disabled class="p-2 text-[#534E4E] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
                                 -- select --
                             </option>
                             <option selected value="Collection Center Manager"
                                 *ngIf="logingRole === 'Collection Center Head'"
-                                class="p-2 text-[#534E4E] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
+                                class="p-2 text-[#030308] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
                                 Collection Center Manager
                             </option>
                             <option selected value="Collection Officer"
-                                class="p-2 text-[#534E4E] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
+                                class="p-2 text-[#030308] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
                                 Collection Officer
                             </option>
                             <option value="Customer Officer"
-                                class="p-2 text-[#534E4E] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
+                                class="p-2 text-[#030308] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
                                 Customer Officer
                             </option>
                             <option value="Driver" *ngIf="logingRole === 'Collection Center Head'"
-                                class="p-2 text-[#534E4E] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
+                                class="p-2 text-[#030308] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
                                 Driver
                             </option>
 
@@ -188,13 +188,13 @@
                                 <input class="w-5 h-5 dark:bg-[gray]" type="checkbox" id="english" name="languages"
                                     value="English" (change)="onCheckboxChange('English', $event)"
                                     [checked]="personalData.languages.includes('English')" />
-                                <label for="english" class="text-gray-700 dark:text-textDark">English</label>
+                                <label for="english" class="text-[#292929] dark:text-textDark">English</label>
                             </div>
                             <div class="flex items-center space-x-2">
                                 <input class="w-5 h-5 dark:bg-[gray]" type="checkbox" id="tamil" name="languages"
                                     value="Tamil" (change)="onCheckboxChange('Tamil', $event)"
                                     [checked]="personalData.languages.includes('Tamil')" />
-                                <label for="tamil" class="text-gray-700 dark:text-textDark">Tamil</label>
+                                <label for="tamil" class="text-[#292929] dark:text-textDark">Tamil</label>
                             </div>
                         </div>
                         <!-- Error Message -->
@@ -207,7 +207,7 @@
 
                     <div>
                         <label for="firstNameEnglish"
-                            class="block text-sm font-medium text-gray-700 dark:text-textDark">First
+                            class="block text-sm font-medium text-[#534E4E] dark:text-textDark">First
                             Name (in English)</label>
                         <input id="firstNameEnglish" [(ngModel)]="personalData.firstNameEnglish" name="firstNameEnglish"
                             class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
@@ -220,7 +220,7 @@
 
                     <div>
                         <label for="lastNameEnglish"
-                            class="block text-sm font-medium text-gray-700 dark:text-textDark">Last
+                            class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Last
                             Name (in English)</label>
                         <input id="lastNameEnglish" name="lastNameEnglish" [(ngModel)]="personalData.lastNameEnglish"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
@@ -233,7 +233,7 @@
 
                     <div>
                         <label for="firstNameSinhala"
-                            class="block text-sm font-medium text-gray-700 dark:text-textDark">First
+                            class="block text-sm font-medium text-[#534E4E] dark:text-textDark">First
                             Name (in Sinhala)</label>
                         <input id="firstNameSinhala" name="firstNameSinhala" [(ngModel)]="personalData.firstNameSinhala"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
@@ -246,7 +246,7 @@
 
                     <div>
                         <label for="lastNameSinhala"
-                            class="block text-sm font-medium text-gray-700 dark:text-textDark">Last
+                            class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Last
                             Name (in Sinhala)</label>
                         <input id="lastNameSinhala" name="lastNameSinhala" [(ngModel)]="personalData.lastNameSinhala"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
@@ -259,7 +259,7 @@
 
                     <div>
                         <label for="firstNameTamil"
-                            class="block text-sm font-medium text-gray-700 dark:text-textDark">First
+                            class="block text-sm font-medium text-[#534E4E] dark:text-textDark">First
                             Name (in Tamil)</label>
                         <input id="firstNameTamil" name="firstNameTamil" [(ngModel)]="personalData.firstNameTamil"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
@@ -272,7 +272,7 @@
 
                     <div>
                         <label for="lastNameTamil"
-                            class="block text-sm font-medium text-gray-700 dark:text-textDark">Last
+                            class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Last
                             Name (in Tamil)</label>
                         <input id="lastNameTamil" name="lastNameTamil" [(ngModel)]="personalData.lastNameTamil"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
@@ -284,13 +284,13 @@
                     </div>
 
                     <div>
-                        <label for="phoneNumber01" class="block text-sm font-medium text-gray-700 dark:text-textDark">
+                        <label for="phoneNumber01" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
                             Phone Number - 1
                         </label>
                         <div class="mt-1 flex">
                             <select id="phoneNumber01Code" name="phoneNumber01Code"
                                 [(ngModel)]="personalData.phoneNumber01Code"
-                                class="block p-2 border border-gray-300 rounded-l-md bg-gray-50 mr-5 text-textLight dark:text-textDark dark:bg-[#1D1D1F]">
+                                class="block p-2 border border-gray-300 rounded-l-md bg-gray-50 mr-5 text-[#534E4E] dark:text-textDark dark:bg-[#1D1D1F]">
                                 <option value="+94">+94 (LK)</option>
                                 <option value="+1">+1 (US)</option>
                                 <option value="+44">+44 (UK)</option>
@@ -308,13 +308,13 @@
                     </div>
 
                     <div>
-                        <label for="phoNumTwo" class="block text-sm font-medium text-gray-700 dark:text-textDark">
+                        <label for="phoNumTwo" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
                             Phone Number - 2
                         </label>
                         <div class="mt-1 flex">
                             <select id="phoneNumber02Code" name="phoneNumber02Code"
                                 [(ngModel)]="personalData.phoneNumber02Code"
-                                class="block p-2 border border-gray-300 rounded-l-md bg-gray-50 mr-5 text-textLight dark:text-textDark dark:bg-[#1D1D1F]">
+                                class="block p-2 border border-gray-300 rounded-l-md bg-gray-50 mr-5 text-[#534E4E] dark:text-textDark dark:bg-[#1D1D1F]">
                                 <option value="+94">+94 (LK)</option>
                                 <option value="+1">+1 (US)</option>
                                 <option value="+44">+44 (UK)</option>
@@ -328,7 +328,7 @@
                     </div>
 
                     <div>
-                        <label for="nic" class="block text-sm font-medium text-gray-700 dark:text-textDark">NIC
+                        <label for="nic" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">NIC
                             Number</label>
                         <input id="nic" name="nic" [(ngModel)]="personalData.nic" #nicInput="ngModel" required
                             pattern="^\d{9}[Vv]|\d{12}$"
@@ -344,7 +344,7 @@
 
                     <div>
                         <label for="email"
-                            class="block text-sm font-medium text-gray-700 dark:text-textDark">Email</label>
+                            class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Email</label>
                         <input type="email" id="email" name="email" [(ngModel)]="personalData.email"
                             #emailInput="ngModel" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
@@ -378,10 +378,10 @@
 
         <div *ngIf="selectedPage === 'pageTwo'">
 
-            <h2 class="text-xl mb-6 text-textLight dark:text-textDark font-bold">Residential Details</h2>
+            <h2 class="text-xl mb-6 text-[#292929] dark:text-textDark ">Residential Details</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                 <div>
-                    <label for="house" class="block text-sm font-medium text-gray-700 dark:text-textDark">House /
+                    <label for="house" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">House /
                         Plot Number</label>
                     <input id="houseNumber" name="houseNumber" [(ngModel)]="personalData.houseNumber"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
@@ -393,7 +393,7 @@
                 </div>
 
                 <div>
-                    <label for="street" class="block text-sm font-medium text-gray-700 dark:text-textDark">Street
+                    <label for="street" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Street
                         Name</label>
                     <input id="streetName" name="streetName" [(ngModel)]="personalData.streetName"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
@@ -404,7 +404,7 @@
                 </div>
 
                 <div>
-                    <label for="city" class="block text-sm font-medium text-gray-700 dark:text-textDark">City</label>
+                    <label for="city" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">City</label>
                     <input id="city" name="city" [(ngModel)]="personalData.city"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                         #cityInput="ngModel" required />
@@ -414,7 +414,7 @@
                 </div>
 
                 <div>
-                    <label for="district" class="block text-sm font-medium text-gray-700 dark:text-textDark">
+                    <label for="district" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
                         District
                     </label>
                     <select id="district" name="district" [(ngModel)]="personalData.district" #districtInput="ngModel"
@@ -431,7 +431,7 @@
                 </div>
 
                 <div>
-                    <label for="province" class="block text-sm font-medium text-gray-700 dark:text-textDark">
+                    <label for="province" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
                         Province
                     </label>
                     <input id="province" name="province" [(ngModel)]="personalData.province"
@@ -441,17 +441,17 @@
 
                 <div>
                     <label for="country"
-                        class="block text-sm font-medium text-gray-700 dark:text-textDark">Country</label>
+                        class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Country</label>
                     <input id="country" name="country" [(ngModel)]="personalData.country"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
                 </div>
             </div>
 
             <div>
-                <h2 class="text-2xl mt-10 mb-6 text-textLight dark:text-textDark">Add Bank Details</h2>
+                <h2 class="text-2xl mt-10 mb-6 text-[#292929] dark:text-textDark">Add Bank Details</h2>
                 <div class="pb-6">
                     <label for="accHolderName"
-                        class="block text-sm font-medium text-gray-700 dark:text-textDark">Account
+                        class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Account
                         Holder’s Name</label>
                     <input id="accHolderName" name="accHolderName" [(ngModel)]="personalData.accHolderName"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
@@ -463,7 +463,7 @@
                 </div>
 
                 <div class="pb-6">
-                    <label for="accNumber" class="block text-sm font-medium text-gray-700 dark:text-textDark">Account
+                    <label for="accNumber" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Account
                         Number</label>
                     <input type="number" id="accNumber" name="accNumber" [(ngModel)]="personalData.accNumber"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
@@ -474,7 +474,7 @@
                 </div>
 
                 <div class="pb-6">
-                    <label for="accNumber" class="block text-sm font-medium text-gray-700 dark:text-textDark">Confirm
+                    <label for="accNumber" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Confirm
                         Account Number</label>
                     <input type="number" id="accNumber" name="accNumber" [(ngModel)]="personalData.conformAccNumber"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
@@ -490,7 +490,7 @@
                 </div>
 
                 <div class="pb-6">
-                    <label for="bankDropdown" class="block text-sm font-medium text-gray-700 dark:text-textDark">
+                    <label for="bankDropdown" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
                         Bank Name
                     </label>
                     <select id="bankDropdown" name="bankDropdown" [(ngModel)]="selectedBankId" (change)="onBankChange()"
@@ -506,7 +506,7 @@
                 </div>
 
                 <div class="pb-6">
-                    <label for="branchDropdown" class="block text-sm font-medium text-gray-700 dark:text-textDark">
+                    <label for="branchDropdown" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
                         Branch Name
                     </label>
                     <select id="branchDropdown" name="branchDropdown" [(ngModel)]="selectedBranchId"
@@ -543,7 +543,7 @@
 
             <h2 class="text-xl mb-6 text-textLight dark:text-textDark font-bold">Driving Details</h2>
             <div>
-                <label for="licNo" class="block text-sm font-medium text-gray-700 dark:text-textDark">Driving
+                <label for="licNo" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Driving
                     License ID</label>
                 <input id="licNo" name="licNo" [(ngModel)]="driverObj.licNo"
                     class="form-licNo mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
@@ -556,7 +556,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-11 my-5">
                 <div>
                     <label for="licenseFrontImageUpload"
-                        class="block text-sm font-medium text-gray-700 dark:text-textDark my-2">
+                        class="block text-sm font-medium text-[#534E4E] dark:text-textDark my-2">
                         License's Front Image
                     </label>
 
@@ -584,7 +584,7 @@
 
                 <div>
                     <label for="licenseBackImageUpload"
-                        class="block text-sm font-medium text-gray-700 dark:text-textDark my-2">License’s Back
+                        class="block text-sm font-medium text-[#534E4E] dark:text-textDark my-2">License’s Back
                         Image</label>
 
                     <input id="licenseBackImageUpload" type="file" accept="image/*"
@@ -611,7 +611,7 @@
             <h2 class="text-xl mt-16 mb-6 text-textLight dark:text-textDark font-bold">Vehicle Insurance Details</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-11 my-5">
                 <div>
-                    <label for="insNo" class="block text-sm font-medium text-gray-700 dark:text-textDark">Insurance
+                    <label for="insNo" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Insurance
                         Number</label>
                     <input id="insNo" name="insNo" [(ngModel)]="driverObj.insNo"
                         class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
@@ -622,7 +622,7 @@
                 </div>
 
                 <div>
-                    <label for="insExpDate" class="block text-sm font-medium text-gray-700 dark:text-textDark">Insurance
+                    <label for="insExpDate" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Insurance
                         Expire Date</label>
                     <input id="insExpDate" name="insExpDate" type="date" [(ngModel)]="driverObj.insExpDate"
                         class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
@@ -634,7 +634,7 @@
 
                 <div>
                     <label for="insurenceFrontImageUpload"
-                        class="block text-sm font-medium text-gray-700 dark:text-textDark my-2">Insurance’s Front
+                        class="block text-sm font-medium text-[#534E4E] dark:text-textDark my-2">Insurance’s Front
                         Image</label>
                     <input id="insurenceFrontImageUpload" type="file" accept="image/*"
                         (change)="onInsurenceFrontImageSelected($event)" class="hidden">
@@ -658,7 +658,7 @@
 
                 <div>
                     <label for="firstNameEnglish"
-                        class="block text-sm font-medium text-gray-700 dark:text-textDark my-2">Insurance’s Back
+                        class="block text-sm font-medium text-[#534E4E] dark:text-textDark my-2">Insurance’s Back
                         Image</label>
                     <input id="insuranceBackImageUpload" type="file" accept="image/*"
                         (change)="onInsurenceBackImageSelected($event)" class="hidden">
@@ -685,7 +685,7 @@
 
             <h2 class="text-xl mt-16 mb-6 text-textLight dark:text-textDark font-bold">Vehicle Details</h2>
             <div>
-                <label for="vRegNo" class="block text-sm font-medium text-gray-700 dark:text-textDark">Vehicle
+                <label for="vRegNo" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Vehicle
                     Registration Number</label>
                 <input id="vRegNo" name="vRegNo" [(ngModel)]="driverObj.vRegNo"  #vRegNoInput="ngModel" required
                     class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
@@ -698,7 +698,7 @@
             <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-11 my-5">
                 <div>
                     <label for="selectVehicletype"
-                        class="block text-sm font-medium text-gray-700 dark:text-textDark">Vehicle Type</label>
+                        class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Vehicle Type</label>
                     <select id="selectVehicletype" [(ngModel)]="selectVehicletype" name="selectVehicletype"
                         placeholder="select" (change)="vehicleChange()" required #selectVehicletypeInput="ngModel"
                         class="form-control mt-1 block w-full p-2 text-gray-700 dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500">
@@ -718,7 +718,7 @@
                 </div>
 
                 <div>
-                    <label for="capacity" class="block text-sm font-medium text-gray-700 dark:text-textDark">Vehicle
+                    <label for="capacity" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Vehicle
                         Capacity</label>
                     <input id="capacity" placeholder="------------" [value]="selectVehicletype?.capacity"
                         class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
@@ -731,7 +731,7 @@
 
                 <div>
                     <label for="vehicleFrontImageUpload"
-                        class="block text-sm font-medium text-gray-700 dark:text-textDark my-2">Vehicle’s Front
+                        class="block text-sm font-medium text-[#534E4E] dark:text-textDark my-2">Vehicle’s Front
                         Image</label>
                     <input id="vehicleFrontImageUpload" type="file" accept="image/*"
                         (change)="onVehicleFrontImageSelected($event)" class="hidden">
@@ -755,7 +755,7 @@
 
                 <div>
                     <label for="vehicleBackImageUpload"
-                        class="block text-sm font-medium text-gray-700 dark:text-textDark my-2">Vehicle’s Back
+                        class="block text-sm font-medium text-[#534E4E] dark:text-textDark my-2">Vehicle’s Back
                         Image</label>
                     <input id="vehicleBackImageUpload" type="file" accept="image/*"
                         (change)="onVehicleBackImageSelected($event)" class="hidden">
@@ -779,7 +779,7 @@
 
                 <div>
                     <label for="vehicleSideAImageUpload"
-                        class="block text-sm font-medium text-gray-700 dark:text-textDark my-2">Vehicle’s Side Image -
+                        class="block text-sm font-medium text-[#534E4E] dark:text-textDark my-2">Vehicle’s Side Image -
                         1</label>
                     <input id="vehicleSideAImageUpload" type="file" accept="image/*"
                         (change)="onVehicleSideAImageSelected($event)" class="hidden">
@@ -803,7 +803,7 @@
 
                 <div>
                     <label for="vehicleSideBImageUpload"
-                        class="block text-sm font-medium text-gray-700 dark:text-textDark my-2">Vehicle’s Side Image -
+                        class="block text-sm font-medium text-[#534E4E] dark:text-textDark my-2">Vehicle’s Side Image -
                         2</label>
                     <input id="vehicleSideBImageUpload" type="file" accept="image/*"
                         (change)="onVehicleSideBImageSelected($event)" class="hidden">

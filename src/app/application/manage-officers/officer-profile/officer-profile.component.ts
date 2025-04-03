@@ -158,23 +158,48 @@ export class OfficerProfileComponent implements OnInit {
     doc.setFont("Inter", "bold");
     doc.text(getValueOrNA(this.officerObj.firstNameEnglish) + ' ' + getValueOrNA(this.officerObj.lastNameEnglish), startX, 15);
 
-    doc.setFont("Inter", "normal");
-    doc.text('Customer Officer  - ', startX, 22);
-
+    let empType = '';
     let empCode = '';
-    if (this.officerObj.jobRole === 'Customer Officer') {
-      empCode = 'CUO';
-    } else if (this.officerObj.jobRole === 'Collection Center Manager') {
-      empCode = 'CCM';
-    } else if (this.officerObj.jobRole === 'Collection Center Head') {
-      empCode = 'CCH';
-    } else if (this.officerObj.jobRole === 'Collection Officer') {
-      empCode = 'COO';
+
+    switch (this.officerObj.jobRole) {
+      case 'Customer Officer':
+        empType = 'Customer Officer';
+        empCode = 'CUO';
+        break;
+      case 'Collection Center Manager':
+        empType = 'Collection Center Manager';
+        empCode = 'CCM';
+        break;
+      case 'Collection Center Head':
+        empType = 'Collection Center Head';
+        empCode = 'CCH';
+        break;
+      case 'Collection Officer':
+        empType = 'Collection Officer';
+        empCode = 'COO';
+        break;
+      case 'Driver':
+        empType = 'Driver';
+        empCode = 'DVR'; // Added empCode for Driver
+        break;
     }
 
-    // Apply bold font for the empCode + empId
+    // Ensure empCode and empId exist
+    let empId = this.officerObj.empId || '';
+    let empCodeText = empCode ? `${empCode}${empId}` : empId;
+
+    // Set font and print empTypeText
+    doc.setFont("Inter", "normal");
+    let empTypeText = `${getValueOrNA(empType)} - `;
+    doc.text(empTypeText, startX, 22);
+
+    // Measure the width of empTypeText for proper alignment
+    let textWidth = doc.getTextWidth(empTypeText);
+
+    // Apply bold font for empCode + empId and print it right after empTypeText
     doc.setFont("Inter", "bold");
-    doc.text(getValueOrNA(empCode + this.officerObj.empId), startX + 35, 22);
+    doc.text(getValueOrNA(empCodeText), startX + textWidth, 22);
+
 
     doc.text(getValueOrNA(this.officerObj.city), startX, 29);
     doc.setFont("Inter", "normal");
@@ -209,18 +234,43 @@ export class OfficerProfileComponent implements OnInit {
     // Phone Number 1
     doc.setFont("Inter", "normal");
     doc.text("Phone Number - 1", 14, startY + 42);
-    doc.setFont("Inter", "bold");
-    doc.text(getValueOrNA(this.officerObj.phoneNumber01), 22, startY + 48);
-    doc.setFont("Inter", "bold");
-    doc.text(getValueOrNA(this.officerObj.phoneCode02), 14, startY + 48);
+    // doc.setFont("Inter", "bold");
+    // doc.text(getValueOrNA(this.officerObj.phoneNumber01), 22, startY + 48);
+    // doc.setFont("Inter", "bold");
+    // doc.text(getValueOrNA(this.officerObj.phoneCode02), 14, startY + 48);
+
+    if (this.officerObj.phoneNumber01 == null || this.officerObj.phoneNumber01 === "") {
+      doc.setFont("Inter", "bold");
+      doc.text("N/A", 14, startY + 48); // Display N/A if phoneNumber02 is null or undefined
+    } else {
+      doc.setFont("Inter", "bold");
+      doc.text(getValueOrNA(this.officerObj.phoneNumber01), 22, startY + 48);
+      doc.setFont("Inter", "bold");
+      doc.text(getValueOrNA(this.officerObj.phoneCode02), 14, startY + 48);
+    }
 
     // Phone Number 2
+    // doc.setFont("Inter", "normal");
+    // doc.text("Phone Number - 2", 100, startY + 42);
+    // doc.setFont("Inter", "bold");
+    // doc.text(getValueOrNA(this.officerObj.phoneNumber02), 108, startY + 48);
+    // doc.setFont("Inter", "bold");
+    // doc.text(getValueOrNA(this.officerObj.phoneCode02), 100, startY + 48);
+
+
     doc.setFont("Inter", "normal");
     doc.text("Phone Number - 2", 100, startY + 42);
-    doc.setFont("Inter", "bold");
-    doc.text(getValueOrNA(this.officerObj.phoneNumber02), 108, startY + 48);
-    doc.setFont("Inter", "bold");
-    doc.text(getValueOrNA(this.officerObj.phoneCode02), 100, startY + 48);
+
+    // Check if phoneNumber02 is undefined or null
+    if (this.officerObj.phoneNumber02 == null || this.officerObj.phoneNumber02 === "") {
+      doc.setFont("Inter", "bold");
+      doc.text("N/A", 100, startY + 48); // Display N/A if phoneNumber02 is null or undefined
+    } else {
+      doc.setFont("Inter", "bold");
+      doc.text(getValueOrNA(this.officerObj.phoneNumber02), 108, startY + 48);
+      doc.setFont("Inter", "bold");
+      doc.text(getValueOrNA(this.officerObj.phoneCode02), 100, startY + 48);
+    }
 
     // Address Details Section
     doc.setFontSize(16);
@@ -323,7 +373,7 @@ export class OfficerProfileComponent implements OnInit {
       doc.addImage(iconBase64, 'PNG', 100, startY + 192, 9, 9);
 
       if (this.officerObj.licBackImg) {
-        doc.link(100, startY + 192, 9, 9, { url: this.officerObj.licBackImg});
+        doc.link(100, startY + 192, 9, 9, { url: this.officerObj.licBackImg });
       }
 
       doc.setFontSize(16);
@@ -343,7 +393,7 @@ export class OfficerProfileComponent implements OnInit {
       doc.addImage(iconBase64, 'PNG', 14, startY + 240, 9, 9);
 
       if (this.officerObj.insFrontImg) {
-        doc.link(14, startY + 240, 9, 9, { url: this.officerObj.insFrontImg});
+        doc.link(14, startY + 240, 9, 9, { url: this.officerObj.insFrontImg });
       }
 
       doc.setFontSize(12);
@@ -352,7 +402,7 @@ export class OfficerProfileComponent implements OnInit {
       doc.addImage(iconBase64, 'PNG', 100, startY + 240, 9, 9);
 
       if (this.officerObj.insBackImg) {
-        doc.link(100, startY + 240, 9, 9, { url: this.officerObj.insBackImg});
+        doc.link(100, startY + 240, 9, 9, { url: this.officerObj.insBackImg });
       }
 
       doc.setFontSize(16);
@@ -416,9 +466,9 @@ export class OfficerProfileComponent implements OnInit {
 
       if (this.officerObj.vehSideImgB) {
 
-        doc.link(100, startY + 322, 9, 9, { 
+        doc.link(100, startY + 322, 9, 9, {
           url: this.officerObj.vehSideImgB,
-          newWindow: true 
+          newWindow: true
         });
       }
 

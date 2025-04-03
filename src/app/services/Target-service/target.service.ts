@@ -239,7 +239,7 @@ export class TargetService {
   createCenter(centerData: any): Observable<any> {
     const formData = new FormData();
     formData.append('centerData', JSON.stringify(centerData));
-    
+
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
     });
@@ -282,6 +282,30 @@ export class TargetService {
     }
 
     return this.http.get<any>(url, { headers });
+  }
+
+
+  // new parts-----------------------
+  getCenterCrops(id: number, page: number = 1, limit: number = 10, searchText: string = ''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/get-center-crops/${id}?page=${page}&limit=${limit}`;
+    if(searchText){
+      url += `&searchText=${searchText}`
+    }
+
+    return this.http.get<any>(url, { headers });
+  }
+
+  addORremoveCenterCrops(data: any): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/add-center-crops`;
+    return this.http.post<any>(url, data, { headers });
   }
 
 

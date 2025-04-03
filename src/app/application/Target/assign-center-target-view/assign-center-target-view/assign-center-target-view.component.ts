@@ -1,0 +1,46 @@
+import { CommonModule } from '@angular/common';
+import { Component, OnInit } from '@angular/core';
+import { FormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
+import { SelectVarietyListComponent } from '../select-variety-list/select-variety-list.component';
+
+@Component({
+  selector: 'app-assign-center-target-view',
+  standalone: true,
+  imports: [CommonModule, FormsModule, SelectVarietyListComponent],
+  templateUrl: './assign-center-target-view.component.html',
+  styleUrl: './assign-center-target-view.component.css'
+})
+export class AssignCenterTargetViewComponent implements OnInit {
+  centerDetailsObj: CenterDetails = new CenterDetails();
+  
+  isAssignTarget: boolean = false;
+  isVariety: boolean = true;
+
+  constructor(
+      private route: ActivatedRoute
+    ) { }
+
+  ngOnInit(): void {
+    this.centerDetailsObj.centerId = this.route.snapshot.params['id'];
+    this.centerDetailsObj.centerName = this.route.snapshot.params['name'];
+    this.centerDetailsObj.regCode = this.route.snapshot.params['regCode'];
+  }
+
+  selectAssignTarget() {
+    this.isAssignTarget = true;
+    this.isVariety = false;
+  }
+
+  selectVariety() {
+    this.isAssignTarget = false;
+    this.isVariety = true;
+  }
+
+}
+
+class CenterDetails {
+  centerId!: number;
+  centerName!: string;
+  regCode!: string;
+}

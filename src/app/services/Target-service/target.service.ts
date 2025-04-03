@@ -286,12 +286,16 @@ export class TargetService {
 
 
   // new parts-----------------------
-  getCenterCrops(id: number, page: number = 1, limit: number = 10): Observable<any> {
+  getCenterCrops(id: number, page: number = 1, limit: number = 10, searchText: string = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
 
     let url = `${this.apiUrl}/get-center-crops/${id}?page=${page}&limit=${limit}`;
+    if(searchText){
+      url += `&searchText=${searchText}`
+    }
+
     return this.http.get<any>(url, { headers });
   }
 

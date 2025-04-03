@@ -23,7 +23,9 @@ export class SelectVarietyListComponent implements OnInit {
   totalItems: number = 0;
   itemsPerPage: number = 10;
 
+
   cropCount: number = 0;
+  searchText: string = '';
   constructor(
     private router: Router,
     private TargetSrv: TargetService,
@@ -35,8 +37,8 @@ export class SelectVarietyListComponent implements OnInit {
     this.fetchCenterCrops();
   }
 
-  fetchCenterCrops(page: number = this.page, limit: number = this.itemsPerPage) {
-    this.TargetSrv.getCenterCrops(this.centerDetails.centerId,page, limit ).subscribe(
+  fetchCenterCrops(page: number = this.page, limit: number = this.itemsPerPage, search: string = this.searchText) {
+    this.TargetSrv.getCenterCrops(this.centerDetails.centerId, page, limit, search).subscribe(
       (res) => {
         console.log(res);
         this.cropsArr = res.items
@@ -67,10 +69,10 @@ export class SelectVarietyListComponent implements OnInit {
 
     this.TargetSrv.addORremoveCenterCrops(data).subscribe(
       (res) => {
-        if(res.status) {
+        if (res.status) {
           this.toastSrv.success(res.message);
           this.fetchCenterCrops();
-        }else{
+        } else {
           this.toastSrv.error(res.message);
         }
         this.fetchCenterCrops();
@@ -80,6 +82,15 @@ export class SelectVarietyListComponent implements OnInit {
 
   onPageChange(event: number) {
     this.page = event;
+    this.fetchCenterCrops();
+  }
+
+  onSearchVarity() {
+    this.fetchCenterCrops();
+  }
+
+  offSearchVarity() {
+    this.searchText = '';
     this.fetchCenterCrops();
   }
 

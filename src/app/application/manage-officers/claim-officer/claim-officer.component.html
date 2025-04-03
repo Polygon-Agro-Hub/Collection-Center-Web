@@ -88,7 +88,7 @@
     class="flex flex-row justify-between items-center border-[#F1F7FA] border-[3px] rounded-lg shadowmd p-8 mx-[10%]"
   >
     <div class="flex flex-row items-center">
-      <img class="w-28 h-28 rounded-full" [src]="officerObj.image" />
+      <img class="w-28 h-28 rounded-full " [src]="officerObj.image" />
 
       <div class="ml-6">
         <p class="text-lg font-semibold">
@@ -103,7 +103,7 @@
 
     <button
       class="bg-[#415CFF] text-white font-semibold rounded-lg shadow-md px-5 py-2"
-      (click)="cliamBtn(officerObj.id)"
+      (click)="toggleClaimView()"
     >
       Claim
     </button>
@@ -138,4 +138,44 @@
       class="w-20 h-20"
     />
   </div>
+
+  <div *ngIf="showClaimView" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white dark:bg-[#363636] shadow-lg rounded-lg p-6 w-1/2">
+
+        <div>
+            <!-- Icon -->
+            <div class="flex items-center justify-center bg-[#F6F7F9] rounded-lg shadow-sm px-4 mb-3 py-3 mx-auto w-[60px]">
+              <i class="fa-solid fa-triangle-exclamation text-[#6B7D8C] text-4xl"></i>
+            </div>
+
+            <div class=" text-center dark:text-textDark mb-8">
+                <p class="text-lg mb-2">
+                    Are you sure you want to Claim the officer
+                </p>
+                <p class="font-semibold text-lg dark:text-white">
+                    "{{officerObj.firstNameEnglish}} {{officerObj.lastNameEnglish}} (EMP ID -
+                    "{{officerObj.empId}}")
+                </p>
+            </div>
+
+            <!-- Buttons -->
+            <div class="flex justify-center gap-4 mb-4">
+                <!-- <button class="bg-[#E8E8E8] border-[1px] border-[#6B7D8C] px-10 py-0.35 rounded-lg shadow-md"
+                    (click)="confirmClaim(officerObj.id)"><span class="font-semibold text-[#6B7D8C]">Yes,</span> <br>
+                    <span class="text-light text-whight-700 button-text text-[#6B7D8C]">Discharge</span>
+                </button> -->
+                <button class="bg-[#E8E8E8] border-[1px] border-[#6B7D8C] px-10 py-0.35 rounded-lg shadow-md"
+                    (click)="cancelClaim()"><span class="font-semibold text-[#6B7D8C]">No,</span> <br>
+                    <span class="text-light text-whight-700 button-text text-[#6B7D8C]">Go Back</span>
+                </button>
+
+                <button class="bg-[#415CFF] border-[1px] border-[#415CFF] px-10 py-0.35 rounded-lg shadow-md"
+                    (click)="confirmClaim(officerObj.id)"><span class="font-semibold text-white">Yes,</span> <br>
+                    <span class="text-light text-whight-700 button-text text-white">Claim</span>
+                </button>
+            </div>
+        </div>
+    </div>
+
+</div>
 </div>

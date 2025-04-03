@@ -5,6 +5,7 @@ import { ManageOfficersService } from '../../../services/manage-officers-service
 import { Router } from '@angular/router';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-claim-officer',
@@ -22,6 +23,8 @@ export class ClaimOfficerComponent implements OnInit {
   hasData!: boolean
 
   isLoading:boolean = false;
+
+  showClaimView = false;
 
 
   constructor(
@@ -63,21 +66,40 @@ export class ClaimOfficerComponent implements OnInit {
     )
   }
 
-  cliamBtn(id: number) {
+  toggleClaimView() {
+    this.showClaimView = !this.showClaimView; // Toggle the boolean value
+  }
+
+  
+
+  cancelClaim() {
+    this.showClaimView = false;
+    this.router.navigate(['/claim-officers']);
+  }
+
+  confirmClaim(id: number) {
     this.isLoading = true;
     this.ManageOficerSrv.claimOfficer(id).subscribe(
       (res) => {
+        this.isLoading = false;
         if (res.status) {
-          this.isLoading = false;
-          this.toastSrv.success(`${this.officerObj.firstNameEnglish} ${this.officerObj.lastNameEnglish} (${this.officerObj.empId}) Claim Succcessfull`);
-          this.router.navigate(['/manage-officers/view-officer'])
+          this.toastSrv.success(`${this.officerObj.firstNameEnglish} ${this.officerObj.lastNameEnglish} (EMP ID - "${this.officerObj.empId}") Claim Successful`);
+          this.showClaimView = false;
+          // Call fetchOfficer directly without navigation
+          this.fetchOfficer();
         } else {
-          this.isLoading = false;
-          this.toastSrv.error(`${this.officerObj.firstNameEnglish} ${this.officerObj.lastNameEnglish} (${this.officerObj.empId}) Claim Unscccessfull!`);
+          this.toastSrv.error(`${this.officerObj.firstNameEnglish} ${this.officerObj.lastNameEnglish} (EMP ID - "${this.officerObj.empId}") Claim Unsuccessful!`);
         }
+      },
+      (error) => {
+        this.isLoading = false;
+        this.toastSrv.error("An error occurred while claiming the officer.");
       }
-    )
+    );
   }
+  
+  
+  
 
 }
 

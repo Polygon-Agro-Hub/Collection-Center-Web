@@ -292,7 +292,7 @@ export class TargetService {
     });
 
     let url = `${this.apiUrl}/get-center-crops/${id}?page=${page}&limit=${limit}`;
-    if(searchText){
+    if (searchText) {
       url += `&searchText=${searchText}`
     }
 
@@ -306,6 +306,37 @@ export class TargetService {
 
     let url = `${this.apiUrl}/add-center-crops`;
     return this.http.post<any>(url, data, { headers });
+  }
+
+  getSavedCenterCrops(id: number, date:string, searchText:string=''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/get-saved-center-crops/${id}/${date}`;
+    if (searchText) {
+      url += `?searchText=${searchText}`
+    }
+    
+    return this.http.get<any>(url, { headers });
+  }
+
+  updateTargetQty(data:any): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/update-target-crop-qty`;
+    return this.http.patch<any>(url,data, { headers });
+  }
+
+  addNewCenterTarget(data:any): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/add-new-center-target`;
+    return this.http.post<any>(url,data, { headers });
   }
 
 

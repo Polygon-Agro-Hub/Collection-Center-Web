@@ -25,7 +25,7 @@
 
     <hr class="my-8 border-[1px] border-[#7F7F7F] dark:border-[#292929]" />
 
-    <!-- <app-recevied-complaints *ngIf="isAssignTarget"/> -->
+    <app-assign-center-target [centerDetails]="centerDetailsObj" *ngIf="isAssignTarget"/>
 
     <app-select-variety-list [centerDetails]="centerDetailsObj" *ngIf="isVariety"/>
 </div>

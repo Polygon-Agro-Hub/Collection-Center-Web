@@ -3,19 +3,20 @@ import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { SelectVarietyListComponent } from '../select-variety-list/select-variety-list.component';
+import { AssignCenterTargetComponent } from '../assign-center-target/assign-center-target.component';
 
 @Component({
   selector: 'app-assign-center-target-view',
   standalone: true,
-  imports: [CommonModule, FormsModule, SelectVarietyListComponent],
+  imports: [CommonModule, FormsModule, SelectVarietyListComponent, AssignCenterTargetComponent],
   templateUrl: './assign-center-target-view.component.html',
   styleUrl: './assign-center-target-view.component.css'
 })
 export class AssignCenterTargetViewComponent implements OnInit {
   centerDetailsObj: CenterDetails = new CenterDetails();
   
-  isAssignTarget: boolean = false;
-  isVariety: boolean = true;
+  isAssignTarget: boolean = true;
+  isVariety: boolean = false;
 
   constructor(
       private route: ActivatedRoute

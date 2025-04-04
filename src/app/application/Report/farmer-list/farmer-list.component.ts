@@ -61,6 +61,10 @@ export class FarmerListComponent implements OnInit {
     )
   }
 
+  navigateToReports() {
+    this.router.navigate(['/reports']); // Change '/reports' to your desired route
+  }
+
   onSearch() {
     this.fetchFarmerList(this.page, this.itemsPerPage, this.searchText);
   }

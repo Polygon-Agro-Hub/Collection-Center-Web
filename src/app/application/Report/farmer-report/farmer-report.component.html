@@ -2,8 +2,9 @@
 
 <div *ngIf="!isLoading">
     <div class="flex flex-row items-center gap-6 font-semibold text[#424242] mb-5 mx-5">
-        <p>Report</p>
-        <p>Farmer List</p>
+        <p (click)="navigateToReports()">Report</p>
+        <p (click)="navigateToOfficerReports()">Officer Reports</p>
+        <p onclick="history.back()">Farmer List</p>
         <p>Farmer Report</p>
     </div>
 

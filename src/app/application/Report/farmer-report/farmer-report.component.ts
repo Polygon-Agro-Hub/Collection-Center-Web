@@ -62,6 +62,14 @@ export class FarmerReportComponent implements OnInit {
       return sum + this.calculateRowTotal(item);
     }, 0);
   }
+
+  navigateToReports() {
+    this.router.navigate(['/reports']); // Change '/reports' to your desired route
+  }
+
+  navigateToOfficerReports() {
+    this.router.navigate(['/reports/officer-reports']); // Change '/reports' to your desired route
+  }
   
 
   calculeteTotal(priceA: number, qtyA: number, priceB: number, qtyB: number, priceC: number, qtyC: number) :number{

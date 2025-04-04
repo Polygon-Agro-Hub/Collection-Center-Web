@@ -32,7 +32,8 @@ export class CollectionMonthlyReportComponent implements OnInit {
   constructor(
     private ReportSrv: ReportServiceService,
     private route: ActivatedRoute,
-    private toastSrv:ToastAlertService
+    private toastSrv:ToastAlertService,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -65,6 +66,10 @@ export class CollectionMonthlyReportComponent implements OnInit {
 
   filterDate() {
     this.fetchOfficerData();
+  }
+
+  navigateToReports() {
+    this.router.navigate(['/reports']); // Change '/reports' to your desired route
   }
 
 

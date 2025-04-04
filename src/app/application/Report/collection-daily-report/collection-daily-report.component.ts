@@ -81,6 +81,10 @@ export class CollectionDailyReportComponent implements OnInit {
     );
   }
 
+  navigateToReports() {
+    this.router.navigate(['/reports']); // Change '/reports' to your desired route
+  }
+
   filterByDate() {
     this.dailyReportArr = [];
     this.fetchDailyReport(this.selectDate);

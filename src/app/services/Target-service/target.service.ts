@@ -308,12 +308,16 @@ export class TargetService {
     return this.http.post<any>(url, data, { headers });
   }
 
-  getSavedCenterCrops(id: number, date:string): Observable<any> {
+  getSavedCenterCrops(id: number, date:string, searchText:string=''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
 
     let url = `${this.apiUrl}/get-saved-center-crops/${id}/${date}`;
+    if (searchText) {
+      url += `?searchText=${searchText}`
+    }
+    
     return this.http.get<any>(url, { headers });
   }
 

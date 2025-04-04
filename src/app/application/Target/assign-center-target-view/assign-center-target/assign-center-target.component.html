@@ -1,4 +1,7 @@
-<div class="h-screen py-8">
+<app-loading-spinner *ngIf="isLoading" />
+
+
+<div *ngIf="!isLoading" class="h-screen py-8">
     <div class="flex flex-row justify-between items-center">
         <p class="text-xl font-bold dark:text-white text-[#030308]">{{centerDetails.regCode}}
             {{centerDetails.centerName}}</p>

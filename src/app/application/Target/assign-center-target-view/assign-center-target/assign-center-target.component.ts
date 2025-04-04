@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TargetService } from '../../../../services/Target-service/target.service';
 import { ToastAlertService } from '../../../../services/toast-alert/toast-alert.service';
+import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-assign-center-target',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent],
   templateUrl: './assign-center-target.component.html',
   styleUrl: './assign-center-target.component.css'
 })
@@ -23,7 +24,7 @@ export class AssignCenterTargetComponent implements OnInit {
   selectDate: string = new Date().toISOString().split('T')[0];
   isNew: boolean = true;
   companyCenterId!: number;
-  isLoading: boolean = false;
+  isLoading: boolean = true;
   isDateValid: boolean = true;
 
 
@@ -39,13 +40,15 @@ export class AssignCenterTargetComponent implements OnInit {
   }
 
   fetchSavedCenterCrops() {
+    this.isLoading = true;
     this.validateSelectDate()
-    this.TargetSrv.getSavedCenterCrops(this.centerDetails.centerId, this.selectDate).subscribe(
+    this.TargetSrv.getSavedCenterCrops(this.centerDetails.centerId, this.selectDate, this.searchText).subscribe(
       (res) => {
         this.assignCropsArr = res.result.data
         this.countCrops = res.result.data.length
         this.isNew = res.result.isNew
         this.companyCenterId = res.companyCenterId
+        this.isLoading = false;
       }
     )
   }
@@ -73,8 +76,13 @@ export class AssignCenterTargetComponent implements OnInit {
     this.fetchSavedCenterCrops()
   }
 
-  onSearch() { }
-  offSearch() { }
+  onSearch() {
+    this.fetchSavedCenterCrops();
+  }
+  offSearch() {
+    this.searchText = ''
+    this.fetchSavedCenterCrops()
+  }
 
   saveGrade(grade: string, item: any, qty: number, editId: number | null) {
     let data = {
@@ -115,11 +123,11 @@ export class AssignCenterTargetComponent implements OnInit {
     }
   }
 
-validateForm() {
-   this.isFormValid = this.assignCropsArr.some(crop => 
-    crop.targetA > 0 || crop.targetB > 0 || crop.targetC > 0
-  );  
-}
+  validateForm() {
+    this.isFormValid = this.assignCropsArr.some(crop =>
+      crop.targetA > 0 || crop.targetB > 0 || crop.targetC > 0
+    );
+  }
 
 }
 

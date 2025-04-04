@@ -17,13 +17,14 @@ export class AssignCenterTargetComponent implements OnInit {
   assignCropsArr: AssignCrops[] = [];
   newTargetObj: NewTarget = new NewTarget();
 
-  isFormValid: boolean = true;
+  isFormValid: boolean = false;
   countCrops: number = 0;
   searchText: string = '';
   selectDate: string = new Date().toISOString().split('T')[0];
   isNew: boolean = true;
   companyCenterId!: number;
   isLoading: boolean = false;
+  isDateValid: boolean = true;
 
 
   constructor(
@@ -38,6 +39,7 @@ export class AssignCenterTargetComponent implements OnInit {
   }
 
   fetchSavedCenterCrops() {
+    this.validateSelectDate()
     this.TargetSrv.getSavedCenterCrops(this.centerDetails.centerId, this.selectDate).subscribe(
       (res) => {
         this.assignCropsArr = res.result.data
@@ -48,11 +50,11 @@ export class AssignCenterTargetComponent implements OnInit {
     )
   }
 
-  onSubmit() { 
+  onSubmit() {
     this.newTargetObj.companyCenterId = this.companyCenterId
     this.newTargetObj.date = this.selectDate
     this.newTargetObj.crop = this.assignCropsArr
-      
+
     this.TargetSrv.addNewCenterTarget(this.newTargetObj).subscribe(
       (res) => {
         if (res.status) {
@@ -66,7 +68,10 @@ export class AssignCenterTargetComponent implements OnInit {
   }
 
 
-  onCancel() { }
+  onCancel() {
+    this.toastSrv.warning('Cancel Add New Center Target')
+    this.fetchSavedCenterCrops()
+  }
 
   onSearch() { }
   offSearch() { }
@@ -95,6 +100,27 @@ export class AssignCenterTargetComponent implements OnInit {
     )
   }
 
+  validateSelectDate() {
+    const selectedDate = new Date(this.selectDate);
+    const today = new Date();
+
+    // Reset time components to compare just dates
+    today.setHours(0, 0, 0, 0);
+    selectedDate.setHours(0, 0, 0, 0);
+
+    if (selectedDate < today) {
+      this.isDateValid = false;
+    } else {
+      this.isDateValid = true;
+    }
+  }
+
+validateForm() {
+   this.isFormValid = this.assignCropsArr.some(crop => 
+    crop.targetA > 0 || crop.targetB > 0 || crop.targetC > 0
+  );  
+}
+
 }
 
 class CenterDetails {
@@ -117,10 +143,10 @@ class AssignCrops {
   idC: number | null = null;
 }
 
-class NewTarget{
+class NewTarget {
   companyCenterId!: number;
   date!: string;
-  crop!:AssignCrops[]
+  crop!: AssignCrops[]
 
 }
 

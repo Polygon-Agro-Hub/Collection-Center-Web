@@ -3,22 +3,15 @@
 <div *ngIf="!isLoading">
   <p class="text[#627189] mx-2 mb-2 mt-0 pt-0 dark:text-white">Profile</p>
 
-  <div
-    class="w-full px-10 py-4 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg"
-  >
+  <div class="w-full px-10 py-4 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg">
     <div class="flex flex-col gap-7 px-2 py-2" id="reportcontainer">
       <h1 class="text-black font-semibold dark:text-white">My profile</h1>
-      <div
-        class="flex flex-row justify-between items-center border-[#F1F7FA] border-[3px] rounded-lg shadow-md p-6"
-      >
+      <div class="flex flex-row justify-between items-center border-[#F1F7FA] border-[3px] rounded-lg p-6">
         <div class="flex flex-row items-center">
           <!-- Profile Image with border and size adjustment -->
           <!-- <img class="w-28 h-28 rounded-full border-4 border-[#F1F7FA]"
                      src="https://images.pexels.com/photos/845457/pexels-photo-845457.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" /> -->
-          <img
-            class="w-28 h-28 rounded-full object-cover"
-            [src]="officerObj.image"
-          />
+          <img class="w-28 h-28 rounded-full object-cover" [src]="officerObj.image" />
           <div class="ml-6">
             <!-- Profile Text with proper spacing -->
             <p class="text-lg font-semibold dark:text-white">
@@ -36,26 +29,19 @@
         </div>
 
         <!-- Buttons with consistent size and styling -->
-        <div
-          class="flex flex-row space-x-4 self-start mt-2"
-          *ngIf="logingRole === 'Collection Center Manager'"
-        >
-          <button
-            (click)="goToChangePassword()"
-            class="bg-[#3B82F6] text-white font-semibold rounded-lg shadow-md px-4 py-2"
-          >
+        <div class="flex flex-row space-x-4 self-start mt-2" *ngIf="logingRole === 'Collection Center Manager'">
+          <button (click)="goToChangePassword()"
+            class="bg-[#3B82F6] text-white font-semibold rounded-lg shadow-md px-4 py-2">
             Change Password
           </button>
-          <button
-            class="bg-[#3B82F6] text-white font-semibold rounded-lg shadow-md px-4 py-2"
-            (click)="navigateToTarget()"
-          >
+          <button class="bg-[#3B82F6] text-white font-semibold rounded-lg shadow-md px-4 py-2"
+            (click)="navigateToTarget()">
             View My Target
           </button>
         </div>
       </div>
 
-      <div class="border-[#F1F7FA] border-[3px] rounded-lg shadowmd p-6">
+      <div class="border-[#F1F7FA] border-[3px] rounded-lg p-6">
         <div class="flex flex-row justify-between">
           <p class="font-semibold dark:text-white">Personal Infomation</p>
         </div>
@@ -100,9 +86,9 @@
             <p class="text-[#627189]">Phone Number - 2</p>
             <p class="font-semibold text-black dark:text-white">
               {{
-                officerObj.phoneCode02
-                  ? officerObj.phoneCode02 + officerObj.phoneNumber02
-                  : " - "
+              officerObj.phoneCode02
+              ? officerObj.phoneCode02 + officerObj.phoneNumber02
+              : " - "
               }}
             </p>
           </div>

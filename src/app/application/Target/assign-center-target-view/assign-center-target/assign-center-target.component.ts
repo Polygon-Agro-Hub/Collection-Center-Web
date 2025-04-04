@@ -15,12 +15,15 @@ import { ToastAlertService } from '../../../../services/toast-alert/toast-alert.
 export class AssignCenterTargetComponent implements OnInit {
   @Input() centerDetails!: CenterDetails;
   assignCropsArr: AssignCrops[] = [];
+  newTargetObj: NewTarget = new NewTarget();
 
-  isFormValid: boolean = false;
+  isFormValid: boolean = true;
   countCrops: number = 0;
   searchText: string = '';
   selectDate: string = new Date().toISOString().split('T')[0];
   isNew: boolean = true;
+  companyCenterId!: number;
+  isLoading: boolean = false;
 
 
   constructor(
@@ -37,26 +40,59 @@ export class AssignCenterTargetComponent implements OnInit {
   fetchSavedCenterCrops() {
     this.TargetSrv.getSavedCenterCrops(this.centerDetails.centerId, this.selectDate).subscribe(
       (res) => {
-        this.assignCropsArr = res.data
-        this.countCrops = res.data.length
-        this.isNew = res.isNew
+        this.assignCropsArr = res.result.data
+        this.countCrops = res.result.data.length
+        this.isNew = res.result.isNew
+        this.companyCenterId = res.companyCenterId
       }
     )
   }
 
-  onSubmit() { }
+  onSubmit() { 
+    this.newTargetObj.companyCenterId = this.companyCenterId
+    this.newTargetObj.date = this.selectDate
+    this.newTargetObj.crop = this.assignCropsArr
+      
+    this.TargetSrv.addNewCenterTarget(this.newTargetObj).subscribe(
+      (res) => {
+        if (res.status) {
+          this.toastSrv.success(res.message)
+          // this.router.navigate(['/target/assign-center-target'])
+          this.fetchSavedCenterCrops();
+        }
+      }
+    )
+
+  }
+
+
   onCancel() { }
 
   onSearch() { }
   offSearch() { }
 
-  saveGrade(grade: string, item: any, price:number) {
-    if (grade === 'A') item.editingA = false;
-    if (grade === 'B') item.editingB = false;
-    if (grade === 'C') item.editingC = false;
+  saveGrade(grade: string, item: any, qty: number, editId: number | null) {
+    let data = {
+      id: editId,
+      qty: qty,
+      date: this.selectDate,
+      companyCenterId: this.companyCenterId,
+      grade: grade,
+      varietyId: item.varietyId
+    }
 
-    console.log(`Saving grade ${grade} for`, item ,price);
+    this.TargetSrv.updateTargetQty(data).subscribe(
+      (res) => {
+        if (res.status) {
+          this.toastSrv.success(res.message)
+          this.fetchSavedCenterCrops()
+          if (grade === 'A') item.editingA = false;
+          if (grade === 'B') item.editingB = false;
+          if (grade === 'C') item.editingC = false;
+        }
 
+      }
+    )
   }
 
 }
@@ -76,5 +112,15 @@ class AssignCrops {
   editingA: boolean = false;
   editingB: boolean = false;
   editingC: boolean = false;
+  idA: number | null = null;
+  idB: number | null = null;
+  idC: number | null = null;
+}
+
+class NewTarget{
+  companyCenterId!: number;
+  date!: string;
+  crop!:AssignCrops[]
+
 }
 

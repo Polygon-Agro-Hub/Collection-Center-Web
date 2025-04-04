@@ -11,7 +11,7 @@
                 <div
                     class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
 
-                    <input type="date" [(ngModel)]="selectDate" name="selectDate"
+                    <input type="date" [(ngModel)]="selectDate" name="selectDate" (change)="fetchSavedCenterCrops()"
                         class="block w-auto appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none cursor-pointer" />
                 </div>
             </div>
@@ -66,12 +66,12 @@
                         <!-- Grade A Column -->
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
                             <input type="number" [(ngModel)]="item.targetA" name="targetA" min="0"
-                                class="border-[#415CFF] border-[2px] border-dotted rounded-lg w-20 px-2 py-1 mr-4" />
+                                class="border-[#415CFF] border-[2px] border-dotted rounded-lg w-20 px-2 py-1 mr-4" [disabled]="!isNew && !item.editingA"/>
                             <button *ngIf="!isNew && !item.editingA" (click)="item.editingA = true">
                                 <i class="fa-solid fa-pen-to-square text-[#415CFF] text-xl"></i>
                             </button>
                             <button *ngIf="!isNew && item.editingA" class="bg-[#415CFF] px-3 py-2 text-white rounded-lg"
-                                (click)="saveGrade('A', item, item.targetA)">
+                                (click)="saveGrade('A', item, item.targetA, item.idA)">
                                 Save
                             </button>
                         </td>
@@ -79,12 +79,12 @@
                         <!-- Grade B Column -->
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
                             <input type="number" [(ngModel)]="item.targetB" name="targetB" min="0"
-                                class="border-[#415CFF] border-[2px] border-dotted rounded-lg w-20 px-2 py-1 mr-4" />
+                                class="border-[#415CFF] border-[2px] border-dotted rounded-lg w-20 px-2 py-1 mr-4" [disabled]="!isNew && !item.editingB"/>
                             <button *ngIf="!isNew && !item.editingB" (click)="item.editingB = true">
                                 <i class="fa-solid fa-pen-to-square text-[#415CFF] text-xl"></i>
                             </button>
                             <button *ngIf="!isNew && item.editingB" class="bg-[#415CFF] px-3 py-2 text-white rounded-lg"
-                                (click)="saveGrade('B', item, item.targetA)">
+                                (click)="saveGrade('B', item, item.targetA, item.idB)">
                                 Save
                             </button>
                         </td>
@@ -92,12 +92,12 @@
                         <!-- Grade C Column -->
                         <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
                             <input type="number" [(ngModel)]="item.targetC" name="targetC" min="0"
-                                class="border-[#415CFF] border-[2px] border-dotted rounded-lg w-16 px-2 py-1 mr-4" />
+                                class="border-[#415CFF] border-[2px] border-dotted rounded-lg w-16 px-2 py-1 mr-4" [disabled]="!isNew && !item.editingC"/>
                             <button *ngIf="!isNew && !item.editingC" (click)="item.editingC = true">
                                 <i class="fa-solid fa-pen-to-square text-[#415CFF] text-xl"></i>
                             </button>
                             <button *ngIf="!isNew && item.editingC" class="bg-[#415CFF] px-3 py-2 text-white rounded-lg"
-                                (click)="saveGrade('C', item, item.targetA)">
+                                (click)="saveGrade('C', item, item.targetA, item.idC)">
                                 Save
                             </button>
                         </td>

@@ -113,4 +113,49 @@ export class ReportServiceService {
     });
   }
 
+  getAllPayments(
+    page: number = 1, 
+    limit: number = 10, 
+    searchText: string = '', 
+    selectcenter: string = '', 
+    date: string = ''
+  ): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+  
+    let url = `${this.apiUrl}/get-all-payments?page=${page}&limit=${limit}`;
+  
+    if (searchText) {
+      url += `&searchText=${searchText}`;
+    }
+  
+    if (selectcenter) {
+      url += `&center=${selectcenter}`;
+    }
+  
+    if (date) {
+      // Check if date is in YYYY-MM format (month filter)
+      if (/^\d{4}-\d{2}$/.test(date)) {
+        url += `&month=${date}`;
+      } 
+      // Else it's in YYYY-MM-DD format (date filter)
+      else {
+        url += `&date=${date}`;
+      }
+    }
+  
+    return this.http.get(url, { headers });
+  }
+
 }
+
+
+// if (status) {
+    //   url += `&status=${status}`
+    // }
+
+    // if (role) {
+    //   url += `&role=${role}`
+    // }

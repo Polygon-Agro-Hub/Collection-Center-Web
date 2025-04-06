@@ -40,6 +40,7 @@ import { ViewCenterTargetComponent } from './application/Target/view-center-targ
 import { PendingChangesGuard } from './guards/can-deactivate.guard';
 import { AssignCenterTargetViewComponent } from './application/Target/assign-center-target-view/assign-center-target-view/assign-center-target-view.component';
 import { ReportDashboardComponent } from './application/Report/report-dashboard/report-dashboard.component';
+import { CollectionReportsComponent } from './application/Report/collection-reports/collection-reports.component';
 
 export const routes: Routes = [
     {
@@ -121,13 +122,19 @@ export const routes: Routes = [
             {
                 path: 'reports',
                 children: [
+                    
+                    {
+                        path: '',
+                        component: ReportDashboardComponent
+                    },
                     {
                         path: 'officer-reports',
                         component: SelectReportComponent
                     },
+
                     {
-                        path: '',
-                        component: ReportDashboardComponent
+                        path: 'collection-reports',
+                        component: CollectionReportsComponent
                     },
                     {
                         path: 'collection-monthly-report/:id',

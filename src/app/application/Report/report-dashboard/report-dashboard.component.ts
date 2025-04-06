@@ -39,7 +39,7 @@ export class ReportDashboardComponent {
   navigateToCollectionReport() {
     if (this.isCollectionReportClicked) {
       console.log('collection repport, ', this.isCollectionReportClicked);
-      // this.router.navigate(['reports/collection-reports']);
+      this.router.navigate(['reports/collection-reports']);
     }
   }
 

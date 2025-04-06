@@ -1,0 +1,39 @@
+<!-- <app-loading-spinner *ngIf="isLoading"/> -->
+
+<div *ngIf="!isLoading">
+
+    <div class="flex flex-row items-center gap-6 font-semibold text[#424242] dark:text-white mb-5 mx-5 cursor-pointer">
+        <p onclick="history.back()">Reports</p>
+        <!-- <p onclick="history.back()">Officer Reports</p> -->
+        <p>Collection Reports</p>
+    </div>
+
+    <div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg mt-6">
+        <div class="flex flex-row justify-between items-center">
+            <div class="flex flex-row gap-6">
+                <div class="flex flex-row items-center gap-2 border-[2px] rounded-2xl px-4 py-2 cursor-pointer dark:text-textDark dark:bg-[#292929]"
+                    [ngClass]="{'text-[#415CFF] border-[rgb(65,92,255)]': isSelectExpenses}" (click)="selectExpenses()">
+                    <i *ngIf="isSelectExpenses" class="fa-solid fa-check"></i>
+                    <p>Expenses</p>
+                </div>
+
+                <div class="flex flex-row items-center gap-2 border-[2px] rounded-2xl px-4 py-2 cursor-pointer dark:text-textDark dark:bg-[#292929]"
+                    [ngClass]="{'text-[#415CFF] border-[#415CFF]': isSelectCollection}" (click)="selectCollection()">
+                    <i *ngIf="isSelectCollection" class="fa-solid fa-check"></i>
+                    <p>Collection</p>
+                </div>
+            </div>
+
+            <!-- <button class="bg-[#415CFF] text-white font-semibold px-4 py-2 rounded-lg" (click)="openAddComplaint()">Add
+                Complaint</button> -->
+
+        </div>
+
+        <hr class="my-8 border-[1px] border-[#7F7F7F]" />
+
+        <app-expenses *ngIf="isSelectExpenses" />
+
+        <!-- <app-cch-send-complaint *ngIf="isSelectSent" /> -->
+    </div>
+    
+</div>

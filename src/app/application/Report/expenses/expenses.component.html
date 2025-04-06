@@ -1,0 +1,174 @@
+<app-loading-spinner *ngIf="isLoading"/>
+
+
+<div *ngIf="!isLoading">
+
+    <div class="w-full px-10 pb-7 pt-4 bg-tileLight dark:bg-[#363636] rounded-lg overflow-x-auto">
+        <div class="flex flex-row items-center justify-between">
+            <div class="flex flex-row gap-4">
+                <div class="flex flex-col justify-between flex-shrink-0">
+                    <p class="font-semibold mb-1 text-lg dark:text-white whitespace-nowrap">All Transactions 
+                        ( {{totalItems}} )</p>
+                </div>
+            </div>
+            
+            <div class="flex flex-row items-center gap-5 ">
+                <i class="fa-solid fa-list text-2xl dark:text-white ml-8"></i>
+
+                <p class="font-normal dark:text-white">Filter By</p>
+
+                <div class="relative w-46">
+                    <div class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
+                        <select [(ngModel)]="selectMonth" (change)="applyMonthFilters()"
+                            class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer"
+                            [disabled]="customDateSelected">
+                            <option value="" selected disabled>Month</option>
+                            <option *ngFor="let month of months" [value]="month.value"
+                                class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">
+                                {{month.name}}
+                            </option>
+                        </select>
+                
+                        <!-- Down arrow icon -->
+                        <div *ngIf="!selectMonth && !customDateSelected"
+                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
+                            <i class="fa-solid fa-angle-down text-lg mr-3"></i>
+                        </div>
+                
+                        <!-- Cancel icon -->
+                        <div (click)="clearMonthFilters()" *ngIf="selectMonth"
+                            class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300 cursor-pointer z-10">
+                            <i class="fa-solid fa-xmark text-lg mr-3"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-46">
+                    <div class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
+                        <input 
+                            type="date" 
+                            [(ngModel)]="selectedDate" 
+                            (change)="applyDateFilter()"
+                            class="block appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none cursor-pointer"
+                        >
+                        <!-- Cancel icon for date -->
+                        <div (click)="clearDateFilter()" *ngIf="customDateSelected"
+                            class="absolute inset-y-0 right-0 flex items-center px-1.5 text-gray-700 dark:text-gray-300 cursor-pointer z-10">
+                            <i class="fa-solid fa-xmark text-lg mr-3"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="relative w-46">
+                    <div
+                        class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
+                        <select [(ngModel)]="selectCenters" (change)="applyCompanyFilters()"
+                            class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer">
+                            <option value="" selected disabled>Centers</option>
+                            <option *ngFor="let item of centerArr"
+                                class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                                [value]="item.id">{{item.regCode}} - {{item.centerName}}</option>
+                        </select>
+
+                        <!-- Down arrow icon -->
+                        <div *ngIf="!selectCenters"
+                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
+                            <i class="fa-solid fa-angle-down text-lg mr-3"></i>
+                        </div>
+
+                        <!-- Cancel icon -->
+                        <div (click)="clearCompanyFilter()" *ngIf="selectCenters"
+                            class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300 cursor-pointer z-10">
+                            <i class="fa-solid fa-xmark text-lg mr-3"></i>
+                        </div>
+                    </div>
+                </div>
+
+               
+
+                <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+                    <input type="text" placeholder="Search..." [(ngModel)]="searchText"
+                        (keyup.enter)="onSearch()" (keyup.esc)="offSearch()"
+                        class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
+                    <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
+                        (click)="onSearch()">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
+                        </svg>
+                    </button>
+                    <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none"
+                        (click)="offSearch()">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div class="text-lg font-medium">
+            <p class="font-semibold mb-1 text-lg dark:text-white whitespace-nowrap">
+                <span class="text-gray-500 dark:textDark">Total : </span>Rs {{ totalPaymentsAmount.toFixed(2) }}
+            </p>
+        </div>
+
+        <div *ngIf="!hasData" class="flex justify-center items-center mt-8 mr-5 w-full h-[500px] dark:bg-[#292929]">
+            <p class="text-3xl text-center font-semibold dark:text-white">No Data Availabale</p>
+        </div>
+
+        <div *ngIf="hasData" class="min-w-max mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+            <table class="w-full min-w-max divide-y-2 border-[1px] border-gray-300 rounded-lg overflow-hidden">
+                <thead class=" dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] text-[#4B5563]">
+                    <tr>
+                        <th class="px-2 py-3 text-left text-sm font-medium">No</th>
+                        <th class="px-3 py-3 text-left text-sm font-medium">GRN No</th>
+                        <th class="px-3 py-3 text-left text-sm font-medium">Amount (Rs.)</th>
+                        <th class="px-3 py-3 text-left text-sm font-medium">Center Code</th>
+                        <th class="px-3 py-3 text-left text-sm font-medium ">Center Name</th>
+                        <th class="px-3 py-3 text-center text-sm font-medium ">Farmer NIC</th>
+                        <th class="px-3 py-3 text-center text-sm font-medium">Collected Time</th>
+                        <th class="px-3 py-3 text-center text-sm font-medium"></th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white text-[#000000] font-semibold dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
+                    <tr *ngFor="let item of farmerPaymentsArr | paginate
+                : {
+                    itemsPerPage: itemsPerPage,
+                    currentPage: page,
+                    totalItems: totalItems
+                  };  let i = index">
+                        <td class="px-2 py-4 text-sm text-gray-900 dark:text-gray-300 ">
+                            {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i + 1)
+                                : (((page - 1) * itemsPerPage) + i + 1) }} </td>
+                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.invNo}}</td>
+                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300 ">
+                            {{item.totalAmount | number:'1.2-2'}}
+                          </td>
+                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.centerCode}}</td>
+                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.centerName}}</td>
+                        <td class="px-3 py-4 text-sm text-center text-gray-900 dark:text-gray-300">{{item.nic}}</td>
+                        <td class="px-3 py-4 text-center text-[#646464] dark:text-gray-300">
+                            <span class="block">{{ item.createdAt | date:'MMM d, y' }}</span>
+                            <span class="block">{{ item.createdAt | date:'h:mm a' }}</span>
+                          </td>
+                        <td class="px-3 py-4 text-center dark:text-gray-300">
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[#415CFF]"></i>
+                        </td>         
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#262f45] text-right">
+            <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
+                [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
+                [screenReaderCurrentLabel]="'Youre on page'">
+            </pagination-controls>
+        </div>
+    </div>
+</div>

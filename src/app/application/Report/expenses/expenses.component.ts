@@ -7,6 +7,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { ManageOfficersService } from '../../../services/manage-officers-service/manage-officers.service';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
+import Swal from 'sweetalert2';
 @Component({
   selector: 'app-expenses',
   standalone: true,
@@ -38,6 +39,8 @@ export class ExpensesComponent implements OnInit {
   isPopupVisible: boolean = false;
   logingRole: string | null = null;
   isLoading: boolean = true;
+
+  isDownloading = false;
 
   months = [
     { value: '01', name: 'January' },
@@ -162,12 +165,26 @@ export class ExpensesComponent implements OnInit {
   }
 
   applyMonthFilters() {
-    if (this.customDateSelected) {
-      this.selectMonth = '';
+    // Get current date in the same format as selectedDate (YYYY-MM-DD)
+    const currentDateFormatted = this.formatDateForInput(new Date());
+    
+    if (this.customDateSelected || 
+        (!this.customDateSelected && this.selectedDate === currentDateFormatted)) {
+      // Temporarily show the selected month value
+      const selectedMonthValue = this.selectMonth;
+      
       this.toastSrv.error('Please clear date filter before selecting month');
-      // Reset month selection
+      
+      // Delay clearing the month to make it visible briefly
+      setTimeout(() => {
+        this.selectMonth = '';
+      }, 300); // 300ms delay - adjust as needed
+      
+      // Set it back temporarily so user sees their selection
+      this.selectMonth = selectedMonthValue;
       return;
     }
+    
     this.selectedDate = '';
     this.fetchAllPayments();
   }
@@ -192,9 +209,9 @@ export class ExpensesComponent implements OnInit {
     this.fetchAllPayments();
   }
   
-  clearDateFilter() {
+  clearDateFilter(): void {
     this.customDateSelected = false;
-    this.selectedDate = this.formatDateForInput(new Date());
+    this.selectedDate = ''; // Completely clear the date instead of setting to current date
     this.fetchAllPayments();
   }
 
@@ -216,6 +233,8 @@ export class ExpensesComponent implements OnInit {
     this.customDateSelected = true;
     this.fetchAllPayments();
   }
+
+ 
 }
 
 class FarmerPayments {

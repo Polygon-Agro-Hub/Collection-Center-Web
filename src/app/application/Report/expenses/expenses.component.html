@@ -21,7 +21,7 @@
                     <div class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
                         <select [(ngModel)]="selectMonth" (change)="applyMonthFilters()"
                             class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer"
-                            [disabled]="customDateSelected">
+                            >
                             <option value="" selected disabled>Month</option>
                             <option *ngFor="let month of months" [value]="month.value"
                                 class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">
@@ -170,5 +170,8 @@
                 [screenReaderCurrentLabel]="'Youre on page'">
             </pagination-controls>
         </div>
+
+        
     </div>
 </div>
+

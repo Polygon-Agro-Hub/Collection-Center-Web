@@ -149,7 +149,7 @@ export class ViewDailyTargetComponent implements OnInit {
   }
 
   navigateToAssignTarget(varietyId:number, companyCenterId:number) {
-    // this.router.navigate([`/target/assing-target/${id}`]);
+    this.router.navigate([`/target/assing-target/${varietyId}/${companyCenterId}`]);
   }
 
   navigateToEditAssignTarget(varietyId:number, companyCenterId:number) {

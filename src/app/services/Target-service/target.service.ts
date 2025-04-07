@@ -151,12 +151,12 @@ export class TargetService {
     return this.http.get<any>(url, { headers });
   }
 
-  getTargetVerity(id: number): Observable<any> {
+  getTargetVerity(varietyId:number, companyCenterId:number): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
 
-    let url = `${this.apiUrl}/get-target-verity/${id}`;
+    let url = `${this.apiUrl}/get-target-verity/${varietyId}/${companyCenterId}`;
 
     return this.http.get<any>(url, { headers });
   }

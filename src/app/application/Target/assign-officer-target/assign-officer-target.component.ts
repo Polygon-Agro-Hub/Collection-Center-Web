@@ -27,7 +27,8 @@ export class AssignOfficerTargetComponent implements OnInit {
   totTargetB: number = 0;
   totTargetC: number = 0;
 
-  targetId!: number;
+  varietyId!: number;
+  companyCenterId!: number;
 
   isLoading: boolean = true;
 
@@ -43,13 +44,14 @@ export class AssignOfficerTargetComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.targetId = this.route.snapshot.params['id'];
+    this.varietyId = this.route.snapshot.params['varietyId'];
+    this.companyCenterId = this.route.snapshot.params['companyCenterId'];
     this.fetchTargetVerity();
   }
 
   fetchTargetVerity() {
     this.isLoading = true;
-    this.targetSrv.getTargetVerity(this.targetId).subscribe(
+    this.targetSrv.getTargetVerity(this.varietyId, this.companyCenterId).subscribe(
       (res) => {
 
         console.log(res);
@@ -66,6 +68,10 @@ export class AssignOfficerTargetComponent implements OnInit {
           targetB: officer.targetB ?? 0,
           targetC: officer.targetC ?? 0,
         }));
+
+        this.AssignTargetObj.dailyTargetsIds.idA = res.crop.idA;
+        this.AssignTargetObj.dailyTargetsIds.idB = res.crop.idB;
+        this.AssignTargetObj.dailyTargetsIds.idC = res.crop.idC;
 
         this.isLoading = false;
 
@@ -122,7 +128,7 @@ export class AssignOfficerTargetComponent implements OnInit {
         title: 'dark:text-white',
 
         icon: '',
-        confirmButton: 'hover:bg-red-600 dark:hover:bg-red-700 focus:ring-red-500 dark:focus:ring-red-800' ,
+        confirmButton: 'hover:bg-red-600 dark:hover:bg-red-700 focus:ring-red-500 dark:focus:ring-red-800',
         cancelButton: 'hover:bg-blue-600 dark:hover:bg-blue-700 focus:ring-blue-500 dark:focus:ring-blue-800',
         actions: 'gap-2'
       }
@@ -130,7 +136,7 @@ export class AssignOfficerTargetComponent implements OnInit {
       if (result.isConfirmed) {
 
         this.toastSrv.warning('Assign Officer Target Operation Canceled.')
-        this.location.back(); 
+        this.location.back();
       }
     });
   }
@@ -172,15 +178,19 @@ export class AssignOfficerTargetComponent implements OnInit {
 }
 
 class TargetVerity {
-  id!: number;
+  idA: number | null = null;
+  idB: number | null = null;
+  idC: number | null = null;
   varietyId!: number;
   cropNameEnglish!: string;
   varietyNameEnglish!: string;
   qtyA!: number;
   qtyB!: number;
   qtyC!: number;
+  companyCenterId!: number
+
+  id!: number;
   toDate!: Date;
-  toTime!: Date;
   formattedToDate!: string;
 }
 
@@ -193,16 +203,26 @@ class Officer {
   targetA: number = 0;
   targetB: number = 0;
   targetC: number = 0;
+  idA:number | null = null;
+  idB:number | null = null;
+  idC:number | null = null;
 }
 
 class AssignTarget {
   id!: number;
   varietyId!: number;
   OfficerData!: Officer[];
+  dailyTargetsIds: DailyTargetsIds = new DailyTargetsIds();
 }
 
 class InputData {
   targetA: number = 0;
   targetB: number = 0;
   targetC: number = 0;
+}
+
+class DailyTargetsIds {
+  idA: number | null = null;
+  idB: number | null = null;
+  idC: number | null = null;
 }

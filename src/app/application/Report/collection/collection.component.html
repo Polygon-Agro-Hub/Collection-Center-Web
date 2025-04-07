@@ -7,7 +7,7 @@
         <div class="flex flex-row items-center justify-between">
             <div class="flex flex-row gap-4">
                 <div class="flex flex-col justify-between flex-shrink-0">
-                    <p class="font-semibold mb-1 text-lg dark:text-white whitespace-nowrap">All Transactions 
+                    <p class="font-semibold mb-1 text-lg dark:text-white whitespace-nowrap">All 
                         ( {{totalItems}} )</p>
                 </div>
             </div>
@@ -112,36 +112,31 @@
 
         </div>
 
-        <div class="flex justify-between items-center mb-5 mt-3"> <!-- Changed this line -->
-            <div class="text-lg font-medium">
-                <p class="font-semibold mb-1 text-lg dark:text-white whitespace-nowrap">
-                    <span class="text-gray-500 dark:textDark">Total : </span>Rs {{ totalPaymentsAmount | number:'1.2-2' }}
-                </p>
-            </div>
-            
-            <button class="bg-[#415CFF] text-white shadow-md font-medium rounded-lg py-2 px-5 mr-5 text-lg flex items-center" 
-                    (click)="downloadTemplate1()">
+        <div class="flex text-center mt-3 justify-end">
+            <button class="bg-[#415CFF] mr-5 rounded-lg shadow-md text-white font-medium py-2 px-5 text-lg flex mb-5 items-center" (click)="downloadTemplate1()">
                 <i class="fa-solid fa-download px-2" *ngIf="!isDownloading"></i>
                 <i class="fa-solid fa-spinner fa-spin px-2" *ngIf="isDownloading"></i>
                 {{ isDownloading ? " Downloading..." : " Download" }}
-            </button>
+              </button>
         </div>
-        <div *ngIf="!hasData" class="flex justify-center items-center mt-8 mr-5 h-[500px] dark:bg-[#292929] ">
+
+        <div *ngIf="!hasData" class="flex justify-center items-center mt-4 mr-5 h-[500px] dark:bg-[#292929]">
             <p class="text-3xl text-center font-semibold dark:text-white">No Data Availabale</p>
         </div>
 
-        <div *ngIf="hasData" class="min-w-max mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+        <div *ngIf="hasData" class="min-w-max mt-4 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
             <table class="w-full min-w-max divide-y-2 border-[1px] border-gray-300 rounded-lg overflow-hidden">
                 <thead class=" dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] text-[#4B5563]">
                     <tr>
                         <th class="px-2 py-3 text-left text-sm font-medium">No</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium">GRN No</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium">Amount (Rs.)</th>
                         <th class="px-3 py-3 text-left text-sm font-medium">Center Code</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium ">Center Name</th>
-                        <th class="px-3 py-3 text-center text-sm font-medium ">Farmer NIC</th>
-                        <th class="px-3 py-3 text-center text-sm font-medium">Collected Time</th>
-                        <th class="px-3 py-3 text-center text-sm font-medium"></th>
+                        <th class="px-3 py-3 text-left text-sm font-medium">Center Name</th>
+                        <th class="px-3 py-3 text-left text-sm font-medium">Crop</th>
+                        <th class="px-3 py-3 text-center text-sm font-medium ">Variety</th>
+                        <th class="px-3 py-3 text-center text-sm font-medium ">Quantity A (kg)</th>
+                        <th class="px-3 py-3 text-center text-sm font-medium">Quantity A (kg)</th>
+                        <th class="px-3 py-3 text-center text-sm font-medium">Quantity A (kg)</th>
+                        <th class="px-3 py-3 text-center text-sm font-medium">Total (kg)</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white text-[#000000] font-semibold dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
@@ -154,20 +149,20 @@
                         <td class="px-2 py-4 text-sm text-gray-900 dark:text-gray-300 ">
                             {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i + 1)
                                 : (((page - 1) * itemsPerPage) + i + 1) }} </td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.invNo}}</td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300 ">
-                            {{item.totalAmount | number:'1.2-2'}}
-                          </td>
                         <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.centerCode}}</td>
                         <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.centerName}}</td>
-                        <td class="px-3 py-4 text-sm text-center text-gray-900 dark:text-gray-300">{{item.nic}}</td>
-                        <td class="px-3 py-4 text-center text-[#646464] dark:text-gray-300">
-                            <span class="block">{{ item.createdAt | date:'MMM d, y' }}</span>
-                            <span class="block">{{ item.createdAt | date:'h:mm a' }}</span>
+                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">
+                            {{ item.cropNameEnglish || '-' }}
                           </td>
+                          <td class="px-3 py-4 text-sm text-center text-gray-900 dark:text-gray-300">
+                            {{ item.varietyNameEnglish || '-' }}
+                          </td>
+                        <td class="px-3 py-4 text-center dark:text-gray-300">{{item.totalGradeAQuantity}}</td>
+                        <td class="px-3 py-4 text-center dark:text-gray-300">{{item.totalGradeBQuantity}}</td>
+                        <td class="px-3 py-4 text-center dark:text-gray-300">{{item.totalGradeCQuantity}}</td>
                         <td class="px-3 py-4 text-center dark:text-gray-300">
-                            <i class="fa-solid fa-arrow-up-right-from-square text-[#415CFF]"></i>
-                        </td>         
+                            {{ item.totalQuantity }}
+                          </td>            
                     </tr>
                 </tbody>
             </table>
@@ -178,6 +173,8 @@
                 [screenReaderCurrentLabel]="'Youre on page'">
             </pagination-controls>
         </div>
+
+        
     </div>
 </div>
 

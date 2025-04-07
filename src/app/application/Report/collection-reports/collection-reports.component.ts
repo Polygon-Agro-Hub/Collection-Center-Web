@@ -6,12 +6,13 @@ import { ExpensesComponent } from '../expenses/expenses.component';
 import { ComplaintsService } from '../../../services/Complaints-Service/complaints.service';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
+import { CollectionComponent } from '../collection/collection.component';
 
 @Component({
   selector: 'app-collection-reports',
   standalone: true,
   imports: [
-    CommonModule, FormsModule, ExpensesComponent, LoadingSpinnerComponent
+    CommonModule, FormsModule, ExpensesComponent, LoadingSpinnerComponent, CollectionComponent
   ],
   templateUrl: './collection-reports.component.html',
   styleUrl: './collection-reports.component.css'

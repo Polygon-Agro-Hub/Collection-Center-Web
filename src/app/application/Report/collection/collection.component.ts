@@ -9,15 +9,19 @@ import { ManageOfficersService } from '../../../services/manage-officers-service
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import Swal from 'sweetalert2';
 import { environment } from '../../../environments/environment';
+
+
 @Component({
-  selector: 'app-expenses',
+  selector: 'app-collection',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent],
-  templateUrl: './expenses.component.html',
-  styleUrl: './expenses.component.css',
+  imports: [
+    CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent
+  ],
+  templateUrl: './collection.component.html',
+  styleUrl: './collection.component.css',
   providers: [DatePipe]
 })
-export class ExpensesComponent implements OnInit {
+export class CollectionComponent implements OnInit {
 
   farmerPaymentsArr!: FarmerPayments[];
   centerArr: Center[] = [];
@@ -108,10 +112,19 @@ export class ExpensesComponent implements OnInit {
       dateToUse = this.customDateSelected ? this.selectedDate : this.formatDateForInput(new Date());
     }
 
-    this.ReportSrv.getAllPayments(page, limit, searchText, selectCompany, dateToUse).subscribe(
+    this.ReportSrv.getAllCollections(page, limit, searchText, selectCompany, dateToUse).subscribe(
       (res) => {
-        console.log('this is ay', res);
-        this.farmerPaymentsArr = res.items;
+        console.log(res);
+        this.farmerPaymentsArr = res.items.map((item: FarmerPayments) => {
+          return {
+            ...item,
+            totalQuantity: (
+              Number(item.totalGradeAQuantity || 0) + 
+              Number(item.totalGradeBQuantity || 0) + 
+              Number(item.totalGradeCQuantity || 0)
+            ).toFixed(2)
+          };
+        });
         this.totalItems = res.total;
         this.hasData = res.items.length > 0;
         this.isLoading = false;
@@ -158,7 +171,6 @@ export class ExpensesComponent implements OnInit {
   }
 
   applyCompanyFilters() {
-    console.log(this.selectCenters);
     this.fetchAllPayments();
   }
 
@@ -251,7 +263,7 @@ export class ExpensesComponent implements OnInit {
     } 
 
     this.isDownloading = true;
-    const apiUrl = `${environment.API_BASE_URL}/report/download-payment-report?createdDate=${this.selectedDate}`;
+    const apiUrl = `${environment.API_BASE_URL}/report/download-collection-report?createdDate=${this.selectedDate}`;
 
     // Trigger the download
     fetch(apiUrl, {
@@ -272,7 +284,7 @@ export class ExpensesComponent implements OnInit {
         // Create a temporary anchor element to trigger the download
         const a = document.createElement("a");
         a.href = url;
-        a.download = `Daily Payment Expenses Report (${this.selectedDate}).xlsx`;
+        a.download = `Daily Collection Report (${this.selectedDate}).xlsx`;
         a.click();
 
         // Revoke the URL after the download is triggered
@@ -297,7 +309,7 @@ export class ExpensesComponent implements OnInit {
       });
   }
 
- 
+
 }
 
 class FarmerPayments {
@@ -305,17 +317,17 @@ class FarmerPayments {
   totalAmount!: number;
   centerCode!: string;
   centerName!: string;
+  cropNameEnglish!: string;
+  varietyNameEnglish!: string;
   nic!: string;
   firstNameEnglish!: string;
-  gradeAprice!: number;
-  gradeBprice!: number;
-  gradeCprice!: number;
-  gradeAquan!: number;
-  gradeBquan!: number;
-  gradeCquan!: number;
+  totalGradeAQuantity!: number;
+  totalGradeBQuantity!: number;
+  totalGradeCQuantity!: number;
   status!: string;
   createdAt!: string | Date;
   companyId!: number;
+  totalQuantity!: number;
 }
 
 class Center {
@@ -323,3 +335,4 @@ class Center {
   centerName!: string;
   regCode!: string;
 }
+

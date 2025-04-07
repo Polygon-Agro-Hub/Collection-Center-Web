@@ -166,10 +166,10 @@
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.varietyNameEnglish}}</td>
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.grade}}</td>
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
-                            {{ item.TargetQty === '0.00' ? 'Not Set' : item.TargetQty }}
+                            {{ item.target === 0.00 ? 'Not Set' : item.target }}
                         </td>
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
-                            {{ item.CompleteQty === '0.00' ? 'Empty' : item.CompleteQty }}
+                            {{ item.complete === 0.00 ? 'Empty' : item.complete }}
                         </td>
                         
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300 flex justify-center items-center">
@@ -184,8 +184,8 @@
                         </td>
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
                             <div class="flex flex-col items-start justify-start">
-                                <p class="text-sm text-[#646464]">{{item.toDate}}</p>
-                                <p class="text-sm text-[#646464] my-1">{{formatTime(item.toTime) }}</p>
+                                <p class="text-sm text-[#646464]">{{formatDate(item.date)}}</p>
+                                <!-- <p class="text-sm text-[#646464] my-1">{{formatTime(item.toTime) }}</p> -->
                             </div>
                         </td>
                         <!-- <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
@@ -244,21 +244,21 @@
                         <td class="px-6 py-4 text-black dark:text-gray-300 ">{{item.qtyB}}</td>
                         <td class="px-6 py-4 text-black dark:text-gray-300 ">{{item.qtyC}}</td>
                         <td class="px-6 py-4 text-black dark:text-gray-300 text-lg">
-                            <p class="text-[#646464] text-sm">{{ item.toDate }}</p>
-                            <p class="text-[#646464] text-sm">{{ formatTime(item.toTime) }}</p>
+                            <p class="text-[#646464] text-sm">{{ formatDate(item.toDate )}}</p>
+                            <!-- <p class="text-[#646464] text-sm">{{ formatTime(item.toTime) }}</p> -->
                         </td>
                         <td class="px-6 py-4 text-black-900 dark:text-gray-300 ">
-                            <span *ngIf="item.isAssign === 0">
+                            <span *ngIf="(item.assignStatusA === 0) && item.assignStatusB === 0 && item.assignStatusC === 0">
                                 <i class="fa-solid fa-users-gear text-blue-600 text-xl cursor-pointer"
-                                    (click)="navigateToAssignTarget(item.id)"></i>
+                                    (click)="navigateToAssignTarget(item.varietyId, item.companyCenterId)"></i>
                             </span>
-                            <span *ngIf="item.isAssign === 1">
+                            <span *ngIf="item.assignStatusA === 1  || item.assignStatusB === 1 || item.assignStatusC === 1">
                                 <i class="fa-solid fa-pen-to-square text-xl text-blue-600 cursor-pointer"
-                                    (click)="navigateToEditAssignTarget(item.id)"></i>
+                                    (click)="navigateToEditAssignTarget(item.varietyId, item.companyCenterId)"></i>
                             </span>
                         </td>
                         <td>
-                            <i class="fa-solid fa-circle-check text-2xl text-blue-600" *ngIf="item.isAssign === 1"></i>
+                            <i class="fa-solid fa-circle-check text-2xl text-blue-600" *ngIf="item.assignStatusA === 1  && item.assignStatusB === 1 && item.assignStatusC === 1"></i>
                         </td>
                     </tr>
                 </tbody>

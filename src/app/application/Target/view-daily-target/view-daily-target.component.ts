@@ -16,7 +16,7 @@ import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loa
 })
 export class ViewDailyTargetComponent implements OnInit {
 
-  
+
   targetArr!: DailyTargets[];
   assignTargetArr!: AssignDailyTarget[];
   searchText: string = '';
@@ -38,7 +38,7 @@ export class ViewDailyTargetComponent implements OnInit {
   isSelectPrograss = true;
   isSelectAssign = false;
 
-  isLoading: boolean = true;
+  isLoading: boolean = false;
 
   constructor(
     private router: Router,
@@ -47,8 +47,8 @@ export class ViewDailyTargetComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    
-    
+
+
     const date = new Date();
     const year = date.getFullYear();
     const month = ('0' + (date.getMonth() + 1)).slice(-2);
@@ -60,7 +60,7 @@ export class ViewDailyTargetComponent implements OnInit {
   }
 
   fetchAllTarget(page: number = 1, limit: number = this.itemsPerPage, search: string = this.searchText) {
-    this.isLoading = true;
+    // this.isLoading = true;
     this.TargetSrv.getAllDailyTarget(page, limit, search).subscribe(
       (res) => {
         this.targetArr = res.items;
@@ -71,7 +71,7 @@ export class ViewDailyTargetComponent implements OnInit {
         } else {
           this.hasData = false;
         }
-        this.isLoading = false;
+        // this.isLoading = false;
 
       }
     );
@@ -132,28 +132,28 @@ export class ViewDailyTargetComponent implements OnInit {
   }
 
   AssignAllDailyTarget(page: number = 1, limit: number = this.itemsPerPage) {
-    this.isLoading = true;
+    // this.isLoading = true;
     this.TargetSrv.AssignAllDailyTarget(page, limit).subscribe(
       (res) => {
-        this.assignTargetArr = res.items;
-        this.assignTotalItems = res.total;
-        if (res.items.length > 0) {
+        this.assignTargetArr = res;
+        // this.assignTotalItems = res.total;
+        if (res.length > 0) {
           this.assignHasData = true;
         } else {
           this.assignHasData = false;
         }
-        this.isLoading = false;
+        // this.isLoading = false;
 
       }
     );
   }
 
-  navigateToAssignTarget(id: number) {
-    this.router.navigate([`/target/assing-target/${id}`]);
+  navigateToAssignTarget(varietyId:number, companyCenterId:number) {
+    // this.router.navigate([`/target/assing-target/${id}`]);
   }
 
-  navigateToEditAssignTarget(id: number) {
-    this.router.navigate([`/target/edit-assing-target/${id}`]);
+  navigateToEditAssignTarget(varietyId:number, companyCenterId:number) {
+    // this.router.navigate([`/target/edit-assing-target/${id}`]);
   }
 
   formatTime(time: string): string {
@@ -165,29 +165,35 @@ export class ViewDailyTargetComponent implements OnInit {
     return `${hours}:${minutes} ${period}`;
   }
 
+  formatDate(date: string): string {
+    return new Date(date).toISOString().split('T')[0]
+  }
+
 
 }
 
 class AssignDailyTarget {
-  id!: number;
-  cropNameEnglish!: string;
-  varietyNameEnglish!: string;
-  qtyA!: string;
-  qtyB!: string;
-  qtyC!: string;
-  toDate!: Date;
-  toTime!: string;
-  fromTime!: Date;
-  isAssign!:number
+  cropNameEnglish!: string
+  varietyNameEnglish!: string
+  qtyA!: number
+  qtyB!: number
+  qtyC!: number
+  assignStatusA!: number
+  assignStatusB!: number
+  assignStatusC!: number
+  toDate!: string
+  varietyId!: number;
+  companyCenterId!: number;
 }
 
 class DailyTargets {
+  id!: number;
   cropNameEnglish!: string;
   varietyNameEnglish!: string;
-  toDate!: string;
-  toTime!: string;
   grade!: string;
-  TargetQty!: string;
-  CompleteQty!: string;
+  target!: number;
+  complete: number = 0;
+  assignStatus: number = 0;
   status!: string;
+  date: string = '';
 }

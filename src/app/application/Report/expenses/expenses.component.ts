@@ -8,6 +8,7 @@ import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loa
 import { ManageOfficersService } from '../../../services/manage-officers-service/manage-officers.service';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import Swal from 'sweetalert2';
+import { environment } from '../../../environments/environment';
 @Component({
   selector: 'app-expenses',
   standalone: true,
@@ -232,6 +233,66 @@ export class ExpensesComponent implements OnInit {
     this.selectedDate = newDate;
     this.customDateSelected = true;
     this.fetchAllPayments();
+  }
+
+  downloadTemplate1() {
+    this.selectCenters = '';
+    this.selectMonth = '';
+    this.searchText = '';
+    if (this.selectedDate === "") {
+      Swal.fire({
+        title: "Error!",
+        text: "Please select a date",
+        icon: "error",
+      })
+      return;
+    } 
+
+    this.isDownloading = true;
+    const apiUrl = `${environment.API_BASE_URL}/report/download-payment-report?createdDate=${this.selectedDate}`;
+
+    // Trigger the download
+    fetch(apiUrl, {
+      method: "GET",
+    })
+      .then((response) => {
+        if (response.ok) {
+          // Create a blob for the Excel file
+          return response.blob();
+        } else {
+          throw new Error("Failed to download the file");
+        }
+      })
+      .then((blob) => {
+        // Create a URL for the blob
+        const url = window.URL.createObjectURL(blob);
+
+        // Create a temporary anchor element to trigger the download
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `Daily Collection Report (${this.selectedDate}).xlsx`;
+        a.click();
+
+        // Revoke the URL after the download is triggered
+        window.URL.revokeObjectURL(url);
+
+        // Show success message
+        Swal.fire({
+          icon: "success",
+          title: "Downloaded",
+          text: "Please check your downloads folder",
+        });
+        this.isDownloading = false;
+      })
+      .catch((error) => {
+        // Handle errors
+        Swal.fire({
+          icon: "error",
+          title: "Download Failed",
+          text: error.message,
+        });
+        this.isDownloading = false;
+      });
   }
 
  

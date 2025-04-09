@@ -18,7 +18,7 @@ import { Location } from '@angular/common';
 
 })
 export class EditAssignOfficerTargetComponent {
-targetVerity: TargetVerity = new TargetVerity();
+  targetVerity: TargetVerity = new TargetVerity();
   officerArr!: Officer[];
   AssignTargetObj: AssignTarget = new AssignTarget();
 
@@ -31,7 +31,7 @@ targetVerity: TargetVerity = new TargetVerity();
   companyCenterId!: number;
 
 
-  isLoading: boolean = true;
+  isLoading: boolean = false;
 
 
   constructor(
@@ -58,7 +58,7 @@ targetVerity: TargetVerity = new TargetVerity();
 
         this.targetVerity = res.crop;
         console.log(this.targetVerity);
-        
+
 
         if (this.targetVerity && this.targetVerity.toDate) {
           this.targetVerity.formattedToDate = this.datePipe.transform(this.targetVerity.toDate, 'yyyy/MM/dd')!;
@@ -71,6 +71,7 @@ targetVerity: TargetVerity = new TargetVerity();
           targetC: officer.targetC ?? 0,
         }));
         this.checkTotals();
+        this.AssignTargetObj.targetIds = res.targetId        
 
         this.isLoading = false;
 
@@ -127,7 +128,7 @@ targetVerity: TargetVerity = new TargetVerity();
         title: 'dark:text-white',
 
         icon: '',
-        confirmButton: 'hover:bg-red-600 dark:hover:bg-red-700 focus:ring-red-500 dark:focus:ring-red-800' ,
+        confirmButton: 'hover:bg-red-600 dark:hover:bg-red-700 focus:ring-red-500 dark:focus:ring-red-800',
         cancelButton: 'hover:bg-blue-600 dark:hover:bg-blue-700 focus:ring-blue-500 dark:focus:ring-blue-800',
         actions: 'gap-2'
       }
@@ -135,7 +136,7 @@ targetVerity: TargetVerity = new TargetVerity();
       if (result.isConfirmed) {
 
         this.toastSrv.warning('Edit Assign Officer Target Operation Canceled.')
-        this.location.back(); 
+        this.location.back();
       }
     });
   }
@@ -175,7 +176,7 @@ targetVerity: TargetVerity = new TargetVerity();
     this.totTargetA = this.officerArr.reduce((sum, officer) => sum + (officer.targetA || 0), 0);
     this.totTargetB = this.officerArr.reduce((sum, officer) => sum + (officer.targetB || 0), 0);
     this.totTargetC = this.officerArr.reduce((sum, officer) => sum + (officer.targetC || 0), 0);
-  
+
     if (
       +this.totTargetA === +this.targetVerity.qtyA &&
       +this.totTargetB === +this.targetVerity.qtyB &&
@@ -214,22 +215,32 @@ class Officer {
   targetA: number = 0;
   targetB: number = 0;
   targetC: number = 0;
-  prevousTargetA:number = 0;
-  prevousTargetB:number = 0;
-  prevousTargetC:number = 0;
+  prevousTargetA: number = 0;
+  prevousTargetB: number = 0;
+  prevousTargetC: number = 0;
   targetAId: number | null = null;
   targetBId: number | null = null;
   targetCId: number | null = null;
+  dailyTargetIdA: number | null = null;
+  dailyTargetIdB: number | null = null;
+  dailyTargetIdC: number | null = null;
 }
 
 class AssignTarget {
   id!: number;
   varietyId!: number;
   OfficerData!: Officer[];
+  targetIds: TargetIds = new TargetIds();
 }
 
 class InputData {
   targetA: number = 0;
   targetB: number = 0;
   targetC: number = 0;
+}
+
+class TargetIds {
+  idA:number | null = null; 
+  idB:number | null = null; 
+  idC:number | null = null; 
 }

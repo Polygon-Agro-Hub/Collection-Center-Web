@@ -60,7 +60,7 @@ export class ViewDailyTargetComponent implements OnInit {
   }
 
   fetchAllTarget(page: number = 1, limit: number = this.itemsPerPage, search: string = this.searchText) {
-    // this.isLoading = true;
+    this.isLoading = true;
     this.TargetSrv.getAllDailyTarget(page, limit, search).subscribe(
       (res) => {
         this.targetArr = res.items;
@@ -71,7 +71,7 @@ export class ViewDailyTargetComponent implements OnInit {
         } else {
           this.hasData = false;
         }
-        // this.isLoading = false;
+        this.isLoading = false;
 
       }
     );
@@ -132,7 +132,7 @@ export class ViewDailyTargetComponent implements OnInit {
   }
 
   AssignAllDailyTarget(page: number = 1, limit: number = this.itemsPerPage) {
-    // this.isLoading = true;
+    this.isLoading = true;
     this.TargetSrv.AssignAllDailyTarget(page, limit).subscribe(
       (res) => {
         this.assignTargetArr = res;
@@ -142,7 +142,7 @@ export class ViewDailyTargetComponent implements OnInit {
         } else {
           this.assignHasData = false;
         }
-        // this.isLoading = false;
+        this.isLoading = false;
 
       }
     );

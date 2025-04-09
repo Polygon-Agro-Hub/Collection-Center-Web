@@ -41,6 +41,7 @@ export class ExpensesComponent implements OnInit {
   logingRole: string | null = null;
   isLoading: boolean = true;
 
+
   isDownloading = false;
 
   months = [
@@ -105,8 +106,10 @@ export class ExpensesComponent implements OnInit {
       const currentYear = new Date().getFullYear();
       dateToUse = `${currentYear}-${this.selectMonth}`; // Format: YYYY-MM
     } else {
-      dateToUse = this.customDateSelected ? this.selectedDate : this.formatDateForInput(new Date());
+      dateToUse = this.selectedDate;
     }
+
+    console.log('sending date', dateToUse)
 
     this.ReportSrv.getAllPayments(page, limit, searchText, selectCompany, dateToUse).subscribe(
       (res) => {
@@ -207,7 +210,9 @@ export class ExpensesComponent implements OnInit {
   clearMonthFilters() {
     this.selectMonth = '';
     // Reset to current date when month is cleared
-    this.selectedDate = this.formatDateForInput(new Date());
+    // this.selectedDate = this.formatDateForInput(new Date());
+    this.selectedDate = '';
+    console.log('month cleared', this.selectedDate );
     this.customDateSelected = false;
     this.fetchAllPayments();
   }
@@ -215,6 +220,7 @@ export class ExpensesComponent implements OnInit {
   clearDateFilter(): void {
     this.customDateSelected = false;
     this.selectedDate = ''; // Completely clear the date instead of setting to current date
+    console.log('date cleared', this.selectedDate );
     this.fetchAllPayments();
   }
 
@@ -227,20 +233,20 @@ export class ExpensesComponent implements OnInit {
     );
   }
 
-  onDateChange(newDate: string) {
-    if (this.selectMonth) {
-      this.toastSrv.error('Please clear month filter before selecting date');
-      return;
-    }
-    this.selectedDate = newDate;
-    this.customDateSelected = true;
-    this.fetchAllPayments();
-  }
+  // onDateChange(newDate: string) {
+  //   if (this.selectMonth) {
+  //     this.toastSrv.error('Please clear month filter before selecting date');
+  //     return;
+  //   }
+  //   this.selectedDate = newDate;
+  //   this.customDateSelected = true;
+  //   this.fetchAllPayments();
+  // }
 
   downloadTemplate1() {
-    this.selectCenters = '';
-    this.selectMonth = '';
-    this.searchText = '';
+    // this.selectCenters = '';
+    // this.selectMonth = '';
+    // this.searchText = '';
     if (this.selectedDate === "") {
       Swal.fire({
         title: "Error!",

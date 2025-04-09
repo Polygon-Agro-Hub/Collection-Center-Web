@@ -109,7 +109,7 @@ export class CollectionComponent implements OnInit {
       const currentYear = new Date().getFullYear();
       dateToUse = `${currentYear}-${this.selectMonth}`; // Format: YYYY-MM
     } else {
-      dateToUse = this.customDateSelected ? this.selectedDate : this.formatDateForInput(new Date());
+      dateToUse = this.selectedDate;
     }
 
     this.ReportSrv.getAllCollections(page, limit, searchText, selectCompany, dateToUse).subscribe(
@@ -250,9 +250,9 @@ export class CollectionComponent implements OnInit {
   }
 
   downloadTemplate1() {
-    this.selectCenters = '';
-    this.selectMonth = '';
-    this.searchText = '';
+    // this.selectCenters = '';
+    // this.selectMonth = '';
+    // this.searchText = '';
     if (this.selectedDate === "") {
       Swal.fire({
         title: "Error!",

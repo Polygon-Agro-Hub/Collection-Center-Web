@@ -148,11 +148,11 @@ export class ViewDailyTargetComponent implements OnInit {
     );
   }
 
-  navigateToAssignTarget(varietyId:number, companyCenterId:number) {
+  navigateToAssignTarget(varietyId: number, companyCenterId: number) {
     this.router.navigate([`/target/assing-target/${varietyId}/${companyCenterId}`]);
   }
 
-  navigateToEditAssignTarget(varietyId:number, companyCenterId:number) {
+  navigateToEditAssignTarget(varietyId: number, companyCenterId: number) {
     // this.router.navigate([`/target/edit-assing-target/${id}`]);
   }
 
@@ -184,6 +184,7 @@ class AssignDailyTarget {
   toDate!: string
   varietyId!: number;
   companyCenterId!: number;
+  isAssign!: number;
 }
 
 class DailyTargets {

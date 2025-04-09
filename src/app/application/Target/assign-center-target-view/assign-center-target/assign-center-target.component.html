@@ -87,7 +87,7 @@
                                 <i class="fa-solid fa-pen-to-square text-[#415CFF] text-xl"></i>
                             </button>
                             <button *ngIf="!isNew && item.editingB && isDateValid" class="bg-[#415CFF] px-3 py-2 text-white rounded-lg"
-                                (click)="saveGrade('B', item, item.targetA, item.idB)">
+                                (click)="saveGrade('B', item, item.targetB, item.idB)">
                                 Save
                             </button>
                         </td>
@@ -100,7 +100,7 @@
                                 <i class="fa-solid fa-pen-to-square text-[#415CFF] text-xl"></i>
                             </button>
                             <button *ngIf="!isNew && item.editingC && isDateValid" class="bg-[#415CFF] px-3 py-2 text-white rounded-lg"
-                                (click)="saveGrade('C', item, item.targetA, item.idC)">
+                                (click)="saveGrade('C', item, item.targetC, item.idC)">
                                 Save
                             </button>
                         </td>

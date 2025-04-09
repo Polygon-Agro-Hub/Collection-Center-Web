@@ -248,18 +248,22 @@
                             <!-- <p class="text-[#646464] text-sm">{{ formatTime(item.toTime) }}</p> -->
                         </td>
                         <td class="px-6 py-4 text-black-900 dark:text-gray-300 ">
-                            <span *ngIf="(item.assignStatusA === 0) && item.assignStatusB === 0 && item.assignStatusC === 0">
+                            <span *ngIf="item.isAssign === 0 && (item.assignStatusA === 0 && item.assignStatusB === 0 && item.assignStatusC === 0)">
                                 <i class="fa-solid fa-users-gear text-blue-600 text-xl cursor-pointer"
                                     (click)="navigateToAssignTarget(item.varietyId, item.companyCenterId)"></i>
                             </span>
-                            <span *ngIf="item.assignStatusA === 1  && item.assignStatusB === 1 && item.assignStatusC === 1">
+                            <span *ngIf="item.isAssign === 1 && (item.assignStatusA === 1  && item.assignStatusB === 1 && item.assignStatusC === 1)">
                                 <i class="fa-solid fa-pen-to-square text-xl text-blue-600 cursor-pointer"
+                                    (click)="navigateToEditAssignTarget(item.varietyId, item.companyCenterId)"></i>
+                            </span>
+                            <span *ngIf="item.isAssign === 1 && (item.assignStatusA === 0  || item.assignStatusB === 0 || item.assignStatusC === 0)">
+                                <i class="fa-solid fa-pen-to-square text-xl text-red-600 cursor-pointer"
                                     (click)="navigateToEditAssignTarget(item.varietyId, item.companyCenterId)"></i>
                             </span>
                         </td>
                         <td>
-                            <i class="fa-solid fa-circle-check text-2xl text-blue-600" *ngIf="item.assignStatusA === 1  && item.assignStatusB === 1 && item.assignStatusC === 1"></i>
-                            <!-- <i class="fa-solid fa-circle-check text-2xl text-[#EB3223]" *ngIf="item.assignStatusA === 0  || item.assignStatusB === 0 || item.assignStatusC === 0"></i> -->
+                            <i class="fa-solid fa-circle-check text-2xl text-blue-600" *ngIf="item.isAssign === 1 && (item.assignStatusA === 1  && item.assignStatusB === 1 && item.assignStatusC === 1)"></i>
+                            <i class="fa-solid fa-circle-check text-2xl text-[#EB3223]" *ngIf="item.isAssign === 1 && (item.assignStatusA === 0  || item.assignStatusB === 0 || item.assignStatusC === 0)"></i>
                         </td>
                     </tr>
                 </tbody>

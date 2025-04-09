@@ -27,6 +27,9 @@ targetVerity: TargetVerity = new TargetVerity();
   totTargetC: number = 0;
 
   targetId!: number;
+  varietyId!: number;
+  companyCenterId!: number;
+
 
   isLoading: boolean = true;
 
@@ -42,16 +45,20 @@ targetVerity: TargetVerity = new TargetVerity();
   ) { }
 
   ngOnInit(): void {
-    this.targetId = this.route.snapshot.params['id'];
+    // this.targetId = this.route.snapshot.params['id'];
+    this.varietyId = this.route.snapshot.params['varietyId'];
+    this.companyCenterId = this.route.snapshot.params['companyCenterId'];
     this.fetchTargetVerity();
   }
 
   fetchTargetVerity() {
     this.isLoading = true;
-    this.targetSrv.getExistTargetVerity(this.targetId).subscribe(
+    this.targetSrv.getExistTargetVerity(this.varietyId, this.companyCenterId).subscribe(
       (res) => {
 
         this.targetVerity = res.crop;
+        console.log(this.targetVerity);
+        
 
         if (this.targetVerity && this.targetVerity.toDate) {
           this.targetVerity.formattedToDate = this.datePipe.transform(this.targetVerity.toDate, 'yyyy/MM/dd')!;

@@ -250,12 +250,12 @@ export class TargetService {
   }
 
 
-  getExistTargetVerity(id: number): Observable<any> {
+  getExistTargetVerity(varietyId:number, companyCenterId:number): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
 
-    let url = `${this.apiUrl}/get-exist-veriety-target/${id}`;
+    let url = `${this.apiUrl}/get-exist-veriety-target/${varietyId}/${companyCenterId}`;
 
     return this.http.get<any>(url, { headers });
   }

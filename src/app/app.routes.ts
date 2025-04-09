@@ -180,7 +180,7 @@ export const routes: Routes = [
                         component: EditMyTargetComponent
                     },
                     {
-                        path: 'edit-assing-target/:id',
+                        path: 'edit-assing-target/:varietyId/:companyCenterId',
                         component: EditAssignOfficerTargetComponent
                     }
                     

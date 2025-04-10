@@ -341,5 +341,15 @@ export class TargetService {
   }
 
 
+  getOfficerAvailabeTarget(data:any, page:number = 1, limit:number = 10): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/officer-target-check-available?page=${page}&limit=${limit}`;
+    return this.http.post<any>(url,data, { headers });
+  }
+
+
 }
 

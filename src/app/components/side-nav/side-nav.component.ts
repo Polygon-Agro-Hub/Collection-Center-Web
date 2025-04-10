@@ -26,6 +26,14 @@ export const MENU_ITEMS = [
   },
   {
     id: 3,
+    key: 'officer-target',
+    path: '/officer-target',
+    label: 'Officer Target',
+    icon: 'fa-solid fa-user-plus',
+    permission: 'Collection Center Manager',
+  },
+  {
+    id: 4,
     key: 'centers',
     path: '/centers',
     label: 'Centers',
@@ -33,7 +41,7 @@ export const MENU_ITEMS = [
     permission: 'Collection Center Head',
   },
   {
-    id: 4,
+    id: 5,
     key: 'price-list',
     path: '/price-list',
     label: 'Price List',
@@ -41,7 +49,7 @@ export const MENU_ITEMS = [
     permission: 'Collection Center Manager',
   },
   {
-    id: 5,
+    id: 6,
     key: 'price-request',
     path: '/price-request',
     label: 'Price Requests',
@@ -49,21 +57,21 @@ export const MENU_ITEMS = [
     permission: 'Collection Center Manager',
   },
   {
-    id: 6,
+    id: 7,
     key: 'reports',
     path: '/reports',
     label: 'Reports',
     icon: 'fa-solid fa-chart-pie',
   },
   {
-    id: 7,
+    id: 8,
     key: 'manage-officers',
     path: '/manage-officers',
     label: 'Manage Officers',
     icon: 'fas fa-user-cog',
   },
   {
-    id: 8,
+    id: 9,
     key: 'complaints',
     path: '/complaints',
     label: 'Complaints',
@@ -71,7 +79,7 @@ export const MENU_ITEMS = [
     permission: 'Collection Center Manager',
   },
   {
-    id: 9,
+    id: 10,
     key: 'cch-complaints',
     path: '/cch-complaints',
     label: 'Complaints',

@@ -27,11 +27,11 @@ import { ProfileComponent } from './application/Auth/profile/profile.component';
 import { CenterViewOfficersComponent } from './application/Target/center-view-officers/center-view-officers.component';
 import { CchViewComplaintComponent } from './application/Complaints/cch-view-complaint/cch-view-complaint/cch-view-complaint.component';
 import { CchRecivedComplaintComponent } from './application/Complaints/cch-recived-complaint/cch-recived-complaint.component';
-import { CenterViewPriceListComponent} from './application/Target/center-view-price-list/center-view-price-list.component';
+import { CenterViewPriceListComponent } from './application/Target/center-view-price-list/center-view-price-list.component';
 import { AssignOfficerTargetComponent } from './application/Target/assign-officer-target/assign-officer-target.component';
 import { EditMyTargetComponent } from './application/Target/edit-my-target/edit-my-target.component';
-import {ViewMyTargetComponent} from './application/Target/view-my-target/view-my-target.component';
-import {ViewOfficerTargetComponent} from './application/manage-officers/view-officer-target/view-officer-target.component';
+import { ViewMyTargetComponent } from './application/Target/view-my-target/view-my-target.component';
+import { ViewOfficerTargetComponent } from './application/manage-officers/view-officer-target/view-officer-target.component';
 import { EditOfficerTargetComponent } from './application/manage-officers/edit-officer-target/edit-officer-target.component';
 import { RoleGuardService } from './services/RoleGuard/role-guard.service';
 import { EditAssignOfficerTargetComponent } from './application/Target/edit-assign-officer-target/edit-assign-officer-target.component';
@@ -41,6 +41,7 @@ import { PendingChangesGuard } from './guards/can-deactivate.guard';
 import { AssignCenterTargetViewComponent } from './application/Target/assign-center-target-view/assign-center-target-view/assign-center-target-view.component';
 import { ReportDashboardComponent } from './application/Report/report-dashboard/report-dashboard.component';
 import { CollectionReportsComponent } from './application/Report/collection-reports/collection-reports.component';
+import { OfficerTargetViewComponent } from './application/Target/officer-target-view/officer-target-view.component';
 
 export const routes: Routes = [
     {
@@ -57,9 +58,9 @@ export const routes: Routes = [
         component: MainLayoutComponent,
         canActivate: [AuthGuard],
         children: [
-            { 
-                path: 'profile', 
-                component: ProfileComponent, 
+            {
+                path: 'profile',
+                component: ProfileComponent,
             },
             {
                 path: 'dashbord',
@@ -122,7 +123,7 @@ export const routes: Routes = [
             {
                 path: 'reports',
                 children: [
-                    
+
                     {
                         path: '',
                         component: ReportDashboardComponent
@@ -183,7 +184,7 @@ export const routes: Routes = [
                         path: 'edit-assing-target/:varietyId/:companyCenterId',
                         component: EditAssignOfficerTargetComponent
                     }
-                    
+
                 ]
             },
             {
@@ -255,6 +256,15 @@ export const routes: Routes = [
                     }
                 ]
             },
+            {
+                path: 'officer-target',
+                children: [
+                    {
+                        path: '',
+                        component: OfficerTargetViewComponent
+                    }
+                ]
+            }
 
         ]
     },

@@ -41,6 +41,8 @@ import { PendingChangesGuard } from './guards/can-deactivate.guard';
 import { AssignCenterTargetViewComponent } from './application/Target/assign-center-target-view/assign-center-target-view/assign-center-target-view.component';
 import { ReportDashboardComponent } from './application/Report/report-dashboard/report-dashboard.component';
 import { CollectionReportsComponent } from './application/Report/collection-reports/collection-reports.component';
+import { CenterCollectionExpenseComponent } from './application/Target/center-collection-expense/center-collection-expense.component';
+import { FarmerReportInvoiceComponent } from './application/Report/farmer-report-invoice/farmer-report-invoice.component';
 
 export const routes: Routes = [
     {
@@ -152,6 +154,10 @@ export const routes: Routes = [
                         path: 'farmer-report/:id',
                         component: FarmerReportComponent
                     },
+                    {
+                        path: 'farmer-report-invoice/:invNo',
+                        component: FarmerReportInvoiceComponent
+                    },
 
 
                 ]
@@ -238,6 +244,10 @@ export const routes: Routes = [
                     {
                         path: 'view-center-target/:id',
                         component: ViewCenterTargetComponent
+                    },
+                    {
+                        path: 'center-collection-expense/:id',
+                        component: CenterCollectionExpenseComponent
                     },
                 ]
             },

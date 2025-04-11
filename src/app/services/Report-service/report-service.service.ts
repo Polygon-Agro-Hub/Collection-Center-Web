@@ -113,76 +113,200 @@ export class ReportServiceService {
     });
   }
 
+  // getAllPayments(
+  //   page: number = 1,
+  //   limit: number = 10,
+  //   searchText: string = '',
+  //   selectcenter: string = '',
+  //   fromDate: string = '',
+  //   toDate: string = ''
+  // ): Observable<any> {
+  //   const headers = new HttpHeaders({
+  //     Authorization: `Bearer ${this.token}`,
+  //     'Content-Type': 'application/json',
+  //   });
+  
+  //   let url = `${this.apiUrl}/get-all-payments?page=${page}&limit=${limit}`;
+  
+  //   if (searchText) {
+  //     url += `&searchText=${searchText}`;
+  //   }
+  
+  //   if (selectcenter) {
+  //     url += `&center=${selectcenter}`;
+  //   }
+  
+  //   if (fromDate && toDate) {
+  //     url += `&fromDate=${fromDate}&toDate=${toDate}`;
+  //   }
+  
+  //   return this.http.get(url, { headers });
+  // }
+
   getAllPayments(
-    page: number = 1, 
-    limit: number = 10, 
-    searchText: string = '', 
-    selectcenter: string = '', 
-    date: string = ''
+    page: number = 1,
+    limit: number = 10,
+    fromDate: Date | string = '',
+    toDate: Date | string = '',
+    center: string = '',
+    searchText: string = ''
   ): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
     });
   
-    let url = `${this.apiUrl}/get-all-payments?page=${page}&limit=${limit}`;
+    // Base URL with date range
+    let url = `${this.apiUrl}/get-all-payments?page=${page}&limit=${limit}&fromDate=${fromDate}&toDate=${toDate}`;
+  
+    // Add filters only if available
+    if (center) {
+      url += `&center=${center}`;
+    }
   
     if (searchText) {
       url += `&searchText=${searchText}`;
-    }
-  
-    if (selectcenter) {
-      url += `&center=${selectcenter}`;
-    }
-  
-    if (date) {
-      // Check if date is in YYYY-MM format (month filter)
-      if (/^\d{4}-\d{2}$/.test(date)) {
-        url += `&month=${date}`;
-      } 
-      // Else it's in YYYY-MM-DD format (date filter)
-      else {
-        url += `&date=${date}`;
-      }
     }
   
     return this.http.get(url, { headers });
   }
 
+  downloadPaymentReportFile(
+    fromDate: Date | string,
+    toDate: Date | string,
+    center: string = '',
+    searchText: string = ''
+  ): Observable<Blob> {
+    let url = `${this.apiUrl}/download-payment-report?fromDate=${fromDate}&toDate=${toDate}`;
+  
+    if (center) {
+      url += `&center=${center}`;
+    }
+  
+    if (searchText) {
+      url += `&searchText=${searchText}`;
+    }
+  
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      // Optional: 'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    });
+  
+    return this.http.get(url, { headers, responseType: 'blob' });
+  }
+  
+  
+  
+  
+
   getAllCollections(
     page: number = 1, 
     limit: number = 10, 
-    searchText: string = '', 
-    selectcenter: string = '', 
-    date: string = ''
+    fromDate: Date | string = '',
+    toDate: Date | string = '',
+    center: string = '',
+    searchText: string = ''
+  ): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    console.log('service called');
+  
+    let url = `${this.apiUrl}/get-all-collection?page=${page}&limit=${limit}&fromDate=${fromDate}&toDate=${toDate}`;
+
+  
+    if (center) {
+      url += `&center=${center}`;
+    }
+
+    if (searchText) {
+      url += `&searchText=${searchText}`;
+    }
+  
+    return this.http.get(url, { headers });
+  }
+
+  downloadCollectionReportFile(
+    fromDate: Date | string,
+    toDate: Date | string,
+    center: string = '',
+    searchText: string = ''
+  ): Observable<Blob> {
+    let url = `${this.apiUrl}/download-collection-report?fromDate=${fromDate}&toDate=${toDate}`;
+  
+    if (center) {
+      url += `&center=${center}`;
+    }
+  
+    if (searchText) {
+      url += `&searchText=${searchText}`;
+    }
+  
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      // Optional: 'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    });
+  
+    return this.http.get(url, { headers, responseType: 'blob' });
+  }
+
+  getAllCenterPayments(
+    page: number = 1,
+    limit: number = 10,
+    fromDate: Date | string = '',
+    toDate: Date | string = '',
+    centerId: number,
+    searchText: string = ''
   ): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
     });
   
-    let url = `${this.apiUrl}/get-all-collection?page=${page}&limit=${limit}`;
+    // Base URL with date range
+    let url = `${this.apiUrl}/get-all-center-payments?page=${page}&limit=${limit}&fromDate=${fromDate}&toDate=${toDate}&centerId=${centerId}`;
   
     if (searchText) {
       url += `&searchText=${searchText}`;
     }
   
-    if (selectcenter) {
-      url += `&center=${selectcenter}`;
-    }
-  
-    if (date) {
-      // Check if date is in YYYY-MM format (month filter)
-      if (/^\d{4}-\d{2}$/.test(date)) {
-        url += `&month=${date}`;
-      } 
-      // Else it's in YYYY-MM-DD format (date filter)
-      else {
-        url += `&date=${date}`;
-      }
-    }
-  
     return this.http.get(url, { headers });
+  }
+
+  downloadCenterPaymentReportFile(
+    fromDate: Date | string,
+    toDate: Date | string,
+    centerId: number,
+    searchText: string = ''
+  ): Observable<Blob> {
+    let url = `${this.apiUrl}/download-center-payment-report?fromDate=${fromDate}&toDate=${toDate}&centerId=${centerId}`;
+  
+    
+    if (searchText) {
+      url += `&searchText=${searchText}`;
+    }
+  
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      // Optional: 'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    });
+  
+    return this.http.get(url, { headers, responseType: 'blob' });
+  }
+
+  getFarmerReportInvoice(invNo: string): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    let url = `${this.apiUrl}/get-farmer-report-invoice-details/${invNo}`
+
+    return this.http.get(url, {
+      headers,
+    });
   }
 
 }

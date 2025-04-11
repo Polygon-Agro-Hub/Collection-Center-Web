@@ -29,35 +29,21 @@ export class ExpensesComponent implements OnInit {
   hasData: boolean = true;
 
   // Filter variables
-  selectMonth: string = '';
-  selectStatus: string = '';
-  selectRole: string = '';
   searchText: string = '';
   selectCenters: string = '';
-  selectedDate: string = '';
-  customDateSelected: boolean = false;  // Track if user selected a custom date
+
+  
+
+  fromDate: Date | string = '';
+  toDate: Date | string = '';
 
   isPopupVisible: boolean = false;
   logingRole: string | null = null;
-  isLoading: boolean = true;
+  isLoading: boolean = false;
+  isDateFilterSet: boolean = false;
 
 
   isDownloading = false;
-
-  months = [
-    { value: '01', name: 'January' },
-    { value: '02', name: 'February' },
-    { value: '03', name: 'March' },
-    { value: '04', name: 'April' },
-    { value: '05', name: 'May' },
-    { value: '06', name: 'June' },
-    { value: '07', name: 'July' },
-    { value: '08', name: 'August' },
-    { value: '09', name: 'September' },
-    { value: '10', name: 'October' },
-    { value: '11', name: 'November' },
-    { value: '12', name: 'December' }
-  ];
 
   constructor(
     private router: Router,
@@ -68,58 +54,53 @@ export class ExpensesComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // Set default date to current date
-    this.setCurrentDate();
-    this.fetchAllPayments();
     this.getAllCenters();
-  }
-
-  setCurrentDate(): void {
-    const today = new Date();
-    this.selectedDate = this.formatDateForInput(today);
-    this.customDateSelected = false;
-  }
-
-  formatDateForInput(date: Date): string {
-    // Format date as YYYY-MM-DD for input element
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-    return `${year}-${month}-${day}`;
   }
 
   navigate(path: string) {
     this.router.navigate([`${path}`]);
   }
 
-  fetchAllPayments(
-    page: number = 1,
-    limit: number = this.itemsPerPage,
-    searchText: string = this.searchText,
-    selectCompany: string = this.selectCenters
-  ) {
+  // fetchAllPayments(
+  //   page: number = 1,
+  //   limit: number = this.itemsPerPage
+  // ) {
+  //   this.isLoading = true;
+  
+  //   console.log('Sending fromDate:', this.fromDate);
+  //   console.log('Sending toDate:', this.toDate);
+  
+  //   this.ReportSrv.getAllPayments(page, limit, this.fromDate, this.toDate).subscribe(
+  //     (res) => {
+  //       this.farmerPaymentsArr = res.items;
+  //       this.totalItems = res.total;
+  //       this.hasData = res.items.length > 0;
+  //       this.isLoading = false;
+  //       this.calculateTotalPayments();
+  //     },
+  //     (error) => {
+  //       this.isLoading = false;
+  //     }
+  //   );
+  // }
+
+  fetchFilteredPayments(page: number = 1, limit: number = this.itemsPerPage) {
     this.isLoading = true;
-
-    // Determine which filter to use
-    let dateToUse = '';
-    if (this.selectMonth) {
-      const currentYear = new Date().getFullYear();
-      dateToUse = `${currentYear}-${this.selectMonth}`; // Format: YYYY-MM
-    } else {
-      dateToUse = this.selectedDate;
-    }
-
-    console.log('sending date', dateToUse)
-
-    this.ReportSrv.getAllPayments(page, limit, searchText, selectCompany, dateToUse).subscribe(
+  
+    this.ReportSrv.getAllPayments(
+      page,
+      limit,
+      this.fromDate,
+      this.toDate,
+      this.selectCenters,
+      this.searchText
+    ).subscribe(
       (res) => {
-        console.log('this is ay', res);
+        console.log(res);
         this.farmerPaymentsArr = res.items;
         this.totalItems = res.total;
         this.hasData = res.items.length > 0;
         this.isLoading = false;
-        
-        // Calculate the total amount whenever new data is fetched
         this.calculateTotalPayments();
       },
       (error) => {
@@ -127,6 +108,7 @@ export class ExpensesComponent implements OnInit {
       }
     );
   }
+  
 
   // New method to calculate the total payments amount
   private formatNumberToTwoDecimals(value: any): number {
@@ -135,93 +117,99 @@ export class ExpensesComponent implements OnInit {
     // Round to 2 decimal places
     return parseFloat(num.toFixed(2));
   }
-  
+
   // Update the calculateTotalPayments method
   calculateTotalPayments(): void {
     this.totalPaymentsAmount = this.farmerPaymentsArr.reduce((sum, payment) => {
       const amount = this.formatNumberToTwoDecimals(payment.totalAmount);
-      return sum + (isNaN(amount) ? 0 : amount); }, 0);
-    
+      return sum + (isNaN(amount) ? 0 : amount);
+    }, 0);
+
     // Ensure the final total is also formatted to 2 decimal places
     this.totalPaymentsAmount = this.formatNumberToTwoDecimals(this.totalPaymentsAmount);
   }
 
   onSearch() {
-    this.fetchAllPayments();
+    this.fetchFilteredPayments();
   }
 
   offSearch() {
     this.searchText = '';
-    this.fetchAllPayments();
+    this.fetchFilteredPayments();
   }
 
   onPageChange(event: number) {
     this.page = event;
-    this.fetchAllPayments(this.page);
+  
+    if (this.selectCenters || this.searchText) {
+      // User has applied center/search filter
+      console.log('filtered payments')
+      this.fetchFilteredPayments(this.page, this.itemsPerPage);
+    } else {
+      // Default data fetch using only date range
+      console.log('normal payments')
+      this.fetchFilteredPayments(this.page, this.itemsPerPage);
+    }
   }
 
   applyCompanyFilters() {
     console.log(this.selectCenters);
-    this.fetchAllPayments();
+    this.fetchFilteredPayments();
   }
 
   clearCompanyFilter() {
     this.selectCenters = '';
-    this.fetchAllPayments();
+    this.fetchFilteredPayments();
   }
 
-  applyMonthFilters() {
-    // Get current date in the same format as selectedDate (YYYY-MM-DD)
-    const currentDateFormatted = this.formatDateForInput(new Date());
-    
-    if (this.customDateSelected || 
-        (!this.customDateSelected && this.selectedDate === currentDateFormatted)) {
-      // Temporarily show the selected month value
-      const selectedMonthValue = this.selectMonth;
-      
-      this.toastSrv.error('Please clear date filter before selecting month');
-      
-      // Delay clearing the month to make it visible briefly
-      setTimeout(() => {
-        this.selectMonth = '';
-      }, 300); // 300ms delay - adjust as needed
-      
-      // Set it back temporarily so user sees their selection
-      this.selectMonth = selectedMonthValue;
+  validateToDate() {
+    // Case 1: User hasn't selected fromDate yet
+    if (!this.fromDate) {
+      this.toDate = ''; // Reset toDate
+      this.toastSrv.warning("Please select the 'From' date first.");
       return;
     }
-    
-    this.selectedDate = '';
-    this.fetchAllPayments();
+  
+    // Case 2: toDate is earlier than fromDate
+    if (this.toDate) {
+      const from = new Date(this.fromDate);
+      const to = new Date(this.toDate);
+  
+      if (to <= from) {
+        this.toDate = ''; // Reset toDate
+        this.toastSrv.warning("The 'To' date cannot be earlier than or same to the 'From' date.");
+      }
+    }
   }
 
-  applyDateFilter() {
-    if (this.selectMonth) {
-      this.toastSrv.error('Please clear month filter before selecting date');
-      // this.showToast('Please clear month filter before selecting date');
-      this.selectedDate = ''; // Reset date selection
+  validateFromDate() {
+    // Case 1: User hasn't selected fromDate yet
+    if (!this.toDate) {
       return;
     }
-    this.selectMonth = '';
-    this.customDateSelected = true;
-    this.fetchAllPayments();
-  }
-
-  clearMonthFilters() {
-    this.selectMonth = '';
-    // Reset to current date when month is cleared
-    // this.selectedDate = this.formatDateForInput(new Date());
-    this.selectedDate = '';
-    console.log('month cleared', this.selectedDate );
-    this.customDateSelected = false;
-    this.fetchAllPayments();
+  
+    // Case 2: toDate is earlier than fromDate
+    if (this.toDate) {
+      const from = new Date(this.fromDate);
+      const to = new Date(this.toDate);
+  
+      if (to <= from) {
+        this.fromDate = ''; // Reset toDate
+        this.toastSrv.warning("The 'From' date cannot be Later than or same to the 'From' date.");
+      }
+    }
   }
   
-  clearDateFilter(): void {
-    this.customDateSelected = false;
-    this.selectedDate = ''; // Completely clear the date instead of setting to current date
-    console.log('date cleared', this.selectedDate );
-    this.fetchAllPayments();
+
+  goBtn() {
+    if (!this.fromDate || !this.toDate) {
+      this.toastSrv.warning("Please fill in all fields");
+      return;
+    }
+
+    this.isDateFilterSet  = true;
+
+    this.fetchFilteredPayments();
   }
 
   getAllCenters() {
@@ -233,77 +221,45 @@ export class ExpensesComponent implements OnInit {
     );
   }
 
-  // onDateChange(newDate: string) {
-  //   if (this.selectMonth) {
-  //     this.toastSrv.error('Please clear month filter before selecting date');
-  //     return;
-  //   }
-  //   this.selectedDate = newDate;
-  //   this.customDateSelected = true;
-  //   this.fetchAllPayments();
-  // }
-
+  
   downloadTemplate1() {
-    // this.selectCenters = '';
-    // this.selectMonth = '';
-    // this.searchText = '';
-    if (this.selectedDate === "") {
-      Swal.fire({
-        title: "Error!",
-        text: "Please select a date",
-        icon: "error",
-      })
-      return;
-    } 
-
     this.isDownloading = true;
-    const apiUrl = `${environment.API_BASE_URL}/report/download-payment-report?createdDate=${this.selectedDate}`;
-
-    // Trigger the download
-    fetch(apiUrl, {
-      method: "GET",
-    })
-      .then((response) => {
-        if (response.ok) {
-          // Create a blob for the Excel file
-          return response.blob();
-        } else {
-          throw new Error("Failed to download the file");
+  
+    this.ReportSrv
+      .downloadPaymentReportFile(this.fromDate, this.toDate, this.selectCenters, this.searchText)
+      .subscribe({
+        next: (blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `Expenses Report From ${this.fromDate} To ${this.toDate}.xlsx`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+  
+          Swal.fire({
+            icon: "success",
+            title: "Downloaded",
+            text: "Please check your downloads folder",
+          });
+          this.isDownloading = false;
+        },
+        error: (error) => {
+          Swal.fire({
+            icon: "error",
+            title: "Download Failed",
+            text: error.message,
+          });
+          this.isDownloading = false;
         }
-      })
-      .then((blob) => {
-        // Create a URL for the blob
-        const url = window.URL.createObjectURL(blob);
-
-        // Create a temporary anchor element to trigger the download
-        const a = document.createElement("a");
-        a.href = url;
-        a.download = `Daily Payment Expenses Report (${this.selectedDate}).xlsx`;
-        a.click();
-
-        // Revoke the URL after the download is triggered
-        window.URL.revokeObjectURL(url);
-
-        // Show success message
-        Swal.fire({
-          icon: "success",
-          title: "Downloaded",
-          text: "Please check your downloads folder",
-        });
-        this.isDownloading = false;
-      })
-      .catch((error) => {
-        // Handle errors
-        Swal.fire({
-          icon: "error",
-          title: "Download Failed",
-          text: error.message,
-        });
-        this.isDownloading = false;
       });
   }
 
- 
+  navigateToFarmerReport(invNo: string) {
+    console.log(invNo);
+    this.router.navigate([`reports/farmer-report-invoice/${invNo}`]);
+  }
+
+
 }
 
 class FarmerPayments {
@@ -311,6 +267,7 @@ class FarmerPayments {
   totalAmount!: number;
   centerCode!: string;
   centerName!: string;
+  id!: number;
   nic!: string;
   firstNameEnglish!: string;
   gradeAprice!: number;

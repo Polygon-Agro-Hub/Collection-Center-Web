@@ -7,23 +7,23 @@ import jsPDF from 'jspdf';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
-  selector: 'app-farmer-report',
+  selector: 'app-farmer-report-invoice',
   standalone: true,
   imports: [CommonModule, FormsModule, LoadingSpinnerComponent],
-  templateUrl: './farmer-report.component.html',
-  styleUrl: './farmer-report.component.css',
+  templateUrl: './farmer-report-invoice.component.html',
+  styleUrl: './farmer-report-invoice.component.css',
   providers: [DatePipe]
-
 })
-export class FarmerReportComponent implements OnInit {
+export class FarmerReportInvoiceComponent implements OnInit {
+
   userObj: User = new User();
   CropArr!: Crop[];
 
-  reportId!: number
+  invNo!: string;
   hasData: boolean = false
   totalAmount: number = 0
   totalAmountforReport: number = 0;
-  isLoading:boolean = true;
+  isLoading: boolean = true;
 
 
   constructor(
@@ -35,14 +35,15 @@ export class FarmerReportComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.reportId = this.route.snapshot.params['id'];
-    console.log(this.reportId);
-    this.fetchFarmerDetails(this.reportId);
+    this.invNo = this.route.snapshot.params['invNo'];
+    console.log('invoice no', this.invNo);
+    this.fetchFarmerDetails(this.invNo);
   }
 
-  fetchFarmerDetails(id: number) {
+  fetchFarmerDetails(invNo: string) {
     this.isLoading = true
-    this.ReportSrv.getFarmerReport(id).subscribe(
+    console.log('invoice', this.invNo);
+    this.ReportSrv.getFarmerReportInvoice(invNo).subscribe(
       (res) => {
         if (res.status) {
           this.userObj = res.user;
@@ -56,7 +57,7 @@ export class FarmerReportComponent implements OnInit {
       }
     );
   }
-  
+
   calculateOverallTotal(): void {
     // Reset totalAmount before calculating
     this.totalAmount = this.CropArr.reduce((sum, item) => {
@@ -64,33 +65,33 @@ export class FarmerReportComponent implements OnInit {
     }, 0);
   }
 
-  navigateToReports() {
-    this.router.navigate(['/reports']); // Change '/reports' to your desired route
+  navigateToCollectionReports() {
+    this.router.navigate(['/reports/collection-reports']); // Change '/reports' to your desired route
   }
 
   navigateToOfficerReports() {
     this.router.navigate(['/reports/officer-reports']); // Change '/reports' to your desired route
   }
-  
 
-  calculeteTotal(priceA: number, qtyA: number, priceB: number, qtyB: number, priceC: number, qtyC: number) :number{
+
+  calculeteTotal(priceA: number, qtyA: number, priceB: number, qtyB: number, priceC: number, qtyC: number): number {
     let tot = priceA * qtyA + priceB * qtyB + priceC * qtyC
     this.totalAmount += tot;
     console.log(this.totalAmount);
-    
+
     return tot;
   }
 
   calculateRowTotal(item: Crop): number {
     return item.gradeAprice * item.gradeAquan +
-           item.gradeBprice * item.gradeBquan +
-           item.gradeCprice * item.gradeCquan;
+      item.gradeBprice * item.gradeBquan +
+      item.gradeCprice * item.gradeCquan;
   }
 
   calculateRowTotalforReport(crop: Crop): number {
-    return  crop.gradeAprice * crop.gradeAquan +
-            crop.gradeBprice * crop.gradeBquan +
-            crop.gradeCprice * crop.gradeCquan;
+    return crop.gradeAprice * crop.gradeAquan +
+      crop.gradeBprice * crop.gradeBquan +
+      crop.gradeCprice * crop.gradeCquan;
   }
 
   calculateOverallTotalforReport(): number {
@@ -99,37 +100,41 @@ export class FarmerReportComponent implements OnInit {
       return sum + this.calculateRowTotalforReport(crop);
     }, 0);
   }
-  
 
   // this code works correctly but did not had time to fix the address display
   async downloadReport() {
     // Create new PDF document
-    this.isLoading= true;
+    this.isLoading = true;
     const doc = new jsPDF();
-    
+
     // Helper function to format null values
     const formatValue = (value: any): string => {
       return value === null || value === undefined ? 'N/A' : value.toString();
     };
 
+    const formatValueForAmounts = (value: any): string => {
+      return value === null || value === undefined ? '0.00' : value.toString();
+    };
+
+
     // Set font
     doc.setFont('helvetica');
-    
+
     // Add title
     doc.setFontSize(16);
     doc.text('INVOICE', 105, 15, { align: 'center' });
-    
+
     // Add invoice details
     doc.setFontSize(10);
     doc.text(`INV NO: ${formatValue(this.userObj.invNo)}`, 14, 25);
     doc.text(`Date: ${new Date(this.userObj.createdAt).toISOString().split('T')[0].replace(/-/g, '/')}`, 14, 30);
-    
+
     // Add Personal Details section
     doc.setFontSize(12);
     doc.text('Personal Details', 14, 40);
     doc.setFontSize(10);
 
-    
+
     // Draw Personal Details table
     this.drawTable(doc, 14, 45, [
       ['First Name', 'Last Name', 'NIC Number', 'Phone Number', 'Address'],
@@ -139,17 +144,17 @@ export class FarmerReportComponent implements OnInit {
         formatValue(this.userObj.NICnumber),
         formatValue(this.userObj.phoneNumber),
         this.userObj.houseNo && this.userObj.streetName && this.userObj.city
-      ? `${formatValue(this.userObj.houseNo)}, ${formatValue(this.userObj.streetName)}, ${formatValue(this.userObj.city)}`
-      : '-'
-        
+          ? `${formatValue(this.userObj.houseNo)}, ${formatValue(this.userObj.streetName)}, ${formatValue(this.userObj.city)}`
+          : '-'
+
       ]
     ]);
-    
+
     // Add Bank Details section
     doc.setFontSize(12);
     doc.text('Bank Details', 14, 70);
     doc.setFontSize(10);
-    
+
     // Draw Bank Details table
     this.drawTable(doc, 14, 75, [
       ['Account Number', 'Account Holder\'s Name', 'Bank Name', 'Branch Name'],
@@ -160,33 +165,33 @@ export class FarmerReportComponent implements OnInit {
         formatValue(this.userObj.branchName)
       ]
     ]);
-    
+
     // Add Crop Details section
     doc.setFontSize(12);
     doc.text('Crop Details', 14, 100);
     doc.setFontSize(10);
-    
+
     // Prepare crop details data for table
-    const cropTableHeaders = ['Crop Name', 'Variety', 'Unit Price (A)', 'Quantity', 'Unit Price (B)', 
-                              'Quantity', 'Unit Price (C)', 'Quantity', 'Total'];
-                              
+    const cropTableHeaders = ['Crop Name', 'Variety', 'Unit Price (A)', 'Quantity', 'Unit Price (B)',
+      'Quantity', 'Unit Price (C)', 'Quantity', 'Total'];
+
     const cropTableData = this.CropArr.map(crop => [
       formatValue(crop.cropNameEnglish),
       formatValue(crop.varietyNameEnglish),
-      formatValue(crop.gradeAprice),
-      formatValue(crop.gradeAquan),
-      formatValue(crop.gradeBprice),
-      formatValue(crop.gradeBquan),
-      formatValue(crop.gradeCprice),
-      formatValue(crop.gradeCquan),
+      formatValueForAmounts(crop.gradeAprice),
+      formatValueForAmounts(crop.gradeAquan),
+      formatValueForAmounts(crop.gradeBprice),
+      formatValueForAmounts(crop.gradeBquan),
+      formatValueForAmounts(crop.gradeCprice),
+      formatValueForAmounts(crop.gradeCquan),
       formatValue(this.calculateRowTotalforReport(crop))
     ]);
-    
+
     // Draw Crop Details table
     this.drawTable(doc, 14, 105, [cropTableHeaders, ...cropTableData]);
-    
+
     // Add Full Total
-    doc.text('Full Total(Rs.): '+ this.calculateOverallTotalforReport(), 14, 135);
+    doc.text('Full Total(Rs.): ' + this.calculateOverallTotalforReport(), 14, 135);
 
     function loadImageAsBase64(url: string): Promise<string> {
       return new Promise((resolve, reject) => {
@@ -257,21 +262,31 @@ export class FarmerReportComponent implements OnInit {
 
     // Add the image at the top
     if (farmerQrImagebase64) {
-      
       doc.addImage(
         farmerQrImagebase64,
         'PNG',
         14, // X position
-        147, // Y position (moved to top)
+        147, // Y position
         40, // Width
         40  // Height
       );
       doc.setFontSize(12);
       doc.text('Farmer Qr Code', 20, 190);
+    } else {
+      doc.rect(16, 147, 35, 35); // X, Y, width, height
+
+      // Add "Not Available" text inside the box (centered roughly)
+      doc.setFontSize(10);
+      doc.text('Not', 30, 165);         // Adjust X/Y for positioning
+      doc.text('Available', 26, 170);   // Adjust as needed
+
+      doc.setFontSize(12);
+      doc.text('Farmer Qr Code', 20, 190);
     }
 
+
     if (officerQrImagebase64) {
-      
+
       doc.addImage(
         officerQrImagebase64,
         'PNG',
@@ -282,8 +297,18 @@ export class FarmerReportComponent implements OnInit {
       );
       doc.setFontSize(12);
       doc.text('Officer Qr Code', 66, 190);
+    } else {
+      doc.rect(16, 147, 35, 35); // X, Y, width, height
+
+      // Add "Not Available" text inside the box (centered roughly)
+      doc.setFontSize(10);
+      doc.text('Not', 30, 165);         // Adjust X/Y for positioning
+      doc.text('Available', 26, 170);   // Adjust as needed
+
+      doc.setFontSize(12);
+      doc.text('Officer Qr Code', 20, 190);
     }
-    
+
     // Save the PDF
     doc.save('invoice.pdf');
   }
@@ -293,36 +318,36 @@ export class FarmerReportComponent implements OnInit {
     // Calculate column widths based on number of columns
     const pageWidth = doc.internal.pageSize.width - 28; // Margins on both sides
     const colWidth = pageWidth / data[0].length;
-    
+
     // Draw headers
     doc.setFillColor(240, 240, 240);
     doc.rect(x, y, pageWidth, 7, 'F');
     doc.setFont('bold');
-    
+
     data[0].forEach((header, i) => {
       doc.text(header, x + i * colWidth + colWidth / 2, y + 5, { align: 'center' });
     });
-    
+
     // Draw data rows
     doc.setFont('normal');
     for (let i = 1; i < data.length; i++) {
       const rowY = y + 7 * i;
-      
+
       // Draw row background (alternating colors for better readability)
       if (i % 2 === 0) {
         doc.setFillColor(252, 252, 252);
         doc.rect(x, rowY, pageWidth, 7, 'F');
       }
-      
+
       // Draw cell borders
       doc.setDrawColor(200, 200, 200);
       doc.rect(x, rowY, pageWidth, 7);
-      
+
       // Draw vertical lines for columns
       for (let j = 1; j < data[0].length; j++) {
         doc.line(x + j * colWidth, rowY, x + j * colWidth, rowY + 7);
       }
-      
+
       // Draw cell contents
       data[i].forEach((cell, j) => {
         doc.text(cell, x + j * colWidth + colWidth / 2, rowY + 5, { align: 'center' });
@@ -350,7 +375,7 @@ class User {
   bankName!: string
   branchName!: string
   createdAt!: string
-  invNo!:string
+  invNo!: string
 }
 
 class Crop {

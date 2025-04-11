@@ -82,6 +82,10 @@ export class CentersDashbordComponent implements OnInit {
   navigateCenterOfficers(){
     this.router.navigate([`centers/center-view-officers/${this.centerId}`]);
   }
+
+  navigateCollectionExpenses(){
+    this.router.navigate([`centers/center-collection-expense/${this.centerId}`]);
+  }
 }
 
 class CenterName {

@@ -1,7 +1,7 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ReportServiceService } from '../../../services/Report-service/report-service.service';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
@@ -10,22 +10,21 @@ import { ToastAlertService } from '../../../services/toast-alert/toast-alert.ser
 import Swal from 'sweetalert2';
 import { environment } from '../../../environments/environment';
 
-
 @Component({
-  selector: 'app-collection',
+  selector: 'app-center-collection-expense',
   standalone: true,
-  imports: [
-    CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent
-  ],
-  templateUrl: './collection.component.html',
-  styleUrl: './collection.component.css',
+  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent],
+  templateUrl: './center-collection-expense.component.html',
+  styleUrl: './center-collection-expense.component.css',
   providers: [DatePipe]
 })
-export class CollectionComponent implements OnInit {
+export class CenterCollectionExpenseComponent implements OnInit{
 
   farmerPaymentsArr!: FarmerPayments[];
   centerArr: Center[] = [];
   totalPaymentsAmount: number = 0; // New variable to store the sum of all payments
+
+  centerId!: number;
 
   page: number = 1;
   totalItems: number = 0;
@@ -34,7 +33,7 @@ export class CollectionComponent implements OnInit {
 
   // Filter variables
   searchText: string = '';
-  selectCenters: string = '';
+  // selectCenters: string = '';
 
   
 
@@ -49,89 +48,42 @@ export class CollectionComponent implements OnInit {
 
   isDownloading = false;
 
-  
   constructor(
     private router: Router,
     private ReportSrv: ReportServiceService,
     private datePipe: DatePipe,
     private ManageOficerSrv: ManageOfficersService,
-    private toastSrv: ToastAlertService
+    private toastSrv: ToastAlertService,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
-    this.getAllCenters();
+    this.centerId = this.route.snapshot.params['id'];
+    console.log('got centerId', this.centerId);
+    // this.getAllCenters();
   }
 
   navigate(path: string) {
     this.router.navigate([`${path}`]);
   }
 
-  // fetchAllPayments(
-  //   page: number = 1,
-  //   limit: number = this.itemsPerPage,
-  //   // searchText: string = this.searchText,
-  //   // selectCompany: string = this.selectCenters
-  // ) {
-  //   this.isLoading = true;
-
-  //   console.log('Sending fromDate:', this.fromDate);
-  //   console.log('Sending toDate:', this.toDate);
-
-  //   this.ReportSrv.getAllCollections(page, limit, this.fromDate, this.toDate).subscribe(
-      
-  //     (res) => {
-        
-  //       console.log(res);
-  //       this.farmerPaymentsArr = res.items.map((item: FarmerPayments) => {
-  //         return {
-  //           ...item,
-  //           totalQuantity: (
-  //             Number(item.totalGradeAQuantity || 0) + 
-  //             Number(item.totalGradeBQuantity || 0) + 
-  //             Number(item.totalGradeCQuantity || 0)
-  //           ).toFixed(2)
-  //         };
-  //       });
-  //       this.totalItems = res.total;
-  //       this.hasData = res.items.length > 0;
-  //       this.isLoading = false;
-        
-  //       // Calculate the total amount whenever new data is fetched
-  //       this.calculateTotalPayments();
-  //     },
-  //     (error) => {
-  //       this.isLoading = false;
-  //     }
-  //   );
-  // }
-
   fetchFilteredPayments(page: number = 1, limit: number = this.itemsPerPage) {
     this.isLoading = true;
   
-    this.ReportSrv.getAllCollections(
+    this.ReportSrv.getAllCenterPayments(
       page,
       limit,
       this.fromDate,
       this.toDate,
-      this.selectCenters,
+      this.centerId,
+      // this.selectCenters,
       this.searchText
     ).subscribe(
       (res) => {
-        this.farmerPaymentsArr = res.items.map((item: FarmerPayments) => {
-          return {
-            ...item,
-            totalQuantity: (
-              Number(item.totalGradeAQuantity || 0) + 
-              Number(item.totalGradeBQuantity || 0) + 
-              Number(item.totalGradeCQuantity || 0)
-            ).toFixed(2)
-          };
-        });
+        this.farmerPaymentsArr = res.items;
         this.totalItems = res.total;
         this.hasData = res.items.length > 0;
         this.isLoading = false;
-        
-        // Calculate the total amount whenever new data is fetched
         this.calculateTotalPayments();
       },
       (error) => {
@@ -139,6 +91,7 @@ export class CollectionComponent implements OnInit {
       }
     );
   }
+  
 
   // New method to calculate the total payments amount
   private formatNumberToTwoDecimals(value: any): number {
@@ -147,13 +100,14 @@ export class CollectionComponent implements OnInit {
     // Round to 2 decimal places
     return parseFloat(num.toFixed(2));
   }
-  
+
   // Update the calculateTotalPayments method
   calculateTotalPayments(): void {
     this.totalPaymentsAmount = this.farmerPaymentsArr.reduce((sum, payment) => {
       const amount = this.formatNumberToTwoDecimals(payment.totalAmount);
-      return sum + (isNaN(amount) ? 0 : amount); }, 0);
-    
+      return sum + (isNaN(amount) ? 0 : amount);
+    }, 0);
+
     // Ensure the final total is also formatted to 2 decimal places
     this.totalPaymentsAmount = this.formatNumberToTwoDecimals(this.totalPaymentsAmount);
   }
@@ -170,26 +124,10 @@ export class CollectionComponent implements OnInit {
   onPageChange(event: number) {
     this.page = event;
   
-    if (this.selectCenters || this.searchText) {
-      // User has applied center/search filter
-      console.log('filtered payments')
-      this.fetchFilteredPayments(this.page, this.itemsPerPage);
-    } else {
-      // Default data fetch using only date range
-      console.log('normal payments')
-      this.fetchFilteredPayments(this.page, this.itemsPerPage);
-    }
+    this.fetchFilteredPayments(this.page, this.itemsPerPage);
   }
 
-  applyCompanyFilters() {
-    this.fetchFilteredPayments();
-  }
-
-  clearCompanyFilter() {
-    this.selectCenters = '';
-    this.fetchFilteredPayments();
-  }
-
+  
   validateToDate() {
     // Case 1: User hasn't selected fromDate yet
     if (!this.fromDate) {
@@ -240,26 +178,19 @@ export class CollectionComponent implements OnInit {
     this.fetchFilteredPayments();
   }
 
-  getAllCenters() {
-    this.ManageOficerSrv.getCCHOwnCenters().subscribe(
-      (res) => {
-        console.log(res);
-        this.centerArr = res;
-      }
-    );
-  }
-
+  
+  
   downloadTemplate1() {
     this.isDownloading = true;
   
     this.ReportSrv
-      .downloadCollectionReportFile(this.fromDate, this.toDate, this.selectCenters, this.searchText)
+      .downloadCenterPaymentReportFile(this.fromDate, this.toDate, this.centerId, this.searchText)
       .subscribe({
         next: (blob) => {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
-          a.download = `Collection Report From ${this.fromDate} To ${this.toDate}.xlsx`;
+          a.download = `Expenses Report From ${this.fromDate} To ${this.toDate}.xlsx`;
           a.click();
           window.URL.revokeObjectURL(url);
   
@@ -281,8 +212,14 @@ export class CollectionComponent implements OnInit {
       });
   }
 
- 
+  navigateToFarmerReport(invNo: string) {
+    console.log(invNo);
+    this.router.navigate([`reports/farmer-report-invoice/${invNo}`]);
+  }
 
+  navigateToCenterTarget() {
+    this.router.navigate(['/centers']); // Change '/reports' to your desired route
+  }
 
 }
 
@@ -291,17 +228,17 @@ class FarmerPayments {
   totalAmount!: number;
   centerCode!: string;
   centerName!: string;
-  cropNameEnglish!: string;
-  varietyNameEnglish!: string;
   nic!: string;
   firstNameEnglish!: string;
-  totalGradeAQuantity!: number;
-  totalGradeBQuantity!: number;
-  totalGradeCQuantity!: number;
+  gradeAprice!: number;
+  gradeBprice!: number;
+  gradeCprice!: number;
+  gradeAquan!: number;
+  gradeBquan!: number;
+  gradeCquan!: number;
   status!: string;
   createdAt!: string | Date;
   companyId!: number;
-  totalQuantity!: number;
 }
 
 class Center {
@@ -309,4 +246,3 @@ class Center {
   centerName!: string;
   regCode!: string;
 }
-

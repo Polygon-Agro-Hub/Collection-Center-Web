@@ -7,9 +7,9 @@
     <p class="font-semibold text-sm text-[#424242] dark:text-white">Edit Profile Profile</p>
 </div>
 
-<div *ngIf="naviPath ==='manage-officers' && !isLoading" class="flex flex-row pt-0 mb-7 gap-5 cursor-pointer">
-    <p class="font-semibold text-sm text-[#424242] dark:text-white" onclick="history.back()">Manage Officers</p>
-    <p class="font-semibold text-sm text-[#424242] dark:text-white">Edit Profile</p>
+<div *ngIf="naviPath ==='manage-officers' && !isLoading" class="flex gap-5 font-semibold text[#424242] mb-8 mx-5 dark:text-[#FFFFFF] dark:bg-blacks cursor-pointer">
+    <p  onclick="history.back()">Manage Officers</p>
+    <p >Edit Profile</p>
 </div>
 
 <div *ngIf="!isLoading" class="mx-auto p-6 bg-white dark:bg-[#363636] rounded-lg shadow-mg">

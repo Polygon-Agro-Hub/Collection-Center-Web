@@ -1,8 +1,12 @@
-<app-loading-spinner *ngIf="isLoading"/>
+<app-loading-spinner *ngIf="isLoading" />
 
-<div *ngIf="!isLoading">
-    <p class="font-semibold text[#424242] mb-8 mx-5 dark:text-white">Daily Target<span class="ml-8">Download
-            Collection</span></p>
+<div *ngIf="!isLoading" class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-8 mx-5 cursor-pointer">
+    <p onclick="history.back()"> Center Target</p>
+    <p>Download Collection</p>
+  </div>
+
+<div *ngIf="!isLoading" class="w-full overflow-x-auto">
+    
 
     <div class="w-full px-10 py-7 bg-tileLight shadow-lg rounded-lg dark:bg-[#363636]">
         <div class="flex flex-row items-center justify-center">
@@ -11,7 +15,7 @@
             <div class="relative w-56 mr-10">
                 <div
                     class="border-2 rounded-xl  text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
-                    <input type="date" [(ngModel)]="fromDate" name="fromDate"
+                    <input type="date" [(ngModel)]="fromDate" name="fromDate" (change)="validateFromDate()"
                         class="block w-full appearance-none  text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none dark:bg-[#292929]" />
                 </div>
             </div>
@@ -21,8 +25,8 @@
             <div class="relative w-56 mr-6">
                 <div
                     class="border-2 rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
-                    <input type="date" [(ngModel)]="toDate" name="toDate"
-                        class="block w-full appearance-none  text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none dark:bg-[#292929]" />
+                    <input type="date" [(ngModel)]="toDate" name="toDate" [min]="fromDate" (change)="validateToDate()"
+                        class="block w-full appearance-none text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none dark:bg-[#292929]" />
                 </div>
             </div>
 
@@ -38,57 +42,67 @@
     </div>
 
 
-    <div *ngIf="hasData"
-        class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
-        <div class="flex items-center justify-center mb-8">
-            <button class="bg-[#415CFF] text-white text-lg font-semibold px-6 py-2 rounded-lg shadow-md"
-                (click)="downloadXlSheet()">Download</button>
-        </div>
-
-        <div>
-            <table class="w-full divide-y-2 overflow-hidden">
-                <thead class=" dark:bg-[#272F45] text-gray-700 dark:text-gray-300">
+    <div *ngIf="hasData" class="mt-8 overflow-x-auto bg-tileLight shadow-lg rounded-lg dark:text-[#FFFFFF] dark:bg-[#363636] p-8">
+        
+    
+        <div class="min-w-max mt-6 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+            <table class="min-w-full divide-y-2 table-fixed">
+                <thead class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
                     <tr>
-                        <th class="px-6 py-3 text-left font-medium">No</th>
-                        <th class="px-6 py-3 text-left font-medium">Crop Name</th>
-                        <th class="px-6 py-3 text-left font-medium">Variety Name</th>
-                        <th class="px-6 py-3 text-left font-medium">Grade</th>
-                        <th class="px-6 py-3 text-left font-medium">Target (kg)</th>
-                        <th class="px-6 py-3 text-left font-medium">Completed (kg)</th>
-                        <th class="px-6 py-3 text-center font-medium">Status</th>
-                        <th class="px-6 py-3 text-center font-medium">End Time</th>
+                        <th class="px-6 py-3 text-left font-medium w-16">No</th>
+                        <th class="px-6 py-3 text-left font-medium w-1/6">Crop Name</th>
+                        <th class="px-6 py-3 text-left font-medium w-1/6">Variety Name</th>
+                        <th class="px-6 py-3 text-left font-medium w-1/6">Grade</th>
+                        <th class="px-6 py-3 text-left font-medium w-1/6">Target (kg)</th>
+                        <th class="px-6 py-3 text-left font-medium w-1/6">Completed (kg)</th>
+                        <th class="px-6 py-3 text-center font-medium w-24">Status</th>
+                        <th class="px-6 py-3 text-center font-medium w-24">Validity</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white dark:bg-[#1E293B]">
+                <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
                     <tr *ngFor="let item of targetArr; let i = index">
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
-                            {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }} </td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.cropNameEnglish}}</td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.varietyNameEnglish}}</td>
+                            {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }}
+                        </td>
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300 truncate">{{item.cropNameEnglish}}</td>
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300 truncate">{{item.varietyNameEnglish}}</td>
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.grade}}</td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.TargetQty}}</td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.CompleteQty}}</td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300 flex justify-center items-center">
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.target}}</td>
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
+                            {{ item.complete != null ? item.complete : '-' }}
+                        </td>
+                        <td class="px-6 py-4 text-center">
                             <span *ngIf="item.status === 'Pending'"
-                                class="bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-6 py-1">
+                                class="inline-block bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-4 py-1 w-32">
                                 Pending
                             </span>
                             <span *ngIf="item.status === 'Completed'"
-                                class="bg-[#C8E0FF] text-[#415CFF] text-center rounded-lg px-4 py-1">
+                                class="inline-block bg-[#C8E0FF] text-[#415CFF] text-center rounded-lg px-4 py-1 w-32">
                                 Completed
                             </span>
+                            <span *ngIf="item.status === 'Exceeded'"
+                                class="inline-block bg-[#f6c0c0] text-[#f59999] text-center rounded-lg px-4 py-1 w-32">
+                                Exceeded
+                            </span>
                         </td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
-                            <div class="flex flex-col items-center justify-center">
-                                <p class="text-[#3E3E3E]">{{item.toDate | date:'yyyy/mm/dd'}}</p>
-                                <p class="text-[#3E3E3E]">{{item.toTime }}</p>
-                            </div>
+                        <td class="px-6 py-4 text-center">
+                            <span *ngIf="item.validity === 'Expired'"
+                                class="inline-block bg-[#D9D9D9] text-[#8A8A8A] text-center rounded-lg px-4 py-1 w-24">
+                                Expired
+                            </span>
+                            <span *ngIf="item.validity === 'Active'"
+                                class="inline-block bg-[#B7FFBE] text-[#02BB3D] text-center rounded-lg px-4 py-1 w-24">
+                                Active
+                            </span>
                         </td>
-
                     </tr>
                 </tbody>
-
             </table>
+        </div>
+
+        <div class="flex items-center justify-center mt-8">
+            <button class="bg-[#415CFF] text-white text-lg font-semibold px-6 py-2 rounded-lg shadow-md"
+                (click)="downloadXlSheet()">Download</button>
         </div>
     </div>
 </div>

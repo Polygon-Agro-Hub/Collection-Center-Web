@@ -85,7 +85,8 @@
             </div>
         </div>
 
-        <div class="w-2/5 pb-1 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg cursor-default">
+        <div (click)="navigateCollectionExpenses()" 
+        class="w-2/5 pb-1 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg cursor-default">
             <div class="flex flex-row items-end justify-end">
                 <i *ngIf="expencePrecentage >= 0" class="fa-solid fa-arrow-trend-up text-[#0D9488] mx-2 "></i>
                 <i *ngIf="expencePrecentage < 0" class="fa-solid fa-arrow-trend-down text-[#D70000] mx-2 "></i>

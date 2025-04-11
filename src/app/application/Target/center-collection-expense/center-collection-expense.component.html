@@ -1,9 +1,15 @@
 <app-loading-spinner *ngIf="isLoading" />
 
+<div *ngIf="!isLoading" class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-8 mx-5 cursor-pointer">
+    <p (click)="navigateToCenterTarget()"> Center Target</p>
+    <p onclick="history.back()">Center Dashboard</p>
+    <p>Collecton Expenses</p>
+  </div>
 
-<div *ngIf="!isLoading" class="w-full overflow-x-auto">
 
-    <div class="w-full px-10 pb-7 pt-4 bg-tileLight dark:bg-[#363636] rounded-lg ">
+<div *ngIf="!isLoading" class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg overflow-x-auto">
+
+    <div class="w-full px-10 pb-7 pt-4  dark:bg-[#363636] ">
 
         <div class="w-full dark:bg-[#363636]">
             <div class="flex flex-row items-center justify-center">
@@ -52,32 +58,6 @@
                 <p class="font-normal dark:text-white">Filter By</p>
     
     
-                <div class="relative w-46">
-                    <div
-                        class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
-                        <select [(ngModel)]="selectCenters" (change)="applyCompanyFilters()"
-                            class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer">
-                            <option value="" selected disabled>Centers</option>
-                            <option *ngFor="let item of centerArr"
-                                class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                                [value]="item.id">{{item.regCode}} - {{item.centerName}}</option>
-                        </select>
-    
-    
-                        <div *ngIf="!selectCenters"
-                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
-                            <i class="fa-solid fa-angle-down text-lg mr-3"></i>
-                        </div>
-    
-    
-                        <div (click)="clearCompanyFilter()" *ngIf="selectCenters"
-                            class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300 cursor-pointer z-10">
-                            <i class="fa-solid fa-xmark text-lg mr-3"></i>
-                        </div>
-                    </div>
-                </div>
-    
-    
     
                 <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
                     <input type="text" placeholder="Search..." [(ngModel)]="searchText" (keyup.enter)="onSearch()"
@@ -105,13 +85,13 @@
     
         </div>
     
-        <div class="flex justify-end items-center mb-5 mt-3"> <!-- Changed this line -->
-            <!-- <div class="text-lg font-medium">
+        <div class="flex justify-between items-center mb-5 mt-3"> <!-- Changed this line -->
+            <div class="text-lg font-medium">
                 <p class="font-semibold mb-1 text-lg dark:text-white whitespace-nowrap">
                     <span class="text-gray-500 dark:textDark">Total : </span>Rs {{ totalPaymentsAmount | number:'1.2-2'
                     }}
                 </p>
-            </div> -->
+            </div>
     
             <button
                 class="bg-[#415CFF] text-white shadow-md font-medium rounded-lg py-2 px-5 mr-5 text-lg flex items-center"
@@ -122,19 +102,23 @@
             </button>
         </div>
     
-        <div *ngIf="hasData" class="min-w-max mt-4 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+    
+        
+    
+        <div  class="min-w-max mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+    
+    
             <table class="w-full min-w-max divide-y-2 border-[1px] border-gray-300 rounded-lg overflow-hidden">
                 <thead class=" dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] text-[#4B5563]">
                     <tr>
                         <th class="px-2 py-3 text-left text-sm font-medium">No</th>
+                        <th class="px-3 py-3 text-left text-sm font-medium">GRN No</th>
+                        <th class="px-3 py-3 text-left text-sm font-medium">Amount (Rs.)</th>
                         <th class="px-3 py-3 text-left text-sm font-medium">Center Code</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium">Center Name</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium">Crop</th>
-                        <th class="px-3 py-3 text-center text-sm font-medium ">Variety</th>
-                        <th class="px-3 py-3 text-center text-sm font-medium ">Quantity A (kg)</th>
-                        <th class="px-3 py-3 text-center text-sm font-medium">Quantity A (kg)</th>
-                        <th class="px-3 py-3 text-center text-sm font-medium">Quantity A (kg)</th>
-                        <th class="px-3 py-3 text-center text-sm font-medium">Total (kg)</th>
+                        <th class="px-3 py-3 text-left text-sm font-medium ">Center Name</th>
+                        <th class="px-3 py-3 text-center text-sm font-medium ">Farmer NIC</th>
+                        <th class="px-3 py-3 text-center text-sm font-medium">Collected Time</th>
+                        <th class="px-3 py-3 text-center text-sm font-medium"></th>
                     </tr>
                 </thead>
                 <tbody class="bg-white text-[#000000] font-semibold dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
@@ -145,22 +129,23 @@
                     totalItems: totalItems
                   };  let i = index">
                         <td class="px-2 py-4 text-sm text-gray-900 dark:text-gray-300 ">
-                            {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i + 1)
-                                : (((page - 1) * itemsPerPage) + i + 1) }} </td>
+                            {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i + 1) :
+                                (((page - 1) * itemsPerPage) + i + 1) }} </td>
+                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.invNo}}</td>
+                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300 ">
+                            {{item.totalAmount | number:'1.2-2'}}
+                        </td>
                         <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.centerCode}}</td>
                         <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.centerName}}</td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">
-                            {{ item.cropNameEnglish || '-' }}
-                          </td>
-                          <td class="px-3 py-4 text-sm text-center text-gray-900 dark:text-gray-300">
-                            {{ item.varietyNameEnglish || '-' }}
-                          </td>
-                        <td class="px-3 py-4 text-center dark:text-gray-300">{{item.totalGradeAQuantity}}</td>
-                        <td class="px-3 py-4 text-center dark:text-gray-300">{{item.totalGradeBQuantity}}</td>
-                        <td class="px-3 py-4 text-center dark:text-gray-300">{{item.totalGradeCQuantity}}</td>
-                        <td class="px-3 py-4 text-center dark:text-gray-300">
-                            {{ item.totalQuantity }}
-                          </td>            
+                        <td class="px-3 py-4 text-sm text-center text-gray-900 dark:text-gray-300">{{item.nic}}</td>
+                        <td class="px-3 py-4 text-center text-[#646464] dark:text-gray-300">
+                            <span class="block">{{ item.createdAt | date:'MMM d, y' }}</span>
+                            <span class="block">{{ item.createdAt | date:'h:mm a' }}</span>
+                        </td>
+                        <td (click)="navigateToFarmerReport(item.invNo)"
+                        class="px-3 py-4 text-center dark:text-gray-300 cursor-pointer">
+                            <i class="fa-solid fa-arrow-up-right-from-square text-[#415CFF]"></i>
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -196,35 +181,7 @@
                 <i class="fa-solid fa-list text-2xl dark:text-white ml-8"></i>
     
                 <p class="font-normal dark:text-white">Filter By</p>
-    
-    
-                <div class="relative w-46">
-                    <div
-                        class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
-                        <select [(ngModel)]="selectCenters" (change)="applyCompanyFilters()"
-                            class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer">
-                            <option value="" selected disabled>Centers</option>
-                            <option *ngFor="let item of centerArr"
-                                class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                                [value]="item.id">{{item.regCode}} - {{item.centerName}}</option>
-                        </select>
-    
-    
-                        <div *ngIf="!selectCenters"
-                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
-                            <i class="fa-solid fa-angle-down text-lg mr-3"></i>
-                        </div>
-    
-    
-                        <div (click)="clearCompanyFilter()" *ngIf="selectCenters"
-                            class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300 cursor-pointer z-10">
-                            <i class="fa-solid fa-xmark text-lg mr-3"></i>
-                        </div>
-                    </div>
-                </div>
-    
-    
-    
+
                 <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
                     <input type="text" placeholder="Search..." [(ngModel)]="searchText" (keyup.enter)="onSearch()"
                         (keyup.esc)="offSearch()"
@@ -252,7 +209,7 @@
         </div>
 
         <div 
-            class="flex flex-col items-center w-fullpx-10 py-7 mt-6 ">
+            class="flex flex-col items-center w-full px-10 py-7 mt-6 ">
             <p class="text-[#494949] my-6 dark:text-textDark">--No Data Available--</p>
             <img src="../../../../assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
         </div>

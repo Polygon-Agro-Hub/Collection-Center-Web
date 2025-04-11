@@ -27,6 +27,8 @@ export class DownloadTargetComponent {
   hasData: boolean = false;
   isLoading: boolean = false;
 
+  
+
 
   // toaster = inject(ToastrService); 
 
@@ -37,19 +39,74 @@ export class DownloadTargetComponent {
   ) { }
 
   fetchDownloadTarget() {
-    this.isLoading = true
+    this.isLoading = true;
     this.TargetSrv.downloadDailyTarget(this.fromDate, this.toDate).subscribe(
-      (res) => {
-        if (res.status) {
-          this.targetArr = res.data;
-          this.hasData = res.data.length > 0;
+      (res: any) => {  // Add type annotation or better create an interface
+        console.log('Full response:', res);
+        
+        // Check for successful response (status code 200-299)
+        if (res) {  // Check if response exists
+          this.targetArr = res.items || res.data || [];  // Handle both 'items' and 'data' properties
+          console.log('Target array:', this.targetArr);
+          this.hasData = this.targetArr.length > 0;
+          
+          if (!this.hasData) {
+            console.warn('No data received');
+          }
         } else {
+          console.error('Empty response received');
           this.hasData = false;
         }
+        
         this.isLoading = false;
+      },
+      (error) => {  // Add error handling
+        console.error('Error fetching targets:', error);
+        this.isLoading = false;
+        this.hasData = false;
+        // Handle error (show toast, etc.)
       }
     );
   }
+
+  validateToDate() {
+    // Case 1: User hasn't selected fromDate yet
+    if (!this.fromDate) {
+      this.toDate = ''; // Reset toDate
+      this.toastSrv.warning("Please select the 'From' date first.");
+      return;
+    }
+  
+    // Case 2: toDate is earlier than fromDate
+    if (this.toDate) {
+      const from = new Date(this.fromDate);
+      const to = new Date(this.toDate);
+  
+      if (to <= from) {
+        this.toDate = ''; // Reset toDate
+        this.toastSrv.warning("The 'To' date cannot be earlier than or same to the 'From' date.");
+      }
+    }
+  }
+
+  validateFromDate() {
+    // Case 1: User hasn't selected fromDate yet
+    if (!this.toDate) {
+      return;
+    }
+  
+    // Case 2: toDate is earlier than fromDate
+    if (this.toDate) {
+      const from = new Date(this.fromDate);
+      const to = new Date(this.toDate);
+  
+      if (to <= from) {
+        this.fromDate = ''; // Reset toDate
+        this.toastSrv.warning("The 'From' date cannot be Later than or same to the 'From' date.");
+      }
+    }
+  }
+  
 
   goBtn() {
     if (!this.fromDate || !this.toDate) {
@@ -62,30 +119,49 @@ export class DownloadTargetComponent {
 
   downloadXlSheet() {
     if (!this.targetArr || this.targetArr.length === 0) {
-      this.toastSrv.error("No data available to export!")
+      this.toastSrv.error("No data available to export!");
       return;
     }
-
+  
     const worksheetData = this.targetArr.map((item, index) => ({
       No: index + 1,
       'Crop Name': item.cropNameEnglish,
       'Variety Name': item.varietyNameEnglish,
       Grade: item.grade,
-      'Target (kg)': item.TargetQty,
-      'Completed (kg)': item.CompleteQty,
+      'Target (kg)': item.target,
+      'Completed (kg)': item.complete ?? '-',  // Handle null/undefined
       Status: item.status,
+      Validity: item.validity,
     }));
-
+  
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(worksheetData);
+    
+    // Set column widths (in characters)
+    worksheet['!cols'] = [
+      { wch: 5 },    // No (column A)
+      { wch: 20 },   // Crop Name (column B)
+      { wch: 20 },   // Variety Name (column C)
+      { wch: 10 },   // Grade (column D)
+      { wch: 12 },   // Target (kg) (column E)
+      { wch: 15 },   // Completed (kg) (column F)
+      { wch: 12 },   // Status (column G)
+      { wch: 12 }    // Validity (column H)
+    ];
+  
+    // Auto-filter (optional)
+    worksheet['!autofilter'] = { ref: `A1:H${worksheetData.length + 1}` };
+  
     const workbook: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Daily Targets');
+    
     const excelBuffer: any = XLSX.write(workbook, {
       bookType: 'xlsx',
       type: 'array',
     });
+    
     const data: Blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
     saveAs(data, `Target-Report (${this.fromDate} - ${this.toDate}).xlsx`);
-    this.toastSrv.success(`Target-Report (${this.fromDate} - ${this.toDate}).xlsx DownLoaded`)
+    this.toastSrv.success(`Target-Report (${this.fromDate} - ${this.toDate}).xlsx Downloaded`);
   }
 
 }
@@ -96,7 +172,8 @@ class DailyTargets {
   toDate!: string;
   toTime!: string;
   grade!: string;
-  TargetQty!: string;
-  CompleteQty!: string;
+  target!: string;
+  complete!: string;
   status!: string;
+  validity!: string;
 }

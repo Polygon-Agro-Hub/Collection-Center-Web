@@ -1,11 +1,10 @@
-<app-loading-spinner *ngIf="isLoading"/>
+<app-loading-spinner *ngIf="isLoading" />
 
 <div *ngIf="!isLoading">
     <div class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-8 mx-5 cursor-pointer">
-        <p (click)="navigateToReports()">Report</p>
-        <p (click)="navigateToOfficerReports()">Officer Reports</p>
-        <p onclick="history.back()">Farmer List</p>
-        <p>Farmer Report</p>
+        <p (click)="navigateToCollectionReports()">Reports</p>
+        <p onclick="history.back()">Collection Reports</p>
+        <p>Farmer Invoice Report</p>
     </div>
 
 
@@ -127,15 +126,15 @@
                             <td class="border-[2px] border-[#b3b1b1] text-center py-2 px-4 dark:text-textDark">
                                 {{item.gradeAprice}}</td>
                             <td class="border-[2px] border-[#b3b1b1] text-center py-2 px-4 dark:text-textDark">
-                                {{item.gradeAquan}}</td>
+                                {{ item.gradeAquan != null ? item.gradeAquan : '0.00' }}</td>
                             <td class="border-[2px] border-[#b3b1b1] text-center py-2 px-4 dark:text-textDark">
                                 {{item.gradeBprice}}</td>
                             <td class="border-[2px] border-[#b3b1b1] text-center py-2 px-4 dark:text-textDark">
-                                {{item.gradeBquan}}</td>
+                                {{ item.gradeBquan != null ? item.gradeBquan : '0.00' }}</td>
                             <td class="border-[2px] border-[#b3b1b1] text-center py-2 px-4 dark:text-textDark">
                                 {{item.gradeCprice}}</td>
                             <td class="border-[2px] border-[#b3b1b1] text-center py-2 px-4 dark:text-textDark">
-                                {{item.gradeCquan}}</td>
+                                {{ item.gradeCquan != null ? item.gradeCquan : '0.00' }}</td>
                             <td class="border-[2px] border-[#b3b1b1] text-center py-2 px-4 dark:text-textDark">
                                 <!-- {{calculeteTotal(item.gradeAprice, item.gradeAquan, item.gradeBprice, item.gradeBquan,
                                 item.gradeCprice, item.gradeCquan)}} -->
@@ -148,24 +147,30 @@
             </div>
 
             <p class="text-lg font-medium my-8 dark:text-white"> Full Total(Rs.) : <span class="dark:text-textDark">{{
-                    totalAmount }} </span></p>
+                    totalAmount != null ? totalAmount : '0.00' }} </span></p>
 
             <div class="flex flex-row items-center justify-center gap-[15%]">
-                <div class="flex flex-col gap-2">
-
-                    <img class="w-36 h-auto" [src]="userObj.farmerQr" />
-                    <!-- <img src="../../../../assets/images/logo.png" class="w-36 h-auto" /> -->
+                <div class="flex flex-col gap-2 items-center">
+                    <ng-container *ngIf="userObj.farmerQr; else farmerPlaceholder">
+                        <img class="w-36 h-auto" [src]="userObj.farmerQr" />
+                    </ng-container>
+                    <ng-template #farmerPlaceholder>
+                        <div class="w-36 h-36"></div>
+                    </ng-template>
                     <p class="text-lg font-medium dark:text-textDark">Farmer’s QR Code</p>
                 </div>
 
-                <div class="flex flex-col gap-2">
-
-                    <img [src]="userObj.officerQr" class="w-36 h-auto" />
-                    <!-- <img src="../../../../assets/images/logo.png" class="w-36 h-auto" /> -->
+                <div class="flex flex-col gap-2 items-center">
+                    <ng-container *ngIf="userObj.officerQr; else officerPlaceholder">
+                        <img class="w-36 h-auto" [src]="userObj.officerQr" />
+                    </ng-container>
+                    <ng-template #officerPlaceholder>
+                        <div class="w-36 h-36"></div>
+                    </ng-template>
                     <p class="text-lg font-medium dark:text-textDark">Officer’s QR Code</p>
                 </div>
-
             </div>
+
         </div>
 
         <div class="flex items-center justify-center mt-10">

@@ -42,6 +42,7 @@ import { AssignCenterTargetViewComponent } from './application/Target/assign-cen
 import { ReportDashboardComponent } from './application/Report/report-dashboard/report-dashboard.component';
 import { CollectionReportsComponent } from './application/Report/collection-reports/collection-reports.component';
 import { OfficerTargetViewComponent } from './application/Target/officer-target-view/officer-target-view.component';
+import { OfficerTargetPassOfficerComponent } from './application/Target/officer-target-pass-officer/officer-target-pass-officer.component';
 
 export const routes: Routes = [
     {
@@ -262,7 +263,12 @@ export const routes: Routes = [
                     {
                         path: '',
                         component: OfficerTargetViewComponent
+                    },
+                    {
+                        path: 'edit-officer-target/:id',
+                        component: OfficerTargetPassOfficerComponent
                     }
+
                 ]
             }
 

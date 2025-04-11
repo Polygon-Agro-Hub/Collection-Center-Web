@@ -92,6 +92,12 @@ export class OfficerTargetViewComponent {
       this.OfficerObj.toDate = '';
     }
   }
+
+  editOfficerTarget(id:number){
+    console.log("nav trigger");
+    
+    this.router.navigate([`/officer-target/edit-officer-target/${id}`])
+  }
   
   
 
@@ -106,6 +112,7 @@ class Officer {
 }
 
 class Target {
+  id!:number;
   varietyNameEnglish!:string
   cropNameEnglish!:string 
   grade!:string 

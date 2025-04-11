@@ -59,13 +59,13 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">
         <div>
             <label for="fromDate" class="block text-sm font-medium text-gray-700 dark:text-textDark">From</label>
-            <input id="fromDate" name="fromDate" type="date" [(ngModel)]="OfficerObj.fromDate"
+            <input id="fromDate" name="fromDate" type="date" [(ngModel)]="OfficerObj.fromDate" 
                 class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
         </div>
 
         <div>
             <label for="toDate" class="block text-sm font-medium text-gray-700 dark:text-textDark">TO</label>
-            <input id="toDate" name="toDate" type="date" [(ngModel)]="OfficerObj.toDate"
+            <input id="toDate" name="toDate" type="date" [(ngModel)]="OfficerObj.toDate" (change)="checkToDate()"
                 class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
         </div>
     </div>

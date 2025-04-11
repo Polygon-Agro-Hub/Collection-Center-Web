@@ -36,6 +36,12 @@ export class OfficerTargetViewComponent {
   }
 
   onSubmit(page: number = this.page, limit: number = this.itemsPerPage) {
+    if(!this.OfficerObj.jobRole || !this.OfficerObj.officerId || !this.OfficerObj.fromDate || !this.OfficerObj.toDate){
+      this.toastSrv.warning('Fill All Input feilds')
+      return;
+    }
+
+
     if(this.OfficerObj.jobRole === 'Collection Center Manager'){
       this.OfficerObj.empId = 'CCM'+this.OfficerObj.officerId;
     }else if(this.OfficerObj.jobRole === 'Collection Officer'){
@@ -70,6 +76,24 @@ export class OfficerTargetViewComponent {
     this.page = event;
     this.onSubmit();
   }
+
+  checkToDate() {
+    if (!this.OfficerObj.fromDate) {
+      this.toastSrv.warning('Please select the "From" date first.');
+      this.OfficerObj.toDate = '';
+      return;
+    }
+  
+    const from = new Date(this.OfficerObj.fromDate);
+    const to = new Date(this.OfficerObj.toDate);
+  
+    if (to < from) {
+      this.toastSrv.warning('"To" date cannot be earlier than "From" date.');
+      this.OfficerObj.toDate = '';
+    }
+  }
+  
+  
 
 }
 

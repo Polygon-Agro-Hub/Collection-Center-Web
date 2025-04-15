@@ -61,28 +61,6 @@ export class ExpensesComponent implements OnInit {
     this.router.navigate([`${path}`]);
   }
 
-  // fetchAllPayments(
-  //   page: number = 1,
-  //   limit: number = this.itemsPerPage
-  // ) {
-  //   this.isLoading = true;
-  
-  //   console.log('Sending fromDate:', this.fromDate);
-  //   console.log('Sending toDate:', this.toDate);
-  
-  //   this.ReportSrv.getAllPayments(page, limit, this.fromDate, this.toDate).subscribe(
-  //     (res) => {
-  //       this.farmerPaymentsArr = res.items;
-  //       this.totalItems = res.total;
-  //       this.hasData = res.items.length > 0;
-  //       this.isLoading = false;
-  //       this.calculateTotalPayments();
-  //     },
-  //     (error) => {
-  //       this.isLoading = false;
-  //     }
-  //   );
-  // }
 
   fetchFilteredPayments(page: number = 1, limit: number = this.itemsPerPage) {
     this.isLoading = true;

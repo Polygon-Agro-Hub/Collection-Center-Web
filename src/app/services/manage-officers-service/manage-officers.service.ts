@@ -268,8 +268,20 @@ export class ManageOfficersService {
     });
   }
 
-  CCHupdateCollectiveOfficer(person: any, id: number, image: any): Observable<any> {
+  CCHupdateCollectiveOfficer(person: any, id: number, image: any, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
     const formData = new FormData();
+    if (person.jobRole === 'Driver') {
+      formData.append('driverData', JSON.stringify(driver));
+      formData.append('licFront', licFront);
+      formData.append('licBack', licBack);
+      formData.append('insFront', insFront);
+      formData.append('insBack', insBack);
+      formData.append('vehiFront', vehiFront);
+      formData.append('vehiBack', vehiBack);
+      formData.append('vehiSideA', vehiSideA);
+      formData.append('vehiSideB', vehiSideB);
+    }
+
     formData.append('officerData', JSON.stringify(person));
     formData.append('file', image);
 

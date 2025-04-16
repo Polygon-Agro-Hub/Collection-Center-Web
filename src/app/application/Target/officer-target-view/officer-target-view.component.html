@@ -4,7 +4,7 @@
 </div>
 
 
-<!-- <app-loading-spinner *ngIf="isLoading"/> -->
+<app-loading-spinner *ngIf="isLoading"/>
 
 
 <div class="w-full px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg">
@@ -59,7 +59,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">
         <div>
             <label for="fromDate" class="block text-sm font-medium text-gray-700 dark:text-textDark">From</label>
-            <input id="fromDate" name="fromDate" type="date" [(ngModel)]="OfficerObj.fromDate" 
+            <input id="fromDate" name="fromDate" type="date" [(ngModel)]="OfficerObj.fromDate"
                 class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
         </div>
 
@@ -84,9 +84,116 @@
     <img src="../../../../assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
 </div>
 
-<div *ngIf="hasData" class="w-full px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg mt-8">
-    <div class="overflow-x-auto mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
-        <table class="w-full divide-y-2 overflow-hidden">
+
+
+<div *ngIf="hasData" class="w-full overflow-x-auto px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg mt-8">
+
+    <div class="">
+        <p class="font-semibold mb-1 text-lg dark:text-white whitespace-nowrap">
+            {{OfficerObj.fromDate +  '  -  ' + OfficerObj.toDate}} </p>
+    </div>
+
+    <div class="flex flex-row items-center justify-between mb-8">
+        <div class="flex flex-row gap-4 ">
+
+            <p class="font-semibold mb-1 text-lg dark:text-white whitespace-nowrap">EMP ID: 
+                 {{OfficerObj.empId}} </p>
+        </div>
+        <div class="flex flex-row items-center gap-5 ">
+            <i class="fa-solid fa-list text-2xl dark:text-white ml-8"></i>
+
+            <p class="font-normal dark:text-white">Filter By</p>
+
+            <div class="relative w-52">
+                <div
+                    class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
+                    <select [(ngModel)]="selectStatus" (change)="applyStatusFilters()"
+                    class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer">
+                    <option value="" selected disabled>Status</option>
+                    <option value="Pending"
+                        class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">
+                        Pending</option>
+                    <option value="Completed"
+                        class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">
+                        Completed</option>
+                    <option value="Exceeded"
+                        class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">
+                        Exceeded</option>
+                </select>
+
+                    <!-- Down arrow icon -->
+                    <div *ngIf="!selectStatus"
+                    class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
+                    <i class="fa-solid fa-angle-down text-lg mr-3"></i>
+                </div>
+
+                    <!-- Cancel icon -->
+                    <div (click)="clearStatusFilter()" *ngIf="selectStatus"
+                    class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300 cursor-pointer z-10">
+                    <i class="fa-solid fa-xmark text-lg mr-3"></i>
+                </div>
+                </div>
+            </div>
+
+            <div class="relative w-52">
+                <div
+                    class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
+                    <select [(ngModel)]="selectValidity" (change)="applyValidityFilters()"
+                    class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer">
+                    <option value="" selected disabled>Validity</option>
+                    <option value="Expired"
+                        class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">
+                        Expired</option>
+                    <option value="Valid"
+                        class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">
+                        Valid</option>
+                    
+                </select>
+
+                    <!-- Down arrow icon -->
+                    <div *ngIf="!selectValidity"
+                    class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
+                    <i class="fa-solid fa-angle-down text-lg mr-3"></i>
+                </div>
+
+                    <!-- Cancel icon -->
+                    <div (click)="clearValidityFilter()" *ngIf="selectValidity"
+                    class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300 cursor-pointer z-10">
+                    <i class="fa-solid fa-xmark text-lg mr-3"></i>
+                </div>
+                </div>
+            </div>
+
+
+            <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+                <input type="text" placeholder="Search ..." [(ngModel)]="searchText"
+                (keyup.enter)="onSearch()" (keyup.esc)="offSearch()"
+                class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
+            <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
+                (click)="onSearch()">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
+                </svg>
+            </button>
+            <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none"
+                (click)="offSearch()">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class=" mr-5 min-w-max border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+        <table class="w-full min-w-max divide-y-2 overflow-hidden">
             <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
                 <tr>
                     <th class="px-6 py-3 text-left font-medium">No</th>
@@ -132,8 +239,8 @@
 
                     </td>
                     <td class="px-6 py-4">
-                        <i class="fa-solid fa-pen-to-square text-xl cursor-pointer" (click)="item.validity === 'Valid' && editOfficerTarget(item.id)"
-                        [ngClass]="{
+                        <i class="fa-solid fa-pen-to-square text-xl cursor-pointer"
+                            (click)="item.validity === 'Valid' && editOfficerTarget(item.id)" [ngClass]="{
                             'text-gray-400': item.validity === 'Expired',
                             'text-[#415CFF]': item.validity === 'Valid'
                           }">
@@ -149,4 +256,14 @@
             [screenReaderCurrentLabel]="'Youre on page'">
         </pagination-controls>
     </div>
+
+    <div class="flex justify-center mb-5">
+        <button *ngIf="hasData"
+          class="flex justify-center bg-[#415CFF] text-white shadow-md font-medium rounded-lg py-2 px-5  mr-5 text-lg items-center"
+          (click)="downloadTemplate1()">
+          <i class="fa-solid fa-download px-2" *ngIf="!isDownloading"></i>
+          <i class="fa-solid fa-spinner fa-spin px-2" *ngIf="isDownloading"></i>
+          {{ isDownloading ? " Downloading..." : " Download" }}
+        </button>
+      </div>
 </div>

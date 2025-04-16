@@ -36,6 +36,7 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
 
   ngOnInit(): void {
     this.targetItemId = this.route.snapshot.params['id'];
+    this.fetchTargetDetalis()
   }
 
   fetchTargetDetalis() {
@@ -55,20 +56,86 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
   }
 
   filterOfficer() {
-
+    if (!this.officerArr) return;
+    const search = this.searchTerm.toLowerCase();
+    this.filteredOfficers = this.officerArr.filter(officer =>
+      officer.firstNameEnglish.toLowerCase().includes(search) ||
+      officer.lastNameEnglish.toLowerCase().includes(search)
+    );
   }
 
   selectOfficer(id: number) {
+    const selectedOfficer = this.officerArr.find(officer => officer.id === id);
+    if (selectedOfficer) {
+      this.searchTerm = `${selectedOfficer.firstNameEnglish} ${selectedOfficer.lastNameEnglish}`;
+      this.selectedOfficerId = id;
+      this.filteredOfficers = [];
+    }
+  }
+
+  onSubmit() {
+    this.isLoading = true;
+
+    if (!this.selectedOfficerId) {
+      this.isLoading = false;
+      this.toastSrv.warning('Pleace fill all feild!')
+      return;
+    }
+
+    if (this.passAmount > this.amount) {
+      this.isLoading = false;
+      this.toastSrv.warning(`The maximum amount you can pass <b>${this.amount}</b>Kg`)
+      return;
+    }
+
+    this.TargetSrv.passToTargetToOfficer(this.selectedOfficerId, this.targetItemId, this.passAmount).subscribe(
+      (res) => {
+        if (res.status) {
+          this.toastSrv.success(res.message);
+          this.isLoading = false;
+          this.fetchTargetDetalis()
+          this.router.navigate(['/officer-target'])
+        } else {
+          this.isLoading = false;
+          this.toastSrv.error(res.message);
+        }
+      }
+    )
 
   }
 
-  onSubmit(){
+  onCancel() {
 
   }
 
-  onCancel(){
+  formatDate(dateString: string | Date): string {
+    if (!dateString) return '';
     
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return ''; // Invalid date
+    
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const year = date.getFullYear();
+    
+    return `${month}.${day}.${year}`;
   }
+
+  formatNextDate(dateString: string | Date): string {
+    if (!dateString) return '';
+    
+    const date = new Date(dateString);
+    if (isNaN(date.getTime())) return ''; 
+  
+    date.setDate(date.getDate() + 1);
+  
+    const month = (date.getMonth() + 1).toString().padStart(2, '0');
+    const day = date.getDate().toString().padStart(2, '0');
+    const year = date.getFullYear();
+  
+    return `${month}.${day}.${year}`;
+  }
+  
 
 
 
@@ -81,6 +148,7 @@ class TargetDetalis {
   complete!: number;
   todo!: number;
   empId!: string;
+  date!:Date
 }
 
 class Officers {

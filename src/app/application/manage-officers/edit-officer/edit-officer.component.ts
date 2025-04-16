@@ -22,11 +22,13 @@ export class EditOfficerComponent implements OnInit {
   // ManagerArr!: ManagerDetails[]
   centerArr: Center[] = [];
   managerArr: Manager[] = [];
+  driverObj: Drivers = new Drivers()
+
 
 
 
   languages: string[] = ['Sinhala', 'English', 'Tamil'];
-  selectedPage: 'pageOne' | 'pageTwo' = 'pageOne';
+  selectedPage: 'pageOne' | 'pageTwo' | 'pageThree' = 'pageOne';
   lastID!: number
   itemId: number | null = null;
   officerId!: number
@@ -53,7 +55,42 @@ export class EditOfficerComponent implements OnInit {
   allBranches: BranchesData = {};
 
   invalidFields: Set<string> = new Set();
-  naviPath!:string
+  naviPath!: string
+
+  selectVehicletype: any = { name: '', capacity: '' };
+
+
+  licenseFrontImageFileName!: string;
+  licenseFrontImagePreview: string | ArrayBuffer | null = null;
+  licenseFrontImageFile: File | null = null;
+
+  licenseBackImageFileName!: string;
+  licenseBackImagePreview: string | ArrayBuffer | null = null;
+  licenseBackImageFile: File | null = null;
+
+  insurenceFrontImageFileName!: string;
+  insurenceFrontImagePreview: string | ArrayBuffer | null = null;
+  insurenceFrontImageFile: File | null = null;
+
+  insurenceBackImageFileName!: string;
+  insurenceBackImagePreview: string | ArrayBuffer | null = null;
+  insurenceBackImageFile: File | null = null;
+
+  vehicleFrontImageFileName!: string;
+  vehicleFrontImagePreview: string | ArrayBuffer | null = null;
+  vehicleFrontImageFile: File | null = null;
+
+  vehicleBackImageFileName!: string;
+  vehicleBackImagePreview: string | ArrayBuffer | null = null;
+  vehicleBackImageFile: File | null = null;
+
+  vehicleSideAImageFileName!: string;
+  vehicleSideAImagePreview: string | ArrayBuffer | null = null;
+  vehicleSideAImageFile: File | null = null;
+
+  vehicleSideBImageFileName!: string;
+  vehicleSideBImagePreview: string | ArrayBuffer | null = null;
+  vehicleSideBImageFile: File | null = null;
 
 
 
@@ -99,6 +136,13 @@ export class EditOfficerComponent implements OnInit {
     { name: 'Vavuniya', province: 'Northern' },
   ];
 
+  VehicleTypes = [
+    { name: 'Lorry', capacity: 2 },
+    { name: 'Dimo Batta', capacity: 3.5 },
+    { name: 'Van', capacity: 2.5 },
+    { name: 'Cab', capacity: 0.5 },
+  ]
+
 
   ngOnInit(): void {
     // this.getAllCollectionCetnter();
@@ -121,6 +165,11 @@ export class EditOfficerComponent implements OnInit {
         this.ExistirmId = res.officerData.irmId;
 
         this.getUpdateLastID(res.officerData.collectionOfficer.jobRole);
+        this.driverObj = res.officerData.driver;
+        this.driverObj.insExpDate = this.formatDateForInput(this.driverObj.insExpDate);
+        this.selectVehicletype = this.VehicleTypes.find(
+          (v) => v.name === this.driverObj.vType && v.capacity === this.driverObj.vCapacity
+        );
         this.personalData.previousQR = this.personalData.QRcode;
         this.personalData.previousImage = this.personalData.image;
 
@@ -145,10 +194,19 @@ export class EditOfficerComponent implements OnInit {
     );
   }
 
+  formatDateForInput(date: string | Date): string {
+    const d = new Date(date);
+    const year = d.getFullYear();
+    const month = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+
   private setActiveTabFromRoute(): void {
     const currentPath = this.router.url.split('?')[0];
     // Extract the first segment after the initial slash
-    this.naviPath = currentPath.split('/')[1];   
+    this.naviPath = currentPath.split('/')[1];
   }
 
 
@@ -188,7 +246,8 @@ export class EditOfficerComponent implements OnInit {
       rolePrefix = 'CCM';
     } else if (this.personalData.jobRole === 'Customer Officer') {
       rolePrefix = 'CUO';
-
+    } else if (this.personalData.jobRole === 'Driver') {
+      rolePrefix = 'DVR';
     } else {
       rolePrefix = 'COO';
 
@@ -232,7 +291,7 @@ export class EditOfficerComponent implements OnInit {
   }
 
 
-  nextForm(page: 'pageOne' | 'pageTwo') {
+  nextForm(page: 'pageOne' | 'pageTwo' | 'pageThree') {
     // if (!this.personalData.firstNameEnglish || !this.personalData.firstNameSinhala || !this.personalData.firstNameTamil || !this.personalData.email || !this.personalData.languages || !this.personalData.lastNameEnglish || !this.personalData.lastNameSinhala || !this.personalData.lastNameTamil || !this.personalData.nic || !this.personalData.phoneNumber01 || !this.personalData.phoneCode01) {
     //   Swal.fire('warning', 'Pleace fill all required feilds', 'warning')
     // } else {
@@ -250,60 +309,34 @@ export class EditOfficerComponent implements OnInit {
   }
 
 
-  // onFileSelected(event: any): void {
-  //   const file: File = event.target.files[0];
-  //   if (file) {
-  //     if (file.size > 5000000) {
-  //       this.toastSrv.error('File size should not exceed 5MB')
-  //       return;
-  //     }
-
-  //     const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-  //     if (!allowedTypes.includes(file.type)) {
-  //       this.toastSrv.error('Only JPEG, JPG and PNG files are allowed')
-  //       return;
-  //     }
-
-  //     this.selectedFile = file;
-  //     this.selectedFileName = file.name;
-  //     // this.officerForm.patchValue({ image: file });
-
-  //     const reader = new FileReader();
-  //     reader.onload = (e: any) => {
-  //       this.selectedImage = e.target.result; // Set selectedImage to the base64 string or URL
-  //     };
-  //     reader.readAsDataURL(file); // Read the file as a data URL
-  //   }
-  // }
-
   onFileSelected(event: any): void {
     this.imageLoadError = false; // Reset error state when new file is selected
     const file: File = event.target.files[0];
-    
+
     if (file) {
-        if (file.size > 5000000) {
-            this.toastSrv.error('File size should not exceed 5MB');
-            return;
-        }
+      if (file.size > 5000000) {
+        this.toastSrv.error('File size should not exceed 5MB');
+        return;
+      }
 
-        const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-        if (!allowedTypes.includes(file.type)) {
-            this.toastSrv.error('Only JPEG, JPG and PNG files are allowed');
-            return;
-        }
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+      if (!allowedTypes.includes(file.type)) {
+        this.toastSrv.error('Only JPEG, JPG and PNG files are allowed');
+        return;
+      }
 
-        this.selectedFile = file;
-        this.selectedFileName = file.name;
+      this.selectedFile = file;
+      this.selectedFileName = file.name;
 
-        const reader = new FileReader();
-        reader.onload = (e: any) => {
-            this.selectedImage = e.target.result;
-            // Clear any previous image error
-            this.imageLoadError = false;
-        };
-        reader.readAsDataURL(file);
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.selectedImage = e.target.result;
+        // Clear any previous image error
+        this.imageLoadError = false;
+      };
+      reader.readAsDataURL(file);
     }
-}
+  }
 
   updateProvince(event: Event): void {
     const target = event.target as HTMLSelectElement;
@@ -353,7 +386,23 @@ export class EditOfficerComponent implements OnInit {
         if (this.personalData.jobRole === 'Collection Center Manager') {
           this.personalData.irmId = null;
         }
-        this.ManageOficerSrv.CCHupdateCollectiveOfficer(this.personalData, this.editOfficerId, this.selectedImage).subscribe(
+
+        if (this.personalData.jobRole === 'Driver') {
+          // if (!this.licenseFrontImageFileName|| !this.licenseBackImageFileName || !this.insurenceFrontImageFileName || !this.insurenceBackImageFileName || !this.vehicleFrontImageFileName || !this.vehicleBackImageFileName || !this.vehicleSideAImageFileName || !this.vehicleSideBImageFileName) {
+          //   return;
+          // }
+
+          this.driverObj.licFrontName = this.licenseFrontImageFileName
+          this.driverObj.licBackName = this.licenseBackImageFileName
+          this.driverObj.insFrontName = this.insurenceFrontImageFileName
+          this.driverObj.insBackName = this.insurenceBackImageFileName
+          this.driverObj.vFrontName = this.vehicleFrontImageFileName
+          this.driverObj.vBackName = this.vehicleBackImageFileName
+          this.driverObj.vSideAName = this.vehicleSideAImageFileName
+          this.driverObj.vSideBName = this.vehicleSideBImageFileName
+        }
+
+        this.ManageOficerSrv.CCHupdateCollectiveOfficer(this.personalData, this.editOfficerId, this.selectedImage, this.driverObj, this.licenseFrontImagePreview, this.licenseBackImagePreview, this.insurenceFrontImagePreview, this.insurenceBackImagePreview, this.vehicleFrontImagePreview, this.vehicleBackImagePreview, this.vehicleSideAImagePreview, this.vehicleSideBImagePreview).subscribe(
           (res: any) => {
             this.officerId = res.officerId;
             this.isLoading = false;
@@ -386,7 +435,7 @@ export class EditOfficerComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.toastSrv.warning('Officer Edit Canceled.')
-        this.location.back(); 
+        this.location.back();
 
       }
     });
@@ -450,8 +499,8 @@ export class EditOfficerComponent implements OnInit {
 
 
   matchExistingBankToDropdown() {
-    console.log("matchExistingBankToDropdown",this.banks.length, this.allBranches);
-    
+    console.log("matchExistingBankToDropdown", this.banks.length, this.allBranches);
+
     // Only proceed if both banks and branches are loaded and we have existing data
     if (this.banks.length > 0 && Object.keys(this.allBranches).length > 0 &&
       this.personalData && this.personalData.bankName) {
@@ -516,14 +565,326 @@ export class EditOfficerComponent implements OnInit {
   imageLoadError = false;
 
   handleImageError() {
-      this.imageLoadError = true;
-      this.personalData.image = ''; // Clear the invalid image URL
+    this.imageLoadError = true;
+    this.personalData.image = ''; // Clear the invalid image URL
   }
 
-   onSubmitForm(form: NgForm) {
-      form.form.markAllAsTouched();
+  onSubmitForm(form: NgForm) {
+    form.form.markAllAsTouched();
+  }
+  onLicenseFrontImageSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      // Validate file size (5MB max)
+      if (file.size > 5000000) {
+        this.toastSrv.error('License image size should not exceed 5MB');
+        return;
+      }
+
+      // Validate file type
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+      if (!allowedTypes.includes(file.type)) {
+        this.toastSrv.error('License image must be JPEG, JPG or PNG format');
+        return;
+      }
+
+      this.licenseFrontImageFile = file;
+      this.licenseFrontImageFileName = file.name;
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.licenseFrontImagePreview = e.target.result;
+      };
+      reader.readAsDataURL(file);
     }
-  
+  }
+
+  // Clear license image
+  clearLicenseFrontImage(): void {
+    this.licenseFrontImageFile = null;
+    this.licenseFrontImageFileName = '';
+    this.licenseFrontImagePreview = null;
+    const fileInput = document.getElementById('licenseFrontImageUpload') as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
+  }
+
+  triggerFileInputForDriver(event: Event, inputId: string): void {
+    event.preventDefault();
+    const fileInput = document.getElementById(inputId);
+    fileInput?.click();
+  }
+
+  onLicenseBackImageSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      // Validate file size (5MB max)
+      if (file.size > 5000000) {
+        this.toastSrv.error('License image size should not exceed 5MB');
+        return;
+      }
+
+      // Validate file type
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+      if (!allowedTypes.includes(file.type)) {
+        this.toastSrv.error('License image must be JPEG, JPG or PNG format');
+        return;
+      }
+
+      this.licenseBackImageFile = file;
+      this.licenseBackImageFileName = file.name;
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.licenseBackImagePreview = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // Clear license image
+  clearLicenseBackImage(): void {
+    this.licenseBackImageFile = null;
+    this.licenseBackImageFileName = '';
+    this.licenseBackImagePreview = null;
+    const fileInput = document.getElementById('licenseBackImageUpload') as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
+  }
+
+  onInsurenceFrontImageSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      // Validate file size (5MB max)
+      if (file.size > 5000000) {
+        this.toastSrv.error('Insurence image size should not exceed 5MB');
+        return;
+      }
+
+      // Validate file type
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+      if (!allowedTypes.includes(file.type)) {
+        this.toastSrv.error('Insurence image must be JPEG, JPG or PNG format');
+        return;
+      }
+
+      this.insurenceFrontImageFile = file;
+      this.insurenceFrontImageFileName = file.name;
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.insurenceFrontImagePreview = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // Clear license image
+  clearInsurenceFrontImage(): void {
+    this.insurenceFrontImageFile = null;
+    this.insurenceFrontImageFileName = '';
+    this.insurenceFrontImagePreview = null;
+    const fileInput = document.getElementById('insurenceFrontImageUpload') as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
+  }
+
+
+  onInsurenceBackImageSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      // Validate file size (5MB max)
+      if (file.size > 5000000) {
+        this.toastSrv.error('Insurence image size should not exceed 5MB');
+        return;
+      }
+
+      // Validate file type
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+      if (!allowedTypes.includes(file.type)) {
+        this.toastSrv.error('Insurence image must be JPEG, JPG or PNG format');
+        return;
+      }
+
+      this.insurenceBackImageFile = file;
+      this.insurenceBackImageFileName = file.name;
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.insurenceBackImagePreview = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // Clear license image
+  clearInsurenceBackImage(): void {
+    this.insurenceBackImageFile = null;
+    this.insurenceBackImageFileName = '';
+    this.insurenceBackImagePreview = null;
+    const fileInput = document.getElementById('insuranceBackImageUpload') as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
+  }
+
+
+  onVehicleFrontImageSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      // Validate file size (5MB max)
+      if (file.size > 5000000) {
+        this.toastSrv.error('License image size should not exceed 5MB');
+        return;
+      }
+
+      // Validate file type
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+      if (!allowedTypes.includes(file.type)) {
+        this.toastSrv.error('License image must be JPEG, JPG or PNG format');
+        return;
+      }
+
+      this.vehicleFrontImageFile = file;
+      this.vehicleFrontImageFileName = file.name;
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.vehicleFrontImagePreview = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // Clear license image
+  clearVehicleFrontImage(): void {
+    this.vehicleFrontImageFile = null;
+    this.vehicleFrontImageFileName = '';
+    this.vehicleFrontImagePreview = null;
+    const fileInput = document.getElementById('vehicleFrontImageUpload') as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
+  }
+
+
+  onVehicleBackImageSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      // Validate file size (5MB max)
+      if (file.size > 5000000) {
+        this.toastSrv.error('Vehicle Back image size should not exceed 5MB');
+        return;
+      }
+
+      // Validate file type
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+      if (!allowedTypes.includes(file.type)) {
+        this.toastSrv.error('Vehicle Back image must be JPEG, JPG or PNG format');
+        return;
+      }
+
+      this.vehicleBackImageFile = file;
+      this.vehicleBackImageFileName = file.name;
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.vehicleBackImagePreview = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // Clear license image
+  clearVehicleBackImage(): void {
+    this.vehicleBackImageFile = null;
+    this.vehicleBackImageFileName = '';
+    this.vehicleBackImagePreview = null;
+    const fileInput = document.getElementById('vehicleBackImageUpload') as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
+  }
+
+  onVehicleSideAImageSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      // Validate file size (5MB max)
+      if (file.size > 5000000) {
+        this.toastSrv.error('Vehicle Back image size should not exceed 5MB');
+        return;
+      }
+
+      // Validate file type
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+      if (!allowedTypes.includes(file.type)) {
+        this.toastSrv.error('Vehicle Back image must be JPEG, JPG or PNG format');
+        return;
+      }
+
+      this.vehicleSideAImageFile = file;
+      this.vehicleSideAImageFileName = file.name;
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.vehicleSideAImagePreview = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // Clear license image
+  clearVehicleSideAImage(): void {
+    this.vehicleSideAImageFile = null;
+    this.vehicleSideAImageFileName = '';
+    this.vehicleSideAImagePreview = null;
+    const fileInput = document.getElementById('vehicleSideAImageUpload') as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
+  }
+
+
+
+  onVehicleSideBImageSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      // Validate file size (5MB max)
+      if (file.size > 5000000) {
+        this.toastSrv.error('Vehicle Back image size should not exceed 5MB');
+        return;
+      }
+
+      // Validate file type
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+      if (!allowedTypes.includes(file.type)) {
+        this.toastSrv.error('Vehicle Back image must be JPEG, JPG or PNG format');
+        return;
+      }
+
+      this.vehicleSideBImageFile = file;
+      this.vehicleSideBImageFileName = file.name;
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.vehicleSideBImagePreview = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // Clear license image
+  clearVehicleSideBImage(): void {
+    this.vehicleSideBImageFile = null;
+    this.vehicleSideBImageFileName = '';
+    this.vehicleSideBImagePreview = null;
+    const fileInput = document.getElementById('vehicleSideBImageUpload') as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
+  }
+
+  vehicleChange() {
+    this.driverObj.vType = this.selectVehicletype.name
+    this.driverObj.vCapacity = this.selectVehicletype.capacity
+  }
+
+
 
 
 }
@@ -601,6 +962,34 @@ interface Branch {
 
 interface BranchesData {
   [key: string]: Branch[];
+}
+
+class Drivers {
+  vehicleRegId!:number;
+  licNo!: string;
+  insNo!: string;
+  insExpDate!: string;
+  vType!: string;
+  vCapacity!: number;
+  vRegNo!: string;
+
+  licFrontName!: string;
+  licBackName!: string;
+  insFrontName!: string;
+  insBackName!: string;
+  vFrontName!: string;
+  vBackName!: string;
+  vSideAName!: string;
+  vSideBName!: string;
+
+  licFrontImg!:string;
+  licBackImg!:string;
+  insFrontImg!:string;
+  insBackImg!:string;
+  vehFrontImg!:string;
+  vehBackImg!:string;
+  vehSideImgA!:string;
+  vehSideImgB!:string;
 }
 
 

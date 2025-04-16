@@ -16,13 +16,14 @@ import { NgxPaginationModule } from 'ngx-pagination';
 })
 export class OfficerTargetViewComponent {
   OfficerObj: Officer = new Officer();
-  hasData: boolean = true;
+  hasData: boolean = false;
   responseTitle: string = '--Fill input fields first--';
   targetArr: Target[] = [];
 
   page: number = 1;
   totalItems: number = 0;
   itemsPerPage: number = 10;
+  isLoading = false;
 
   constructor(
     private router: Router,
@@ -36,6 +37,7 @@ export class OfficerTargetViewComponent {
   }
 
   onSubmit(page: number = this.page, limit: number = this.itemsPerPage) {
+    this.isLoading = true
     if(!this.OfficerObj.jobRole || !this.OfficerObj.officerId || !this.OfficerObj.fromDate || !this.OfficerObj.toDate){
       this.toastSrv.warning('Fill All Input feilds')
       return;
@@ -57,9 +59,12 @@ export class OfficerTargetViewComponent {
           this.hasData = true;
           this.targetArr = res.result;
           this.totalItems = res.total;
+          this.isLoading = false;
         }else{
           this.responseTitle = res.message;
           this.hasData = false;
+          this.isLoading = false;
+
         }
       }
     )
@@ -92,6 +97,12 @@ export class OfficerTargetViewComponent {
       this.OfficerObj.toDate = '';
     }
   }
+
+  editOfficerTarget(id:number){
+    console.log("nav trigger");
+    
+    this.router.navigate([`/officer-target/edit-officer-target/${id}`])
+  }
   
   
 
@@ -106,6 +117,7 @@ class Officer {
 }
 
 class Target {
+  id!:number;
   varietyNameEnglish!:string
   cropNameEnglish!:string 
   grade!:string 

@@ -204,7 +204,7 @@ export class TargetService {
     return this.http.get<any>(url, { headers });
   }
 
-
+//use for transfer officer target
   passToTargetToOfficer(id: number | null, targetItemId: number, amount: number): Observable<any> {
 
     const headers = new HttpHeaders({
@@ -348,6 +348,18 @@ export class TargetService {
 
     let url = `${this.apiUrl}/officer-target-check-available?page=${page}&limit=${limit}`;
     return this.http.post<any>(url,data, { headers });
+  }
+
+
+  transferOfficerTargetToOfficer(id: number | null, targetItemId: number, amount: number): Observable<any> {
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/transfer-officer-target-to-officer`;
+
+    return this.http.patch<any>(url, { officerId: id, target: targetItemId, amount: amount }, { headers });
   }
 
 

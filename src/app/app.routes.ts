@@ -44,6 +44,7 @@ import { CollectionReportsComponent } from './application/Report/collection-repo
 import { OfficerTargetViewComponent } from './application/Target/officer-target-view/officer-target-view.component';
 import { CenterCollectionExpenseComponent } from './application/Target/center-collection-expense/center-collection-expense.component';
 import { FarmerReportInvoiceComponent } from './application/Report/farmer-report-invoice/farmer-report-invoice.component';
+import { OfficerTargetPassOfficerComponent } from './application/Target/officer-target-pass-officer/officer-target-pass-officer.component';
 
 export const routes: Routes = [
     {
@@ -272,7 +273,12 @@ export const routes: Routes = [
                     {
                         path: '',
                         component: OfficerTargetViewComponent
+                    },
+                    {
+                        path: 'edit-officer-target/:id',
+                        component: OfficerTargetPassOfficerComponent
                     }
+
                 ]
             }
 

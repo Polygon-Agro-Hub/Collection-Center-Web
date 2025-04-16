@@ -132,7 +132,8 @@
 
                     </td>
                     <td class="px-6 py-4">
-                        <i class="fa-solid fa-pen-to-square text-xl cursor-pointer" [ngClass]="{
+                        <i class="fa-solid fa-pen-to-square text-xl cursor-pointer" (click)="item.validity === 'Valid' && editOfficerTarget(item.id)"
+                        [ngClass]="{
                             'text-gray-400': item.validity === 'Expired',
                             'text-[#415CFF]': item.validity === 'Valid'
                           }">

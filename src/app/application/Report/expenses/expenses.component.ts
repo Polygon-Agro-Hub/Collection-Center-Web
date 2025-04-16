@@ -9,6 +9,7 @@ import { ManageOfficersService } from '../../../services/manage-officers-service
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import Swal from 'sweetalert2';
 import { environment } from '../../../environments/environment';
+import { TokenServiceService } from '../../../services/Token/token-service.service';
 @Component({
   selector: 'app-expenses',
   standalone: true,
@@ -32,15 +33,16 @@ export class ExpensesComponent implements OnInit {
   searchText: string = '';
   selectCenters: string = '';
 
-  
+  logingRole: string | null = null;
 
   fromDate: Date | string = '';
   toDate: Date | string = '';
 
   isPopupVisible: boolean = false;
-  logingRole: string | null = null;
   isLoading: boolean = false;
   isDateFilterSet: boolean = false;
+ 
+  isCenterManager: boolean = false;
 
 
   isDownloading = false;
@@ -50,11 +52,20 @@ export class ExpensesComponent implements OnInit {
     private ReportSrv: ReportServiceService,
     private datePipe: DatePipe,
     private ManageOficerSrv: ManageOfficersService,
-    private toastSrv: ToastAlertService
-  ) { }
+    private toastSrv: ToastAlertService,
+    private tokenSrv: TokenServiceService
+  ) { 
+    this.logingRole = tokenSrv.getUserDetails().role
+  }
 
   ngOnInit(): void {
     this.getAllCenters();
+    console.log(this.logingRole);
+    if (this.logingRole === "Collection Center Manager") {
+      this.isCenterManager = true;
+    }else {
+      this.isCenterManager = false;
+    }
   }
 
   navigate(path: string) {

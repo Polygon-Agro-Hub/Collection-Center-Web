@@ -341,12 +341,25 @@ export class TargetService {
   }
 
 
-  getOfficerAvailabeTarget(data:any, page:number = 1, limit:number = 10): Observable<any> {
+  getOfficerAvailabeTarget(data:any, page:number = 1, limit:number = 10, status: string = '', validity: string = '', searchText: string = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
 
     let url = `${this.apiUrl}/officer-target-check-available?page=${page}&limit=${limit}`;
+
+    if (status) {
+      url += `&status=${status}`
+    }
+
+    if (validity) {
+      url += `&validity=${validity}`
+    }
+
+    if (searchText) {
+      url += `&searchText=${searchText}`
+    }
+
     return this.http.post<any>(url,data, { headers });
   }
 
@@ -360,6 +373,38 @@ export class TargetService {
     let url = `${this.apiUrl}/transfer-officer-target-to-officer`;
 
     return this.http.patch<any>(url, { officerId: id, target: targetItemId, amount: amount }, { headers });
+  }
+
+  downloadOfficerTarget(
+    fromDate: Date | string,
+    toDate: Date | string,
+    jobRole: string = '',
+    empId: string = '',
+    status: string = '',
+    validity: string = '',
+    searchText: string = '',
+    
+  ): Observable<Blob> {
+    let url = `${this.apiUrl}/download-officer-target-report?fromDate=${fromDate}&toDate=${toDate}&jobRole=${jobRole}&empId=${empId}`;
+
+    if (status) {
+      url += `&status=${status}`
+    }
+
+    if (validity) {
+      url += `&validity=${validity}`
+    }
+
+    if (searchText) {
+      url += `&searchText=${searchText}`
+    }
+  
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      // Optional: 'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    });
+  
+    return this.http.get(url, { headers, responseType: 'blob' });
   }
 
 

@@ -6,6 +6,7 @@ import { TargetService } from '../../../services/Target-service/target.service';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { NgxPaginationModule } from 'ngx-pagination';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-officer-target-view',
@@ -25,6 +26,12 @@ export class OfficerTargetViewComponent {
   itemsPerPage: number = 10;
   isLoading = false;
 
+  selectStatus: string = '';
+  searchText: string = '';
+  selectValidity: string = '';
+
+  isDownloading: boolean = false;
+
   constructor(
     private router: Router,
     private TargetSrv: TargetService,
@@ -36,7 +43,35 @@ export class OfficerTargetViewComponent {
     this.onSubmit()
   }
 
-  onSubmit(page: number = this.page, limit: number = this.itemsPerPage) {
+  fetchAllOfficers(page: number = this.page, limit: number = this.itemsPerPage, status: string = this.selectStatus, validity: string = this.selectValidity, searchText: string = this.searchText) {
+    this.isLoading = true;
+    if(this.OfficerObj.jobRole === 'Collection Center Manager'){
+      this.OfficerObj.empId = 'CCM'+this.OfficerObj.officerId;
+    }else if(this.OfficerObj.jobRole === 'Collection Officer'){
+      this.OfficerObj.empId = 'COO'+this.OfficerObj.officerId;
+    }else if(this.OfficerObj.jobRole === 'Customer Officer'){
+      this.OfficerObj.empId = 'CUO'+this.OfficerObj.officerId;
+    }
+
+    this.TargetSrv.getOfficerAvailabeTarget(this.OfficerObj,page, limit, status, validity, searchText ).subscribe(
+      (res)=>{
+        if(res.status){
+          this.responseTitle = res.message;
+          this.hasData = true;
+          this.targetArr = res.result;
+          this.totalItems = res.total;
+          this.isLoading = false;
+        }else{
+          this.responseTitle = res.message;
+          this.hasData = false;
+          this.isLoading = false;
+
+        }
+      }
+    )
+  }
+
+  onSubmit(page: number = this.page, limit: number = this.itemsPerPage, status: string = this.selectStatus, validity: string = this.selectValidity, searchText: string = this.searchText) {
     this.isLoading = true
     if(!this.OfficerObj.jobRole || !this.OfficerObj.officerId || !this.OfficerObj.fromDate || !this.OfficerObj.toDate){
       this.toastSrv.warning('Fill All Input feilds')
@@ -52,7 +87,7 @@ export class OfficerTargetViewComponent {
       this.OfficerObj.empId = 'CUO'+this.OfficerObj.officerId;
     }
 
-    this.TargetSrv.getOfficerAvailabeTarget(this.OfficerObj,page, limit ).subscribe(
+    this.TargetSrv.getOfficerAvailabeTarget(this.OfficerObj,page, limit, status, validity, searchText).subscribe(
       (res)=>{
         if(res.status){
           this.responseTitle = res.message;
@@ -79,7 +114,15 @@ export class OfficerTargetViewComponent {
 
   onPageChange(event: number) {
     this.page = event;
-    this.onSubmit();
+    console.log('dates', this.OfficerObj.fromDate );
+    if (this.OfficerObj.fromDate && this.OfficerObj.fromDate) {
+      this.fetchAllOfficers
+      console.log('fetchAllOfficers')
+    }else {
+      this.onSubmit(); 
+      console.log('onsubmei')
+    }
+    
   }
 
   checkToDate() {
@@ -103,7 +146,65 @@ export class OfficerTargetViewComponent {
     
     this.router.navigate([`/officer-target/edit-officer-target/${id}`])
   }
+
+  applyStatusFilters() {
+    this.fetchAllOfficers();
+  }
+
+  clearStatusFilter() {
+    this.selectStatus = ''
+    this.fetchAllOfficers();
+  }
+
+  applyValidityFilters() {
+    this.fetchAllOfficers();
+  }
+
+  clearValidityFilter() {
+    this.selectValidity = ''
+    this.fetchAllOfficers();
+  }
+
+  onSearch() {
+    this.fetchAllOfficers();
+  }
+
+  offSearch() {
+    this.searchText = ''
+    this.fetchAllOfficers();
+  }
   
+  downloadTemplate1() {
+    this.isDownloading = true;
+  
+    this.TargetSrv
+      .downloadOfficerTarget(this.OfficerObj.fromDate, this.OfficerObj.toDate, this.OfficerObj.jobRole, this.OfficerObj.empId, this.selectStatus, this.selectValidity, this.searchText)
+      .subscribe({
+        next: (blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `Officer Target Report From ${this.OfficerObj.fromDate} To ${this.OfficerObj.toDate}.xlsx`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+  
+          Swal.fire({
+            icon: "success",
+            title: "Downloaded",
+            text: "Please check your downloads folder",
+          });
+          this.isDownloading = false;
+        },
+        error: (error) => {
+          Swal.fire({
+            icon: "error",
+            title: "Download Failed",
+            text: error.message,
+          });
+          this.isDownloading = false;
+        }
+      });
+  }
   
 
 }

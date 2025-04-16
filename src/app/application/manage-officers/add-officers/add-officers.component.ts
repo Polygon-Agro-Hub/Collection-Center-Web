@@ -132,10 +132,10 @@ export class AddOfficersComponent implements OnInit {
   ];
 
   VehicleTypes = [
-    { name: 'Lorry', capacity: '1.5T' },
-    { name: 'Dimo Batta', capacity: '3.5T' },
-    { name: 'Van', capacity: '2.5T' },
-    { name: 'Cab', capacity: '0.5T' },
+    { name: 'Lorry', capacity: 2 },
+    { name: 'Dimo Batta', capacity: 3.5 },
+    { name: 'Van', capacity: 2.5 },
+    { name: 'Cab', capacity: 0.5 },
   ]
 
 

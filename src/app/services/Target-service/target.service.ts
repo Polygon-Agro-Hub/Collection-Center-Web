@@ -271,12 +271,16 @@ export class TargetService {
     return this.http.post<any>(url, data, { headers });
   }
 
-  getAllCenterDailyTarget(centerId: number, page: number = 1, limit: number = 10, searchText: string = ''): Observable<any> {
+  getAllCenterDailyTarget(centerId: number, page: number = 1, limit: number = 10, status: string = '', searchText: string = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
 
     let url = `${this.apiUrl}/get-center-target?centerId=${centerId}&page=${page}&limit=${limit}`;
+
+    if (status) {
+      url += `&status=${status}`
+    }
 
     if (searchText) {
       url += `&searchText=${searchText}`
@@ -397,6 +401,29 @@ export class TargetService {
 
     if (searchText) {
       url += `&searchText=${searchText}`
+    }
+  
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      // Optional: 'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    });
+  
+    return this.http.get(url, { headers, responseType: 'blob' });
+  }
+
+  downloadCurrentTargetReport(
+    centerId: number,
+    status: string = '',
+    searchText: string = ''
+  ): Observable<Blob> {
+    let url = `${this.apiUrl}/download-current-target-report?centerId=${centerId}`;
+  
+    if (status) {
+      url += `&status=${status}`;
+    }
+  
+    if (searchText) {
+      url += `&searchText=${searchText}`;
     }
   
     const headers = new HttpHeaders({

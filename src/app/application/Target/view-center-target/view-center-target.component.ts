@@ -49,7 +49,7 @@ export class ViewCenterTargetComponent implements OnInit {
     const day = ('0' + date.getDate()).slice(-2);
     this.today = `${year}/${month}/${day}`;
 
-    this.fetchAllTarget();
+    // this.fetchAllTarget();
     // this.AssignAllDailyTarget()
   }
 

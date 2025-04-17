@@ -69,7 +69,7 @@ export class ViewOfficersComponent implements OnInit {
 
   }
 
-  fetchAllOfficers(page: number = 1, limit: number = this.itemsPerPage, status: string = this.selectStatus, role: string = this.selectRole, searchText: string = this.searchText) {
+  fetchAllOfficers(page: number = this.page, limit: number = this.itemsPerPage, status: string = this.selectStatus, role: string = this.selectRole, searchText: string = this.searchText) {
     this.isLoading = true;
     this.ManageOficerSrv.getAllOfficers(page, limit, status, role, searchText).subscribe(
       (res) => {
@@ -89,7 +89,7 @@ export class ViewOfficersComponent implements OnInit {
 
 
   //add to center filter
-  fetchAllOfficersForCCH(page: number = 1, limit: number = this.itemsPerPage, status: string = this.selectStatus, role: string = this.selectRole, searchText: string = this.searchText, selectCompany: string = this.selectCenters) {
+  fetchAllOfficersForCCH(page: number = this.page, limit: number = this.itemsPerPage, status: string = this.selectStatus, role: string = this.selectRole, searchText: string = this.searchText, selectCompany: string = this.selectCenters) {
     this.isLoading = true;
     this.ManageOficerSrv.getAllOfficersForCCH(page, limit, status, role, searchText, selectCompany).subscribe(
       (res) => {

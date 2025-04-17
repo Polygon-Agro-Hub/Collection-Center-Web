@@ -188,19 +188,11 @@ export class OfficerTargetViewComponent {
           a.click();
           window.URL.revokeObjectURL(url);
   
-          Swal.fire({
-            icon: "success",
-            title: "Downloaded",
-            text: "Please check your downloads folder",
-          });
+          this.toastSrv.success('Please check your downloads folder')
           this.isDownloading = false;
         },
         error: (error) => {
-          Swal.fire({
-            icon: "error",
-            title: "Download Failed",
-            text: error.message,
-          });
+          this.toastSrv.error('Download Failed')
           this.isDownloading = false;
         }
       });

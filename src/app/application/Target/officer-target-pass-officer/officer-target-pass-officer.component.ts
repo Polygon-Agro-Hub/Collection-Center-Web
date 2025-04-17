@@ -4,11 +4,12 @@ import { TargetService } from '../../../services/Target-service/target.service';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-officer-target-pass-officer',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent],
   templateUrl: './officer-target-pass-officer.component.html',
   styleUrl: './officer-target-pass-officer.component.css'
 })

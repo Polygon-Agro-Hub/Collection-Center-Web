@@ -9,7 +9,7 @@ import { ManageOfficersService } from '../../../services/manage-officers-service
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import Swal from 'sweetalert2';
 import { environment } from '../../../environments/environment';
-
+import { TokenServiceService } from '../../../services/Token/token-service.service';
 
 @Component({
   selector: 'app-collection',
@@ -36,7 +36,7 @@ export class CollectionComponent implements OnInit {
   searchText: string = '';
   selectCenters: string = '';
 
-  
+  isCenterManager: boolean = false;
 
   fromDate: Date | string = '';
   toDate: Date | string = '';
@@ -55,11 +55,21 @@ export class CollectionComponent implements OnInit {
     private ReportSrv: ReportServiceService,
     private datePipe: DatePipe,
     private ManageOficerSrv: ManageOfficersService,
-    private toastSrv: ToastAlertService
-  ) { }
+    private toastSrv: ToastAlertService,
+    private tokenSrv: TokenServiceService
+  ) {
+    this.logingRole = tokenSrv.getUserDetails().role
+   }
 
   ngOnInit(): void {
     this.getAllCenters();
+    console.log('role', this.logingRole);
+    if (this.logingRole === "Collection Center Manager") {
+      this.isCenterManager = true;
+      console.log('center manager', this.isCenterManager);
+    }else {
+      this.isCenterManager = false;
+    }
   }
 
   navigate(path: string) {

@@ -374,7 +374,9 @@ export class EditOfficerComponent implements OnInit {
             this.officerId = res.officerId;
             this.isLoading = false;
             this.toastSrv.success('Collective Officer Updated Successfully')
-            this.router.navigate(['/manage-officers'])
+            // this.router.navigate(['/manage-officers'])
+            this.location.back();
+
           },
           (error: any) => {
             this.isLoading = false;
@@ -407,7 +409,8 @@ export class EditOfficerComponent implements OnInit {
             this.officerId = res.officerId;
             this.isLoading = false;
             this.toastSrv.success('Collective Officer Updated Successfully')
-            this.router.navigate(['/manage-officers'])
+            this.location.back();
+
           },
           (error: any) => {
             this.isLoading = false;
@@ -965,7 +968,7 @@ interface BranchesData {
 }
 
 class Drivers {
-  vehicleRegId!:number;
+  vehicleRegId!: number;
   licNo!: string;
   insNo!: string;
   insExpDate!: string;
@@ -982,14 +985,14 @@ class Drivers {
   vSideAName!: string;
   vSideBName!: string;
 
-  licFrontImg!:string;
-  licBackImg!:string;
-  insFrontImg!:string;
-  insBackImg!:string;
-  vehFrontImg!:string;
-  vehBackImg!:string;
-  vehSideImgA!:string;
-  vehSideImgB!:string;
+  licFrontImg!: string;
+  licBackImg!: string;
+  insFrontImg!: string;
+  insBackImg!: string;
+  vehFrontImg!: string;
+  vehBackImg!: string;
+  vehSideImgA!: string;
+  vehSideImgB!: string;
 }
 
 

@@ -8,6 +8,8 @@ import { ToastAlertService } from '../../../services/toast-alert/toast-alert.ser
 import { TokenServiceService } from '../../../services/Token/token-service.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { HttpClient } from '@angular/common/http';
+import { Location } from '@angular/common';
+
 
 @Component({
   selector: 'app-add-officers',
@@ -97,6 +99,8 @@ export class AddOfficersComponent implements OnInit {
     private toastSrv: ToastAlertService,
     private tokenSrv: TokenServiceService,
     private http: HttpClient,
+    private location: Location
+
 
   ) {
     this.logingRole = tokenSrv.getUserDetails().role
@@ -369,6 +373,8 @@ export class AddOfficersComponent implements OnInit {
       if (result.isConfirmed) {
         this.personalData = new Personal();
         this.toastSrv.warning('Officer Add canceled.')
+        this.location.back(); 
+
       }
     });
   }

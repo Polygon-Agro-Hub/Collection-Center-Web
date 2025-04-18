@@ -1,5 +1,5 @@
-<div class="h-screen py-8">
-    <div class="flex flex-row justify-between items-center">
+<div class="h-screen py-8 relative">
+    <div class="flex flex-row justify-between items-center absolute">
         <p class="text-xl font-bold dark:text-white text-[#030308]">{{centerDetails.regCode}} {{centerDetails.centerName}}</p>
         <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
             <input type="text" placeholder="Search by Crop / Variety Name" [(ngModel)]="searchText" (keyup.enter)="onSearchVarity()" (keyup.esc)="offSearchVarity()"

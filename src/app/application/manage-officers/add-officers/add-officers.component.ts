@@ -327,7 +327,7 @@ export class AddOfficersComponent implements OnInit {
               this.router.navigate(['/manage-officers'])
             } else {
               this.isLoading = false;
-              this.toastSrv.error('There was an error creating the collective officer')
+              // this.toastSrv.error('There was an error creating the collective officer')
               this.toastSrv.error(res.message)
 
 

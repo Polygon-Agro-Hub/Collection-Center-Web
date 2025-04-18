@@ -1,6 +1,7 @@
 <app-loading-spinner *ngIf="isLoading" />
 
-<div *ngIf="!isLoading" class="flex flex-row items-center gap-6 font-semibold text[#424242] dark:text-white mb-8 mx-5 cursor-pointer">
+<div *ngIf="!isLoading"
+    class="flex flex-row items-center gap-6 font-semibold text[#424242] dark:text-white mb-8 mx-5 cursor-pointer">
     <p onclick="history.back()">Manage Officers</p>
     <p>Add Officer</p>
 </div>
@@ -71,7 +72,8 @@
                         <select id="jobRole" [(ngModel)]="personalData.jobRole" (change)="EpmloyeIdCreate()"
                             name="jobRole" placeholder="select" #jobRoleInput="ngModel" required
                             class="form-control mt-1 block w-full p-2 text-[#030308] dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500">
-                            <option disabled class="p-2 text-[#534E4E] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
+                            <option disabled
+                                class="p-2 text-[#534E4E] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
                                 -- select --
                             </option>
                             <option selected value="Collection Center Manager"
@@ -299,11 +301,16 @@
                             <input id="phoneNumber01" name="phoneNumber01" type="number"
                                 [(ngModel)]="personalData.phoneNumber01"
                                 class="block w-full p-2 border border-gray-300 rounded-r-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                                placeholder="Enter your phone number" #phoneNumber01Input="ngModel" required />
+                                placeholder="Enter your phone number" #phoneNumber01Input="ngModel" required required
+                                pattern="^[0-9]{9}$" minlength="9" maxlength="9" />
                         </div>
                         <div *ngIf="phoneNumber01Input.touched && !personalData.phoneNumber01"
                             class="text-red-500 text-sm mt-1">
                             <div> Phone Number - 1 is required</div>
+                        </div>
+                        <div *ngIf="personalData.phoneNumber01 && phoneNumber01Input.invalid"
+                            class="text-red-500 text-sm mt-1">
+                            Phone Number must be exactly 9 digits.
                         </div>
                     </div>
 
@@ -320,10 +327,16 @@
                                 <option value="+44">+44 (UK)</option>
                                 <option value="+91">+91 (India)</option>
                             </select>
-                            <input id="phoneNumber02" name="phoneNumber02" type="number"
+                            <input id="phoneNumber02" name="phoneNumber02" type="number" #phoneNumber02Input="ngModel"
                                 [(ngModel)]="personalData.phoneNumber02"
                                 class="block w-full p-2 border border-gray-300 rounded-r-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                                placeholder="Enter your phone number" />
+                                placeholder="Enter your phone number"  pattern="^[0-9]{9}$" minlength="9"
+                                maxlength="9"/>
+
+                        </div>
+                        <div *ngIf="personalData.phoneNumber02 && phoneNumber02Input.invalid"
+                            class="text-red-500 text-sm mt-1">
+                            Phone Number must be exactly 9 digits.
                         </div>
                     </div>
 
@@ -363,10 +376,11 @@
                 </div>
 
                 <div class="flex justify-end m-10">
-                    <button type="button" class="px-6 py-2 bg-[#F6F7F9] border-gray-400 border-[2px] text-[#6B7D8C] rounded-lg mr-2"
+                    <button type="button"
+                        class="px-6 py-2 bg-[#F6F7F9] border-gray-400 border-[2px] text-[#6B7D8C] rounded-lg mr-2"
                         (click)="onCancel()">Cancel</button>
                     <button (click)="!PageOneForm.invalid ? nextForm('pageTwo') :  nextForm('pageOne')" type="submit"
-                    class="px-6 py-1 bg-[#415CFF] text-white rounded-lg">Next</button>
+                        class="px-6 py-1 bg-[#415CFF] text-white rounded-lg">Next</button>
                 </div>
 
 
@@ -525,7 +539,7 @@
 
             <div class="flex justify-end m-10">
                 <button (click)="nextForm('pageOne')" type="button"
-                class="px-6 py-2 bg-[#F6F7F9] border-gray-400 border-[2px] text-[#6B7D8C] rounded-lg mr-2">Back</button>
+                    class="px-6 py-2 bg-[#F6F7F9] border-gray-400 border-[2px] text-[#6B7D8C] rounded-lg mr-2">Back</button>
                 <button type="submit" class="px-6 py-1 bg-[#415CFF] text-white rounded-lg"
                     (click)="(!PageTwoForm.invalid && personalData.jobRole !== 'Driver') ? onSubmit() : (!PageTwoForm.invalid && personalData.jobRole === 'Driver') ? nextForm('pageThree') : nextForm('pageTwo')">
                     <span *ngIf="personalData.jobRole ==='Driver'">Next</span>
@@ -622,7 +636,8 @@
                 </div>
 
                 <div>
-                    <label for="insExpDate" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Insurance
+                    <label for="insExpDate"
+                        class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Insurance
                         Expire Date</label>
                     <input id="insExpDate" name="insExpDate" type="date" [(ngModel)]="driverObj.insExpDate"
                         class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
@@ -687,11 +702,10 @@
             <div>
                 <label for="vRegNo" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Vehicle
                     Registration Number</label>
-                <input id="vRegNo" name="vRegNo" [(ngModel)]="driverObj.vRegNo"  #vRegNoInput="ngModel" required
+                <input id="vRegNo" name="vRegNo" [(ngModel)]="driverObj.vRegNo" #vRegNoInput="ngModel" required
                     class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                     required />
-                <div *ngIf="vRegNoInput.touched && !driverObj.vRegNo"
-                    class="text-red-500 text-sm mt-1">
+                <div *ngIf="vRegNoInput.touched && !driverObj.vRegNo" class="text-red-500 text-sm mt-1">
                     <div>Vehicle Registration Number is required</div>
                 </div>
             </div>
@@ -703,7 +717,8 @@
                         placeholder="select" (change)="vehicleChange()" required #selectVehicletypeInput="ngModel"
                         class="form-control mt-1 block w-full p-2 text-gray-700 dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500">
                         <option disabled selected
-                            class="p-2 text-gray-700 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]" [value]="{name: '', capacity: ''}">
+                            class="p-2 text-gray-700 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]"
+                            [value]="{name: '', capacity: ''}">
                             -- select Vehicle Type--
                         </option>
                         <option *ngFor="let item of VehicleTypes" [ngValue]="item"
@@ -711,8 +726,7 @@
                             {{item.name}}
                         </option>
                     </select>
-                    <div *ngIf="selectVehicletypeInput.touched && !driverObj.vType"
-                        class="text-red-500 text-sm mt-1">
+                    <div *ngIf="selectVehicletypeInput.touched && !driverObj.vType" class="text-red-500 text-sm mt-1">
                         <div>Vehicle Type is required</div>
                     </div>
                 </div>
@@ -830,7 +844,7 @@
 
             <div class="flex justify-end m-10">
                 <button (click)="nextForm('pageTwo')" type="button"
-                class="px-6 py-2 bg-[#F6F7F9] border-gray-400 border-[2px] text-[#6B7D8C] rounded-lg mr-2">Back</button>
+                    class="px-6 py-2 bg-[#F6F7F9] border-gray-400 border-[2px] text-[#6B7D8C] rounded-lg mr-2">Back</button>
                 <button type="submit" class="px-6 py-1 bg-[#415CFF] text-white rounded-lg"
                     (click)="!PageThreeForm.invalid ? onSubmit() : nextForm('pageThree')">Sent to
                     Approve</button>

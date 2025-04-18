@@ -68,45 +68,55 @@
 
                         <!-- Grade A Column -->
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
-                            <input type="number" [(ngModel)]="item.targetA" name="targetA" min="0"
+                            <input type="number" [(ngModel)]="item.targetA" name="targetA" min="0" (change)="checkNegativeValue(item, 'A')"
                                 class="border-[#415CFF] border-[2px] border-dotted rounded-lg w-20 px-2 py-1 mr-4"
                                 [disabled]="!isNew && !item.editingA" (change)="validateForm()" />
-                            <button *ngIf="!isNew && !item.editingA && isDateValid" (click)="item.editingA = true">
+                            <button *ngIf="!isNew && !item.editingA && isDateValid"
+                                (click)="(item.editingA = true) && pressEditIcon(item,'A')">
                                 <i class="fa-solid fa-pen-to-square text-[#415CFF] text-xl"></i>
                             </button>
                             <button *ngIf="!isNew && item.editingA && isDateValid"
-                                class="bg-[#415CFF] px-3 py-2 text-white rounded-lg"
-                                (click)="saveGrade('A', item, item.targetA, item.idA)">
+                                class="px-3 py-2 text-white rounded-lg" [ngClass]="{
+                                    'bg-[#415CFF]': item.preValueA !== item.targetA,
+                                    'bg-[#6B7D8C]': item.preValueA === item.targetA || item.targetA < 0 || item.targetA < item.preValueA
+                                  }"
+                                (click)="item.preValueA !== item.targetA && item.targetA >= 0 && saveGrade('A', item, item.targetA, item.idA)">
                                 Save
                             </button>
                         </td>
 
                         <!-- Grade B Column -->
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
-                            <input type="number" [(ngModel)]="item.targetB" name="targetB" min="0"
+                            <input type="number" [(ngModel)]="item.targetB" name="targetB" min="0" (change)="checkNegativeValue(item, 'B')"
                                 class="border-[#415CFF] border-[2px] border-dotted rounded-lg w-20 px-2 py-1 mr-4"
                                 [disabled]="!isNew && !item.editingB" (change)="validateForm()" />
-                            <button *ngIf="!isNew && !item.editingB && isDateValid" (click)="item.editingB = true">
+                            <button *ngIf="!isNew && !item.editingB && isDateValid"
+                                (click)="(item.editingB = true) && pressEditIcon(item,'B')">
                                 <i class="fa-solid fa-pen-to-square text-[#415CFF] text-xl"></i>
                             </button>
-                            <button *ngIf="!isNew && item.editingB && isDateValid"
-                                class="bg-[#415CFF] px-3 py-2 text-white rounded-lg"
-                                (click)="saveGrade('B', item, item.targetB, item.idB)">
+                            <button *ngIf="!isNew && item.editingB && isDateValid" [ngClass]="{
+                                'bg-[#415CFF]': item.preValueB !== item.targetB,
+                                'bg-[#6B7D8C]': item.preValueB === item.targetB || item.targetB < 0 || item.targetB < item.preValueB
+                              }" class="px-3 py-2 text-white rounded-lg"
+                                (click)="item.preValueB !== item.targetB && item.targetB >= 0 && saveGrade('B', item, item.targetB, item.idB)">
                                 Save
                             </button>
                         </td>
 
                         <!-- Grade C Column -->
                         <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
-                            <input type="number" [(ngModel)]="item.targetC" name="targetC" min="0"
+                            <input type="number" [step]="0.01" [(ngModel)]="item.targetC" name="targetC" min="0" (change)="checkNegativeValue(item, 'C')"
                                 class="border-[#415CFF] border-[2px] border-dotted rounded-lg w-16 px-2 py-1 mr-4"
                                 [disabled]="!isNew && !item.editingC" (change)="validateForm()" />
-                            <button *ngIf="!isNew && !item.editingC && isDateValid" (click)="item.editingC = true">
+                            <button *ngIf="!isNew && !item.editingC && isDateValid"
+                                (click)="(item.editingC = true) && pressEditIcon(item,'C')">
                                 <i class="fa-solid fa-pen-to-square text-[#415CFF] text-xl"></i>
                             </button>
-                            <button *ngIf="!isNew && item.editingC && isDateValid"
-                                class="bg-[#415CFF] px-3 py-2 text-white rounded-lg"
-                                (click)="saveGrade('C', item, item.targetC, item.idC)">
+                            <button *ngIf="!isNew && item.editingC && isDateValid" [ngClass]="{
+                                'bg-[#415CFF]': item.preValueC !== item.targetC,
+                                'bg-[#6B7D8C]': (item.preValueC === item.targetC) || item.targetC < 0 || item.targetC < item.preValueC
+                              }" class="px-3 py-2 text-white rounded-lg"
+                                (click)="item.preValueC !== item.targetC && item.targetC >= 0 && saveGrade('C', item, item.targetC, item.idC)">
                                 Save
                             </button>
                         </td>

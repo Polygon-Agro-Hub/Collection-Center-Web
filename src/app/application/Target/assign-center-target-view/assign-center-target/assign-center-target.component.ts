@@ -5,6 +5,8 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TargetService } from '../../../../services/Target-service/target.service';
 import { ToastAlertService } from '../../../../services/toast-alert/toast-alert.service';
 import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
+import { Location } from '@angular/common';
+
 
 @Component({
   selector: 'app-assign-center-target',
@@ -33,7 +35,9 @@ export class AssignCenterTargetComponent implements OnInit {
     private router: Router,
     private TargetSrv: TargetService,
     private toastSrv: ToastAlertService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private location: Location
+
   ) { }
 
   ngOnInit(): void {
@@ -50,6 +54,8 @@ export class AssignCenterTargetComponent implements OnInit {
         this.isNew = res.result.isNew
         this.companyCenterId = res.companyCenterId
         this.isLoading = false;
+        this.hasData = res.result.data.length > 0 ? true : false;
+
       }
     )
   }
@@ -58,6 +64,7 @@ export class AssignCenterTargetComponent implements OnInit {
     this.newTargetObj.companyCenterId = this.companyCenterId
     this.newTargetObj.date = this.selectDate
     this.newTargetObj.crop = this.assignCropsArr
+
 
     this.TargetSrv.addNewCenterTarget(this.newTargetObj).subscribe(
       (res) => {
@@ -74,7 +81,8 @@ export class AssignCenterTargetComponent implements OnInit {
 
   onCancel() {
     this.toastSrv.warning('Cancel Add New Center Target')
-    this.fetchSavedCenterCrops()
+    // this.fetchSavedCenterCrops()
+    this.location.back();
   }
 
   onSearch() {
@@ -86,6 +94,22 @@ export class AssignCenterTargetComponent implements OnInit {
   }
 
   saveGrade(grade: string, item: any, qty: number, editId: number | null) {
+    if (grade === 'A') {
+      if (item.targetA < item.preValueA) {
+        return this.toastSrv.warning('Value must be greater than the current saved value')
+      }
+
+    } else if (grade === 'B') {
+      if (item.targetB < item.preValueB) {
+        return this.toastSrv.warning('Value must be greater than the current saved value')
+      }
+    } else {
+      if (item.targetC < item.preValueC) {
+        return this.toastSrv.warning('Value must be greater than the current saved value')
+      }
+    }
+
+
     let data = {
       id: editId,
       qty: qty,
@@ -130,6 +154,24 @@ export class AssignCenterTargetComponent implements OnInit {
     );
   }
 
+  pressEditIcon(item: AssignCrops, grade: string) {
+    if (grade === 'A') item.preValueA = item.targetA;
+    if (grade === 'B') item.preValueB = item.targetB;
+    if (grade === 'C') item.preValueC = item.targetC;
+  }
+
+  checkNegativeValue(item: AssignCrops, grade: string) {
+    if (this.isNew && this.isDateValid) {
+      if (item.targetA < 0 || item.targetB < 0 || item.targetC < 0) {
+        if (grade === 'A') item.targetA = 0;
+        if (grade === 'B') item.targetB = 0;
+        if (grade === 'C') item.targetC = 0;
+        this.toastSrv.error('Negative values are not allowed.')
+        return;
+      }
+    }
+  }
+
 }
 
 class CenterDetails {
@@ -150,6 +192,9 @@ class AssignCrops {
   idA: number | null = null;
   idB: number | null = null;
   idC: number | null = null;
+  preValueA!: number;
+  preValueB!: number;
+  preValueC!: number;
 }
 
 class NewTarget {

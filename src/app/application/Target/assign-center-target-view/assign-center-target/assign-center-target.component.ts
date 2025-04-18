@@ -26,6 +26,7 @@ export class AssignCenterTargetComponent implements OnInit {
   companyCenterId!: number;
   isLoading: boolean = true;
   isDateValid: boolean = true;
+  hasData: boolean = false;
 
 
   constructor(

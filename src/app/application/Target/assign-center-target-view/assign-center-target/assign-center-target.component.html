@@ -105,7 +105,7 @@
 
                         <!-- Grade C Column -->
                         <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
-                            <input type="number" [step]="0.01" [(ngModel)]="item.targetC" name="targetC" min="0" (change)="checkNegativeValue(item, 'C')"
+                            <input type="number" [(ngModel)]="item.targetC" name="targetC" min="0" (change)="checkNegativeValue(item, 'C')"
                                 class="border-[#415CFF] border-[2px] border-dotted rounded-lg w-16 px-2 py-1 mr-4"
                                 [disabled]="!isNew && !item.editingC" (change)="validateForm()" />
                             <button *ngIf="!isNew && !item.editingC && isDateValid"

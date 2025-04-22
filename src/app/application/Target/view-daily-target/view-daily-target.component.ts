@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TargetService } from '../../../services/Target-service/target.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
@@ -15,6 +15,8 @@ import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loa
   // providers: [DatePipe]
 })
 export class ViewDailyTargetComponent implements OnInit {
+
+
   targetArr!: DailyTargets[];
   assignTargetArr!: AssignDailyTarget[];
   searchText: string = '';
@@ -31,20 +33,24 @@ export class ViewDailyTargetComponent implements OnInit {
   assignPage: number = 1;
   assignTotalItems: number = 0;
   assignItemsPerPage: number = 10;
+  assignSearch: string = '';
+  selectAssignStatus: string = ''
 
 
   isSelectPrograss = true;
   isSelectAssign = false;
 
-  isLoading: boolean = true;
+  isLoading: boolean = false;
 
   constructor(
     private router: Router,
-    // private datePipe: DatePipe,
+
     private TargetSrv: TargetService
   ) { }
 
   ngOnInit(): void {
+
+
     const date = new Date();
     const year = date.getFullYear();
     const month = ('0' + (date.getMonth() + 1)).slice(-2);
@@ -60,6 +66,7 @@ export class ViewDailyTargetComponent implements OnInit {
     this.TargetSrv.getAllDailyTarget(page, limit, search).subscribe(
       (res) => {
         this.targetArr = res.items;
+        console.log(res.items);
         this.totalItems = res.totalPages
         if (res.items.length > 0) {
           this.hasData = true;
@@ -70,17 +77,6 @@ export class ViewDailyTargetComponent implements OnInit {
 
       }
     );
-  }
-
-  checkValidity(toDate: string): string {
-    const currentDate = new Date();
-    const targetDate = new Date(toDate);
-
-    if (targetDate >= currentDate) {
-      return 'Active';
-    } else {
-      return 'Expired';
-    }
   }
 
   onSearch() {
@@ -106,27 +102,6 @@ export class ViewDailyTargetComponent implements OnInit {
   }
 
 
-  filterValidity() {
-    if (!this.selectValidity) {
-      this.fetchAllTarget();
-      return;
-    }
-
-    this.targetArr = this.targetArr.filter(item => {
-      if (this.selectValidity === 'Active') {
-        return this.checkValidity(item.toDate) === 'Active';
-      } else if (this.selectValidity === 'Expired') {
-        return this.checkValidity(item.toDate) === 'Expired';
-      }
-      return true;
-    });
-  }
-
-  cancelValidity() {
-    this.selectValidity = '';
-    this.fetchAllTarget();
-  }
-
 
   onPageChange(event: number) {
     this.page = event;
@@ -147,13 +122,13 @@ export class ViewDailyTargetComponent implements OnInit {
     this.isSelectAssign = true;
   }
 
-  AssignAllDailyTarget(page: number = 1, limit: number = this.itemsPerPage) {
+  AssignAllDailyTarget(page: number = 1, limit: number = this.itemsPerPage, search: string = this.assignSearch) {
     this.isLoading = true;
-    this.TargetSrv.AssignAllDailyTarget(page, limit).subscribe(
+    this.TargetSrv.AssignAllDailyTarget(page, limit, search).subscribe(
       (res) => {
-        this.assignTargetArr = res.items;
-        this.assignTotalItems = res.total;
-        if (res.items.length > 0) {
+        this.assignTargetArr = res;
+        // this.assignTotalItems = res.total;
+        if (res.length > 0) {
           this.assignHasData = true;
         } else {
           this.assignHasData = false;
@@ -164,8 +139,12 @@ export class ViewDailyTargetComponent implements OnInit {
     );
   }
 
-  navigateToAssignTarget(id: number) {
-    this.router.navigate([`/target/assing-target/${id}`]);
+  navigateToAssignTarget(varietyId: number, companyCenterId: number) {
+    this.router.navigate([`/target/assing-target/${varietyId}/${companyCenterId}`]);
+  }
+
+  navigateToEditAssignTarget(varietyId: number, companyCenterId: number) {
+    this.router.navigate([`/target/edit-assing-target/${varietyId}/${companyCenterId}`]);
   }
 
   formatTime(time: string): string {
@@ -177,28 +156,84 @@ export class ViewDailyTargetComponent implements OnInit {
     return `${hours}:${minutes} ${period}`;
   }
 
+  formatDate(date: string): string {
+    return new Date(date).toISOString().split('T')[0]
+  }
+
+  assignOnSearch() {
+    this.AssignAllDailyTarget();
+  }
+  assignOffSearch() {
+    this.assignSearch = '';
+    this.AssignAllDailyTarget()
+  }
+
+  filterAssignStatus() {
+    console.log(this.selectAssignStatus);
+    
+    this.TargetSrv.AssignAllDailyTarget(1, 10, this.assignSearch).subscribe(
+      (res) => {
+        this.assignTargetArr = res;
+        
+        if (this.selectAssignStatus === 'Updated') {
+          this.assignTargetArr = this.assignTargetArr.filter(item =>
+            item.isAssign === 1 &&
+            (item.assignStatusA === 0 || item.assignStatusB === 0 || item.assignStatusC === 0)
+          );
+        } else if (this.selectAssignStatus === 'Assigned') {
+          this.assignTargetArr = this.assignTargetArr.filter(item =>
+            item.isAssign === 1 && 
+            item.assignStatusA === 1 && 
+            item.assignStatusB === 1 && 
+            item.assignStatusC === 1
+          );
+        } else if (this.selectAssignStatus === 'Not Assigned') {
+          this.assignTargetArr = this.assignTargetArr.filter(item =>
+            item.isAssign === 0 && 
+            item.assignStatusA === 0 && 
+            item.assignStatusB === 0 && 
+            item.assignStatusC === 0
+          );
+        }
+        
+        // Update pagination variables
+        this.assignTotalItems = this.assignTargetArr.length;
+        this.assignPage = 1;
+      }
+    );
+  }
+
+  cancelAssignStatus(){
+    this.selectAssignStatus = '';
+    this.AssignAllDailyTarget();
+  }
+
 
 }
 
 class AssignDailyTarget {
-  id!: number;
-  cropNameEnglish!: string;
-  varietyNameEnglish!: string;
-  qtyA!: string;
-  qtyB!: string;
-  qtyC!: string;
-  toDate!: Date;
-  toTime!: string;
-  fromTime!: Date;
+  cropNameEnglish!: string
+  varietyNameEnglish!: string
+  qtyA!: number
+  qtyB!: number
+  qtyC!: number
+  assignStatusA!: number
+  assignStatusB!: number
+  assignStatusC!: number
+  toDate!: string
+  varietyId!: number;
+  companyCenterId!: number;
+  isAssign!: number;
 }
 
 class DailyTargets {
+  id!: number;
   cropNameEnglish!: string;
   varietyNameEnglish!: string;
-  toDate!: string;
-  toTime!: string;
   grade!: string;
-  TargetQty!: string;
-  CompleteQty!: string;
+  target!: number;
+  complete: number = 0;
+  assignStatus: number = 0;
   status!: string;
+  date: string = '';
 }

@@ -1,167 +1,175 @@
-<div class="flex flex-row items-center gap-6 font-semibold text[#424242] mb-5 mx-5">
-    <p>Report</p>
-    <p>Monthly Report</p>
-</div>
+<app-loading-spinner *ngIf="isLoading"/>
 
-<div class="w-full px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg">
-    <div class="flex flex-row items-center justify-center">
-        <p class="text-xl font-semibold text-[#292929] mx-3">From :</p>
+<div *ngIf="!isLoading">
+    <div class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-8 mx-5 cursor-pointer">
+        <p (click)="navigateToReports()">Reports</p>
+        <p onclick="history.back()">Officer Reports</p>
+        <p>Monthly Report</p>
+    </div>
 
-        <div class="relative w-56 mr-10">
-            <div
-                class="border-2 rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
-                <input type="date" [(ngModel)]="startDate" (change)="startDateValidation()"
-                    class="block w-full appearance-none dark:bg-[#272F45] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none" />
+    <div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg">
+        <div class="flex flex-row items-center justify-center">
+            <p class="text-xl font-semibold text-[#292929] mx-3 dark:text-textDark">From :</p>
+
+            <div class="relative w-56 mr-10">
+                <div
+                    class="border-2 rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
+                    <input type="date" [(ngModel)]="startDate" (change)="startDateValidation()"
+                        class="block w-full appearance-none  text-textLight dark:text-textDark dark:bg-[#292929] px-3 py-2 rounded-xl focus:outline-none" />
+                </div>
+            </div>
+
+            <p class="text-xl font-semibold text-[#292929] mx-3 dark:text-textDark">To :</p>
+
+            <div class="relative w-56 mr-6">
+                <div
+                    class="border-2 rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
+                    <input type="date" [(ngModel)]="endDate" (change)="endDateValidation()"
+                        class="block w-full appearance-none  text-textLight dark:text-textDark dark:bg-[#292929] px-3 py-2 rounded-xl focus:outline-none" />
+                </div>
+            </div>
+
+            <button (click)="filterDate()"
+                class="bg-[#415CFF] text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-lg ml-5 dark:text-textDark dark:bg-[#292929]">Go</button>
+        </div>
+
+        <div *ngIf="hasData" class="flex justify-center items-center mt-10">
+            <button (click)="downloadReport()"
+                class="bg-[#415CFF] dark:bg-[#272F45] text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-lg ml-5">Download
+                Report</button>
+        </div>
+    </div>
+
+    <div *ngIf="!hasData"
+        class="flex flex-col items-center w-full h-screen px-10 py-7 bg-tileLight dark:bg-[#363636] dark:text-textDark shadow-lg rounded-lg mt-6">
+        <p class="text-[#494949] my-6 dark:text-textDark">--No Data Availabale--</p>
+        <img src="../../../../assets/images/NoData.png" alt="No Data" class="w-20 h-20 dark:text-textDark" />
+    </div>
+
+    <div *ngIf="hasData" id="reportContainer"
+        class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg mt-6">
+        <div class="flex flex-col justify-center items-center">
+            <p class="text-[#292929] font-semibold text-xl my-4 dark:text-textDark">Collection Officer Report</p>
+        </div>
+
+        <div class="grid grid-cols-2 gap-x-10 gap-y-6">
+            <div class="flex">
+                <span
+                    class="inline-flex items-center px-4 text-gray-900 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-textDark dark:border-gray-600">
+                    From
+                </span>
+                <span
+                    class="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-ful4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    {{startDate | date: 'yyyy-MM-dd'}}
+                </span>
+            </div>
+
+            <div class="flex">
+                <span
+                    class="inline-flex items-center px-4 text-gray-900 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-textDark dark:border-gray-600">
+                    To
+                </span>
+                <span
+                    class="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-ful4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    {{endDate | date: 'yyyy-MM-dd'}}
+                </span>
+            </div>
+
+            <div class="flex">
+                <span
+                    class="inline-flex items-center px-4 text-gray-900 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-textDark dark:border-gray-600">
+                    EMP ID
+                </span>
+                <span
+                    class="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-ful4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    {{officerDataObj.empId}}
+                </span>
+            </div>
+
+            <div class="flex">
+                <span
+                    class="inline-flex items-center px-4 text-gray-900 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-textDark dark:border-gray-600">
+                    Role
+                </span>
+                <span
+                    class="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-ful4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    {{officerDataObj.jobRole}}
+                </span>
+            </div>
+
+            <div class="flex">
+                <span
+                    class="inline-flex items-center px-4 text-gray-900 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-textDark dark:border-gray-600">
+                    First Name
+                </span>
+                <span
+                    class="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-ful4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    {{officerDataObj.firstNameEnglish}}
+                </span>
+            </div>
+
+            <div class="flex">
+                <span
+                    class="inline-flex items-center px-4 text-gray-900 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-textDark dark:border-gray-600">
+                    Last Name
+                </span>
+                <span
+                    class="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-ful4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    {{officerDataObj.lastNameEnglish}}
+                </span>
+            </div>
+
+            <div class="flex">
+                <span
+                    class="inline-flex items-center px-4 text-gray-900 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-textDark dark:border-gray-600">
+                    Weight
+                </span>
+                <span
+                    class="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-ful4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    {{officerDataObj.TotalQty}} Kg
+                </span>
+            </div>
+
+            <div class="flex">
+                <span
+                    class="inline-flex items-center px-4 text-gray-900 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-textDark dark:border-gray-600">
+                    Farmer
+                </span>
+                <span
+                    class="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-ful4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    {{officerDataObj.TotalFarmers}}
+                </span>
             </div>
         </div>
 
-        <p class="text-xl font-semibold text-[#292929] mx-3">To :</p>
 
-        <div class="relative w-56 mr-6">
-            <div
-                class="border-2 rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
-                <input type="date" [(ngModel)]="endDate" (change)="endDateValidation()"
-                    class="block w-full appearance-none dark:bg-[#272F45] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none" />
-            </div>
+        <div class="w-full mt-8 bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
+            <table class="w-full border-collapse border border-gray-300 dark:border-gray-700">
+                <thead>
+                    <tr class="bg-[#828282] dark:bg-gray-700">
+                        <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Date</th>
+                        <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Total Weight</th>
+                        <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Total Farmers</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of farmerDataArr">
+                        <td class="text-center border border-gray-300 dark:border-gray-600 px-4 py-2">{{ item.ReportDate
+                            |
+                            date: 'yyyy-MM-dd' }}</td>
+                        <td class="text-center border border-gray-300 dark:border-gray-600 px-4 py-2">{{item.TotalQty}}
+                        </td>
+                        <td class="text-center border border-gray-300 dark:border-gray-600 px-4 py-2">
+                            {{item.TotalFarmers}}
+                        </td>
+                    </tr>
+
+                </tbody>
+            </table>
+            <p class="text-gray-500 dark:text-textDark text-sm mt-4">
+                This report is generated on {{ currentDate | date: 'yyyy/MM/dd \'at\' hh:mm a' }}
+            </p>
+
         </div>
-
-        <button (click)="filterDate()"
-            class="bg-[#415CFF] dark:bg-[#272F45] text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-lg ml-5">Go</button>
-    </div>
-
-    <div *ngIf="hasData" class="flex justify-center items-center mt-10">
-        <button (click)="downloadReport()"
-            class="bg-[#415CFF] dark:bg-[#272F45] text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-lg ml-5">Download
-            Report</button>
-    </div>
-</div>
-
-<div *ngIf="!hasData"
-    class="flex flex-col items-center w-full h-screen px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg mt-6">
-    <p class="text-[#494949] my-6">--No Data Availabale--</p>
-    <img src="../../../../assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
-</div>
-
-<div *ngIf="hasData" id="reportContainer"
-    class="w-full px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg mt-6">
-    <div class="flex flex-col justify-center items-center">
-        <p class="text-[#292929] font-semibold text-xl my-4">Collection Officer Report</p>
-    </div>
-
-    <div class="grid grid-cols-2 gap-x-10 gap-y-6">
-        <div class="flex">
-            <span
-                class="inline-flex items-center px-4 text-gray-900 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
-                From
-            </span>
-            <span
-                class="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-ful4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                {{startDate | date: 'yyyy-MM-dd'}}
-            </span>
-        </div>
-
-        <div class="flex">
-            <span
-                class="inline-flex items-center px-4 text-gray-900 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
-                To
-            </span>
-            <span
-                class="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-ful4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                {{endDate | date: 'yyyy-MM-dd'}}
-            </span>
-        </div>
-
-        <div class="flex">
-            <span
-                class="inline-flex items-center px-4 text-gray-900 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
-                EMP ID
-            </span>
-            <span
-                class="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-ful4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                {{officerDataObj.empId}}
-            </span>
-        </div>
-
-        <div class="flex">
-            <span
-                class="inline-flex items-center px-4 text-gray-900 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
-                Role
-            </span>
-            <span
-                class="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-ful4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                {{officerDataObj.jobRole}}
-            </span>
-        </div>
-
-        <div class="flex">
-            <span
-                class="inline-flex items-center px-4 text-gray-900 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
-                First Name
-            </span>
-            <span
-                class="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-ful4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                {{officerDataObj.firstNameEnglish}}
-            </span>
-        </div>
-
-        <div class="flex">
-            <span
-                class="inline-flex items-center px-4 text-gray-900 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
-                Last Name
-            </span>
-            <span
-                class="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-ful4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                {{officerDataObj.lastNameEnglish}}
-            </span>
-        </div>
-
-        <div class="flex">
-            <span
-                class="inline-flex items-center px-4 text-gray-900 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
-                Weight
-            </span>
-            <span
-                class="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-ful4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                {{officerDataObj.TotalQty}} Kg
-            </span>
-        </div>
-
-        <div class="flex">
-            <span
-                class="inline-flex items-center px-4 text-gray-900 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
-                Farmer
-            </span>
-            <span
-                class="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-ful4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                {{officerDataObj.TotalFarmers}}
-            </span>
-        </div>
-    </div>
-
-
-    <div class="w-full mt-8 bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
-        <table class="w-full border-collapse border border-gray-300 dark:border-gray-700">
-            <thead>
-                <tr class="bg-[#828282] dark:bg-gray-700">
-                    <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Date</th>
-                    <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Total Weight</th>
-                    <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Total Farmers</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr *ngFor="let item of farmerDataArr">
-                    <td class="text-center border border-gray-300 dark:border-gray-600 px-4 py-2">{{ item.ReportDate |
-                        date: 'yyyy-MM-dd' }}</td>
-                    <td class="text-center border border-gray-300 dark:border-gray-600 px-4 py-2">{{item.TotalQty}}</td>
-                    <td class="text-center border border-gray-300 dark:border-gray-600 px-4 py-2">{{item.TotalFarmers}}
-                    </td>
-                </tr>
-
-            </tbody>
-        </table>
-        <p class="text-gray-500 dark:text-gray-400 text-sm mt-4">
-            This report is generated on {{ currentDate | date: 'yyyy/MM/dd \'at\' hh:mm a' }}
-        </p>
-
     </div>
 </div>

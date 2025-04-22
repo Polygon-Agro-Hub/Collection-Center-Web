@@ -1,0 +1,269 @@
+<div class="flex flex-row pt-0 mb-7 gap-5 cursor-pointer">
+    <p class="font-semibold text-[#424242] dark:text-white">Officer Targets</p>
+    <!-- <p class="font-semibold text-sm text-[#424242] dark:text-white" onclick="history.back()">Center Dashboard</p> -->
+</div>
+
+
+<app-loading-spinner *ngIf="isLoading"/>
+
+
+<div class="w-full px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">
+        <div>
+            <label for="jobRole" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
+                Job Role
+            </label>
+            <select id="jobRole" name="jobRole" placeholder="select" required [(ngModel)]="OfficerObj.jobRole"
+                class="form-control mt-1 block w-full p-2 text-[#030308] dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500">
+                <option disabled class="p-2 text-[#534E4E] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]" value="">
+                    -- select --
+                </option>
+                <option selected value="Collection Center Manager"
+                    class="p-2 text-[#030308] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
+                    Collection Center Manager
+                </option>
+                <option selected value="Collection Officer"
+                    class="p-2 text-[#030308] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
+                    Collection Officer
+                </option>
+                <option value="Customer Officer"
+                    class="p-2 text-[#030308] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
+                    Customer Officer
+                </option>
+            </select>
+            <!-- Error: Required Field -->
+            <!-- <div *ngIf="jobRoleInput.touched && !personalData.jobRole" class="text-red-500 text-sm mt-1">
+                <div>Job Role is required</div>
+            </div> -->
+        </div>
+
+
+        <div>
+            <label class="block text-sm font-medium text-[#534E4E] dark:text-textDark">EMP ID / User name</label>
+            <div class="flex mt-1">
+                <span
+                    class="inline-flex items-center px-3 py-2 text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-[#1D1D1F] dark:text-gray-400 ">
+                    <p *ngIf="OfficerObj.jobRole === ''">---</p>
+                    <p *ngIf="OfficerObj.jobRole === 'Collection Center Manager'">CCM</p>
+                    <p *ngIf="OfficerObj.jobRole === 'Collection Officer'">COO</p>
+                    <p *ngIf="OfficerObj.jobRole === 'Customer Officer'">CUO</p>
+                </span>
+                <input type="text" name="officerId" [(ngModel)]="OfficerObj.officerId"
+                    class="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm pl-4  dark:bg-[#1D1D1F]  dark:placeholder-gray-400 dark:text-textDark dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            </div>
+        </div>
+    </div>
+
+    <!-- <hr class="border-b-1 border-[#BDBDBD] my-5" /> -->
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">
+        <div>
+            <label for="fromDate" class="block text-sm font-medium text-gray-700 dark:text-textDark">From</label>
+            <input id="fromDate" name="fromDate" type="date" [(ngModel)]="OfficerObj.fromDate"
+                class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
+        </div>
+
+        <div>
+            <label for="toDate" class="block text-sm font-medium text-gray-700 dark:text-textDark">TO</label>
+            <input id="toDate" name="toDate" type="date" [(ngModel)]="OfficerObj.toDate" (change)="checkToDate()"
+                class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
+        </div>
+    </div>
+
+    <div class="flex flex-row justify-center items-center gap-12 my-10">
+        <button class="bg-[#415CFF] text-white rounded-lg shadow-md px-6 py-2" (click)="onSubmit()">Genarate</button>
+    </div>
+</div>
+
+
+<div *ngIf="!hasData"
+    class="flex flex-col items-center w-full min-h-screen px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg mt-6">
+    <p class="text-[#494949] my-6 dark:text-white">
+        {{responseTitle}}
+    </p>
+    <img src="../../../../assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
+</div>
+
+
+
+<div *ngIf="hasData" class="w-full overflow-x-auto px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg mt-8">
+
+    <div class="">
+        <p class="font-semibold mb-1 text-lg dark:text-white whitespace-nowrap">
+            {{OfficerObj.fromDate +  '  -  ' + OfficerObj.toDate}} </p>
+    </div>
+
+    <div class="flex flex-row items-center justify-between mb-8">
+        <div class="flex flex-row gap-4 ">
+
+            <p class="font-semibold mb-1 text-lg dark:text-white whitespace-nowrap">EMP ID: 
+                 {{OfficerObj.empId}} </p>
+        </div>
+        <div class="flex flex-row items-center gap-5 ">
+            <i class="fa-solid fa-list text-2xl dark:text-white ml-8"></i>
+
+            <p class="font-normal dark:text-white">Filter By</p>
+
+            <div class="relative w-52">
+                <div
+                    class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
+                    <select [(ngModel)]="selectStatus" (change)="applyStatusFilters()"
+                    class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer">
+                    <option value="" selected disabled>Status</option>
+                    <option value="Pending"
+                        class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">
+                        Pending</option>
+                    <option value="Completed"
+                        class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">
+                        Completed</option>
+                    <option value="Exceeded"
+                        class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">
+                        Exceeded</option>
+                </select>
+
+                    <!-- Down arrow icon -->
+                    <div *ngIf="!selectStatus"
+                    class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
+                    <i class="fa-solid fa-angle-down text-lg mr-3"></i>
+                </div>
+
+                    <!-- Cancel icon -->
+                    <div (click)="clearStatusFilter()" *ngIf="selectStatus"
+                    class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300 cursor-pointer z-10">
+                    <i class="fa-solid fa-xmark text-lg mr-3"></i>
+                </div>
+                </div>
+            </div>
+
+            <div class="relative w-52">
+                <div
+                    class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
+                    <select [(ngModel)]="selectValidity" (change)="applyValidityFilters()"
+                    class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer">
+                    <option value="" selected disabled>Validity</option>
+                    <option value="Expired"
+                        class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">
+                        Expired</option>
+                    <option value="Valid"
+                        class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">
+                        Valid</option>
+                    
+                </select>
+
+                    <!-- Down arrow icon -->
+                    <div *ngIf="!selectValidity"
+                    class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
+                    <i class="fa-solid fa-angle-down text-lg mr-3"></i>
+                </div>
+
+                    <!-- Cancel icon -->
+                    <div (click)="clearValidityFilter()" *ngIf="selectValidity"
+                    class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300 cursor-pointer z-10">
+                    <i class="fa-solid fa-xmark text-lg mr-3"></i>
+                </div>
+                </div>
+            </div>
+
+
+            <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+                <input type="text" placeholder="Search ..." [(ngModel)]="searchText"
+                (keyup.enter)="onSearch()" (keyup.esc)="offSearch()"
+                class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
+            <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
+                (click)="onSearch()">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
+                </svg>
+            </button>
+            <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none"
+                (click)="offSearch()">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div class=" mr-5 min-w-max border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+        <table class="w-full min-w-max divide-y-2 overflow-hidden">
+            <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
+                <tr>
+                    <th class="px-6 py-3 text-left font-medium">No</th>
+                    <th class="px-6 py-3 text-left font-medium">Crop Name</th>
+                    <th class="px-6 py-3 text-left font-medium">Variety Name</th>
+                    <th class="px-6 py-3 text-left font-medium">Grade</th>
+                    <th class="px-6 py-3 text-left font-medium">Target (kg)</th>
+                    <th class="px-6 py-3 text-left font-medium">To Do (Kg)</th>
+                    <th class="px-6 py-3 text-left font-medium">Completed</th>
+                    <th class="px-6 py-3 text-left font-medium">Date</th>
+                    <th class="px-6 py-3 font-medium text-center">Status</th>
+                    <th class="px-6 py-3 font-medium text-center">Validity</th>
+                    <th class="px-6 py-3 text-left font-medium"></th>
+                </tr>
+            </thead>
+            <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
+                <tr
+                    *ngFor="let item of targetArr | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index">
+                    <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
+                        {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i + 1) :
+                            (((page - 1) * itemsPerPage) + i + 1) }} </td>
+                    <td class="px-6 py-4 text-black dark:text-gray-300 ">{{item.cropNameEnglish}}</td>
+                    <td class="px-6 py-4 text-black dark:text-gray-300 ">{{item.varietyNameEnglish}}</td>
+                    <td class="px-6 py-4 text-black dark:text-gray-300 text-center">{{item.grade}}</td>
+                    <td class="px-6 py-4 text-black dark:text-gray-300 ">{{item.target}}</td>
+                    <td class="px-6 py-4 text-black dark:text-gray-300 ">{{claculateTodo(item.target, item.complete)}}
+                    </td>
+                    <td class="px-6 py-4 text-black dark:text-gray-300 ">{{item.complete}}</td>
+                    <td class="px-6 py-4 text-black-900 dark:text-gray-300 ">{{item.date}}</td>
+                    <td class="px-6 py-4 text-black-900 dark:text-gray-300">
+                        <span *ngIf="item.target === item.complete"
+                            class="bg-[#B7FFBE] rounded-lg text-[#02BB3D] px-4 py-2">Completed</span>
+                        <span *ngIf="item.target > item.complete"
+                            class="bg-[#F8FFA6] rounded-lg text-[#A8A100] px-6 py-2">Pending</span>
+                        <span *ngIf="item.target < item.complete"
+                            class="bg-[#C8E0FF] rounded-lg text-[#415CFF] px-4 py-2">Exceeded</span>
+                    </td>
+                    <td class="px-6 py-4">
+                        <span *ngIf="item.validity === 'Valid'"
+                            class="bg-[#B7FFBE] rounded-lg text-[#02BB3D] px-3 py-2">Active</span>
+                        <span *ngIf="item.validity === 'Expired'"
+                            class="bg-[#D9D9D9] rounded-lg text-[#8A8A8A] px-3 py-2">Expired</span>
+
+                    </td>
+                    <td class="px-6 py-4">
+                        <i class="fa-solid fa-pen-to-square text-xl cursor-pointer"
+                            (click)="item.validity === 'Valid' && editOfficerTarget(item.id)" [ngClass]="{
+                            'text-gray-400': item.validity === 'Expired',
+                            'text-[#415CFF]': item.validity === 'Valid'
+                          }">
+                        </i>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+    <div class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#262f45] text-right">
+        <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
+            [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
+            [screenReaderCurrentLabel]="'Youre on page'">
+        </pagination-controls>
+    </div>
+
+    <div class="flex justify-center mb-5">
+        <button *ngIf="hasData"
+          class="flex justify-center bg-[#415CFF] text-white shadow-md font-medium rounded-lg py-2 px-5  mr-5 text-lg items-center"
+          (click)="downloadTemplate1()">
+          <i class="fa-solid fa-download px-2" *ngIf="!isDownloading"></i>
+          <i class="fa-solid fa-spinner fa-spin px-2" *ngIf="isDownloading"></i>
+          {{ isDownloading ? " Downloading..." : " Download" }}
+        </button>
+      </div>
+</div>

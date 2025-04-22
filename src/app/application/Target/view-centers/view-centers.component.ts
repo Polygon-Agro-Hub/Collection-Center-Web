@@ -7,11 +7,12 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { DropdownModule } from 'primeng/dropdown';
 import { TargetService } from '../../../services/Target-service/target.service'
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
+import { AddCenterComponent } from '../add-center/add-center.component';
 
 @Component({
     selector: 'app-view-centers',
     standalone: true,
-    imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, LoadingSpinnerComponent],
+    imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, LoadingSpinnerComponent, AddCenterComponent],
     templateUrl: './view-centers.component.html',
     styleUrl: './view-centers.component.css'
 })
@@ -27,7 +28,6 @@ export class ViewCentersComponent implements OnInit {
 
     isLoading: boolean = true;
 
-    
     // Define all Sri Lanka provinces
     provinces: string[] = [
         'Western',
@@ -157,20 +157,26 @@ export class ViewCentersComponent implements OnInit {
     }
 
     navigateToDashboard(id: number) {
+        console.log('this is id: ', id);
         this.router.navigate([`/centers/center-shashbord/${id}`]);
     }
+
+
+    addCenter() {
+        this.router.navigate([`/centers/add-a-center`]);
+      }
 }
 
 class CenterData {
-    id!: number
+    centerId!: number
     centerName!: string
     province!: string
     district!: string
     city!: string
     contact01!: string
-    CollectionOfficer!: number
-    CustomerOfficer!: number
-    CollectionCenterManager!: number
-    CustomerService!: number
+    collectionOfficerCount!: number
+    customerOfficerCount!: number
+    collectionCenterManagerCount!: number
+    customerServiceCount!: number
     regCode!: string
 }

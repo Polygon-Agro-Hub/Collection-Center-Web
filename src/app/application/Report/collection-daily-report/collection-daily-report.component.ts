@@ -5,11 +5,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ReportServiceService } from '../../../services/Report-service/report-service.service';
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 import { jsPDF } from 'jspdf';
+import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-collection-daily-report',
   standalone: true,
-  imports: [CommonModule, FormsModule, CanvasJSAngularChartsModule],
+  imports: [CommonModule, FormsModule, CanvasJSAngularChartsModule, LoadingSpinnerComponent],
   templateUrl: './collection-daily-report.component.html',
   styleUrl: './collection-daily-report.component.css',
   providers: [DatePipe]
@@ -25,6 +26,9 @@ export class CollectionDailyReportComponent implements OnInit {
   loadingTable = true;
   chartOptions: any;
 
+
+  isLoading: boolean = true;
+
   constructor(
     private router: Router,
     private ReportSrv: ReportServiceService,
@@ -36,18 +40,27 @@ export class CollectionDailyReportComponent implements OnInit {
     this.officerId = this.route.snapshot.params['id'];
     this.officerName = this.route.snapshot.params['name'];
     this.empId = this.route.snapshot.params['empid'];
-    
+
     const today = new Date();
-    this.selectDate = today.toISOString().split('T')[0]; 
-    
+    this.selectDate = today.toISOString().split('T')[0];
+
     this.fetchDailyReport();
   }
 
   fetchDailyReport(date: string = this.selectDate) {
     this.loadingTable = true;
     this.loadingChart = true;
+    this.isLoading = true
     this.ReportSrv.getCollectionDailyReport(this.officerId, date).subscribe(
       (res) => {
+        console.log(res.data.length);
+        if (res.data.length === 0) {
+          this.updateChart();
+          this.loadingTable = false;
+          this.isLoading = false;
+          return;
+        }
+
         this.dailyReportArr = res.map((item: any) => ({
           ...item,
           gradeA: Number(item.gradeA) || 0,
@@ -56,13 +69,20 @@ export class CollectionDailyReportComponent implements OnInit {
         }));
         this.updateChart();
         this.loadingTable = false;
+        this.isLoading = false;
       },
       (err) => {
         console.error("Error fetching daily report:", err);
         this.loadingTable = false;
         this.loadingChart = false;
+        this.isLoading = false;
+
       }
     );
+  }
+
+  navigateToReports() {
+    this.router.navigate(['/reports']); // Change '/reports' to your desired route
   }
 
   filterByDate() {
@@ -71,6 +91,7 @@ export class CollectionDailyReportComponent implements OnInit {
   }
 
   updateChart() {
+    this.isLoading = true;
     const gradeAData = this.dailyReportArr.map((crop) => ({
       label: crop.varietyNameEnglish,
       y: crop.gradeA || 0,
@@ -112,58 +133,60 @@ export class CollectionDailyReportComponent implements OnInit {
           type: "stackedBar",
           name: "Grade A",
           showInLegend: true,
-          legendMarkerColor: "#2B88D9", 
+          legendMarkerColor: "#2B88D9",
           dataPoints: gradeAData,
         },
         {
           type: "stackedBar",
           name: "Grade B",
           showInLegend: true,
-          legendMarkerColor: "#79BAF2", 
+          legendMarkerColor: "#79BAF2",
           dataPoints: gradeBData,
         },
         {
           type: "stackedBar",
           name: "Grade C",
           showInLegend: true,
-          legendMarkerColor: "#A7D5F2", 
+          legendMarkerColor: "#A7D5F2",
           dataPoints: gradeCData,
         },
       ],
     };
 
     this.loadingChart = false;
+    this.isLoading = false;
+
   }
 
   downloadPdf() {
     const doc = new jsPDF();
-  
+
     const title = `Daily Report`;
     doc.setFontSize(18);
     doc.text(title, 14, 10);
-  
+
     const title2 = `${this.officerName} - ${this.empId}`;
     doc.setFontSize(14);
     doc.text(title2, 14, 20);
-  
+
     const dateText = `On ${this.selectDate}`;
     doc.setFontSize(12);
     doc.text(dateText, 14, 30);
-  
-    const startY = 40; 
+
+    const startY = 40;
     doc.setFontSize(10);
     const headers = ['Variety Name', 'Grade A', 'Grade B', 'Grade C', 'Total'];
-  
+
     const rowHeight = 10;
-    const columnWidths = [60, 30, 30, 30, 30]; 
-  
+    const columnWidths = [60, 30, 30, 30, 30];
+
     let currentX = 14;
     headers.forEach((header, index) => {
       doc.rect(currentX, startY, columnWidths[index], rowHeight);
-      doc.text(header, currentX + 2, startY + 7); 
+      doc.text(header, currentX + 2, startY + 7);
       currentX += columnWidths[index];
     });
-  
+
     let currentY = startY + rowHeight;
     this.dailyReportArr.forEach((report) => {
       currentX = 14;
@@ -174,19 +197,19 @@ export class CollectionDailyReportComponent implements OnInit {
         report.gradeC.toString() + 'Kg',
         report.total.toString() + 'Kg',
       ];
-  
+
       rowData.forEach((data, index) => {
         doc.rect(currentX, currentY, columnWidths[index], rowHeight);
         doc.text(data, currentX + 2, currentY + 7);
         currentX += columnWidths[index];
       });
-  
+
       currentY += rowHeight;
     });
-  
+
     doc.save(`Daily_Report_${this.officerName}_${this.selectDate}.pdf`);
   }
-  
+
 }
 
 class DailyReport {

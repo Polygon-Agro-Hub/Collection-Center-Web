@@ -26,15 +26,8 @@ export class TargetService {
     return this.http.get<any>(url, { headers });
   }
 
-  createDailyTarget(data: any): Observable<any> {
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${this.token}`
-    });
 
-    let url = `${this.apiUrl}/create-daily-target`;
-    return this.http.post<any>(url, data, { headers });
-  }
-
+  //usable
   getAllDailyTarget(page: number = 1, limit: number = 10, searchText: string = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
@@ -92,6 +85,7 @@ export class TargetService {
     return this.http.get<any>(url, { headers });
   }
 
+  //use
   getOfficers(centerId: number, page: number = 1, limit: number = 10, role: string = '', status: string = '', searchText: string = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
@@ -140,22 +134,26 @@ export class TargetService {
     });
   }
 
-  AssignAllDailyTarget(page: number = 1, limit: number = 10): Observable<any> {
+  AssignAllDailyTarget(page: number = 1, limit: number = 10, search:string = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
 
     let url = `${this.apiUrl}/assign-all-daily-target?page=${page}&limit=${limit}`;
 
+    if(search){
+      url+=`&searchText=${search}`
+    }
+
     return this.http.get<any>(url, { headers });
   }
 
-  getTargetVerity(id: number): Observable<any> {
+  getTargetVerity(varietyId:number, companyCenterId:number): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
 
-    let url = `${this.apiUrl}/get-target-verity/${id}`;
+    let url = `${this.apiUrl}/get-target-verity/${varietyId}/${companyCenterId}`;
 
     return this.http.get<any>(url, { headers });
   }
@@ -203,7 +201,7 @@ export class TargetService {
     return this.http.get<any>(url, { headers });
   }
 
-
+//use for transfer officer target
   passToTargetToOfficer(id: number | null, targetItemId: number, amount: number): Observable<any> {
 
     const headers = new HttpHeaders({
@@ -234,6 +232,203 @@ export class TargetService {
     return this.http.get(url, {
       headers,
     });
+  }
+
+  createCenter(centerData: any): Observable<any> {
+    const formData = new FormData();
+    formData.append('centerData', JSON.stringify(centerData));
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
+    return this.http.post(`${this.apiUrl}/create-center`, formData, {
+      headers,
+    });
+  }
+
+
+  getExistTargetVerity(varietyId:number, companyCenterId:number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/get-exist-veriety-target/${varietyId}/${companyCenterId}`;
+
+    return this.http.get<any>(url, { headers });
+  }
+
+
+  editAssignedOfficerTartget(data: any): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/edit-assigned-officer-target`;
+
+    return this.http.post<any>(url, data, { headers });
+  }
+
+  getAllCenterDailyTarget(centerId: number, page: number = 1, limit: number = 10, status: string = '', searchText: string = ''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/get-center-target?centerId=${centerId}&page=${page}&limit=${limit}`;
+
+    if (status) {
+      url += `&status=${status}`
+    }
+
+    if (searchText) {
+      url += `&searchText=${searchText}`
+    }
+
+    return this.http.get<any>(url, { headers });
+  }
+
+
+  // new parts-----------------------
+  getCenterCrops(id: number, page: number = 1, limit: number = 10, searchText: string = ''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/get-center-crops/${id}?page=${page}&limit=${limit}`;
+    if (searchText) {
+      url += `&searchText=${searchText}`
+    }
+
+    return this.http.get<any>(url, { headers });
+  }
+
+  addORremoveCenterCrops(data: any): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/add-center-crops`;
+    return this.http.post<any>(url, data, { headers });
+  }
+
+  getSavedCenterCrops(id: number, date:string, searchText:string=''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/get-saved-center-crops/${id}/${date}`;
+    if (searchText) {
+      url += `?searchText=${searchText}`
+    }
+    
+    return this.http.get<any>(url, { headers });
+  }
+
+  updateTargetQty(data:any): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/update-target-crop-qty`;
+    return this.http.patch<any>(url,data, { headers });
+  }
+
+  addNewCenterTarget(data:any): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/add-new-center-target`;
+    return this.http.post<any>(url,data, { headers });
+  }
+
+
+  getOfficerAvailabeTarget(data:any, page:number = 1, limit:number = 10, status: string = '', validity: string = '', searchText: string = ''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/officer-target-check-available?page=${page}&limit=${limit}`;
+
+    if (status) {
+      url += `&status=${status}`
+    }
+
+    if (validity) {
+      url += `&validity=${validity}`
+    }
+
+    if (searchText) {
+      url += `&searchText=${searchText}`
+    }
+
+    return this.http.post<any>(url,data, { headers });
+  }
+
+
+  transferOfficerTargetToOfficer(id: number | null, targetItemId: number, amount: number): Observable<any> {
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/transfer-officer-target-to-officer`;
+
+    return this.http.patch<any>(url, { officerId: id, target: targetItemId, amount: amount }, { headers });
+  }
+
+  downloadOfficerTarget(
+    fromDate: Date | string,
+    toDate: Date | string,
+    jobRole: string = '',
+    empId: string = '',
+    status: string = '',
+    validity: string = '',
+    searchText: string = '',
+    
+  ): Observable<Blob> {
+    let url = `${this.apiUrl}/download-officer-target-report?fromDate=${fromDate}&toDate=${toDate}&jobRole=${jobRole}&empId=${empId}`;
+
+    if (status) {
+      url += `&status=${status}`
+    }
+
+    if (validity) {
+      url += `&validity=${validity}`
+    }
+
+    if (searchText) {
+      url += `&searchText=${searchText}`
+    }
+  
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      // Optional: 'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    });
+  
+    return this.http.get(url, { headers, responseType: 'blob' });
+  }
+
+  downloadCurrentTargetReport(
+    centerId: number,
+    status: string = '',
+    searchText: string = ''
+  ): Observable<Blob> {
+    let url = `${this.apiUrl}/download-current-target-report?centerId=${centerId}`;
+  
+    if (status) {
+      url += `&status=${status}`;
+    }
+  
+    if (searchText) {
+      url += `&searchText=${searchText}`;
+    }
+  
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      // Optional: 'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    });
+  
+    return this.http.get(url, { headers, responseType: 'blob' });
   }
 
 

@@ -6,8 +6,7 @@
             <p class="text-lg text-black font-bold">{{targetVerity.cropNameEnglish}} :
                 {{targetVerity.varietyNameEnglish}}
             </p>
-            <p class="text-black font-semibold">Target Ends by {{targetVerity.toDate| date:'yyyy/mm/dd'}} <span
-                    class="text-[#415CFF]">{{targetVerity.toTime}}</span></p>
+            <p class="text-black font-semibold">Daily Target for <span class="text-[#415CFF]">{{targetVerity.formattedToDate}}</span></p>
 
             <div class="border-[1px] border-[#E5E7EB] my-5 rounded-lg">
                 <table>
@@ -128,7 +127,9 @@
         </div>
 
         <div class="flex flex-row justify-center items-center my-7 gap-8">
-            <button class="bg-[#95A1AC] text-[#6B7D8C] rounded-lg px-5 py-2">
+            <button class="bg-[#FFFFFF] text-[#6B7D8C] border-[2px] border-[#95A1AC] rounded-lg px-5 py-2"
+                (click)="onCancel()"
+            >
                 Cancel
             </button>
             <button class="rounded-lg px-7 py-2"

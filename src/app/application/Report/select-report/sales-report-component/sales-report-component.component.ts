@@ -4,11 +4,12 @@ import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ReportServiceService } from '../../../../services/Report-service/report-service.service';
+import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-sales-report-component',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxPaginationModule],
+  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent],
   templateUrl: './sales-report-component.component.html',
   styleUrl: './sales-report-component.component.css'
 })
@@ -21,8 +22,9 @@ export class SalesReportComponentComponent {
   hasData: boolean = true
 
   searchText: string = '';
+  isLoading: boolean = true;
 
-constructor(
+  constructor(
     private router: Router,
     private ReportSrv: ReportServiceService,
 
@@ -33,6 +35,7 @@ constructor(
   }
 
   fetchAllOfficers(page: number = 1, limit: number = this.itemsPerPage, searchText: string = '') {
+    this.isLoading = true;
     this.ReportSrv.getAllSalesReport(page, limit, searchText).subscribe(
       (res) => {
         this.OfficerArr = res.items
@@ -42,13 +45,15 @@ constructor(
         } else {
           this.hasData = true;
         }
+        this.isLoading = false;
+
 
       }
     )
   }
 
   onSearch() {
-    this.fetchAllOfficers(this.page, this.itemsPerPage,this.searchText);
+    this.fetchAllOfficers(this.page, this.itemsPerPage, this.searchText);
 
   }
 

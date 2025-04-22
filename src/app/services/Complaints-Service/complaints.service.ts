@@ -162,6 +162,16 @@ export class ComplaintsService {
     return this.http.post<any>(url, data, { headers });
   }
 
+  getComplainCategory(): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/get-complain-category`;
+    return this.http.get<any>(url, { headers });
+  }
+
+
 }
 
 

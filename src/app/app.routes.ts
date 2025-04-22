@@ -14,7 +14,6 @@ import { CollectionMonthlyReportComponent } from './application/Report/collectio
 import { FarmerListComponent } from './application/Report/farmer-list/farmer-list.component';
 import { CollectionDailyReportComponent } from './application/Report/collection-daily-report/collection-daily-report.component';
 import { FarmerReportComponent } from './application/Report/farmer-report/farmer-report.component';
-import { AddDailyTargetComponent } from './application/Target/add-daily-target/add-daily-target.component';
 import { ViewDailyTargetComponent } from './application/Target/view-daily-target/view-daily-target.component';
 import { OfficerProfileComponent } from './application/manage-officers/officer-profile/officer-profile.component';
 import { DownloadTargetComponent } from './application/Target/download-target/download-target.component';
@@ -27,13 +26,24 @@ import { ProfileComponent } from './application/Auth/profile/profile.component';
 import { CenterViewOfficersComponent } from './application/Target/center-view-officers/center-view-officers.component';
 import { CchViewComplaintComponent } from './application/Complaints/cch-view-complaint/cch-view-complaint/cch-view-complaint.component';
 import { CchRecivedComplaintComponent } from './application/Complaints/cch-recived-complaint/cch-recived-complaint.component';
-import { CenterViewPriceListComponent} from './application/Target/center-view-price-list/center-view-price-list.component';
+import { CenterViewPriceListComponent } from './application/Target/center-view-price-list/center-view-price-list.component';
 import { AssignOfficerTargetComponent } from './application/Target/assign-officer-target/assign-officer-target.component';
 import { EditMyTargetComponent } from './application/Target/edit-my-target/edit-my-target.component';
-import {ViewMyTargetComponent} from './application/Target/view-my-target/view-my-target.component';
-import {ViewOfficerTargetComponent} from './application/manage-officers/view-officer-target/view-officer-target.component';
+import { ViewMyTargetComponent } from './application/Target/view-my-target/view-my-target.component';
+import { ViewOfficerTargetComponent } from './application/manage-officers/view-officer-target/view-officer-target.component';
 import { EditOfficerTargetComponent } from './application/manage-officers/edit-officer-target/edit-officer-target.component';
 import { RoleGuardService } from './services/RoleGuard/role-guard.service';
+import { EditAssignOfficerTargetComponent } from './application/Target/edit-assign-officer-target/edit-assign-officer-target.component';
+import { AddCenterComponent } from './application/Target/add-center/add-center.component';
+import { ViewCenterTargetComponent } from './application/Target/view-center-target/view-center-target.component';
+import { PendingChangesGuard } from './guards/can-deactivate.guard';
+import { AssignCenterTargetViewComponent } from './application/Target/assign-center-target-view/assign-center-target-view/assign-center-target-view.component';
+import { ReportDashboardComponent } from './application/Report/report-dashboard/report-dashboard.component';
+import { CollectionReportsComponent } from './application/Report/collection-reports/collection-reports.component';
+import { OfficerTargetViewComponent } from './application/Target/officer-target-view/officer-target-view.component';
+import { CenterCollectionExpenseComponent } from './application/Target/center-collection-expense/center-collection-expense.component';
+import { FarmerReportInvoiceComponent } from './application/Report/farmer-report-invoice/farmer-report-invoice.component';
+import { OfficerTargetPassOfficerComponent } from './application/Target/officer-target-pass-officer/officer-target-pass-officer.component';
 
 export const routes: Routes = [
     {
@@ -50,9 +60,9 @@ export const routes: Routes = [
         component: MainLayoutComponent,
         canActivate: [AuthGuard],
         children: [
-            { 
-                path: 'profile', 
-                component: ProfileComponent, 
+            {
+                path: 'profile',
+                component: ProfileComponent,
             },
             {
                 path: 'dashbord',
@@ -66,7 +76,8 @@ export const routes: Routes = [
                         component: AddOfficersComponent
                     },
                     {
-                        path: 'view-officer',
+                        // view-officer removed
+                        path: '',
                         component: ViewOfficersComponent
                     },
                     {
@@ -96,8 +107,9 @@ export const routes: Routes = [
                 path: 'price-list',
                 children: [
                     {
-                        path: 'view-prices',
-                        component: ViewPriceListComponent
+                        path: '',
+                        component: ViewPriceListComponent,
+                        canDeactivate: [PendingChangesGuard]
                     }
                 ]
             },
@@ -105,7 +117,7 @@ export const routes: Routes = [
                 path: 'price-request',
                 children: [
                     {
-                        path: 'view-request',
+                        path: '',
                         component: PriceRequestComponent
                     }
                 ]
@@ -113,9 +125,19 @@ export const routes: Routes = [
             {
                 path: 'reports',
                 children: [
+
                     {
-                        path: 'select-report',
+                        path: '',
+                        component: ReportDashboardComponent
+                    },
+                    {
+                        path: 'officer-reports',
                         component: SelectReportComponent
+                    },
+
+                    {
+                        path: 'collection-reports',
+                        component: CollectionReportsComponent
                     },
                     {
                         path: 'collection-monthly-report/:id',
@@ -133,6 +155,10 @@ export const routes: Routes = [
                         path: 'farmer-report/:id',
                         component: FarmerReportComponent
                     },
+                    {
+                        path: 'farmer-report-invoice/:invNo',
+                        component: FarmerReportInvoiceComponent
+                    },
 
 
                 ]
@@ -141,7 +167,7 @@ export const routes: Routes = [
                 path: 'target',
                 children: [
                     {
-                        path: 'view-target',
+                        path: '',
                         component: ViewDailyTargetComponent
                     },
                     {
@@ -149,7 +175,7 @@ export const routes: Routes = [
                         component: DownloadTargetComponent
                     },
                     {
-                        path: 'assing-target/:id',
+                        path: 'assing-target/:varietyId/:companyCenterId',
                         component: AssignOfficerTargetComponent
                     },
                     {
@@ -160,7 +186,11 @@ export const routes: Routes = [
                         path: 'edit-my-target/:id',
                         component: EditMyTargetComponent
                     },
-                    
+                    {
+                        path: 'edit-assing-target/:varietyId/:companyCenterId',
+                        component: EditAssignOfficerTargetComponent
+                    }
+
                 ]
             },
             {
@@ -189,8 +219,8 @@ export const routes: Routes = [
                         component: CentersDashbordComponent
                     },
                     {
-                        path: 'add-target/:id/:name',
-                        component: AddDailyTargetComponent
+                        path: 'add-target/:id/:name/:regCode',
+                        component: AssignCenterTargetViewComponent
                     },
                     {
                         path: 'edit-officer/:id',
@@ -205,8 +235,20 @@ export const routes: Routes = [
                         component: CenterViewPriceListComponent
                     },
                     {
-                        path: 'center-view-officers',
+                        path: 'center-view-officers/:id',
                         component: CenterViewOfficersComponent
+                    },
+                    {
+                        path: 'add-a-center',
+                        component: AddCenterComponent
+                    },
+                    {
+                        path: 'view-center-target/:id',
+                        component: ViewCenterTargetComponent
+                    },
+                    {
+                        path: 'center-collection-expense/:id',
+                        component: CenterCollectionExpenseComponent
                     },
                 ]
             },
@@ -224,6 +266,20 @@ export const routes: Routes = [
                     }
                 ]
             },
+            {
+                path: 'officer-target',
+                children: [
+                    {
+                        path: '',
+                        component: OfficerTargetViewComponent
+                    },
+                    {
+                        path: 'edit-officer-target/:id',
+                        component: OfficerTargetPassOfficerComponent
+                    }
+
+                ]
+            }
 
         ]
     },

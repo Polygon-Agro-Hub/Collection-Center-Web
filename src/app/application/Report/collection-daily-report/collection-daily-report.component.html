@@ -1,66 +1,70 @@
-<div class="flex flex-row items-center gap-6 font-semibold text[#424242] mb-5 mx-5">
-  <p>Report</p>
-  <p>Daily Report</p>
-</div>
+<app-loading-spinner *ngIf="isLoading" />
 
-<div class="w-full px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg mt-6">
-  <div class="flex flex-row items-center justify-end">
-    <div class="flex flex-row items-center gap-4">
-      <p class="text-xl font-semibold">Date :</p>
-      <div class="relative w-48 mr-6">
-        <div class="border-2 rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
-          <input
-            type="date"
-            [(ngModel)]="selectDate"
-            (change)="filterByDate()"
-            class="block w-full appearance-none dark:bg-[#272F45] text-textLight dark:text-textDark px-3 py-1 rounded-xl focus:outline-none" />
+<div *ngIf="!isLoading">
+  <div class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-8 mx-5 cursor-pointer">
+    <p (click)="navigateToReports()">Reports</p>
+    <p onclick="history.back()">Officer Reports</p>
+    <p>Daily Report</p>
+  </div>
+
+  <div class="w-full px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg mt-6">
+    <div class="flex flex-row items-center justify-end">
+      <div class="flex flex-row items-center gap-4">
+        <p class="text-xl font-semibold">Date :</p>
+        <div class="relative w-48 mr-6">
+          <div
+            class="border-2 rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
+            <input type="date" [(ngModel)]="selectDate" (change)="filterByDate()"
+              class="block w-full appearance-none dark:bg-[#272F45] text-textLight dark:text-textDark px-3 py-1 rounded-xl focus:outline-none" />
+          </div>
         </div>
       </div>
     </div>
-  </div>
 
-  <div class="flex flex-col items-center justify-center my-5">
-    <p class="text-xl font-semibold">{{officerName}} - {{empId}}</p>
-    <p class="text-lg text-[#534E4E]">On {{selectDate}}</p>
-  </div>
-
-  <div *ngIf="!loadingChart; else loading">
-    <div class="pt-16">
-      <canvasjs-chart *ngIf="chartOptions" [options]="chartOptions"></canvasjs-chart>
+    <div class="flex flex-col items-center justify-center my-5">
+      <p class="text-xl font-semibold">{{officerName}} - {{empId}}</p>
+      <p class="text-lg text-[#534E4E]">On {{selectDate}}</p>
     </div>
+
+    <div *ngIf="!loadingChart; else loading">
+      <div class="pt-16">
+        <canvasjs-chart *ngIf="chartOptions" [options]="chartOptions"></canvasjs-chart>
+      </div>
+    </div>
+
+    <ng-template #loading>
+      <p>Loading chart...</p>
+    </ng-template>
+
+    <div class="w-full mt-8 bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
+      <table class="w-full border-collapse border border-gray-300 dark:border-gray-700">
+        <thead>
+          <tr class="bg-[#828282] dark:bg-gray-700">
+            <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Crop Variety</th>
+            <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Grade A</th>
+            <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Grade B</th>
+            <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Grade C</th>
+            <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Total</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr *ngFor="let item of dailyReportArr">
+            <td class="text-center border border-gray-300 dark:border-gray-600 px-4 py-2">{{item.varietyNameEnglish}}
+            </td>
+            <td class="text-center border border-gray-300 dark:border-gray-600 px-4 py-2">{{item.gradeA}}Kg</td>
+            <td class="text-center border border-gray-300 dark:border-gray-600 px-4 py-2">{{item.gradeB}}Kg</td>
+            <td class="text-center border border-gray-300 dark:border-gray-600 px-4 py-2">{{item.gradeC}}Kg</td>
+            <td class="text-center border border-gray-300 dark:border-gray-600 px-4 py-2">{{item.total}}Kg</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="flex justify-center items-center mt-8">
+      <button class="bg-[#415CFF] text-lg text-white rounded-lg shadow-lg px-4 py-2" (click)="downloadPdf()">
+        Download
+      </button>
+    </div>
+
   </div>
 
-  <ng-template #loading>
-    <p>Loading chart...</p>
-  </ng-template>
-
-  <div class="w-full mt-8 bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
-    <table class="w-full border-collapse border border-gray-300 dark:border-gray-700">
-      <thead>
-        <tr class="bg-[#828282] dark:bg-gray-700">
-          <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Crop Variety</th>
-          <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Grade A</th>
-          <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Grade B</th>
-          <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Grade C</th>
-          <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Total</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr *ngFor="let item of dailyReportArr">
-          <td class="text-center border border-gray-300 dark:border-gray-600 px-4 py-2">{{item.varietyNameEnglish}}</td>
-          <td class="text-center border border-gray-300 dark:border-gray-600 px-4 py-2">{{item.gradeA}}Kg</td>
-          <td class="text-center border border-gray-300 dark:border-gray-600 px-4 py-2">{{item.gradeB}}Kg</td>
-          <td class="text-center border border-gray-300 dark:border-gray-600 px-4 py-2">{{item.gradeC}}Kg</td>
-          <td class="text-center border border-gray-300 dark:border-gray-600 px-4 py-2">{{item.total}}Kg</td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
-  <div class="flex justify-center items-center mt-8">
-    <button class="bg-[#415CFF] text-lg text-white rounded-lg shadow-lg px-4 py-2"
-                (click)="downloadPdf()">
-                Download
-            </button>
-  </div>
-  
 </div>

@@ -20,6 +20,7 @@ export class LoginComponent {
   loginObj: Login;
   disError: any;
   isLoading: boolean = false;
+  role!: string;
 
 
   constructor(
@@ -34,6 +35,22 @@ export class LoginComponent {
   ngOnInit() {
     this.tokenService.clearLoginDetails();
     // localStorage.removeItem('LoginToken');
+    this.clearAllCookies();
+  }
+
+
+
+  clearAllCookies() {
+    const cookies = document.cookie.split(";");
+    
+    for (let i = 0; i < cookies.length; i++) {
+      const cookie = cookies[i];
+      const eqPos = cookie.indexOf("=");
+      const name = eqPos > -1 ? cookie.substring(0, eqPos).trim() : cookie.trim();
+      document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
+    }
+
+   
   }
 
 
@@ -71,18 +88,6 @@ export class LoginComponent {
       this.isLoading = true;
       this.authService.login(this.loginObj.userName, this.loginObj.password).subscribe(
         (res: any) => {
-          Swal.fire({
-            icon: 'success',
-            title: 'Logged',
-            text: 'Successfully Logged In',
-            showConfirmButton: false,
-            timer: 1500
-          });
-
-
-          localStorage.setItem("CCLoginToken", res.token)
-
-          // Save token details synchronously
           this.tokenService.saveLoginDetails(
             res.token,
             res.userName,
@@ -91,25 +96,50 @@ export class LoginComponent {
             res.expiresIn,
             res.image
           );
-          this.isLoading = true;
+          Swal.fire({
+            icon: 'success',
+            title: 'Logged',
+            text: 'Successfully Logged In',
+            showConfirmButton: false,
+            timer: 1500
+          });
+
+          
+          // localStorage.setItem("CCLoginToken", res.token)
+          this.role = res.role;
+          // Save token details synchronously
+          
+          
 
 
           // Defer navigation to allow the token to be saved properly
           setTimeout(() => {
             if (res.updatedPassword == 0) {
               this.router.navigate(['/change-password']);
+              this.isLoading = false;
             } else if (res.updatedPassword == 1) {
-              this.router.navigate(['/dashbord']);
+              if (this.role === 'Collection Center Manager') {
+                this.router.navigate(['/dashbord']);
+                this.isLoading = false;
+              }else if(this.role === 'Collection Center Head'){
+                this.router.navigate(['/centers']);
+                this.isLoading = false;
+              }else{
+                this.router.navigate(['/'])
+                this.isLoading = false;
+              }
             } else {
               Swal.fire({
                 icon: 'error',
                 title: 'Unsuccessful',
                 text: 'Error occurred. Please contact Agro World Admin',
               });
+              this.isLoading = false;
             }
           }, 0);
         },
         (error) => {
+          this.isLoading = false;
           console.error('Error updating Market Price', error);
           this.disError = error.error?.error || 'An error occurred. Please try again.';
           Swal.fire({

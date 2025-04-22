@@ -3,13 +3,13 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { ReportServiceService } from '../../../services/Report-service/report-service.service';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
-import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
+import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-farmer-report',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent],
   templateUrl: './farmer-report.component.html',
   styleUrl: './farmer-report.component.css',
   providers: [DatePipe]
@@ -23,6 +23,7 @@ export class FarmerReportComponent implements OnInit {
   hasData: boolean = false
   totalAmount: number = 0
   totalAmountforReport: number = 0;
+  isLoading:boolean = true;
 
 
   constructor(
@@ -35,10 +36,12 @@ export class FarmerReportComponent implements OnInit {
 
   ngOnInit(): void {
     this.reportId = this.route.snapshot.params['id'];
+    console.log(this.reportId);
     this.fetchFarmerDetails(this.reportId);
   }
 
   fetchFarmerDetails(id: number) {
+    this.isLoading = true
     this.ReportSrv.getFarmerReport(id).subscribe(
       (res) => {
         if (res.status) {
@@ -49,6 +52,7 @@ export class FarmerReportComponent implements OnInit {
         } else {
           this.hasData = false;
         }
+        this.isLoading = false;
       }
     );
   }
@@ -58,6 +62,14 @@ export class FarmerReportComponent implements OnInit {
     this.totalAmount = this.CropArr.reduce((sum, item) => {
       return sum + this.calculateRowTotal(item);
     }, 0);
+  }
+
+  navigateToReports() {
+    this.router.navigate(['/reports']); // Change '/reports' to your desired route
+  }
+
+  navigateToOfficerReports() {
+    this.router.navigate(['/reports/officer-reports']); // Change '/reports' to your desired route
   }
   
 
@@ -89,154 +101,235 @@ export class FarmerReportComponent implements OnInit {
   }
   
 
-  downloadReport() {
-    const element = document.getElementById('reportContainer'); // Ensure this selector matches the report container
-    if (!element) {
-      alert('Report content not found.');
-      return;
+  // this code works correctly but did not had time to fix the address display
+  async downloadReport() {
+    // Create new PDF document
+    this.isLoading= true;
+    const doc = new jsPDF();
+    
+    // Helper function to format null values
+    const formatValue = (value: any): string => {
+      return value === null || value === undefined ? 'N/A' : value.toString();
+    };
+
+    // Set font
+    doc.setFont('helvetica');
+    
+    // Add title
+    doc.setFontSize(16);
+    doc.text('INVOICE', 105, 15, { align: 'center' });
+    
+    // Add invoice details
+    doc.setFontSize(10);
+    doc.text(`INV NO: ${formatValue(this.userObj.invNo)}`, 14, 25);
+    doc.text(`Date: ${new Date(this.userObj.createdAt).toISOString().split('T')[0].replace(/-/g, '/')}`, 14, 30);
+    
+    // Add Personal Details section
+    doc.setFontSize(12);
+    doc.text('Personal Details', 14, 40);
+    doc.setFontSize(10);
+
+    
+    // Draw Personal Details table
+    this.drawTable(doc, 14, 45, [
+      ['First Name', 'Last Name', 'NIC Number', 'Phone Number', 'Address'],
+      [
+        formatValue(this.userObj.firstName),
+        formatValue(this.userObj.lastName),
+        formatValue(this.userObj.NICnumber),
+        formatValue(this.userObj.phoneNumber),
+        this.userObj.houseNo && this.userObj.streetName && this.userObj.city
+      ? `${formatValue(this.userObj.houseNo)}, ${formatValue(this.userObj.streetName)}, ${formatValue(this.userObj.city)}`
+      : '-'
+        
+      ]
+    ]);
+    
+    // Add Bank Details section
+    doc.setFontSize(12);
+    doc.text('Bank Details', 14, 70);
+    doc.setFontSize(10);
+    
+    // Draw Bank Details table
+    this.drawTable(doc, 14, 75, [
+      ['Account Number', 'Account Holder\'s Name', 'Bank Name', 'Branch Name'],
+      [
+        formatValue(this.userObj.accNumber),
+        formatValue(this.userObj.accHolderName),
+        formatValue(this.userObj.bankName),
+        formatValue(this.userObj.branchName)
+      ]
+    ]);
+    
+    // Add Crop Details section
+    doc.setFontSize(12);
+    doc.text('Crop Details', 14, 100);
+    doc.setFontSize(10);
+    
+    // Prepare crop details data for table
+    const cropTableHeaders = ['Crop Name', 'Variety', 'Unit Price (A)', 'Quantity', 'Unit Price (B)', 
+                              'Quantity', 'Unit Price (C)', 'Quantity', 'Total'];
+                              
+    const cropTableData = this.CropArr.map(crop => [
+      formatValue(crop.cropNameEnglish),
+      formatValue(crop.varietyNameEnglish),
+      formatValue(crop.gradeAprice),
+      formatValue(crop.gradeAquan),
+      formatValue(crop.gradeBprice),
+      formatValue(crop.gradeBquan),
+      formatValue(crop.gradeCprice),
+      formatValue(crop.gradeCquan),
+      formatValue(this.calculateRowTotalforReport(crop))
+    ]);
+    
+    // Draw Crop Details table
+    this.drawTable(doc, 14, 105, [cropTableHeaders, ...cropTableData]);
+    
+    // Add Full Total
+    doc.text('Full Total(Rs.): '+ this.calculateOverallTotalforReport(), 14, 135);
+
+    function loadImageAsBase64(url: string): Promise<string> {
+      return new Promise((resolve, reject) => {
+        const xhr = new XMLHttpRequest();
+        xhr.onload = function () {
+          const reader = new FileReader();
+          reader.onloadend = function () {
+            resolve(reader.result as string);
+          };
+          reader.readAsDataURL(xhr.response);
+        };
+        xhr.onerror = function () {
+          // If XHR fails, try loading image directly
+          const img = new Image();
+          img.crossOrigin = 'Anonymous';
+          img.onload = function () {
+            const canvas = document.createElement('canvas');
+            const ctx = canvas.getContext('2d');
+            canvas.width = img.width;
+            canvas.height = img.height;
+            ctx?.drawImage(img, 0, 0);
+            resolve(canvas.toDataURL('image/png'));
+          };
+          img.onerror = function () {
+            console.warn('Image load failed:', url);
+            resolve(''); // Resolve with empty string if image fails to load
+          };
+          img.src = url;
+        };
+        xhr.open('GET', url);
+        xhr.responseType = 'blob';
+        xhr.setRequestHeader('Accept', 'image/png;image/*');
+        try {
+          xhr.send();
+        } catch (error) {
+          console.error('XHR send error:', error);
+          reject(error);
+        }
+      });
     }
 
-    html2canvas(element, { scale: 3 }).then((canvas) => {
-      const imgData = canvas.toDataURL('image/png');
-      const pdf = new jsPDF('p', 'mm', 'a4');
-      const imgWidth = 190; // A4 width minus margins
-      const imgHeight = (canvas.height * imgWidth) / canvas.width;
+    const appendCacheBuster = (url: string) => {
+      if (!url) return '';
+      const separator = url.includes('?') ? '&' : '?';
+      return `${url}${separator}t=${new Date().getTime()}`;
+    };
 
-      pdf.addImage(imgData, 'PNG', 10, 10, imgWidth, imgHeight);
-      pdf.save(`Farmer_Report_${this.userObj.invNo}.pdf`);
-    }).catch((error) => {
-      console.error('Error generating PDF:', error);
-      alert('An error occurred while generating the report. Please try again.');
-    });
+    // Load the image first
+    let farmerQrImagebase64 = '';
+    let officerQrImagebase64 = '';
+    try {
+      if (this.userObj.farmerQr) {
+        const modifiedFarmerQrImageUrl = appendCacheBuster(this.userObj.farmerQr);
+        farmerQrImagebase64 = await loadImageAsBase64(modifiedFarmerQrImageUrl);
+      }
+    } catch (error) {
+      console.error('Error loading image:', error);
+    }
+
+    try {
+      if (this.userObj.officerQr) {
+        const modifiedOfficerQrImageUrl = appendCacheBuster(this.userObj.officerQr);
+        officerQrImagebase64 = await loadImageAsBase64(modifiedOfficerQrImageUrl);
+      }
+    } catch (error) {
+      console.error('Error loading officer QR image:', error);
+    }
+
+    // Add the image at the top
+    if (farmerQrImagebase64) {
+      
+      doc.addImage(
+        farmerQrImagebase64,
+        'PNG',
+        14, // X position
+        147, // Y position (moved to top)
+        40, // Width
+        40  // Height
+      );
+      doc.setFontSize(12);
+      doc.text('Farmer Qr Code', 20, 190);
+    }
+
+    if (officerQrImagebase64) {
+      
+      doc.addImage(
+        officerQrImagebase64,
+        'PNG',
+        60, // X position (adjusted for placement)
+        147, // Y position (aligned with farmer QR)
+        40, // Width
+        40  // Height
+      );
+      doc.setFontSize(12);
+      doc.text('Officer Qr Code', 66, 190);
+    }
+    
+    // Save the PDF
+    doc.save('invoice.pdf');
   }
 
-  //this code works correctly but did not had time to fix the address display
-  // downloadReport(): void {
-  //   // Create new PDF document
-  //   const doc = new jsPDF();
-    
-  //   // Helper function to format null values
-  //   const formatValue = (value: any): string => {
-  //     return value === null || value === undefined ? 'N/A' : value.toString();
-  //   };
-
-  //   // Set font
-  //   doc.setFont('helvetica');
-    
-  //   // Add title
-  //   doc.setFontSize(16);
-  //   doc.text('INVOICE', 105, 15, { align: 'center' });
-    
-  //   // Add invoice details
-  //   doc.setFontSize(10);
-  //   doc.text(`INV NO: ${formatValue(this.userObj.invNo)}`, 14, 25);
-  //   doc.text(`Date: ${formatValue(this.userObj.createdAt)}`, 14, 30);
-    
-  //   // Add Personal Details section
-  //   doc.setFontSize(12);
-  //   doc.text('Personal Details', 14, 40);
-  //   doc.setFontSize(10);
-    
-  //   // Draw Personal Details table
-  //   this.drawTable(doc, 14, 45, [
-  //     ['First Name', 'Last Name', 'NIC Number', 'Phone Number', 'Address'],
-  //     [
-  //       formatValue(this.userObj.firstName),
-  //       formatValue(this.userObj.lastName),
-  //       formatValue(this.userObj.NICnumber),
-  //       formatValue(this.userObj.phoneNumber),
-  //       // formatValue(this.userObj.address)
-  //     ]
-  //   ]);
-    
-  //   // Add Bank Details section
-  //   doc.setFontSize(12);
-  //   doc.text('Bank Details', 14, 70);
-  //   doc.setFontSize(10);
-    
-  //   // Draw Bank Details table
-  //   this.drawTable(doc, 14, 75, [
-  //     ['Account Number', 'Account Holder\'s Name', 'Bank Name', 'Branch Name'],
-  //     [
-  //       formatValue(this.userObj.accNumber),
-  //       formatValue(this.userObj.accHolderName),
-  //       formatValue(this.userObj.bankName),
-  //       formatValue(this.userObj.branchName)
-  //     ]
-  //   ]);
-    
-  //   // Add Crop Details section
-  //   doc.setFontSize(12);
-  //   doc.text('Crop Details', 14, 100);
-  //   doc.setFontSize(10);
-    
-  //   // Prepare crop details data for table
-  //   const cropTableHeaders = ['Crop Name', 'Variety', 'Unit Price (A)', 'Quantity', 'Unit Price (B)', 
-  //                             'Quantity', 'Unit Price (C)', 'Quantity', 'Total'];
-                              
-  //   const cropTableData = this.CropArr.map(crop => [
-  //     formatValue(crop.cropNameEnglish),
-  //     formatValue(crop.varietyNameEnglish),
-  //     formatValue(crop.gradeAprice),
-  //     formatValue(crop.gradeAquan),
-  //     formatValue(crop.gradeBprice),
-  //     formatValue(crop.gradeBquan),
-  //     formatValue(crop.gradeCprice),
-  //     formatValue(crop.gradeCquan),
-  //     formatValue(this.calculateRowTotalforReport(crop))
-  //   ]);
-    
-  //   // Draw Crop Details table
-  //   this.drawTable(doc, 14, 105, [cropTableHeaders, ...cropTableData]);
-    
-  //   // Add Full Total
-  //   doc.text('Full Total(Rs.): '+ this.calculateOverallTotalforReport(), 14, 135);
-    
-  //   // Save the PDF
-  //   doc.save('invoice.pdf');
-  // }
-
   // Helper function to draw tables
-  // private drawTable(doc: jsPDF, x: number, y: number, data: string[][]): void {
-  //   // Calculate column widths based on number of columns
-  //   const pageWidth = doc.internal.pageSize.width - 28; // Margins on both sides
-  //   const colWidth = pageWidth / data[0].length;
+  private drawTable(doc: jsPDF, x: number, y: number, data: string[][]): void {
+    // Calculate column widths based on number of columns
+    const pageWidth = doc.internal.pageSize.width - 28; // Margins on both sides
+    const colWidth = pageWidth / data[0].length;
     
-  //   // Draw headers
-  //   doc.setFillColor(240, 240, 240);
-  //   doc.rect(x, y, pageWidth, 7, 'F');
-  //   doc.setFont('bold');
+    // Draw headers
+    doc.setFillColor(240, 240, 240);
+    doc.rect(x, y, pageWidth, 7, 'F');
+    doc.setFont('bold');
     
-  //   data[0].forEach((header, i) => {
-  //     doc.text(header, x + i * colWidth + colWidth / 2, y + 5, { align: 'center' });
-  //   });
+    data[0].forEach((header, i) => {
+      doc.text(header, x + i * colWidth + colWidth / 2, y + 5, { align: 'center' });
+    });
     
-  //   // Draw data rows
-  //   doc.setFont('normal');
-  //   for (let i = 1; i < data.length; i++) {
-  //     const rowY = y + 7 * i;
+    // Draw data rows
+    doc.setFont('normal');
+    for (let i = 1; i < data.length; i++) {
+      const rowY = y + 7 * i;
       
-  //     // Draw row background (alternating colors for better readability)
-  //     if (i % 2 === 0) {
-  //       doc.setFillColor(252, 252, 252);
-  //       doc.rect(x, rowY, pageWidth, 7, 'F');
-  //     }
+      // Draw row background (alternating colors for better readability)
+      if (i % 2 === 0) {
+        doc.setFillColor(252, 252, 252);
+        doc.rect(x, rowY, pageWidth, 7, 'F');
+      }
       
-  //     // Draw cell borders
-  //     doc.setDrawColor(200, 200, 200);
-  //     doc.rect(x, rowY, pageWidth, 7);
+      // Draw cell borders
+      doc.setDrawColor(200, 200, 200);
+      doc.rect(x, rowY, pageWidth, 7);
       
-  //     // Draw vertical lines for columns
-  //     for (let j = 1; j < data[0].length; j++) {
-  //       doc.line(x + j * colWidth, rowY, x + j * colWidth, rowY + 7);
-  //     }
+      // Draw vertical lines for columns
+      for (let j = 1; j < data[0].length; j++) {
+        doc.line(x + j * colWidth, rowY, x + j * colWidth, rowY + 7);
+      }
       
-  //     // Draw cell contents
-  //     data[i].forEach((cell, j) => {
-  //       doc.text(cell, x + j * colWidth + colWidth / 2, rowY + 5, { align: 'center' });
-  //     });
-  //   }
-  // }
+      // Draw cell contents
+      data[i].forEach((cell, j) => {
+        doc.text(cell, x + j * colWidth + colWidth / 2, rowY + 5, { align: 'center' });
+      });
+    }
+    this.isLoading = false
+  }
 
 }
 

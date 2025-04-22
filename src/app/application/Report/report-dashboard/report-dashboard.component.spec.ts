@@ -1,18 +1,18 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { AddDailyTargetComponent } from './add-daily-target.component';
+import { ReportDashboardComponent } from './report-dashboard.component';
 
-describe('AddDailyTargetComponent', () => {
-  let component: AddDailyTargetComponent;
-  let fixture: ComponentFixture<AddDailyTargetComponent>;
+describe('ReportDashboardComponent', () => {
+  let component: ReportDashboardComponent;
+  let fixture: ComponentFixture<ReportDashboardComponent>;
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: [AddDailyTargetComponent]
+      imports: [ReportDashboardComponent]
     })
     .compileComponents();
 
-    fixture = TestBed.createComponent(AddDailyTargetComponent);
+    fixture = TestBed.createComponent(ReportDashboardComponent);
     component = fixture.componentInstance;
     fixture.detectChanges();
   });

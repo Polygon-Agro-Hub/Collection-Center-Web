@@ -1,9 +1,9 @@
-<app-loading-spinner *ngIf="isLoading"/>
+<app-loading-spinner *ngIf="isLoading" />
 
 <div *ngIf="!isLoading">
-    <p class="font-semibold text[#424242] mb-8 mx-5 dark:text-white dark:bg-black">Price List</p>
+    <p class="font-semibold text[#424242] mb-8 mx-5 dark:text-white dark:bg-black ">Price List</p>
 
-    <div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-l">
+    <div class="w-full overflow-x-auto px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-l">
         <div class="flex flex-row items-center justify-between">
             <div class="flex flex-col justify-between">
                 <p class="font-semibold text-lg mb-1 dark:text-white">Market Price on {{today}}</p>
@@ -17,7 +17,7 @@
 
                 <p class="text-lg dark:text-white">Filter By</p>
 
-                <div class="relative w-46 ">
+                <!-- <div class="relative w-46 ">
                     <div
                         class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-white flex flex-row justify-between items-center ">
                         <select [(ngModel)]="selectGrade" (change)="filterGrade()"
@@ -42,11 +42,48 @@
                         </button>
 
                     </div>
+                </div> -->
+
+
+
+
+
+
+
+                <div class="relative w-52">
+                    <div
+                        class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
+                        <select [(ngModel)]="selectGrade" (change)="filterGrade()"
+                            class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer">
+                            <option value="" selected disabled>Grade</option>
+                            <option
+                                class=" dark:bg-[#292929] text-textLight dark:text-white hover:bg-gray-300 dark:hover:bg-[#292929]"
+                                value="A">A</option>
+                            <option
+                                class=" dark:bg-[#292929] text-textLight dark:text-white hover:bg-gray-300 dark:hover:bg-[#292929]"
+                                value="B">B</option>
+                            <option
+                                class=" dark:bg-[#292929] text-textLight dark:text-white hover:bg-gray-300 dark:hover:bg-[#292929]"
+                                value="C">C</option>
+                        </select>
+
+                        <!-- Down arrow icon -->
+                        <div *ngIf="!selectGrade"
+                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
+                            <i class="fa-solid fa-angle-down text-lg mr-3"></i>
+                        </div>
+
+                        <!-- Cancel icon -->
+                        <div (click)="cancelGrade()" *ngIf="selectGrade"
+                            class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300 cursor-pointer z-10">
+                            <i class="fa-solid fa-xmark text-lg mr-3"></i>
+                        </div>
+                    </div>
                 </div>
 
 
                 <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
-                    <input type="text" placeholder="Search by Crop / Variety name.." [(ngModel)]="searchText"
+                    <input type="text" placeholder="Search by Crop / Variety name.." [(ngModel)]="searchText" (keyup.enter)="onSearch()" (keyup.esc)="offSearch()"
                         class="bg-transparent outline-none w-full text-textLight dark:text-textDark " />
                     <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                         (click)="onSearch()">
@@ -74,9 +111,8 @@
             <p class="text-3xl text-center font-semibold dark:text-white">No Data Availabale</p>
         </div>
 
-        <div *ngIf="hasData"
-            class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
-            <table class="w-full divide-y-2 overflow-hidden ">
+        <div *ngIf="hasData" class="min-w-max mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+            <table class="w-full min-w-max divide-y-2 overflow-hidden ">
                 <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
                     <tr>
                         <th class=" px-6 py-3 text-left text-sm font-medium">No</th>
@@ -104,8 +140,10 @@
                                 {{ item.updatedPrice }}
                             </span>
                             <span *ngIf="editingIndex === i">
-                                <input type="number" [(ngModel)]="editValue"
-                                    class="border-[#415CFF] border-[2px] border-dotted rounded-lg w-16 px-2 py-1" />
+                                <input type="number" [(ngModel)]="editValue" (input)="validateInput()"
+                                    class="border-[#415CFF] border-[2px] border-dotted rounded-lg w-16 px-2 py-1"
+                                    min="0" step="0.01" required />
+
                             </span>
                         </td>
                         <td class="px-6 py-4 flex justify-center space-x-4">
@@ -113,9 +151,13 @@
                                 (click)="editRow(i, item.updatedPrice)">
                                 <i class="fa-solid fa-pen-to-square text-lg"></i>
                             </button>
-                            <button *ngIf="editingIndex === i"
-                                class="bg-[#415CFF] text-white hover:text-blue-500 px-2 py-1 rounded-lg"
-                                (click)="saveRow(item.id)">
+                            <button *ngIf="editingIndex === i" 
+                                [ngClass]="{
+                                'bg-[#415CFF] text-white hover:text-blue-500': !isInvalidInput(),
+                                'bg-gray-400 text-gray-200 cursor-not-allowed': isInvalidInput()
+                                }" 
+                                class="px-2 py-1 rounded-lg" [disabled]="isInvalidInput()"
+                                (click)="saveRow(item.id, item.cropNameEnglish, item.grade, item.varietyNameEnglish)">
                                 Save
                             </button>
                         </td>
@@ -124,11 +166,41 @@
 
             </table>
         </div>
-        <div class="flex items-center justify-end my-5 mr-5">
+        <div class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#262f45] text-right">
             <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
                 [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
                 [screenReaderCurrentLabel]="'Youre on page'">
             </pagination-controls>
+        </div>
+    </div>
+</div>
+
+
+
+<div *ngIf="isExit" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="flex flex-col justify-center items-center gap-y-5 bg-white dark:bg-[#363636] shadow-lg rounded-lg p-6 w-1/3">
+        <div class="flex items-center justify-center bg-[#F6F7F9] rounded-lg shadow-sm px-4 py-3">
+            <i class="fa-solid fa-triangle-exclamation text-[#6B7D8C] text-4xl"></i>
+        </div>
+
+        <div class="flex flex-col items-center justify-center text-center">
+            <p class="text-[#4B5563] text-lg">You have unsaved changes.</p>
+            <p class="text-[#4B5563] text-lg">If you leave this page now, your changes will be lost.</p>
+            <p class="text-[#4B5563] text-lg">Do you want to continue without saving?</p>
+        </div>
+
+        <div class="flex flex-row items-center justify-center gap-x-4">
+            <button (click)="leaveWithoutSaving()"
+                class="bg-[#F6F7F9] text-[#4B5563] px-4 py-2 rounded-lg hover:bg-gray-200 flex flex-col items-center justify-center">
+                <span class="font-semibold">Leave</span>
+                <span>without saving</span>
+            </button>
+
+            <button (click)="stayOnPage()"
+                class="bg-[#415CFF] text-white px-10 py-2 rounded-lg hover:bg-blue-600 flex flex-col items-center justify-center">
+                <span class="font-semibold">Stay</span>
+                <span>on page</span>
+            </button>
         </div>
     </div>
 </div>

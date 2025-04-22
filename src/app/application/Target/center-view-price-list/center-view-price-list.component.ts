@@ -61,7 +61,8 @@ export class CenterViewPriceListComponent implements OnInit{
     this.fetchAllPriceList(this.centerId, this.page, this.itemsPerPage, this.selectGrade, this.searchText);
   }
 
-  cancelGrade() {
+  cancelGrade(event: Event) {
+    event.stopPropagation();
     this.selectGrade = '';
     this.fetchAllPriceList(this.centerId, this.page, this.itemsPerPage, this.selectGrade, this.searchText);
   }
@@ -74,6 +75,14 @@ export class CenterViewPriceListComponent implements OnInit{
     this.searchText = '';
     this.fetchAllPriceList(this.centerId, this.page, this.itemsPerPage, this.selectGrade, this.searchText);
   }
+
+  toggleGradeDropdown() {
+    // This will trigger the native select dropdown
+    const select = document.querySelector('select');
+    select?.click();
+  }
+  
+
 
 }
 

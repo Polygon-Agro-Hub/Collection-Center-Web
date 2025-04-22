@@ -48,13 +48,16 @@ export class CchRecivedComplaintComponent {
     this.isLoading = true;
     this.ComplainSrv.getComplainById(id).subscribe(
       (res) => {
+        console.log(res);
+        
         this.compalintObj = res.data
+        console.log(res);
         this.officerName = this.compalintObj.firstNameEnglish + " " + this.compalintObj.lastNameEnglish
         this.phone1 = this.compalintObj.phoneCode01 + " - " + this.compalintObj.phoneNumber01;
         this.phone2 = this.compalintObj.phoneCode02 + " - " + this.compalintObj.phoneNumber02;
 
 
-        if (res.items.length === 0) {
+        if (res.data.length === 0) {
           this.hasData = false;
         } else {
           this.hasData = true;
@@ -75,7 +78,16 @@ export class CchRecivedComplaintComponent {
       confirmButtonColor: '#3085d6',
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, forward it!',
-      cancelButtonText: 'No, cancel'
+      cancelButtonText: 'No, cancel',
+      customClass: {
+        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+        title: 'dark:text-white',
+
+        icon: '',
+        confirmButton: 'hover:bg-red-600 dark:hover:bg-red-700 focus:ring-red-500 dark:focus:ring-red-800' ,
+        cancelButton: 'hover:bg-blue-600 dark:hover:bg-blue-700 focus:ring-blue-500 dark:focus:ring-blue-800',
+        actions: 'gap-2'
+      }
     }).then((result) => {
       if (result.isConfirmed) {
         this.isLoading = true;
@@ -96,6 +108,7 @@ export class CchRecivedComplaintComponent {
     });
   }
 
+ 
   replyBtn() {
     this.isReplyView = true;
   }

@@ -6,6 +6,8 @@ import { TargetService } from '../../../services/Target-service/target.service';
 import { ManageOfficersService } from '../../../services/manage-officers-service/manage-officers.service';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
+import Swal from 'sweetalert2';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-assign-officer-target',
@@ -25,7 +27,8 @@ export class AssignOfficerTargetComponent implements OnInit {
   totTargetB: number = 0;
   totTargetC: number = 0;
 
-  targetId!: number;
+  varietyId!: number;
+  companyCenterId!: number;
 
   isLoading: boolean = true;
 
@@ -35,20 +38,29 @@ export class AssignOfficerTargetComponent implements OnInit {
     private targetSrv: TargetService,
     private route: ActivatedRoute,
     private toastSrv: ToastAlertService,
-    private cdRef: ChangeDetectorRef
+    private cdRef: ChangeDetectorRef,
+    private location: Location,
+    private datePipe: DatePipe
   ) { }
 
   ngOnInit(): void {
-    this.targetId = this.route.snapshot.params['id'];
+    this.varietyId = this.route.snapshot.params['varietyId'];
+    this.companyCenterId = this.route.snapshot.params['companyCenterId'];
     this.fetchTargetVerity();
   }
 
   fetchTargetVerity() {
     this.isLoading = true;
-    this.targetSrv.getTargetVerity(this.targetId).subscribe(
+    this.targetSrv.getTargetVerity(this.varietyId, this.companyCenterId).subscribe(
       (res) => {
 
+        console.log(res);
+
         this.targetVerity = res.crop;
+
+        if (this.targetVerity && this.targetVerity.toDate) {
+          this.targetVerity.formattedToDate = this.datePipe.transform(this.targetVerity.toDate, 'yyyy/MM/dd')!;
+        }
 
         this.officerArr = res.officer.map((officer: Officer) => ({
           ...officer,
@@ -56,6 +68,10 @@ export class AssignOfficerTargetComponent implements OnInit {
           targetB: officer.targetB ?? 0,
           targetC: officer.targetC ?? 0,
         }));
+
+        this.AssignTargetObj.dailyTargetsIds.idA = res.crop.idA;
+        this.AssignTargetObj.dailyTargetsIds.idB = res.crop.idB;
+        this.AssignTargetObj.dailyTargetsIds.idC = res.crop.idC;
 
         this.isLoading = false;
 
@@ -88,13 +104,41 @@ export class AssignOfficerTargetComponent implements OnInit {
         if (res.status) {
           this.isLoading = false;
           this.toastSrv.success('Successfully assigned the target!');
-          this.router.navigate(['/target/view-target'])
+          this.router.navigate(['/target'])
         } else {
           this.isLoading = false;
           this.toastSrv.error('Failed to assign the target!');
         }
       }
     )
+  }
+
+  onCancel() {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you really want to clear the operation?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, cancel it!',
+      cancelButtonText: 'No, Stay On Page',
+      customClass: {
+        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+        title: 'dark:text-white',
+
+        icon: '',
+        confirmButton: 'hover:bg-red-600 dark:hover:bg-red-700 focus:ring-red-500 dark:focus:ring-red-800',
+        cancelButton: 'hover:bg-blue-600 dark:hover:bg-blue-700 focus:ring-blue-500 dark:focus:ring-blue-800',
+        actions: 'gap-2'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        this.toastSrv.warning('Assign Officer Target Operation Canceled.')
+        this.location.back();
+      }
+    });
   }
 
   updateTotals(index: number, grade: 'A' | 'B' | 'C') {
@@ -134,15 +178,20 @@ export class AssignOfficerTargetComponent implements OnInit {
 }
 
 class TargetVerity {
-  id!: number;
+  idA: number | null = null;
+  idB: number | null = null;
+  idC: number | null = null;
   varietyId!: number;
   cropNameEnglish!: string;
   varietyNameEnglish!: string;
   qtyA!: number;
   qtyB!: number;
   qtyC!: number;
+  companyCenterId!: number
+
+  id!: number;
   toDate!: Date;
-  toTime!: Date;
+  formattedToDate!: string;
 }
 
 class Officer {
@@ -154,16 +203,26 @@ class Officer {
   targetA: number = 0;
   targetB: number = 0;
   targetC: number = 0;
+  idA:number | null = null;
+  idB:number | null = null;
+  idC:number | null = null;
 }
 
 class AssignTarget {
   id!: number;
   varietyId!: number;
   OfficerData!: Officer[];
+  dailyTargetsIds: DailyTargetsIds = new DailyTargetsIds();
 }
 
 class InputData {
   targetA: number = 0;
   targetB: number = 0;
   targetC: number = 0;
+}
+
+class DailyTargetsIds {
+  idA: number | null = null;
+  idB: number | null = null;
+  idC: number | null = null;
 }

@@ -7,6 +7,9 @@ import { Router } from '@angular/router';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { TokenServiceService } from '../../../services/Token/token-service.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
+import { HttpClient } from '@angular/common/http';
+import { Location } from '@angular/common';
+
 
 @Component({
   selector: 'app-add-officers',
@@ -22,14 +25,17 @@ export class AddOfficersComponent implements OnInit {
   ManagerArr!: ManagerDetails[]
   centerArr: Center[] = [];
   managerArr: Manager[] = [];
+  driverObj: Drivers = new Drivers()
 
 
 
   languages: string[] = ['Sinhala', 'English', 'Tamil'];
-  selectedPage: 'pageOne' | 'pageTwo' = 'pageOne';
+  selectedPage: 'pageOne' | 'pageTwo' | 'pageThree' = 'pageOne';
   lastID!: number
   itemId: number | null = null;
   officerId!: number
+
+  selectVehicletype: any = { name: '', capacity: '' };
 
 
   selectedFileName!: string
@@ -41,6 +47,49 @@ export class AddOfficersComponent implements OnInit {
 
   isLoading: boolean = false;
 
+  banks: Bank[] = [];
+  branches: Branch[] = [];
+  selectedBankId: number | null = null;
+  selectedBranchId: number | null = null;
+  allBranches: BranchesData = {};
+
+  invalidFields: Set<string> = new Set();
+
+
+  // Driver Images
+  licenseFrontImageFileName!: string;
+  licenseFrontImagePreview: string | ArrayBuffer | null = null;
+  licenseFrontImageFile: File | null = null;
+
+  licenseBackImageFileName!: string;
+  licenseBackImagePreview: string | ArrayBuffer | null = null;
+  licenseBackImageFile: File | null = null;
+
+  insurenceFrontImageFileName!: string;
+  insurenceFrontImagePreview: string | ArrayBuffer | null = null;
+  insurenceFrontImageFile: File | null = null;
+
+  insurenceBackImageFileName!: string;
+  insurenceBackImagePreview: string | ArrayBuffer | null = null;
+  insurenceBackImageFile: File | null = null;
+
+  vehicleFrontImageFileName!: string;
+  vehicleFrontImagePreview: string | ArrayBuffer | null = null;
+  vehicleFrontImageFile: File | null = null;
+
+  vehicleBackImageFileName!: string;
+  vehicleBackImagePreview: string | ArrayBuffer | null = null;
+  vehicleBackImageFile: File | null = null;
+
+  vehicleSideAImageFileName!: string;
+  vehicleSideAImagePreview: string | ArrayBuffer | null = null;
+  vehicleSideAImageFile: File | null = null;
+
+  vehicleSideBImageFileName!: string;
+  vehicleSideBImagePreview: string | ArrayBuffer | null = null;
+  vehicleSideBImageFile: File | null = null;
+
+
 
 
 
@@ -48,7 +97,11 @@ export class AddOfficersComponent implements OnInit {
     private ManageOficerSrv: ManageOfficersService,
     private router: Router,
     private toastSrv: ToastAlertService,
-    private tokenSrv: TokenServiceService
+    private tokenSrv: TokenServiceService,
+    private http: HttpClient,
+    private location: Location
+
+
   ) {
     this.logingRole = tokenSrv.getUserDetails().role
 
@@ -82,8 +135,18 @@ export class AddOfficersComponent implements OnInit {
     { name: 'Vavuniya', province: 'Northern' },
   ];
 
+  VehicleTypes = [
+    { name: 'Lorry', capacity: 2 },
+    { name: 'Dimo Batta', capacity: 3.5 },
+    { name: 'Van', capacity: 2.5 },
+    { name: 'Cab', capacity: 0.5 },
+  ]
+
+
 
   ngOnInit(): void {
+    this.loadBanks()
+    this.loadBranches()
     this.getAllCenters();
     this.getLastID('COO');
     this.EpmloyeIdCreate();
@@ -113,40 +176,13 @@ export class AddOfficersComponent implements OnInit {
   }
 
 
-  // onCheckboxChange(lang: string, event: any) {
-  //     if (event.target.checked) {
-  //         if (!this.personalData.languages) {
-  //             this.personalData.languages = lang;
-  //         } else if (!this.personalData.languages.includes(lang)) {
-  //             this.personalData.languages += `,${lang}`;
-  //         }
-  //     } else {
-  //         const languagesArray = this.personalData.languages.split(',');
-  //         const index = languagesArray.indexOf(lang);
-  //         if (index !== -1) {
-  //             languagesArray.splice(index, 1);
-  //         }
-  //         this.personalData.languages = languagesArray.join(',');
-  //     }
-
-  //     // Validate when a change occurs
-  //     this.validateLanguages();
-  // }
-
   validateLanguages() {
     this.languagesRequired = !this.personalData.languages || this.personalData.languages.trim() === '';
   }
 
 
-  nextForm(page: 'pageOne' | 'pageTwo') {
-    // if (!this.personalData.centerId || !this.personalData.firstNameEnglish || !this.personalData.firstNameSinhala || !this.personalData.firstNameTamil || !this.personalData.city || !this.personalData.country || !this.personalData.district || !this.personalData.email || !this.personalData.houseNumber || !this.personalData.languages || !this.personalData.lastNameEnglish || !this.personalData.lastNameSinhala || !this.personalData.lastNameTamil || !this.personalData.nic || !this.personalData.phoneNumber01) {
-    //   Swal.fire('warning', 'Pleace fill all required feilds', 'warning')
-    // } else {
-    //   this.selectedPage = page;
-    // }
-
+  nextForm(page: 'pageOne' | 'pageTwo' | 'pageThree') {
     this.selectedPage = page;
-
   }
 
   triggerFileInput(event: Event): void {
@@ -203,6 +239,8 @@ export class AddOfficersComponent implements OnInit {
       rolePrefix = 'CCM';
     } else if (this.personalData.jobRole === 'Customer Officer') {
       rolePrefix = 'CUO';
+    } else if (this.personalData.jobRole === 'Driver') {
+      rolePrefix = 'DVR';
     } else {
       rolePrefix = 'COO';
     }
@@ -232,7 +270,7 @@ export class AddOfficersComponent implements OnInit {
 
   onSubmit() {
     // this.personalData.image = this.selectedFile;
-    if (this.personalData.accNumber === this.personalData.conformAccNumber) {
+    if (this.personalData.accNumber !== this.personalData.conformAccNumber) {
       return;
     }
     this.isLoading = true;
@@ -250,10 +288,11 @@ export class AddOfficersComponent implements OnInit {
               this.officerId = res.officerId;
               this.isLoading = false;
               this.toastSrv.success('Collective Officer Created Successfully')
-              this.router.navigate(['/manage-officers/view-officer'])
+              this.router.navigate(['/manage-officers'])
             } else {
               this.isLoading = false;
-              this.toastSrv.error('There was an error creating the collective officer')
+              // this.toastSrv.error('There was an error creating the collective officer')
+              this.toastSrv.error(res.message)
 
             }
           },
@@ -263,16 +302,34 @@ export class AddOfficersComponent implements OnInit {
           }
         );
       } else if (this.logingRole === 'Collection Center Head') {
-        this.ManageOficerSrv.CCHcreateCollectiveOfficer(this.personalData, this.selectedImage).subscribe(
+
+        if (this.personalData.jobRole === 'Driver') {
+          if (!this.licenseFrontImageFileName|| !this.licenseBackImageFileName || !this.insurenceFrontImageFileName || !this.insurenceBackImageFileName || !this.vehicleFrontImageFileName || !this.vehicleBackImageFileName || !this.vehicleSideAImageFileName || !this.vehicleSideBImageFileName) {
+            return;
+          }
+
+          this.driverObj.licFrontName = this.licenseFrontImageFileName
+          this.driverObj.licBackName = this.licenseBackImageFileName
+          this.driverObj.insFrontName = this.insurenceFrontImageFileName
+          this.driverObj.insBackName = this.insurenceBackImageFileName
+          this.driverObj.vFrontName = this.vehicleFrontImageFileName
+          this.driverObj.vBackName = this.vehicleBackImageFileName
+          this.driverObj.vSideAName = this.vehicleSideAImageFileName
+          this.driverObj.vSideBName = this.vehicleSideBImageFileName
+        }
+
+        this.ManageOficerSrv.CCHcreateCollectiveOfficer(this.personalData, this.selectedImage, this.driverObj, this.licenseFrontImagePreview, this.licenseBackImagePreview, this.insurenceFrontImagePreview, this.insurenceBackImagePreview, this.vehicleFrontImagePreview, this.vehicleBackImagePreview, this.vehicleSideAImagePreview, this.vehicleSideBImagePreview).subscribe(
           (res: any) => {
             if (res.status) {
               this.officerId = res.officerId;
               this.isLoading = false;
               this.toastSrv.success('Collective Officer Created Successfully')
-              this.router.navigate(['/manage-officers/view-officer'])
+              this.router.navigate(['/manage-officers'])
             } else {
               this.isLoading = false;
-              this.toastSrv.error('There was an error creating the collective officer')
+              // this.toastSrv.error('There was an error creating the collective officer')
+              this.toastSrv.error(res.message)
+
 
             }
           },
@@ -289,22 +346,35 @@ export class AddOfficersComponent implements OnInit {
     }
 
 
+
+
   }
 
   onCancel() {
     Swal.fire({
       title: 'Are you sure?',
-      text: 'Do you really want to clear this form?',
+      text: 'Do you really want to cancel this form?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, clear it!',
-      cancelButtonText: 'Cancel'
+      confirmButtonText: 'Yes, cancel it!',
+      cancelButtonText: 'No, Stay On Page',
+      customClass: {
+        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+        title: 'dark:text-white',
+
+        icon: '!border-gray-200 dark:!border-gray-500',
+        confirmButton: 'hover:bg-red-600 dark:hover:bg-red-700 focus:ring-red-500 dark:focus:ring-red-800',
+        cancelButton: 'hover:bg-blue-600 dark:hover:bg-blue-700 focus:ring-blue-500 dark:focus:ring-blue-800',
+        actions: 'gap-2'
+      }
     }).then((result) => {
       if (result.isConfirmed) {
         this.personalData = new Personal();
-        this.toastSrv.success('The form has been cleared.')
+        this.toastSrv.warning('Officer Add canceled.')
+        this.location.back(); 
+
       }
     });
   }
@@ -351,6 +421,381 @@ export class AddOfficersComponent implements OnInit {
   }
 
 
+  loadBanks() {
+    this.http.get<Bank[]>('assets/json/banks.json').subscribe(
+      data => {
+        this.banks = data;
+
+      },
+      error => {
+        console.error('Error loading banks:', error);
+      }
+    );
+  }
+
+  loadBranches() {
+    this.http.get<BranchesData>('assets/json/branches.json').subscribe(
+      data => {
+        this.allBranches = data;
+
+      },
+      error => {
+        console.error('Error loading branches:', error);
+      }
+    );
+  }
+
+
+
+
+
+  onBankChange() {
+    if (this.selectedBankId) {
+      // Update branches based on selected bank
+      this.branches = this.allBranches[this.selectedBankId.toString()] || [];
+
+      // Update company data with bank name
+      const selectedBank = this.banks.find(bank => bank.ID === this.selectedBankId);
+      if (selectedBank) {
+        this.personalData.bankName = selectedBank.name;
+        this.invalidFields.delete('bankName');
+      }
+
+      // Reset branch selection
+      this.selectedBranchId = null;
+      this.personalData.branchName = '';
+    } else {
+      this.branches = [];
+      this.personalData.bankName = '';
+    }
+  }
+
+  onBranchChange() {
+    if (this.selectedBranchId) {
+      // Update company data with branch name
+      const selectedBranch = this.branches.find(branch => branch.ID === this.selectedBranchId);
+      if (selectedBranch) {
+        this.personalData.branchName = selectedBranch.name;
+        this.invalidFields.delete('branchName');
+      }
+    } else {
+      this.personalData.branchName = '';
+    }
+  }
+
+
+  // Replace onFileSelected with this more specific version
+  onLicenseFrontImageSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      // Validate file size (5MB max)
+      if (file.size > 5000000) {
+        this.toastSrv.error('License image size should not exceed 5MB');
+        return;
+      }
+
+      // Validate file type
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+      if (!allowedTypes.includes(file.type)) {
+        this.toastSrv.error('License image must be JPEG, JPG or PNG format');
+        return;
+      }
+
+      this.licenseFrontImageFile = file;
+      this.licenseFrontImageFileName = file.name;
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.licenseFrontImagePreview = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // Clear license image
+  clearLicenseFrontImage(): void {
+    this.licenseFrontImageFile = null;
+    this.licenseFrontImageFileName = '';
+    this.licenseFrontImagePreview = null;
+    const fileInput = document.getElementById('licenseFrontImageUpload') as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
+  }
+
+  triggerFileInputForDriver(event: Event, inputId: string): void {
+    event.preventDefault();
+    const fileInput = document.getElementById(inputId);
+    fileInput?.click();
+  }
+
+  onLicenseBackImageSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      // Validate file size (5MB max)
+      if (file.size > 5000000) {
+        this.toastSrv.error('License image size should not exceed 5MB');
+        return;
+      }
+
+      // Validate file type
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+      if (!allowedTypes.includes(file.type)) {
+        this.toastSrv.error('License image must be JPEG, JPG or PNG format');
+        return;
+      }
+
+      this.licenseBackImageFile = file;
+      this.licenseBackImageFileName = file.name;
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.licenseBackImagePreview = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // Clear license image
+  clearLicenseBackImage(): void {
+    this.licenseBackImageFile = null;
+    this.licenseBackImageFileName = '';
+    this.licenseBackImagePreview = null;
+    const fileInput = document.getElementById('licenseBackImageUpload') as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
+  }
+
+  onInsurenceFrontImageSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      // Validate file size (5MB max)
+      if (file.size > 5000000) {
+        this.toastSrv.error('Insurence image size should not exceed 5MB');
+        return;
+      }
+
+      // Validate file type
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+      if (!allowedTypes.includes(file.type)) {
+        this.toastSrv.error('Insurence image must be JPEG, JPG or PNG format');
+        return;
+      }
+
+      this.insurenceFrontImageFile = file;
+      this.insurenceFrontImageFileName = file.name;
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.insurenceFrontImagePreview = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // Clear license image
+  clearInsurenceFrontImage(): void {
+    this.insurenceFrontImageFile = null;
+    this.insurenceFrontImageFileName = '';
+    this.insurenceFrontImagePreview = null;
+    const fileInput = document.getElementById('insurenceFrontImageUpload') as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
+  }
+
+
+  onInsurenceBackImageSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      // Validate file size (5MB max)
+      if (file.size > 5000000) {
+        this.toastSrv.error('Insurence image size should not exceed 5MB');
+        return;
+      }
+
+      // Validate file type
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+      if (!allowedTypes.includes(file.type)) {
+        this.toastSrv.error('Insurence image must be JPEG, JPG or PNG format');
+        return;
+      }
+
+      this.insurenceBackImageFile = file;
+      this.insurenceBackImageFileName = file.name;
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.insurenceBackImagePreview = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // Clear license image
+  clearInsurenceBackImage(): void {
+    this.insurenceBackImageFile = null;
+    this.insurenceBackImageFileName = '';
+    this.insurenceBackImagePreview = null;
+    const fileInput = document.getElementById('insuranceBackImageUpload') as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
+  }
+
+
+  onVehicleFrontImageSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      // Validate file size (5MB max)
+      if (file.size > 5000000) {
+        this.toastSrv.error('License image size should not exceed 5MB');
+        return;
+      }
+
+      // Validate file type
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+      if (!allowedTypes.includes(file.type)) {
+        this.toastSrv.error('License image must be JPEG, JPG or PNG format');
+        return;
+      }
+
+      this.vehicleFrontImageFile = file;
+      this.vehicleFrontImageFileName = file.name;
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.vehicleFrontImagePreview = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // Clear license image
+  clearVehicleFrontImage(): void {
+    this.vehicleFrontImageFile = null;
+    this.vehicleFrontImageFileName = '';
+    this.vehicleFrontImagePreview = null;
+    const fileInput = document.getElementById('vehicleFrontImageUpload') as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
+  }
+
+
+  onVehicleBackImageSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      // Validate file size (5MB max)
+      if (file.size > 5000000) {
+        this.toastSrv.error('Vehicle Back image size should not exceed 5MB');
+        return;
+      }
+
+      // Validate file type
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+      if (!allowedTypes.includes(file.type)) {
+        this.toastSrv.error('Vehicle Back image must be JPEG, JPG or PNG format');
+        return;
+      }
+
+      this.vehicleBackImageFile = file;
+      this.vehicleBackImageFileName = file.name;
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.vehicleBackImagePreview = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // Clear license image
+  clearVehicleBackImage(): void {
+    this.vehicleBackImageFile = null;
+    this.vehicleBackImageFileName = '';
+    this.vehicleBackImagePreview = null;
+    const fileInput = document.getElementById('vehicleBackImageUpload') as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
+  }
+
+  onVehicleSideAImageSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      // Validate file size (5MB max)
+      if (file.size > 5000000) {
+        this.toastSrv.error('Vehicle Back image size should not exceed 5MB');
+        return;
+      }
+
+      // Validate file type
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+      if (!allowedTypes.includes(file.type)) {
+        this.toastSrv.error('Vehicle Back image must be JPEG, JPG or PNG format');
+        return;
+      }
+
+      this.vehicleSideAImageFile = file;
+      this.vehicleSideAImageFileName = file.name;
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.vehicleSideAImagePreview = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // Clear license image
+  clearVehicleSideAImage(): void {
+    this.vehicleSideAImageFile = null;
+    this.vehicleSideAImageFileName = '';
+    this.vehicleSideAImagePreview = null;
+    const fileInput = document.getElementById('vehicleSideAImageUpload') as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
+  }
+
+
+
+  onVehicleSideBImageSelected(event: any): void {
+    const file: File = event.target.files[0];
+    if (file) {
+      // Validate file size (5MB max)
+      if (file.size > 5000000) {
+        this.toastSrv.error('Vehicle Back image size should not exceed 5MB');
+        return;
+      }
+
+      // Validate file type
+      const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+      if (!allowedTypes.includes(file.type)) {
+        this.toastSrv.error('Vehicle Back image must be JPEG, JPG or PNG format');
+        return;
+      }
+
+      this.vehicleSideBImageFile = file;
+      this.vehicleSideBImageFileName = file.name;
+
+      // Create preview
+      const reader = new FileReader();
+      reader.onload = (e: any) => {
+        this.vehicleSideBImagePreview = e.target.result;
+      };
+      reader.readAsDataURL(file);
+    }
+  }
+
+  // Clear license image
+  clearVehicleSideBImage(): void {
+    this.vehicleSideBImageFile = null;
+    this.vehicleSideBImageFileName = '';
+    this.vehicleSideBImagePreview = null;
+    const fileInput = document.getElementById('vehicleSideBImageUpload') as HTMLInputElement;
+    if (fileInput) fileInput.value = '';
+  }
+
+  vehicleChange() {
+    this.driverObj.vType = this.selectVehicletype.name
+    this.driverObj.vCapacity = this.selectVehicletype.capacity
+  }
 
 
 }
@@ -421,5 +866,37 @@ class Manager {
 }
 
 
+interface Bank {
+  ID: number;
+  name: string;
+}
+
+interface Branch {
+  bankID: number;
+  ID: number;
+  name: string;
+}
+
+class Drivers {
+  licNo!: string;
+  insNo!: string;
+  insExpDate!: string;
+  vType!: string;
+  vCapacity!: string;
+  vRegNo!: string;
+
+  licFrontName!: string;
+  licBackName!: string;
+  insFrontName!: string;
+  insBackName!: string;
+  vFrontName!: string;
+  vBackName!: string;
+  vSideAName!: string;
+  vSideBName!: string;
+}
 
 
+
+interface BranchesData {
+  [key: string]: Branch[];
+}

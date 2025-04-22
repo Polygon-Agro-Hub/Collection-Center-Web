@@ -16,16 +16,16 @@ export class TokenServiceService {
   constructor() { }
 
   saveLoginDetails(token: string, userName: string, userId: string, role: string, expiresIn: number, image: string): Promise<void> {
-  return new Promise((resolve) => {
-    const expirationTime = new Date().getTime() + expiresIn * 1000; // Convert seconds to milliseconds
-    localStorage.setItem(this.TOKEN_KEY, token);
-    localStorage.setItem(this.USERNAME_KEY, userName);
-    localStorage.setItem(this.USERID_KEY, userId);
-    localStorage.setItem(this.ROLE_KEY, role);
-    localStorage.setItem(this.PROFILE_IMAGE, image);
-    localStorage.setItem(this.EXPIRATION_KEY, expirationTime.toString());
-    resolve(); // Ensure function completes before continuing
-  });
+    return new Promise((resolve) => {
+      const expirationTime = new Date().getTime() + expiresIn * 1000; // Convert seconds to milliseconds
+      localStorage.setItem(this.TOKEN_KEY, token);
+      localStorage.setItem(this.USERNAME_KEY, userName);
+      localStorage.setItem(this.USERID_KEY, userId);
+      localStorage.setItem(this.ROLE_KEY, role);
+      localStorage.setItem(this.PROFILE_IMAGE, image);
+      localStorage.setItem(this.EXPIRATION_KEY, expirationTime.toString());
+      resolve(); // Ensure function completes before continuing
+    });
 
   }
 
@@ -33,12 +33,19 @@ export class TokenServiceService {
     return localStorage.getItem(this.TOKEN_KEY);
   }
 
-  clearLoginDetails(): void {
-    localStorage.removeItem(this.TOKEN_KEY);
-    localStorage.removeItem(this.USERNAME_KEY);
-    localStorage.removeItem(this.USERID_KEY);
-    localStorage.removeItem(this.ROLE_KEY);
-    localStorage.removeItem(this.EXPIRATION_KEY);
+  clearLoginDetails(): Promise<void> {
+    return new Promise((resolve) => {
+      console.log("start");
+      
+      localStorage.removeItem(this.TOKEN_KEY);
+      localStorage.removeItem(this.USERNAME_KEY);
+      localStorage.removeItem(this.USERID_KEY);
+      localStorage.removeItem(this.ROLE_KEY);
+      localStorage.removeItem(this.EXPIRATION_KEY);
+      console.log("end");
+
+      resolve();
+    })
   }
 
 
@@ -56,6 +63,8 @@ export class TokenServiceService {
       userId: localStorage.getItem(this.USERID_KEY),
       role: localStorage.getItem(this.ROLE_KEY),
       image: localStorage.getItem(this.PROFILE_IMAGE),
+      tokenExpiration: localStorage.getItem(this.EXPIRATION_KEY),
+
     };
   }
 }

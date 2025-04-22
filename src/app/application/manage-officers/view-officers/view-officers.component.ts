@@ -69,10 +69,11 @@ export class ViewOfficersComponent implements OnInit {
 
   }
 
-  fetchAllOfficers(page: number = 1, limit: number = this.itemsPerPage, status: string = '', role: string = '', searchText: string = '') {
+  fetchAllOfficers(page: number = this.page, limit: number = this.itemsPerPage, status: string = this.selectStatus, role: string = this.selectRole, searchText: string = this.searchText) {
     this.isLoading = true;
     this.ManageOficerSrv.getAllOfficers(page, limit, status, role, searchText).subscribe(
       (res) => {
+        console.log(res);
         this.OfficerArr = res.items
         this.totalItems = res.total
         if (res.items.length === 0) {
@@ -88,7 +89,7 @@ export class ViewOfficersComponent implements OnInit {
 
 
   //add to center filter
-  fetchAllOfficersForCCH(page: number = 1, limit: number = this.itemsPerPage, status: string = '', role: string = '', searchText: string = '', selectCompany: string = this.selectCenters) {
+  fetchAllOfficersForCCH(page: number = this.page, limit: number = this.itemsPerPage, status: string = this.selectStatus, role: string = this.selectRole, searchText: string = this.searchText, selectCompany: string = this.selectCenters) {
     this.isLoading = true;
     this.ManageOficerSrv.getAllOfficersForCCH(page, limit, status, role, searchText, selectCompany).subscribe(
       (res) => {
@@ -135,6 +136,15 @@ export class ViewOfficersComponent implements OnInit {
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete it!',
       cancelButtonText: 'Cancel',
+      customClass: {
+        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+        title: 'dark:text-white',
+
+        icon: '!border-gray-200 dark:!border-gray-500',
+        confirmButton: 'hover:bg-red-600 dark:hover:bg-red-700 focus:ring-red-500 dark:focus:ring-red-800',
+        cancelButton: 'hover:bg-blue-600 dark:hover:bg-blue-700 focus:ring-blue-500 dark:focus:ring-blue-800',
+        actions: 'gap-2'
+      }
     }).then((result) => {
       if (result.isConfirmed) {
         this.isLoading = true;
@@ -143,7 +153,7 @@ export class ViewOfficersComponent implements OnInit {
             if (data.status) {
               console.log('Collection Officer deleted successfully');
               this.toastSrv.success('The Officer has been deleted.')
-              this.fetchAllOfficers(this.page, this.itemsPerPage, this.selectStatus, this.selectRole, this.searchText);
+              this.fetchByRole()
               this.isLoading = false;
             } else {
               this.isLoading = false;
@@ -165,76 +175,69 @@ export class ViewOfficersComponent implements OnInit {
 
   openPopup(item: any) {
     this.isPopupVisible = true;
-
-    // HTML structure for the popup
+  
     const tableHtml = `
       <div class="container mx-auto">
-        <h1 class="text-center text-2xl font-bold mb-4">Officer Name : ${item.firstNameEnglish}</h1>
-        <div >
+        <h1 class="text-center text-2xl font-bold mb-4">Officer Name: ${item.firstNameEnglish}</h1>
+        <div>
           <p class="text-center">Are you sure you want to approve or reject this collection?</p>
         </div>
         <div class="flex justify-center mt-4">
-          <button id="rejectButton" class="bg-red-500 text-white px-6 py-2 rounded-lg mr-2">Reject</button>
-          <button id="approveButton" class="bg-green-500 text-white px-4 py-2 rounded-lg">Approve</button>
+          <button id="rejectButton" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg mr-2">
+            Reject
+          </button>
+          <button id="approveButton" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
+            Approve
+          </button>
         </div>
       </div>
     `;
-
-    Swal.fire({
+  
+    const swalInstance = Swal.fire({
       html: tableHtml,
-      showConfirmButton: false, // Hide default confirm button
+      showConfirmButton: false,
       width: 'auto',
+      allowOutsideClick: false, // Prevent closing by clicking outside
       didOpen: () => {
-        // Handle the "Approve" button click
-        document
-          .getElementById('approveButton')
-          ?.addEventListener('click', () => {
-            this.isPopupVisible = false;
-            // this.isLoading = true;
-            this.ManageOficerSrv.ChangeStatus(item.id, 'Approved').subscribe(
-              (res) => {
-
-                // this.isLoading = false;
-                if (res.status) {
-                  this.toastSrv.success('The collection was approved successfully.')
-                  this.fetchByRole();
-                } else {
-                  this.toastSrv.error(res.message)
-                }
-              },
-              (err) => {
-                // this.isLoading = false;
-                this.toastSrv.error('An error occurred while approving. Please try again.')
-              }
-            );
-          });
-
-        // Handle the "Reject" button click
-        document
-          .getElementById('rejectButton')
-          ?.addEventListener('click', () => {
-            // this.isPopupVisible = false;
-            // this.isLoading = true;
-            this.ManageOficerSrv.ChangeStatus(item.id, 'Rejected').subscribe(
-              (res) => {
-                // this.isLoading = false;
-                if (res.status) {
-                  this.toastSrv.success('The collection was rejected successfully.')
-
-                  this.fetchByRole();
-                } else {
-                  this.toastSrv.error(res.message)
-
-                }
-              },
-              (err) => {
-                // this.isLoading = false;
-                this.toastSrv.error('An error occurred while rejecting. Please try again.')
-
-              }
-            );
-          });
+        // Approve Button
+        document.getElementById('approveButton')?.addEventListener('click', () => {
+          this.handleStatusChange(swalInstance, item.id, 'Approved');
+        });
+  
+        // Reject Button
+        document.getElementById('rejectButton')?.addEventListener('click', () => {
+          this.handleStatusChange(swalInstance, item.id, 'Rejected');
+        });
+      }
+    });
+  }
+  
+  private handleStatusChange(swalInstance: any, id: number, status: 'Approved' | 'Rejected') {
+    // Show loading state
+    swalInstance.update({
+      showConfirmButton: false,
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+  
+    this.ManageOficerSrv.ChangeStatus(id, status).subscribe({
+      next: (res) => {
+        swalInstance.close();
+        if (res.status) {
+          const action = status === 'Approved' ? 'approved' : 'rejected';
+          this.toastSrv.success(`The collection was ${action} successfully.`);
+          this.fetchByRole();
+        } else {
+          this.toastSrv.error(res.message || `Failed to ${status.toLowerCase()} the collection.`);
+        }
       },
+      error: (err) => {
+        swalInstance.close();
+        this.toastSrv.error(`An error occurred while ${status.toLowerCase()}ing. Please try again.`);
+      }
     });
   }
 
@@ -316,5 +319,6 @@ class Company {
 
 class Center {
   id!: number
-  centerName!: string
+  centerName!: string;
+  regCode!:string;
 }

@@ -4,18 +4,19 @@ import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ReportServiceService } from '../../../services/Report-service/report-service.service';
+import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-farmer-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxPaginationModule],
+  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent],
   templateUrl: './farmer-list.component.html',
   styleUrl: './farmer-list.component.css'
 })
 export class FarmerListComponent implements OnInit {
   farmerListArr!: FarmerList[];
   officerId!: number;
-  officerName:string = ''
+  officerName: string = ''
 
   page: number = 1;
   totalItems: number = 0;
@@ -25,24 +26,27 @@ export class FarmerListComponent implements OnInit {
   searchText: string = '';
   selectDate: string = '';
 
+  isLoading: boolean = true;
+
   constructor(
     private router: Router,
     private ReportSrv: ReportServiceService,
-    private route:ActivatedRoute
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
     this.officerId = this.route.snapshot.params['id'];
     this.officerName = this.route.snapshot.params['officer'];
     this.selectDate = new Date().toISOString().slice(0, 10);
-    
+
     this.fetchFarmerList();
 
-    
+
   }
 
   fetchFarmerList(page: number = 1, limit: number = this.itemsPerPage, searchText: string = '', date: string = this.selectDate) {
-    this.ReportSrv.getCollectionFarmerList(this.officerId, page, limit, searchText,date).subscribe(
+    this.isLoading = true;
+    this.ReportSrv.getCollectionFarmerList(this.officerId, page, limit, searchText, date).subscribe(
       (res) => {
         this.farmerListArr = res.items
         this.totalItems = res.total
@@ -51,21 +55,26 @@ export class FarmerListComponent implements OnInit {
         } else {
           this.hasData = true;
         }
+        this.isLoading = false;
 
       }
     )
+  }
+
+  navigateToReports() {
+    this.router.navigate(['/reports']); // Change '/reports' to your desired route
   }
 
   onSearch() {
     this.fetchFarmerList(this.page, this.itemsPerPage, this.searchText);
   }
 
-  offSearch() { 
+  offSearch() {
     this.searchText = '';
     this.fetchFarmerList(this.page, this.itemsPerPage, this.searchText);
   }
 
-  filterDate(){
+  filterDate() {
     this.fetchFarmerList(this.page, this.itemsPerPage, this.searchText, this.selectDate);
   }
 

@@ -95,7 +95,7 @@ export class EditMyTargetComponent implements OnInit {
         if (res.status) {
           this.toastSrv.success(res.message);
           this.isLoading = false;
-          this.router.navigate(['/targets'])
+          // this.router.navigate(['/targets'])
         } else {
           this.isLoading = false;
           this.toastSrv.error(res.message);
@@ -117,8 +117,6 @@ class TargetDetalis {
   target!: number;
   complete!: number;
   todo!: number;
-  toDate!: Date;
-  toTime!: Date;
   empId!: string;
 }
 

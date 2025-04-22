@@ -34,7 +34,7 @@ export class ClaimOfficerComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.selectJobRole = 'Collection Officer'
+    this.selectJobRole = ''
   }
 
   fetchOfficer() {

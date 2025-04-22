@@ -26,6 +26,7 @@ export class TargetService {
     return this.http.get<any>(url, { headers });
   }
 
+
   //usable
   getAllDailyTarget(page: number = 1, limit: number = 10, searchText: string = ''): Observable<any> {
     const headers = new HttpHeaders({
@@ -133,12 +134,16 @@ export class TargetService {
     });
   }
 
-  AssignAllDailyTarget(page: number = 1, limit: number = 10): Observable<any> {
+  AssignAllDailyTarget(page: number = 1, limit: number = 10, search:string = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
 
     let url = `${this.apiUrl}/assign-all-daily-target?page=${page}&limit=${limit}`;
+
+    if(search){
+      url+=`&searchText=${search}`
+    }
 
     return this.http.get<any>(url, { headers });
   }

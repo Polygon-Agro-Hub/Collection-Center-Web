@@ -71,54 +71,6 @@
 
 
 
-                <!-- <div class="relative w-46">
-                    <div
-                        class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
-                        <select [(ngModel)]="selectValidity" (change)="filterValidity()"
-                            class="block w-full appearance-none  dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
-                            <option value="" selected disabled>Validity</option>
-                            <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                                value="Active">Active</option>
-                            <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                                value="Expired">Expired</option>
-                        </select>
-                        <button *ngIf="!selectValidity">
-                            <i class="fa-solid fa-angle-down text-lg mr-3"></i>
-                        </button>
-                        <button *ngIf="selectValidity" (click)="cancelValidity()">
-                            <i class="fa-solid fa-xmark text-lg mr-3"></i>
-                        </button>
-
-                    </div>
-                </div> -->
-
-
-
-
-                <!-- 
-                <div class="relative w-52">
-                    <div class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
-                      <select [(ngModel)]="selectValidity" (change)="filterValidity()"
-                        class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer">
-                        <option value="" selected disabled>Validity</option>
-                        <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                            value="Active">Active</option>
-                        <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                            value="Expired">Expired</option>
-                      </select>
-                      
-
-                      <div *ngIf="!selectValidity" class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
-                        <i class="fa-solid fa-angle-down text-lg mr-3"></i>
-                      </div>
-
-                      <div (click)="cancelValidity()" *ngIf="selectValidity" 
-                           class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300 cursor-pointer z-10">
-                        <i class="fa-solid fa-xmark text-lg mr-3"></i>
-                      </div>
-                    </div>
-                  </div> -->
-
 
                 <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
                     <input type="text" placeholder="Search by Variety Name" [(ngModel)]="searchText"
@@ -219,10 +171,6 @@
     </div>
     <div *ngIf="isSelectAssign">
 
-        <div *ngIf="!assignHasData" class="flex justify-center items-center mt-8 mr-5 w-full h-[500px]">
-            <p class="text-3xl text-center font-semibold">No Data Availabale</p>
-        </div>
-
         <div class="flex flex-row items-center justify-end gap-8 ">
             <i class="fa-solid fa-list text-2xl dark:text-white ml-8"></i>
 
@@ -260,23 +208,25 @@
             </div>
 
 
-            <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
-                <input type="text" placeholder="Search by Variety Name" [(ngModel)]="assignSearch"
-                    class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
-                <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
-                    (click)="assignOnSearch()" (keyup.enter)="assignOnSearch()">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
+            <div class="flex items-center rounded-full px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+                <input type="text" 
+                       placeholder="Search by Variety Name" 
+                       [(ngModel)]="assignSearch"
+                       (keyup.enter)="assignOnSearch()"
+                       (keyup.esc)="assignOffSearch()"
+                       class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
+                <button type="button" 
+                        class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
+                        (click)="assignOnSearch()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
                     </svg>
                 </button>
-                <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none"
-                    (click)="assignOffSearch()" (keyup.esc)="assignOffSearch()">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12" />
+                <button type="button" 
+                        class="text-gray-500 hover:text-gray-700 focus:outline-none"
+                        (click)="assignOffSearch()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
                     </svg>
                 </button>
             </div>
@@ -284,8 +234,10 @@
         </div>
 
 
-
-        <div *ngIf="hasData"
+        <div *ngIf="!assignHasData" class="flex justify-center items-center mt-8 mr-5 w-full h-[500px]">
+            <p class="text-3xl text-center font-semibold">No Data Availabale</p>
+        </div>
+        <div *ngIf="assignHasData"
             class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
             <table class="w-full divide-y-2 overflow-hidden">
                 <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">

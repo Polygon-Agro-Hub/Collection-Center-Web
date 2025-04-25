@@ -114,8 +114,8 @@
                         <th class="px-2 py-3 text-left text-sm font-medium">No</th>
                         <th class="px-3 py-3 text-left text-sm font-medium">GRN No</th>
                         <th class="px-3 py-3 text-left text-sm font-medium">Amount (Rs.)</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium">Center Code</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium ">Center Name</th>
+                        <!-- <th class="px-3 py-3 text-left text-sm font-medium">Center Code</th> -->
+                        <!-- <th class="px-3 py-3 text-left text-sm font-medium ">Center Name</th> -->
                         <th class="px-3 py-3 text-center text-sm font-medium ">Farmer NIC</th>
                         <th class="px-3 py-3 text-center text-sm font-medium">Collected Time</th>
                         <th class="px-3 py-3 text-center text-sm font-medium"></th>
@@ -128,16 +128,16 @@
                     currentPage: page,
                     totalItems: totalItems
                   };  let i = index">
-                        <td class="px-2 py-4 text-sm text-gray-900 dark:text-gray-300 ">
+                        <td class="px-2 py-4 text-sm text-[#000000] dark:text-gray-300 ">
                             {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i + 1) :
                                 (((page - 1) * itemsPerPage) + i + 1) }} </td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.invNo}}</td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300 ">
+                        <td class="px-3 py-4 text-sm text-[#000000] dark:text-gray-300">{{item.invNo}}</td>
+                        <td class="px-3 py-4 text-sm text-[#000000] dark:text-gray-300 ">
                             {{item.totalAmount | number:'1.2-2'}}
                         </td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.centerCode}}</td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.centerName}}</td>
-                        <td class="px-3 py-4 text-sm text-center text-gray-900 dark:text-gray-300">{{item.nic}}</td>
+                        <!-- <td class="px-3 py-4 text-sm text-[#000000] dark:text-gray-300">{{item.centerCode}}</td> -->
+                        <!-- <td class="px-3 py-4 text-sm text-[#000000] dark:text-gray-300">{{item.centerName}}</td> -->
+                        <td class="px-3 py-4 text-sm text-center text-[#000000] dark:text-gray-300">{{item.nic}}</td>
                         <td class="px-3 py-4 text-center text-[#646464] dark:text-gray-300">
                             <span class="block">{{ item.createdAt | date:'MMM d, y' }}</span>
                             <span class="block">{{ item.createdAt | date:'h:mm a' }}</span>
@@ -184,7 +184,7 @@
 
                 <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
                     <input type="text" placeholder="Search..." [(ngModel)]="searchText" (keyup.enter)="onSearch()"
-                        (keyup.esc)="offSearch()"
+                        
                         class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
                     <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                         (click)="onSearch()">
@@ -195,7 +195,7 @@
                         </svg>
                     </button>
                     <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none"
-                        (click)="offSearch()">
+                        (click)="offSearch()" (keyup.esc)="offSearch()">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"

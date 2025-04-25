@@ -8,6 +8,8 @@ import { ToastAlertService } from '../../../services/toast-alert/toast-alert.ser
 import { TokenServiceService } from '../../../services/Token/token-service.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { HttpClient } from '@angular/common/http';
+import { Location } from '@angular/common';
+
 
 @Component({
   selector: 'app-add-officers',
@@ -28,7 +30,7 @@ export class AddOfficersComponent implements OnInit {
 
 
   languages: string[] = ['Sinhala', 'English', 'Tamil'];
-  selectedPage: 'pageOne' | 'pageTwo' | 'pageThree' = 'pageOne';
+  selectedPage: 'pageOne' | 'pageTwo' | 'pageThree' = 'pageTwo';
   lastID!: number
   itemId: number | null = null;
   officerId!: number
@@ -97,6 +99,8 @@ export class AddOfficersComponent implements OnInit {
     private toastSrv: ToastAlertService,
     private tokenSrv: TokenServiceService,
     private http: HttpClient,
+    private location: Location
+
 
   ) {
     this.logingRole = tokenSrv.getUserDetails().role
@@ -323,7 +327,7 @@ export class AddOfficersComponent implements OnInit {
               this.router.navigate(['/manage-officers'])
             } else {
               this.isLoading = false;
-              this.toastSrv.error('There was an error creating the collective officer')
+              // this.toastSrv.error('There was an error creating the collective officer')
               this.toastSrv.error(res.message)
 
 
@@ -369,6 +373,8 @@ export class AddOfficersComponent implements OnInit {
       if (result.isConfirmed) {
         this.personalData = new Personal();
         this.toastSrv.warning('Officer Add canceled.')
+        this.location.back(); 
+
       }
     });
   }

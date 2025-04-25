@@ -1,31 +1,34 @@
-<div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg mt-6">
+<div class="flex flex-row items-center gap-5 font-semibold text-[#424242] dark:text-white mb-8 mx-5 cursor-pointer">
+    <p>Center</p>
+    <p onclick="history.back()">Center Dashboard</p>
+    <p>Assign Center Target</p>
+</div>
+
+<div
+    class="w-full max-w-[100vw] px-4 md:px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg mt-6 overflow-x-hidden">
     <div class="flex flex-row justify-between items-center">
         <div class="flex flex-row gap-6">
-            <div 
-            class="flex flex-row items-center gap-2 border-[2px] rounded-2xl px-4 py-2 dark:bg-[#292929] cursor-pointer"
-            [ngClass]="{'text-[#415CFF] border-[#415CFF]': isAssignTarget}"
-            (click)="selectAssignTarget()"
-            >
+            <div class="flex flex-row items-center gap-2 border-[2px] rounded-2xl px-4 py-2 dark:bg-[#292929] cursor-pointer"
+                [ngClass]="{'text-[#415CFF] border-[#415CFF]': isAssignTarget}" (click)="selectAssignTarget()">
                 <i *ngIf="isAssignTarget" class="fa-solid fa-check"></i>
                 <p class="dark:text-white">Center Target</p>
             </div>
 
-            <div 
-            class="flex flex-row items-center gap-2 border-[2px] rounded-2xl px-4 py-2 dark:bg-[#292929] cursor-pointer"
-            [ngClass]="{'text-[#415CFF] border-[#415CFF]': isVariety}"
-            (click)="selectVariety()"
-            >
+            <div class="flex flex-row items-center gap-2 border-[2px] rounded-2xl px-4 py-2 dark:bg-[#292929] cursor-pointer"
+                [ngClass]="{'text-[#415CFF] border-[#415CFF]': isVariety}" (click)="selectVariety()">
                 <i *ngIf="isVariety" class="fa-solid fa-check"></i>
                 <p class="dark:text-white">Variety List</p>
             </div>
         </div>
-
-
     </div>
 
     <hr class="my-8 border-[1px] border-[#7F7F7F] dark:border-[#292929]" />
 
-    <app-assign-center-target [centerDetails]="centerDetailsObj" *ngIf="isAssignTarget"/>
+    <div class="overflow-auto scrollbar-hide">
+        <app-assign-center-target [centerDetails]="centerDetailsObj" *ngIf="isAssignTarget" class="min-w-[1200px]" />
+    </div>
 
-    <app-select-variety-list [centerDetails]="centerDetailsObj" *ngIf="isVariety"/>
+    <div class="overflow-auto ">
+        <app-select-variety-list [centerDetails]="centerDetailsObj" *ngIf="isVariety" />
+    </div>
 </div>

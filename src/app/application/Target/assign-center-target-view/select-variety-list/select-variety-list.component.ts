@@ -45,6 +45,8 @@ export class SelectVarietyListComponent implements OnInit {
         this.cropCount = res.items.length;
         this.hasData = this.cropsArr.length > 0 ? true : false;
         this.totalItems = res.total;
+        console.log(this.hasData,"Has datas");
+        
 
       }
     )

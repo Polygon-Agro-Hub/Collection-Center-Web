@@ -33,6 +33,8 @@ export class ViewDailyTargetComponent implements OnInit {
   assignPage: number = 1;
   assignTotalItems: number = 0;
   assignItemsPerPage: number = 10;
+  assignSearch: string = '';
+  selectAssignStatus: string = ''
 
 
   isSelectPrograss = true;
@@ -77,17 +79,6 @@ export class ViewDailyTargetComponent implements OnInit {
     );
   }
 
-  // checkValidity(toDate: string): string {
-  //   const currentDate = new Date();
-  //   const targetDate = new Date(toDate);
-
-  //   if (targetDate >= currentDate) {
-  //     return 'Active';
-  //   } else {
-  //     return 'Expired';
-  //   }
-  // }
-
   onSearch() {
     this.fetchAllTarget();
   }
@@ -131,9 +122,9 @@ export class ViewDailyTargetComponent implements OnInit {
     this.isSelectAssign = true;
   }
 
-  AssignAllDailyTarget(page: number = 1, limit: number = this.itemsPerPage) {
+  AssignAllDailyTarget(page: number = 1, limit: number = this.itemsPerPage, search: string = this.assignSearch) {
     this.isLoading = true;
-    this.TargetSrv.AssignAllDailyTarget(page, limit).subscribe(
+    this.TargetSrv.AssignAllDailyTarget(page, limit, search).subscribe(
       (res) => {
         this.assignTargetArr = res;
         // this.assignTotalItems = res.total;
@@ -167,6 +158,54 @@ export class ViewDailyTargetComponent implements OnInit {
 
   formatDate(date: string): string {
     return new Date(date).toISOString().split('T')[0]
+  }
+
+  assignOnSearch() {
+    this.AssignAllDailyTarget();
+  }
+  assignOffSearch() {
+    this.assignSearch = '';
+    this.AssignAllDailyTarget()
+  }
+
+  filterAssignStatus() {
+    console.log(this.selectAssignStatus);
+    
+    this.TargetSrv.AssignAllDailyTarget(1, 10, this.assignSearch).subscribe(
+      (res) => {
+        this.assignTargetArr = res;
+        
+        if (this.selectAssignStatus === 'Updated') {
+          this.assignTargetArr = this.assignTargetArr.filter(item =>
+            item.isAssign === 1 &&
+            (item.assignStatusA === 0 || item.assignStatusB === 0 || item.assignStatusC === 0)
+          );
+        } else if (this.selectAssignStatus === 'Assigned') {
+          this.assignTargetArr = this.assignTargetArr.filter(item =>
+            item.isAssign === 1 && 
+            item.assignStatusA === 1 && 
+            item.assignStatusB === 1 && 
+            item.assignStatusC === 1
+          );
+        } else if (this.selectAssignStatus === 'Not Assigned') {
+          this.assignTargetArr = this.assignTargetArr.filter(item =>
+            item.isAssign === 0 && 
+            item.assignStatusA === 0 && 
+            item.assignStatusB === 0 && 
+            item.assignStatusC === 0
+          );
+        }
+        
+        // Update pagination variables
+        this.assignTotalItems = this.assignTargetArr.length;
+        this.assignPage = 1;
+      }
+    );
+  }
+
+  cancelAssignStatus(){
+    this.selectAssignStatus = '';
+    this.AssignAllDailyTarget();
   }
 
 

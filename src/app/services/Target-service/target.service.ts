@@ -26,14 +26,6 @@ export class TargetService {
     return this.http.get<any>(url, { headers });
   }
 
-  createDailyTarget(data: any): Observable<any> {
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${this.token}`
-    });
-
-    let url = `${this.apiUrl}/create-daily-target`;
-    return this.http.post<any>(url, data, { headers });
-  }
 
   //usable
   getAllDailyTarget(page: number = 1, limit: number = 10, searchText: string = ''): Observable<any> {
@@ -93,6 +85,7 @@ export class TargetService {
     return this.http.get<any>(url, { headers });
   }
 
+  //use
   getOfficers(centerId: number, page: number = 1, limit: number = 10, role: string = '', status: string = '', searchText: string = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
@@ -141,12 +134,16 @@ export class TargetService {
     });
   }
 
-  AssignAllDailyTarget(page: number = 1, limit: number = 10): Observable<any> {
+  AssignAllDailyTarget(page: number = 1, limit: number = 10, search:string = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
 
     let url = `${this.apiUrl}/assign-all-daily-target?page=${page}&limit=${limit}`;
+
+    if(search){
+      url+=`&searchText=${search}`
+    }
 
     return this.http.get<any>(url, { headers });
   }

@@ -230,6 +230,7 @@ class CollectionOfficers {
   image!: string;
   firstNameEnglish!: string;
   lastNameEnglish!: string;
+  phoneCode01!:string;
   phoneNumber01!: string;
   companyNameEnglish!: string;
   empId!: string;

@@ -1,8 +1,9 @@
 <app-loading-spinner *ngIf="isLoading" />
 
-<div *ngIf="!isLoading" class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-8 mx-5 cursor-pointer">
+<div *ngIf="!isLoading"
+    class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-8 mx-5 cursor-pointer">
     <p>Center Target</p>
-  </div>
+</div>
 
 <div *ngIf="!isLoading"
     class="w-full overflow-x-auto px-10 py-7  bg-tileLight shadow-lg rounded-lg dark:text-[#FFFFFF] dark:bg-[#363636]">
@@ -43,82 +44,37 @@
 
 
                 <div class="relative w-52">
-                    <div class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
-                      <select [(ngModel)]="selectStatus" (change)="filterStatus()"
-                        class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer">
-                        <option value="" selected disabled>Status</option>
-                        <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                            value="Pending">Pending</option>
-                        <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                            value="Completed">Completed</option>
-                      </select>
-                      
-                      <!-- Down arrow icon -->
-                      <div *ngIf="!selectStatus" class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
-                        <i class="fa-solid fa-angle-down text-lg mr-3"></i>
-                      </div>
-                  
-                      <!-- Cancel icon -->
-                      <div (click)="cancelStatus()" *ngIf="selectStatus" 
-                           class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300 cursor-pointer z-10">
-                        <i class="fa-solid fa-xmark text-lg mr-3"></i>
-                      </div>
-                    </div>
-                  </div>
-
-
-
-                <!-- <div class="relative w-46">
                     <div
                         class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
-                        <select [(ngModel)]="selectValidity" (change)="filterValidity()"
-                            class="block w-full appearance-none  dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
-                            <option value="" selected disabled>Validity</option>
+                        <select [(ngModel)]="selectStatus" (change)="filterStatus()"
+                            class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer">
+                            <option value="" selected disabled>Status</option>
                             <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                                value="Active">Active</option>
+                                value="Pending">Pending</option>
                             <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                                value="Expired">Expired</option>
+                                value="Completed">Completed</option>
                         </select>
-                        <button *ngIf="!selectValidity">
+
+                        <!-- Down arrow icon -->
+                        <div *ngIf="!selectStatus"
+                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
                             <i class="fa-solid fa-angle-down text-lg mr-3"></i>
-                        </button>
-                        <button *ngIf="selectValidity" (click)="cancelValidity()">
+                        </div>
+
+                        <!-- Cancel icon -->
+                        <div (click)="cancelStatus()" *ngIf="selectStatus"
+                            class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300 cursor-pointer z-10">
                             <i class="fa-solid fa-xmark text-lg mr-3"></i>
-                        </button>
-
+                        </div>
                     </div>
-                </div> -->
+                </div>
 
 
-
-
-<!-- 
-                <div class="relative w-52">
-                    <div class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
-                      <select [(ngModel)]="selectValidity" (change)="filterValidity()"
-                        class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer">
-                        <option value="" selected disabled>Validity</option>
-                        <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                            value="Active">Active</option>
-                        <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                            value="Expired">Expired</option>
-                      </select>
-                      
-
-                      <div *ngIf="!selectValidity" class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
-                        <i class="fa-solid fa-angle-down text-lg mr-3"></i>
-                      </div>
-
-                      <div (click)="cancelValidity()" *ngIf="selectValidity" 
-                           class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300 cursor-pointer z-10">
-                        <i class="fa-solid fa-xmark text-lg mr-3"></i>
-                      </div>
-                    </div>
-                  </div> -->
 
 
                 <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
-                    <input type="text" placeholder="Search by Variety Name" [(ngModel)]="searchText" (keyup.enter)="onSearch()" (keyup.esc)="offSearch()"
+                    <input type="text" placeholder="Search by Variety Name" [(ngModel)]="searchText"
+                        (keyup.enter)="onSearch()" (keyup.esc)="offSearch()"
                         class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
                     <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                         (click)="onSearch()">
@@ -174,7 +130,7 @@
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
                             {{ item.complete === 0.00 ? 'Empty' : item.complete }}
                         </td>
-                        
+
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300 flex justify-center items-center">
                             <span *ngIf="item.status === 'Pending'"
                                 class="bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-6 py-1">
@@ -215,10 +171,73 @@
     </div>
     <div *ngIf="isSelectAssign">
 
+        <div class="flex flex-row items-center justify-end gap-8 ">
+            <i class="fa-solid fa-list text-2xl dark:text-white ml-8"></i>
+
+            <p class="text-lg dark:text-white">Filter By</p>
+
+
+
+            <div class="relative w-52">
+                <div
+                    class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
+                    <select [(ngModel)]="selectAssignStatus" (change)="filterAssignStatus()"
+                        class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer">
+                        <option value="" selected disabled>Status</option>
+                        <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                            value="Updated">Updated</option>
+                            <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                            value="Assigned">Assigned</option>
+                        <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                            value="Not Assigned">Not Assigned</option>
+                        
+                    </select>
+
+                    <!-- Down arrow icon -->
+                    <div *ngIf="!selectAssignStatus"
+                        class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
+                        <i class="fa-solid fa-angle-down text-lg mr-3"></i>
+                    </div>
+
+                    <!-- Cancel icon -->
+                    <div (click)="cancelAssignStatus()" *ngIf="selectAssignStatus"
+                        class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300 cursor-pointer z-10">
+                        <i class="fa-solid fa-xmark text-lg mr-3"></i>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="flex items-center rounded-full px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+                <input type="text" 
+                       placeholder="Search by Variety Name" 
+                       [(ngModel)]="assignSearch"
+                       (keyup.enter)="assignOnSearch()"
+                       (keyup.esc)="assignOffSearch()"
+                       class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
+                <button type="button" 
+                        class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
+                        (click)="assignOnSearch()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
+                    </svg>
+                </button>
+                <button type="button" 
+                        class="text-gray-500 hover:text-gray-700 focus:outline-none"
+                        (click)="assignOffSearch()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
+            </div>
+
+        </div>
+
+
         <div *ngIf="!assignHasData" class="flex justify-center items-center mt-8 mr-5 w-full h-[500px]">
             <p class="text-3xl text-center font-semibold">No Data Availabale</p>
         </div>
-        <div *ngIf="hasData"
+        <div *ngIf="assignHasData"
             class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
             <table class="w-full divide-y-2 overflow-hidden">
                 <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
@@ -251,22 +270,27 @@
                             <!-- <p class="text-[#646464] text-sm">{{ formatTime(item.toTime) }}</p> -->
                         </td>
                         <td class="px-6 py-4 text-black-900 dark:text-gray-300 ">
-                            <span *ngIf="item.isAssign === 0 && (item.assignStatusA === 0 && item.assignStatusB === 0 && item.assignStatusC === 0)">
+                            <span
+                                *ngIf="item.isAssign === 0 && (item.assignStatusA === 0 && item.assignStatusB === 0 && item.assignStatusC === 0)">
                                 <i class="fa-solid fa-users-gear text-blue-600 text-xl cursor-pointer"
                                     (click)="navigateToAssignTarget(item.varietyId, item.companyCenterId)"></i>
                             </span>
-                            <span *ngIf="item.isAssign === 1 && (item.assignStatusA === 1  && item.assignStatusB === 1 && item.assignStatusC === 1)">
+                            <span
+                                *ngIf="item.isAssign === 1 && (item.assignStatusA === 1  && item.assignStatusB === 1 && item.assignStatusC === 1)">
                                 <i class="fa-solid fa-pen-to-square text-xl text-blue-600 cursor-pointer"
                                     (click)="navigateToEditAssignTarget(item.varietyId, item.companyCenterId)"></i>
                             </span>
-                            <span *ngIf="item.isAssign === 1 && (item.assignStatusA === 0  || item.assignStatusB === 0 || item.assignStatusC === 0)">
+                            <span
+                                *ngIf="item.isAssign === 1 && (item.assignStatusA === 0  || item.assignStatusB === 0 || item.assignStatusC === 0)">
                                 <i class="fa-solid fa-pen-to-square text-xl text-red-600 cursor-pointer"
                                     (click)="navigateToEditAssignTarget(item.varietyId, item.companyCenterId)"></i>
                             </span>
                         </td>
                         <td>
-                            <i class="fa-solid fa-circle-check text-2xl text-blue-600" *ngIf="item.isAssign === 1 && (item.assignStatusA === 1  && item.assignStatusB === 1 && item.assignStatusC === 1)"></i>
-                            <i class="fa-solid fa-circle-check text-2xl text-[#EB3223]" *ngIf="item.isAssign === 1 && (item.assignStatusA === 0  || item.assignStatusB === 0 || item.assignStatusC === 0)"></i>
+                            <i class="fa-solid fa-circle-check text-2xl text-blue-600"
+                                *ngIf="item.isAssign === 1 && (item.assignStatusA === 1  && item.assignStatusB === 1 && item.assignStatusC === 1)"></i>
+                            <i class="fa-solid fa-circle-check text-2xl text-[#EB3223]"
+                                *ngIf="item.isAssign === 1 && (item.assignStatusA === 0  || item.assignStatusB === 0 || item.assignStatusC === 0)"></i>
                         </td>
                     </tr>
                 </tbody>

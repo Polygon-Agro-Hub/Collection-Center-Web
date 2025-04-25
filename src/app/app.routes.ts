@@ -14,7 +14,6 @@ import { CollectionMonthlyReportComponent } from './application/Report/collectio
 import { FarmerListComponent } from './application/Report/farmer-list/farmer-list.component';
 import { CollectionDailyReportComponent } from './application/Report/collection-daily-report/collection-daily-report.component';
 import { FarmerReportComponent } from './application/Report/farmer-report/farmer-report.component';
-import { AddDailyTargetComponent } from './application/Target/add-daily-target/add-daily-target.component';
 import { ViewDailyTargetComponent } from './application/Target/view-daily-target/view-daily-target.component';
 import { OfficerProfileComponent } from './application/manage-officers/officer-profile/officer-profile.component';
 import { DownloadTargetComponent } from './application/Target/download-target/download-target.component';

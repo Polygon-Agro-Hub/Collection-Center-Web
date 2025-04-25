@@ -53,7 +53,7 @@ export class CollectionDailyReportComponent implements OnInit {
     this.isLoading = true
     this.ReportSrv.getCollectionDailyReport(this.officerId, date).subscribe(
       (res) => {
-        console.log(res.data.length);
+        // console.log(res.data.length);
         if (res.data.length === 0) {
           this.updateChart();
           this.loadingTable = false;
@@ -61,7 +61,7 @@ export class CollectionDailyReportComponent implements OnInit {
           return;
         }
 
-        this.dailyReportArr = res.map((item: any) => ({
+        this.dailyReportArr = res.data.map((item: any) => ({
           ...item,
           gradeA: Number(item.gradeA) || 0,
           gradeB: Number(item.gradeB) || 0,

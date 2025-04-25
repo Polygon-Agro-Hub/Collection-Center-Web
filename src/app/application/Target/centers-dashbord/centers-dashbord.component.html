@@ -1,7 +1,7 @@
 <app-loading-spinner *ngIf="isLoading" />
 
 <div *ngIf="!isLoading">
-    <div class="flex flex-row items-center gap-6 font-semibold text[#424242] mb-5 mx-5">
+    <div class="flex flex-row items-center gap-6 font-semibold text[#424242] mb-5 mx-5 cursor-pointer">
         <p onclick="history.back()">Centers</p>
         <p>Center Dashboard</p>
     </div>
@@ -60,9 +60,9 @@
             <i class="fa-solid fa-layer-group text-2xl text-white"></i>
             <div class="flex flex-col justify-center items-center">
                 <p class="font-bold text-white text-lg">Today Sales</p>
-                <p class="font-bold text-white text-lg">400 Transactions</p>
+                <p class="font-bold text-white text-lg">0 Transactions</p>
             </div>
-            <p class="font-bold text-white text-2xl my-4">Rs. 3,50,000</p>
+            <p class="font-bold text-white text-2xl my-4">Rs.0</p>
         </div>
     </div>
 
@@ -111,7 +111,7 @@
         <div class="w-2/5 pb-1 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg cursor-default">
             <div class="flex flex-row items-end justify-end">
                 <i class="fa-solid fa-arrow-trend-down text-[#D70000] mx-2"></i>
-                <p class="text-[#D70000] mx-2 mt-1 dark:text-white">34.7%</p>
+                <p class="text-[#D70000] mx-2 mt-1 dark:text-white">0%</p>
             </div>
             <div class="flex flex-row items-center justify-start mx-5 gap-5">
                 <div class="bg-[#CCFBF1] p-3 rounded-full">
@@ -119,7 +119,7 @@
                 </div>
                 <div class="flex flex-col justify-start items-start">
                     <p class="text-[#627189] dark:text-white">Total Sales Income</p>
-                    <p class="font-bold text-black text-lg dark:text-white">Rs. 11,25,568</p>
+                    <p class="font-bold text-black text-lg dark:text-white">Rs. 0</p>
                 </div>
             </div>
             <div class="flex flex-row items-end justify-end gap-2">

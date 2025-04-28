@@ -51,7 +51,7 @@
 
                     <div *ngIf="logingRole === 'Collection Center Head'" (change)="getAllManagers()">
                         <label for="centerId" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">
-                            Collection Center
+                            Collection Centre
                         </label>
                         <select id="centerId" [(ngModel)]="personalData.centerId" name="centerId" placeholder="select"
                             class="form-control mt-1 block w-full p-2 text-[#292929] mb-1 dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500"
@@ -59,7 +59,7 @@
                             <option disabled selected
                                 class="p-2 text-[#292929] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]"
                                 value="">
-                                -- select center--
+                                -- select centre--
                             </option>
                             <option *ngFor="let item of centerArr" [value]="item.id"
                                 class="p-2 text-[#292929] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">

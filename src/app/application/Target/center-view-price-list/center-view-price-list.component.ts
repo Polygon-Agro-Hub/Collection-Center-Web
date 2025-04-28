@@ -90,7 +90,7 @@ class PriceList {
   id!: number;
   cropNameEnglish!: string;
   varietyNameEnglish!: string;
-  averagePrice!: string;
+  averagePrice!: number;
   grade!: string;
   updatedPrice!: number;
   centerName!: string;

@@ -152,7 +152,7 @@
                         class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
                         <select [(ngModel)]="selectCenters" (change)="applyCompanyFilters()"
                             class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer">
-                            <option value="" selected disabled>Centers</option>
+                            <option value="" selected disabled>Centres</option>
                             <option *ngFor="let item of centerArr"
                                 class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
                                 [value]="item.id">{{item.regCode}} - {{item.centerName}}</option>
@@ -220,7 +220,7 @@
                         <th class="px-3 py-3 text-left text-sm font-medium">Last Name</th>
                         <th class="px-3 py-3 text-left text-sm font-medium"
                             *ngIf="logingRole ==='Collection Center Head'">
-                            Centers</th>
+                            Centres</th>
                         <th class="px-3 py-3 text-left text-sm font-medium ">Role</th>
                         <th class="px-3 py-3 text-center text-sm font-medium ">Status</th>
                         <th class="px-3 py-3 text-center text-sm font-medium">Phone</th>

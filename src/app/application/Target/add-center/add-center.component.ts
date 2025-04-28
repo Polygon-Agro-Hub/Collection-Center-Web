@@ -123,10 +123,10 @@ export class AddCenterComponent implements OnInit {
     this.targetService.createCenter(this.centerData).subscribe({
       next: (res: any) => {
         if (res.status) {
-          this.toastSrv.success('Center Created Successfully');
+          this.toastSrv.success('Centre Created Successfully');
           this.router.navigate(['/centers']);
         } else {
-          this.toastSrv.error(res.message || 'There was an error creating the center');
+          this.toastSrv.error(res.message || 'There was an error creating the Centre');
         }
       },
       error: (error: any) => {
@@ -143,7 +143,7 @@ export class AddCenterComponent implements OnInit {
           // Conflict error, e.g., duplicate regCode
           const errorMessage =
             error?.error?.message ||
-            'A center with this registration code already exists.';
+            'A Centre with this registration code already exists.';
           this.toastSrv.error(errorMessage);
         } else if (error.status === 500) {
           // Server error
@@ -152,7 +152,7 @@ export class AddCenterComponent implements OnInit {
           // Generic error
           const errorMessage =
             error?.error?.message ||
-            'There was an error creating the center. Please try again.';
+            'There was an error creating the Centre. Please try again.';
           this.toastSrv.error(errorMessage);
         }
       },
@@ -186,7 +186,7 @@ export class AddCenterComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
 
-        this.toastSrv.warning('Center Add Operation Canceled.')
+        this.toastSrv.warning('Centre Add Operation Canceled.')
         this.location.back(); 
       }
     });

@@ -98,8 +98,8 @@ class CenterName {
 class ResentCollection {
   cropNameEnglish!: string;
   varietyNameEnglish!: string;
-  totPrice!: string;
-  totQty!: string;
+  totPrice!: number;
+  totQty!: number;
   grade!: string;
   date!: Date;
 }

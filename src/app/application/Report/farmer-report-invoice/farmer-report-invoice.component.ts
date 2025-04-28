@@ -273,7 +273,7 @@ export class FarmerReportInvoiceComponent implements OnInit {
       formatValueForAmounts(crop.gradeBquan),
       formatValueForAmounts(crop.gradeCprice),
       formatValueForAmounts(crop.gradeCquan),
-      formatValueForAmounts(this.calculateRowTotalforReport(crop).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }))
+      formatValueForAmounts(this.calculateRowTotalforReport(crop).toFixed(2))
     ]);
 
     // Draw Crop Details table with dynamic row heights
@@ -289,7 +289,7 @@ export class FarmerReportInvoiceComponent implements OnInit {
     // Add Full Total
     doc.setFontSize(10);
     y += yIncrement
-    doc.text('Full Total(Rs.) : '  + formatValueForAmounts(this.calculateOverallTotalforReport().toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })) , x, y);
+    doc.text('Full Total(Rs.) : '  + formatValueForAmounts(this.calculateOverallTotalforReport().toFixed(2)) , x, y);
     y += yIncrement * 2.5;
 
     // QR Code Image Loading Function

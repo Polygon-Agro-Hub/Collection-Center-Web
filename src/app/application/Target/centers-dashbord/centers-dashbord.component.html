@@ -2,8 +2,8 @@
 
 <div *ngIf="!isLoading">
     <div class="flex flex-row items-center gap-6 font-semibold text[#424242] mb-5 mx-5 cursor-pointer">
-        <p onclick="history.back()">Centers</p>
-        <p>Center Dashboard</p>
+        <p onclick="history.back()">Centres</p>
+        <p>Centre Dashboard</p>
     </div>
 
     <div class="flex flex-row items-center justify-center gap-16 dark:bg-black cursor-default">
@@ -21,7 +21,7 @@
 
         <div class="flex flex-row items-center justify-center w-2/5 py-4 bg-[#415CFF] shadow-lg rounded-lg cursor-pointer"
             (click)="navigateAddTarget()">
-            <p class="font-bold text-tileLight text-lg">Assign Center Target</p>
+            <p class="font-bold text-tileLight text-lg">Assign Centre Target</p>
         </div>
     </div>
 
@@ -67,8 +67,8 @@
     </div>
 
 
-    <div class="flex flex-row items-center justify-center gap-16 my-8">
-        <div class="w-1/5 pt-6 pb-1 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg cursor-pointer">
+    <div (click)="navigateCenterOfficers()" class="flex flex-row items-center justify-center gap-16 my-8 cursor-pointer">
+        <div class="w-1/5 pt-6 pb-1 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg ">
             <div class="flex flex-row items-center justify-start mx-5 gap-5 ">
                 <div class="bg-[#CCFBF1] p-3 rounded-full">
                     <i class="fa-solid fa-users text-3xl"></i>
@@ -81,12 +81,12 @@
             </div>
             <div class="flex flex-row items-end justify-end">
                 <i class="fa-solid fa-arrow-up-right-from-square text-[#415CFF] mx-4"
-                    (click)="navigateCenterOfficers()"></i>
+                    ></i>
             </div>
         </div>
 
         <div (click)="navigateCollectionExpenses()" 
-        class="w-2/5 pb-1 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg cursor-default">
+        class="w-2/5 pb-1 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg cursor-pointer">
             <div class="flex flex-row items-end justify-end">
                 <i *ngIf="expencePrecentage >= 0" class="fa-solid fa-arrow-trend-up text-[#0D9488] mx-2 "></i>
                 <i *ngIf="expencePrecentage < 0" class="fa-solid fa-arrow-trend-down text-[#D70000] mx-2 "></i>
@@ -164,8 +164,8 @@
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.cropNameEnglish}}</td>
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.varietyNameEnglish}}</td>
                         <td class="px-6 py-4 text-gray-900 text-center dark:text-gray-300">{{item.grade}}</td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.totQty}}</td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.totPrice}}</td>
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.totQty | number: '1.2-2' }}</td>
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.totPrice | number: '1.2-2' }}</td>
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
                             <div class="flex flex-col items-center justify-center">
                                 <p class="text-[#3E3E3E]">{{item.date | date:'yyyy/mm/dd'}}</p>

@@ -127,15 +127,15 @@
                             <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark">
                                 {{item.gradeAprice}}</td>
                             <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark">
-                                {{item.gradeAquan}}</td>
+                                {{(item.gradeAquan | number: '1.2-2' )}}</td>
                             <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark">
                                 {{item.gradeBprice}}</td>
                             <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark">
-                                {{item.gradeBquan}}</td>
+                                {{(item.gradeBquan | number: '1.2-2' )}}</td>
                             <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark">
                                 {{item.gradeCprice}}</td>
                             <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark">
-                                {{item.gradeCquan}}</td>
+                                {{(item.gradeCquan | number: '1.2-2' )}}</td>
                             <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark">
                                 
                                 {{ calculateRowTotal(item) != null ? (calculateRowTotal(item) | number: '1.2-2') : '0.00' }}

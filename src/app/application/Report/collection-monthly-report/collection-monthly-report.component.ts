@@ -65,7 +65,9 @@ export class CollectionMonthlyReportComponent implements OnInit {
   }
 
   filterDate() {
-    this.fetchOfficerData();
+    if (this.startDate && this.endDate) {
+      this.fetchOfficerData();
+    }
   }
 
   navigateToReports() {

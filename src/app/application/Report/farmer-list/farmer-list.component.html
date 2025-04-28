@@ -76,7 +76,7 @@
                             <td class="px-5 py-4  text-gray-900 dark:text-textDark">{{item.firstName}}</td>
                             <td class="px-5 py-4  text-gray-900 dark:text-textDark">{{item.lastName}}</td>
                             <td class="px-5 py-4  text-gray-900 dark:text-textDark">{{item.NICnumber}}</td>
-                            <td class="px-5 py-4  text-gray-900 dark:text-textDark">{{item.totalAmount}}</td>
+                            <td class="px-5 py-4  text-gray-900 dark:text-textDark">{{item.totalAmount | number: '1.2-2' }}</td>
     
                             <td class="px-5 py-4  text-gray-900 dark:text-textDark">
                                 <button (click)="vieFarmerReport(item.id)"

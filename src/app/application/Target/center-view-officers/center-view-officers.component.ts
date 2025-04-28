@@ -223,6 +223,10 @@ export class CenterViewOfficersComponent implements OnInit {
     this.getAllOfficers(this.page, this.itemsPerPage);
   }
 
+  navigateToCenters() {
+    this.router.navigate(['/centers']); // Change '/reports' to your desired route
+  }
+
 }
 
 class CollectionOfficers {

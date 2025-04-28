@@ -521,6 +521,14 @@ export class OfficerProfileComponent implements OnInit {
   viewImage(imageUrl: string) {
   }
 
+  navigateToCenterDashboard() {
+    this.router.navigate(['/centers']); // Change '/reports' to your desired route
+  }
+
+  navigateToCenters() {
+    this.router.navigate(['/centers']); // Change '/reports' to your desired route
+  }
+
 }
 
 class Officer {

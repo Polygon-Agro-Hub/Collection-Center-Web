@@ -81,6 +81,10 @@ export class CenterViewPriceListComponent implements OnInit{
     const select = document.querySelector('select');
     select?.click();
   }
+
+  navigateToCenters() {
+    this.router.navigate(['/centers']); // Change '/reports' to your desired route
+  }
   
 
 

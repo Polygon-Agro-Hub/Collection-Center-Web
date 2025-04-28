@@ -54,8 +54,9 @@ export class CenterViewOfficersComponent implements OnInit {
   navigateToEdit(id: number) {
     this.router.navigate([`/centers/edit-officer/${id}`])
   }
-  navigateToProfile(id: number) {
-    this.router.navigate([`/centers/officer-profile/${id}`])
+  navigateToProfile(id: number, centerId: number) {
+    console.log(centerId);
+    this.router.navigate([`/centers/officer-profile/${id}/${centerId}`])
 
   }
 

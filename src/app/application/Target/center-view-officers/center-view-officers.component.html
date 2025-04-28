@@ -155,7 +155,7 @@
                             <td class="px-3 py-4 text-sm text-[#000000] dark:text-gray-300">{{officer.nic}}</td>
                             <td class="px-3 py-4 text-sm text-[#000000] text-center dark:text-gray-300 flex flex-row gap-4">
                                 <button class="text-gray-400 hover:text-gray-600"
-                                    (click)="navigateToProfile(officer.id)">
+                                    (click)="navigateToProfile(officer.id, this.centerId)">
                                     <i class="fa-regular fa-file text-lg"></i>
                                 </button>
                                 <button class="text-[#415CFF] hover:text-blue-500" (click)="navigateToEdit(officer.id)">

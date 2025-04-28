@@ -85,7 +85,7 @@ export const routes: Routes = [
                         component: EditOfficerComponent
                     },
                     {
-                        path: 'officer-profile/:id',
+                        path: 'officer-profile/:id:centerId',
                         component: OfficerProfileComponent
                     },
                     {
@@ -227,7 +227,7 @@ export const routes: Routes = [
                         component: EditOfficerComponent
                     },
                     {
-                        path: 'officer-profile/:id',
+                        path: 'officer-profile/:id/:centerId',
                         component: OfficerProfileComponent
                     },
                     {

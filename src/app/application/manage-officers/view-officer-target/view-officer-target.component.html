@@ -1,9 +1,9 @@
 
 <app-loading-spinner *ngIf="isLoading"/>
 
-<div *ngIf="!isLoading" class="flex flex-row ">
-    <p class="font-semibold text-[#424242] mb-8 mx-5 dark:text-[#FFFFFF] dark:bg-[#0F0F0F] text-l">Manage Officers</p>
-    <p class="font-semibold text-[#424242] mb-8 mx-5 dark:text-[#FFFFFF] dark:bg-[#0F0F0F] text-l">Officer Profile</p>
+<div *ngIf="!isLoading" class="flex flex-row cursor-pointer">
+    <p class="font-semibold text-[#424242] mb-8 mx-5 dark:text-[#FFFFFF] dark:bg-[#0F0F0F] text-l" (click)="navigateToManageOfficers()">Manage Officers</p>
+    <p class="font-semibold text-[#424242] mb-8 mx-5 dark:text-[#FFFFFF] dark:bg-[#0F0F0F] text-l "  onclick="history.back()">Officer Profile</p>
     <p class="font-semibold text-[#424242] mb-8 mx-5 dark:text-[#FFFFFF] dark:bg-[#0F0F0F] text-l">View Officer Target</p>
 </div>
 

@@ -96,6 +96,10 @@ export class ViewOfficerTargetComponent implements OnInit {
     this.fetchSelectedOfficerTarget(this.officerId, this.selectStatus, this.searchText);
   }
 
+  navigateToManageOfficers() {
+    this.router.navigate(['/manage-officers']); // Change '/reports' to your desired route
+  }
+
 }
 
 class SelectedOfficerTarget {

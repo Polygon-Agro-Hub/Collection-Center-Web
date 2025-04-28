@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SelectVarietyListComponent } from '../select-variety-list/select-variety-list.component';
 import { AssignCenterTargetComponent } from '../assign-center-target/assign-center-target.component';
 
@@ -19,6 +19,7 @@ export class AssignCenterTargetViewComponent implements OnInit {
   isVariety: boolean = false;
 
   constructor(
+    private router: Router,
       private route: ActivatedRoute
     ) { }
 
@@ -36,6 +37,10 @@ export class AssignCenterTargetViewComponent implements OnInit {
   selectVariety() {
     this.isAssignTarget = false;
     this.isVariety = true;
+  }
+
+  navigateToCenters() {
+    this.router.navigate(['/centers']); // Change '/reports' to your desired route
   }
 
 }

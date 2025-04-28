@@ -223,11 +223,11 @@ export const routes: Routes = [
                         component: AssignCenterTargetViewComponent
                     },
                     {
-                        path: 'edit-officer/:id',
+                        path: 'edit-officer/:id/:centerId',
                         component: EditOfficerComponent
                     },
                     {
-                        path: 'officer-profile/:id',
+                        path: 'officer-profile/:id/:centerId',
                         component: OfficerProfileComponent
                     },
                     {

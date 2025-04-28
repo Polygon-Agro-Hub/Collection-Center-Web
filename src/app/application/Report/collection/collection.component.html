@@ -57,7 +57,7 @@
                         class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
                         <select [(ngModel)]="selectCenters" (change)="applyCompanyFilters()"
                             class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer">
-                            <option value="" selected disabled>Centers</option>
+                            <option value="" selected disabled>Centres</option>
                             <option *ngFor="let item of centerArr"
                                 class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
                                 [value]="item.id">{{item.regCode}} - {{item.centerName}}</option>
@@ -127,8 +127,8 @@
                 <thead class=" dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] text-[#4B5563]">
                     <tr>
                         <th class="px-2 py-3 text-left text-sm font-medium">No</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium" *ngIf="logingRole === 'Collection Center Head'">Center Code</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium" *ngIf="logingRole === 'Collection Center Head'">Center Name</th>
+                        <th class="px-3 py-3 text-left text-sm font-medium" *ngIf="logingRole === 'Collection Center Head'">Centre Code</th>
+                        <th class="px-3 py-3 text-left text-sm font-medium" *ngIf="logingRole === 'Collection Center Head'">Centre Name</th>
                         <th class="px-3 py-3 text-left text-sm font-medium">Crop</th>
                         <th class="px-3 py-3 text-center text-sm font-medium ">Variety</th>
                         <th class="px-3 py-3 text-center text-sm font-medium ">Quantity A (kg)</th>
@@ -155,11 +155,11 @@
                           <td class="px-3 py-4 text-sm text-center text-gray-900 dark:text-gray-300">
                             {{ item.varietyNameEnglish || '-' }}
                           </td>
-                        <td class="px-3 py-4 text-center dark:text-gray-300">{{item.totalGradeAQuantity}}</td>
-                        <td class="px-3 py-4 text-center dark:text-gray-300">{{item.totalGradeBQuantity}}</td>
-                        <td class="px-3 py-4 text-center dark:text-gray-300">{{item.totalGradeCQuantity}}</td>
+                        <td class="px-3 py-4 text-center dark:text-gray-300">{{item.totalGradeAQuantity | number: '1.2-2' }}</td>
+                        <td class="px-3 py-4 text-center dark:text-gray-300">{{item.totalGradeBQuantity | number: '1.2-2' }}</td>
+                        <td class="px-3 py-4 text-center dark:text-gray-300">{{item.totalGradeCQuantity | number: '1.2-2' }}</td>
                         <td class="px-3 py-4 text-center dark:text-gray-300">
-                            {{ item.totalQuantity }}
+                            {{ item.totalQuantity | number: '1.2-2' }}
                           </td>            
                     </tr>
                 </tbody>

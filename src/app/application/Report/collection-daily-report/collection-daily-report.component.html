@@ -51,10 +51,10 @@
           <tr *ngFor="let item of dailyReportArr">
             <td class="text-center border border-gray-300 dark:border-gray-600 px-4 py-2">{{item.varietyNameEnglish}}
             </td>
-            <td class="text-center border border-gray-300 dark:border-gray-600 px-4 py-2">{{item.gradeA}}Kg</td>
-            <td class="text-center border border-gray-300 dark:border-gray-600 px-4 py-2">{{item.gradeB}}Kg</td>
-            <td class="text-center border border-gray-300 dark:border-gray-600 px-4 py-2">{{item.gradeC}}Kg</td>
-            <td class="text-center border border-gray-300 dark:border-gray-600 px-4 py-2">{{item.total}}Kg</td>
+            <td class="text-center border border-gray-300 dark:border-gray-600 px-4 py-2">{{item.gradeA | number: '1.2-2'}}Kg</td>
+            <td class="text-center border border-gray-300 dark:border-gray-600 px-4 py-2">{{item.gradeB | number: '1.2-2'}}Kg</td>
+            <td class="text-center border border-gray-300 dark:border-gray-600 px-4 py-2">{{item.gradeC | number: '1.2-2'}}Kg</td>
+            <td class="text-center border border-gray-300 dark:border-gray-600 px-4 py-2">{{item.total | number: '1.2-2'}}Kg</td>
           </tr>
         </tbody>
       </table>

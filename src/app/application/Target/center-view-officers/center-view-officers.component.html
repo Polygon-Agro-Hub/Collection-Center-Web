@@ -2,9 +2,9 @@
 
 <div *ngIf="!isLoading">
     <div class="flex flex-row pt-0 mb-7 gap-5 cursor-pointer">
-        <p class="font-semibold text-sm text-[#424242] dark:text-white">Centers</p>
-        <p class="font-semibold text-sm text-[#424242] dark:text-white" onclick="history.back()">Center Dashboard</p>
-        <p class="font-semibold text-sm text-[#424242] dark:text-white">Center Officers</p>
+        <p class="font-semibold text-sm text-[#424242] dark:text-white" (click)="navigateToCenters()">Centres</p>
+        <p class="font-semibold text-sm text-[#424242] dark:text-white" onclick="history.back()">Centre Dashboard</p>
+        <p class="font-semibold text-sm text-[#424242] dark:text-white">Centre Officers</p>
     </div>
 
     <div class="w-full overflow-x-auto px-10 py-7 bg-tileLight shadow-lg rounded-lg dark:bg-[#363636]">
@@ -155,10 +155,10 @@
                             <td class="px-3 py-4 text-sm text-[#000000] dark:text-gray-300">{{officer.nic}}</td>
                             <td class="px-3 py-4 text-sm text-[#000000] text-center dark:text-gray-300 flex flex-row gap-4">
                                 <button class="text-gray-400 hover:text-gray-600"
-                                    (click)="navigateToProfile(officer.id)">
+                                    (click)="navigateToProfile(officer.id, this.centerId)">
                                     <i class="fa-regular fa-file text-lg"></i>
                                 </button>
-                                <button class="text-[#415CFF] hover:text-blue-500" (click)="navigateToEdit(officer.id)">
+                                <button class="text-[#415CFF] hover:text-blue-500" (click)="navigateToEdit(officer.id, this.centerId)">
                                     <i class="fa-solid fa-pen-to-square text-lg"></i>
                                 </button>
                                 <button class="text-[#FF415C] hover:text-red-500"

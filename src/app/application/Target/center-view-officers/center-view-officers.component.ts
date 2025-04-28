@@ -51,11 +51,13 @@ export class CenterViewOfficersComponent implements OnInit {
     this.router.navigate([`${path}`])
   }
 
-  navigateToEdit(id: number) {
-    this.router.navigate([`/centers/edit-officer/${id}`])
+  navigateToEdit(id: number, centerId: number) {
+    this.router.navigate([`/centers/edit-officer/${id}/${centerId}`]);
   }
-  navigateToProfile(id: number) {
-    this.router.navigate([`/centers/officer-profile/${id}`])
+
+  navigateToProfile(id: number, centerId: number) {
+    console.log(centerId);
+    this.router.navigate([`/centers/officer-profile/${id}/${centerId}`])
 
   }
 
@@ -221,6 +223,10 @@ export class CenterViewOfficersComponent implements OnInit {
   onPageChange(event: number) {
     this.page = event;
     this.getAllOfficers(this.page, this.itemsPerPage);
+  }
+
+  navigateToCenters() {
+    this.router.navigate(['/centers']); // Change '/reports' to your desired route
   }
 
 }

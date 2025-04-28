@@ -25,6 +25,8 @@ export class OfficerProfileComponent implements OnInit {
 
   isLoading: boolean = true;
 
+  centerId!: number;
+
 
 
   constructor(
@@ -42,6 +44,7 @@ export class OfficerProfileComponent implements OnInit {
   ngOnInit(): void {
     this.officerId = this.route.snapshot.params['id'];
     this.fetchOfficer(this.officerId);
+    this.centerId = this.route.snapshot.params['centerId'];
     this.setActiveTabFromRoute()
   }
 
@@ -519,6 +522,14 @@ export class OfficerProfileComponent implements OnInit {
   }
 
   viewImage(imageUrl: string) {
+  }
+
+  navigateToCenterDashboard() {
+    this.router.navigate(['/centers/center-shashbord', this.centerId]); // Change '/reports' to your desired route
+  }
+
+  navigateToCenters() {
+    this.router.navigate(['/centers']); // Change '/reports' to your desired route
   }
 
 }

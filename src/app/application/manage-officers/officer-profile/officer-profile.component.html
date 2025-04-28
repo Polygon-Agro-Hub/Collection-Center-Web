@@ -2,9 +2,9 @@
 
 <div *ngIf="!isLoading">
     <div *ngIf="naviPath ==='centers'" class="flex flex-row pt-0 mb-7 gap-5 cursor-pointer">
-        <p class="font-semibold text-sm text-[#424242] dark:text-white">Centers</p>
-        <p class="font-semibold text-sm text-[#424242] dark:text-white">Center Dashboard</p>
-        <p class="font-semibold text-sm text-[#424242] dark:text-white" onclick="history.back()">Center Officers</p>
+        <p class="font-semibold text-sm text-[#424242] dark:text-white" (click)="navigateToCenters()">Centres</p>
+        <p class="font-semibold text-sm text-[#424242] dark:text-white" (click)="navigateToCenterDashboard()">Centre Dashboard</p>
+        <p class="font-semibold text-sm text-[#424242] dark:text-white" onclick="history.back()">Centre Officers</p>
         <p class="font-semibold text-sm text-[#424242] dark:text-white">Officer Profile</p>
     </div>
 

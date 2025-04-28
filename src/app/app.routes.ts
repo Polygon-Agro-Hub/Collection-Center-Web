@@ -85,7 +85,7 @@ export const routes: Routes = [
                         component: EditOfficerComponent
                     },
                     {
-                        path: 'officer-profile/:id:centerId',
+                        path: 'officer-profile/:id',
                         component: OfficerProfileComponent
                     },
                     {
@@ -223,7 +223,7 @@ export const routes: Routes = [
                         component: AssignCenterTargetViewComponent
                     },
                     {
-                        path: 'edit-officer/:id',
+                        path: 'edit-officer/:id/:centerId',
                         component: EditOfficerComponent
                     },
                     {

@@ -38,6 +38,8 @@ export class EditOfficerComponent implements OnInit {
   upateEmpID!: string
   selectedLanguages: string[] = [];
 
+  centerId!: number;
+
 
 
   selectedFileName!: string
@@ -150,6 +152,7 @@ export class EditOfficerComponent implements OnInit {
     this.loadBranches();
     this.getAllCenters();
     this.editOfficerId = this.route.snapshot.params['id'];
+    this.centerId = this.route.snapshot.params['centerId'];
     this.fetchOffierById(this.editOfficerId);
     this.UpdateEpmloyeIdCreate();
     this.setActiveTabFromRoute()
@@ -885,6 +888,14 @@ export class EditOfficerComponent implements OnInit {
   vehicleChange() {
     this.driverObj.vType = this.selectVehicletype.name
     this.driverObj.vCapacity = this.selectVehicletype.capacity
+  }
+
+  navigateToCenters() {
+    this.router.navigate(['/centers']); // Change '/reports' to your desired route
+  }
+
+  navigateToCenterDashboard() {
+    this.router.navigate(['/centers/center-shashbord', this.centerId]); // Change '/reports' to your desired route
   }
 
 

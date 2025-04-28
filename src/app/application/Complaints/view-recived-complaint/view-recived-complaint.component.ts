@@ -55,7 +55,7 @@ export class ViewRecivedComplaintComponent implements OnInit {
         this.phone2 = this.compalintObj.phoneCode02 + " - " + this.compalintObj.phoneNumber02;
 
 
-        if (res.items.length === 0) {
+        if (res.data.length === 0) {
           this.hasData = false;
         } else {
           this.hasData = true;
@@ -85,7 +85,7 @@ export class ViewRecivedComplaintComponent implements OnInit {
             if (res.status) {
               this.isLoading = false;
               this.toastSrv.success(res.message)
-              this.router.navigate(['/cch-complaints']);
+              this.router.navigate(['/complaints']);
             } else {
               this.isLoading = false;
               this.toastSrv.error(res.message)
@@ -117,7 +117,7 @@ export class ViewRecivedComplaintComponent implements OnInit {
         if (res.status) {
           this.isLoading = false;
           this.toastSrv.success(res.message)
-          this.router.navigate(['/cch-complaints']);
+          this.router.navigate(['/complaints']);
         } else {
           this.isLoading = false;
           this.toastSrv.error(res.message)

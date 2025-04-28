@@ -124,12 +124,12 @@ export class CchRecivedComplaintComponent {
     this.isLoading = true;
     this.replyObj.id = this.compalinId;
 
-    this.ComplainSrv.replyToComplain(this.replyObj).subscribe(
+    this.ComplainSrv.cchReplyToComplain(this.replyObj).subscribe(
       (res) => {
         if (res.status) {
           this.isLoading = false;
           this.toastSrv.success(res.message)
-          this.router.navigate(['/complaints']);
+          this.router.navigate(['/cch-complaints']);
         } else {
           this.isLoading = false;
           this.toastSrv.error(res.message)

@@ -20,8 +20,8 @@ export class FarmerReportComponent implements OnInit {
   CropArr!: Crop[];
 
   reportId!: number
-  hasData: boolean = false
-  totalAmount: number = 0
+  hasData: boolean = false;
+  totalAmount: number = 0;
   totalAmountforReport: number = 0;
   isLoading:boolean = true;
 
@@ -104,105 +104,207 @@ export class FarmerReportComponent implements OnInit {
   // this code works correctly but did not had time to fix the address display
   async downloadReport() {
     // Create new PDF document
-    this.isLoading= true;
+    this.isLoading = true;
     const doc = new jsPDF();
-    
+
     // Helper function to format null values
     const formatValue = (value: any): string => {
       return value === null || value === undefined ? 'N/A' : value.toString();
     };
 
+    const formatValueForAmounts = (value: any): string => {
+      return value === null || value === undefined ? '0.00' : value.toString();
+    };
+
+    // Helper function to split text into multiple lines
+    const splitTextIntoLines = (text: string, maxWidth: number): string[] => {
+      return doc.splitTextToSize(text, maxWidth);
+    };
+
+    // Dynamic table drawing function
+    const drawDynamicTable = (
+      data: any[][],
+      startX: number,
+      startY: number,
+      columnWidths: number[],
+      lineHeight: number = 7, // Increased from 5 to 7 for better spacing
+      padding: number = 3 // Increased from 2 to 3
+    ): number => {
+      let currentY = startY;
+      
+      data.forEach((row) => {
+        let maxLines = 1;
+        const cellLines: string[][] = [];
+        
+        // First determine how many lines we need for this row
+        row.forEach((cell, colIndex) => {
+          const cellContent = cell.toString();
+          const maxCellWidth = columnWidths[colIndex] - padding * 2;
+          const lines = splitTextIntoLines(cellContent, maxCellWidth);
+          cellLines.push(lines);
+          maxLines = Math.max(maxLines, lines.length);
+        });
+    
+        // Calculate total row height
+        const rowHeight = maxLines * lineHeight + padding * 2;
+        
+        // Draw each cell with the correct number of lines
+        let currentX = startX;
+        row.forEach((cell, colIndex) => {
+          // Draw cell border
+          doc.rect(
+            currentX,
+            currentY,
+            columnWidths[colIndex],
+            rowHeight
+          );
+          
+          // Draw text (centered vertically)
+          const lines = cellLines[colIndex];
+          const textHeight = lines.length * lineHeight;
+          const verticalOffset = (rowHeight - textHeight) / 1.5;
+          
+          lines.forEach((line, lineIndex) => {
+            doc.text(
+              line,
+              currentX + padding,
+              currentY + verticalOffset + (lineIndex * lineHeight) + padding
+            );
+          });
+          
+          currentX += columnWidths[colIndex];
+        });
+    
+        currentY += rowHeight;
+      });
+    
+      return currentY;
+    };
+
+    // Initialize position variables
+    let x = 14;  // Starting x position
+    let y = 15;  // Starting y position
+    const yIncrement = 5;  // Standard increment for y position
+
     // Set font
     doc.setFont('helvetica');
-    
+
     // Add title
-    doc.setFontSize(16);
-    doc.text('INVOICE', 105, 15, { align: 'center' });
-    
+    // doc.setFontSize(16);
+    // doc.text('INVOICE', 105, y, { align: 'center' });
+    // y += yIncrement * 2;
+
     // Add invoice details
     doc.setFontSize(10);
-    doc.text(`INV NO: ${formatValue(this.userObj.invNo)}`, 14, 25);
-    doc.text(`Date: ${new Date(this.userObj.createdAt).toISOString().split('T')[0].replace(/-/g, '/')}`, 14, 30);
-    
+    doc.text(`INV NO: ${formatValue(this.userObj.invNo)}`, x, y);
+    y += yIncrement;
+    doc.text(`Date: ${new Date(this.userObj.createdAt).toISOString().split('T')[0].replace(/-/g, '/')}`, x, y);
+    y += yIncrement * 2;
+
     // Add Personal Details section
+    y += yIncrement*0.25;
     doc.setFontSize(12);
-    doc.text('Personal Details', 14, 40);
+    doc.text('Personal Details', x, y);
+    y += yIncrement;
     doc.setFontSize(10);
 
-    
     // Draw Personal Details table
-    this.drawTable(doc, 14, 45, [
-      ['First Name', 'Last Name', 'NIC Number', 'Phone Number', 'Address'],
+    y = drawDynamicTable(
       [
-        formatValue(this.userObj.firstName),
-        formatValue(this.userObj.lastName),
-        formatValue(this.userObj.NICnumber),
-        formatValue(this.userObj.phoneNumber),
-        this.userObj.houseNo && this.userObj.streetName && this.userObj.city
-      ? `${formatValue(this.userObj.houseNo)}, ${formatValue(this.userObj.streetName)}, ${formatValue(this.userObj.city)}`
-      : '-'
-        
-      ]
-    ]);
-    
+        ['First Name', 'Last Name', 'NIC Number', 'Phone Number', 'Address'],
+        [
+          formatValue(this.userObj.firstName),
+          formatValue(this.userObj.lastName),
+          formatValue(this.userObj.NICnumber),
+          formatValue(this.userObj.phoneNumber),
+          this.userObj.houseNo && this.userObj.streetName && this.userObj.city
+            ? `${formatValue(this.userObj.houseNo)}, ${formatValue(this.userObj.streetName)}, ${formatValue(this.userObj.city)}`
+            : '-'
+        ]
+      ],
+      x,
+      y,
+      [25, 25, 30, 40, 60] // Column widths
+    ) + yIncrement;
+
     // Add Bank Details section
+    y += yIncrement*0.25;
+    y += yIncrement;
     doc.setFontSize(12);
-    doc.text('Bank Details', 14, 70);
+    doc.text('Bank Details', x, y);
+    y += yIncrement;
     doc.setFontSize(10);
-    
+
     // Draw Bank Details table
-    this.drawTable(doc, 14, 75, [
-      ['Account Number', 'Account Holder\'s Name', 'Bank Name', 'Branch Name'],
+    y = drawDynamicTable(
       [
-        formatValue(this.userObj.accNumber),
-        formatValue(this.userObj.accHolderName),
-        formatValue(this.userObj.bankName),
-        formatValue(this.userObj.branchName)
-      ]
-    ]);
-    
+        ['Account Number', 'Account Holder\'s Name', 'Bank Name', 'Branch Name'],
+        [
+          formatValue(this.userObj.accNumber),
+          formatValue(this.userObj.accHolderName),
+          formatValue(this.userObj.bankName),
+          formatValue(this.userObj.branchName)
+        ]
+      ],
+      x,
+      y,
+      [40, 50, 30, 30] // Column widths
+    ) + yIncrement;
+
     // Add Crop Details section
+    y += yIncrement*0.25;
+    y += yIncrement;
     doc.setFontSize(12);
-    doc.text('Crop Details', 14, 100);
+    doc.text('Crop Details', x, y);
+    y += yIncrement;
     doc.setFontSize(10);
-    
+
     // Prepare crop details data for table
-    const cropTableHeaders = ['Crop Name', 'Variety', 'Unit Price (A)', 'Quantity', 'Unit Price (B)', 
-                              'Quantity', 'Unit Price (C)', 'Quantity', 'Total'];
-                              
+    const cropTableHeaders = ['Crop Name', 'Variety', 'Unit Price (A)', 'Quantity', 
+                            'Unit Price (B)', 'Quantity', 'Unit Price (C)', 'Quantity', 'Total (Rs.)'];
+    
     const cropTableData = this.CropArr.map(crop => [
       formatValue(crop.cropNameEnglish),
       formatValue(crop.varietyNameEnglish),
-      formatValue(crop.gradeAprice),
-      formatValue(crop.gradeAquan),
-      formatValue(crop.gradeBprice),
-      formatValue(crop.gradeBquan),
-      formatValue(crop.gradeCprice),
-      formatValue(crop.gradeCquan),
-      formatValue(this.calculateRowTotalforReport(crop))
+      formatValueForAmounts(crop.gradeAprice),
+      formatValueForAmounts(crop.gradeAquan),
+      formatValueForAmounts(crop.gradeBprice),
+      formatValueForAmounts(crop.gradeBquan),
+      formatValueForAmounts(crop.gradeCprice),
+      formatValueForAmounts(crop.gradeCquan),
+      formatValueForAmounts(this.calculateRowTotalforReport(crop).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }))
     ]);
-    
-    // Draw Crop Details table
-    this.drawTable(doc, 14, 105, [cropTableHeaders, ...cropTableData]);
-    
-    // Add Full Total
-    doc.text('Full Total(Rs.): '+ this.calculateOverallTotalforReport(), 14, 135);
 
-    function loadImageAsBase64(url: string): Promise<string> {
+    // Draw Crop Details table with dynamic row heights
+    y = drawDynamicTable(
+      [cropTableHeaders, ...cropTableData],
+      x,
+      y,
+      [25, 40, 20, 15, 20, 15, 20, 15, 20], // Column widths
+      5, // Line height
+      2 // Padding
+    ) + yIncrement;
+
+    // Add Full Total
+    y += yIncrement
+    doc.text('Full Total(Rs.) : '  + formatValueForAmounts(this.calculateOverallTotalforReport().toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })) , x, y);
+    y += yIncrement * 2.5;
+
+    // QR Code Image Loading Function
+    const loadImageAsBase64 = (url: string): Promise<string> => {
       return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        xhr.onload = function () {
+        xhr.onload = function() {
           const reader = new FileReader();
-          reader.onloadend = function () {
+          reader.onloadend = function() {
             resolve(reader.result as string);
           };
           reader.readAsDataURL(xhr.response);
         };
-        xhr.onerror = function () {
-          // If XHR fails, try loading image directly
+        xhr.onerror = function() {
           const img = new Image();
           img.crossOrigin = 'Anonymous';
-          img.onload = function () {
+          img.onload = function() {
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
             canvas.width = img.width;
@@ -210,23 +312,17 @@ export class FarmerReportComponent implements OnInit {
             ctx?.drawImage(img, 0, 0);
             resolve(canvas.toDataURL('image/png'));
           };
-          img.onerror = function () {
-            console.warn('Image load failed:', url);
-            resolve(''); // Resolve with empty string if image fails to load
+          img.onerror = function() {
+            resolve('');
           };
           img.src = url;
         };
         xhr.open('GET', url);
         xhr.responseType = 'blob';
         xhr.setRequestHeader('Accept', 'image/png;image/*');
-        try {
-          xhr.send();
-        } catch (error) {
-          console.error('XHR send error:', error);
-          reject(error);
-        }
+        xhr.send();
       });
-    }
+    };
 
     const appendCacheBuster = (url: string) => {
       if (!url) return '';
@@ -234,59 +330,62 @@ export class FarmerReportComponent implements OnInit {
       return `${url}${separator}t=${new Date().getTime()}`;
     };
 
-    // Load the image first
+    // Load QR codes
     let farmerQrImagebase64 = '';
     let officerQrImagebase64 = '';
+    
     try {
       if (this.userObj.farmerQr) {
-        const modifiedFarmerQrImageUrl = appendCacheBuster(this.userObj.farmerQr);
-        farmerQrImagebase64 = await loadImageAsBase64(modifiedFarmerQrImageUrl);
+        farmerQrImagebase64 = await loadImageAsBase64(appendCacheBuster(this.userObj.farmerQr));
       }
     } catch (error) {
-      console.error('Error loading image:', error);
+      console.error('Error loading farmer QR:', error);
     }
 
     try {
       if (this.userObj.officerQr) {
-        const modifiedOfficerQrImageUrl = appendCacheBuster(this.userObj.officerQr);
-        officerQrImagebase64 = await loadImageAsBase64(modifiedOfficerQrImageUrl);
+        officerQrImagebase64 = await loadImageAsBase64(appendCacheBuster(this.userObj.officerQr));
       }
     } catch (error) {
-      console.error('Error loading officer QR image:', error);
+      console.error('Error loading officer QR:', error);
     }
 
-    // Add the image at the top
+    // QR code positions
+    const qrWidth = 40;
+    const qrHeight = 40;
+    const qrY = y;
+    const farmerQrX = x;
+    const officerQrX = x + qrWidth + 6;
+    const labelY = qrY + qrHeight + 3;
+
+    // Add farmer QR code
     if (farmerQrImagebase64) {
-      
-      doc.addImage(
-        farmerQrImagebase64,
-        'PNG',
-        14, // X position
-        147, // Y position (moved to top)
-        40, // Width
-        40  // Height
-      );
-      doc.setFontSize(12);
-      doc.text('Farmer Qr Code', 20, 190);
+      doc.addImage(farmerQrImagebase64, 'PNG', farmerQrX, qrY, qrWidth, qrHeight);
+    } else {
+      doc.rect(farmerQrX, qrY, qrWidth - 5, qrHeight - 5);
+      doc.setFontSize(10);
+      doc.text('Not', farmerQrX + 14, qrY + 18);
+      doc.text('Available', farmerQrX + 10, qrY + 23);
     }
+    doc.setFontSize(12);
+    doc.text('Farmer Qr Code', farmerQrX + 6, labelY);
 
+    // Add officer QR code
     if (officerQrImagebase64) {
-      
-      doc.addImage(
-        officerQrImagebase64,
-        'PNG',
-        60, // X position (adjusted for placement)
-        147, // Y position (aligned with farmer QR)
-        40, // Width
-        40  // Height
-      );
-      doc.setFontSize(12);
-      doc.text('Officer Qr Code', 66, 190);
+      doc.addImage(officerQrImagebase64, 'PNG', officerQrX, qrY, qrWidth, qrHeight);
+    } else {
+      doc.rect(officerQrX, qrY, qrWidth - 5, qrHeight - 5);
+      doc.setFontSize(10);
+      doc.text('Not', officerQrX + 14, qrY + 18);
+      doc.text('Available', officerQrX + 10, qrY + 23);
     }
-    
+    doc.setFontSize(12);
+    doc.text('Officer Qr Code', officerQrX + 6, labelY);
+
     // Save the PDF
     doc.save('invoice.pdf');
-  }
+    this.isLoading = false;
+}
 
   // Helper function to draw tables
   private drawTable(doc: jsPDF, x: number, y: number, data: string[][]): void {

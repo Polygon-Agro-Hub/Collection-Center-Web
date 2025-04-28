@@ -171,6 +171,15 @@ export class ComplaintsService {
     return this.http.get<any>(url, { headers });
   }
 
+  cchReplyToComplain(data: any): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/cch-reply-complain`;
+    return this.http.patch<any>(url, data, { headers });
+  }
+
 
 }
 

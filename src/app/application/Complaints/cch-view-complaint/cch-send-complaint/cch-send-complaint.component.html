@@ -90,8 +90,8 @@
                 class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer">
                 <option value="" selected disabled>Status</option>
                 <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
-                    value="Assigned">
-                    Opend</option>
+                    value="Opened">
+                    Opened</option>
                 <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
                     value="Closed">
                     Closed</option>
@@ -158,8 +158,8 @@
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.complain}}</td>
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
                         <div class="flex flex-col items-center justify-center">
-                            <p class="text-[#3E3E3E]">{{item.createdAt | date:'yyyy/mm/dd'}}</p>
-                            <p class="text-[#3E3E3E]">{{item.createdAt | date:'hh:mm a'}}</p>
+                            <p class="text-[#3E3E3E] dark:text-gray-300">{{item.createdAt | date:'yyyy/mm/dd'}}</p>
+                            <p class="text-[#3E3E3E] dark:text-gray-300">{{item.createdAt | date:'hh:mm a'}}</p>
                         </div>
                     </td>
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300 flex items-center justify-center">

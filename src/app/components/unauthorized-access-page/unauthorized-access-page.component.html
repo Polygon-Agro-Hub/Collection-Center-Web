@@ -1,0 +1,54 @@
+<div class="min-h-screen flex flex-col items-center justify-center bg-gray-50 px-4">
+    <div class="max-w-md w-full text-center">
+      <!-- Shield Icon -->
+      <div class="mb-8">
+        <svg class="mx-auto h-40 w-40 text-red-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"></path>
+        </svg>
+      </div>
+  
+      <!-- Error Message -->
+      <h1 class="text-5xl font-bold text-gray-900 mb-4">451</h1>
+      <h2 class="text-2xl font-semibold text-gray-800 mb-6">Access Restricted</h2>
+      <p class="text-gray-600 mb-6">
+        You don't have permission to access this resource.
+      </p>
+      <p class="text-gray-500 text-sm mb-8">
+        If you believe this is an error, please contact your administrator.
+      </p>
+  
+      <!-- Action Buttons -->
+      <div class="flex flex-col sm:flex-row justify-center gap-4 cursor-pointer">
+        <div 
+          (click)="logOut()"
+          class="inline-flex items-center px-6 py-3 border border-transparent text-base font-medium rounded-md shadow-sm text-white bg-red-600 hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200"
+        >
+        <svg class="-ml-1 mr-3 h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 19l-7-7m0 0l7-7m-7 7h18"></path>
+          </svg>
+          Go Back
+        </div>
+  
+        <a 
+          href="mailto:support@yourdomain.com"
+          class="inline-flex items-center px-6 py-3 border border-gray-300 text-base font-medium rounded-md shadow-sm text-gray-700 bg-white hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200"
+        >
+          <svg class="-ml-1 mr-3 h-5 w-5 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z"></path>
+          </svg>
+          Contact Support
+        </a>
+      </div>
+  
+      <!-- Login Suggestion (if applicable) -->
+      <!-- <div class="mt-10 pt-6 border-t border-gray-200">
+        <p class="text-sm text-gray-500 mb-4">Already have an account?</p>
+        <a 
+          routerLink="/login"
+          class="inline-flex items-center px-4 py-2 border border-transparent text-sm font-medium rounded-md text-red-700 bg-red-100 hover:bg-red-200 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200"
+        >
+          Sign in to your account
+        </a>
+      </div> -->
+    </div>
+  </div>

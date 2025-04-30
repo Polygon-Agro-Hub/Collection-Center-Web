@@ -1,12 +1,14 @@
 import { Injectable } from '@angular/core';
-import { CanActivate, ActivatedRouteSnapshot, RouterStateSnapshot, Router } from '@angular/router';
+import { ActivatedRouteSnapshot, Router, RouterStateSnapshot } from '@angular/router';
 import { TokenServiceService } from '../Token/token-service.service';
+
 
 @Injectable({
   providedIn: 'root'
 })
-export class RoleGuardService {
+export class CcmRoleGuardService {
   userRole: string | null = null;
+
 
   constructor(private router: Router, private tokenSrv: TokenServiceService) {
     this.userRole = this.tokenSrv.getUserDetails().role;
@@ -14,7 +16,7 @@ export class RoleGuardService {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
 
-    if (this.userRole === 'Collection Center Head') {
+    if (this.userRole === 'Collection Center Manager') {
       return true;
     } else {
       this.router.navigate(['/451']);

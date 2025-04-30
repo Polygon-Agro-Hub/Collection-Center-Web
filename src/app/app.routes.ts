@@ -44,6 +44,9 @@ import { OfficerTargetViewComponent } from './application/Target/officer-target-
 import { CenterCollectionExpenseComponent } from './application/Target/center-collection-expense/center-collection-expense.component';
 import { FarmerReportInvoiceComponent } from './application/Report/farmer-report-invoice/farmer-report-invoice.component';
 import { OfficerTargetPassOfficerComponent } from './application/Target/officer-target-pass-officer/officer-target-pass-officer.component';
+import { NotFoundPageComponent } from './components/not-found-page/not-found-page.component';
+import { UnauthorizedAccessPageComponent } from './components/unauthorized-access-page/unauthorized-access-page.component';
+import { CcmRoleGuardService } from './services/RoleGuard/ccm-role-guard.service';
 
 export const routes: Routes = [
     {
@@ -53,6 +56,7 @@ export const routes: Routes = [
     },
     { path: 'login', component: LoginComponent },
     { path: 'change-password', component: ChangePasswordComponent, canActivate: [AuthGuard] },
+    { path: '451', component: UnauthorizedAccessPageComponent},
 
 
     {
@@ -66,6 +70,7 @@ export const routes: Routes = [
             },
             {
                 path: 'dashbord',
+                canActivate:[CcmRoleGuardService],
                 component: DashboardComponent
             },
             {
@@ -105,6 +110,7 @@ export const routes: Routes = [
             },
             {
                 path: 'price-list',
+                canActivate:[CcmRoleGuardService],
                 children: [
                     {
                         path: '',
@@ -115,6 +121,7 @@ export const routes: Routes = [
             },
             {
                 path: 'price-request',
+                canActivate:[CcmRoleGuardService],
                 children: [
                     {
                         path: '',
@@ -165,6 +172,7 @@ export const routes: Routes = [
             },
             {
                 path: 'target',
+                canActivate:[CcmRoleGuardService],
                 children: [
                     {
                         path: '',
@@ -195,6 +203,7 @@ export const routes: Routes = [
             },
             {
                 path: 'complaints',
+                canActivate:[CcmRoleGuardService],
                 children: [
                     {
                         path: '',
@@ -268,6 +277,7 @@ export const routes: Routes = [
             },
             {
                 path: 'officer-target',
+                canActivate:[CcmRoleGuardService],
                 children: [
                     {
                         path: '',
@@ -279,8 +289,10 @@ export const routes: Routes = [
                     }
 
                 ]
-            }
+            },
 
         ]
     },
+    {path:'**', component: NotFoundPageComponent}
+
 ];

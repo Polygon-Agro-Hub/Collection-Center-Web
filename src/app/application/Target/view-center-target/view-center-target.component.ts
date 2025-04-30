@@ -44,8 +44,6 @@ export class ViewCenterTargetComponent implements OnInit {
 
   ngOnInit(): void {
     this.centerId = this.route.snapshot.params['id'];
-    console.log('got centerId', this.centerId);
-
     const date = new Date();
     const year = date.getFullYear();
     const month = ('0' + (date.getMonth() + 1)).slice(-2);
@@ -53,7 +51,7 @@ export class ViewCenterTargetComponent implements OnInit {
     this.today = `${year}/${month}/${day}`;
 
     this.fetchAllTarget();
-    // this.AssignAllDailyTarget()
+
   }
 
   fetchAllTarget(centerId: number = this.centerId, page: number = 1, limit: number = this.itemsPerPage, status: string = this.selectStatus, search: string = this.searchText) {
@@ -61,7 +59,6 @@ export class ViewCenterTargetComponent implements OnInit {
     this.TargetSrv.getAllCenterDailyTarget(centerId, page, limit, status, search).subscribe(
       (res) => {
         this.targetArr = res.items;
-        console.log(this.targetArr);
         if (res.items.length > 0) {
           this.hasData = true;
         } else {
@@ -73,17 +70,6 @@ export class ViewCenterTargetComponent implements OnInit {
     );
   }
 
-  // checkValidity(toDate: string): string {
-  //   const currentDate = new Date();
-  //   const targetDate = new Date(toDate);
-
-  //   if (targetDate >= currentDate) {
-  //     return 'Active';
-  //   } else {
-  //     return 'Expired';
-  //   }
-  // }
-
   onSearch() {
     this.fetchAllTarget();
   }
@@ -91,15 +77,6 @@ export class ViewCenterTargetComponent implements OnInit {
     this.searchText = '';
     this.fetchAllTarget()
   }
-
-  // filterStatus() {
-  //   if (!this.selectStatus) {
-  //     this.fetchAllTarget();  // Reset and fetch all targets if no filter is selected
-  //     return;
-  //   }
-
-  //   this.targetArr = this.targetArr.filter(item => item.status === this.selectStatus);
-  // }
 
   filterStatus() {
     this.fetchAllTarget();

@@ -31,7 +31,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   ) { }
 
   ngOnInit(): void {
-    // window.location.reload();
     this.fetchOfficerCounts();
     this.fetchChart('week')
   }

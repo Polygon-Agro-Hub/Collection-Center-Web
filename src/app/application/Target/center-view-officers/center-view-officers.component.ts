@@ -56,7 +56,6 @@ export class CenterViewOfficersComponent implements OnInit {
   }
 
   navigateToProfile(id: number, centerId: number) {
-    console.log(centerId);
     this.router.navigate([`/centers/officer-profile/${id}/${centerId}`])
 
   }
@@ -66,9 +65,6 @@ export class CenterViewOfficersComponent implements OnInit {
     this.targetSrv.getOfficers(centerId, page, limit, role, status, searchText).subscribe(
       (res) => {
 
-
-        // console.log(res.items);
-        // console.log(res.total);
         this.OfficerArr = res.items
         this.totalItems = res.total
         if (res.items.length === 0) {
@@ -76,7 +72,7 @@ export class CenterViewOfficersComponent implements OnInit {
         } else {
           this.hasData = true;
         }
-    this.isLoading = false;
+        this.isLoading = false;
 
 
       },
@@ -102,7 +98,6 @@ export class CenterViewOfficersComponent implements OnInit {
         this.ManageOficerSrv.deleteOfficer(id).subscribe(
           (data) => {
             if (data.status) {
-              console.log('Officer deleted successfully');
               this.toastSrv.success('The Officer has been deleted.')
               this.getAllOfficers(this.centerId, this.page, this.itemsPerPage, this.selectRole, this.selectStatus, this.searchText);
             } else {
@@ -120,10 +115,10 @@ export class CenterViewOfficersComponent implements OnInit {
     });
   }
 
-   openPopup(item: any) {
-      this.isPopupVisible = true;
-    
-      const tableHtml = `
+  openPopup(item: any) {
+    this.isPopupVisible = true;
+
+    const tableHtml = `
         <div class="container mx-auto">
           <h1 class="text-center text-2xl font-bold mb-4">Officer Name: ${item.firstNameEnglish}</h1>
           <div>
@@ -139,54 +134,54 @@ export class CenterViewOfficersComponent implements OnInit {
           </div>
         </div>
       `;
-    
-      const swalInstance = Swal.fire({
-        html: tableHtml,
-        showConfirmButton: false,
-        width: 'auto',
-        allowOutsideClick: false, // Prevent closing by clicking outside
-        didOpen: () => {
-          // Approve Button
-          document.getElementById('approveButton')?.addEventListener('click', () => {
-            this.handleStatusChange(swalInstance, item.id, 'Approved');
-          });
-    
-          // Reject Button
-          document.getElementById('rejectButton')?.addEventListener('click', () => {
-            this.handleStatusChange(swalInstance, item.id, 'Rejected');
-          });
-        }
-      });
-    }
 
-      private handleStatusChange(swalInstance: any, id: number, status: 'Approved' | 'Rejected') {
-        // Show loading state
-        swalInstance.update({
-          showConfirmButton: false,
-          allowEscapeKey: false,
-          allowOutsideClick: false,
-          didOpen: () => {
-            Swal.showLoading();
-          }
+    const swalInstance = Swal.fire({
+      html: tableHtml,
+      showConfirmButton: false,
+      width: 'auto',
+      allowOutsideClick: false, // Prevent closing by clicking outside
+      didOpen: () => {
+        // Approve Button
+        document.getElementById('approveButton')?.addEventListener('click', () => {
+          this.handleStatusChange(swalInstance, item.id, 'Approved');
         });
-      
-        this.ManageOficerSrv.ChangeStatus(id, status).subscribe({
-          next: (res) => {
-            swalInstance.close();
-            if (res.status) {
-              const action = status === 'Approved' ? 'approved' : 'rejected';
-              this.toastSrv.success(`The collection was ${action} successfully.`);
-              this.getAllOfficers();
-            } else {
-              this.toastSrv.error(res.message || `Failed to ${status.toLowerCase()} the collection.`);
-            }
-          },
-          error: (err) => {
-            swalInstance.close();
-            this.toastSrv.error(`An error occurred while ${status.toLowerCase()}ing. Please try again.`);
-          }
+
+        // Reject Button
+        document.getElementById('rejectButton')?.addEventListener('click', () => {
+          this.handleStatusChange(swalInstance, item.id, 'Rejected');
         });
       }
+    });
+  }
+
+  private handleStatusChange(swalInstance: any, id: number, status: 'Approved' | 'Rejected') {
+    // Show loading state
+    swalInstance.update({
+      showConfirmButton: false,
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+
+    this.ManageOficerSrv.ChangeStatus(id, status).subscribe({
+      next: (res) => {
+        swalInstance.close();
+        if (res.status) {
+          const action = status === 'Approved' ? 'approved' : 'rejected';
+          this.toastSrv.success(`The collection was ${action} successfully.`);
+          this.getAllOfficers();
+        } else {
+          this.toastSrv.error(res.message || `Failed to ${status.toLowerCase()} the collection.`);
+        }
+      },
+      error: (err) => {
+        swalInstance.close();
+        this.toastSrv.error(`An error occurred while ${status.toLowerCase()}ing. Please try again.`);
+      }
+    });
+  }
 
   applyRoleFilters() {
 
@@ -236,7 +231,7 @@ class CollectionOfficers {
   image!: string;
   firstNameEnglish!: string;
   lastNameEnglish!: string;
-  phoneCode01!:string;
+  phoneCode01!: string;
   phoneNumber01!: string;
   companyNameEnglish!: string;
   empId!: string;

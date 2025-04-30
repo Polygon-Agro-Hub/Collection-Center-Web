@@ -23,10 +23,8 @@ export class ChangePasswordComponent implements OnInit {
   isLoading: boolean = false;
 
   constructor(private authService: AuthService, private http: HttpClient, private router: Router) {
-    // this.changePassword = new ChangePassword();
   }
   ngOnInit(): void {
-    // window.location.reload();
   }
 
   togglePasswordVisibility(): void {
@@ -37,9 +35,6 @@ export class ChangePasswordComponent implements OnInit {
     this.showPassword1 = !this.showPassword1;
   }
 
-  /**
-   * Update the user's password with SweetAlert for notifications
-   */
   updatePassword(): void {
     if (!this.changePassword || !this.conformPassword) {
       Swal.fire({

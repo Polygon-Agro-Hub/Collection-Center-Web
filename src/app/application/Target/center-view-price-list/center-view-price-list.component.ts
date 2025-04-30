@@ -13,7 +13,8 @@ import { NgxPaginationModule } from "ngx-pagination";
   templateUrl: './center-view-price-list.component.html',
   styleUrl: './center-view-price-list.component.css'
 })
-export class CenterViewPriceListComponent implements OnInit{
+export class 
+CenterViewPriceListComponent implements OnInit{
   centerId!: number;
   
 
@@ -85,8 +86,6 @@ export class CenterViewPriceListComponent implements OnInit{
   navigateToCenters() {
     this.router.navigate(['/centers']); // Change '/reports' to your desired route
   }
-  
-
 
 }
 

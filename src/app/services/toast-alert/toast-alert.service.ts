@@ -5,7 +5,7 @@ import { ToastrService } from 'ngx-toastr';
   providedIn: 'root',
 })
 export class ToastAlertService {
-  constructor(private toastr: ToastrService) {}
+  constructor(private toastr: ToastrService) { }
 
   success(message: string, options: any = {}) {
     this.toastr.success(
@@ -25,11 +25,11 @@ export class ToastAlertService {
       '',
       {
         enableHtml: true,
-        progressBar:true,
+        progressBar: true,
         positionClass: 'toast-bottom-right',
-        toastClass: 'custom-hidden custom-toast-spacing', 
-        timeOut: 5000, 
-        tapToDismiss:true,
+        toastClass: 'custom-hidden custom-toast-spacing',
+        timeOut: 5000,
+        tapToDismiss: true,
         ...options
       }
     );
@@ -53,16 +53,16 @@ export class ToastAlertService {
       '',
       {
         enableHtml: true,
-        progressBar:true,
+        progressBar: true,
         positionClass: 'toast-bottom-right',
-        toastClass: 'custom-hidden custom-toast-spacing', 
-        timeOut: 5000, 
-        tapToDismiss:false,
+        toastClass: 'custom-hidden custom-toast-spacing',
+        timeOut: 5000,
+        tapToDismiss: false,
         ...options
       }
     );
   }
-  
+
   warning(message: string, options: any = {}) {
     this.toastr.warning(
       `
@@ -81,11 +81,11 @@ export class ToastAlertService {
       '',
       {
         enableHtml: true,
-        progressBar:true,
+        progressBar: true,
         positionClass: 'toast-bottom-right',
-        toastClass: 'custom-hidden custom-toast-spacing', 
-        timeOut: 5000, 
-        tapToDismiss:false,
+        toastClass: 'custom-hidden custom-toast-spacing',
+        timeOut: 5000,
+        tapToDismiss: false,
         ...options
       }
     );

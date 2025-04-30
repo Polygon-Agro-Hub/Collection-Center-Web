@@ -133,7 +133,6 @@ export class PriceRequestComponent implements OnInit {
         document
           .getElementById('rejectButton')
           ?.addEventListener('click', () => {
-            // this.isPopupVisible = false;
             this.isLoading = true;
             this.PriceListSrv.ChangeRequestStatus(item.id, 'Rejected').subscribe(
               (res) => {

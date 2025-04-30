@@ -80,13 +80,7 @@ export class CollectionMonthlyReportComponent implements OnInit {
     const selectedDate = new Date(this.startDate);
 
     if (selectedDate > today) {
-      // Swal.fire({
-      //   icon: 'error',
-      //   title: 'Invalid Date',
-      //   text: 'Start date cannot be a future date.',
-      //   confirmButtonText: 'OK',
-      // });
-      this.toastSrv.warning('<b>Start date</b> cannot be a future date.')
+     this.toastSrv.warning('<b>Start date</b> cannot be a future date.')
       this.startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
     }
   }
@@ -96,12 +90,6 @@ export class CollectionMonthlyReportComponent implements OnInit {
     const selectedEndDate = new Date(this.endDate);
 
     if (!this.startDate) {
-      // Swal.fire({
-      //   icon: 'warning',
-      //   title: 'Missing Start Date',
-      //   text: 'Please select a start date before selecting an end date.',
-      //   confirmButtonText: 'OK',
-      // });
       this.toastSrv.success('Please select a <b>start date</b> before selecting an end date.')
 
       this.endDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());;
@@ -109,13 +97,7 @@ export class CollectionMonthlyReportComponent implements OnInit {
     }
 
     if (selectedEndDate > today) {
-      // Swal.fire({
-      //   icon: 'error',
-      //   title: 'Invalid End Date',
-      //   text: 'End date cannot be a future date.',
-      //   confirmButtonText: 'OK',
-      // });
-
+      
       this.toastSrv.error('<b>End date cannot be a future date.')
       this.endDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());;
     }
@@ -124,7 +106,6 @@ export class CollectionMonthlyReportComponent implements OnInit {
 
 
   downloadReport(): void {
-    console.log('downloading', this.startDate, this.endDate)
     // Create new jsPDF instance
     const doc = new jsPDF();
 

@@ -127,9 +127,6 @@ export class ViewRecivedComplaintComponent implements OnInit {
     )
   }
 
-
-
-
 }
 
 class Complaint {

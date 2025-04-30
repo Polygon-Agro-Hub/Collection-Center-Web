@@ -60,7 +60,6 @@ export class AddComplaintComponent implements OnInit {
     this.complaintsService.submitComplaint(formData).subscribe(
       (response) => {
         if (response.status) {
-          console.log('Complaint submitted successfully:', response);
           this.toastSrv.success('Your complaint has been submitted successfully!');
           this.refreshScreen();
           // Reset the form fields
@@ -101,31 +100,25 @@ export class AddComplaintComponent implements OnInit {
       }
     }).then((result) => {
       if (result.isConfirmed) {
-        // this.toastSrv.warning('Add Complaint Canceled.');
-
         location.reload();
-        // setTimeout(() => {
-        //   this.router.navigate(['/collection/complaints']); // Navigate to the specific route
-        // }, 500); // Delay to allow the toast to display
+
       }
     });
   }
-  
 
 
-  fetchAllCategory(){
+
+  fetchAllCategory() {
     this.complaintsService.getComplainCategory().subscribe(
-      (res)=>{
+      (res) => {
         this.categoryArr = res;
-        console.log(this.categoryArr);
       }
     )
   }
-  
 
 }
 
 class Category {
   id!: number;
-  categoryEnglish!:string
+  categoryEnglish!: string
 }

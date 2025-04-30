@@ -9,15 +9,11 @@ import { TokenServiceService } from '../Token/token-service.service';
 })
 export class ComplaintsService {
   private apiUrl = `${environment.API_BASE_URL}/complaint`;
-  // private token = `${environment.TOKEN}`;
-  private token!:string | null;
+  private token!: string | null;
 
-
-
-  constructor(private http: HttpClient, private tokenSrv:TokenServiceService) {
+  constructor(private http: HttpClient, private tokenSrv: TokenServiceService) {
     this.token = this.tokenSrv.getToken()
-   }
-
+  }
 
   getAllReciveComplaints(page: number = 1, limit: number = 10, status: string = '', searchText: string = ''): Observable<any> {
     const headers = new HttpHeaders({
@@ -54,7 +50,7 @@ export class ComplaintsService {
     });
 
     let url = `${this.apiUrl}/forword-to-complain/${id}`;
-    return this.http.patch<any>(url,{}, { headers });
+    return this.http.patch<any>(url, {}, { headers });
   }
 
 
@@ -113,8 +109,6 @@ export class ComplaintsService {
       url += `&searchText=${searchText}`
 
     }
-  
-    
 
     return this.http.get<any>(url, { headers });
   }
@@ -149,7 +143,7 @@ export class ComplaintsService {
     });
 
     let url = `${this.apiUrl}/forword-complain-admin/${id}`;
-    return this.http.patch<any>(url,{}, { headers });
+    return this.http.patch<any>(url, {}, { headers });
   }
 
 

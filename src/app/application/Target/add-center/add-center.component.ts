@@ -20,7 +20,7 @@ export class AddCenterComponent implements OnInit {
   centerData: CenterData = new CenterData();
 
   isLoading: boolean = false;
-  
+
 
   provinces: string[] = [
     'Western',
@@ -94,7 +94,7 @@ export class AddCenterComponent implements OnInit {
       if (selectedDistrict) {
         // Update the province based on the selected district
         this.centerData.province = selectedDistrict.province;
-  
+
         // Update filtered districts for the selected province
         this.filteredDistricts = this.allDistricts.filter(d => d.province === this.centerData.province);
       }
@@ -103,7 +103,7 @@ export class AddCenterComponent implements OnInit {
 
   onSubmit() {
     this.isLoading = true;
-  
+
     // Validate form data
     if (
       !this.centerData ||
@@ -118,7 +118,7 @@ export class AddCenterComponent implements OnInit {
       this.toastSrv.warning('Please fill all required fields');
       return;
     }
-  
+
     // Call the service to create a center
     this.targetService.createCenter(this.centerData).subscribe({
       next: (res: any) => {
@@ -131,7 +131,7 @@ export class AddCenterComponent implements OnInit {
       },
       error: (error: any) => {
         this.isLoading = false;
-  
+
         // Handle different types of errors based on error status or message
         if (error.status === 400) {
           // Validation error or bad request
@@ -161,8 +161,6 @@ export class AddCenterComponent implements OnInit {
       },
     });
   }
-  
-  
 
   onCancel() {
     Swal.fire({
@@ -179,7 +177,7 @@ export class AddCenterComponent implements OnInit {
         title: 'dark:text-white',
 
         icon: '',
-        confirmButton: 'hover:bg-red-600 dark:hover:bg-red-700 focus:ring-red-500 dark:focus:ring-red-800' ,
+        confirmButton: 'hover:bg-red-600 dark:hover:bg-red-700 focus:ring-red-500 dark:focus:ring-red-800',
         cancelButton: 'hover:bg-blue-600 dark:hover:bg-blue-700 focus:ring-blue-500 dark:focus:ring-blue-800',
         actions: 'gap-2'
       }
@@ -187,12 +185,11 @@ export class AddCenterComponent implements OnInit {
       if (result.isConfirmed) {
 
         this.toastSrv.warning('Centre Add Operation Canceled.')
-        this.location.back(); 
+        this.location.back();
       }
     });
   }
 
-  
 }
 
 class CenterData {

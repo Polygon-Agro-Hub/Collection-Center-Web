@@ -10,8 +10,6 @@ export class AuthGuard implements CanActivate {
   tokenExpiration: any;
 
   constructor(private router: Router, private tokenSrv: TokenServiceService) {
-    // this.token = tokenSrv.getToken();
-    // this.tokenExpiration = tokenSrv.getUserDetails().tokenExpiration
   }
 
 
@@ -26,8 +24,8 @@ export class AuthGuard implements CanActivate {
         return true; // Token is valid and not expired
       } else {
         // Token expired, remove token and redirect to login
-        this.tokenSrv.clearLoginDetails().then(()=>{
-        this.router.navigate(['/login']);
+        this.tokenSrv.clearLoginDetails().then(() => {
+          this.router.navigate(['/login']);
         })
         return false;
       }

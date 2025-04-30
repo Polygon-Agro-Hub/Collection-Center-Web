@@ -49,9 +49,9 @@ export class ViewOfficersComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.fetchAllOfficers();
+
     this.getAllcompany();
-    console.log(this.logingRole);
+
     this.getAllCenters();
     this.fetchByRole();
 
@@ -73,7 +73,7 @@ export class ViewOfficersComponent implements OnInit {
     this.isLoading = true;
     this.ManageOficerSrv.getAllOfficers(page, limit, status, role, searchText).subscribe(
       (res) => {
-        console.log(res);
+
         this.OfficerArr = res.items
         this.totalItems = res.total
         if (res.items.length === 0) {
@@ -151,7 +151,6 @@ export class ViewOfficersComponent implements OnInit {
         this.ManageOficerSrv.deleteOfficer(id).subscribe(
           (data) => {
             if (data.status) {
-              console.log('Collection Officer deleted successfully');
               this.toastSrv.success('The Officer has been deleted.')
               this.fetchByRole()
               this.isLoading = false;
@@ -175,7 +174,7 @@ export class ViewOfficersComponent implements OnInit {
 
   openPopup(item: any) {
     this.isPopupVisible = true;
-  
+
     const tableHtml = `
       <div class="container mx-auto">
         <h1 class="text-center text-2xl font-bold mb-4">Officer Name: ${item.firstNameEnglish}</h1>
@@ -192,7 +191,7 @@ export class ViewOfficersComponent implements OnInit {
         </div>
       </div>
     `;
-  
+
     const swalInstance = Swal.fire({
       html: tableHtml,
       showConfirmButton: false,
@@ -203,7 +202,7 @@ export class ViewOfficersComponent implements OnInit {
         document.getElementById('approveButton')?.addEventListener('click', () => {
           this.handleStatusChange(swalInstance, item.id, 'Approved');
         });
-  
+
         // Reject Button
         document.getElementById('rejectButton')?.addEventListener('click', () => {
           this.handleStatusChange(swalInstance, item.id, 'Rejected');
@@ -211,7 +210,7 @@ export class ViewOfficersComponent implements OnInit {
       }
     });
   }
-  
+
   private handleStatusChange(swalInstance: any, id: number, status: 'Approved' | 'Rejected') {
     // Show loading state
     swalInstance.update({
@@ -222,7 +221,7 @@ export class ViewOfficersComponent implements OnInit {
         Swal.showLoading();
       }
     });
-  
+
     this.ManageOficerSrv.ChangeStatus(id, status).subscribe({
       next: (res) => {
         swalInstance.close();
@@ -320,5 +319,5 @@ class Company {
 class Center {
   id!: number
   centerName!: string;
-  regCode!:string;
+  regCode!: string;
 }

@@ -111,34 +111,31 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
 
   formatDate(dateString: string | Date): string {
     if (!dateString) return '';
-    
+
     const date = new Date(dateString);
     if (isNaN(date.getTime())) return ''; // Invalid date
-    
+
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const day = date.getDate().toString().padStart(2, '0');
     const year = date.getFullYear();
-    
+
     return `${month}.${day}.${year}`;
   }
 
   formatNextDate(dateString: string | Date): string {
     if (!dateString) return '';
-    
+
     const date = new Date(dateString);
-    if (isNaN(date.getTime())) return ''; 
-  
+    if (isNaN(date.getTime())) return '';
+
     date.setDate(date.getDate() + 1);
-  
+
     const month = (date.getMonth() + 1).toString().padStart(2, '0');
     const day = date.getDate().toString().padStart(2, '0');
     const year = date.getFullYear();
-  
+
     return `${month}.${day}.${year}`;
   }
-  
-
-
 
 }
 
@@ -149,7 +146,7 @@ class TargetDetalis {
   complete!: number;
   todo!: number;
   empId!: string;
-  date!:Date
+  date!: Date
 }
 
 class Officers {

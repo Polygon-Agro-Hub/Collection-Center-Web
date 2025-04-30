@@ -14,14 +14,14 @@ import { AssignCenterTargetComponent } from '../assign-center-target/assign-cent
 })
 export class AssignCenterTargetViewComponent implements OnInit {
   centerDetailsObj: CenterDetails = new CenterDetails();
-  
+
   isAssignTarget: boolean = true;
   isVariety: boolean = false;
 
   constructor(
     private router: Router,
-      private route: ActivatedRoute
-    ) { }
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
     this.centerDetailsObj.centerId = this.route.snapshot.params['id'];

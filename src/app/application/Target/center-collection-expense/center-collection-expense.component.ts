@@ -18,7 +18,7 @@ import { environment } from '../../../environments/environment';
   styleUrl: './center-collection-expense.component.css',
   providers: [DatePipe]
 })
-export class CenterCollectionExpenseComponent implements OnInit{
+export class CenterCollectionExpenseComponent implements OnInit {
 
   farmerPaymentsArr!: FarmerPayments[];
   centerArr: Center[] = [];
@@ -31,11 +31,7 @@ export class CenterCollectionExpenseComponent implements OnInit{
   itemsPerPage: number = 10;
   hasData: boolean = true;
 
-  // Filter variables
   searchText: string = '';
-  // selectCenters: string = '';
-
-  
 
   fromDate: Date | string = '';
   toDate: Date | string = '';
@@ -59,8 +55,7 @@ export class CenterCollectionExpenseComponent implements OnInit{
 
   ngOnInit(): void {
     this.centerId = this.route.snapshot.params['id'];
-    console.log('got centerId', this.centerId);
-    // this.getAllCenters();
+
   }
 
   navigate(path: string) {
@@ -69,14 +64,13 @@ export class CenterCollectionExpenseComponent implements OnInit{
 
   fetchFilteredPayments(page: number = 1, limit: number = this.itemsPerPage) {
     this.isLoading = true;
-  
+
     this.ReportSrv.getAllCenterPayments(
       page,
       limit,
       this.fromDate,
       this.toDate,
       this.centerId,
-      // this.selectCenters,
       this.searchText
     ).subscribe(
       (res) => {
@@ -91,13 +85,9 @@ export class CenterCollectionExpenseComponent implements OnInit{
       }
     );
   }
-  
 
-  // New method to calculate the total payments amount
   private formatNumberToTwoDecimals(value: any): number {
-    // Convert to number if it's a string
     const num = typeof value === 'string' ? parseFloat(value) : Number(value);
-    // Round to 2 decimal places
     return parseFloat(num.toFixed(2));
   }
 
@@ -123,11 +113,11 @@ export class CenterCollectionExpenseComponent implements OnInit{
 
   onPageChange(event: number) {
     this.page = event;
-  
+
     this.fetchFilteredPayments(this.page, this.itemsPerPage);
   }
 
-  
+
   validateToDate() {
     // Case 1: User hasn't selected fromDate yet
     if (!this.fromDate) {
@@ -135,12 +125,12 @@ export class CenterCollectionExpenseComponent implements OnInit{
       this.toastSrv.warning("Please select the 'From' date first.");
       return;
     }
-  
+
     // Case 2: toDate is earlier than fromDate
     if (this.toDate) {
       const from = new Date(this.fromDate);
       const to = new Date(this.toDate);
-  
+
       if (to <= from) {
         this.toDate = ''; // Reset toDate
         this.toastSrv.warning("The 'To' date cannot be earlier than or same to the 'From' date.");
@@ -153,36 +143,32 @@ export class CenterCollectionExpenseComponent implements OnInit{
     if (!this.toDate) {
       return;
     }
-  
+
     // Case 2: toDate is earlier than fromDate
     if (this.toDate) {
       const from = new Date(this.fromDate);
       const to = new Date(this.toDate);
-  
+
       if (to <= from) {
         this.fromDate = ''; // Reset toDate
         this.toastSrv.warning("The 'From' date cannot be Later than or same to the 'From' date.");
       }
     }
   }
-  
+
 
   goBtn() {
     if (!this.fromDate || !this.toDate) {
       this.toastSrv.warning("Please fill in all fields");
       return;
     }
-
-    this.isDateFilterSet  = true;
-
+    this.isDateFilterSet = true;
     this.fetchFilteredPayments();
   }
 
-  
-  
   downloadTemplate1() {
     this.isDownloading = true;
-  
+
     this.ReportSrv
       .downloadCenterPaymentReportFile(this.fromDate, this.toDate, this.centerId, this.searchText)
       .subscribe({
@@ -193,7 +179,7 @@ export class CenterCollectionExpenseComponent implements OnInit{
           a.download = `Expenses Report From ${this.fromDate} To ${this.toDate}.xlsx`;
           a.click();
           window.URL.revokeObjectURL(url);
-  
+
           Swal.fire({
             icon: "success",
             title: "Downloaded",
@@ -213,7 +199,6 @@ export class CenterCollectionExpenseComponent implements OnInit{
   }
 
   navigateToFarmerReport(invNo: string) {
-    console.log(invNo);
     this.router.navigate([`reports/farmer-report-invoice/${invNo}`]);
   }
 

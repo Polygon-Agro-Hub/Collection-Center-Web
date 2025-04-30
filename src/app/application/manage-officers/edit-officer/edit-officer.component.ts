@@ -19,7 +19,6 @@ import { Location } from '@angular/common';
 })
 export class EditOfficerComponent implements OnInit {
   personalData: Personal = new Personal();
-  // ManagerArr!: ManagerDetails[]
   centerArr: Center[] = [];
   managerArr: Manager[] = [];
   driverObj: Drivers = new Drivers()
@@ -162,7 +161,6 @@ export class EditOfficerComponent implements OnInit {
     this.isLoading = true;
     this.ManageOficerSrv.getOfficerById(id).subscribe(
       (res: any) => {
-        console.log(res.officerData.collectionOfficer);
 
         this.personalData = res.officerData.collectionOfficer;
         this.ExistirmId = res.officerData.irmId;
@@ -189,7 +187,6 @@ export class EditOfficerComponent implements OnInit {
 
 
         this.UpdateEpmloyeIdCreate();
-        // this.getAllmanagers();
         this.matchExistingBankToDropdown();
         this.isLoading = false;
 
@@ -295,11 +292,7 @@ export class EditOfficerComponent implements OnInit {
 
 
   nextForm(page: 'pageOne' | 'pageTwo' | 'pageThree') {
-    // if (!this.personalData.firstNameEnglish || !this.personalData.firstNameSinhala || !this.personalData.firstNameTamil || !this.personalData.email || !this.personalData.languages || !this.personalData.lastNameEnglish || !this.personalData.lastNameSinhala || !this.personalData.lastNameTamil || !this.personalData.nic || !this.personalData.phoneNumber01 || !this.personalData.phoneCode01) {
-    //   Swal.fire('warning', 'Pleace fill all required feilds', 'warning')
-    // } else {
-    //   this.selectedPage = page;
-    // }
+    
     this.selectedPage = page;
 
 
@@ -377,7 +370,6 @@ export class EditOfficerComponent implements OnInit {
             this.officerId = res.officerId;
             this.isLoading = false;
             this.toastSrv.success('Collective Officer Updated Successfully')
-            // this.router.navigate(['/manage-officers'])
             this.location.back();
 
           },
@@ -393,9 +385,6 @@ export class EditOfficerComponent implements OnInit {
         }
 
         if (this.personalData.jobRole === 'Driver') {
-          // if (!this.licenseFrontImageFileName|| !this.licenseBackImageFileName || !this.insurenceFrontImageFileName || !this.insurenceBackImageFileName || !this.vehicleFrontImageFileName || !this.vehicleBackImageFileName || !this.vehicleSideAImageFileName || !this.vehicleSideBImageFileName) {
-          //   return;
-          // }
 
           this.driverObj.licFrontName = this.licenseFrontImageFileName
           this.driverObj.licBackName = this.licenseBackImageFileName
@@ -460,7 +449,6 @@ export class EditOfficerComponent implements OnInit {
   getAllManagers() {
     this.ManageOficerSrv.getCenterManagers(this.personalData.centerId).subscribe(
       (res) => {
-        console.log(res);
 
         this.managerArr = res
 
@@ -505,13 +493,11 @@ export class EditOfficerComponent implements OnInit {
 
 
   matchExistingBankToDropdown() {
-    console.log("matchExistingBankToDropdown", this.banks.length, this.allBranches);
 
     // Only proceed if both banks and branches are loaded and we have existing data
     if (this.banks.length > 0 && Object.keys(this.allBranches).length > 0 &&
       this.personalData && this.personalData.bankName) {
-      console.log('hit 01', this.personalData.bankName);
-
+      
       // Find the bank ID that matches the existing bank name
       const matchedBank = this.banks.find(bank => bank.name === this.personalData.bankName);
 
@@ -529,7 +515,7 @@ export class EditOfficerComponent implements OnInit {
         }
       }
     }
-    console.log('hit 02');
+    
   }
 
 

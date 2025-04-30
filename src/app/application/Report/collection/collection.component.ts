@@ -49,7 +49,7 @@ export class CollectionComponent implements OnInit {
 
   isDownloading = false;
 
-  
+
   constructor(
     private router: Router,
     private ReportSrv: ReportServiceService,
@@ -59,15 +59,13 @@ export class CollectionComponent implements OnInit {
     private tokenSrv: TokenServiceService
   ) {
     this.logingRole = tokenSrv.getUserDetails().role
-   }
+  }
 
   ngOnInit(): void {
     this.getAllCenters();
-    console.log('role', this.logingRole);
     if (this.logingRole === "Collection Center Manager") {
       this.isCenterManager = true;
-      console.log('center manager', this.isCenterManager);
-    }else {
+    } else {
       this.isCenterManager = false;
     }
   }
@@ -76,48 +74,9 @@ export class CollectionComponent implements OnInit {
     this.router.navigate([`${path}`]);
   }
 
-  // fetchAllPayments(
-  //   page: number = 1,
-  //   limit: number = this.itemsPerPage,
-  //   // searchText: string = this.searchText,
-  //   // selectCompany: string = this.selectCenters
-  // ) {
-  //   this.isLoading = true;
-
-  //   console.log('Sending fromDate:', this.fromDate);
-  //   console.log('Sending toDate:', this.toDate);
-
-  //   this.ReportSrv.getAllCollections(page, limit, this.fromDate, this.toDate).subscribe(
-      
-  //     (res) => {
-        
-  //       console.log(res);
-  //       this.farmerPaymentsArr = res.items.map((item: FarmerPayments) => {
-  //         return {
-  //           ...item,
-  //           totalQuantity: (
-  //             Number(item.totalGradeAQuantity || 0) + 
-  //             Number(item.totalGradeBQuantity || 0) + 
-  //             Number(item.totalGradeCQuantity || 0)
-  //           ).toFixed(2)
-  //         };
-  //       });
-  //       this.totalItems = res.total;
-  //       this.hasData = res.items.length > 0;
-  //       this.isLoading = false;
-        
-  //       // Calculate the total amount whenever new data is fetched
-  //       this.calculateTotalPayments();
-  //     },
-  //     (error) => {
-  //       this.isLoading = false;
-  //     }
-  //   );
-  // }
-
   fetchFilteredPayments(page: number = 1, limit: number = this.itemsPerPage) {
     this.isLoading = true;
-  
+
     this.ReportSrv.getAllCollections(
       page,
       limit,
@@ -131,8 +90,8 @@ export class CollectionComponent implements OnInit {
           return {
             ...item,
             totalQuantity: (
-              Number(item.totalGradeAQuantity || 0) + 
-              Number(item.totalGradeBQuantity || 0) + 
+              Number(item.totalGradeAQuantity || 0) +
+              Number(item.totalGradeBQuantity || 0) +
               Number(item.totalGradeCQuantity || 0)
             ).toFixed(2)
           };
@@ -140,7 +99,7 @@ export class CollectionComponent implements OnInit {
         this.totalItems = res.total;
         this.hasData = res.items.length > 0;
         this.isLoading = false;
-        
+
         // Calculate the total amount whenever new data is fetched
         this.calculateTotalPayments();
       },
@@ -150,20 +109,18 @@ export class CollectionComponent implements OnInit {
     );
   }
 
-  // New method to calculate the total payments amount
+
   private formatNumberToTwoDecimals(value: any): number {
-    // Convert to number if it's a string
     const num = typeof value === 'string' ? parseFloat(value) : Number(value);
-    // Round to 2 decimal places
     return parseFloat(num.toFixed(2));
   }
-  
-  // Update the calculateTotalPayments method
+
   calculateTotalPayments(): void {
     this.totalPaymentsAmount = this.farmerPaymentsArr.reduce((sum, payment) => {
       const amount = this.formatNumberToTwoDecimals(payment.totalAmount);
-      return sum + (isNaN(amount) ? 0 : amount); }, 0);
-    
+      return sum + (isNaN(amount) ? 0 : amount);
+    }, 0);
+
     // Ensure the final total is also formatted to 2 decimal places
     this.totalPaymentsAmount = this.formatNumberToTwoDecimals(this.totalPaymentsAmount);
   }
@@ -179,14 +136,10 @@ export class CollectionComponent implements OnInit {
 
   onPageChange(event: number) {
     this.page = event;
-  
+
     if (this.selectCenters || this.searchText) {
-      // User has applied center/search filter
-      console.log('filtered payments')
       this.fetchFilteredPayments(this.page, this.itemsPerPage);
     } else {
-      // Default data fetch using only date range
-      console.log('normal payments')
       this.fetchFilteredPayments(this.page, this.itemsPerPage);
     }
   }
@@ -207,12 +160,12 @@ export class CollectionComponent implements OnInit {
       this.toastSrv.warning("Please select the 'From' date first.");
       return;
     }
-  
+
     // Case 2: toDate is earlier than fromDate
     if (this.toDate) {
       const from = new Date(this.fromDate);
       const to = new Date(this.toDate);
-  
+
       if (to <= from) {
         this.toDate = ''; // Reset toDate
         this.toastSrv.warning("The 'To' date cannot be earlier than or same to the 'From' date.");
@@ -225,19 +178,19 @@ export class CollectionComponent implements OnInit {
     if (!this.toDate) {
       return;
     }
-  
+
     // Case 2: toDate is earlier than fromDate
     if (this.toDate) {
       const from = new Date(this.fromDate);
       const to = new Date(this.toDate);
-  
+
       if (to <= from) {
         this.fromDate = ''; // Reset toDate
         this.toastSrv.warning("The 'From' date cannot be Later than or same to the 'From' date.");
       }
     }
   }
-  
+
 
   goBtn() {
     if (!this.fromDate || !this.toDate) {
@@ -245,7 +198,7 @@ export class CollectionComponent implements OnInit {
       return;
     }
 
-    this.isDateFilterSet  = true;
+    this.isDateFilterSet = true;
 
     this.fetchFilteredPayments();
   }
@@ -253,7 +206,6 @@ export class CollectionComponent implements OnInit {
   getAllCenters() {
     this.ManageOficerSrv.getCCHOwnCenters().subscribe(
       (res) => {
-        console.log(res);
         this.centerArr = res;
       }
     );
@@ -261,7 +213,7 @@ export class CollectionComponent implements OnInit {
 
   downloadTemplate1() {
     this.isDownloading = true;
-  
+
     this.ReportSrv
       .downloadCollectionReportFile(this.fromDate, this.toDate, this.selectCenters, this.searchText)
       .subscribe({
@@ -272,7 +224,7 @@ export class CollectionComponent implements OnInit {
           a.download = `Collection Report From ${this.fromDate} To ${this.toDate}.xlsx`;
           a.click();
           window.URL.revokeObjectURL(url);
-  
+
           Swal.fire({
             icon: "success",
             title: "Downloaded",
@@ -291,7 +243,7 @@ export class CollectionComponent implements OnInit {
       });
   }
 
- 
+
 
 
 }

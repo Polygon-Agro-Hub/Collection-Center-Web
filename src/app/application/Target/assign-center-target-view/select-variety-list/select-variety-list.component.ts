@@ -40,14 +40,10 @@ export class SelectVarietyListComponent implements OnInit {
   fetchCenterCrops(page: number = this.page, limit: number = this.itemsPerPage, search: string = this.searchText) {
     this.TargetSrv.getCenterCrops(this.centerDetails.centerId, page, limit, search).subscribe(
       (res) => {
-        console.log(res);
         this.cropsArr = res.items
         this.cropCount = res.items.length;
         this.hasData = this.cropsArr.length > 0 ? true : false;
         this.totalItems = res.total;
-        console.log(this.hasData,"Has datas");
-        
-
       }
     )
   }
@@ -59,9 +55,6 @@ export class SelectVarietyListComponent implements OnInit {
     } else {
       isSelected = 1;
     }
-
-    console.log("On Add", isSelected, cropId);
-
 
     let data = {
       centerId: this.centerDetails.centerId,

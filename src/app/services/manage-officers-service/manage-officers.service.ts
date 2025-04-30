@@ -9,8 +9,6 @@ import { TokenServiceService } from '../Token/token-service.service';
 })
 export class ManageOfficersService {
   private apiUrl = `${environment.API_BASE_URL}`;
-  // private token = `${environment.TOKEN}`;
-
   private token!: string | null;
 
   constructor(private http: HttpClient, private tokenSrv: TokenServiceService) {
@@ -207,8 +205,6 @@ export class ManageOfficersService {
 
     let url = `${this.apiUrl}/manage-officers/get-all-officers-for-cch?page=${page}&limit=${limit}`
 
-    console.log(status);
-
     if (status) {
       url += `&status=${status}`
     }
@@ -258,8 +254,6 @@ export class ManageOfficersService {
     formData.append('officerData', JSON.stringify(person));
     formData.append('file', selectedImage);
 
-    console.log(formData);
-    
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
     });

@@ -8,8 +8,6 @@ import { TokenServiceService } from '../Token/token-service.service';
 })
 export class CcmRoleGuardService {
   userRole: string | null = null;
-
-
   constructor(private router: Router, private tokenSrv: TokenServiceService) {
     this.userRole = this.tokenSrv.getUserDetails().role;
   }

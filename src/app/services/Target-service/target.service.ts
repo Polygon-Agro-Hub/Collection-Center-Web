@@ -9,8 +9,6 @@ import { TokenServiceService } from '../Token/token-service.service';
 })
 export class TargetService {
   private apiUrl = `${environment.API_BASE_URL}/target`;
-  // private token = `${environment.TOKEN}`;
-
   private token!: string | null;
 
   constructor(private http: HttpClient, private tokenSrv: TokenServiceService) {
@@ -26,8 +24,6 @@ export class TargetService {
     return this.http.get<any>(url, { headers });
   }
 
-
-  //usable
   getAllDailyTarget(page: number = 1, limit: number = 10, searchText: string = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
@@ -85,7 +81,6 @@ export class TargetService {
     return this.http.get<any>(url, { headers });
   }
 
-  //use
   getOfficers(centerId: number, page: number = 1, limit: number = 10, role: string = '', status: string = '', searchText: string = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
@@ -119,8 +114,6 @@ export class TargetService {
 
     let url = `${this.apiUrl}/get-all-price?centerId=${centerId}&page=${page}&limit=${limit}`;
 
-
-
     if (grade) {
       url += `&grade=${grade}`
     }
@@ -134,21 +127,21 @@ export class TargetService {
     });
   }
 
-  AssignAllDailyTarget(page: number = 1, limit: number = 10, search:string = ''): Observable<any> {
+  AssignAllDailyTarget(page: number = 1, limit: number = 10, search: string = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
 
     let url = `${this.apiUrl}/assign-all-daily-target?page=${page}&limit=${limit}`;
 
-    if(search){
-      url+=`&searchText=${search}`
+    if (search) {
+      url += `&searchText=${search}`
     }
 
     return this.http.get<any>(url, { headers });
   }
 
-  getTargetVerity(varietyId:number, companyCenterId:number): Observable<any> {
+  getTargetVerity(varietyId: number, companyCenterId: number): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
@@ -177,7 +170,6 @@ export class TargetService {
 
     let url = `${this.apiUrl}/get-officer-target-data?limit=1`;
 
-    // If status is provided, append it as a query parameter.
     if (status) {
       url += `&status=${status}`;
     }
@@ -201,7 +193,6 @@ export class TargetService {
     return this.http.get<any>(url, { headers });
   }
 
-//use for transfer officer target
   passToTargetToOfficer(id: number | null, targetItemId: number, amount: number): Observable<any> {
 
     const headers = new HttpHeaders({
@@ -247,7 +238,7 @@ export class TargetService {
   }
 
 
-  getExistTargetVerity(varietyId:number, companyCenterId:number): Observable<any> {
+  getExistTargetVerity(varietyId: number, companyCenterId: number): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
@@ -310,7 +301,7 @@ export class TargetService {
     return this.http.post<any>(url, data, { headers });
   }
 
-  getSavedCenterCrops(id: number, date:string, searchText:string=''): Observable<any> {
+  getSavedCenterCrops(id: number, date: string, searchText: string = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
@@ -319,30 +310,30 @@ export class TargetService {
     if (searchText) {
       url += `?searchText=${searchText}`
     }
-    
+
     return this.http.get<any>(url, { headers });
   }
 
-  updateTargetQty(data:any): Observable<any> {
+  updateTargetQty(data: any): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
 
     let url = `${this.apiUrl}/update-target-crop-qty`;
-    return this.http.patch<any>(url,data, { headers });
+    return this.http.patch<any>(url, data, { headers });
   }
 
-  addNewCenterTarget(data:any): Observable<any> {
+  addNewCenterTarget(data: any): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
 
     let url = `${this.apiUrl}/add-new-center-target`;
-    return this.http.post<any>(url,data, { headers });
+    return this.http.post<any>(url, data, { headers });
   }
 
 
-  getOfficerAvailabeTarget(data:any, page:number = 1, limit:number = 10, status: string = '', validity: string = '', searchText: string = ''): Observable<any> {
+  getOfficerAvailabeTarget(data: any, page: number = 1, limit: number = 10, status: string = '', validity: string = '', searchText: string = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
@@ -361,7 +352,7 @@ export class TargetService {
       url += `&searchText=${searchText}`
     }
 
-    return this.http.post<any>(url,data, { headers });
+    return this.http.post<any>(url, data, { headers });
   }
 
 
@@ -384,7 +375,7 @@ export class TargetService {
     status: string = '',
     validity: string = '',
     searchText: string = '',
-    
+
   ): Observable<Blob> {
     let url = `${this.apiUrl}/download-officer-target-report?fromDate=${fromDate}&toDate=${toDate}&jobRole=${jobRole}&empId=${empId}`;
 
@@ -399,12 +390,11 @@ export class TargetService {
     if (searchText) {
       url += `&searchText=${searchText}`
     }
-  
+
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
-      // Optional: 'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     });
-  
+
     return this.http.get(url, { headers, responseType: 'blob' });
   }
 
@@ -414,23 +404,21 @@ export class TargetService {
     searchText: string = ''
   ): Observable<Blob> {
     let url = `${this.apiUrl}/download-current-target-report?centerId=${centerId}`;
-  
+
     if (status) {
       url += `&status=${status}`;
     }
-  
+
     if (searchText) {
       url += `&searchText=${searchText}`;
     }
-  
+
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
-      // Optional: 'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     });
-  
+
     return this.http.get(url, { headers, responseType: 'blob' });
   }
-
 
 }
 

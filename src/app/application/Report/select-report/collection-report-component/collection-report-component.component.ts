@@ -84,8 +84,6 @@ export class CollectionReportComponentComponent implements OnInit {
 
   viewFarmerList(id: number, fname: string, lname: string) {
     const name = fname + ' ' + lname;
-    console.log("full name", name);
-
     this.router.navigate([`reports/farmer-list/${id}/${name}`])
   }
 

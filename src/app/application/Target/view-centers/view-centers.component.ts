@@ -40,7 +40,7 @@ export class ViewCentersComponent implements OnInit {
         'Uva',
         'Sabaragamuwa'
     ];
-    
+
     // Define all districts with their provinces
     allDistricts = [
         { name: 'Ampara', province: 'Eastern' },
@@ -69,9 +69,9 @@ export class ViewCentersComponent implements OnInit {
         { name: 'Trincomalee', province: 'Eastern' },
         { name: 'Vavuniya', province: 'Northern' },
     ];
-    
+
     // Districts filtered by selected province
-    filteredDistricts: {name: string, province: string}[] = [];
+    filteredDistricts: { name: string, province: string }[] = [];
 
     constructor(
         private router: Router,
@@ -161,7 +161,7 @@ export class ViewCentersComponent implements OnInit {
 
     addCenter() {
         this.router.navigate([`/centers/add-a-center`]);
-      }
+    }
 }
 
 class CenterData {

@@ -11,8 +11,6 @@ export class TokenServiceService {
   private readonly PROFILE_IMAGE = 'CCprofileImage';
   private readonly EXPIRATION_KEY = 'CCTokenExpiration';
 
-
-
   constructor() { }
 
   saveLoginDetails(token: string, userName: string, userId: string, role: string, expiresIn: number, image: string): Promise<void> {
@@ -35,15 +33,11 @@ export class TokenServiceService {
 
   clearLoginDetails(): Promise<void> {
     return new Promise((resolve) => {
-      console.log("start");
-      
       localStorage.removeItem(this.TOKEN_KEY);
       localStorage.removeItem(this.USERNAME_KEY);
       localStorage.removeItem(this.USERID_KEY);
       localStorage.removeItem(this.ROLE_KEY);
       localStorage.removeItem(this.EXPIRATION_KEY);
-      console.log("end");
-
       resolve();
     })
   }

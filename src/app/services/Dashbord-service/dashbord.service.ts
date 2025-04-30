@@ -9,8 +9,6 @@ import { TokenServiceService } from '../Token/token-service.service';
 })
 export class DashboardService {
   private apiUrl = `${environment.API_BASE_URL}/dashboard`;
-  // private token = `${environment.TOKEN}`;
-
   private token!: string | null;
 
   constructor(private http: HttpClient, private tokenSrv: TokenServiceService) {
@@ -42,7 +40,6 @@ export class DashboardService {
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
     });
-    // Pass the dynamic endpoint into the URL
     return this.http.get<any[]>(`${this.apiUrl}/get-chart?filter=${filter}`, {
       headers,
     });

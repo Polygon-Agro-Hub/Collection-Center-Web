@@ -46,12 +46,12 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         this.COOCount = data.COOCount.COOCount;
         this.CUOCount = data.CUOCount.CUOCount;
         this.activityLogs = data.activities.map((log: any) => {
-          log.updateAt = this.formatDate(log.updateAt); 
+          log.updateAt = this.formatDate(log.updateAt);
           this.isLoading = false; // Time only format
           return log;
         });
-        this.isLoading = false; 
-        
+        this.isLoading = false;
+
       },
       (error) => {
         this.isLoading = false;
@@ -126,7 +126,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
                 },
                 y: {
                   ticks: {
-                    color: 'black'           //#FFFFFF
+                    color: 'black'
                   },
                   grid: {
                     display: true,

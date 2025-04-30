@@ -67,7 +67,7 @@ export class EditAssignOfficerTargetComponent {
           targetC: officer.targetC ?? 0,
         }));
         this.checkTotals();
-        this.AssignTargetObj.targetIds = res.targetId        
+        this.AssignTargetObj.targetIds = res.targetId
 
         this.isLoading = false;
 
@@ -236,7 +236,7 @@ class InputData {
 }
 
 class TargetIds {
-  idA:number | null = null; 
-  idB:number | null = null; 
-  idC:number | null = null; 
+  idA: number | null = null;
+  idB: number | null = null;
+  idC: number | null = null;
 }

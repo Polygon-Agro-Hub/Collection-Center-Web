@@ -28,7 +28,7 @@ export class ReceviedComplaintsComponent implements OnInit {
   totalItems: number = 0;
   itemsPerPage: number = 10;
   hasData: boolean = true;
-  isLoading:boolean = true;
+  isLoading: boolean = true;
 
 
   constructor(
@@ -47,7 +47,7 @@ export class ReceviedComplaintsComponent implements OnInit {
       (res) => {
         this.complainArr = res.items
         this.totalItems = res.total;
-        
+
         if (res.items.length === 0) {
           this.hasData = false;
         } else {
@@ -105,7 +105,7 @@ export class ReceviedComplaintsComponent implements OnInit {
     this.fetchAllreciveComplaint(this.page, this.itemsPerPage);
   }
 
-  navigateViewReply(id:number){
+  navigateViewReply(id: number) {
     this.router.navigate([`/complaints/view-recive-reply/${id}`])
   }
 

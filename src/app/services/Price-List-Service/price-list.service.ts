@@ -9,8 +9,6 @@ import { TokenServiceService } from '../Token/token-service.service';
 })
 export class PriceListService {
   private apiUrl = `${environment.API_BASE_URL}/price-list`;
-  // private token = `${environment.TOKEN}`;
-
   private token!: string | null;
 
   constructor(private http: HttpClient, private tokenSrv: TokenServiceService) {
@@ -56,7 +54,6 @@ export class PriceListService {
     });
 
     let url = `${this.apiUrl}/get-all-price-request?page=${page}&limit=${limit}`
-
 
     if (grade) {
       url += `&grade=${grade}`

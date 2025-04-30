@@ -9,17 +9,14 @@ import { NgxPaginationModule } from "ngx-pagination";
 @Component({
   selector: 'app-center-view-price-list',
   standalone: true,
-  imports: [CommonModule, FormsModule,  DropdownModule, NgxPaginationModule],
+  imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule],
   templateUrl: './center-view-price-list.component.html',
   styleUrl: './center-view-price-list.component.css'
 })
-export class 
-CenterViewPriceListComponent implements OnInit{
+export class
+  CenterViewPriceListComponent implements OnInit {
   centerId!: number;
-  
-
   priceListArr!: PriceList[];
-
   page: number = 1;
   totalItems: number = 0;
   itemsPerPage: number = 10;
@@ -27,8 +24,6 @@ CenterViewPriceListComponent implements OnInit{
 
   selectGrade: string = '';
   searchText: string = '';
-  
-
 
   constructor(
     private router: Router,
@@ -39,7 +34,7 @@ CenterViewPriceListComponent implements OnInit{
   ngOnInit(): void {
     this.centerId = this.route.snapshot.params['id'];
     this.fetchAllPriceList(this.centerId);
-    
+
   }
 
   fetchAllPriceList(centerId: number, page: number = 1, limit: number = this.itemsPerPage, grade: string = this.selectGrade, search: string = this.searchText) {
@@ -78,7 +73,6 @@ CenterViewPriceListComponent implements OnInit{
   }
 
   toggleGradeDropdown() {
-    // This will trigger the native select dropdown
     const select = document.querySelector('select');
     select?.click();
   }

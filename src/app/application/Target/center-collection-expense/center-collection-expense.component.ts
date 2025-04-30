@@ -162,13 +162,9 @@ export class CenterCollectionExpenseComponent implements OnInit {
       this.toastSrv.warning("Please fill in all fields");
       return;
     }
-
     this.isDateFilterSet = true;
-
     this.fetchFilteredPayments();
   }
-
-
 
   downloadTemplate1() {
     this.isDownloading = true;

@@ -7,7 +7,7 @@ export class ThemeService {
   private darkTheme: boolean = false;
   private themeKey = 'selectedTheme';
 
-  constructor() {this.applySavedTheme(); }
+  constructor() { this.applySavedTheme(); }
 
   toggleTheme() {
     const currentTheme = this.getActiveTheme();

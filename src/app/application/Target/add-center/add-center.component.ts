@@ -162,8 +162,6 @@ export class AddCenterComponent implements OnInit {
     });
   }
 
-
-
   onCancel() {
     Swal.fire({
       title: 'Are you sure?',
@@ -191,7 +189,6 @@ export class AddCenterComponent implements OnInit {
       }
     });
   }
-
 
 }
 

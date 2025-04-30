@@ -83,7 +83,6 @@ export class ChangePasswordComponent implements OnInit {
               title: 'Error',
               text: 'Failed to update password. Please try again.',
             });
-            console.log(error);
           }
         );
       }

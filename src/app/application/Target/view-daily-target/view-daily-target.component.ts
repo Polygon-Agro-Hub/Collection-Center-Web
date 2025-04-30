@@ -12,7 +12,6 @@ import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loa
   imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent],
   templateUrl: './view-daily-target.component.html',
   styleUrls: ['./view-daily-target.component.css'],
-  // providers: [DatePipe]
 })
 export class ViewDailyTargetComponent implements OnInit {
 
@@ -65,8 +64,8 @@ export class ViewDailyTargetComponent implements OnInit {
     this.isLoading = true;
     this.TargetSrv.getAllDailyTarget(page, limit, search).subscribe(
       (res) => {
-       this.targetArr = res.items;
-       this.totalItems = res.totalPages
+        this.targetArr = res.items;
+        this.totalItems = res.totalPages
         if (res.items.length > 0) {
           this.hasData = true;
         } else {
@@ -99,8 +98,6 @@ export class ViewDailyTargetComponent implements OnInit {
     this.selectStatus = '';
     this.fetchAllTarget();
   }
-
-
 
   onPageChange(event: number) {
     this.page = event;
@@ -170,7 +167,7 @@ export class ViewDailyTargetComponent implements OnInit {
     this.TargetSrv.AssignAllDailyTarget(1, 10, this.assignSearch).subscribe(
       (res) => {
         this.assignTargetArr = res;
-        
+
         if (this.selectAssignStatus === 'Updated') {
           this.assignTargetArr = this.assignTargetArr.filter(item =>
             item.isAssign === 1 &&
@@ -178,20 +175,20 @@ export class ViewDailyTargetComponent implements OnInit {
           );
         } else if (this.selectAssignStatus === 'Assigned') {
           this.assignTargetArr = this.assignTargetArr.filter(item =>
-            item.isAssign === 1 && 
-            item.assignStatusA === 1 && 
-            item.assignStatusB === 1 && 
+            item.isAssign === 1 &&
+            item.assignStatusA === 1 &&
+            item.assignStatusB === 1 &&
             item.assignStatusC === 1
           );
         } else if (this.selectAssignStatus === 'Not Assigned') {
           this.assignTargetArr = this.assignTargetArr.filter(item =>
-            item.isAssign === 0 && 
-            item.assignStatusA === 0 && 
-            item.assignStatusB === 0 && 
+            item.isAssign === 0 &&
+            item.assignStatusA === 0 &&
+            item.assignStatusB === 0 &&
             item.assignStatusC === 0
           );
         }
-        
+
         // Update pagination variables
         this.assignTotalItems = this.assignTargetArr.length;
         this.assignPage = 1;
@@ -199,11 +196,10 @@ export class ViewDailyTargetComponent implements OnInit {
     );
   }
 
-  cancelAssignStatus(){
+  cancelAssignStatus() {
     this.selectAssignStatus = '';
     this.AssignAllDailyTarget();
   }
-
 
 }
 

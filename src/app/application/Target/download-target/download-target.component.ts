@@ -36,12 +36,12 @@ export class DownloadTargetComponent {
   fetchDownloadTarget() {
     this.isLoading = true;
     this.TargetSrv.downloadDailyTarget(this.fromDate, this.toDate).subscribe(
-      (res: any) => {  
-        
-        if (res) {  
-         this.targetArr = res.items || res.data || [];  
-         this.hasData = this.targetArr.length > 0;
-          
+      (res: any) => {
+
+        if (res) {
+          this.targetArr = res.items || res.data || [];
+          this.hasData = this.targetArr.length > 0;
+
           if (!this.hasData) {
             console.warn('No data received');
           }
@@ -49,14 +49,14 @@ export class DownloadTargetComponent {
           console.error('Empty response received');
           this.hasData = false;
         }
-        
+
         this.isLoading = false;
       },
-      (error) => {  
+      (error) => {
         console.error('Error fetching targets:', error);
         this.isLoading = false;
         this.hasData = false;
-        
+
       }
     );
   }
@@ -68,12 +68,12 @@ export class DownloadTargetComponent {
       this.toastSrv.warning("Please select the 'From' date first.");
       return;
     }
-  
+
     // Case 2: toDate is earlier than fromDate
     if (this.toDate) {
       const from = new Date(this.fromDate);
       const to = new Date(this.toDate);
-  
+
       if (to <= from) {
         this.toDate = ''; // Reset toDate
         this.toastSrv.warning("The 'To' date cannot be earlier than or same to the 'From' date.");
@@ -86,19 +86,19 @@ export class DownloadTargetComponent {
     if (!this.toDate) {
       return;
     }
-  
+
     // Case 2: toDate is earlier than fromDate
     if (this.toDate) {
       const from = new Date(this.fromDate);
       const to = new Date(this.toDate);
-  
+
       if (to <= from) {
         this.fromDate = ''; // Reset toDate
         this.toastSrv.warning("The 'From' date cannot be Later than or same to the 'From' date.");
       }
     }
   }
-  
+
 
   goBtn() {
     if (!this.fromDate || !this.toDate) {
@@ -114,7 +114,7 @@ export class DownloadTargetComponent {
       this.toastSrv.error("No data available to export!");
       return;
     }
-  
+
     const worksheetData = this.targetArr.map((item, index) => ({
       No: index + 1,
       'Crop Name': item.cropNameEnglish,
@@ -125,9 +125,9 @@ export class DownloadTargetComponent {
       Status: item.status,
       Validity: item.validity,
     }));
-  
+
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(worksheetData);
-    
+
     // Set column widths (in characters)
     worksheet['!cols'] = [
       { wch: 5 },    // No (column A)
@@ -139,18 +139,18 @@ export class DownloadTargetComponent {
       { wch: 12 },   // Status (column G)
       { wch: 12 }    // Validity (column H)
     ];
-  
+
     // Auto-filter (optional)
     worksheet['!autofilter'] = { ref: `A1:H${worksheetData.length + 1}` };
-  
+
     const workbook: XLSX.WorkBook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Daily Targets');
-    
+
     const excelBuffer: any = XLSX.write(workbook, {
       bookType: 'xlsx',
       type: 'array',
     });
-    
+
     const data: Blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
     saveAs(data, `Target-Report (${this.fromDate} - ${this.toDate}).xlsx`);
     this.toastSrv.success(`Target-Report (${this.fromDate} - ${this.toDate}).xlsx Downloaded`);

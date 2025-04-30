@@ -70,7 +70,6 @@ export class AssignCenterTargetComponent implements OnInit {
       (res) => {
         if (res.status) {
           this.toastSrv.success(res.message)
-          // this.router.navigate(['/target/assign-center-target'])
           this.fetchSavedCenterCrops();
         }
       }
@@ -81,7 +80,6 @@ export class AssignCenterTargetComponent implements OnInit {
 
   onCancel() {
     this.toastSrv.warning('Cancel Add New Center Target')
-    // this.fetchSavedCenterCrops()
     this.location.back();
   }
 

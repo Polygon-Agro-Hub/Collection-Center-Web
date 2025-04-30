@@ -31,7 +31,6 @@ export class CenterViewOfficersComponent implements OnInit {
   totalItems: number = 0;
   itemsPerPage: number = 10;
 
-
   isLoading: boolean = true;
 
   constructor(
@@ -57,7 +56,6 @@ export class CenterViewOfficersComponent implements OnInit {
 
   navigateToProfile(id: number, centerId: number) {
     this.router.navigate([`/centers/officer-profile/${id}/${centerId}`])
-
   }
 
   getAllOfficers(centerId: number = this.centerId, page: number = 1, limit: number = this.itemsPerPage, role: string = '', status: string = '', searchText: string = '') {
@@ -73,7 +71,6 @@ export class CenterViewOfficersComponent implements OnInit {
           this.hasData = true;
         }
         this.isLoading = false;
-
 
       },
       (error) => {

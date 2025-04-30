@@ -38,7 +38,6 @@ export class ViewCenterTargetComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    // private datePipe: DatePipe,
     private TargetSrv: TargetService
   ) { }
 

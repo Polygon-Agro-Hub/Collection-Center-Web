@@ -54,8 +54,6 @@ export class AssignOfficerTargetComponent implements OnInit {
     this.targetSrv.getTargetVerity(this.varietyId, this.companyCenterId).subscribe(
       (res) => {
 
-        console.log(res);
-
         this.targetVerity = res.crop;
 
         if (this.targetVerity && this.targetVerity.toDate) {
@@ -171,9 +169,6 @@ export class AssignOfficerTargetComponent implements OnInit {
 
     this.cdRef.detectChanges();
   }
-
-
-
 
 }
 

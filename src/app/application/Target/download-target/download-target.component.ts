@@ -27,11 +27,6 @@ export class DownloadTargetComponent {
   hasData: boolean = false;
   isLoading: boolean = false;
 
-  
-
-
-  // toaster = inject(ToastrService); 
-
   constructor(
     private router: Router,
     private TargetSrv: TargetService,
@@ -41,14 +36,11 @@ export class DownloadTargetComponent {
   fetchDownloadTarget() {
     this.isLoading = true;
     this.TargetSrv.downloadDailyTarget(this.fromDate, this.toDate).subscribe(
-      (res: any) => {  // Add type annotation or better create an interface
-        console.log('Full response:', res);
+      (res: any) => {  
         
-        // Check for successful response (status code 200-299)
-        if (res) {  // Check if response exists
-          this.targetArr = res.items || res.data || [];  // Handle both 'items' and 'data' properties
-          console.log('Target array:', this.targetArr);
-          this.hasData = this.targetArr.length > 0;
+        if (res) {  
+         this.targetArr = res.items || res.data || [];  
+         this.hasData = this.targetArr.length > 0;
           
           if (!this.hasData) {
             console.warn('No data received');
@@ -60,11 +52,11 @@ export class DownloadTargetComponent {
         
         this.isLoading = false;
       },
-      (error) => {  // Add error handling
+      (error) => {  
         console.error('Error fetching targets:', error);
         this.isLoading = false;
         this.hasData = false;
-        // Handle error (show toast, etc.)
+        
       }
     );
   }

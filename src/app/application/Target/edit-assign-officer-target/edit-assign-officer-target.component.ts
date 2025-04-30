@@ -45,7 +45,6 @@ export class EditAssignOfficerTargetComponent {
   ) { }
 
   ngOnInit(): void {
-    // this.targetId = this.route.snapshot.params['id'];
     this.varietyId = this.route.snapshot.params['varietyId'];
     this.companyCenterId = this.route.snapshot.params['companyCenterId'];
     this.fetchTargetVerity();
@@ -57,9 +56,6 @@ export class EditAssignOfficerTargetComponent {
       (res) => {
 
         this.targetVerity = res.crop;
-        console.log(this.targetVerity);
-
-
         if (this.targetVerity && this.targetVerity.toDate) {
           this.targetVerity.formattedToDate = this.datePipe.transform(this.targetVerity.toDate, 'yyyy/MM/dd')!;
         }
@@ -182,9 +178,9 @@ export class EditAssignOfficerTargetComponent {
       +this.totTargetB === +this.targetVerity.qtyB &&
       +this.totTargetC === +this.targetVerity.qtyC
     ) {
-      console.log('All targets are fully assigned.');
+
     } else {
-      console.log('Targets are not fully assigned.');
+
     }
   }
 

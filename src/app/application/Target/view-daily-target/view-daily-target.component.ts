@@ -65,9 +65,8 @@ export class ViewDailyTargetComponent implements OnInit {
     this.isLoading = true;
     this.TargetSrv.getAllDailyTarget(page, limit, search).subscribe(
       (res) => {
-        this.targetArr = res.items;
-        console.log(res.items);
-        this.totalItems = res.totalPages
+       this.targetArr = res.items;
+       this.totalItems = res.totalPages
         if (res.items.length > 0) {
           this.hasData = true;
         } else {
@@ -127,7 +126,6 @@ export class ViewDailyTargetComponent implements OnInit {
     this.TargetSrv.AssignAllDailyTarget(page, limit, search).subscribe(
       (res) => {
         this.assignTargetArr = res;
-        // this.assignTotalItems = res.total;
         if (res.length > 0) {
           this.assignHasData = true;
         } else {
@@ -169,8 +167,6 @@ export class ViewDailyTargetComponent implements OnInit {
   }
 
   filterAssignStatus() {
-    console.log(this.selectAssignStatus);
-    
     this.TargetSrv.AssignAllDailyTarget(1, 10, this.assignSearch).subscribe(
       (res) => {
         this.assignTargetArr = res;

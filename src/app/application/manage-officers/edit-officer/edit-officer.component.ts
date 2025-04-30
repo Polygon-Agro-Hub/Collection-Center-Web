@@ -187,7 +187,6 @@ export class EditOfficerComponent implements OnInit {
 
 
         this.UpdateEpmloyeIdCreate();
-        // this.getAllmanagers();
         this.matchExistingBankToDropdown();
         this.isLoading = false;
 
@@ -371,7 +370,6 @@ export class EditOfficerComponent implements OnInit {
             this.officerId = res.officerId;
             this.isLoading = false;
             this.toastSrv.success('Collective Officer Updated Successfully')
-            // this.router.navigate(['/manage-officers'])
             this.location.back();
 
           },
@@ -499,8 +497,7 @@ export class EditOfficerComponent implements OnInit {
     // Only proceed if both banks and branches are loaded and we have existing data
     if (this.banks.length > 0 && Object.keys(this.allBranches).length > 0 &&
       this.personalData && this.personalData.bankName) {
-      console.log('hit 01', this.personalData.bankName);
-
+      
       // Find the bank ID that matches the existing bank name
       const matchedBank = this.banks.find(bank => bank.name === this.personalData.bankName);
 
@@ -518,7 +515,7 @@ export class EditOfficerComponent implements OnInit {
         }
       }
     }
-    console.log('hit 02');
+    
   }
 
 

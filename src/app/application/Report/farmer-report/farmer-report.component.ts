@@ -36,7 +36,6 @@ export class FarmerReportComponent implements OnInit {
 
   ngOnInit(): void {
     this.reportId = this.route.snapshot.params['id'];
-    console.log(this.reportId);
     this.fetchFarmerDetails(this.reportId);
   }
 
@@ -76,8 +75,6 @@ export class FarmerReportComponent implements OnInit {
   calculeteTotal(priceA: number, qtyA: number, priceB: number, qtyB: number, priceC: number, qtyC: number) :number{
     let tot = priceA * qtyA + priceB * qtyB + priceC * qtyC
     this.totalAmount += tot;
-    console.log(this.totalAmount);
-    
     return tot;
   }
 
@@ -188,11 +185,6 @@ export class FarmerReportComponent implements OnInit {
 
     // Set font
     doc.setFont('helvetica');
-
-    // Add title
-    // doc.setFontSize(16);
-    // doc.text('INVOICE', 105, y, { align: 'center' });
-    // y += yIncrement * 2;
 
     // Add invoice details
     doc.setFontSize(10);

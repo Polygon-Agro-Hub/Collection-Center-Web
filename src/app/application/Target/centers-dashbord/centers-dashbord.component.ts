@@ -43,8 +43,6 @@ export class CentersDashbordComponent implements OnInit {
   fetchCenterDashbordDetails() {
     this.isLoading = true;
     this.TargetSrv.getDashbordDetails(this.centerId).subscribe((res) => {
-      console.log(res.transCount);
-      
       this.centerNameObj = res.officerCount
       this.transCount = res.transCount.transactionCount;
       this.transAmount = res.transAmountCount.transAmountCount;

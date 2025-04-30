@@ -99,8 +99,6 @@ export class ViewPriceListComponent implements OnInit {
   }
 
   validateInput() {
-    // Optional: Additional validation logic if needed
-    // For example, formatting or additional checks
     if (this.editValue < 0) {
       this.editValue = 0;
     }

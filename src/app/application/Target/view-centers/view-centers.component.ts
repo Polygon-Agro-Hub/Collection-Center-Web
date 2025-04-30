@@ -81,14 +81,12 @@ export class ViewCentersComponent implements OnInit {
     ngOnInit(): void {
         this.updateFilteredDistricts();
         this.fetchAllCenterDetails();
-        // Initialize with all districts
     }
 
     fetchAllCenterDetails(province: string = this.selectProvince, district: string = this.selectDistrict, search: string = this.searchText) {
         this.isLoading = true;
         this.TargetSrv.getCenterDetails(this.currentPage, this.itemsPerPage, province, district, search).subscribe(
             (res) => {
-                console.log(res);
                 this.itemsArr = res.items;
                 this.totalItems = res.totalItems;
                 this.countOfOfficers = res.items.length;
@@ -157,7 +155,6 @@ export class ViewCentersComponent implements OnInit {
     }
 
     navigateToDashboard(id: number) {
-        console.log('this is id: ', id);
         this.router.navigate([`/centers/center-shashbord/${id}`]);
     }
 

@@ -51,17 +51,13 @@ export class OfficerProfileComponent implements OnInit {
   fetchOfficer(id: number) {
     this.isLoading = true;
     this.ManageOficerSrv.getOfficerById(id).subscribe((res: any) => {
-      console.log(res);
       this.officerObj = res.officerData.collectionOfficer;
-      console.log(this.officerObj);
-      console.log('sfshfhshfsfh');
       this.isLoading = false;
     });
   }
 
   async generatePDF() {
-    console.log('downloading');
-
+    
     const contentHeight = 500;
 
     const doc = new jsPDF({
@@ -237,10 +233,6 @@ export class OfficerProfileComponent implements OnInit {
     // Phone Number 1
     doc.setFont("Inter", "normal");
     doc.text("Phone Number - 1", 14, startY + 42);
-    // doc.setFont("Inter", "bold");
-    // doc.text(getValueOrNA(this.officerObj.phoneNumber01), 22, startY + 48);
-    // doc.setFont("Inter", "bold");
-    // doc.text(getValueOrNA(this.officerObj.phoneCode02), 14, startY + 48);
 
     if (this.officerObj.phoneNumber01 == null || this.officerObj.phoneNumber01 === "") {
       doc.setFont("Inter", "bold");
@@ -252,15 +244,7 @@ export class OfficerProfileComponent implements OnInit {
       doc.text(getValueOrNA(this.officerObj.phoneCode02), 14, startY + 48);
     }
 
-    // Phone Number 2
-    // doc.setFont("Inter", "normal");
-    // doc.text("Phone Number - 2", 100, startY + 42);
-    // doc.setFont("Inter", "bold");
-    // doc.text(getValueOrNA(this.officerObj.phoneNumber02), 108, startY + 48);
-    // doc.setFont("Inter", "bold");
-    // doc.text(getValueOrNA(this.officerObj.phoneCode02), 100, startY + 48);
-
-
+    
     doc.setFont("Inter", "normal");
     doc.text("Phone Number - 2", 100, startY + 42);
 
@@ -579,8 +563,6 @@ class Officer {
 }
 
 
-// doc.setFont("Inter", "bold");
-// doc.text(getValueOrNA(this.officerObj.vCapacity), 14, startY + 266);
 
 
 

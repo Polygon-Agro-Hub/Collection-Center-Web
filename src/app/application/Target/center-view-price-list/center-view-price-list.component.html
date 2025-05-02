@@ -31,7 +31,7 @@
               <div class="relative w-32">
                 <div
                     class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center w-full">
-                    <select (change)="filterGrade()" [(ngModel)]="selectGrade"
+                    <select (change)="filterGrade()" [(ngModel)]="selectGrade" 
                         class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none cursor-pointer">
                         <option value="" selected disabled>Grade</option>
                         <option value="A"
@@ -57,7 +57,7 @@
 
             <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
                 <input type="text" placeholder="Search by Crop / Variety name.." [(ngModel)]="searchText"
-                    class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
+                    class="bg-transparent outline-none w-full text-textLight dark:text-textDark" (keydown.esc)="offSearch()" (keydown.enter)="onSearch()"/>
                 <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                     (click)="onSearch()">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"

@@ -136,7 +136,7 @@ export class CenterViewOfficersComponent implements OnInit {
       html: tableHtml,
       showConfirmButton: false,
       width: 'auto',
-      allowOutsideClick: false, // Prevent closing by clicking outside
+      allowOutsideClick: true, // Prevent closing by clicking outside
       didOpen: () => {
         // Approve Button
         document.getElementById('approveButton')?.addEventListener('click', () => {

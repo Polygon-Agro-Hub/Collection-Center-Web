@@ -135,7 +135,7 @@
 
                             <td class="px-3 py-4 text-sm text-[#000000] dark:text-textDark">{{ officer.jobRole }}</td>
                             <td class="px-3 py-4">
-                                <div class="flex justify-center items-center w-full" (click)="openPopup(officer)">
+                                <div class="flex justify-center items-center w-full cursor-pointer" (click)="openPopup(officer)">
                                     <span *ngIf="officer.status === 'Approved'"
                                         class="inline-block w-[120px] text-center px-3 py-2 bg-[#C8E0FF] text-[#415CFF] text-sm font-medium rounded-md">
                                         Approved

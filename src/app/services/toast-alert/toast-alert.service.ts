@@ -36,7 +36,7 @@ export class ToastAlertService {
   }
 
   error(message: string, options: any = {}) {
-    this.toastr.warning(
+    this.toastr.error(
       `
         <div class="flex items-center space-x-4 bg-[#FFDADA] px-8 py-4">
           <!-- Icon -->
@@ -66,17 +66,17 @@ export class ToastAlertService {
   warning(message: string, options: any = {}) {
     this.toastr.warning(
       `
-        <div class="flex items-center space-x-4 bg-[#FFEED3] px-8 py-4">
-          <!-- Icon -->
-          <div class="flex items-center justify-center bg-[#FF9F0A] w-12 h-12 rounded-lg shadow-md">
-            <i class="fa-solid fa-triangle-exclamation text-white text-2xl"></i>
-          </div>
-          <!-- Text -->
-          <p class="text-xl text-[#333333] m-0">${message}</p>
+      <div class="flex items-center space-x-4 bg-[#FFEED3] px-8 py-4">
+      <!-- Icon -->
+      <div class="flex items-center justify-center bg-[#FF9F0A] w-12 h-12 rounded-lg shadow-md">
+        <i class="fa-solid fa-triangle-exclamation text-white text-2xl"></i>
+      </div>
+      <!-- Text -->
+      <p class="text-xl text-[#333333] m-0">${message}</p>
 
-          <i class="fa-solid fa-xmark text-lg text-[#95A1AC]"></i>
+      <i class="fa-solid fa-xmark text-lg text-[#95A1AC]"></i>
 
-        </div>
+    </div>
       `,
       '',
       {
@@ -85,7 +85,7 @@ export class ToastAlertService {
         positionClass: 'toast-bottom-right',
         toastClass: 'custom-hidden custom-toast-spacing',
         timeOut: 5000,
-        tapToDismiss: false,
+        tapToDismiss: true,
         ...options
       }
     );

@@ -52,6 +52,7 @@ export class OfficerProfileComponent implements OnInit {
     this.isLoading = true;
     this.ManageOficerSrv.getOfficerById(id).subscribe((res: any) => {
       this.officerObj = res.officerData.collectionOfficer;
+      console.log(this.officerObj)
       this.isLoading = false;
     });
   }
@@ -73,6 +74,10 @@ export class OfficerProfileComponent implements OnInit {
     const getValueOrNA = (value: string | null | undefined): string => {
       return value ? value : 'N/A';
     };
+
+    const getValueOrNAforInsOrLiscNo = (value: number | null | undefined): string => {
+      return value !== null && value !== undefined ? value.toString() : 'N/A';
+  };
 
     function loadImageAsBase64(url: string): Promise<string> {
       return new Promise((resolve, reject) => {
@@ -147,6 +152,7 @@ export class OfficerProfileComponent implements OnInit {
     const startX = imagebase64 ? 60 : 14; // If no image, start from left margin
     const startY = imagebase64 ? 60 : 50; // Adjust Y position based on image presence
 
+  
     // Title
     doc.setFontSize(16);
     doc.setFont("Inter", "bold");
@@ -343,7 +349,7 @@ export class OfficerProfileComponent implements OnInit {
       doc.text("Driving License ID", 14, startY + 174);
 
       doc.setFont("Inter", "bold");
-      doc.text(getValueOrNA(this.officerObj.licNo), 14, startY + 180);
+      doc.text(getValueOrNAforInsOrLiscNo(this.officerObj.licNo), 14, startY + 180);
 
       doc.setFontSize(12);
       doc.setFont("Inter", "normal");
@@ -372,7 +378,7 @@ export class OfficerProfileComponent implements OnInit {
       doc.text("Vehicle Insurance Number", 14, startY + 222);
 
       doc.setFont("Inter", "bold");
-      doc.text(getValueOrNA(this.officerObj.insNo), 14, startY + 228);
+      doc.text(getValueOrNAforInsOrLiscNo(this.officerObj.insNo), 14, startY + 228);
 
       doc.setFontSize(12);
       doc.setFont("Inter", "normal");
@@ -545,8 +551,8 @@ class Officer {
   centerName!: string;
 
   //driver
-  licNo!: string;
-  insNo!: string;
+  licNo!: number;
+  insNo!: number;
   insExpDate!: string;
   vType!: string;
   vCapacity!: string;

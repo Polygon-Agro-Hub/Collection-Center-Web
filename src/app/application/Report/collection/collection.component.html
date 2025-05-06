@@ -22,11 +22,16 @@
                 <div class="relative w-56 mr-6">
                     <div
                         class="border-2 rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
-                        <input type="date" [(ngModel)]="toDate" name="toDate" [min]="fromDate"
-                            (change)="validateToDate()"
-                            class="block w-full appearance-none text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none dark:bg-[#292929]" />
+                        <input type="date"
+                               #toDateInput
+                               [(ngModel)]="toDate"
+                               name="toDate"
+                               [min]="fromDate"
+                               (change)="validateToDate(toDateInput)"
+                               class="block w-full appearance-none text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none dark:bg-[#292929]" />
                     </div>
                 </div>
+                
 
                 <button (click)="goBtn()"
                     class="bg-[#415CFF]  text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-lg ml-5 dark:bg-[#292929] dark:text-textDark">Go</button>

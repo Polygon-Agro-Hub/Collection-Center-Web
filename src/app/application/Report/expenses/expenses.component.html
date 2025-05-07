@@ -12,7 +12,7 @@
                 <div class="relative w-56 mr-10">
                     <div
                         class="border-2 rounded-xl  text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
-                        <input type="date" [(ngModel)]="fromDate" name="fromDate" (change)="validateFromDate()"
+                        <input type="date" [(ngModel)]="fromDate" name="fromDate" (change)="validateFromDate()" [max]="maxDate"
                             class="block w-full appearance-none  text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none dark:bg-[#292929]" />
                     </div>
                 </div>
@@ -22,7 +22,7 @@
                 <div class="relative w-56 mr-6">
                     <div
                         class="border-2 rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
-                        <input type="date" [(ngModel)]="toDate" name="toDate" [min]="fromDate"
+                        <input type="date" [(ngModel)]="toDate" name="toDate" [min]="fromDate" [max]="maxDate"
                             (change)="validateToDate()"
                             class="block w-full appearance-none text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none dark:bg-[#292929]" />
                     </div>

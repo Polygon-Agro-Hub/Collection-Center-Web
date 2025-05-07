@@ -35,8 +35,9 @@ export class ExpensesComponent implements OnInit {
 
   logingRole: string | null = null;
 
-  fromDate: Date | string = '';
-  toDate: Date | string = '';
+  fromDate: string = '';
+  toDate:  string = '';
+  maxDate: string = new Date().toISOString().split('T')[0];
 
   isPopupVisible: boolean = false;
   isLoading: boolean = false;
@@ -143,7 +144,7 @@ export class ExpensesComponent implements OnInit {
     // Case 1: User hasn't selected fromDate yet
     if (!this.fromDate) {
       this.toDate = ''; // Reset toDate
-      this.toastSrv.warning("Please select the 'From' date first.");
+      this.toastSrv.warning("Please select the <b>From</b> date first.");
       return;
     }
 
@@ -180,7 +181,7 @@ export class ExpensesComponent implements OnInit {
 
   goBtn() {
     if (!this.fromDate || !this.toDate) {
-      this.toastSrv.warning("Please fill in all fields");
+      this.toastSrv.warning("Please select a date range to view the data");
       return;
     }
 

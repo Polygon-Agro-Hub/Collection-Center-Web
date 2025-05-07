@@ -36,7 +36,7 @@ export const MENU_ITEMS = [
     id: 4,
     key: 'centers',
     path: '/centers',
-    label: 'Centers',
+    label: 'Centres',
     icon: 'fa-solid fa-bullseye',
     permission: 'Collection Center Head',
   },

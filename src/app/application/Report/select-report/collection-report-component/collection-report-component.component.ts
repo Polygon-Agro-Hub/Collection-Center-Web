@@ -6,6 +6,7 @@ import { FormsModule } from '@angular/forms';
 import { ReportServiceService } from '../../../../services/Report-service/report-service.service';
 import { TokenServiceService } from '../../../../services/Token/token-service.service';
 import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
+import { ManageOfficersService } from '../../../../services/manage-officers-service/manage-officers.service';
 
 @Component({
   selector: 'app-collection-report-component',
@@ -16,6 +17,8 @@ import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/
 })
 export class CollectionReportComponentComponent implements OnInit {
   OfficerArr!: CollectionOfficers[];
+  centerArr: Center[] = [];
+
 
   page: number = 1;
   totalItems: number = 0;
@@ -23,6 +26,8 @@ export class CollectionReportComponentComponent implements OnInit {
   hasData: boolean = true
 
   searchText: string = '';
+  selectCenters: string = '';
+
 
   logingRole: string | null = null;
   isLoading: boolean = true;
@@ -31,16 +36,21 @@ export class CollectionReportComponentComponent implements OnInit {
   constructor(
     private router: Router,
     private ReportSrv: ReportServiceService,
-    private tokenSrv: TokenServiceService
+    private tokenSrv: TokenServiceService,
+    private ManageOficerSrv: ManageOfficersService,
+
   ) {
     this.logingRole = tokenSrv.getUserDetails().role
   }
 
   ngOnInit(): void {
+    if (this.logingRole === 'Collection Center Head') {
+      this.getAllCenters();
+    }
     this.fetchAllOfficers();
   }
 
-  fetchAllOfficers(page: number = 1, limit: number = this.itemsPerPage, searchText: string = '') {
+  fetchAllOfficers(page: number = 1, limit: number = this.itemsPerPage, searchText: string = '', centerId: string = this.selectCenters) {
     this.isLoading = true;
     let role: string;
     if (this.logingRole === 'Collection Center Head') {
@@ -49,7 +59,7 @@ export class CollectionReportComponentComponent implements OnInit {
       role = "CCM"
     }
 
-    this.ReportSrv.getAllCollectionReport(role, page, limit, searchText).subscribe(
+    this.ReportSrv.getAllCollectionReport(role, page, limit, searchText, centerId).subscribe(
       (res) => {
         this.OfficerArr = res.items
         this.totalItems = res.total
@@ -92,6 +102,24 @@ export class CollectionReportComponentComponent implements OnInit {
     this.router.navigate([`reports/daily-report/${id}/${name}/${empid}`])
   }
 
+  getAllCenters() {
+    this.ManageOficerSrv.getCCHOwnCenters().subscribe(
+      (res) => {
+        this.centerArr = res
+
+      }
+    )
+  }
+
+  applyCompanyFilters() {
+    this.fetchAllOfficers();
+  }
+
+  clearCompanyFilter() {
+    this.selectCenters = '';
+    this.fetchAllOfficers();
+  }
+
 }
 
 class CollectionOfficers {
@@ -100,4 +128,10 @@ class CollectionOfficers {
   lastNameEnglish!: string;
   empId!: string;
   centerName!: string;
+}
+
+class Center {
+  id!: number
+  centerName!: string;
+  regCode!: string;
 }

@@ -213,6 +213,7 @@ export class ViewOfficersComponent implements OnInit {
 
   private handleStatusChange(swalInstance: any, id: number, status: 'Approved' | 'Rejected') {
     // Show loading state
+    this.isLoading = true;
     swalInstance.update({
       showConfirmButton: false,
       allowEscapeKey: false,
@@ -226,15 +227,19 @@ export class ViewOfficersComponent implements OnInit {
       next: (res) => {
         swalInstance.close();
         if (res.status) {
+          this.isLoading = false;
+          swalInstance.close();
           const action = status === 'Approved' ? 'approved' : 'rejected';
           this.toastSrv.success(`The collection was ${action} successfully.`);
           this.fetchByRole();
         } else {
+          this.isLoading = false;
           this.toastSrv.error(res.message || `Failed to ${status.toLowerCase()} the collection.`);
         }
       },
       error: (err) => {
         swalInstance.close();
+        this.isLoading = false;
         this.toastSrv.error(`An error occurred while ${status.toLowerCase()}ing. Please try again.`);
       }
     });

@@ -52,6 +52,7 @@ export class CchRecivedComplaintComponent {
         this.officerName = this.compalintObj.firstNameEnglish + " " + this.compalintObj.lastNameEnglish
         this.phone1 = this.compalintObj.phoneCode01 + " - " + this.compalintObj.phoneNumber01;
         this.phone2 = this.compalintObj.phoneCode02 + " - " + this.compalintObj.phoneNumber02;
+        this.replyObj.reply = this.createTemplate(this.officerName);
 
 
         if (res.data.length === 0) {
@@ -136,7 +137,27 @@ export class CchRecivedComplaintComponent {
     )
   }
 
+createTemplate(fname:string=''):string{
+  return `
+  Dear ${fname},
 
+  We are pleased to inform you that your complaint has been resolved.
+
+
+  [Add message here]
+
+  
+
+  If you have any further concerns or questions, feel free to reach out.
+  Thank you for your patience and understanding.
+
+
+  Sincerely,[Collection Center Head Name]
+  Collection Center Head of [Center Reg Code]
+  [Company Name]
+
+  `
+}
 
 
 }

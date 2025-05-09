@@ -53,7 +53,7 @@
         <div *ngIf="hasData">
             <div class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
                 <table class="w-full divide-y-2 border-[1px] border-gray-300 rounded-lg overflow-hidden">
-                    <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
+                    <thead class="text-[#4B5563] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
                         <tr>
                             <th class="px-5 py-3 text-left  font-medium">No</th>
                             <th class="px-5 py-3 text-left  font-medium">First Name</th>
@@ -70,15 +70,15 @@
                         currentPage: page,
                         totalItems: totalItems
                       };  let i = index">
-                            <td class="px-5 py-4  text-gray-900 dark:text-textDark">
+                            <td class="px-5 py-4  text-[#000000] dark:text-textDark">
                                 {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i +
                                     1) : (((page - 1) * itemsPerPage) + i + 1) }} </td>
-                            <td class="px-5 py-4  text-gray-900 dark:text-textDark">{{item.firstName}}</td>
-                            <td class="px-5 py-4  text-gray-900 dark:text-textDark">{{item.lastName}}</td>
-                            <td class="px-5 py-4  text-gray-900 dark:text-textDark">{{item.NICnumber}}</td>
-                            <td class="px-5 py-4  text-gray-900 dark:text-textDark">{{item.totalAmount | number: '1.2-2' }}</td>
+                            <td class="px-5 py-4  text-[#000000] dark:text-textDark">{{item.firstName}}</td>
+                            <td class="px-5 py-4  text-[#000000] dark:text-textDark">{{item.lastName}}</td>
+                            <td class="px-5 py-4  text-[#000000] dark:text-textDark">{{item.NICnumber}}</td>
+                            <td class="px-5 py-4  text-[#000000] dark:text-textDark">{{item.totalAmount | number: '1.2-2' }}</td>
     
-                            <td class="px-5 py-4  text-gray-900 dark:text-textDark">
+                            <td class="px-5 py-4  text-[#000000] dark:text-textDark">
                                 <button (click)="vieFarmerReport(item.id)"
                                     class="flex items-center justify-center text-[#415CFF] hover:text-blue-500 w-10 h-10">
                                     <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>

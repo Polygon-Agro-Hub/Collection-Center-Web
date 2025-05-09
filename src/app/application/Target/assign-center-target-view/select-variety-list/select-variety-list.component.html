@@ -1,4 +1,6 @@
-<div class="h-screen py-8 relative w-fill">
+<app-loading-spinner *ngIf="isLoading" />
+
+<div *ngIf="!isLoading" class="h-screen py-8 relative w-fill">
     <div class="absolute w-full">
         <div class="flex flex-row justify-between items-center">
             <p class="text-xl font-bold dark:text-white text-[#030308]">{{centerDetails.regCode}}

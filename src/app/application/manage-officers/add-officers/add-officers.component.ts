@@ -19,6 +19,7 @@ import { Location } from '@angular/common';
   styleUrl: './add-officers.component.css'
 })
 export class AddOfficersComponent implements OnInit {
+  today: string = new Date().toISOString().split('T')[0];
 
   personalData: Personal = new Personal();
   collectionCenterData: CollectionCenter[] = []

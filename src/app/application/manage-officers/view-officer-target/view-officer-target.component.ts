@@ -27,6 +27,8 @@ export class ViewOfficerTargetComponent implements OnInit {
   logingRole: string | null = null;
   isLoading: boolean = true;
 
+  centerName!: string;
+
   constructor(
     private TargetSrv: TargetService,
     private router: Router,
@@ -41,6 +43,7 @@ export class ViewOfficerTargetComponent implements OnInit {
 
   ngOnInit(): void {
     this.officerId = this.route.snapshot.params['officerId'];
+    this.centerName = this.route.snapshot.params['centerName'];
     this.fetchSelectedOfficerTarget(this.officerId);
   }
 

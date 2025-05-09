@@ -132,17 +132,16 @@ export class ViewOfficersComponent implements OnInit {
       text: 'Do you really want to delete this Collection Officer? This action cannot be undone.',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
+      confirmButtonColor: '#3085d6', // Default blue color
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete it!',
       cancelButtonText: 'Cancel',
       customClass: {
         popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
         title: 'dark:text-white',
-
         icon: '!border-gray-200 dark:!border-gray-500',
-        confirmButton: 'hover:bg-red-600 dark:hover:bg-red-700 focus:ring-red-500 dark:focus:ring-red-800',
-        cancelButton: 'hover:bg-blue-600 dark:hover:bg-blue-700 focus:ring-blue-500 dark:focus:ring-blue-800',
+        confirmButton: 'hover:!bg-red-600 dark:hover:!bg-red-700 focus:ring-red-500 dark:focus:ring-red-800',
+        cancelButton: '',
         actions: 'gap-2'
       }
     }).then((result) => {
@@ -157,14 +156,12 @@ export class ViewOfficersComponent implements OnInit {
             } else {
               this.isLoading = false;
               this.toastSrv.error('There was an error deleting the ofiicer')
-
             }
           },
           (error) => {
             console.error('Error deleting news:', error);
             this.isLoading = false;
             this.toastSrv.error('There was an error deleting the ofiicer')
-
           }
         );
       }

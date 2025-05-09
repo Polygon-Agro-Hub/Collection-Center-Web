@@ -6,6 +6,10 @@
         <p onclick="history.back()">Reports</p>
         <!-- <p onclick="history.back()">Officer Reports</p> -->
         <p>Collection Reports</p>
+        <p *ngIf="isSelectCollection">Collections</p>
+
+        <!-- Show when isSelectExpenses is true -->
+        <p *ngIf="isSelectExpenses">Expenses</p>
     </div>
 
     <div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg mt-6">

@@ -475,8 +475,8 @@ export class OfficerProfileComponent implements OnInit {
     this.showDisclaimView = !this.showDisclaimView; // Toggle the boolean value
   }
 
-  viewOfficerTarget(officerId: number) {
-    this.router.navigate([`/manage-officers/view-officer-target/${officerId}`])
+  viewOfficerTarget(officerId: number, centerName: string) {
+    this.router.navigate([`/manage-officers/view-officer-target/${officerId}/${centerName}`]);
   }
 
   cancelDisclaim() {

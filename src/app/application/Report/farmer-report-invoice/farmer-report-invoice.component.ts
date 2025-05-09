@@ -375,7 +375,7 @@ export class FarmerReportInvoiceComponent implements OnInit {
     doc.text('Officer Qr Code', officerQrX + 6, labelY);
 
     // Save the PDF
-    doc.save('invoice.pdf');
+    doc.save(`invoice_${this.userObj.invNo}.pdf`);
     this.isLoading = false;
 }
 

@@ -330,8 +330,8 @@
                             <input id="phoneNumber02" name="phoneNumber02" type="number" #phoneNumber02Input="ngModel"
                                 [(ngModel)]="personalData.phoneNumber02"
                                 class="block w-full p-2 border border-gray-300 rounded-r-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                                placeholder="Enter your phone number"  pattern="^[0-9]{9}$" minlength="9"
-                                maxlength="9"/>
+                                placeholder="Enter your phone number" pattern="^[0-9]{9}$" minlength="9"
+                                maxlength="9" />
 
                         </div>
                         <div *ngIf="personalData.phoneNumber02 && phoneNumber02Input.invalid"
@@ -344,7 +344,7 @@
                         <label for="nic" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">NIC
                             Number</label>
                         <input id="nic" name="nic" [(ngModel)]="personalData.nic" #nicInput="ngModel" required
-                            pattern="^\d{9}[Vv]|\d{12}$"
+                            pattern="^(\d{9}[Vv]|\d{12})$"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
                         <div *ngIf="nicInput.touched && !personalData.nic" class="text-red-500 text-sm mt-1">
                             <div> NIC is required</div>
@@ -635,12 +635,12 @@
                     </div>
                 </div>
 
-                <div>
+                <div class="">
                     <label for="insExpDate"
                         class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Insurance
                         Expire Date</label>
-                    <input id="insExpDate" name="insExpDate" type="date" [(ngModel)]="driverObj.insExpDate"
-                        class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+                    <input id="insExpDate" name="insExpDate" type="date" [(ngModel)]="driverObj.insExpDate" [min]="today"
+                        class="cursor-pointer form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                         #insExpDateInput="ngModel" required />
                     <div *ngIf="insExpDateInput.touched && !driverObj.insExpDate" class="text-red-500 text-sm mt-1">
                         <div>Insurance Expire Date is required</div>
@@ -715,7 +715,7 @@
                         class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Vehicle Type</label>
                     <select id="selectVehicletype" [(ngModel)]="selectVehicletype" name="selectVehicletype"
                         placeholder="select" (change)="vehicleChange()" required #selectVehicletypeInput="ngModel"
-                        class="form-control mt-1 block w-full p-2 text-gray-700 dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500">
+                        class="cursor-pointer form-control mt-1 block w-full p-2 text-gray-700 dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500">
                         <option disabled selected
                             class="p-2 text-gray-700 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]"
                             [value]="{name: '', capacity: ''}">

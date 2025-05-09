@@ -49,23 +49,48 @@ export class ViewRecivedComplaintComponent implements OnInit {
     this.isLoading = true;
     this.ComplainSrv.getComplainById(id).subscribe(
       (res) => {
-        this.compalintObj = res.data
-        this.officerName = this.compalintObj.firstNameEnglish + " " + this.compalintObj.lastNameEnglish
-        this.phone1 = this.compalintObj.phoneCode01 + " - " + this.compalintObj.phoneNumber01;
-        this.phone2 = this.compalintObj.phoneCode02 + " - " + this.compalintObj.phoneNumber02;
-
-
-        if (res.data.length === 0) {
+        this.compalintObj = res.data;
+  
+        this.officerName = 
+          (this.compalintObj?.firstNameEnglish || '') + ' ' + 
+          (this.compalintObj?.lastNameEnglish || '');
+  
+        // Handle phone1
+        if (
+          this.compalintObj?.phoneNumber01 === null ||
+          this.compalintObj?.phoneNumber01 === undefined
+        ) {
+          this.phone1 = 'N/A';
+        } else {
+          this.phone1 = `${this.compalintObj.phoneCode01 || ''} - ${this.compalintObj.phoneNumber01}`;
+        }
+  
+        // Handle phone2
+        if (
+          this.compalintObj?.phoneNumber02 === null ||
+          this.compalintObj?.phoneNumber02 === undefined
+        ) {
+          this.phone2 = 'N/A';
+        } else {
+          this.phone2 = `${this.compalintObj.phoneCode02 || ''} - ${this.compalintObj.phoneNumber02}`;
+        }
+  
+        if (!res.data || (Array.isArray(res.data) && res.data.length === 0)) {
           this.hasData = false;
         } else {
           this.hasData = true;
-
         }
+  
         this.isLoading = false;
-
+      },
+      (error) => {
+        console.error('Error fetching complaint:', error);
+        this.isLoading = false;
       }
-    )
+    );
   }
+  
+  
 
   forwordComplain() {
     Swal.fire({

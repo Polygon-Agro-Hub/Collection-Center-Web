@@ -357,6 +357,10 @@ export class EditOfficerComponent implements OnInit {
 
     this.personalData.empId = this.upateEmpID;
 
+    if (this.personalData.accNumber !== this.personalData.conformAccNumber) {
+      return;
+    }
+
     if (!this.personalData.accHolderName || !this.personalData.accNumber || !this.personalData.bankName || !this.personalData.branchName || !this.personalData.city || !this.personalData.country || !this.personalData.district || !this.personalData.houseNumber) {
       this.toastSrv.warning('Pleace fill all required feilds')
 
@@ -918,6 +922,7 @@ class Personal {
   accNumber!: string;
   bankName!: string;
   branchName!: string;
+  conformAccNumber!: string;
 
   jobRole: string = 'Collection Officer'
   empId!: string

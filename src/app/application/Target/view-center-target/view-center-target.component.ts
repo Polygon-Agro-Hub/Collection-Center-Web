@@ -58,6 +58,7 @@ export class ViewCenterTargetComponent implements OnInit {
     this.TargetSrv.getAllCenterDailyTarget(centerId, page, limit, status, search).subscribe(
       (res) => {
         this.targetArr = res.items;
+        console.log(res.items)
         if (res.items.length > 0) {
           this.hasData = true;
         } else {
@@ -209,4 +210,5 @@ class DailyTargets {
   complete!: number;
   status!: string;
   date!: Date;
+  regCode!: string;
 }

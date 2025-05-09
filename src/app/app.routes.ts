@@ -98,7 +98,7 @@ export const routes: Routes = [
                         component: ClaimOfficerComponent
                     },
                     {
-                        path: 'view-officer-target/:officerId',
+                        path: 'view-officer-target/:officerId/:centerName',
                         component: ViewOfficerTargetComponent
                     },
                     {

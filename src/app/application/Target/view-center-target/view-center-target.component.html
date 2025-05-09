@@ -1,17 +1,17 @@
 <app-loading-spinner *ngIf="isLoading" />
 
 <div class="flex flex-row items-center gap-6 font-semibold text[#424242] mb-5 mx-5 dark:text-white cursor-pointer">
-    <p (click)="navigateToCenters()" >Centres</p>
-    <p onclick="history.back()" >Centre Dashboard</p>
-    <p>View Centre Target</p>
+    <p (click)="navigateToCenters()">Centres</p>
+    <p onclick="history.back()">Centre Dashboard</p>
+    <p>Current Centre Target</p>
 </div>
 
 <div *ngIf="!isLoading"
     class="w-full overflow-x-auto px-10 py-7 bg-tileLight shadow-lg rounded-lg dark:text-[#FFFFFF] dark:bg-[#363636]">
 
     <div class="flex justify-between items-center mb-5 mt-3"> <!-- Changed this line -->
-        
-        <button 
+
+        <button
             class="bg-[#415CFF] text-white shadow-md font-medium rounded-lg py-2 px-5 mr-5 text-lg flex items-center"
             (click)="downloadTemplate1()" [disabled]="!hasData">
             <i class="fa-solid fa-download px-2" *ngIf="!isDownloading"></i>
@@ -24,7 +24,7 @@
 
         <div class="flex flex-row items-center justify-between mt-5">
             <div class="flex flex-col justify-between">
-                <p class="font-semibold text-lg mb-1">Center Target on {{today}} </p>
+                <p class="font-semibold text-lg mb-1">{{targetArr[0].regCode}} Center Target on {{today}} </p>
             </div>
             <div class="flex flex-row items-center gap-8 ">
                 <i class="fa-solid fa-list text-2xl ml-8"></i>
@@ -61,8 +61,8 @@
                 </div>
 
                 <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
-                    <input (keyup.enter)="onSearch()" (keyup.esc)="offSearch()"
-                    type="text" placeholder="Search by Variety Name" [(ngModel)]="searchText"
+                    <input (keyup.enter)="onSearch()" (keyup.esc)="offSearch()" type="text"
+                        placeholder="Search by Variety Name" [(ngModel)]="searchText"
                         class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
                     <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                         (click)="onSearch()">
@@ -84,8 +84,7 @@
             </div>
         </div>
 
-        <div *ngIf="!hasData"
-            class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6 ">
+        <div *ngIf="!hasData" class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6 ">
             <p class="text-[#494949] my-6 dark:text-textDark">--No Data Available--</p>
             <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
         </div>
@@ -99,9 +98,10 @@
                         <th class="px-6 py-3 text-left text-[#4B5563] dark:text-textDark font-medium">Variety Name</th>
                         <th class="px-6 py-3 text-center  text-[#4B5563] dark:text-textDark font-medium">Grade</th>
                         <th class="px-6 py-3 text-left text-[#4B5563] dark:text-textDark font-medium">Target (kg)</th>
-                        <th class="px-6 py-3 text-left text-[#4B5563] dark:text-textDark font-medium">Completed (kg)</th>
+                        <th class="px-6 py-3 text-left text-[#4B5563] dark:text-textDark font-medium">Completed (kg)
+                        </th>
                         <th class="px-6 py-3 text-center text-[#4B5563] dark:text-textDark font-medium">Status</th>
-                        <th class="px-6 py-3 text-center text-[#4B5563] dark:text-textDark font-medium"></th>
+                        <th class="px-6 py-3 text-left text-[#4B5563] dark:text-textDark font-medium">Ends At</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
@@ -110,12 +110,18 @@
                         <!--  -->
                         <td class="px-6 py-4 text-gray-[#000000] font-semibold dark:text-gray-300">
                             {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }} </td>
-                        <td class="px-6 py-4 text-gray-[#000000] font-semibold dark:text-gray-300">{{item.cropNameEnglish}}</td>
-                        <td class="px-6 py-4 text-gray-[#000000] font-semibold dark:text-gray-300">{{item.varietyNameEnglish}}</td>
-                        <td class="px-6 py-4 text-gray-[#000000] font-semibold text-center dark:text-gray-300">{{item.grade}}</td>
-                        <td class="px-6 py-4 text-gray-[#000000] font-semibold dark:text-gray-300">{{item.target | number: '1.2-2' }}</td>
-                        <td class="px-6 py-4 text-gray-[#000000] font-semibold dark:text-gray-300">{{item.complete | number: '1.2-2'}}</td>
-                        <td class="px-6 py-4 text-gray-[#000000] font-semibold dark:text-gray-300 flex justify-center items-center">
+                        <td class="px-6 py-4 text-gray-[#000000] font-semibold dark:text-gray-300">
+                            {{item.cropNameEnglish}}</td>
+                        <td class="px-6 py-4 text-gray-[#000000] font-semibold dark:text-gray-300">
+                            {{item.varietyNameEnglish}}</td>
+                        <td class="px-6 py-4 text-gray-[#000000] font-semibold text-center dark:text-gray-300">
+                            {{item.grade}}</td>
+                        <td class="px-6 py-4 text-gray-[#000000] font-semibold dark:text-gray-300">{{item.target |
+                            number: '1.2-2' }}</td>
+                        <td class="px-6 py-4 text-gray-[#000000] font-semibold dark:text-gray-300">{{item.complete |
+                            number: '1.2-2'}}</td>
+                        <td
+                            class="px-6 py-4 text-gray-[#000000] font-semibold dark:text-gray-300 flex justify-center items-center">
                             <span *ngIf="item.status === 'Pending'"
                                 class="bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-6 py-1">
                                 Pending
@@ -129,8 +135,8 @@
                                 Exceeded
                             </span>
                         </td>
-                        
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300 text-center">
+
+                        <!-- <td class="px-6 py-4 text-gray-900 dark:text-gray-300 text-center">
                             <button class="w-6 h-6 text-blue-500 hover:text-blue-700">
                                 <svg viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                                     <path
@@ -139,6 +145,11 @@
                                         stroke-linejoin="round" />
                                 </svg>
                             </button>
+                        </td> -->
+
+                        <td class="px-6 py-4 text-gray-900 text-left dark:text-gray-300">
+                            {{ item.date | date: 'yyyy/MM/dd' }}<br>
+                            {{ item.date | date: 'h.mm a' }}
                         </td>
 
                     </tr>

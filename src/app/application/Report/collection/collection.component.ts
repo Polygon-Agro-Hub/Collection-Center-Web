@@ -153,25 +153,28 @@ export class CollectionComponent implements OnInit {
     this.fetchFilteredPayments();
   }
 
-  validateToDate() {
+  validateToDate(toDateInput: HTMLInputElement) {
     // Case 1: User hasn't selected fromDate yet
     if (!this.fromDate) {
-      this.toDate = ''; // Reset toDate
-      this.toastSrv.warning("Please select the 'From' date first.");
-      return;
+        this.toDate = '';            // Clear model
+        toDateInput.value = '';      // Clear input field
+        this.toastSrv.warning("Please select the 'From' date first.");
+        return;
     }
 
     // Case 2: toDate is earlier than fromDate
     if (this.toDate) {
-      const from = new Date(this.fromDate);
-      const to = new Date(this.toDate);
+        const from = new Date(this.fromDate);
+        const to = new Date(this.toDate);
 
-      if (to <= from) {
-        this.toDate = ''; // Reset toDate
-        this.toastSrv.warning("The 'To' date cannot be earlier than or same to the 'From' date.");
-      }
+        if (to <= from) {
+            this.toDate = '';        // Clear model
+            toDateInput.value = '';  // Clear input field
+            this.toastSrv.warning("The 'To' date cannot be earlier than or same to the 'From' date.");
+        }
     }
-  }
+}
+
 
   validateFromDate() {
     // Case 1: User hasn't selected fromDate yet

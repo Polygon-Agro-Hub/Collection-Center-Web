@@ -22,8 +22,8 @@
                 <div class="relative w-56 mr-6">
                     <div
                         class="border-2 rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
-                        <input type="date" [(ngModel)]="toDate" name="toDate" [min]="fromDate" [max]="maxDate"
-                            (change)="validateToDate()"
+                        <input type="date" #toDateInput [(ngModel)]="toDate" name="toDate" [min]="fromDate"
+                            (change)="validateToDate(toDateInput)"
                             class="block w-full appearance-none text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none dark:bg-[#292929]" />
                     </div>
                 </div>
@@ -47,7 +47,8 @@
             </div>
 
             <div class="flex flex-row items-center gap-5 ">
-                <i *ngIf="logingRole === 'Collection Center Head'" class="fa-solid fa-list text-2xl dark:text-white ml-8"></i>
+                <i *ngIf="logingRole === 'Collection Center Head'"
+                    class="fa-solid fa-list text-2xl dark:text-white ml-8"></i>
 
                 <p *ngIf="logingRole === 'Collection Center Head'" class="font-normal dark:text-white">Filter By</p>
 
@@ -134,8 +135,10 @@
                         <th class="px-2 py-3 text-left text-sm font-medium">No</th>
                         <th class="px-3 py-3 text-left text-sm font-medium">GRN No</th>
                         <th class="px-3 py-3 text-left text-sm font-medium">Amount (Rs.)</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium" *ngIf="logingRole === 'Collection Center Head'">Centre Code</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium" *ngIf="logingRole === 'Collection Center Head'">Centre Name</th>
+                        <th class="px-3 py-3 text-left text-sm font-medium"
+                            *ngIf="logingRole === 'Collection Center Head'">Centre Code</th>
+                        <th class="px-3 py-3 text-left text-sm font-medium"
+                            *ngIf="logingRole === 'Collection Center Head'">Centre Name</th>
                         <th class="px-3 py-3 text-center text-sm font-medium ">Farmer NIC</th>
                         <th class="px-3 py-3 text-center text-sm font-medium">Collected Time</th>
                         <th class="px-3 py-3 text-center text-sm font-medium"></th>
@@ -155,8 +158,10 @@
                         <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300 ">
                             {{item.totalAmount | number:'1.2-2'}}
                         </td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300" *ngIf="logingRole === 'Collection Center Head'">{{item.centerCode}}</td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300" *ngIf="logingRole === 'Collection Center Head'">{{item.centerName}}</td>
+                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300"
+                            *ngIf="logingRole === 'Collection Center Head'">{{item.centerCode}}</td>
+                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300"
+                            *ngIf="logingRole === 'Collection Center Head'">{{item.centerName}}</td>
                         <td class="px-3 py-4 text-sm text-center text-gray-900 dark:text-gray-300">{{item.nic}}</td>
                         <td class="px-3 py-4 text-center text-[#646464] dark:text-gray-300">
                             <span class="block">{{ item.createdAt | date:'MMM d, y' }}</span>
@@ -256,11 +261,9 @@
 
         </div>
 
-        <div 
-            class="flex flex-col items-center w-full px-10 py-7 mt-6 ">
+        <div class="flex flex-col items-center w-full px-10 py-7 mt-6 ">
             <p class="text-[#494949] my-6 dark:text-textDark">--No Data Available--</p>
             <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
         </div>
     </div>
 </div>
-

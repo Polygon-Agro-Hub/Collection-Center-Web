@@ -140,25 +140,32 @@ export class ExpensesComponent implements OnInit {
     this.fetchFilteredPayments();
   }
 
-  validateToDate() {
-    // Case 1: User hasn't selected fromDate yet
-    if (!this.fromDate) {
-      this.toDate = ''; // Reset toDate
-      this.toastSrv.warning("Please select the <b>From</b> date first.");
-      return;
+  validateToDate(toDateInput: HTMLInputElement) {
+    const from = this.fromDate ? new Date(this.fromDate) : null;
+    const to = this.toDate ? new Date(this.toDate) : null;
+
+    // Always clear toDate if fromDate is not properly set
+    if (!from || isNaN(from.getTime())) {
+        if (this.toDate) {
+            this.toDate = '';           // Clear model
+            toDateInput.value = '';     // Clear input field directly
+            console.log(this.toDate);
+        }
+        this.toastSrv.warning("Please select the 'From' date first.");
+        return;
     }
 
-    // Case 2: toDate is earlier than fromDate
-    if (this.toDate) {
-      const from = new Date(this.fromDate);
-      const to = new Date(this.toDate);
-
-      if (to <= from) {
-        this.toDate = ''; // Reset toDate
-        this.toastSrv.warning("The 'To' date cannot be earlier than or same to the 'From' date.");
-      }
+    // If toDate is set, check if it's valid against fromDate
+    if (to && !isNaN(to.getTime())) {
+        if (to <= from) {
+            this.toDate = '';           // Clear model
+            toDateInput.value = '';     // Clear input field directly
+            this.toastSrv.warning("The 'To' date cannot be earlier than or same to the 'From' date.");
+        }
     }
-  }
+}
+
+
 
   validateFromDate() {
     // Case 1: User hasn't selected fromDate yet

@@ -1,4 +1,11 @@
-<app-loading-spinner *ngIf="isLoading"/>
+<app-loading-spinner *ngIf="isLoading" />
+
+<div *ngIf="!isLoading"
+    class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-2 mx-5 cursor-pointer">
+    <p onclick="history.back()">Complaints</p>
+    <p>View Received Complaint</p>
+</div>
+
 
 
 <div *ngIf="!isLoading">
@@ -83,7 +90,8 @@
                 </div>
 
                 <div class="flex flex-row justify-center items-center gap-8">
-                    <button class="bg-[#F6F7F9] dark:bg-gray-600 text-[#6B7D8C] dark:text-white font-semibold border-[1px] shadow-lg px-4 py-2 rounded-lg"
+                    <button
+                        class="bg-[#F6F7F9] dark:bg-gray-600 text-[#6B7D8C] dark:text-white font-semibold border-[1px] shadow-lg px-4 py-2 rounded-lg"
                         (click)="cancelViewReply()">
                         Go Back
                     </button>

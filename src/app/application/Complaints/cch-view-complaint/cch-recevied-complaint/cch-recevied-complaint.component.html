@@ -63,7 +63,7 @@
 
         <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
             <input type="text" placeholder="Search by Ref No, EMP ID" [(ngModel)]="searchText"
-                class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
+                class="bg-transparent outline-none w-full text-textLight dark:text-textDark"  (keyup.enter)="onSearch()" (keyup.esc)="offSearch()"/>
             <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                 (click)="onSearch()">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -83,7 +83,7 @@
     </div>
 
 
-    <div class="overflow-x-auto mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+    <div *ngIf="hasData" class="overflow-x-auto mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
         <table class="w-full divide-y-2 overflow-hidden">
             <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
                 <tr>
@@ -144,13 +144,17 @@
         </table>
         
     </div>
-    <div class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#262f45] text-right">
+    <div *ngIf="hasData" class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#262f45] text-right">
         <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
             [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
             [screenReaderCurrentLabel]="'Youre on page'">
         </pagination-controls>
     </div>
 
+    <div *ngIf="!hasData" class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6 ">
+        <p class="text-[#494949] my-6 dark:text-textDark">--No Data Availabale--</p>
+        <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
+    </div>
 
     <div *ngIf="isReplyView" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
         <div class="bg-white dark:bg-[#363636] shadow-lg rounded-lg p-6 w-2/5">

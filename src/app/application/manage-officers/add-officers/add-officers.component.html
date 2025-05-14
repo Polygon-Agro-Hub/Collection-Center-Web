@@ -10,7 +10,7 @@
     <form #PageOneForm="ngForm" (ngSubmit)="onSubmitForm(PageOneForm)">
 
         <div *ngIf="selectedPage === 'pageOne'">
-            <h2 class="text-xl mb-6 text-[#292929] dark:text-textDark font-bold">Add Personal Details</h2>
+            <h2 class="text-xl mb-6 text-[#292929] dark:text-textDark font-semibold">Add Personal Details</h2>
             <div>
                 <div class="flex justify-center pt-3 mb-12">
                     <div class="relative">
@@ -330,8 +330,8 @@
                             <input id="phoneNumber02" name="phoneNumber02" type="number" #phoneNumber02Input="ngModel"
                                 [(ngModel)]="personalData.phoneNumber02"
                                 class="block w-full p-2 border border-gray-300 rounded-r-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                                placeholder="Enter your phone number"  pattern="^[0-9]{9}$" minlength="9"
-                                maxlength="9"/>
+                                placeholder="Enter your phone number" pattern="^[0-9]{9}$" minlength="9"
+                                maxlength="9" />
 
                         </div>
                         <div *ngIf="personalData.phoneNumber02 && phoneNumber02Input.invalid"
@@ -392,8 +392,8 @@
 
         <div *ngIf="selectedPage === 'pageTwo'">
 
-            <h2 class="text-xl mb-6 text-textLight dark:text-textDark font-bold">Residential Details</h2>
-            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <h2 class="text-xl mb-6 text-textLight dark:text-textDark font-semibold">Residential Details</h2>
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 mb-4">
                 <div>
                     <label for="house" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">House /
                         Plot Number</label>
@@ -461,9 +461,9 @@
                 </div>
             </div>
 
-            <div>
-                <h2 class="text-xl mb-6 text-textLight dark:text-textDark font-bold">Add Bank Details</h2>
-                <div class="pb-6">
+            <div class="mt-24">
+                <h2 class="text-xl mb-6 text-textLight dark:text-textDark font-semibold">Add Bank Details</h2>
+                <div class="pb-6 pl-8">
                     <label for="accHolderName"
                         class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Account
                         Holder’s Name</label>
@@ -476,7 +476,7 @@
                     </div>
                 </div>
 
-                <div class="pb-6">
+                <div class="pb-6 pl-8">
                     <label for="accNumber" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Account
                         Number</label>
                     <input type="number" id="accNumber" name="accNumber" [(ngModel)]="personalData.accNumber"
@@ -487,7 +487,7 @@
                     </div>
                 </div>
 
-                <div class="pb-6">
+                <div class="pb-6 pl-8">
                     <label for="accNumber" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Confirm
                         Account Number</label>
                     <input type="number" id="accNumber" name="accNumber" [(ngModel)]="personalData.conformAccNumber"
@@ -503,7 +503,7 @@
                     </div>
                 </div>
 
-                <div class="pb-6">
+                <div class="pb-6 pl-8">
                     <label for="bankDropdown" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
                         Bank Name
                     </label>
@@ -519,7 +519,7 @@
                     </span> -->
                 </div>
 
-                <div class="pb-6">
+                <div class="pb-6 pl-8">
                     <label for="branchDropdown" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
                         Branch Name
                     </label>
@@ -555,7 +555,7 @@
 
         <div *ngIf="selectedPage === 'pageThree'">
 
-            <h2 class="text-xl mb-6 text-textLight dark:text-textDark font-bold">Driving Details</h2>
+            <h2 class="text-xl mb-6 text-textLight dark:text-textDark font-semibold">Driving Details</h2>
             <div>
                 <label for="licNo" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Driving
                     License ID</label>
@@ -591,7 +591,7 @@
                         </button>
                     </div>
 
-                    <div *ngIf="!licenseFrontImageFileName" class="text-red-500 text-sm mt-1">
+                    <div *ngIf="isAppireImgValidation && !licenseFrontImageFileName" class="text-red-500 text-sm mt-1">
                         <div>License Front Image is required</div>
                     </div>
                 </div>
@@ -616,13 +616,14 @@
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
-                    <div *ngIf="!licenseBackImageFileName" class="text-red-500 text-sm mt-1">
+                    <div *ngIf="isAppireImgValidation && !licenseBackImageFileName" class="text-red-500 text-sm mt-1">
                         <div>License Back Image is required</div>
                     </div>
                 </div>
             </div>
 
-            <h2 class="text-xl mt-16 mb-6 text-textLight dark:text-textDark font-bold">Vehicle Insurance Details</h2>
+            <h2 class="text-xl mt-16 mb-6 text-textLight dark:text-textDark font-semibold">Vehicle Insurance Details
+            </h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-11 my-5">
                 <div>
                     <label for="insNo" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Insurance
@@ -666,7 +667,8 @@
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
-                    <div *ngIf="!insurenceFrontImageFileName" class="text-red-500 text-sm mt-1">
+                    <div *ngIf="isAppireImgValidation && !insurenceFrontImageFileName"
+                        class="text-red-500 text-sm mt-1">
                         <div>Insurance’s Front Image is required</div>
                     </div>
                 </div>
@@ -691,14 +693,14 @@
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
-                    <div *ngIf="!insurenceBackImageFileName" class="text-red-500 text-sm mt-1">
+                    <div *ngIf="isAppireImgValidation && !insurenceBackImageFileName" class="text-red-500 text-sm mt-1">
                         <div>Insurance’s Back Image is required</div>
                     </div>
                 </div>
             </div>
 
 
-            <h2 class="text-xl mt-16 mb-6 text-textLight dark:text-textDark font-bold">Vehicle Details</h2>
+            <h2 class="text-xl mt-16 mb-6 text-textLight dark:text-textDark font-semibold">Vehicle Details</h2>
             <div>
                 <label for="vRegNo" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Vehicle
                     Registration Number</label>
@@ -762,7 +764,7 @@
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
-                    <div *ngIf="!vehicleFrontImageFileName" class="text-red-500 text-sm mt-1">
+                    <div *ngIf="isAppireImgValidation && !vehicleFrontImageFileName" class="text-red-500 text-sm mt-1">
                         <div>Vehicle’s Front Image is required</div>
                     </div>
                 </div>
@@ -786,7 +788,7 @@
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
-                    <div *ngIf="!vehicleBackImageFileName" class="text-red-500 text-sm mt-1">
+                    <div *ngIf="isAppireImgValidation && !vehicleBackImageFileName" class="text-red-500 text-sm mt-1">
                         <div>Vehicle’s Back Image is required</div>
                     </div>
                 </div>
@@ -810,7 +812,7 @@
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
-                    <div *ngIf="!vehicleSideAImageFileName" class="text-red-500 text-sm mt-1">
+                    <div *ngIf="isAppireImgValidation && !vehicleSideAImageFileName" class="text-red-500 text-sm mt-1">
                         <div>Vehicle’s Side Image - 1 is required</div>
                     </div>
                 </div>
@@ -834,7 +836,7 @@
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
-                    <div *ngIf="!vehicleSideBImageFileName" class="text-red-500 text-sm mt-1">
+                    <div *ngIf="isAppireImgValidation && !vehicleSideBImageFileName" class="text-red-500 text-sm mt-1">
                         <div>Vehicle’s Side Image - 2 is required</div>
                     </div>
                 </div>

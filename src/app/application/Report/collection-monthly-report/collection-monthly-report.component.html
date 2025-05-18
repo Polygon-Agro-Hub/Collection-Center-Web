@@ -1,4 +1,4 @@
-<app-loading-spinner *ngIf="isLoading"/>
+<app-loading-spinner *ngIf="isLoading" />
 
 <div *ngIf="!isLoading">
     <div class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-8 mx-5 cursor-pointer">
@@ -15,7 +15,7 @@
                 <div
                     class="border-2 rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
                     <input type="date" [(ngModel)]="startDate" (change)="startDateValidation()"
-                        class="block w-full appearance-none  text-textLight dark:text-textDark dark:bg-[#292929] px-3 py-2 rounded-xl focus:outline-none" />
+                        class="block w-full appearance-none text-textLight dark:text-textDark dark:bg-[#292929] px-3 py-2 rounded-xl focus:outline-none" />
                 </div>
             </div>
 
@@ -25,13 +25,15 @@
                 <div
                     class="border-2 rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
                     <input type="date" [(ngModel)]="endDate" (change)="endDateValidation()"
-                        class="block w-full appearance-none  text-textLight dark:text-textDark dark:bg-[#292929] px-3 py-2 rounded-xl focus:outline-none" />
+                        [min]="startDate | date:'yyyy-MM-dd'"
+                        class="block w-full appearance-none text-textLight dark:text-textDark dark:bg-[#292929] px-3 py-2 rounded-xl focus:outline-none" />
                 </div>
             </div>
 
             <button (click)="filterDate()"
                 class="bg-[#415CFF] text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-lg ml-5 dark:text-textDark dark:bg-[#292929]">Go</button>
         </div>
+
 
         <div *ngIf="hasData" class="flex justify-center items-center mt-10">
             <button (click)="downloadReport()"
@@ -154,10 +156,12 @@
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of farmerDataArr">
-                        <td class="text-center border border-[#828282] dark:border-gray-600 px-4 py-2">{{ item.ReportDate
+                        <td class="text-center border border-[#828282] dark:border-gray-600 px-4 py-2">{{
+                            item.ReportDate
                             |
                             date: 'yyyy-MM-dd' }}</td>
-                        <td class="text-center border text-[#292929] border-[#828282] dark:border-gray-600 px-4 py-2">{{item.TotalQty}} kg
+                        <td class="text-center border text-[#292929] border-[#828282] dark:border-gray-600 px-4 py-2">
+                            {{item.TotalQty}} kg
                         </td>
                         <td class="text-center border border-[#828282] dark:border-gray-600 px-4 py-2">
                             {{item.TotalFarmers}}

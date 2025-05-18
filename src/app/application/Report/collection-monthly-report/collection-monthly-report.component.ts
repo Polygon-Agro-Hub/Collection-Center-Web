@@ -25,6 +25,7 @@ export class CollectionMonthlyReportComponent implements OnInit {
   currentDate: Date = new Date();
   startDate: Date = new Date();
   endDate: Date = new Date();
+  maxDate: string = new Date().toISOString().split('T')[0];
 
   hasData: boolean = false;
   isLoading: boolean = false;
@@ -78,10 +79,18 @@ export class CollectionMonthlyReportComponent implements OnInit {
   startDateValidation() {
     const today = new Date();
     const selectedDate = new Date(this.startDate);
-
+  
+    // Check if start date is in the future
     if (selectedDate > today) {
-     this.toastSrv.warning('<b>Start date</b> cannot be a future date.')
+      this.toastSrv.warning('<b>Start date</b> cannot be a future date.');
       this.startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      return;
+    }
+  
+    // Check if end date is already selected and start date is after end date
+    if (this.endDate && selectedDate > new Date(this.endDate)) {
+      this.toastSrv.warning('<b>Start date</b> cannot be after the selected end date.');
+      this.startDate = new Date(this.endDate);
     }
   }
 

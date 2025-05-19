@@ -33,7 +33,7 @@ export class CollectionMonthlyReportComponent implements OnInit {
   constructor(
     private ReportSrv: ReportServiceService,
     private route: ActivatedRoute,
-    private toastSrv:ToastAlertService,
+    private toastSrv: ToastAlertService,
     private router: Router,
   ) { }
 
@@ -79,14 +79,14 @@ export class CollectionMonthlyReportComponent implements OnInit {
   startDateValidation() {
     const today = new Date();
     const selectedDate = new Date(this.startDate);
-  
+
     // Check if start date is in the future
     if (selectedDate > today) {
       this.toastSrv.warning('<b>Start date</b> cannot be a future date.');
       this.startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
       return;
     }
-  
+
     // Check if end date is already selected and start date is after end date
     if (this.endDate && selectedDate > new Date(this.endDate)) {
       this.toastSrv.warning('<b>Start date</b> cannot be after the selected end date.');
@@ -106,7 +106,7 @@ export class CollectionMonthlyReportComponent implements OnInit {
     }
 
     if (selectedEndDate > today) {
-      
+
       this.toastSrv.error('<b>End date cannot be a future date.')
       this.endDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());;
     }
@@ -229,7 +229,9 @@ export class CollectionMonthlyReportComponent implements OnInit {
     doc.text(timestamp, margin + 5, y);
 
     // Save the PDF
-    doc.save('collection_officer_report.pdf');
+    const fileName = `collection_officer_report(${this.officerDataObj.empId}_from_${this.startDate}_to_${this.endDate}).pdf`;
+    doc.save(fileName);
+
   }
 
 

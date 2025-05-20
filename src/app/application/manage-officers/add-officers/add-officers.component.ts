@@ -31,7 +31,7 @@ export class AddOfficersComponent implements OnInit {
 
 
   languages: string[] = ['Sinhala', 'English', 'Tamil'];
-  selectedPage: 'pageOne' | 'pageTwo' | 'pageThree' = 'pageThree';
+  selectedPage: 'pageOne' | 'pageTwo' | 'pageThree' = 'pageOne';
   lastID!: number
   itemId: number | null = null;
   officerId!: number

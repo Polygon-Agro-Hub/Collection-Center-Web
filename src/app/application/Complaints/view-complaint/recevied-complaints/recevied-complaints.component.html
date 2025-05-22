@@ -111,7 +111,7 @@
                             <p class="text-[#3E3E3E]">{{item.createdAt | date:'hh:mm a'}}</p>
                         </div>
                     </td>
-                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300 flex items-center justify-center">
+                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300 flex items-center justify-center cursor-default">
                         <span *ngIf="item.status ==='Assigned'"
                             class="bg-[#C8E0FF] text-[#415CFF] px-3 py-1 rounded-lg">
                             Assigned
@@ -169,9 +169,10 @@
 
                 <p class="text-3xl font-bold dark:text-white">Your Response</p>
 
-                <div class="border-[1px] border-[#D9D9D9] dark:text-textDark dark:bg-[#1D1D1F] rounded-lg p-5">
-                    <p>{{replyObj.reply}}</p>
-                </div>
+                <textarea
+                    class="w-full border-[1px] border-[#D9D9D9] dark:text-textDark dark:bg-[#1D1D1F] rounded-lg p-5"
+                    rows="10" readonly [(ngModel)]="replyObj.reply">
+                </textarea>
 
                 <button
                     class="bg-[#F6F7F9]  text-[#6B7D8C] text-lg  border-2 border-gray-400 rounded-lg px-6 py-2 font-medium shadow-md hover:bg-gray-100"

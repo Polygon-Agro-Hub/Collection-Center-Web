@@ -2,7 +2,6 @@ import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ReceviedComplaintsComponent } from '../recevied-complaints/recevied-complaints.component';
-import { AddComplaintComponent } from '../../add-complaint/add-complaint.component';
 import { SendedComplaintComponent } from '../sended-complaint/sended-complaint.component';
 import { ComplaintsService } from '../../../../services/Complaints-Service/complaints.service';
 import { ToastAlertService } from '../../../../services/toast-alert/toast-alert.service';

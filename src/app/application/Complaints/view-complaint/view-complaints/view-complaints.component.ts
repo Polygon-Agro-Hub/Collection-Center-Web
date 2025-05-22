@@ -11,7 +11,7 @@ import Swal from 'sweetalert2';
 @Component({
   selector: 'app-view-complaints',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReceviedComplaintsComponent, AddComplaintComponent, SendedComplaintComponent],
+  imports: [CommonModule, FormsModule, ReceviedComplaintsComponent, SendedComplaintComponent],
   templateUrl: './view-complaints.component.html',
   styleUrl: './view-complaints.component.css'
 })

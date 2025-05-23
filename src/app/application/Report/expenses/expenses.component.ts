@@ -35,13 +35,14 @@ export class ExpensesComponent implements OnInit {
 
   logingRole: string | null = null;
 
-  fromDate: Date | string = '';
-  toDate: Date | string = '';
+  fromDate: string = '';
+  toDate:  string = '';
+  maxDate: string = new Date().toISOString().split('T')[0];
 
   isPopupVisible: boolean = false;
   isLoading: boolean = false;
   isDateFilterSet: boolean = false;
- 
+
   isCenterManager: boolean = false;
 
 
@@ -54,16 +55,15 @@ export class ExpensesComponent implements OnInit {
     private ManageOficerSrv: ManageOfficersService,
     private toastSrv: ToastAlertService,
     private tokenSrv: TokenServiceService
-  ) { 
+  ) {
     this.logingRole = tokenSrv.getUserDetails().role
   }
 
   ngOnInit(): void {
     this.getAllCenters();
-    console.log(this.logingRole);
     if (this.logingRole === "Collection Center Manager") {
       this.isCenterManager = true;
-    }else {
+    } else {
       this.isCenterManager = false;
     }
   }
@@ -75,7 +75,7 @@ export class ExpensesComponent implements OnInit {
 
   fetchFilteredPayments(page: number = 1, limit: number = this.itemsPerPage) {
     this.isLoading = true;
-  
+
     this.ReportSrv.getAllPayments(
       page,
       limit,
@@ -85,7 +85,6 @@ export class ExpensesComponent implements OnInit {
       this.searchText
     ).subscribe(
       (res) => {
-        console.log(res);
         this.farmerPaymentsArr = res.items;
         this.totalItems = res.total;
         this.hasData = res.items.length > 0;
@@ -97,24 +96,19 @@ export class ExpensesComponent implements OnInit {
       }
     );
   }
-  
 
-  // New method to calculate the total payments amount
+
   private formatNumberToTwoDecimals(value: any): number {
-    // Convert to number if it's a string
     const num = typeof value === 'string' ? parseFloat(value) : Number(value);
-    // Round to 2 decimal places
     return parseFloat(num.toFixed(2));
   }
 
-  // Update the calculateTotalPayments method
   calculateTotalPayments(): void {
     this.totalPaymentsAmount = this.farmerPaymentsArr.reduce((sum, payment) => {
       const amount = this.formatNumberToTwoDecimals(payment.totalAmount);
       return sum + (isNaN(amount) ? 0 : amount);
     }, 0);
 
-    // Ensure the final total is also formatted to 2 decimal places
     this.totalPaymentsAmount = this.formatNumberToTwoDecimals(this.totalPaymentsAmount);
   }
 
@@ -129,20 +123,15 @@ export class ExpensesComponent implements OnInit {
 
   onPageChange(event: number) {
     this.page = event;
-  
+
     if (this.selectCenters || this.searchText) {
-      // User has applied center/search filter
-      console.log('filtered payments')
       this.fetchFilteredPayments(this.page, this.itemsPerPage);
     } else {
-      // Default data fetch using only date range
-      console.log('normal payments')
       this.fetchFilteredPayments(this.page, this.itemsPerPage);
     }
   }
 
   applyCompanyFilters() {
-    console.log(this.selectCenters);
     this.fetchFilteredPayments();
   }
 
@@ -151,52 +140,59 @@ export class ExpensesComponent implements OnInit {
     this.fetchFilteredPayments();
   }
 
-  validateToDate() {
-    // Case 1: User hasn't selected fromDate yet
-    if (!this.fromDate) {
-      this.toDate = ''; // Reset toDate
-      this.toastSrv.warning("Please select the 'From' date first.");
-      return;
+  validateToDate(toDateInput: HTMLInputElement) {
+    const from = this.fromDate ? new Date(this.fromDate) : null;
+    const to = this.toDate ? new Date(this.toDate) : null;
+
+    // Always clear toDate if fromDate is not properly set
+    if (!from || isNaN(from.getTime())) {
+        if (this.toDate) {
+            this.toDate = '';           // Clear model
+            toDateInput.value = '';     // Clear input field directly
+            console.log(this.toDate);
+        }
+        this.toastSrv.warning("Please select the 'From' date first.");
+        return;
     }
-  
-    // Case 2: toDate is earlier than fromDate
-    if (this.toDate) {
-      const from = new Date(this.fromDate);
-      const to = new Date(this.toDate);
-  
-      if (to <= from) {
-        this.toDate = ''; // Reset toDate
-        this.toastSrv.warning("The 'To' date cannot be earlier than or same to the 'From' date.");
-      }
+
+    // If toDate is set, check if it's valid against fromDate
+    if (to && !isNaN(to.getTime())) {
+        if (to <= from) {
+            this.toDate = '';           // Clear model
+            toDateInput.value = '';     // Clear input field directly
+            this.toastSrv.warning("The 'To' date cannot be earlier than or same to the 'From' date.");
+        }
     }
-  }
+}
+
+
 
   validateFromDate() {
     // Case 1: User hasn't selected fromDate yet
     if (!this.toDate) {
       return;
     }
-  
+
     // Case 2: toDate is earlier than fromDate
     if (this.toDate) {
       const from = new Date(this.fromDate);
       const to = new Date(this.toDate);
-  
+
       if (to <= from) {
         this.fromDate = ''; // Reset toDate
         this.toastSrv.warning("The 'From' date cannot be Later than or same to the 'From' date.");
       }
     }
   }
-  
+
 
   goBtn() {
     if (!this.fromDate || !this.toDate) {
-      this.toastSrv.warning("Please fill in all fields");
+      this.toastSrv.warning("Please select a date range to view the data");
       return;
     }
 
-    this.isDateFilterSet  = true;
+    this.isDateFilterSet = true;
 
     this.fetchFilteredPayments();
   }
@@ -204,16 +200,15 @@ export class ExpensesComponent implements OnInit {
   getAllCenters() {
     this.ManageOficerSrv.getCCHOwnCenters().subscribe(
       (res) => {
-        console.log(res);
         this.centerArr = res;
       }
     );
   }
 
-  
+
   downloadTemplate1() {
     this.isDownloading = true;
-  
+
     this.ReportSrv
       .downloadPaymentReportFile(this.fromDate, this.toDate, this.selectCenters, this.searchText)
       .subscribe({
@@ -224,7 +219,7 @@ export class ExpensesComponent implements OnInit {
           a.download = `Expenses Report From ${this.fromDate} To ${this.toDate}.xlsx`;
           a.click();
           window.URL.revokeObjectURL(url);
-  
+
           Swal.fire({
             icon: "success",
             title: "Downloaded",
@@ -244,7 +239,6 @@ export class ExpensesComponent implements OnInit {
   }
 
   navigateToFarmerReport(invNo: string) {
-    console.log(invNo);
     this.router.navigate([`reports/farmer-report-invoice/${invNo}`]);
   }
 

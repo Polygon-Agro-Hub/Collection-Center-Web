@@ -40,7 +40,7 @@ export class ViewCentersComponent implements OnInit {
         'Uva',
         'Sabaragamuwa'
     ];
-    
+
     // Define all districts with their provinces
     allDistricts = [
         { name: 'Ampara', province: 'Eastern' },
@@ -69,9 +69,9 @@ export class ViewCentersComponent implements OnInit {
         { name: 'Trincomalee', province: 'Eastern' },
         { name: 'Vavuniya', province: 'Northern' },
     ];
-    
+
     // Districts filtered by selected province
-    filteredDistricts: {name: string, province: string}[] = [];
+    filteredDistricts: { name: string, province: string }[] = [];
 
     constructor(
         private router: Router,
@@ -81,14 +81,12 @@ export class ViewCentersComponent implements OnInit {
     ngOnInit(): void {
         this.updateFilteredDistricts();
         this.fetchAllCenterDetails();
-        // Initialize with all districts
     }
 
     fetchAllCenterDetails(province: string = this.selectProvince, district: string = this.selectDistrict, search: string = this.searchText) {
         this.isLoading = true;
         this.TargetSrv.getCenterDetails(this.currentPage, this.itemsPerPage, province, district, search).subscribe(
             (res) => {
-                console.log(res);
                 this.itemsArr = res.items;
                 this.totalItems = res.totalItems;
                 this.countOfOfficers = res.items.length;
@@ -157,14 +155,13 @@ export class ViewCentersComponent implements OnInit {
     }
 
     navigateToDashboard(id: number) {
-        console.log('this is id: ', id);
         this.router.navigate([`/centers/center-shashbord/${id}`]);
     }
 
 
     addCenter() {
         this.router.navigate([`/centers/add-a-center`]);
-      }
+    }
 }
 
 class CenterData {

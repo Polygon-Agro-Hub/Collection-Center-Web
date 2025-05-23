@@ -31,19 +31,16 @@ export class FarmerReportInvoiceComponent implements OnInit {
     private router: Router,
     private ReportSrv: ReportServiceService,
     private route: ActivatedRoute,
-    // private datePipe: DatePipe
 
   ) { }
 
   ngOnInit(): void {
     this.invNo = this.route.snapshot.params['invNo'];
-    console.log('invoice no', this.invNo);
     this.fetchFarmerDetails(this.invNo);
   }
 
   fetchFarmerDetails(invNo: string) {
     this.isLoading = true
-    console.log('invoice', this.invNo);
     this.ReportSrv.getFarmerReportInvoice(invNo).subscribe(
       (res) => {
         if (res.status) {
@@ -78,8 +75,6 @@ export class FarmerReportInvoiceComponent implements OnInit {
   calculeteTotal(priceA: number, qtyA: number, priceB: number, qtyB: number, priceC: number, qtyC: number): number {
     let tot = priceA * qtyA + priceB * qtyB + priceC * qtyC
     this.totalAmount += tot;
-    console.log(this.totalAmount);
-
     return tot;
   }
 
@@ -190,11 +185,6 @@ export class FarmerReportInvoiceComponent implements OnInit {
     // Set font
     doc.setFont('helvetica');
 
-    // Add title
-    // doc.setFontSize(16);
-    // doc.text('INVOICE', 105, y, { align: 'center' });
-    // y += yIncrement * 2;
-
     // Add invoice details
     doc.setFontSize(10);
     doc.text(`INV NO: ${formatValue(this.userObj.invNo)}`, x, y);
@@ -273,7 +263,7 @@ export class FarmerReportInvoiceComponent implements OnInit {
       formatValueForAmounts(crop.gradeBquan),
       formatValueForAmounts(crop.gradeCprice),
       formatValueForAmounts(crop.gradeCquan),
-      formatValueForAmounts(this.calculateRowTotalforReport(crop).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }))
+      formatValueForAmounts(this.calculateRowTotalforReport(crop).toFixed(2))
     ]);
 
     // Draw Crop Details table with dynamic row heights
@@ -289,7 +279,7 @@ export class FarmerReportInvoiceComponent implements OnInit {
     // Add Full Total
     doc.setFontSize(10);
     y += yIncrement
-    doc.text('Full Total(Rs.) : '  + formatValueForAmounts(this.calculateOverallTotalforReport().toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })) , x, y);
+    doc.text('Full Total(Rs.) : '  + formatValueForAmounts(this.calculateOverallTotalforReport().toFixed(2)) , x, y);
     y += yIncrement * 2.5;
 
     // QR Code Image Loading Function
@@ -385,53 +375,11 @@ export class FarmerReportInvoiceComponent implements OnInit {
     doc.text('Officer Qr Code', officerQrX + 6, labelY);
 
     // Save the PDF
-    doc.save('invoice.pdf');
+    doc.save(`invoice_${this.userObj.invNo}.pdf`);
     this.isLoading = false;
 }
 
-  // Helper function to draw tables
-  // private drawTable(doc: jsPDF, x: number, y: number, data: string[][]): void {
-  //   // Calculate column widths based on number of columns
-  //   const pageWidth = doc.internal.pageSize.width - 28; // Margins on both sides
-  //   const colWidth = pageWidth / data[0].length;
-
-  //   // Draw headers
-  //   doc.setFillColor(240, 240, 240);
-  //   doc.rect(x, y, pageWidth, 7, 'F');
-  //   doc.setFont('bold');
-
-  //   data[0].forEach((header, i) => {
-  //     doc.text(header, x + i * colWidth + colWidth / 2, y + 5, { align: 'center' });
-  //   });
-
-  //   // Draw data rows
-  //   doc.setFont('normal');
-  //   for (let i = 1; i < data.length; i++) {
-  //     const rowY = y + 7 * i;
-
-  //     // Draw row background (alternating colors for better readability)
-  //     if (i % 2 === 0) {
-  //       doc.setFillColor(252, 252, 252);
-  //       doc.rect(x, rowY, pageWidth, 7, 'F');
-  //     }
-
-  //     // Draw cell borders
-  //     doc.setDrawColor(200, 200, 200);
-  //     doc.rect(x, rowY, pageWidth, 7);
-
-  //     // Draw vertical lines for columns
-  //     for (let j = 1; j < data[0].length; j++) {
-  //       doc.line(x + j * colWidth, rowY, x + j * colWidth, rowY + 7);
-  //     }
-
-  //     // Draw cell contents
-  //     data[i].forEach((cell, j) => {
-  //       doc.text(cell, x + j * colWidth + colWidth / 2, rowY + 5, { align: 'center' });
-  //     });
-  //   }
-  //   this.isLoading = false
-  // }
-
+  
 }
 
 class User {

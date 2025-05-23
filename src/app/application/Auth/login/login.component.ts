@@ -34,7 +34,6 @@ export class LoginComponent {
 
   ngOnInit() {
     this.tokenService.clearLoginDetails();
-    // localStorage.removeItem('LoginToken');
     this.clearAllCookies();
   }
 
@@ -42,7 +41,7 @@ export class LoginComponent {
 
   clearAllCookies() {
     const cookies = document.cookie.split(";");
-    
+
     for (let i = 0; i < cookies.length; i++) {
       const cookie = cookies[i];
       const eqPos = cookie.indexOf("=");
@@ -50,14 +49,12 @@ export class LoginComponent {
       document.cookie = name + "=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/";
     }
 
-   
+
   }
 
 
 
   onLogin() {
-    console.log("Successfully click the button");
-
     if (!this.loginObj.userName) {
       Swal.fire({
         icon: 'error',
@@ -104,15 +101,8 @@ export class LoginComponent {
             timer: 1500
           });
 
-          
-          // localStorage.setItem("CCLoginToken", res.token)
           this.role = res.role;
-          // Save token details synchronously
-          
-          
 
-
-          // Defer navigation to allow the token to be saved properly
           setTimeout(() => {
             if (res.updatedPassword == 0) {
               this.router.navigate(['/change-password']);
@@ -121,10 +111,10 @@ export class LoginComponent {
               if (this.role === 'Collection Center Manager') {
                 this.router.navigate(['/dashbord']);
                 this.isLoading = false;
-              }else if(this.role === 'Collection Center Head'){
+              } else if (this.role === 'Collection Center Head') {
                 this.router.navigate(['/centers']);
                 this.isLoading = false;
-              }else{
+              } else {
                 this.router.navigate(['/'])
                 this.isLoading = false;
               }

@@ -1,10 +1,10 @@
 <app-loading-spinner *ngIf="isLoading" />
 
 <div *ngIf="!isLoading">
-    <div class="flex flex-row pt-0 mb-7 gap-5 cursor-pointer">
-        <p class="font-semibold text-sm text-[#424242] dark:text-white">Centers</p>
-        <p class="font-semibold text-sm text-[#424242] dark:text-white" onclick="history.back()">Center Dashboard</p>
-        <p class="font-semibold text-sm text-[#424242] dark:text-white">Center Officers</p>
+    <div class="flex flex-row pt-0 mb-5 mr-5 ml-0 gap-5 cursor-pointer">
+        <p class="font-semibold text-sm text-[#424242] dark:text-white" (click)="navigateToCenters()">Centres</p>
+        <p class="font-semibold text-sm text-[#424242] dark:text-white" onclick="history.back()">Centre Dashboard</p>
+        <p class="font-semibold text-sm text-[#424242] dark:text-white">Centre Officers</p>
     </div>
 
     <div class="w-full overflow-x-auto px-10 py-7 bg-tileLight shadow-lg rounded-lg dark:bg-[#363636]">
@@ -73,7 +73,7 @@
 
                 <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
                     <input type="text" placeholder="Search by EMP ID, First / Last name,NIC" [(ngModel)]="searchText"
-                        class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
+                        class="bg-transparent outline-none w-full text-textLight dark:text-textDark" (keydown.enter)="onSearch()" (keydown.esc)="offSearch()"/>
                     <button type="button" class="text-gray-500 hover:text-[#000000] focus:outline-none mr-2"
                         (click)="onSearch()">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -135,7 +135,7 @@
 
                             <td class="px-3 py-4 text-sm text-[#000000] dark:text-textDark">{{ officer.jobRole }}</td>
                             <td class="px-3 py-4">
-                                <div class="flex justify-center items-center w-full" (click)="openPopup(officer)">
+                                <div class="flex justify-center items-center w-full cursor-pointer" (click)="openPopup(officer)">
                                     <span *ngIf="officer.status === 'Approved'"
                                         class="inline-block w-[120px] text-center px-3 py-2 bg-[#C8E0FF] text-[#415CFF] text-sm font-medium rounded-md">
                                         Approved
@@ -155,10 +155,10 @@
                             <td class="px-3 py-4 text-sm text-[#000000] dark:text-gray-300">{{officer.nic}}</td>
                             <td class="px-3 py-4 text-sm text-[#000000] text-center dark:text-gray-300 flex flex-row gap-4">
                                 <button class="text-gray-400 hover:text-gray-600"
-                                    (click)="navigateToProfile(officer.id)">
+                                    (click)="navigateToProfile(officer.id, this.centerId)">
                                     <i class="fa-regular fa-file text-lg"></i>
                                 </button>
-                                <button class="text-[#415CFF] hover:text-blue-500" (click)="navigateToEdit(officer.id)">
+                                <button class="text-[#415CFF] hover:text-blue-500" (click)="navigateToEdit(officer.id, this.centerId)">
                                     <i class="fa-solid fa-pen-to-square text-lg"></i>
                                 </button>
                                 <button class="text-[#FF415C] hover:text-red-500"

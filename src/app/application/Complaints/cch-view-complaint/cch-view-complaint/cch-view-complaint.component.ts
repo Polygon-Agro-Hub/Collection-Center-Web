@@ -30,7 +30,7 @@ export class CchViewComplaintComponent implements OnInit {
     private complaintsService: ComplaintsService,
     private toastSrv: ToastAlertService
   ) { }
-  
+
   ngOnInit(): void {
     this.fetchAllCategory();
   }
@@ -51,7 +51,6 @@ export class CchViewComplaintComponent implements OnInit {
     this.complaintsService.submitCCHComplaint(formData).subscribe(
       (response) => {
         if (response.status) {
-          console.log('Complaint submitted successfully:', response);
           this.toastSrv.success('Your complaint has been submitted successfully!');
           this.isAddComplaintOpen = false;
           this.category = '';
@@ -88,20 +87,19 @@ export class CchViewComplaintComponent implements OnInit {
     this.isAddComplaintOpen = true;
   }
 
-  
-  fetchAllCategory(){
+
+  fetchAllCategory() {
     this.complaintsService.getComplainCategory().subscribe(
-      (res)=>{
+      (res) => {
         this.categoryArr = res;
-        console.log(this.categoryArr);
       }
     )
   }
-  
+
 
 }
 
 class Category {
   id!: number;
-  categoryEnglish!:string
+  categoryEnglish!: string
 }

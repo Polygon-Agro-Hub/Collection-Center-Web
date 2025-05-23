@@ -1,5 +1,10 @@
 <app-loading-spinner *ngIf="isLoading" />
 
+<div *ngIf="!isLoading" class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-8 mx-5 cursor-pointer">
+    <p onclick="history.back()"> Centre Target</p>
+    <p>Edit Officer Target</p>
+  </div>
+
 <div *ngIf="!isLoading">
     <div class="font-semibold text[#424242] mb-8 mx-5 dark:text-[#FFFFFF]">
         <div class="flex flex-col items-center justify-center ">
@@ -12,15 +17,15 @@
                 <table>
                     <tr class="border-b-2">
                         <th class="px-8 py-1 text-[#4B5563] font-normal">
-                            <p>Grade</p>
+                            <p>Grade A</p>
                             <p>(Kg)</p>
                         </th>
                         <th class="px-8 py-1 text-[#4B5563] font-normal">
-                            <p>Grade</p>
+                            <p>Grade B</p>
                             <p>(Kg)</p>
                         </th>
                         <th class="px-8 py-1 text-[#4B5563] font-normal">
-                            <p>Grade</p>
+                            <p>Grade C</p>
                             <p>(Kg)</p>
                         </th>
                     </tr>

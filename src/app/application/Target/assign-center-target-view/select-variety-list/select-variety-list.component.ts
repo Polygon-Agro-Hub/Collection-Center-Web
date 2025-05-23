@@ -5,11 +5,12 @@ import { ToastAlertService } from '../../../../services/toast-alert/toast-alert.
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
+import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-select-variety-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxPaginationModule],
+  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent],
   templateUrl: './select-variety-list.component.html',
   styleUrl: './select-variety-list.component.css'
 })
@@ -22,6 +23,7 @@ export class SelectVarietyListComponent implements OnInit {
   page: number = 1;
   totalItems: number = 0;
   itemsPerPage: number = 10;
+  isLoading: boolean = true;
 
 
   cropCount: number = 0;
@@ -38,16 +40,14 @@ export class SelectVarietyListComponent implements OnInit {
   }
 
   fetchCenterCrops(page: number = this.page, limit: number = this.itemsPerPage, search: string = this.searchText) {
+    this.isLoading = true;
     this.TargetSrv.getCenterCrops(this.centerDetails.centerId, page, limit, search).subscribe(
       (res) => {
-        console.log(res);
         this.cropsArr = res.items
         this.cropCount = res.items.length;
         this.hasData = this.cropsArr.length > 0 ? true : false;
         this.totalItems = res.total;
-        console.log(this.hasData,"Has datas");
-        
-
+        this.isLoading = false;
       }
     )
   }
@@ -60,9 +60,6 @@ export class SelectVarietyListComponent implements OnInit {
       isSelected = 1;
     }
 
-    console.log("On Add", isSelected, cropId);
-
-
     let data = {
       centerId: this.centerDetails.centerId,
       isAssign: isSelected,
@@ -71,6 +68,7 @@ export class SelectVarietyListComponent implements OnInit {
 
     this.TargetSrv.addORremoveCenterCrops(data).subscribe(
       (res) => {
+        this.isLoading = true;
         if (res.status) {
           this.toastSrv.success(res.message);
           this.fetchCenterCrops();

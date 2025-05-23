@@ -30,7 +30,6 @@ export class ViewMyTargetComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // this.today = this.datePipe.transform(new Date(), 'yyyy/MM/dd') || '';
     this.fetchOfficerTarget()
   }
 

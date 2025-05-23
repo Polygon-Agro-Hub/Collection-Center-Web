@@ -49,9 +49,9 @@ export class ViewOfficersComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.fetchAllOfficers();
+
     this.getAllcompany();
-    console.log(this.logingRole);
+
     this.getAllCenters();
     this.fetchByRole();
 
@@ -73,7 +73,7 @@ export class ViewOfficersComponent implements OnInit {
     this.isLoading = true;
     this.ManageOficerSrv.getAllOfficers(page, limit, status, role, searchText).subscribe(
       (res) => {
-        console.log(res);
+
         this.OfficerArr = res.items
         this.totalItems = res.total
         if (res.items.length === 0) {
@@ -132,17 +132,16 @@ export class ViewOfficersComponent implements OnInit {
       text: 'Do you really want to delete this Collection Officer? This action cannot be undone.',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
+      confirmButtonColor: '#3085d6', // Default blue color
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete it!',
       cancelButtonText: 'Cancel',
       customClass: {
         popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
         title: 'dark:text-white',
-
         icon: '!border-gray-200 dark:!border-gray-500',
-        confirmButton: 'hover:bg-red-600 dark:hover:bg-red-700 focus:ring-red-500 dark:focus:ring-red-800',
-        cancelButton: 'hover:bg-blue-600 dark:hover:bg-blue-700 focus:ring-blue-500 dark:focus:ring-blue-800',
+        confirmButton: 'hover:!bg-red-600 dark:hover:!bg-red-700 focus:ring-red-500 dark:focus:ring-red-800',
+        cancelButton: '',
         actions: 'gap-2'
       }
     }).then((result) => {
@@ -151,21 +150,18 @@ export class ViewOfficersComponent implements OnInit {
         this.ManageOficerSrv.deleteOfficer(id).subscribe(
           (data) => {
             if (data.status) {
-              console.log('Collection Officer deleted successfully');
               this.toastSrv.success('The Officer has been deleted.')
               this.fetchByRole()
               this.isLoading = false;
             } else {
               this.isLoading = false;
               this.toastSrv.error('There was an error deleting the ofiicer')
-
             }
           },
           (error) => {
             console.error('Error deleting news:', error);
             this.isLoading = false;
             this.toastSrv.error('There was an error deleting the ofiicer')
-
           }
         );
       }
@@ -175,7 +171,7 @@ export class ViewOfficersComponent implements OnInit {
 
   openPopup(item: any) {
     this.isPopupVisible = true;
-  
+
     const tableHtml = `
       <div class="container mx-auto">
         <h1 class="text-center text-2xl font-bold mb-4">Officer Name: ${item.firstNameEnglish}</h1>
@@ -192,18 +188,18 @@ export class ViewOfficersComponent implements OnInit {
         </div>
       </div>
     `;
-  
+
     const swalInstance = Swal.fire({
       html: tableHtml,
       showConfirmButton: false,
       width: 'auto',
-      allowOutsideClick: false, // Prevent closing by clicking outside
+      allowOutsideClick: true, // Prevent closing by clicking outside
       didOpen: () => {
         // Approve Button
         document.getElementById('approveButton')?.addEventListener('click', () => {
           this.handleStatusChange(swalInstance, item.id, 'Approved');
         });
-  
+
         // Reject Button
         document.getElementById('rejectButton')?.addEventListener('click', () => {
           this.handleStatusChange(swalInstance, item.id, 'Rejected');
@@ -211,9 +207,10 @@ export class ViewOfficersComponent implements OnInit {
       }
     });
   }
-  
+
   private handleStatusChange(swalInstance: any, id: number, status: 'Approved' | 'Rejected') {
     // Show loading state
+    this.isLoading = true;
     swalInstance.update({
       showConfirmButton: false,
       allowEscapeKey: false,
@@ -222,20 +219,24 @@ export class ViewOfficersComponent implements OnInit {
         Swal.showLoading();
       }
     });
-  
+
     this.ManageOficerSrv.ChangeStatus(id, status).subscribe({
       next: (res) => {
         swalInstance.close();
         if (res.status) {
+          this.isLoading = false;
+          swalInstance.close();
           const action = status === 'Approved' ? 'approved' : 'rejected';
           this.toastSrv.success(`The collection was ${action} successfully.`);
           this.fetchByRole();
         } else {
+          this.isLoading = false;
           this.toastSrv.error(res.message || `Failed to ${status.toLowerCase()} the collection.`);
         }
       },
       error: (err) => {
         swalInstance.close();
+        this.isLoading = false;
         this.toastSrv.error(`An error occurred while ${status.toLowerCase()}ing. Please try again.`);
       }
     });
@@ -320,5 +321,5 @@ class Company {
 class Center {
   id!: number
   centerName!: string;
-  regCode!:string;
+  regCode!: string;
 }

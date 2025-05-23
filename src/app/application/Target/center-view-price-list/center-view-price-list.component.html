@@ -1,21 +1,24 @@
-<div class="flex flex-row pt-0 mb-7 gap-5 cursor-pointer">
-    <p class="font-semibold text-sm text-[#424242] dark:text-white">Centers</p>
-    <p class="font-semibold text-sm text-[#424242] dark:text-white" onclick="history.back()">Center Dashboard</p>
+<app-loading-spinner *ngIf="isLoading" />
+
+
+<div *ngIf="!isLoading" class="flex flex-row mb-5 mr-5 ml-0 gap-5 cursor-pointer">
+    <p class="font-semibold text-sm text-[#424242] dark:text-white " (click)="navigateToCenters()">Centres</p>
+    <p class="font-semibold text-sm text-[#424242] dark:text-white" onclick="history.back()">Centre Dashboard</p>
     <p class="font-semibold text-sm text-[#424242] dark:text-white">View Price List</p>
 </div>
 
-<div class="w-full overflow-x-auto px-10 py-7 bg-tileLight shadow-lg rounded-lg dark:bg-[#363636]">
+<div *ngIf="!isLoading" class="w-full overflow-x-auto px-10 py-7 bg-tileLight shadow-lg rounded-lg dark:bg-[#363636]">
     <div class="flex flex-row items-center justify-between min-w-max">
         <div class="h-[100px]">  <!-- Set a fixed height to prevent layout shifts -->
-            <ng-container *ngIf="priceListArr.length > 0">
+            <ng-container *ngIf="hasData">
               <p class="font-semibold text-black text-base dark:text-white" >
                 Center: {{ priceListArr[0].centerName }}
               </p>
               <p class="font-semibold text-black text-base dark:text-white">
-                Market price on {{ priceListArr[0].formattedDate | date: 'shortDate' }}
+                Market price on {{ priceListArr[0].createdAt | date: 'yyyy/MM/dd' }}
               </p>
               <p class="font-semibol text-[#636D81] text-sm mt-1 dark:text-textDark">
-                Last upload at {{ priceListArr[0].formattedDate | date: 'hh.mm a \'on\' yyyy/MM/dd' }}
+                Last upload at {{ priceListArr[0].createdAt | date: 'hh:mm a' }}
               </p>
             </ng-container>
         </div>
@@ -24,35 +27,37 @@
 
             <p class="text-lg dark:text-white">Filter By</p>
 
-            <div class="relative w-46">
+
+              <div class="relative w-32">
                 <div
-                  class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center cursor-pointer"
-                  (click)="toggleGradeDropdown()">
-                  <select [(ngModel)]="selectGrade" (change)="filterGrade()"
-                    class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none opacity-0 absolute inset-0 cursor-pointer">
-                    <option value="" selected disabled>Grade</option>
-                    <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300" value="A">A</option>
-                    <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300" value="B">B</option>
-                    <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300" value="C">C</option>
-                  </select>
-                  
-                  <span class="px-3 py-2 w-full">
-                    {{selectGrade || 'Grade'}}
-                  </span>
-                  
-                  <button *ngIf="!selectGrade">
-                    <i class="fa-solid fa-angle-down text-lg mr-3"></i>
-                  </button>
-                  <button *ngIf="selectGrade" (click)="cancelGrade($event)">
-                    <i class="fa-solid fa-xmark text-lg mr-3"></i>
-                  </button>
+                    class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center w-full">
+                    <select (change)="filterGrade()" [(ngModel)]="selectGrade" 
+                        class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none cursor-pointer">
+                        <option value="" selected disabled>Grade</option>
+                        <option value="A"
+                            class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">
+                            A</option>
+                        <option value="B" class="text-textLight dark:text-textDark hover:bg-gray-300">
+                            B</option>
+                        <option value="C"
+                            class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">
+                            C</option>
+
+                    </select>
+                    <button *ngIf="!selectGrade" class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-[#000000] dark:text-gray-300">
+                        <i class="fa-solid fa-angle-down text-lg mr-3"></i>
+                    </button>
+                    <button *ngIf="selectGrade" (click)="cancelGrade()" class="absolute inset-y-0 right-0 flex items-center px-2 text-[#000000] dark:text-gray-300 cursor-pointer z-10">
+                        <i class="fa-solid fa-xmark text-lg mr-3"></i>
+                    </button>
+
                 </div>
-              </div>
+            </div>
 
 
             <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
                 <input type="text" placeholder="Search by Crop / Variety name.." [(ngModel)]="searchText"
-                    class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
+                    class="bg-transparent outline-none w-full text-textLight dark:text-textDark" (keydown.esc)="offSearch()" (keydown.enter)="onSearch()"/>
                 <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                     (click)="onSearch()">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -101,8 +106,8 @@
                   <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5]">{{ item.cropNameEnglish }}</td>
                   <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5]">{{ item.varietyNameEnglish }}</td>
                   <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5]">{{ item.grade }}</td>
-                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5]">{{ item.averagePrice }}</td>
-                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5]">{{ item.updatedPrice }}</td>
+                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5]">{{ item.averagePrice | number: '1.2-2' }}</td>
+                  <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5]">{{ item.updatedPrice | number: '1.2-2' }}</td>
                   
                 </tr>
               </tbody>

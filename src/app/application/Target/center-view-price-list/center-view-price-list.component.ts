@@ -5,20 +5,19 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from "@angular/forms";
 import { DropdownModule } from "primeng/dropdown";
 import { NgxPaginationModule } from "ngx-pagination";
+import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-center-view-price-list',
   standalone: true,
-  imports: [CommonModule, FormsModule,  DropdownModule, NgxPaginationModule],
+  imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, LoadingSpinnerComponent],
   templateUrl: './center-view-price-list.component.html',
   styleUrl: './center-view-price-list.component.css'
 })
-export class CenterViewPriceListComponent implements OnInit{
+export class
+  CenterViewPriceListComponent implements OnInit {
   centerId!: number;
-  
-
   priceListArr!: PriceList[];
-
   page: number = 1;
   totalItems: number = 0;
   itemsPerPage: number = 10;
@@ -26,8 +25,8 @@ export class CenterViewPriceListComponent implements OnInit{
 
   selectGrade: string = '';
   searchText: string = '';
-  
 
+  isLoading:boolean = true;
 
   constructor(
     private router: Router,
@@ -38,17 +37,21 @@ export class CenterViewPriceListComponent implements OnInit{
   ngOnInit(): void {
     this.centerId = this.route.snapshot.params['id'];
     this.fetchAllPriceList(this.centerId);
-    
+
   }
 
   fetchAllPriceList(centerId: number, page: number = 1, limit: number = this.itemsPerPage, grade: string = this.selectGrade, search: string = this.searchText) {
+    this.isLoading = true;
     this.TargetSrv.getAllPriceList(centerId, page, limit, grade, search).subscribe((res) => {
-
       this.priceListArr = res.items;
       this.totalItems = res.total;
       if (res.items.length === 0) {
         this.hasData = false;
+      }else{
+        this.hasData = true;
       }
+        this.isLoading = false;
+
     });
   }
 
@@ -61,8 +64,8 @@ export class CenterViewPriceListComponent implements OnInit{
     this.fetchAllPriceList(this.centerId, this.page, this.itemsPerPage, this.selectGrade, this.searchText);
   }
 
-  cancelGrade(event: Event) {
-    event.stopPropagation();
+  cancelGrade() {
+    // event.stopPropagation();
     this.selectGrade = '';
     this.fetchAllPriceList(this.centerId, this.page, this.itemsPerPage, this.selectGrade, this.searchText);
   }
@@ -77,12 +80,13 @@ export class CenterViewPriceListComponent implements OnInit{
   }
 
   toggleGradeDropdown() {
-    // This will trigger the native select dropdown
     const select = document.querySelector('select');
     select?.click();
   }
-  
 
+  navigateToCenters() {
+    this.router.navigate(['/centers']); // Change '/reports' to your desired route
+  }
 
 }
 
@@ -90,10 +94,12 @@ class PriceList {
   id!: number;
   cropNameEnglish!: string;
   varietyNameEnglish!: string;
-  averagePrice!: string;
+  averagePrice!: number;
   grade!: string;
   updatedPrice!: number;
   centerName!: string;
+  createdAt!: string;
+
   formattedDate!: string;
   updatedDate!: string;
 }

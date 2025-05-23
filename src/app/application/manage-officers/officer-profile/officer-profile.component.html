@@ -1,14 +1,14 @@
 <app-loading-spinner *ngIf="isLoading" />
 
 <div *ngIf="!isLoading">
-    <div *ngIf="naviPath ==='centers'" class="flex flex-row pt-0 mb-7 gap-5 cursor-pointer">
-        <p class="font-semibold text-sm text-[#424242] dark:text-white">Centers</p>
-        <p class="font-semibold text-sm text-[#424242] dark:text-white">Center Dashboard</p>
-        <p class="font-semibold text-sm text-[#424242] dark:text-white" onclick="history.back()">Center Officers</p>
+    <div *ngIf="naviPath ==='centers'" class="flex flex-row mb-4 mr-5 ml-0 gap-5 cursor-pointer">
+        <p class="font-semibold text-sm text-[#424242] dark:text-white" (click)="navigateToCenters()">Centres</p>
+        <p class="font-semibold text-sm text-[#424242] dark:text-white" (click)="navigateToCenterDashboard()">Centre Dashboard</p>
+        <p class="font-semibold text-sm text-[#424242] dark:text-white" onclick="history.back()">Centre Officers</p>
         <p class="font-semibold text-sm text-[#424242] dark:text-white">Officer Profile</p>
     </div>
 
-    <div *ngIf="naviPath ==='manage-officers'" class="flex gap-5 font-semibold text[#424242] mb-8 mx-5 dark:text-[#FFFFFF] dark:bg-blacks cursor-pointer">
+    <div *ngIf="naviPath ==='manage-officers'" class="flex gap-5 font-semibold text[#424242] mb-4 mr-5 ml-0 dark:text-[#FFFFFF] dark:bg-blacks cursor-pointer">
         <p  onclick="history.back()">Manage Officers</p>
         <p >Officer Profile</p>
     </div>
@@ -44,7 +44,7 @@
                             (click)="toggleDisclaimView()">Disclaim</button>
                     </span>
                     <button class="bg-blue-600 text-white font-semibold rounded-lg shadow-md px-5 py-2"
-                        (click)="viewOfficerTarget(officerId)">View Target</button>
+                        (click)="viewOfficerTarget(officerId, officerObj.centerName)">View Target</button>
                 </div>
 
             </div>

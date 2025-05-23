@@ -24,7 +24,6 @@ export class ReportDashboardComponent {
   isOfficerReportClicked: boolean = false;
 
   onCollectionReportClick() {
-    console.log('clicked')
     this.isCollectionReportClicked = true;
     this.isOfficerReportClicked = false;
     this.navigateToCollectionReport();
@@ -38,14 +37,12 @@ export class ReportDashboardComponent {
 
   navigateToCollectionReport() {
     if (this.isCollectionReportClicked) {
-      console.log('collection repport, ', this.isCollectionReportClicked);
       this.router.navigate(['reports/collection-reports']);
     }
   }
 
   navigateToOfficerReport() {
     if (this.isOfficerReportClicked) {
-      console.log('officer reports', this.isOfficerReportClicked);
       this.router.navigate(['reports/officer-reports']);
     }
   }

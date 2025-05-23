@@ -17,7 +17,7 @@ export class RoleGuardService {
     if (this.userRole === 'Collection Center Head') {
       return true;
     } else {
-      this.router.navigate(['/dashbord']);
+      this.router.navigate(['/451']);
       return false;
     }
   }

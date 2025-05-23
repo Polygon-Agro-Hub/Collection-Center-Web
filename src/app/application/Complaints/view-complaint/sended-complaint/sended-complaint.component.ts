@@ -31,8 +31,8 @@ export class SendedComplaintComponent implements OnInit {
   totalItems: number = 0;
   itemsPerPage: number = 10;
   hasData: boolean = true;
-  
-isLoading:boolean = true;
+
+  isLoading: boolean = true;
 
 
   constructor(
@@ -52,27 +52,27 @@ isLoading:boolean = true;
         this.totalItems = res.total;
         this.officerId = res.userId
 
-        
+
         if (res.items.length === 0) {
           this.hasData = false;
-          console.log('checkhasdata', this.hasData)
         } else {
           this.hasData = true;
-          console.log('checkhasdata', this.hasData)
         }
-
         this.isLoading = false;
-
       }
     )
   }
 
   fetchGetReply(id: number) {
+    this.isLoading = true;
     this.ComplainSrv.getComplainById(id).subscribe(
       (res) => {
         this.replyObj = res.data;
+        this.isLoading = false;
+
       }
     )
+
   }
 
   filterStatus() {
@@ -99,7 +99,7 @@ isLoading:boolean = true;
   }
 
   offSearch() {
-    this.searchText ='';
+    this.searchText = '';
     this.fetchAllreciveComplaint();
 
   }
@@ -118,6 +118,10 @@ isLoading:boolean = true;
     this.isReplyView = false;
   }
 
+  truncateText(text: string, maxLength: number = 150): string {
+    if (!text) return '';
+    return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+  }
 
 }
 
@@ -131,7 +135,7 @@ class SentComplaint {
   empId!: string
   reply: string | null = null
   createdAt!: Date
-  officerId!:number
+  officerId!: number
 }
 
 class Reply {

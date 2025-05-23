@@ -25,6 +25,8 @@ export class OfficerProfileComponent implements OnInit {
 
   isLoading: boolean = true;
 
+  centerId!: number;
+
 
 
   constructor(
@@ -42,23 +44,21 @@ export class OfficerProfileComponent implements OnInit {
   ngOnInit(): void {
     this.officerId = this.route.snapshot.params['id'];
     this.fetchOfficer(this.officerId);
+    this.centerId = this.route.snapshot.params['centerId'];
     this.setActiveTabFromRoute()
   }
 
   fetchOfficer(id: number) {
     this.isLoading = true;
     this.ManageOficerSrv.getOfficerById(id).subscribe((res: any) => {
-      console.log(res);
       this.officerObj = res.officerData.collectionOfficer;
-      console.log(this.officerObj);
-      console.log('sfshfhshfsfh');
+      console.log(this.officerObj)
       this.isLoading = false;
     });
   }
 
   async generatePDF() {
-    console.log('downloading');
-
+    
     const contentHeight = 500;
 
     const doc = new jsPDF({
@@ -74,6 +74,10 @@ export class OfficerProfileComponent implements OnInit {
     const getValueOrNA = (value: string | null | undefined): string => {
       return value ? value : 'N/A';
     };
+
+    const getValueOrNAforInsOrLiscNo = (value: number | null | undefined): string => {
+      return value !== null && value !== undefined ? value.toString() : 'N/A';
+  };
 
     function loadImageAsBase64(url: string): Promise<string> {
       return new Promise((resolve, reject) => {
@@ -148,6 +152,7 @@ export class OfficerProfileComponent implements OnInit {
     const startX = imagebase64 ? 60 : 14; // If no image, start from left margin
     const startY = imagebase64 ? 60 : 50; // Adjust Y position based on image presence
 
+  
     // Title
     doc.setFontSize(16);
     doc.setFont("Inter", "bold");
@@ -234,10 +239,6 @@ export class OfficerProfileComponent implements OnInit {
     // Phone Number 1
     doc.setFont("Inter", "normal");
     doc.text("Phone Number - 1", 14, startY + 42);
-    // doc.setFont("Inter", "bold");
-    // doc.text(getValueOrNA(this.officerObj.phoneNumber01), 22, startY + 48);
-    // doc.setFont("Inter", "bold");
-    // doc.text(getValueOrNA(this.officerObj.phoneCode02), 14, startY + 48);
 
     if (this.officerObj.phoneNumber01 == null || this.officerObj.phoneNumber01 === "") {
       doc.setFont("Inter", "bold");
@@ -249,15 +250,7 @@ export class OfficerProfileComponent implements OnInit {
       doc.text(getValueOrNA(this.officerObj.phoneCode02), 14, startY + 48);
     }
 
-    // Phone Number 2
-    // doc.setFont("Inter", "normal");
-    // doc.text("Phone Number - 2", 100, startY + 42);
-    // doc.setFont("Inter", "bold");
-    // doc.text(getValueOrNA(this.officerObj.phoneNumber02), 108, startY + 48);
-    // doc.setFont("Inter", "bold");
-    // doc.text(getValueOrNA(this.officerObj.phoneCode02), 100, startY + 48);
-
-
+    
     doc.setFont("Inter", "normal");
     doc.text("Phone Number - 2", 100, startY + 42);
 
@@ -356,7 +349,7 @@ export class OfficerProfileComponent implements OnInit {
       doc.text("Driving License ID", 14, startY + 174);
 
       doc.setFont("Inter", "bold");
-      doc.text(getValueOrNA(this.officerObj.licNo), 14, startY + 180);
+      doc.text(getValueOrNAforInsOrLiscNo(this.officerObj.licNo), 14, startY + 180);
 
       doc.setFontSize(12);
       doc.setFont("Inter", "normal");
@@ -385,7 +378,7 @@ export class OfficerProfileComponent implements OnInit {
       doc.text("Vehicle Insurance Number", 14, startY + 222);
 
       doc.setFont("Inter", "bold");
-      doc.text(getValueOrNA(this.officerObj.insNo), 14, startY + 228);
+      doc.text(getValueOrNAforInsOrLiscNo(this.officerObj.insNo), 14, startY + 228);
 
       doc.setFontSize(12);
       doc.setFont("Inter", "normal");
@@ -482,8 +475,8 @@ export class OfficerProfileComponent implements OnInit {
     this.showDisclaimView = !this.showDisclaimView; // Toggle the boolean value
   }
 
-  viewOfficerTarget(officerId: number) {
-    this.router.navigate([`/manage-officers/view-officer-target/${officerId}`])
+  viewOfficerTarget(officerId: number, centerName: string) {
+    this.router.navigate([`/manage-officers/view-officer-target/${officerId}/${centerName}`]);
   }
 
   cancelDisclaim() {
@@ -521,6 +514,14 @@ export class OfficerProfileComponent implements OnInit {
   viewImage(imageUrl: string) {
   }
 
+  navigateToCenterDashboard() {
+    this.router.navigate(['/centers/center-shashbord', this.centerId]); // Change '/reports' to your desired route
+  }
+
+  navigateToCenters() {
+    this.router.navigate(['/centers']); // Change '/reports' to your desired route
+  }
+
 }
 
 class Officer {
@@ -550,8 +551,8 @@ class Officer {
   centerName!: string;
 
   //driver
-  licNo!: string;
-  insNo!: string;
+  licNo!: number;
+  insNo!: number;
   insExpDate!: string;
   vType!: string;
   vCapacity!: string;
@@ -568,8 +569,6 @@ class Officer {
 }
 
 
-// doc.setFont("Inter", "bold");
-// doc.text(getValueOrNA(this.officerObj.vCapacity), 14, startY + 266);
 
 
 

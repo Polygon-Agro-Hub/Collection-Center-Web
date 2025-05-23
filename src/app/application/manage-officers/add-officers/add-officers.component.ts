@@ -19,6 +19,7 @@ import { Location } from '@angular/common';
   styleUrl: './add-officers.component.css'
 })
 export class AddOfficersComponent implements OnInit {
+  today: string = new Date().toISOString().split('T')[0];
 
   personalData: Personal = new Personal();
   collectionCenterData: CollectionCenter[] = []
@@ -88,6 +89,8 @@ export class AddOfficersComponent implements OnInit {
   vehicleSideBImageFileName!: string;
   vehicleSideBImagePreview: string | ArrayBuffer | null = null;
   vehicleSideBImageFile: File | null = null;
+
+  isAppireImgValidation: boolean = false;
 
 
 
@@ -274,11 +277,14 @@ export class AddOfficersComponent implements OnInit {
       return;
     }
     this.isLoading = true;
+    this.isAppireImgValidation = true;
+
 
 
     if (!this.personalData.accHolderName || !this.personalData.accNumber || !this.personalData.bankName || !this.personalData.branchName) {
       this.isLoading = false;
-      this.toastSrv.warning('Pleace fill all required feilds')
+      this.toastSrv.warning('Pleace fill all required bank details feilds')
+      return;
 
     } else {
       if (this.logingRole === 'Collection Center Manager') {
@@ -304,7 +310,8 @@ export class AddOfficersComponent implements OnInit {
       } else if (this.logingRole === 'Collection Center Head') {
 
         if (this.personalData.jobRole === 'Driver') {
-          if (!this.licenseFrontImageFileName|| !this.licenseBackImageFileName || !this.insurenceFrontImageFileName || !this.insurenceBackImageFileName || !this.vehicleFrontImageFileName || !this.vehicleBackImageFileName || !this.vehicleSideAImageFileName || !this.vehicleSideBImageFileName) {
+          if (!this.licenseFrontImageFileName || !this.licenseBackImageFileName || !this.insurenceFrontImageFileName || !this.insurenceBackImageFileName || !this.vehicleFrontImageFileName || !this.vehicleBackImageFileName || !this.vehicleSideAImageFileName || !this.vehicleSideBImageFileName) {
+            this.isLoading = false;
             return;
           }
 
@@ -373,7 +380,7 @@ export class AddOfficersComponent implements OnInit {
       if (result.isConfirmed) {
         this.personalData = new Personal();
         this.toastSrv.warning('Officer Add canceled.')
-        this.location.back(); 
+        this.location.back();
 
       }
     });

@@ -20,7 +20,7 @@ export class AddCenterComponent implements OnInit {
   centerData: CenterData = new CenterData();
 
   isLoading: boolean = false;
-  
+
 
   provinces: string[] = [
     'Western',
@@ -94,7 +94,7 @@ export class AddCenterComponent implements OnInit {
       if (selectedDistrict) {
         // Update the province based on the selected district
         this.centerData.province = selectedDistrict.province;
-  
+
         // Update filtered districts for the selected province
         this.filteredDistricts = this.allDistricts.filter(d => d.province === this.centerData.province);
       }
@@ -103,7 +103,7 @@ export class AddCenterComponent implements OnInit {
 
   onSubmit() {
     this.isLoading = true;
-  
+
     // Validate form data
     if (
       !this.centerData ||
@@ -118,20 +118,20 @@ export class AddCenterComponent implements OnInit {
       this.toastSrv.warning('Please fill all required fields');
       return;
     }
-  
+
     // Call the service to create a center
     this.targetService.createCenter(this.centerData).subscribe({
       next: (res: any) => {
         if (res.status) {
-          this.toastSrv.success('Center Created Successfully');
+          this.toastSrv.success('Centre Created Successfully');
           this.router.navigate(['/centers']);
         } else {
-          this.toastSrv.error(res.message || 'There was an error creating the center');
+          this.toastSrv.error(res.message || 'There was an error creating the Centre');
         }
       },
       error: (error: any) => {
         this.isLoading = false;
-  
+
         // Handle different types of errors based on error status or message
         if (error.status === 400) {
           // Validation error or bad request
@@ -143,7 +143,7 @@ export class AddCenterComponent implements OnInit {
           // Conflict error, e.g., duplicate regCode
           const errorMessage =
             error?.error?.message ||
-            'A center with this registration code already exists.';
+            'A Centre with this registration code already exists.';
           this.toastSrv.error(errorMessage);
         } else if (error.status === 500) {
           // Server error
@@ -152,7 +152,7 @@ export class AddCenterComponent implements OnInit {
           // Generic error
           const errorMessage =
             error?.error?.message ||
-            'There was an error creating the center. Please try again.';
+            'There was an error creating the Centre. Please try again.';
           this.toastSrv.error(errorMessage);
         }
       },
@@ -161,8 +161,6 @@ export class AddCenterComponent implements OnInit {
       },
     });
   }
-  
-  
 
   onCancel() {
     Swal.fire({
@@ -179,18 +177,19 @@ export class AddCenterComponent implements OnInit {
         title: 'dark:text-white',
 
         icon: '',
-        confirmButton: 'hover:bg-red-600 dark:hover:bg-red-700 focus:ring-red-500 dark:focus:ring-red-800' ,
+        confirmButton: 'hover:bg-red-600 dark:hover:bg-red-700 focus:ring-red-500 dark:focus:ring-red-800',
         cancelButton: 'hover:bg-blue-600 dark:hover:bg-blue-700 focus:ring-blue-500 dark:focus:ring-blue-800',
         actions: 'gap-2'
       }
     }).then((result) => {
       if (result.isConfirmed) {
 
-        this.toastSrv.warning('Center Add Operation Canceled.')
-        this.location.back(); 
+        this.toastSrv.warning('Centre Add Operation Canceled.')
+        this.location.back();
       }
     });
   }
+
 }
 
 class CenterData {

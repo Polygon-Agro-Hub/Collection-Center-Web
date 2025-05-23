@@ -53,7 +53,6 @@ export class CollectionDailyReportComponent implements OnInit {
     this.isLoading = true
     this.ReportSrv.getCollectionDailyReport(this.officerId, date).subscribe(
       (res) => {
-        // console.log(res.data.length);
         if (res.data.length === 0) {
           this.updateChart();
           this.loadingTable = false;
@@ -192,21 +191,21 @@ export class CollectionDailyReportComponent implements OnInit {
       currentX = 14;
       const rowData = [
         report.varietyNameEnglish,
-        report.gradeA.toString() + 'Kg',
-        report.gradeB.toString() + 'Kg',
-        report.gradeC.toString() + 'Kg',
-        report.total.toString() + 'Kg',
+        (report.gradeA.toFixed(2)).toLocaleString() + 'Kg',
+        (report.gradeB.toFixed(2)).toLocaleString() + 'Kg',
+        (report.gradeC.toFixed(2)).toLocaleString() + 'Kg',
+        (report.total.toFixed(2)).toLocaleString() + 'Kg',
       ];
-
+    
       rowData.forEach((data, index) => {
         doc.rect(currentX, currentY, columnWidths[index], rowHeight);
         doc.text(data, currentX + 2, currentY + 7);
         currentX += columnWidths[index];
       });
-
+    
       currentY += rowHeight;
     });
-
+    
     doc.save(`Daily_Report_${this.officerName}_${this.selectDate}.pdf`);
   }
 

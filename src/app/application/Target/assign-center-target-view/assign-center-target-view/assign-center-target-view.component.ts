@@ -1,26 +1,29 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { SelectVarietyListComponent } from '../select-variety-list/select-variety-list.component';
 import { AssignCenterTargetComponent } from '../assign-center-target/assign-center-target.component';
+import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
 
 @Component({
   selector: 'app-assign-center-target-view',
   standalone: true,
-  imports: [CommonModule, FormsModule, SelectVarietyListComponent, AssignCenterTargetComponent],
+  imports: [CommonModule, FormsModule, SelectVarietyListComponent, AssignCenterTargetComponent, LoadingSpinnerComponent],
   templateUrl: './assign-center-target-view.component.html',
   styleUrl: './assign-center-target-view.component.css'
 })
 export class AssignCenterTargetViewComponent implements OnInit {
   centerDetailsObj: CenterDetails = new CenterDetails();
-  
+
   isAssignTarget: boolean = true;
   isVariety: boolean = false;
+  isLoading: boolean = true;
 
   constructor(
-      private route: ActivatedRoute
-    ) { }
+    private router: Router,
+    private route: ActivatedRoute
+  ) { }
 
   ngOnInit(): void {
     this.centerDetailsObj.centerId = this.route.snapshot.params['id'];
@@ -36,6 +39,10 @@ export class AssignCenterTargetViewComponent implements OnInit {
   selectVariety() {
     this.isAssignTarget = false;
     this.isVariety = true;
+  }
+
+  navigateToCenters() {
+    this.router.navigate(['/centers']); // Change '/reports' to your desired route
   }
 
 }

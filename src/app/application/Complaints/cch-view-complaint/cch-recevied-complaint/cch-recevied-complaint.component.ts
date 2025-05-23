@@ -64,7 +64,6 @@ complainArr!: RecivedComplaint[];
     this.isLoading = true;
     this.ComplainSrv.getComplainById(id).subscribe(
       (res) => {
-        console.log(res);
         this.replyObj = res.data;
         this.isLoading = false;
       }

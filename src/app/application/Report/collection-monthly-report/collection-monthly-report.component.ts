@@ -25,6 +25,7 @@ export class CollectionMonthlyReportComponent implements OnInit {
   currentDate: Date = new Date();
   startDate: Date = new Date();
   endDate: Date = new Date();
+  maxDate: string = new Date().toISOString().split('T')[0];
 
   hasData: boolean = false;
   isLoading: boolean = false;
@@ -32,7 +33,7 @@ export class CollectionMonthlyReportComponent implements OnInit {
   constructor(
     private ReportSrv: ReportServiceService,
     private route: ActivatedRoute,
-    private toastSrv:ToastAlertService,
+    private toastSrv: ToastAlertService,
     private router: Router,
   ) { }
 
@@ -65,7 +66,9 @@ export class CollectionMonthlyReportComponent implements OnInit {
   }
 
   filterDate() {
-    this.fetchOfficerData();
+    if (this.startDate && this.endDate) {
+      this.fetchOfficerData();
+    }
   }
 
   navigateToReports() {
@@ -77,15 +80,17 @@ export class CollectionMonthlyReportComponent implements OnInit {
     const today = new Date();
     const selectedDate = new Date(this.startDate);
 
+    // Check if start date is in the future
     if (selectedDate > today) {
-      // Swal.fire({
-      //   icon: 'error',
-      //   title: 'Invalid Date',
-      //   text: 'Start date cannot be a future date.',
-      //   confirmButtonText: 'OK',
-      // });
-      this.toastSrv.warning('<b>Start date</b> cannot be a future date.')
+      this.toastSrv.warning('<b>Start date</b> cannot be a future date.');
       this.startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
+      return;
+    }
+
+    // Check if end date is already selected and start date is after end date
+    if (this.endDate && selectedDate > new Date(this.endDate)) {
+      this.toastSrv.warning('<b>Start date</b> cannot be after the selected end date.');
+      this.startDate = new Date(this.endDate);
     }
   }
 
@@ -94,12 +99,6 @@ export class CollectionMonthlyReportComponent implements OnInit {
     const selectedEndDate = new Date(this.endDate);
 
     if (!this.startDate) {
-      // Swal.fire({
-      //   icon: 'warning',
-      //   title: 'Missing Start Date',
-      //   text: 'Please select a start date before selecting an end date.',
-      //   confirmButtonText: 'OK',
-      // });
       this.toastSrv.success('Please select a <b>start date</b> before selecting an end date.')
 
       this.endDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());;
@@ -107,12 +106,6 @@ export class CollectionMonthlyReportComponent implements OnInit {
     }
 
     if (selectedEndDate > today) {
-      // Swal.fire({
-      //   icon: 'error',
-      //   title: 'Invalid End Date',
-      //   text: 'End date cannot be a future date.',
-      //   confirmButtonText: 'OK',
-      // });
 
       this.toastSrv.error('<b>End date cannot be a future date.')
       this.endDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());;
@@ -122,7 +115,6 @@ export class CollectionMonthlyReportComponent implements OnInit {
 
 
   downloadReport(): void {
-    console.log('downloading', this.startDate, this.endDate)
     // Create new jsPDF instance
     const doc = new jsPDF();
 
@@ -237,7 +229,9 @@ export class CollectionMonthlyReportComponent implements OnInit {
     doc.text(timestamp, margin + 5, y);
 
     // Save the PDF
-    doc.save('collection_officer_report.pdf');
+    const fileName = `collection_officer_report(${this.officerDataObj.empId}_from_${this.startDate}_to_${this.endDate}).pdf`;
+    doc.save(fileName);
+
   }
 
 

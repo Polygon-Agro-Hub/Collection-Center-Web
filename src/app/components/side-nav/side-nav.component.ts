@@ -20,7 +20,7 @@ export const MENU_ITEMS = [
     id: 2,
     key: 'target',
     path: '/target',
-    label: 'Center Target',
+    label: 'Centre Target',
     icon: 'fa-solid fa-bullseye',
     permission: 'Collection Center Manager',
   },
@@ -36,7 +36,7 @@ export const MENU_ITEMS = [
     id: 4,
     key: 'centers',
     path: '/centers',
-    label: 'Centers',
+    label: 'Centres',
     icon: 'fa-solid fa-bullseye',
     permission: 'Collection Center Head',
   },
@@ -126,14 +126,12 @@ export class SideNavComponent {
 
   private setActiveTabFromRoute(): void {
     const currentPath = this.router.url.split('?')[0];
-    
-    // Specific handling for profile route
+
     if (currentPath === '/profile') {
       this.isSelectTab = '';
       return;
     }
-    
-    // Find the menu item with the longest path that matches the current route
+
     const activeItem = this.menuItems
       .filter(item => currentPath.startsWith(item.path))
       .sort((a, b) => b.path.length - a.path.length)[0];
@@ -158,8 +156,6 @@ export class SideNavComponent {
   }
 
   navigate(path: string, selectTab: string) {
-    console.log(path);
-    console.log(selectTab);
     this.isSelectTab = selectTab;
     this.router.navigate([path]).then(() => {
       this.setActiveTabFromRoute();

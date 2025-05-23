@@ -23,20 +23,18 @@ export class FarmerReportComponent implements OnInit {
   hasData: boolean = false;
   totalAmount: number = 0;
   totalAmountforReport: number = 0;
-  isLoading:boolean = true;
+  isLoading: boolean = true;
 
 
   constructor(
     private router: Router,
     private ReportSrv: ReportServiceService,
     private route: ActivatedRoute,
-    // private datePipe: DatePipe
 
   ) { }
 
   ngOnInit(): void {
     this.reportId = this.route.snapshot.params['id'];
-    console.log(this.reportId);
     this.fetchFarmerDetails(this.reportId);
   }
 
@@ -56,7 +54,7 @@ export class FarmerReportComponent implements OnInit {
       }
     );
   }
-  
+
   calculateOverallTotal(): void {
     // Reset totalAmount before calculating
     this.totalAmount = this.CropArr.reduce((sum, item) => {
@@ -71,26 +69,24 @@ export class FarmerReportComponent implements OnInit {
   navigateToOfficerReports() {
     this.router.navigate(['/reports/officer-reports']); // Change '/reports' to your desired route
   }
-  
 
-  calculeteTotal(priceA: number, qtyA: number, priceB: number, qtyB: number, priceC: number, qtyC: number) :number{
+
+  calculeteTotal(priceA: number, qtyA: number, priceB: number, qtyB: number, priceC: number, qtyC: number): number {
     let tot = priceA * qtyA + priceB * qtyB + priceC * qtyC
     this.totalAmount += tot;
-    console.log(this.totalAmount);
-    
     return tot;
   }
 
   calculateRowTotal(item: Crop): number {
     return item.gradeAprice * item.gradeAquan +
-           item.gradeBprice * item.gradeBquan +
-           item.gradeCprice * item.gradeCquan;
+      item.gradeBprice * item.gradeBquan +
+      item.gradeCprice * item.gradeCquan;
   }
 
   calculateRowTotalforReport(crop: Crop): number {
-    return  crop.gradeAprice * crop.gradeAquan +
-            crop.gradeBprice * crop.gradeBquan +
-            crop.gradeCprice * crop.gradeCquan;
+    return crop.gradeAprice * crop.gradeAquan +
+      crop.gradeBprice * crop.gradeBquan +
+      crop.gradeCprice * crop.gradeCquan;
   }
 
   calculateOverallTotalforReport(): number {
@@ -99,7 +95,7 @@ export class FarmerReportComponent implements OnInit {
       return sum + this.calculateRowTotalforReport(crop);
     }, 0);
   }
-  
+
 
   // this code works correctly but did not had time to fix the address display
   async downloadReport() {
@@ -131,11 +127,11 @@ export class FarmerReportComponent implements OnInit {
       padding: number = 3 // Increased from 2 to 3
     ): number => {
       let currentY = startY;
-      
+
       data.forEach((row) => {
         let maxLines = 1;
         const cellLines: string[][] = [];
-        
+
         // First determine how many lines we need for this row
         row.forEach((cell, colIndex) => {
           const cellContent = cell.toString();
@@ -144,10 +140,10 @@ export class FarmerReportComponent implements OnInit {
           cellLines.push(lines);
           maxLines = Math.max(maxLines, lines.length);
         });
-    
+
         // Calculate total row height
         const rowHeight = maxLines * lineHeight + padding * 2;
-        
+
         // Draw each cell with the correct number of lines
         let currentX = startX;
         row.forEach((cell, colIndex) => {
@@ -158,12 +154,12 @@ export class FarmerReportComponent implements OnInit {
             columnWidths[colIndex],
             rowHeight
           );
-          
+
           // Draw text (centered vertically)
           const lines = cellLines[colIndex];
           const textHeight = lines.length * lineHeight;
           const verticalOffset = (rowHeight - textHeight) / 1.5;
-          
+
           lines.forEach((line, lineIndex) => {
             doc.text(
               line,
@@ -171,13 +167,13 @@ export class FarmerReportComponent implements OnInit {
               currentY + verticalOffset + (lineIndex * lineHeight) + padding
             );
           });
-          
+
           currentX += columnWidths[colIndex];
         });
-    
+
         currentY += rowHeight;
       });
-    
+
       return currentY;
     };
 
@@ -189,11 +185,6 @@ export class FarmerReportComponent implements OnInit {
     // Set font
     doc.setFont('helvetica');
 
-    // Add title
-    // doc.setFontSize(16);
-    // doc.text('INVOICE', 105, y, { align: 'center' });
-    // y += yIncrement * 2;
-
     // Add invoice details
     doc.setFontSize(10);
     doc.text(`INV NO: ${formatValue(this.userObj.invNo)}`, x, y);
@@ -202,7 +193,7 @@ export class FarmerReportComponent implements OnInit {
     y += yIncrement * 2;
 
     // Add Personal Details section
-    y += yIncrement*0.25;
+    y += yIncrement * 0.25;
     doc.setFontSize(12);
     doc.text('Personal Details', x, y);
     y += yIncrement;
@@ -228,7 +219,7 @@ export class FarmerReportComponent implements OnInit {
     ) + yIncrement;
 
     // Add Bank Details section
-    y += yIncrement*0.25;
+    y += yIncrement * 0.25;
     y += yIncrement;
     doc.setFontSize(12);
     doc.text('Bank Details', x, y);
@@ -252,7 +243,7 @@ export class FarmerReportComponent implements OnInit {
     ) + yIncrement;
 
     // Add Crop Details section
-    y += yIncrement*0.25;
+    y += yIncrement * 0.25;
     y += yIncrement;
     doc.setFontSize(12);
     doc.text('Crop Details', x, y);
@@ -260,9 +251,9 @@ export class FarmerReportComponent implements OnInit {
     doc.setFontSize(10);
 
     // Prepare crop details data for table
-    const cropTableHeaders = ['Crop Name', 'Variety', 'Unit Price (A)', 'Quantity', 
-                            'Unit Price (B)', 'Quantity', 'Unit Price (C)', 'Quantity', 'Total (Rs.)'];
-    
+    const cropTableHeaders = ['Crop Name', 'Variety', 'Unit Price (A)', 'Quantity',
+      'Unit Price (B)', 'Quantity', 'Unit Price (C)', 'Quantity', 'Total (Rs.)'];
+
     const cropTableData = this.CropArr.map(crop => [
       formatValue(crop.cropNameEnglish),
       formatValue(crop.varietyNameEnglish),
@@ -272,7 +263,7 @@ export class FarmerReportComponent implements OnInit {
       formatValueForAmounts(crop.gradeBquan),
       formatValueForAmounts(crop.gradeCprice),
       formatValueForAmounts(crop.gradeCquan),
-      formatValueForAmounts(this.calculateRowTotalforReport(crop).toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 }))
+      formatValueForAmounts(this.calculateRowTotalforReport(crop).toFixed(2))
     ]);
 
     // Draw Crop Details table with dynamic row heights
@@ -287,24 +278,24 @@ export class FarmerReportComponent implements OnInit {
 
     // Add Full Total
     y += yIncrement
-    doc.text('Full Total(Rs.) : '  + formatValueForAmounts(this.calculateOverallTotalforReport().toLocaleString('en-IN', { minimumFractionDigits: 2, maximumFractionDigits: 2 })) , x, y);
+    doc.text('Full Total(Rs.) : ' + formatValueForAmounts(this.calculateOverallTotalforReport().toFixed(2)), x, y);
     y += yIncrement * 2.5;
 
     // QR Code Image Loading Function
     const loadImageAsBase64 = (url: string): Promise<string> => {
       return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        xhr.onload = function() {
+        xhr.onload = function () {
           const reader = new FileReader();
-          reader.onloadend = function() {
+          reader.onloadend = function () {
             resolve(reader.result as string);
           };
           reader.readAsDataURL(xhr.response);
         };
-        xhr.onerror = function() {
+        xhr.onerror = function () {
           const img = new Image();
           img.crossOrigin = 'Anonymous';
-          img.onload = function() {
+          img.onload = function () {
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
             canvas.width = img.width;
@@ -312,7 +303,7 @@ export class FarmerReportComponent implements OnInit {
             ctx?.drawImage(img, 0, 0);
             resolve(canvas.toDataURL('image/png'));
           };
-          img.onerror = function() {
+          img.onerror = function () {
             resolve('');
           };
           img.src = url;
@@ -333,7 +324,7 @@ export class FarmerReportComponent implements OnInit {
     // Load QR codes
     let farmerQrImagebase64 = '';
     let officerQrImagebase64 = '';
-    
+
     try {
       if (this.userObj.farmerQr) {
         farmerQrImagebase64 = await loadImageAsBase64(appendCacheBuster(this.userObj.farmerQr));
@@ -383,45 +374,45 @@ export class FarmerReportComponent implements OnInit {
     doc.text('Officer Qr Code', officerQrX + 6, labelY);
 
     // Save the PDF
-    doc.save('invoice.pdf');
+    doc.save(`invoice_${this.userObj.invNo}.pdf`);
     this.isLoading = false;
-}
+  }
 
   // Helper function to draw tables
   private drawTable(doc: jsPDF, x: number, y: number, data: string[][]): void {
     // Calculate column widths based on number of columns
     const pageWidth = doc.internal.pageSize.width - 28; // Margins on both sides
     const colWidth = pageWidth / data[0].length;
-    
+
     // Draw headers
     doc.setFillColor(240, 240, 240);
     doc.rect(x, y, pageWidth, 7, 'F');
     doc.setFont('bold');
-    
+
     data[0].forEach((header, i) => {
       doc.text(header, x + i * colWidth + colWidth / 2, y + 5, { align: 'center' });
     });
-    
+
     // Draw data rows
     doc.setFont('normal');
     for (let i = 1; i < data.length; i++) {
       const rowY = y + 7 * i;
-      
+
       // Draw row background (alternating colors for better readability)
       if (i % 2 === 0) {
         doc.setFillColor(252, 252, 252);
         doc.rect(x, rowY, pageWidth, 7, 'F');
       }
-      
+
       // Draw cell borders
       doc.setDrawColor(200, 200, 200);
       doc.rect(x, rowY, pageWidth, 7);
-      
+
       // Draw vertical lines for columns
       for (let j = 1; j < data[0].length; j++) {
         doc.line(x + j * colWidth, rowY, x + j * colWidth, rowY + 7);
       }
-      
+
       // Draw cell contents
       data[i].forEach((cell, j) => {
         doc.text(cell, x + j * colWidth + colWidth / 2, rowY + 5, { align: 'center' });
@@ -449,7 +440,7 @@ class User {
   bankName!: string
   branchName!: string
   createdAt!: string
-  invNo!:string
+  invNo!: string
 }
 
 class Crop {

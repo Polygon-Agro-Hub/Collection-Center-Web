@@ -1,12 +1,12 @@
 <app-loading-spinner *ngIf="isLoading" />
 
 <div *ngIf="!isLoading">
-    <p class="font-semibold text[#424242] mb-8 mx-5 dark:text-[#FFFFFF] dark:bg-black cursor-pointer">Manage Officers</p>
+    <p class="font-semibold text-[#424242] mb-4 mr-5 ml-0 dark:text-[#FFFFFF] dark:bg-black cursor-pointer">Manage Officers</p>
 
     <div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg overflow-x-auto">
         <div class="flex flex-row items-center justify-between">
             <div class="flex flex-row gap-4">
-                <button class="bg-[#415CFF] text-white dark:text-white rounded-lg shadow-lg px-4 py-2"
+                <button class="bg-[#415CFF] text-[#FFFFFF] dark:text-white rounded-lg shadow-lg px-4 py-2 whitespace-nowrap"
                     (click)="navigate('/manage-officers/create-officer')">
                     Add Officer
                 </button>
@@ -44,30 +44,30 @@
 
                 <div class="relative w-52">
                     <div
-                        class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
+                        class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
                         <select [(ngModel)]="selectRole" (change)="applyRoleFilters()"
-                            class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer">
+                            class="block w-full appearance-none dark:bg-[#292929] text-[#4A4A4A] dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer">
                             <option value="" selected disabled>Role</option>
-                            <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                                value="Collection Center Manager">Collection Center Manager</option>
-                            <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                            <option class=" dark:bg-[#292929] text-[#4A4A4A] dark:text-textDark hover:bg-gray-300"
+                                value="Collection Center Manager">[Collection Center Manager</option>
+                            <option class=" dark:bg-[#292929] text-[#4A4A4A]] dark:text-textDark hover:bg-gray-300"
                                 value="Collection Officer">Collection Officer</option>
-                            <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                            <option class=" dark:bg-[#292929] text-[#4A4A4A] dark:text-textDark hover:bg-gray-300"
                                 value="Customer Officer">Customer Officer</option>
-                                <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                                <option class=" dark:bg-[#292929] text-[#4A4A4A] dark:text-textDark hover:bg-gray-300"
                                 value="Driver">Driver</option>
                         </select>
 
                         <!-- Down arrow icon -->
                         <div *ngIf="!selectRole"
                             class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
-                            <i class="fa-solid fa-angle-down text-lg mr-3"></i>
+                            <i class="fa-solid fa-angle-down text-lg text-[#828282] mr-3"></i>
                         </div>
 
                         <!-- Cancel icon -->
                         <div (click)="clearRoleFilter()" *ngIf="selectRole"
                             class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300 cursor-pointer z-10">
-                            <i class="fa-solid fa-xmark text-lg mr-3"></i>
+                            <i class="fa-solid fa-xmark text-lg text-[#828282] mr-3"></i>
                         </div>
                     </div>
                 </div>
@@ -101,7 +101,7 @@
 
                 <div class="relative w-52">
                     <div
-                        class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
+                        class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
                         <select [(ngModel)]="selectStatus" (change)="applyStatusFilters()"
                             class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer">
                             <option value="" selected disabled>Status</option>
@@ -119,13 +119,13 @@
                         <!-- Down arrow icon -->
                         <div *ngIf="!selectStatus"
                             class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
-                            <i class="fa-solid fa-angle-down text-lg mr-3"></i>
+                            <i class="fa-solid fa-angle-down text-lg text-[#828282] mr-3"></i>
                         </div>
 
                         <!-- Cancel icon -->
                         <div (click)="clearStatusFilter()" *ngIf="selectStatus"
                             class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300 cursor-pointer z-10">
-                            <i class="fa-solid fa-xmark text-lg mr-3"></i>
+                            <i class="fa-solid fa-xmark text-lg text-[#828282] mr-3"></i>
                         </div>
                     </div>
                 </div>
@@ -149,10 +149,10 @@
 
                 <div class="relative w-46" *ngIf="logingRole ==='Collection Center Head'">
                     <div
-                        class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
+                        class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
                         <select [(ngModel)]="selectCenters" (change)="applyCompanyFilters()"
                             class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer">
-                            <option value="" selected disabled>Centers</option>
+                            <option value="" selected disabled>Centres</option>
                             <option *ngFor="let item of centerArr"
                                 class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
                                 [value]="item.id">{{item.regCode}} - {{item.centerName}}</option>
@@ -161,13 +161,13 @@
                         <!-- Down arrow icon -->
                         <div *ngIf="!selectCenters"
                             class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
-                            <i class="fa-solid fa-angle-down text-lg mr-3"></i>
+                            <i class="fa-solid fa-angle-down text-[#828282] text-lg mr-3"></i>
                         </div>
 
                         <!-- Cancel icon -->
                         <div (click)="clearCompanyFilter()" *ngIf="selectCenters"
                             class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300 cursor-pointer z-10">
-                            <i class="fa-solid fa-xmark text-lg mr-3"></i>
+                            <i class="fa-solid fa-xmark text-lg text-[#828282] mr-3"></i>
                         </div>
                     </div>
                 </div>
@@ -180,8 +180,8 @@
                 [options]="companyArr" [checkmark]="true" optionLabel="companyNameEnglish" [showClear]="true"
                 placeholder="Role" (onChange)="applyCompanyFilters()" /> -->
 
-                <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
-                    <input type="text" placeholder="Search by EMP ID, First / Last name,NIC" [(ngModel)]="searchText"
+                <div class="flex items-center text-[#95A1AC] text-lg rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+                    <input type="text" placeholder="Search..." [(ngModel)]="searchText"
                         (keyup.enter)="onSearch()" (keyup.esc)="offSearch()"
                         class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
                     <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
@@ -212,7 +212,7 @@
 
         <div *ngIf="hasData" class="min-w-max mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
             <table class="w-full min-w-max divide-y-2 border-[1px] border-gray-300 rounded-lg overflow-hidden">
-                <thead class=" dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
+                <thead class=" text-[#4B5563] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
                     <tr>
                         <th class="px-2 py-3 text-left text-sm font-medium">No</th>
                         <th class="px-3 py-3 text-left text-sm font-medium">EMP ID</th>
@@ -220,7 +220,7 @@
                         <th class="px-3 py-3 text-left text-sm font-medium">Last Name</th>
                         <th class="px-3 py-3 text-left text-sm font-medium"
                             *ngIf="logingRole ==='Collection Center Head'">
-                            Centers</th>
+                            Centres</th>
                         <th class="px-3 py-3 text-left text-sm font-medium ">Role</th>
                         <th class="px-3 py-3 text-center text-sm font-medium ">Status</th>
                         <th class="px-3 py-3 text-center text-sm font-medium">Phone</th>
@@ -228,7 +228,7 @@
                         <th class="px-3 py-3 text-center text-sm font-medium"></th>
                     </tr>
                 </thead>
-                <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
+                <tbody class="bg-white text-[#000000] dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
                     <tr *ngFor="let item of OfficerArr | paginate
                 : {
                     itemsPerPage: itemsPerPage,
@@ -253,11 +253,11 @@
                                     Approved
                                 </span>
                                 <span *ngIf="item.status === 'Not Approved'"
-                                    class="inline-block px-3 py-1 bg-[#FFB9B7] text-[#D16D6A] text-sm font-medium rounded-md shadow-md">
+                                    class="inline-block px-3 py-1 bg-[#F8FFA6] text-[#A8A100] text-sm font-medium rounded-md shadow-md">
                                     Not Approved
                                 </span>
                                 <span *ngIf="item.status === 'Rejected'"
-                                    class="inline-block px-8 py-1 bg-[#F8FFA6] text-[#A8A100] text-sm font-medium rounded-md shadow-md">
+                                    class="inline-block px-8 py-1 bg-[#FFB9B7] text-[#D16D6A]  text-sm font-medium rounded-md shadow-md">
                                     Rejected
                                 </span>
                             </div>
@@ -269,7 +269,7 @@
                         <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300 text-center">{{item.nic}}</td>
                         <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300 text-center">
                             <button class="text-gray-400 hover:text-gray-600 px-2" (click)="navigateToProfile(item.id)">
-                                <i class="fa-regular fa-file text-lg"></i>
+                                <i class="fa-regular fa-file text-lg text-gray-600"></i>
                             </button>
                             <button 
                                 class="text-[#415CFF] hover:text-blue-500 px-2" 

@@ -24,6 +24,7 @@
     "@primeng/themes": "^18.0.0",
     "canvasjs": "^1.8.3",
     "chart.js": "^4.4.7",
+    "collection-center": "file:",
     "file-saver": "^2.0.5",
     "flowbite": "^2.5.2",
     "html2canvas": "^1.4.1",

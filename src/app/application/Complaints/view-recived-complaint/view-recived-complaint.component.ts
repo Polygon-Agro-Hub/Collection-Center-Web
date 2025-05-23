@@ -60,7 +60,7 @@ export class ViewRecivedComplaintComponent implements OnInit {
           this.compalintObj?.phoneNumber01 === null ||
           this.compalintObj?.phoneNumber01 === undefined
         ) {
-          this.phone1 = 'N/A';
+          this.phone1 = '-';
         } else {
           this.phone1 = `${this.compalintObj.phoneCode01 || ''} - ${this.compalintObj.phoneNumber01}`;
         }
@@ -70,7 +70,7 @@ export class ViewRecivedComplaintComponent implements OnInit {
           this.compalintObj?.phoneNumber02 === null ||
           this.compalintObj?.phoneNumber02 === undefined
         ) {
-          this.phone2 = 'N/A';
+          this.phone2 = '-';
         } else {
           this.phone2 = `${this.compalintObj.phoneCode02 || ''} - ${this.compalintObj.phoneNumber02}`;
         }
@@ -80,6 +80,8 @@ export class ViewRecivedComplaintComponent implements OnInit {
         } else {
           this.hasData = true;
         }
+        this.replyObj.reply = this.createTemplate(this.officerName);
+
   
         this.isLoading = false;
       },
@@ -151,6 +153,26 @@ export class ViewRecivedComplaintComponent implements OnInit {
       }
     )
   }
+
+  createTemplate(fname:string=''):string{
+  return `
+  Dear ${fname},
+
+  We are pleased to inform you that your complaint has been resolved.
+
+  We will send a repairing team within this week. Thank you for reporting.
+
+  If you have any further concerns or questions, feel free to reach out.
+  Thank you for your patience and understanding.
+
+
+  Sincerely,
+  [Collection Manager Name]
+  Collection Center Manger of [Center Reg Code]
+  [Company Name]
+
+  `
+}
 
 }
 

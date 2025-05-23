@@ -64,11 +64,15 @@ export class SendedComplaintComponent implements OnInit {
   }
 
   fetchGetReply(id: number) {
+    this.isLoading = true;
     this.ComplainSrv.getComplainById(id).subscribe(
       (res) => {
         this.replyObj = res.data;
+        this.isLoading = false;
+
       }
     )
+
   }
 
   filterStatus() {
@@ -114,6 +118,10 @@ export class SendedComplaintComponent implements OnInit {
     this.isReplyView = false;
   }
 
+  truncateText(text: string, maxLength: number = 150): string {
+    if (!text) return '';
+    return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+  }
 
 }
 

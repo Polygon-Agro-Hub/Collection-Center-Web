@@ -109,7 +109,20 @@ export class FarmerReportComponent implements OnInit {
     };
 
     const formatValueForAmounts = (value: any): string => {
-      return value === null || value === undefined ? '0.00' : value.toString();
+      if (value === null || value === undefined) {
+        return '0.00';
+      }
+
+      // Convert to number
+      const num = Number(value);
+
+      // Format with commas and 2 decimal places
+      return isNaN(num)
+        ? '0.00'
+        : num.toLocaleString('en-US', {
+          minimumFractionDigits: 2,
+          maximumFractionDigits: 2
+        });
     };
 
     // Helper function to split text into multiple lines
@@ -123,15 +136,18 @@ export class FarmerReportComponent implements OnInit {
       startX: number,
       startY: number,
       columnWidths: number[],
-      lineHeight: number = 7, // Increased from 5 to 7 for better spacing
-      padding: number = 3 // Increased from 2 to 3
+      lineHeight: number = 7,
+      padding: number = 3,
+      headerTextColor: string = '#000000',
+      bodyTextColor: string = '#000000'
     ): number => {
       let currentY = startY;
-
-      data.forEach((row) => {
+      const originalFont = doc.getFont(); // Store original font settings
+    
+      data.forEach((row, rowIndex) => {
         let maxLines = 1;
         const cellLines: string[][] = [];
-
+    
         // First determine how many lines we need for this row
         row.forEach((cell, colIndex) => {
           const cellContent = cell.toString();
@@ -140,11 +156,22 @@ export class FarmerReportComponent implements OnInit {
           cellLines.push(lines);
           maxLines = Math.max(maxLines, lines.length);
         });
-
+    
         // Calculate total row height
         const rowHeight = maxLines * lineHeight + padding * 2;
-
-        // Draw each cell with the correct number of lines
+    
+        // Set text style based on row type
+        const isHeader = rowIndex === 0;
+        doc.setTextColor(isHeader ? headerTextColor : bodyTextColor);
+        
+        // Set font to bold for headers
+        if (isHeader) {
+          doc.setFont(originalFont.fontName, 'bold');
+        } else {
+          doc.setFont(originalFont.fontName, 'normal');
+        }
+    
+        // Draw each cell
         let currentX = startX;
         row.forEach((cell, colIndex) => {
           // Draw cell border
@@ -154,12 +181,12 @@ export class FarmerReportComponent implements OnInit {
             columnWidths[colIndex],
             rowHeight
           );
-
+    
           // Draw text (centered vertically)
           const lines = cellLines[colIndex];
           const textHeight = lines.length * lineHeight;
           const verticalOffset = (rowHeight - textHeight) / 1.5;
-
+    
           lines.forEach((line, lineIndex) => {
             doc.text(
               line,
@@ -167,13 +194,16 @@ export class FarmerReportComponent implements OnInit {
               currentY + verticalOffset + (lineIndex * lineHeight) + padding
             );
           });
-
+    
           currentX += columnWidths[colIndex];
         });
-
+    
         currentY += rowHeight;
       });
-
+    
+      // Reset to original font settings
+      doc.setFont(originalFont.fontName, originalFont.fontStyle);
+      doc.setTextColor('#000000');
       return currentY;
     };
 
@@ -187,14 +217,17 @@ export class FarmerReportComponent implements OnInit {
 
     // Add invoice details
     doc.setFontSize(10);
+    doc.setTextColor('#000000');
     doc.text(`INV NO: ${formatValue(this.userObj.invNo)}`, x, y);
     y += yIncrement;
+    doc.setTextColor('#575757');
     doc.text(`Date: ${new Date(this.userObj.createdAt).toISOString().split('T')[0].replace(/-/g, '/')}`, x, y);
     y += yIncrement * 2;
 
     // Add Personal Details section
     y += yIncrement * 0.25;
     doc.setFontSize(12);
+    doc.setTextColor('#000000');
     doc.text('Personal Details', x, y);
     y += yIncrement;
     doc.setFontSize(10);
@@ -202,7 +235,7 @@ export class FarmerReportComponent implements OnInit {
     // Draw Personal Details table
     y = drawDynamicTable(
       [
-        ['First Name', 'Last Name', 'NIC Number', 'Phone Number', 'Address'],
+        ['First Name', 'Last Name', 'NIC Number', 'Phone Number', 'Address'], // Header row
         [
           formatValue(this.userObj.firstName),
           formatValue(this.userObj.lastName),
@@ -215,7 +248,11 @@ export class FarmerReportComponent implements OnInit {
       ],
       x,
       y,
-      [25, 25, 30, 40, 60] // Column widths
+      [25, 25, 30, 40, 60],
+      7,  // lineHeight
+      3,  // padding
+      '#434343',  // Header text color (red)
+      '#000000'   // Body text color (dark gray)
     ) + yIncrement;
 
     // Add Bank Details section
@@ -239,16 +276,20 @@ export class FarmerReportComponent implements OnInit {
       ],
       x,
       y,
-      [40, 50, 30, 30] // Column widths
+      [40, 50, 30, 30], // Column widths
+      7,  // lineHeight
+      3,  // padding
+      '#434343',  // Header text color (red)
+      '#000000'   // Body text color (dark gray)
     ) + yIncrement;
 
     // Add Crop Details section
     y += yIncrement * 0.25;
     y += yIncrement;
-    doc.setFontSize(12);
+    doc.setFontSize(11);
     doc.text('Crop Details', x, y);
     y += yIncrement;
-    doc.setFontSize(10);
+    doc.setFontSize(9);
 
     // Prepare crop details data for table
     const cropTableHeaders = ['Crop Name', 'Variety', 'Unit Price (A)', 'Quantity',
@@ -271,13 +312,17 @@ export class FarmerReportComponent implements OnInit {
       [cropTableHeaders, ...cropTableData],
       x,
       y,
-      [25, 40, 20, 15, 20, 15, 20, 15, 20], // Column widths
+      [22, 24, 23, 20, 23, 18, 23, 17, 23], // Column widths
       5, // Line height
-      2 // Padding
+      2, // Padding
+      '#434343',  // Header text color (red)
+      '#000000'   // Body text color (dark gray)
     ) + yIncrement;
 
     // Add Full Total
     y += yIncrement
+    doc.setFontSize(10);
+    doc.setTextColor('#000000');
     doc.text('Full Total(Rs.) : ' + formatValueForAmounts(this.calculateOverallTotalforReport().toFixed(2)), x, y);
     y += yIncrement * 2.5;
 
@@ -358,6 +403,8 @@ export class FarmerReportComponent implements OnInit {
       doc.text('Not', farmerQrX + 14, qrY + 18);
       doc.text('Available', farmerQrX + 10, qrY + 23);
     }
+    doc.setTextColor('#000000');
+
     doc.setFontSize(12);
     doc.text('Farmer Qr Code', farmerQrX + 6, labelY);
 
@@ -370,6 +417,7 @@ export class FarmerReportComponent implements OnInit {
       doc.text('Not', officerQrX + 14, qrY + 18);
       doc.text('Available', officerQrX + 10, qrY + 23);
     }
+    doc.setTextColor('#000000');
     doc.setFontSize(12);
     doc.text('Officer Qr Code', officerQrX + 6, labelY);
 

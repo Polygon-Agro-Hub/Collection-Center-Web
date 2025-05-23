@@ -279,8 +279,7 @@ export class AddOfficersComponent implements OnInit {
     this.isLoading = true;
     this.isAppireImgValidation = true;
 
-
-
+    this.vehicleSideBImageFile
     if (!this.personalData.accHolderName || !this.personalData.accNumber || !this.personalData.bankName || !this.personalData.branchName) {
       this.isLoading = false;
       this.toastSrv.warning('Pleace fill all required bank details feilds')
@@ -312,6 +311,7 @@ export class AddOfficersComponent implements OnInit {
         if (this.personalData.jobRole === 'Driver') {
           if (!this.licenseFrontImageFileName || !this.licenseBackImageFileName || !this.insurenceFrontImageFileName || !this.insurenceBackImageFileName || !this.vehicleFrontImageFileName || !this.vehicleBackImageFileName || !this.vehicleSideAImageFileName || !this.vehicleSideBImageFileName) {
             this.isLoading = false;
+            this.toastSrv.warning('Pleace fill all required vehicle image upload fields')
             return;
           }
 

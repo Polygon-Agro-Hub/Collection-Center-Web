@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DropdownModule } from 'primeng/dropdown'
@@ -36,6 +36,18 @@ export class ViewOfficersComponent implements OnInit {
   logingRole: string | null = null;
   isLoading: boolean = true;
 
+  isDropdownOpen = false;
+  dropdownOptions = ['Approved', 'Not Approved', 'Rejected'];
+
+  toggleDropdown() {
+    this.isDropdownOpen = !this.isDropdownOpen;
+  }
+
+  selectOption(option: string) {
+    this.selectStatus = option;
+    this.isDropdownOpen = false;
+    this.applyStatusFilters();
+  }
 
 
 
@@ -55,6 +67,16 @@ export class ViewOfficersComponent implements OnInit {
     this.getAllCenters();
     this.fetchByRole();
 
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const dropdownElement = document.querySelector('.custom-dropdown-container');
+    const clickedInside = dropdownElement?.contains(event.target as Node);
+
+    if (!clickedInside && this.isDropdownOpen) {
+      this.isDropdownOpen = false;
+    }
   }
 
   navigate(path: string) {
@@ -242,18 +264,34 @@ export class ViewOfficersComponent implements OnInit {
     });
   }
 
+  clearStatusFilter(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
+    this.selectStatus = '';
+    this.isDropdownOpen = false;
+    this.applyStatusFilters();
+  }
+
+  // Keep your existing methods
   applyStatusFilters() {
     this.fetchByRole();
   }
+
+  // applyStatusFilters() {
+  //   this.fetchByRole();
+  // }
+
+  // clearStatusFilter() {
+  //   this.selectStatus = ''
+  //   this.fetchByRole();
+  // }
 
   applyRoleFilters() {
     this.fetchByRole();
   }
 
-  clearStatusFilter() {
-    this.selectStatus = ''
-    this.fetchByRole();
-  }
+
 
   clearRoleFilter() {
     this.selectRole = ''

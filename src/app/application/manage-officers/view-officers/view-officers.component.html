@@ -1,12 +1,14 @@
 <app-loading-spinner *ngIf="isLoading" />
 
 <div *ngIf="!isLoading">
-    <p class="font-semibold text-[#424242] mb-4 mr-5 ml-0 dark:text-[#FFFFFF] dark:bg-black cursor-pointer">Manage Officers</p>
+    <p class="font-semibold text-[#424242] mb-4 mr-5 ml-0 dark:text-[#FFFFFF] dark:bg-black cursor-pointer">Manage
+        Officers</p>
 
     <div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg overflow-x-auto">
         <div class="flex flex-row items-center justify-between">
             <div class="flex flex-row gap-4">
-                <button class="bg-[#415CFF] text-[#FFFFFF] dark:text-white rounded-lg shadow-lg px-4 py-2 whitespace-nowrap"
+                <button
+                    class="bg-[#415CFF] text-[#FFFFFF] dark:text-white rounded-lg shadow-lg px-4 py-2 whitespace-nowrap"
                     (click)="navigate('/manage-officers/create-officer')">
                     Add Officer
                 </button>
@@ -54,7 +56,7 @@
                                 value="Collection Officer">Collection Officer</option>
                             <option class=" dark:bg-[#292929] text-[#4A4A4A] dark:text-textDark hover:bg-gray-300"
                                 value="Customer Officer">Customer Officer</option>
-                                <option class=" dark:bg-[#292929] text-[#4A4A4A] dark:text-textDark hover:bg-gray-300"
+                            <option class=" dark:bg-[#292929] text-[#4A4A4A] dark:text-textDark hover:bg-gray-300"
                                 value="Driver">Driver</option>
                         </select>
 
@@ -132,47 +134,47 @@
 
                 <!-- <div *ngIf="isDropdownOpen" class="dropdown-backdrop" (click)="isDropdownOpen = false"></div> -->
                 <div class="relative w-52 custom-dropdown-container">
-                    <!-- Hidden native select for form binding -->
+                    <!-- Hidden native select -->
                     <select [(ngModel)]="selectStatus" class="hidden" (change)="applyStatusFilters()">
-                      <option value=""></option>
-                      <option value="Approved">Approved</option>
-                      <option value="Not Approved">Not Approved</option>
-                      <option value="Rejected">Rejected</option>
+                        <option value=""></option>
+                        <option value="Approved">Approved</option>
+                        <option value="Not Approved">Not Approved</option>
+                        <option value="Rejected">Rejected</option>
                     </select>
-                  
+
                     <!-- Custom dropdown trigger -->
                     <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
-                         (click)="toggleDropdown()">
-                      <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
-                        <span>{{ selectStatus || 'Status' }}</span>
-                        <div class="flex items-center">
-                          <!-- Cancel icon -->
-                          <i *ngIf="selectStatus" 
-                             (click)="clearStatusFilter($event)"
-                             class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
-                          <!-- Down/Up arrow icon -->
-                          <i class="fa-solid text-lg text-[#828282] transition-transform duration-200"
-                             [class.fa-angle-down]="!isDropdownOpen"
-                             [class.fa-angle-up]="isDropdownOpen"></i>
-                        </div>
-                      </div>
-                    </div>
-                  
-                    <!-- Custom dropdown options -->
-                    <div *ngIf="isDropdownOpen" 
-                         class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
-                      <div class="py-1">
-                        <div *ngFor="let option of dropdownOptions"
-                             (click)="selectOption(option)"
-                             class="px-3 py-2 hover:bg-[#3982ff] dark:text-textDark dark:hover:bg-[#415CFF] cursor-pointer flex items-center">
-                          <span class="flex-grow">{{ option }}</span>
-                          <i class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
+                        (click)="toggleDropdown()">
+                        <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
+                            <span>{{ selectStatus || 'Status' }}</span>
+                            <div class="flex items-center">
+                                <!-- X icon (shown ONLY when option is selected) -->
+                                <i *ngIf="selectStatus" (click)="clearStatusFilter($event)"
+                                    class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
 
-                
+                                <!-- Arrow icon (shown when EITHER: dropdown is open OR no selection exists) -->
+                                <i *ngIf="isDropdownOpen || !selectStatus"
+                                    class="fa-solid text-lg text-[#828282] transition-transform duration-200"
+                                    [class.fa-angle-down]="!isDropdownOpen" [class.fa-angle-up]="isDropdownOpen"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Custom dropdown options -->
+                    <div *ngIf="isDropdownOpen"
+                        class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
+                        <div class="py-1">
+                            <div *ngFor="let option of dropdownOptions" (click)="selectOption(option)"
+                                class="px-3 py-2 hover:bg-[#3982ff] dark:text-textDark dark:hover:bg-[#415CFF] cursor-pointer flex items-center">
+                                <span class="flex-grow">{{ option }}</span>
+                                <i
+                                    class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
 
                 <!-- <div class="relative w-46" *ngIf="logingRole ==='Collection Center Head'">
                     <div
@@ -224,9 +226,10 @@
                 [options]="companyArr" [checkmark]="true" optionLabel="companyNameEnglish" [showClear]="true"
                 placeholder="Role" (onChange)="applyCompanyFilters()" /> -->
 
-                <div class="flex items-center text-[#95A1AC] text-lg rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
-                    <input type="text" placeholder="Search..." [(ngModel)]="searchText"
-                        (keyup.enter)="onSearch()" (keyup.esc)="offSearch()"
+                <div
+                    class="flex items-center text-[#95A1AC] text-lg rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+                    <input type="text" placeholder="Search..." [(ngModel)]="searchText" (keyup.enter)="onSearch()"
+                        (keyup.esc)="offSearch()"
                         class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
                     <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                         (click)="onSearch()">
@@ -315,9 +318,7 @@
                             <button class="text-gray-400 hover:text-gray-600 px-2" (click)="navigateToProfile(item.id)">
                                 <i class="fa-regular fa-file text-lg text-gray-600"></i>
                             </button>
-                            <button 
-                                class="text-[#415CFF] hover:text-blue-500 px-2" 
-                                [ngClass]="{
+                            <button class="text-[#415CFF] hover:text-blue-500 px-2" [ngClass]="{
                                     'text-gray-400 hover:text-gray-600': (logingRole ==='Collection Center Manager' && (item.jobRole === 'Collection Center Manager' || item.jobRole ==='Driver'))
                                   }"
                                 (click)="(logingRole ==='Collection Center Manager' && (item.jobRole === 'Collection Center Manager' || item.jobRole ==='Driver')) ? '' : navigateToEdit(item.id)">

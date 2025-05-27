@@ -292,7 +292,7 @@ export class EditOfficerComponent implements OnInit {
 
 
   nextForm(page: 'pageOne' | 'pageTwo' | 'pageThree') {
-    
+
     this.selectedPage = page;
 
 
@@ -373,13 +373,29 @@ export class EditOfficerComponent implements OnInit {
           (res: any) => {
             this.officerId = res.officerId;
             this.isLoading = false;
-            this.toastSrv.success('Collective Officer Updated Successfully')
-            this.location.back();
+            if (res && res.message) {
+              // Success response from backend
+              this.toastSrv.success(res.message);
+              this.location.back();
+            } else {
+              // Handle unexpected format
+              this.toastSrv.error('Something went wrong while updating.');
+            }
 
           },
           (error: any) => {
             this.isLoading = false;
-            this.toastSrv.error('There was an error creating the collective officer')
+            if (error.status === 409) {
+              this.toastSrv.error('NIC already exists for another collection officer');
+            } else if (error.status === 410) {
+              this.toastSrv.error('Email already exists for another collection officer');
+            } else if (error.status === 400) {
+              this.toastSrv.error('No file uploaded. Please attach required file(s).');
+            } else if (error.status === 500) {
+              this.toastSrv.error('Internal server error. Please try again later.');
+            } else {
+              this.toastSrv.error('An unexpected error occurred.');
+            }
 
           }
         );
@@ -402,17 +418,34 @@ export class EditOfficerComponent implements OnInit {
 
         this.ManageOficerSrv.CCHupdateCollectiveOfficer(this.personalData, this.editOfficerId, this.selectedImage, this.driverObj, this.licenseFrontImagePreview, this.licenseBackImagePreview, this.insurenceFrontImagePreview, this.insurenceBackImagePreview, this.vehicleFrontImagePreview, this.vehicleBackImagePreview, this.vehicleSideAImagePreview, this.vehicleSideBImagePreview).subscribe(
           (res: any) => {
-            this.officerId = res.officerId;
             this.isLoading = false;
-            this.toastSrv.success('Collective Officer Updated Successfully')
-            this.location.back();
 
+            if (res && res.message) {
+              // Success response from backend
+              this.toastSrv.success(res.message);
+              this.location.back();
+            } else {
+              // Handle unexpected format
+              this.toastSrv.error('Something went wrong while updating.');
+            }
           },
           (error: any) => {
             this.isLoading = false;
-            this.toastSrv.error('There was an error creating the collective officer')
 
+            if (error.status === 409) {
+              this.toastSrv.error('NIC already exists for another collection officer');
+            } else if (error.status === 410) {
+              this.toastSrv.error('Email already exists for another collection officer');
+            } else if (error.status === 400) {
+              this.toastSrv.error('No file uploaded. Please attach required file(s).');
+            } else if (error.status === 500) {
+              this.toastSrv.error('Internal server error. Please try again later.');
+            } else {
+              this.toastSrv.error('An unexpected error occurred.');
+            }
           }
+
+
         );
       }
 
@@ -501,7 +534,7 @@ export class EditOfficerComponent implements OnInit {
     // Only proceed if both banks and branches are loaded and we have existing data
     if (this.banks.length > 0 && Object.keys(this.allBranches).length > 0 &&
       this.personalData && this.personalData.bankName) {
-      
+
       // Find the bank ID that matches the existing bank name
       const matchedBank = this.banks.find(bank => bank.name === this.personalData.bankName);
 
@@ -519,7 +552,7 @@ export class EditOfficerComponent implements OnInit {
         }
       }
     }
-    
+
   }
 
 

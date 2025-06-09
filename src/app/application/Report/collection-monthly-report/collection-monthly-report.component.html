@@ -49,96 +49,96 @@
     </div>
 
     <div *ngIf="hasData" id="reportContainer"
-        class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg mt-6">
+        class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg mt-6 mb-6">
         <div class="flex flex-col justify-center items-center">
-            <p class="text-[#292929] font-semibold text-xl my-4 dark:text-textDark">Collection Officer Report</p>
+            <p class="text-[#292929] font-semibold text-xl mt-4 mb-8 dark:text-textDark">Collection Officer Report</p>
         </div>
 
         <div class="grid grid-cols-2 gap-x-10 gap-y-6">
             <div class="flex">
                 <span
-                    class="inline-flex items-center px-4 text-[#292929] border font-semibold border-e-0 border-[#828282] rounded-s-md dark:bg-gray-600 dark:text-textDark dark:border-gray-600">
+                    class="inline-flex items-center px-4 text-[#292929] border font-semibold border-e-0 border-[#D9D9D9] rounded-s-md dark:bg-gray-600 dark:text-textDark dark:border-gray-600">
                     From
                 </span>
                 <span
-                    class="rounded-none rounded-e-lg bg-gray-50 border border-[#828282] font-semibold text-[#292929] focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-ful4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    class="rounded-none rounded-e-lg bg-gray-50 border border-[#D9D9D9] font-semibold text-[#292929] focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-ful4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     {{startDate | date: 'yyyy-MM-dd'}}
                 </span>
             </div>
 
             <div class="flex">
                 <span
-                    class="inline-flex items-center px-4 text-[#292929] border font-semibold border-e-0 border-[#828282] rounded-s-md dark:bg-gray-600 dark:text-textDark dark:border-gray-600">
+                    class="inline-flex items-center px-4 text-[#292929] border font-semibold border-e-0 border-[#D9D9D9] rounded-s-md dark:bg-gray-600 dark:text-textDark dark:border-gray-600">
                     To
                 </span>
                 <span
-                    class="rounded-none rounded-e-lg bg-gray-50 border border-[#828282] font-semibold text-[#292929] focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-ful4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    class="rounded-none rounded-e-lg bg-gray-50 border border-[#D9D9D9] font-semibold text-[#292929] focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-ful4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     {{endDate | date: 'yyyy-MM-dd'}}
                 </span>
             </div>
 
             <div class="flex">
                 <span
-                    class="inline-flex items-center px-4 text-[#292929] border font-semibold border-e-0 border-[#828282] rounded-s-md dark:bg-gray-600 dark:text-textDark dark:border-gray-600">
+                    class="inline-flex items-center px-4 text-[#292929] border font-semibold border-e-0 border-[#D9D9D9] rounded-s-md dark:bg-gray-600 dark:text-textDark dark:border-gray-600">
                     EMP ID
                 </span>
                 <span
-                    class="rounded-none rounded-e-lg bg-gray-50 border border-[#828282] font-semibold text-[#292929] focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-ful4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    class="rounded-none rounded-e-lg bg-gray-50 border border-[#D9D9D9] font-semibold text-[#292929] focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-ful4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     {{officerDataObj.empId}}
                 </span>
             </div>
 
             <div class="flex">
                 <span
-                    class="inline-flex items-center px-4 text-[#292929] border font-semibold border-e-0 border-[#828282] rounded-s-md dark:bg-gray-600 dark:text-textDark dark:border-gray-600">
+                    class="inline-flex items-center px-4 text-[#292929] border font-semibold border-e-0 border-[#D9D9D9] rounded-s-md dark:bg-gray-600 dark:text-textDark dark:border-gray-600">
                     Role
                 </span>
                 <span
-                    class="rounded-none rounded-e-lg bg-gray-50 border border-[#828282] font-semibold text-[#292929] focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-ful4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    class="rounded-none rounded-e-lg bg-gray-50 border border-[#D9D9D9] font-semibold text-[#292929] focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-ful4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     {{officerDataObj.jobRole}}
                 </span>
             </div>
 
             <div class="flex">
                 <span
-                    class="inline-flex items-center px-4 text-[#292929] border font-semibold border-e-0 border-[#828282] rounded-s-md dark:bg-gray-600 dark:text-textDark dark:border-gray-600">
+                    class="inline-flex items-center px-4 text-[#292929] border font-semibold border-e-0 border-[#D9D9D9] rounded-s-md dark:bg-gray-600 dark:text-textDark dark:border-gray-600">
                     First Name
                 </span>
                 <span
-                    class="rounded-none rounded-e-lg bg-gray-50 border border-[#828282] font-semibold text-[#292929] focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-ful4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    class="rounded-none rounded-e-lg bg-gray-50 border border-[#D9D9D9] font-semibold text-[#292929] focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-ful4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     {{officerDataObj.firstNameEnglish}}
                 </span>
             </div>
 
             <div class="flex">
                 <span
-                    class="inline-flex items-center px-4 text-[#292929] border font-semibold border-e-0 border-[#828282] rounded-s-md dark:bg-gray-600 dark:text-textDark dark:border-gray-600">
+                    class="inline-flex items-center px-4 text-[#292929] border font-semibold border-e-0 border-[#D9D9D9] rounded-s-md dark:bg-gray-600 dark:text-textDark dark:border-gray-600">
                     Last Name
                 </span>
                 <span
-                    class="rounded-none rounded-e-lg bg-gray-50 border border-[#828282] font-semibold text-[#292929] focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-ful4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    class="rounded-none rounded-e-lg bg-gray-50 border border-[#D9D9D9] font-semibold text-[#292929] focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-ful4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     {{officerDataObj.lastNameEnglish}}
                 </span>
             </div>
 
             <div class="flex">
                 <span
-                    class="inline-flex items-center px-4 text-[#292929] border font-semibold border-e-0 border-[#828282] rounded-s-md dark:bg-gray-600 dark:text-textDark dark:border-gray-600">
+                    class="inline-flex items-center px-4 text-[#292929] border font-semibold border-e-0 border-[#D9D9D9] rounded-s-md dark:bg-gray-600 dark:text-textDark dark:border-gray-600">
                     Weight
                 </span>
                 <span
-                    class="rounded-none rounded-e-lg bg-gray-50 border border-[#828282] font-semibold text-[#292929] focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-ful4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    class="rounded-none rounded-e-lg bg-gray-50 border border-[#D9D9D9] font-semibold text-[#292929] focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-ful4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     {{officerDataObj.TotalQty}} kg
                 </span>
             </div>
 
             <div class="flex">
                 <span
-                    class="inline-flex items-center px-4 text-[#292929] border font-semibold border-e-0 border-[#828282] rounded-s-md dark:bg-gray-600 dark:text-textDark dark:border-gray-600">
+                    class="inline-flex items-center px-4 text-[#292929] border font-semibold border-e-0 border-[#D9D9D9] rounded-s-md dark:bg-gray-600 dark:text-textDark dark:border-gray-600">
                     Farmer
                 </span>
                 <span
-                    class="rounded-none rounded-e-lg bg-gray-50 border border-[#828282] font-semibold text-[#292929] focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-ful4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
+                    class="rounded-none rounded-e-lg bg-gray-50 border border-[#D9D9D9] font-semibold text-[#292929] focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-ful4 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                     {{officerDataObj.TotalFarmers}}
                 </span>
             </div>
@@ -149,28 +149,28 @@
             <table class="w-full border-collapse border border-[#828282] dark:border-gray-700">
                 <thead>
                     <tr class="bg-[#E4DCD3] dark:bg-gray-700">
-                        <th class="border border-[#828282] dark:border-gray-600 px-4 py-2">Date</th>
-                        <th class="border border-[#828282] dark:border-gray-600 px-4 py-2">Total Weight</th>
-                        <th class="border border-[#828282] dark:border-gray-600 px-4 py-2">Total Farmers</th>
+                        <th class="border text-[#000000] border-[#828282] dark:border-gray-600 px-4 py-2">Date</th>
+                        <th class="border text-[#000000] border-[#828282] dark:border-gray-600 px-4 py-2">Total Weight</th>
+                        <th class="border text-[#000000] border-[#828282] dark:border-gray-600 px-4 py-2">Total Farmers</th>
                     </tr>
                 </thead>
                 <tbody>
                     <tr *ngFor="let item of farmerDataArr">
-                        <td class="text-center border border-[#828282] dark:border-gray-600 px-4 py-2">{{
+                        <td class="text-center text-[#000000] border border-[#828282] dark:border-gray-600 px-4 py-2">{{
                             item.ReportDate
                             |
                             date: 'yyyy-MM-dd' }}</td>
-                        <td class="text-center border text-[#292929] border-[#828282] dark:border-gray-600 px-4 py-2">
+                        <td class="text-center text-[#000000] border border-[#828282] dark:border-gray-600 px-4 py-2">
                             {{item.TotalQty}} kg
                         </td>
-                        <td class="text-center border border-[#828282] dark:border-gray-600 px-4 py-2">
+                        <td class="text-center text-[#000000] border border-[#828282] dark:border-gray-600 px-4 py-2">
                             {{item.TotalFarmers}}
                         </td>
                     </tr>
 
                 </tbody>
             </table>
-            <p class="text-gray-500 dark:text-textDark text-sm mt-4">
+            <p class="text-[#3F3E3E] dark:text-textDark text-sm mt-4">
                 This report is generated on {{ currentDate | date: 'yyyy/MM/dd \'at\' hh:mm a' }}
             </p>
 

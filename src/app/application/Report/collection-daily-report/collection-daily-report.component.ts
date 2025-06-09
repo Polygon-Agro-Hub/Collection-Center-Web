@@ -25,6 +25,7 @@ export class CollectionDailyReportComponent implements OnInit {
   loadingChart = true;
   loadingTable = true;
   chartOptions: any;
+  hasData: boolean = true;
 
 
   isLoading: boolean = true;
@@ -53,7 +54,9 @@ export class CollectionDailyReportComponent implements OnInit {
     this.isLoading = true
     this.ReportSrv.getCollectionDailyReport(this.officerId, date).subscribe(
       (res) => {
+        console.log(res);
         if (res.data.length === 0) {
+          this.hasData = false;
           this.updateChart();
           this.loadingTable = false;
           this.isLoading = false;
@@ -112,12 +115,15 @@ export class CollectionDailyReportComponent implements OnInit {
     this.chartOptions = {
       animationEnabled: true,
       theme: "light2",
+      color: "#000000", // Note: this sets series color (not axis title)
       axisX: {
-        title: "Crops",
+        title: "Crop Variety",
+        titleFontColor: "#000000", // Set title color (example: red)
         reversed: true,
       },
       axisY: {
-        title: "Total Weight (Kg)",
+        title: "kg",
+        titleFontColor: "#000000", // Set title color
         includeZero: true,
       },
       legend: {
@@ -127,6 +133,9 @@ export class CollectionDailyReportComponent implements OnInit {
           e.chart.render();
         },
       },
+      toolTip: {
+        shared: true
+      },
       data: [
         {
           type: "stackedBar",
@@ -134,6 +143,7 @@ export class CollectionDailyReportComponent implements OnInit {
           showInLegend: true,
           legendMarkerColor: "#2B88D9",
           dataPoints: gradeAData,
+          cursor: "pointer", // 👈 Add this
         },
         {
           type: "stackedBar",
@@ -141,6 +151,7 @@ export class CollectionDailyReportComponent implements OnInit {
           showInLegend: true,
           legendMarkerColor: "#79BAF2",
           dataPoints: gradeBData,
+          cursor: "pointer", // 👈 Add this
         },
         {
           type: "stackedBar",
@@ -148,8 +159,9 @@ export class CollectionDailyReportComponent implements OnInit {
           showInLegend: true,
           legendMarkerColor: "#A7D5F2",
           dataPoints: gradeCData,
+          cursor: "pointer", // 👈 Add this
         },
-      ],
+      ]
     };
 
     this.loadingChart = false;
@@ -196,16 +208,16 @@ export class CollectionDailyReportComponent implements OnInit {
         (report.gradeC.toFixed(2)).toLocaleString() + 'Kg',
         (report.total.toFixed(2)).toLocaleString() + 'Kg',
       ];
-    
+
       rowData.forEach((data, index) => {
         doc.rect(currentX, currentY, columnWidths[index], rowHeight);
         doc.text(data, currentX + 2, currentY + 7);
         currentX += columnWidths[index];
       });
-    
+
       currentY += rowHeight;
     });
-    
+
     doc.save(`Daily_Report_${this.officerName}_${this.selectDate}.pdf`);
   }
 

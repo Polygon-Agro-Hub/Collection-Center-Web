@@ -51,6 +51,7 @@ export class OfficerProfileComponent implements OnInit {
   fetchOfficer(id: number) {
     this.isLoading = true;
     this.ManageOficerSrv.getOfficerById(id).subscribe((res: any) => {
+      console.log(res);
       this.officerObj = res.officerData.collectionOfficer;
       console.log(this.officerObj)
       this.isLoading = false;
@@ -79,45 +80,57 @@ export class OfficerProfileComponent implements OnInit {
       return value !== null && value !== undefined ? value.toString() : 'N/A';
   };
 
-    function loadImageAsBase64(url: string): Promise<string> {
-      return new Promise((resolve, reject) => {
-        const xhr = new XMLHttpRequest();
-        xhr.onload = function () {
-          const reader = new FileReader();
-          reader.onloadend = function () {
-            resolve(reader.result as string);
-          };
-          reader.readAsDataURL(xhr.response);
+  function loadImageAsBase64(url: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        console.log('XHR succeeded for', url);
+        const reader = new FileReader();
+        reader.onloadend = function () {
+          console.log('FileReader loaded:', reader.result?.toString().slice(0, 30), '...');
+          resolve(reader.result as string);
         };
-        xhr.onerror = function () {
-          // If XHR fails, try loading image directly
-          const img = new Image();
-          img.crossOrigin = 'Anonymous';
-          img.onload = function () {
-            const canvas = document.createElement('canvas');
-            const ctx = canvas.getContext('2d');
-            canvas.width = img.width;
-            canvas.height = img.height;
-            ctx?.drawImage(img, 0, 0);
-            resolve(canvas.toDataURL('image/png'));
-          };
-          img.onerror = function () {
-            console.warn('Image load failed:', url);
-            resolve(''); // Resolve with empty string if image fails to load
-          };
-          img.src = url;
+        reader.readAsDataURL(xhr.response);
+      };
+      xhr.onerror = function () {
+        console.warn('XHR failed, falling back to Image for', url);
+  
+        const img = new Image();
+        img.crossOrigin = 'Anonymous';
+        img.onload = function () {
+          console.log('Fallback image loaded:', url);
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx?.drawImage(img, 0, 0);
+          try {
+            const dataUrl = canvas.toDataURL('image/png');
+            console.log('Canvas toDataURL result:', dataUrl.slice(0, 30), '...');
+            resolve(dataUrl);
+          } catch (e) {
+            console.error('Canvas toDataURL failed:', e);
+            resolve('');
+          }
         };
-        xhr.open('GET', url);
-        xhr.responseType = 'blob';
-        xhr.setRequestHeader('Accept', 'image/png;image/*');
-        try {
-          xhr.send();
-        } catch (error) {
-          console.error('XHR send error:', error);
-          reject(error);
-        }
-      });
-    }
+        img.onerror = function () {
+          console.warn('Image load failed:', url);
+          resolve('');
+        };
+        img.src = url;
+      };
+      xhr.open('GET', url);
+      xhr.responseType = 'blob';
+      xhr.setRequestHeader('Accept', 'image/png,image/*');
+      try {
+        xhr.send();
+      } catch (error) {
+        console.error('XHR send error:', error);
+        reject(error);
+      }
+    });
+  }
+  
 
     const appendCacheBuster = (url: string) => {
       if (!url) return '';
@@ -130,7 +143,9 @@ export class OfficerProfileComponent implements OnInit {
     try {
       if (this.officerObj.image) {
         const modifiedImageUrl = appendCacheBuster(this.officerObj.image);
+        
         imagebase64 = await loadImageAsBase64(modifiedImageUrl);
+        console.log('this is image base 64 one', imagebase64)
       }
     } catch (error) {
       console.error('Error loading image:', error);

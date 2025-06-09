@@ -126,31 +126,37 @@ export class CollectionMonthlyReportComponent implements OnInit {
 
     // Helper function to add a bordered field
     const addField = (label: string, value: string, x: number, y: number, width: number): number => {
-      // Draw rectangle
-      doc.setDrawColor(200, 200, 200);
-      doc.setFillColor(255, 255, 255);
-      doc.rect(x, y, width, 10, 'S');
-
-      // Draw divider line
+      const height = 10;
+      const borderRadius = 2;
       const labelWidth = width / 3;
-      doc.line(x + labelWidth, y, x + labelWidth, y + 10);
-
-      // Add label text
+    
+      // Set border color to #D9D9D9 and draw rounded rectangle
+      doc.setDrawColor(217, 217, 217);
+      doc.setFillColor(255, 255, 255);
+      doc.roundedRect(x, y, width, height, borderRadius, borderRadius, 'S');
+    
+      // Divider line between label and value
+      doc.line(x + labelWidth, y, x + labelWidth, y + height);
+    
+      // Set text font and color
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(9);
+      doc.setTextColor(41, 41, 41);  // #292929
+    
+      // Add label and value text
       doc.text(label, x + 2, y + 6);
-
-      // Add value text
       doc.text(value, x + labelWidth + 2, y + 6);
-
-      return y + 10;
+    
+      return y + height;
     };
+    
 
     // Add title
     doc.setFont('helvetica', 'bold');
     doc.setFontSize(16);
+    doc.setTextColor('#292929');
     doc.text('Collection Officer Report', pageWidth / 2, y, { align: 'center' });
-    y += 15;
+    y += 10;
 
     // Draw the outer container
     doc.setDrawColor(220, 220, 220);
@@ -175,55 +181,63 @@ export class CollectionMonthlyReportComponent implements OnInit {
     y = Math.max(leftY, rightY) + 5;
 
     // Fourth row - Weight and Farmer
-    leftY = addField('Weight', String(this.officerDataObj.TotalQty), margin + 5, y, halfWidth);
+    leftY = addField('Weight', String(this.officerDataObj.TotalQty) + ' kg', margin + 5, y, halfWidth);
     rightY = addField('Farmer', String(this.officerDataObj.TotalFarmers), margin + halfWidth + 10, y, halfWidth);
     y = Math.max(leftY, rightY) + 15;
 
     // Table
     // Table header
     const colWidths = [contentWidth * 0.3, contentWidth * 0.35, contentWidth * 0.35];
-    const startX = margin + 5;
+const startX = margin + 5;
 
-    // Header row
-    doc.setFillColor(150, 150, 150);
-    doc.rect(startX, y, colWidths[0], 10, 'F');
-    doc.rect(startX + colWidths[0], y, colWidths[1], 10, 'F');
-    doc.rect(startX + colWidths[0] + colWidths[1], y, colWidths[2], 10, 'F');
+// Table header background and border
+doc.setFillColor(228, 220, 211); // #E4DCD3
+doc.setDrawColor(130, 130, 130); // #828282
 
-    // Header text
-    doc.setTextColor(255, 255, 255);
-    doc.setFont('helvetica', 'bold');
-    doc.setFontSize(10);
-    doc.text('Date', startX + colWidths[0] / 2, y + 6, { align: 'center' });
-    doc.text('Total Weight', startX + colWidths[0] + colWidths[1] / 2, y + 6, { align: 'center' });
-    doc.text('Total Farmers', startX + colWidths[0] + colWidths[1] + colWidths[2] / 2, y + 6, { align: 'center' });
-    y += 10;
+// Header rectangles
+doc.rect(startX, y, colWidths[0], 10, 'FD');
+doc.rect(startX + colWidths[0], y, colWidths[1], 10, 'FD');
+doc.rect(startX + colWidths[0] + colWidths[1], y, colWidths[2], 10, 'FD');
 
-    // Table data rows
-    doc.setTextColor(0, 0, 0);
-    doc.setFont('helvetica', 'normal');
-    this.farmerDataArr.forEach(row => {
-      doc.setDrawColor(200, 200, 200);
-      doc.rect(startX, y, colWidths[0], 10, 'S');
-      doc.rect(startX + colWidths[0], y, colWidths[1], 10, 'S');
-      doc.rect(startX + colWidths[0] + colWidths[1], y, colWidths[2], 10, 'S');
+// Header text
+doc.setTextColor(0, 0, 0); // #000000
+doc.setFont('helvetica', 'bold');
+doc.setFontSize(10);
+doc.text('Date', startX + colWidths[0] / 2, y + 6, { align: 'center' });
+doc.text('Total Weight', startX + colWidths[0] + colWidths[1] / 2, y + 6, { align: 'center' });
+doc.text('Total Farmers', startX + colWidths[0] + colWidths[1] + colWidths[2] / 2, y + 6, { align: 'center' });
 
-      // Format the date
-      const formattedDate = row.ReportDate
-        ? new Date(row.ReportDate).toISOString().split('T')[0].replace(/-/g, '-')
-        : '-';
+y += 10;
 
-      doc.text(formattedDate, startX + colWidths[0] / 2, y + 6, { align: 'center' });
-      doc.text(String(row.TotalQty), startX + colWidths[0] + colWidths[1] / 2, y + 6, { align: 'center' });
-      doc.text(String(row.TotalFarmers), startX + colWidths[0] + colWidths[1] + colWidths[2] / 2, y + 6, { align: 'center' });
+// Table body
+this.farmerDataArr.forEach(row => {
+  doc.setDrawColor(130, 130, 130); // border #828282
+  doc.setFont('helvetica', 'normal'); // not bold
+  doc.setFontSize(9);
+  doc.setTextColor(0, 0, 0); // text color black
 
-      y += 10;
-    });
+  // Rectangles for each column
+  doc.rect(startX, y, colWidths[0], 10, 'S');
+  doc.rect(startX + colWidths[0], y, colWidths[1], 10, 'S');
+  doc.rect(startX + colWidths[0] + colWidths[1], y, colWidths[2], 10, 'S');
+
+  // Format date
+  const formattedDate = row.ReportDate
+    ? new Date(row.ReportDate).toISOString().split('T')[0].replace(/-/g, '-')
+    : '-';
+
+  // Body text
+  doc.text(formattedDate, startX + colWidths[0] / 2, y + 6, { align: 'center' });
+  doc.text(String(row.TotalQty) + ' kg', startX + colWidths[0] + colWidths[1] / 2, y + 6, { align: 'center' });
+  doc.text(String(row.TotalFarmers), startX + colWidths[0] + colWidths[1] + colWidths[2] / 2, y + 6, { align: 'center' });
+
+  y += 10;
+});
 
     y += 10;
     // Timestamp
     doc.setFontSize(8);
-    doc.setTextColor(100, 100, 100);
+    doc.setTextColor(62, 62, 62);
     const currentDate = new Date();
     const timestamp = `This report is generated on ${currentDate.getFullYear()}/${String(currentDate.getMonth() + 1).padStart(2, '0')}/${String(currentDate.getDate()).padStart(2, '0')} at ${String(currentDate.getHours()).padStart(2, '0')}:${String(currentDate.getMinutes()).padStart(2, '0')} ${currentDate.getHours() >= 12 ? 'PM' : 'AM'}`;
     doc.text(timestamp, margin + 5, y);

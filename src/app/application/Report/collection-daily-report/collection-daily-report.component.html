@@ -22,47 +22,55 @@
     </div>
 
     <div class="flex flex-col items-center justify-center my-5">
-      <p class="text-xl font-semibold">{{officerName}} - {{empId}}</p>
+      <p class="text-xl text-[#292929] font-semibold">{{officerName}} - {{empId}}</p>
       <p class="text-lg text-[#534E4E]">On {{selectDate}}</p>
     </div>
 
-    <div *ngIf="!loadingChart; else loading">
-      <div class="pt-16">
-        <canvasjs-chart *ngIf="chartOptions" [options]="chartOptions"></canvasjs-chart>
+    <div *ngIf="!hasData"
+            class="flex flex-col items-center w-full h-screen px-10 py-7 bg-tileLight dark:bg-[#363636] dark:text-textDark mt-6">
+            <p class="text-[#494949] my-6 dark:text-textDark">--No Data Availabale--</p>
+            <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20 dark:text-textDark" />
+        </div>
+
+    <div *ngIf="hasData">
+      <div *ngIf="!loadingChart; else loading">
+        <div class="pt-16">
+          <canvasjs-chart *ngIf="chartOptions" [options]="chartOptions"></canvasjs-chart>
+        </div>
       </div>
-    </div>
-
-    <ng-template #loading>
-      <p>Loading chart...</p>
-    </ng-template>
-
-    <div class="w-full mt-8 bg-white dark:bg-gray-800 p-8 rounded-lg shadow-md">
-      <table class="w-full border-collapse border border-gray-300 dark:border-gray-700">
-        <thead>
-          <tr class="bg-[#828282] dark:bg-gray-700">
-            <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Crop Variety</th>
-            <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Grade A</th>
-            <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Grade B</th>
-            <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Grade C</th>
-            <th class="border border-gray-300 dark:border-gray-600 px-4 py-2">Total</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr *ngFor="let item of dailyReportArr">
-            <td class="text-center border border-gray-300 dark:border-gray-600 px-4 py-2">{{item.varietyNameEnglish}}
-            </td>
-            <td class="text-center border border-gray-300 dark:border-gray-600 px-4 py-2">{{item.gradeA | number: '1.2-2'}}Kg</td>
-            <td class="text-center border border-gray-300 dark:border-gray-600 px-4 py-2">{{item.gradeB | number: '1.2-2'}}Kg</td>
-            <td class="text-center border border-gray-300 dark:border-gray-600 px-4 py-2">{{item.gradeC | number: '1.2-2'}}Kg</td>
-            <td class="text-center border border-gray-300 dark:border-gray-600 px-4 py-2">{{item.total | number: '1.2-2'}}Kg</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-    <div class="flex justify-center items-center mt-8">
-      <button class="bg-[#415CFF] text-lg text-white rounded-lg shadow-lg px-4 py-2" (click)="downloadPdf()">
-        Download
-      </button>
+  
+      <ng-template #loading>
+        <p>Loading chart...</p>
+      </ng-template>
+  
+      <div class="w-full mt-8 bg-white dark:bg-gray-800 p-8 rounded-lg">
+        <table class="w-full border-collapse border border-[#828282] dark:border-gray-700">
+          <thead>
+            <tr class="bg-[#E4DCD3] dark:bg-gray-700 text-[#000000]">
+              <th class="border border-[#828282] dark:border-gray-600 px-4 py-2">Crop Variety</th>
+              <th class="border border-[#828282] dark:border-gray-600 px-4 py-2">Grade A</th>
+              <th class="border border-[#828282] dark:border-gray-600 px-4 py-2">Grade B</th>
+              <th class="border border-[#828282] dark:border-gray-600 px-4 py-2">Grade C</th>
+              <th class="border border-[#828282] dark:border-gray-600 px-4 py-2">Total</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr *ngFor="let item of dailyReportArr">
+              <td class="text-center border border-[#828282] dark:border-gray-600 px-4 py-2">{{item.varietyNameEnglish}}
+              </td>
+              <td class="text-center border border-[#828282] dark:border-gray-600 px-4 py-2">{{item.gradeA | number: '1.2-2'}}kg</td>
+              <td class="text-center border border-[#828282] dark:border-gray-600 px-4 py-2">{{item.gradeB | number: '1.2-2'}}kg</td>
+              <td class="text-center border border-[#828282] dark:border-gray-600 px-4 py-2">{{item.gradeC | number: '1.2-2'}}kg</td>
+              <td class="text-center border border-[#828282] dark:border-gray-600 px-4 py-2">{{item.total | number: '1.2-2'}}kg</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="flex justify-center items-center mt-8">
+        <button class="bg-[#415CFF] text-lg text-white rounded-lg shadow-lg px-4 py-2" (click)="downloadPdf()">
+          Download
+        </button>
+      </div>
     </div>
 
   </div>

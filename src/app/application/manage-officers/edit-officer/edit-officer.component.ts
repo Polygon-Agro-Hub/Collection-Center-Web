@@ -163,6 +163,8 @@ export class EditOfficerComponent implements OnInit {
       (res: any) => {
 
         this.personalData = res.officerData.collectionOfficer;
+        this.personalData.conformAccNumber = this.personalData.accNumber
+        console.log( this.personalData);
         this.ExistirmId = res.officerData.irmId;
 
         this.getUpdateLastID(res.officerData.collectionOfficer.jobRole);

@@ -286,5 +286,16 @@ export class ManageOfficersService {
       headers,
     });
   }
+
+  getProfileImageBase64(id: number) {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
+    return this.http.get(`${this.apiUrl}/manage-officers/get-profile-image-base64-by-id/${id}`, {
+      headers,
+    });
+  }
+  
 }
+
 

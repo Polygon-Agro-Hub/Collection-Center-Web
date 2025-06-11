@@ -36,17 +36,30 @@ export class ViewOfficersComponent implements OnInit {
   logingRole: string | null = null;
   isLoading: boolean = true;
 
-  isDropdownOpen = false;
-  dropdownOptions = ['Approved', 'Not Approved', 'Rejected'];
+  isStatusDropdownOpen = false;
+  statusDropdownOptions = ['Approved', 'Not Approved', 'Rejected'];
 
-  toggleDropdown() {
-    this.isDropdownOpen = !this.isDropdownOpen;
+  toggleStatusDropdown() {
+    this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
   }
 
-  selectOption(option: string) {
+  selectStatusOption(option: string) {
     this.selectStatus = option;
-    this.isDropdownOpen = false;
+    this.isStatusDropdownOpen = false;
     this.applyStatusFilters();
+  }
+
+  isRoleDropdownOpen = false;
+  roleDropdownOptions = ['Collection Center Manager', 'Collection Officer', 'Customer Officer', 'Driver'];
+
+  toggleRoleDropdown() {
+    this.isRoleDropdownOpen = !this.isRoleDropdownOpen;
+  }
+
+  selectRoleOption(option: string) {
+    this.selectRole = option;
+    this.isRoleDropdownOpen = false;
+    this.applyRoleFilters();
   }
 
 
@@ -71,11 +84,18 @@ export class ViewOfficersComponent implements OnInit {
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
-    const dropdownElement = document.querySelector('.custom-dropdown-container');
-    const clickedInside = dropdownElement?.contains(event.target as Node);
+    const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
+    const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
 
-    if (!clickedInside && this.isDropdownOpen) {
-      this.isDropdownOpen = false;
+    const roleDropdownElement = document.querySelector('.custom-role-dropdown-container');
+    const roleDropdownClickedInside = roleDropdownElement?.contains(event.target as Node);
+
+    if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
+      this.isStatusDropdownOpen = false;
+    }
+
+    if (!roleDropdownClickedInside && this.isRoleDropdownOpen) {
+      this.isRoleDropdownOpen = false;
     }
   }
 
@@ -269,7 +289,7 @@ export class ViewOfficersComponent implements OnInit {
       event.stopPropagation(); // Prevent triggering the dropdown toggle
     }
     this.selectStatus = '';
-    this.isDropdownOpen = false;
+    this.isStatusDropdownOpen = false;
     this.applyStatusFilters();
   }
 
@@ -291,9 +311,10 @@ export class ViewOfficersComponent implements OnInit {
     this.fetchByRole();
   }
 
-
-
-  clearRoleFilter() {
+  clearRoleFilter(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
     this.selectRole = ''
     this.fetchByRole();
   }

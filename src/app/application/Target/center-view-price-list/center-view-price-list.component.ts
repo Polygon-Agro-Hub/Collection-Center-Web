@@ -44,6 +44,8 @@ export class
     this.isLoading = true;
     this.TargetSrv.getAllPriceList(centerId, page, limit, grade, search).subscribe((res) => {
       this.priceListArr = res.items;
+      console.log('colosle', this.priceListArr[0].createdAt);
+      
       this.totalItems = res.total;
       if (res.items.length === 0) {
         this.hasData = false;

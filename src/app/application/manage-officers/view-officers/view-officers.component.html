@@ -44,7 +44,7 @@
                     </div>
                 </div> -->
 
-                <div class="relative w-52 custom-role-dropdown-container">
+                <div class="relative w-64 custom-role-dropdown-container">
                     <!-- Hidden native select -->
                     <select [(ngModel)]="selectStatus" class="hidden" (change)="applyRoleFilters()">
                         <option value="Collection Center Manager">Collection Center Manager</option>
@@ -204,7 +204,7 @@
                     </div>
                 </div> -->
 
-                <div class="relative w-46" *ngIf="logingRole ==='Collection Center Head'">
+                <div class="relative w-44" *ngIf="logingRole ==='Collection Center Head'">
                     <div
                         class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
                         <select [(ngModel)]="selectCenters" (change)="applyCompanyFilters()"

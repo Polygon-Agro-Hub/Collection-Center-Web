@@ -9,6 +9,7 @@ import { ToastAlertService } from '../../../services/toast-alert/toast-alert.ser
 import { TokenServiceService } from '../../../services/Token/token-service.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 
+
 @Component({
   selector: 'app-officer-profile',
   standalone: true,
@@ -60,42 +61,35 @@ export class OfficerProfileComponent implements OnInit {
     });
   }
 
-  async fetchProfileImageBase64(id: number): Promise<void> {
-    // this.isLoading = true;
-    
-    return new Promise((resolve, reject) => {
-      this.ManageOficerSrv.getProfileImageBase64(id).subscribe({
-        next: (res: any) => {
-          console.log(res);
-          this.imagebase64 = res.profileImageBase64;
-          console.log(this.imagebase64);
-          // this.isLoading = false;
-          resolve(); // Resolve the promise when successful
-        },
-        error: (error: any) => {
-          // this.isLoading = false;
-          console.error("Error fetching profile image:", error);
-          reject(error); // Reject the promise on error
-        }
-      });
-    });
-  }
+  // async downloadPDF() {
+  //   try {
+  //     // Step 1: Convert image to Base64 if not already done
+  //     if (!this.imagebase64) {
+  //       this.imagebase64 = await this.convertImageToBase64(this.officerObj.image);
+  //     }
   
-  async downloadPDF() {
-    try {
-      // Step 1: Wait for the image fetch to complete
-      if (!this.imagebase64) {
-        await this.fetchProfileImageBase64(this.officerId);
-      }
+  //     // Step 2: Call your function that needs the Base64 image
+  //     this.generatePDF();
+  //   } catch (error) {
+  //     console.error("Failed to fetch profile image. PDF not generated.", error);
+  //   }
+  // }
   
-      this.generatePDF();
-    } catch (error) {
-      // If Step 1 fails, this block runs, and PDF will NOT be generated
-      console.error("Failed to fetch profile image. PDF not generated.", error);
-    }
-  }
+  // // Helper function to convert image URL to Base64
+  // async convertImageToBase64(imageUrl: string): Promise<string> {
+  //   const response = await fetch(imageUrl);
+  //   const blob = await response.blob();
   
-  generatePDF() {
+  //   return new Promise<string>((resolve, reject) => {
+  //     const reader = new FileReader();
+  //     reader.onloadend = () => resolve(reader.result as string);
+  //     reader.onerror = reject;
+  //     reader.readAsDataURL(blob); // Converts blob to Base64
+  //   });
+  // }
+  
+  
+  async generatePDF() {
 
     // this.fetchProfileImageBase64(this.officerId);
     
@@ -117,22 +111,79 @@ export class OfficerProfileComponent implements OnInit {
       return value !== null && value !== undefined ? value.toString() : 'N/A';
   };
 
-  
+  function loadImageAsBase64(url: string): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function () {
+        const reader = new FileReader();
+        reader.onloadend = function () {
+          resolve(reader.result as string);
+        };
+        reader.readAsDataURL(xhr.response);
+      };
+      xhr.onerror = function () {
+        const img = new Image();
+        img.crossOrigin = 'Anonymous';
+        img.onload = function () {
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          canvas.width = img.width;
+          canvas.height = img.height;
+          ctx?.drawImage(img, 0, 0);
+          resolve(canvas.toDataURL('image/png'));
+        };
+        img.onerror = function () {
+          resolve('');
+        };
+        img.src = url;
+      };
+      xhr.open('GET', url);
+      xhr.responseType = 'blob';
+      xhr.setRequestHeader('Accept', 'image/png;image/*');
+      try {
+        xhr.send();
+      } catch (error) {
+        reject(error);
+      }
+    });
+  }
+
+  const hasImage = !!this.officerObj.image;
+
+  if (hasImage) {
+    const appendCacheBuster = (url: string) => {
+      if (!url) return '';
+      const separator = url.includes('?') ? '&' : '?';
+      return `${url}${separator}t=${new Date().getTime()}`;
+    };
+
+    const img = new Image();
+    const modifiedFarmerUrl = appendCacheBuster(this.officerObj.image);
+    img.src = await loadImageAsBase64(modifiedFarmerUrl);
+
+    doc.saveGraphicsState();
+
+    doc.addImage(img, 'JPEG', 14, 10, 40, 40);
+    doc.restoreGraphicsState();
+  }
+
     // Add the image at the top if it exists
-    if (this.imagebase64) {
-      doc.addImage(
-        this.imagebase64,
-        'PNG',
-        14, // X position
-        10, // Y position (moved to top)
-        40, // Width
-        40  // Height
-      );
-    }
+    // if (this.imagebase64) {
+    //   doc.addImage(
+    //     img,
+    //     'JPEG',
+    //     14, // X position
+    //     10, // Y position (moved to top)
+    //     40, // Width
+    //     40  // Height
+    //   );
+    // }
+
+
 
     // Adjust starting positions based on image presence
-    const startX = this.imagebase64 ? 60 : 14; // If no image, start from left margin
-    const startY = this.imagebase64 ? 60 : 50; // Adjust Y position based on image presence
+    const startX = hasImage ? 60 : 14; // If no image, start from left margin
+    const startY = hasImage ? 60 : 50; // Adjust Y position based on image presence
 
   
     // Title
@@ -623,6 +674,8 @@ class Officer {
 //   } catch (error) {
 //     console.error('Error loading image:', error);
 //   }
+
+
 
 
 

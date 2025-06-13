@@ -78,6 +78,8 @@ export class ViewPriceListComponent implements OnInit {
     this.PriceListSrv.getAllPriceList(page, limit, grade, search).subscribe((res) => {
       this.priceListArr = res.items;
       this.totalItems = res.total;
+
+      console.log(res);
       if (res.items.length === 0) {
         this.hasData = false;
       } else {

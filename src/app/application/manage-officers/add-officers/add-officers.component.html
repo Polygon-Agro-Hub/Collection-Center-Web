@@ -379,7 +379,7 @@
                     <button type="button"
                         class="px-6 py-2 bg-[#F6F7F9] border-gray-400 border-[2px] text-[#6B7D8C] rounded-lg mr-2"
                         (click)="onCancel()">Cancel</button>
-                    <button (click)="!PageOneForm.invalid ? nextForm('pageTwo') :  nextForm('pageOne')" type="submit"
+                    <button (click)="!PageOneForm.invalid && personalData.phoneNumber02 !== personalData.phoneNumber01  ? nextForm('pageTwo') :  nextForm('pageOne')" type="submit"
                         class="px-6 py-1 bg-[#415CFF] text-white rounded-lg">Next</button>
                 </div>
 

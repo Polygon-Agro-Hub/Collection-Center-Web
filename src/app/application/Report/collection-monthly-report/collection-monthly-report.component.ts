@@ -23,8 +23,8 @@ export class CollectionMonthlyReportComponent implements OnInit {
   farmerDataArr!: FarmerDetails[]
   officerId!: number;
   currentDate: Date = new Date();
-  startDate: Date = new Date();
-  endDate: Date = new Date();
+  startDate!: Date ;
+  endDate!: Date;
   maxDate: string = new Date().toISOString().split('T')[0];
 
   hasData: boolean = false;
@@ -66,10 +66,35 @@ export class CollectionMonthlyReportComponent implements OnInit {
   }
 
   filterDate() {
-    if (this.startDate && this.endDate) {
+
+    console.log('filterung')
+    const startEntered = !!this.startDate;
+    const endEntered = !!this.endDate;
+
+    console.log(this.startDate, this.endDate)
+  
+    if (startEntered && endEntered) {
       this.fetchOfficerData();
+    } else {
+      let msg = '';
+  
+      if (!startEntered && !endEntered) {
+        msg = 'Please enter both Start Date and End Date.';
+      } else if (!startEntered) {
+        msg = 'Please enter the Start Date.';
+      } else if (!endEntered) {
+        msg = 'Please enter the End Date.';
+      }
+  
+      Swal.fire({
+        icon: 'warning',
+        title: 'Missing Date Input',
+        text: msg,
+        confirmButtonText: 'OK'
+      });
     }
   }
+  
 
   navigateToReports() {
     this.router.navigate(['/reports']); // Change '/reports' to your desired route

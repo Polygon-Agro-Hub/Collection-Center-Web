@@ -74,7 +74,7 @@ export class ClaimOfficerComponent implements OnInit {
 
   cancelClaim() {
     this.showClaimView = false;
-    this.router.navigate(['/claim-officers']);
+    this.router.navigate(['/manage-officers']);
   }
 
   confirmClaim(id: number) {

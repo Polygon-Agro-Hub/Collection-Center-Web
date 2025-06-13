@@ -164,7 +164,7 @@ export class EditOfficerComponent implements OnInit {
 
         this.personalData = res.officerData.collectionOfficer;
         this.personalData.conformAccNumber = this.personalData.accNumber
-        console.log( this.personalData);
+        console.log(this.personalData);
         this.ExistirmId = res.officerData.irmId;
 
         this.getUpdateLastID(res.officerData.collectionOfficer.jobRole);
@@ -363,9 +363,12 @@ export class EditOfficerComponent implements OnInit {
       return;
     }
 
-    if (!this.personalData.accHolderName || !this.personalData.accNumber || !this.personalData.bankName || !this.personalData.branchName || !this.personalData.city || !this.personalData.country || !this.personalData.district || !this.personalData.houseNumber) {
-      this.toastSrv.warning('Pleace fill all required feilds')
+    if (this.personalData.phoneNumber01 == this.personalData.phoneNumber02) {
+      this.toastSrv.warning('Pleace enter 2 different phone numbers')
+   }
 
+    else if (!this.personalData.accHolderName || !this.personalData.accNumber || !this.personalData.bankName || !this.personalData.branchName || !this.personalData.city || !this.personalData.country || !this.personalData.district || !this.personalData.houseNumber) {
+      this.toastSrv.warning('Pleace fill all required feilds')
 
     } else {
       this.isLoading = true;

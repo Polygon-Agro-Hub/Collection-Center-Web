@@ -8,13 +8,13 @@
         <div class="flex flex-row items-center justify-between">
             <div class="flex flex-row gap-4">
                 <button
-                    class="bg-[#415CFF] text-[#FFFFFF] dark:text-white rounded-lg shadow-lg px-4 py-2 whitespace-nowrap"
+                    class="w-28 bg-[#415CFF] text-[#FFFFFF] dark:text-white rounded-lg shadow-lg px-4 py-2 whitespace-nowrap"
                     (click)="navigate('/manage-officers/create-officer')">
                     Add Officer
                 </button>
 
                 <span *ngIf="logingRole === 'Collection Center Manager'">
-                    <button class="bg-[#415CFF] text-white rounded-lg shadow-lg px-4 py-2"
+                    <button class="bg-[#415CFF] text-white rounded-lg shadow-lg px-4 py-2 w-28"
                         (click)="navigate('/manage-officers/claim-officer')">
                         Claim Officer
                     </button>

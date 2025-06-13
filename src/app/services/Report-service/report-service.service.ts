@@ -16,6 +16,7 @@ export class ReportServiceService {
   }
 
   getAllCollectionReport(role: string, page: number = 1, limit: number = 10, searchText: string = '', centerId:string=''): Observable<any> {
+    console.log('this is seacrch', searchText)
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',

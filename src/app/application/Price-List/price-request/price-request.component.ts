@@ -30,7 +30,7 @@ export class PriceRequestComponent implements OnInit {
   selectStatus: string = '';
   today!: string;
   isPopupVisible: boolean = false
-  isLoading:boolean = true;
+  isLoading: boolean = false;
 
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Pending', 'Approved', 'Rejected'];
@@ -89,10 +89,14 @@ export class PriceRequestComponent implements OnInit {
   }
 
   fetchAllRequestPrice(page: number = 1, limit: number = this.itemsPerPage, grade: string = this.selectGrade, status: string = '', search: string = this.searchText) {
+    this.isLoading = true;
     this.PriceListSrv.getAllRequestPrice(page, limit, grade, status, search).subscribe(
       (res) => {
         this.reqPriceArr = res.items;
         this.totalItems = res.total;
+        console.log(res)
+        console.log(res.items)
+
         
         if (res.items.length === 0) {
           this.hasData = false;
@@ -232,7 +236,7 @@ export class PriceRequestComponent implements OnInit {
   // }
 
   filterGrade() {
-    this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade);
+    this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade, this.selectStatus, this.searchText);
   }
 
   cancelGrade(event?: MouseEvent) {
@@ -241,7 +245,7 @@ export class PriceRequestComponent implements OnInit {
     }
     this.selectGrade = '';
     this.isGradeDropdownOpen = false;
-    this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade);
+    this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade, this.selectStatus, this.searchText);
   }
 
 
@@ -251,11 +255,11 @@ export class PriceRequestComponent implements OnInit {
     }
     this.selectStatus = '';
     this.isStatusDropdownOpen = false;
-    this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade, this.selectStatus);
+    this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade, this.selectStatus, this.searchText);
   }
 
   filterStatus() {
-    this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade, this.selectStatus);
+    this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade, this.selectStatus, this.searchText);
   }
 
   navigate(path: string) {

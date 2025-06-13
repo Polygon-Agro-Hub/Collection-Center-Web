@@ -32,8 +32,53 @@
             </div>
         </div> -->
 
+        <div class="relative w-40 custom-status-dropdown-container">
+            <!-- Hidden native select -->
+            <select [(ngModel)]="selectStatus" class="hidden" (change)="filterStatus()">
+                <option value="" selected disabled>Status</option>
+                <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
+                        value="Assigned">
+                        Assigned</option>
+                    <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
+                        value="Closed">
+                        Closed</option>
+            </select>
 
-        <div class="relative w-46">
+            <!-- Custom dropdown trigger -->
+            <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
+                (click)="toggleStatusDropdown()">
+                <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
+                    <span>{{ selectStatus || 'Status' }}</span>
+                    <div class="flex items-center">
+                        <!-- X icon (shown ONLY when option is selected) -->
+                        <i *ngIf="selectStatus" (click)="cancelStatus($event)"
+                            class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
+
+                        <!-- Arrow icon (shown when EITHER: dropdown is open OR no selection exists) -->
+                        <i *ngIf="isStatusDropdownOpen || !selectStatus"
+                            class="fa-solid text-lg text-[#828282] transition-transform duration-200"
+                            [class.fa-angle-down]="!isStatusDropdownOpen"
+                            [class.fa-angle-up]="isStatusDropdownOpen"></i>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Custom dropdown options -->
+            <div *ngIf="isStatusDropdownOpen"
+                class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
+                <div class="py-1">
+                    <div *ngFor="let option of statusDropdownOptions" (click)="selectStatusOption(option)"
+                        class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
+                        <span class="flex-grow">{{ option }}</span>
+                        <i
+                            class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- <div class="relative w-46">
             <div class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
               <select [(ngModel)]="selectStatus" (change)="filterStatus()"
                 class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer">
@@ -47,18 +92,18 @@
 
               </select>
               
-              <!-- Down arrow icon -->
+
               <div *ngIf="!selectStatus" class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
                 <i class="fa-solid fa-angle-down text-lg mr-3"></i>
               </div>
           
-              <!-- Cancel icon -->
+
               <div (click)="cancelStatus()" *ngIf="selectStatus" 
                    class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300 cursor-pointer z-10">
                 <i class="fa-solid fa-xmark text-lg mr-3"></i>
               </div>
             </div>
-          </div>
+          </div> -->
 
 
         <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">

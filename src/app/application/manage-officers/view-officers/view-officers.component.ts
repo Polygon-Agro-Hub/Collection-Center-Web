@@ -62,6 +62,21 @@ export class ViewOfficersComponent implements OnInit {
     this.applyRoleFilters();
   }
 
+  isCenterDropdownOpen = false;
+  centerDropdownOptions = [];
+
+  toggleCenterDropdown() {
+    this.isCenterDropdownOpen = !this.isCenterDropdownOpen;
+  }
+
+  selectCenterOption(center: Center) {
+    this.selectCenters = center.id.toString(); // convert id to string
+    this.isCenterDropdownOpen = false;
+    this.applyCompanyFilters();
+  }
+
+  
+
 
 
   constructor(
@@ -90,12 +105,19 @@ export class ViewOfficersComponent implements OnInit {
     const roleDropdownElement = document.querySelector('.custom-role-dropdown-container');
     const roleDropdownClickedInside = roleDropdownElement?.contains(event.target as Node);
 
+    const centerDropdownElement = document.querySelector('.custom-center-dropdown-container');
+    const centerDropdownClickedInside = centerDropdownElement?.contains(event.target as Node);
+
     if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
       this.isStatusDropdownOpen = false;
     }
 
     if (!roleDropdownClickedInside && this.isRoleDropdownOpen) {
       this.isRoleDropdownOpen = false;
+    }
+
+    if (!centerDropdownClickedInside && this.isCenterDropdownOpen) {
+      this.isCenterDropdownOpen = false;
     }
   }
 
@@ -337,9 +359,10 @@ export class ViewOfficersComponent implements OnInit {
     this.fetchByRole();
   }
 
-  clearCompanyFilter() {
+  clearCompanyFilter(event: MouseEvent) {
+    event.stopPropagation();
     this.selectCenters = '';
-    this.fetchByRole();
+    this.applyCompanyFilters();
   }
 
   getAllCenters() {
@@ -349,6 +372,13 @@ export class ViewOfficersComponent implements OnInit {
 
       }
     )
+  }
+
+  get selectedCenterDisplay(): string {
+    if (!this.selectCenters) return 'Centers';
+    
+    const selectedCenter = this.centerArr.find(center => center.id.toString() === this.selectCenters);
+    return selectedCenter ? `${selectedCenter.regCode} - ${selectedCenter.centerName}` : 'Centers';
   }
 
 }

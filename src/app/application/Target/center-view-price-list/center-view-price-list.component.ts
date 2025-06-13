@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { TargetService } from "../../../services/Target-service/target.service"
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -28,6 +28,19 @@ export class
 
   isLoading:boolean = true;
 
+  isGradeDropdownOpen = false;
+  gradeDropdownOptions = ['A', 'B', 'C'];
+
+  togglegradeDropdown() {
+    this.isGradeDropdownOpen = !this.isGradeDropdownOpen;
+  }
+
+  selectGradeOption(option: string) {
+    this.selectGrade = option;
+    this.isGradeDropdownOpen = false;
+    this.filterGrade();
+  }
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -37,6 +50,17 @@ export class
   ngOnInit(): void {
     this.centerId = this.route.snapshot.params['id'];
     this.fetchAllPriceList(this.centerId);
+
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const gradeDropdownElement = document.querySelector('.custom-grade-dropdown-container');
+    const gradeDropdownClickedInside = gradeDropdownElement?.contains(event.target as Node);
+
+    if (!gradeDropdownClickedInside && this.isGradeDropdownOpen) {
+      this.isGradeDropdownOpen = false;
+    }
 
   }
 
@@ -66,11 +90,19 @@ export class
     this.fetchAllPriceList(this.centerId, this.page, this.itemsPerPage, this.selectGrade, this.searchText);
   }
 
-  cancelGrade() {
-    // event.stopPropagation();
+  cancelGrade(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
     this.selectGrade = '';
     this.fetchAllPriceList(this.centerId, this.page, this.itemsPerPage, this.selectGrade, this.searchText);
   }
+
+  // cancelGrade() {
+  //   // event.stopPropagation();
+  //   this.selectGrade = '';
+  //   this.fetchAllPriceList(this.centerId, this.page, this.itemsPerPage, this.selectGrade, this.searchText);
+  // }
 
   onSearch() {
     this.fetchAllPriceList(this.centerId, this.page, this.itemsPerPage, this.selectGrade, this.searchText);

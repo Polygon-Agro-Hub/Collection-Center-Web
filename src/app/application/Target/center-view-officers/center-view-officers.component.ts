@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DropdownModule } from 'primeng/dropdown'
@@ -33,6 +33,32 @@ export class CenterViewOfficersComponent implements OnInit {
 
   isLoading: boolean = true;
 
+  isStatusDropdownOpen = false;
+  statusDropdownOptions = ['Approved', 'Not Approved', 'Rejected'];
+
+  toggleStatusDropdown() {
+    this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
+  }
+
+  selectStatusOption(option: string) {
+    this.selectStatus = option;
+    this.isStatusDropdownOpen = false;
+    this.applyStatusFilters();
+  }
+
+  isRoleDropdownOpen = false;
+  roleDropdownOptions = ['Collection Center Manager', 'Collection Officer', 'Customer Officer', 'Driver'];
+
+  toggleRoleDropdown() {
+    this.isRoleDropdownOpen = !this.isRoleDropdownOpen;
+  }
+
+  selectRoleOption(option: string) {
+    this.selectStatus = option;
+    this.isRoleDropdownOpen = false;
+    this.applyRoleFilters();
+  }
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -45,6 +71,24 @@ export class CenterViewOfficersComponent implements OnInit {
     this.centerId = this.route.snapshot.params['id']
     this.getAllOfficers();
   };
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
+    const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
+
+    if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
+      this.isStatusDropdownOpen = false;
+    }
+
+    const roleDropdownElement = document.querySelector('.custom-role-dropdown-container');
+    const roleDropdownClickedInside = roleDropdownElement?.contains(event.target as Node);
+
+    if (!roleDropdownClickedInside && this.isRoleDropdownOpen) {
+      this.isRoleDropdownOpen = false;
+    }
+
+  }
 
   navigate(path: string) {
     this.router.navigate([`${path}`])
@@ -186,7 +230,15 @@ export class CenterViewOfficersComponent implements OnInit {
 
   }
 
-  clearRoleFilter() {
+  // clearRoleFilter() {
+  //   this.selectRole = ''
+  //   this.getAllOfficers(this.centerId, this.page, this.itemsPerPage, this.selectRole, this.selectStatus, this.searchText)
+  // }
+
+  clearRoleFilter(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
     this.selectRole = ''
     this.getAllOfficers(this.centerId, this.page, this.itemsPerPage, this.selectRole, this.selectStatus, this.searchText)
   }
@@ -196,10 +248,12 @@ export class CenterViewOfficersComponent implements OnInit {
     this.getAllOfficers(this.centerId, this.page, this.itemsPerPage, this.selectRole, this.selectStatus, this.searchText)
   }
 
-  clearStatusFilter() {
+  clearStatusFilter(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
     this.selectStatus = ''
     this.getAllOfficers(this.centerId, this.page, this.itemsPerPage, this.selectRole, this.selectStatus, this.searchText)
-
   }
 
   onSearch() {

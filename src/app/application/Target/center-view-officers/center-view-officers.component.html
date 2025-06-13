@@ -17,7 +17,7 @@
 
                 <p class="font-normal dark:text-white">Filter By</p>
 
-                <div class="relative w-52">
+                <!-- <div class="relative w-52">
                     <div
                         class="border-2 w-full rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
                         <select (change)="applyRoleFilters()" [(ngModel)]="selectRole"
@@ -42,9 +42,56 @@
                         </button>
 
                     </div>
+                </div> -->
+
+                <div class="relative w-64 custom-role-dropdown-container">
+                    <!-- Hidden native select -->
+                    <select [(ngModel)]="selectRole" class="hidden" (change)="applyRoleFilters()">
+                        <option value="" selected disabled>Role</option>
+                        <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                            value="Collection Center Manager">Collection Center Manager</option>
+                        <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                            value="Collection Officer">Collection Officer</option>
+                        <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                            value="Customer Officer">Customer Officer</option>
+                        <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                            value="Driver">Driver</option>
+                    </select>
+        
+                    <!-- Custom dropdown trigger -->
+                    <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
+                        (click)="toggleRoleDropdown()">
+                        <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
+                            <span>{{ selectRole || 'Role' }}</span>
+                            <div class="flex items-center">
+                                <!-- X icon (shown ONLY when option is selected) -->
+                                <i *ngIf="selectRole" (click)="clearRoleFilter($event)"
+                                    class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
+        
+                                <!-- Arrow icon (shown when EITHER: dropdown is open OR no selection exists) -->
+                                <i *ngIf="isRoleDropdownOpen || !selectRole"
+                                    class="fa-solid text-lg text-[#828282] transition-transform duration-200"
+                                    [class.fa-angle-down]="!isRoleDropdownOpen"
+                                    [class.fa-angle-up]="isRoleDropdownOpen"></i>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <!-- Custom dropdown options -->
+                    <div *ngIf="isRoleDropdownOpen"
+                        class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
+                        <div class="py-1">
+                            <div *ngFor="let option of roleDropdownOptions" (click)="selectRoleOption(option)"
+                                class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
+                                <span class="flex-grow">{{ option }}</span>
+                                <i
+                                    class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
+                            </div>
+                        </div>
+                    </div>
                 </div>
 
-                <div class="relative w-48">
+                <!-- <div class="relative w-48">
                     <div
                         class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center w-full">
                         <select (change)="applyStatusFilters()" [(ngModel)]="selectStatus"
@@ -67,6 +114,53 @@
                             <i class="fa-solid fa-xmark text-lg mr-3"></i>
                         </button>
 
+                    </div>
+                </div> -->
+
+                <div class="relative w-40 custom-status-dropdown-container">
+                    <!-- Hidden native select -->
+                    <select [(ngModel)]="selectStatus" class="hidden" (change)="applyStatusFilters()">
+                        <option value="" selected disabled>Status</option>
+                            <option value="Approved"
+                                class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">
+                                Approved</option>
+                            <option value="Not Approved" class="text-textLight dark:text-textDark hover:bg-gray-300">
+                                Not Approved</option>
+                            <option value="Rejected"
+                                class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">
+                                Rejected</option>
+                    </select>
+        
+                    <!-- Custom dropdown trigger -->
+                    <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
+                        (click)="toggleStatusDropdown()">
+                        <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
+                            <span>{{ selectStatus || 'Status' }}</span>
+                            <div class="flex items-center">
+                                <!-- X icon (shown ONLY when option is selected) -->
+                                <i *ngIf="selectStatus" (click)="clearStatusFilter($event)"
+                                    class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
+        
+                                <!-- Arrow icon (shown when EITHER: dropdown is open OR no selection exists) -->
+                                <i *ngIf="isStatusDropdownOpen || !selectStatus"
+                                    class="fa-solid text-lg text-[#828282] transition-transform duration-200"
+                                    [class.fa-angle-down]="!isStatusDropdownOpen"
+                                    [class.fa-angle-up]="isStatusDropdownOpen"></i>
+                            </div>
+                        </div>
+                    </div>
+        
+                    <!-- Custom dropdown options -->
+                    <div *ngIf="isStatusDropdownOpen"
+                        class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
+                        <div class="py-1">
+                            <div *ngFor="let option of statusDropdownOptions" (click)="selectStatusOption(option)"
+                                class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
+                                <span class="flex-grow">{{ option }}</span>
+                                <i
+                                    class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
+                            </div>
+                        </div>
                     </div>
                 </div>
 

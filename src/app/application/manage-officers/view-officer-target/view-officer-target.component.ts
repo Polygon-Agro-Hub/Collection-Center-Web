@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -29,6 +29,19 @@ export class ViewOfficerTargetComponent implements OnInit {
 
   centerName!: string;
 
+  isStatusDropdownOpen = false;
+  statusDropdownOptions = ['Pending', 'Completed', 'Exceeded'];
+
+  toggleStatusDropdown() {
+    this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
+  }
+
+  selectStatusOption(option: string) {
+    this.selectStatus = option;
+    this.isStatusDropdownOpen = false;
+    this.filterStatus();
+  }
+
   constructor(
     private TargetSrv: TargetService,
     private router: Router,
@@ -45,6 +58,17 @@ export class ViewOfficerTargetComponent implements OnInit {
     this.officerId = this.route.snapshot.params['officerId'];
     this.centerName = this.route.snapshot.params['centerName'];
     this.fetchSelectedOfficerTarget(this.officerId);
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
+    const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
+
+    if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
+      this.isStatusDropdownOpen = false;
+    }
+
   }
 
   fetchSelectedOfficerTarget(officerId: number, status: string = this.selectStatus, search: string = this.searchText) {
@@ -67,7 +91,10 @@ export class ViewOfficerTargetComponent implements OnInit {
     this.router.navigate([`/manage-officers/edit-officer-target/${id}`]);  // Assuming you want to pass the `item.id` to the new page
   }
 
-  cancelStatus() {
+  cancelStatus(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
     this.selectStatus = '';
     this.fetchSelectedOfficerTarget(this.officerId, this.selectStatus, this.searchText);
   }

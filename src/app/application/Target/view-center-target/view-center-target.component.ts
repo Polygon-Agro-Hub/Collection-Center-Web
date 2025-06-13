@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
@@ -35,6 +35,19 @@ export class ViewCenterTargetComponent implements OnInit {
 
   isLoading: boolean = false;
 
+  isStatusDropdownOpen = false;
+  statusDropdownOptions = ['Pending', 'Completed', 'Exceeded'];
+
+  toggleStatusDropdown() {
+    this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
+  }
+
+  selectStatusOption(option: string) {
+    this.selectStatus = option;
+    this.isStatusDropdownOpen = false;
+    this.filterStatus();
+  }
+
   constructor(
     private router: Router,
     private route: ActivatedRoute,
@@ -50,6 +63,17 @@ export class ViewCenterTargetComponent implements OnInit {
     this.today = `${year}/${month}/${day}`;
 
     this.fetchAllTarget();
+
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
+    const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
+
+    if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
+      this.isStatusDropdownOpen = false;
+    }
 
   }
 
@@ -82,7 +106,15 @@ export class ViewCenterTargetComponent implements OnInit {
     this.fetchAllTarget();
   }
 
-  cancelStatus() {
+  // cancelStatus() {
+  //   this.selectStatus = '';
+  //   this.fetchAllTarget();
+  // }
+
+  cancelStatus(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
     this.selectStatus = '';
     this.fetchAllTarget();
   }

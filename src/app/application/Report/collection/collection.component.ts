@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ReportServiceService } from '../../../services/Report-service/report-service.service';
@@ -49,6 +49,19 @@ export class CollectionComponent implements OnInit {
 
   isDownloading = false;
 
+  isCenterDropdownOpen = false;
+  centerDropdownOptions = [];
+
+  toggleCenterDropdown() {
+    this.isCenterDropdownOpen = !this.isCenterDropdownOpen;
+  }
+
+  selectCenterOption(center: Center) {
+    this.selectCenters = center.id.toString(); // convert id to string
+    this.isCenterDropdownOpen = false;
+    this.applyCompanyFilters();
+  }
+
 
   constructor(
     private router: Router,
@@ -67,6 +80,16 @@ export class CollectionComponent implements OnInit {
       this.isCenterManager = true;
     } else {
       this.isCenterManager = false;
+    }
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const centerDropdownElement = document.querySelector('.custom-center-dropdown-container');
+    const centerDropdownClickedInside = centerDropdownElement?.contains(event.target as Node);
+
+    if (!centerDropdownClickedInside && this.isCenterDropdownOpen) {
+      this.isCenterDropdownOpen = false;
     }
   }
 
@@ -148,9 +171,17 @@ export class CollectionComponent implements OnInit {
     this.fetchFilteredPayments();
   }
 
-  clearCompanyFilter() {
+  clearCompanyFilter(event: MouseEvent) {
+    event.stopPropagation();
     this.selectCenters = '';
     this.fetchFilteredPayments();
+  }
+
+  get selectedCenterDisplay(): string {
+    if (!this.selectCenters) return 'Centers';
+    
+    const selectedCenter = this.centerArr.find(center => center.id.toString() === this.selectCenters);
+    return selectedCenter ? `${selectedCenter.regCode} - ${selectedCenter.centerName}` : 'Centers';
   }
 
   validateToDate(toDateInput: HTMLInputElement) {

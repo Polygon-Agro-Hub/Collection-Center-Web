@@ -54,7 +54,7 @@ export class CenterViewOfficersComponent implements OnInit {
   }
 
   selectRoleOption(option: string) {
-    this.selectStatus = option;
+    this.selectRole = option;
     this.isRoleDropdownOpen = false;
     this.applyRoleFilters();
   }

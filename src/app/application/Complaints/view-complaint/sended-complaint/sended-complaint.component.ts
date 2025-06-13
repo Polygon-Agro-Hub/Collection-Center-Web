@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ComplaintsService } from '../../../../services/Complaints-Service/complaints.service';
@@ -34,6 +34,32 @@ export class SendedComplaintComponent implements OnInit {
 
   isLoading: boolean = true;
 
+  isStatusDropdownOpen = false;
+  statusDropdownOptions = ['Opened', 'Closed'];
+
+  toggleStatusDropdown() {
+    this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
+  }
+
+  selectStatusOption(option: string) {
+    this.selectStatus = option;
+    this.isStatusDropdownOpen = false;
+    this.filterStatus();
+  }
+
+  isEmployeeDropdownOpen = false;
+  employeeDropdownOptions = ['Own', 'Other'];
+
+  toggleEmployeeDropdown() {
+    this.isEmployeeDropdownOpen = !this.isEmployeeDropdownOpen;
+  }
+
+  selectEmployeeOption(option: string) {
+    this.selectEmployee = option;
+    this.isEmployeeDropdownOpen = false;
+    this.filterEmployee();
+  }
+
 
   constructor(
     private router: Router,
@@ -42,6 +68,24 @@ export class SendedComplaintComponent implements OnInit {
   ) { }
   ngOnInit(): void {
     this.fetchAllreciveComplaint();
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
+    const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
+
+    const employeeDropdownElement = document.querySelector('.custom-employee-dropdown-container');
+    const employeeDropdownClickedInside = employeeDropdownElement?.contains(event.target as Node);
+
+    if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
+      this.isStatusDropdownOpen = false;
+    }
+
+    if (!employeeDropdownClickedInside && this.isEmployeeDropdownOpen) {
+      this.isEmployeeDropdownOpen = false;
+    }
+
   }
 
   fetchAllreciveComplaint(page: number = 1, limit: number = this.itemsPerPage, status: string = this.selectStatus, emptype: string = this.selectEmployee, search: string = this.searchText) {
@@ -79,8 +123,12 @@ export class SendedComplaintComponent implements OnInit {
     this.fetchAllreciveComplaint();
   }
 
-  cancelStatus() {
+  cancelStatus(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
     this.selectStatus = '';
+    this.isStatusDropdownOpen = false;
     this.fetchAllreciveComplaint();
   }
 
@@ -88,8 +136,12 @@ export class SendedComplaintComponent implements OnInit {
     this.fetchAllreciveComplaint();
   }
 
-  cancelEmployee() {
+  cancelEmployee(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
     this.selectEmployee = '';
+    this.isEmployeeDropdownOpen = false;
     this.fetchAllreciveComplaint();
   }
 

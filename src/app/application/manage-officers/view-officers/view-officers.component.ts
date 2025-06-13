@@ -75,9 +75,6 @@ export class ViewOfficersComponent implements OnInit {
     this.applyCompanyFilters();
   }
 
-  
-
-
 
   constructor(
     private router: Router,

@@ -44,9 +44,9 @@
                     </div>
                 </div> -->
 
-                <div class="relative w-64 custom-role-dropdown-container">
+                <div class="relative w-56 custom-role-dropdown-container">
                     <!-- Hidden native select -->
-                    <select [(ngModel)]="selectStatus" class="hidden" (change)="applyRoleFilters()">
+                    <select [(ngModel)]="selectRole" class="hidden" (change)="applyRoleFilters()">
                         <option value="Collection Center Manager">Collection Center Manager</option>
                         <option value="Collection Officer">Collection Officer</option>
                         <option value="Customer Officer">Customer Officer</option>
@@ -77,7 +77,7 @@
                         class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
                         <div class="py-1">
                             <div *ngFor="let option of roleDropdownOptions" (click)="selectRoleOption(option)"
-                                class="px-3 py-2 hover:bg-[#3982ff] dark:text-textDark dark:hover:bg-[#415CFF] cursor-pointer flex items-center">
+                                class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
                                 <span class="flex-grow">{{ option }}</span>
                                 <i
                                     class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
@@ -143,7 +143,7 @@
                 </div> -->
 
                 <!-- <div *ngIf="isDropdownOpen" class="dropdown-backdrop" (click)="isDropdownOpen = false"></div> -->
-                <div class="relative w-52 custom-status-dropdown-container">
+                <div class="relative w-40 custom-status-dropdown-container">
                     <!-- Hidden native select -->
                     <select [(ngModel)]="selectStatus" class="hidden" (change)="applyStatusFilters()">
                         <option class = "hover:bg-gray-300 dark:hover:bg-gray-300" value=""></option>
@@ -176,7 +176,7 @@
                         class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
                         <div class="py-1">
                             <div *ngFor="let option of statusDropdownOptions" (click)="selectStatusOption(option)"
-                                class="px-3 py-2 hover:bg-[#3982ff] dark:text-textDark dark:hover:bg-[#415CFF] cursor-pointer flex items-center">
+                                class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
                                 <span class="flex-grow">{{ option }}</span>
                                 <i
                                     class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>

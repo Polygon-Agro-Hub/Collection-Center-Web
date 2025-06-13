@@ -4,7 +4,7 @@ import { CommonModule, DatePipe } from "@angular/common";
 import { FormsModule } from "@angular/forms";
 import { DropdownModule } from "primeng/dropdown";
 import { NgxPaginationModule } from "ngx-pagination";
-import { Component, OnInit } from "@angular/core";
+import { Component, HostListener, OnInit } from "@angular/core";
 import Swal from "sweetalert2";
 import { LoadingSpinnerComponent } from "../../../components/loading-spinner/loading-spinner.component";
 import { TargetService } from '../../../services/Target-service/target.service';
@@ -37,6 +37,19 @@ export class ViewPriceListComponent implements OnInit {
   isLoading: boolean = true;
   isExit: boolean = false;
 
+  isGradeDropdownOpen = false;
+  gradeDropdownOptions = ['A', 'B', 'C'];
+
+  toggleGradeDropdown() {
+    this.isGradeDropdownOpen = !this.isGradeDropdownOpen;
+  }
+
+  selectGradeOption(option: string) {
+    this.selectGrade = option;
+    this.isGradeDropdownOpen = false;
+    this.filterGrade();
+  }
+
 
   constructor(
     private router: Router,
@@ -48,6 +61,17 @@ export class ViewPriceListComponent implements OnInit {
   ngOnInit(): void {
     this.fetchAllPriceList();
     this.today = this.datePipe.transform(new Date(), 'yyyy/MM/dd') || '';
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const gradeDropdownElement = document.querySelector('.custom-grade-dropdown-container');
+    const roleDropdownClickedInside = gradeDropdownElement?.contains(event.target as Node);
+
+    if (!roleDropdownClickedInside && this.isGradeDropdownOpen) {
+      this.isGradeDropdownOpen = false;
+    }
+
   }
 
   fetchAllPriceList(page: number = 1, limit: number = this.itemsPerPage, grade: string = this.selectGrade, search: string = this.searchText) {
@@ -76,8 +100,12 @@ export class ViewPriceListComponent implements OnInit {
     this.fetchAllPriceList(this.page, this.itemsPerPage, this.selectGrade, this.searchText);
   }
 
-  cancelGrade() {
+  cancelGrade(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
     this.selectGrade = '';
+    this.isGradeDropdownOpen = false;
     this.fetchAllPriceList(this.page, this.itemsPerPage, this.selectGrade, this.searchText);
   }
 

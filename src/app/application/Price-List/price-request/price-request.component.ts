@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
@@ -32,6 +32,33 @@ export class PriceRequestComponent implements OnInit {
   isPopupVisible: boolean = false
   isLoading:boolean = true;
 
+  isStatusDropdownOpen = false;
+  statusDropdownOptions = ['Pending', 'Approved', 'Rejected'];
+
+  toggleStatusDropdown() {
+    this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
+  }
+
+  selectStatusOption(option: string) {
+    this.selectStatus = option;
+    this.isStatusDropdownOpen = false;
+    this.filterStatus();
+  }
+
+
+  isGradeDropdownOpen = false;
+  gradeDropdownOptions = ['A', 'B', 'C'];
+
+  toggleGradeDropdown() {
+    this.isGradeDropdownOpen = !this.isGradeDropdownOpen;
+  }
+
+  selectGradeOption(option: string) {
+    this.selectGrade = option;
+    this.isGradeDropdownOpen = false;
+    this.filterGrade();
+  }
+
   constructor(
     private router: Router,
     private PriceListSrv: PriceListService,
@@ -41,6 +68,24 @@ export class PriceRequestComponent implements OnInit {
   ngOnInit(): void {
     this.today = this.datePipe.transform(new Date(), 'yyyy/MM/dd') || '';
     this.fetchAllRequestPrice()
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
+    const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
+
+    const gradeDropdownElement = document.querySelector('.custom-grade-dropdown-container');
+    const roleDropdownClickedInside = gradeDropdownElement?.contains(event.target as Node);
+
+    if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
+      this.isStatusDropdownOpen = false;
+    }
+
+    if (!roleDropdownClickedInside && this.isGradeDropdownOpen) {
+      this.isGradeDropdownOpen = false;
+    }
+
   }
 
   fetchAllRequestPrice(page: number = 1, limit: number = this.itemsPerPage, grade: string = this.selectGrade, status: string = '', search: string = this.searchText) {
@@ -181,17 +226,31 @@ export class PriceRequestComponent implements OnInit {
     this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade, this.selectStatus, this.searchText);
   }
 
-  cancelGrade() {
-    this.selectGrade = '';
-    this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade);
-  }
+  // cancelGrade() {
+  //   this.selectGrade = '';
+  //   this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade);
+  // }
 
   filterGrade() {
     this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade);
   }
 
-  cancelStatus() {
+  cancelGrade(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
+    this.selectGrade = '';
+    this.isGradeDropdownOpen = false;
+    this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade);
+  }
+
+
+  cancelStatus(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
     this.selectStatus = '';
+    this.isStatusDropdownOpen = false;
     this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade, this.selectStatus);
   }
 

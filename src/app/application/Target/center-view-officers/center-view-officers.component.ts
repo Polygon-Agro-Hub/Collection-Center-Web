@@ -20,7 +20,7 @@ import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loa
 export class CenterViewOfficersComponent implements OnInit {
   centerId!: number;
   OfficerArr!: CollectionOfficers[];
-  hasData: boolean = true;
+  hasData: boolean = false;
 
   selectRole: string = '';
   selectStatus: string = '';

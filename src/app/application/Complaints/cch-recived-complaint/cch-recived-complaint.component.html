@@ -66,8 +66,10 @@
         </div>
 
         <div class="flex justify-center gap-6 mt-6">
-            <button
-                class="bg-[#F6F7F9] dark:bg-gray-600 text-[#6B7D8C] dark:text-white font-semibold border-[1px] shadow-lg px-4 py-2 rounded-lg"
+            <button class="font-semibold border-[1px] shadow-lg px-4 py-2 rounded-lg"
+                [ngClass]="{
+                    'bg-[#F6F7F9] dark:bg-gray-600 text-[#6B7D8C] dark:text-white': compalintObj.reply === null,
+                    'bg-gray-300 dark:bg-gray-500 text-gray-500 dark:text-gray-300 cursor-not-allowed': compalintObj.reply !== null}" [disabled]="compalintObj.reply !== null"
                 (click)="forwordComplain()">
                 Forward
             </button>

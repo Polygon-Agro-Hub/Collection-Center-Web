@@ -1,4 +1,4 @@
-<app-loading-spinner *ngIf="isLoading"/>
+<app-loading-spinner *ngIf="isLoading" />
 
 <div *ngIf="!isLoading">
     <div class="flex flex-row items-center justify-end gap-8 dark:text-white">
@@ -66,8 +66,7 @@
                     <div *ngFor="let option of employeeDropdownOptions" (click)="selectEmployeeOption(option)"
                         class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
                         <span class="flex-grow">{{ option }}</span>
-                        <i
-                            class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
+                        <i class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
                     </div>
                 </div>
             </div>
@@ -102,11 +101,9 @@
             <!-- Hidden native select -->
             <select [(ngModel)]="selectStatus" class="hidden" (change)="filterStatus()">
                 <option value="" selected disabled>Status</option>
-                <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
-                    value="Opened">
+                <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300" value="Opened">
                     Opened</option>
-                <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
-                    value="Closed">
+                <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300" value="Closed">
                     Closed</option>
             </select>
 
@@ -136,8 +133,7 @@
                     <div *ngFor="let option of statusDropdownOptions" (click)="selectStatusOption(option)"
                         class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
                         <span class="flex-grow">{{ option }}</span>
-                        <i
-                            class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
+                        <i class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
                     </div>
                 </div>
             </div>
@@ -174,7 +170,8 @@
 
         <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929] ">
             <input type="text" placeholder="Search by Ref No, EMP ID" [(ngModel)]="searchText"
-                class="bg-transparent outline-none w-full text-textLight dark:text-textDark"  (keyup.enter)="onSearch()" (keyup.esc)="offSearch()"/>
+                class="bg-transparent outline-none w-full text-textLight dark:text-textDark" (keyup.enter)="onSearch()"
+                (keyup.esc)="offSearch()" />
             <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                 (click)="onSearch()">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -199,9 +196,10 @@
     </div>
 
 
-    <div *ngIf="hasData" class="overflow-x-auto mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+    <div *ngIf="hasData"
+        class="overflow-x-auto mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
         <table class="w-full divide-y-2 overflow-hidden">
-            <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
+            <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
                 <tr>
                     <th class="px-6 py-3 text-left text-sm font-medium">Ref. No</th>
                     <th class="px-6 py-3 text-left text-sm font-medium">EMP ID</th>
@@ -221,16 +219,17 @@
                         <span *ngIf="item.officerId !== officerId">{{item.empId}}</span>
                     </td>
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.complainCategory}}</td>
-                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.complain}}</td>
+                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
+                        {{item.complain | slice:0:100}}{{item.complain.length > 50 ? '...' : ''}}
+                    </td>
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
                         <div class="flex flex-col items-center justify-center">
                             <p class="text-[#3E3E3E] dark:text-gray-300">{{item.createdAt | date:'yyyy/mm/dd'}}</p>
                             <p class="text-[#3E3E3E] dark:text-gray-300">{{item.createdAt | date:'hh:mm a'}}</p>
                         </div>
                     </td>
-                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300 flex items-center justify-center">
-                        <span *ngIf="item.status ==='Opened'"
-                            class="bg-[#C8E0FF] text-[#415CFF] px-3 py-1 rounded-lg">
+                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300 flex items-center justify-center cursor-default">
+                        <span *ngIf="item.status ==='Opened'" class="bg-[#C8E0FF] text-[#415CFF] px-3 py-1 rounded-lg">
                             Opened
                         </span>
 
@@ -238,7 +237,7 @@
                             Closed
                         </span>
                     </td>
-                    <td class="px-6 py-4">
+                    <td class="px-6 py-4 cursor-pointer">
                         <i class="fa-solid fa-reply text-[#415CFF] text-lg cursor-pointer"
                             [ngClass]="{'text-gray-200 cursor-not-allowed': item.reply === null}"
                             (click)="item.reply !== null && viewReply(item.id)">
@@ -249,7 +248,7 @@
                 </tr>
             </tbody>
         </table>
-        
+
     </div>
     <div *ngIf="hasData" class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#262f45] text-right">
         <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
@@ -277,7 +276,8 @@
                     <p>{{replyObj.reply}}</p>
                 </div>
 
-                <button class="bg-[#F6F7F9]  text-[#6B7D8C] text-lg  border-2 border-gray-400 rounded-lg px-6 py-2 font-medium shadow-md hover:bg-gray-100"
+                <button
+                    class="bg-[#F6F7F9]  text-[#6B7D8C] text-lg  border-2 border-gray-400 rounded-lg px-6 py-2 font-medium shadow-md hover:bg-gray-100"
                     (click)="cancelViewReply()">
                     Close
                 </button>

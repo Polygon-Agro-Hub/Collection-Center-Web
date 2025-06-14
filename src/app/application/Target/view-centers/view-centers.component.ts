@@ -12,7 +12,7 @@ import { AddCenterComponent } from '../add-center/add-center.component';
 @Component({
     selector: 'app-view-centers',
     standalone: true,
-    imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, LoadingSpinnerComponent, AddCenterComponent],
+    imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, LoadingSpinnerComponent],
     templateUrl: './view-centers.component.html',
     styleUrl: './view-centers.component.css'
 })
@@ -27,6 +27,7 @@ export class ViewCentersComponent implements OnInit {
     countOfOfficers: number = 0;
 
     isLoading: boolean = true;
+    hasData: boolean = false;
 
     // Define all Sri Lanka provinces
     isProvinceDropdownOpen = false;
@@ -111,6 +112,7 @@ export class ViewCentersComponent implements OnInit {
                 this.itemsArr = res.items;
                 this.totalItems = res.totalItems;
                 this.countOfOfficers = res.items.length;
+                this.hasData = res.items.length > 0 ? true : false;
                 this.isLoading = false;
             }
         );

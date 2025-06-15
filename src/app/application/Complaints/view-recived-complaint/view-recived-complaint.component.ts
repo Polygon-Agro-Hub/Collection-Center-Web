@@ -50,11 +50,11 @@ export class ViewRecivedComplaintComponent implements OnInit {
     this.ComplainSrv.getComplainById(id).subscribe(
       (res) => {
         this.compalintObj = res.data;
-  
-        this.officerName = 
-          (this.compalintObj?.firstNameEnglish || '') + ' ' + 
+
+        this.officerName =
+          (this.compalintObj?.firstNameEnglish || '') + ' ' +
           (this.compalintObj?.lastNameEnglish || '');
-  
+
         // Handle phone1
         if (
           this.compalintObj?.phoneNumber01 === null ||
@@ -64,7 +64,7 @@ export class ViewRecivedComplaintComponent implements OnInit {
         } else {
           this.phone1 = `${this.compalintObj.phoneCode01 || ''} - ${this.compalintObj.phoneNumber01}`;
         }
-  
+
         // Handle phone2
         if (
           this.compalintObj?.phoneNumber02 === null ||
@@ -74,15 +74,15 @@ export class ViewRecivedComplaintComponent implements OnInit {
         } else {
           this.phone2 = `${this.compalintObj.phoneCode02 || ''} - ${this.compalintObj.phoneNumber02}`;
         }
-  
+
         if (!res.data || (Array.isArray(res.data) && res.data.length === 0)) {
           this.hasData = false;
         } else {
           this.hasData = true;
         }
-        this.replyObj.reply = this.createTemplate(this.officerName);
+        this.replyObj.reply = res.data.reply === null ? this.createTemplate(this.officerName, res.data.language, res.template) : res.data.reply;
 
-  
+
         this.isLoading = false;
       },
       (error) => {
@@ -91,8 +91,8 @@ export class ViewRecivedComplaintComponent implements OnInit {
       }
     );
   }
-  
-  
+
+
 
   forwordComplain() {
     Swal.fire({
@@ -154,25 +154,42 @@ export class ViewRecivedComplaintComponent implements OnInit {
     )
   }
 
-  createTemplate(fname:string=''):string{
-  return `
-  Dear ${fname},
+  createTemplate(fname: string = '', language: string = 'English', templateData: TemplateData): string {
+    if (language === 'Sinhala') {
+      return `
+හිතවත් ${fname},
 
-  We are pleased to inform you that your complaint has been resolved.
+ඔබට තවත් ගැටළු හෝ ප්‍රශ්න තිබේ නම්, කරුණාකර අප හා සම්බන්ධ වන්න. ඔබේ ඉවසීම සහ අවබෝධය වෙනුවෙන් ස්තූතියි.
 
-  We will send a repairing team within this week. Thank you for reporting.
+මෙයට,
+${templateData.SinName}
+Collection Center Manager of ${templateData.companyNameSinhala}
+    `
+    } else if (language === 'Tamil') {
+      return `
+அன்புள்ள ${fname},
 
-  If you have any further concerns or questions, feel free to reach out.
-  Thank you for your patience and understanding.
+உங்களுக்கு மேலும் ஏதேனும் சிக்கல்கள் அல்லது கேள்விகள் இருந்தால், தயவுசெய்து எங்களைத் தொடர்பு கொள்ளவும். உங்கள் பொறுமைக்கும் புரிதலுக்கும் நன்றி.
+
+இதற்கு,
+  ${templateData.TamName}
+Collection Center Manager of ${templateData.companyNameTamil}
+      `
+    } else {
+      return `
+Dear ${fname},
+
+If you have any further concerns or questions, feel free to reach out.
+Thank you for your patience and understanding.
 
 
-  Sincerely,
-  [Collection Manager Name]
-  Collection Center Manger of [Center Reg Code]
-  [Company Name]
+Sincerely, ${templateData.EngName}
+Collection Center Manager of  ${templateData.companyNameEnglish}
 
   `
-}
+    }
+
+  }
 
 }
 
@@ -196,4 +213,14 @@ class Complaint {
 class Reply {
   id!: number
   reply!: string
+}
+
+
+interface TemplateData {
+  EngName: string
+  SinName: string
+  TamName: string
+  companyNameEnglish: string
+  companyNameSinhala: string
+  companyNameTamil: string
 }

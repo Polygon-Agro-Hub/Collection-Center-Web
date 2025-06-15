@@ -139,45 +139,37 @@ export class CchRecivedComplaintComponent {
     )
   }
 
-  createTemplate(fname: string = '', language: string = 'English', templateData:TemplateData): string {
+  createTemplate(fname: string = '', language: string = 'English', templateData: TemplateData): string {
     if (language === 'Sinhala') {
       return `
-    හිතවත් ${fname},
+හිතවත් ${fname},
 
-    ඔබට තවත් ගැටළු හෝ ප්‍රශ්න තිබේ නම්, කරුණාකර අප හා සම්බන්ධ වන්න. ඔබේ ඉවසීම සහ අවබෝධය වෙනුවෙන් ස්තූතියි.
+ඔබට තවත් ගැටළු හෝ ප්‍රශ්න තිබේ නම්, කරුණාකර අප හා සම්බන්ධ වන්න. ඔබේ ඉවසීම සහ අවබෝධය වෙනුවෙන් ස්තූතියි.
 
-    මෙයට,
-    ${templateData.SinName}
-    Collection Center Head of ${templateData.companyNameSinhala}
+මෙයට,
+${templateData.SinName}
+Collection Center Head of ${templateData.companyNameSinhala}
     `
     } else if (language === 'Tamil') {
       return `
-      அன்புள்ள ${fname},
+அன்புள்ள ${fname},
 
-      உங்களுக்கு மேலும் ஏதேனும் சிக்கல்கள் அல்லது கேள்விகள் இருந்தால், தயவுசெய்து எங்களைத் தொடர்பு கொள்ளவும். உங்கள் பொறுமைக்கும் புரிதலுக்கும் நன்றி.
+உங்களுக்கு மேலும் ஏதேனும் சிக்கல்கள் அல்லது கேள்விகள் இருந்தால், தயவுசெய்து எங்களைத் தொடர்பு கொள்ளவும். உங்கள் பொறுமைக்கும் புரிதலுக்கும் நன்றி.
 
-      இதற்கு,
-       ${templateData.TamName}
-      Collection Center Head of ${templateData.companyNameTamil}
+இதற்கு,
+${templateData.TamName}
+Collection Center Head of ${templateData.companyNameTamil}
       `
     } else {
       return `
-      Dear ${fname},
+Dear ${fname},
 
-      We are pleased to inform you that your complaint has been resolved.
-
-
-      [Add message here]
-
-  
-
-      If you have any further concerns or questions, feel free to reach out.
-      Thank you for your patience and understanding.
+If you have any further concerns or questions, feel free to reach out.
+Thank you for your patience and understanding.
 
 
-      Sincerely, ${templateData.EngName}
-      Collection Center Head of  ${templateData.companyNameEnglish}
-
+Sincerely, ${templateData.EngName}
+Collection Center Head of  ${templateData.companyNameEnglish}
   `
     }
 
@@ -209,10 +201,10 @@ class Reply {
 }
 
 interface TemplateData {
-  EngName:string
-  SinName:string 
-  TamName:string 
-  companyNameEnglish:string 
-  companyNameSinhala:string 
-  companyNameTamil:string 
+  EngName: string
+  SinName: string
+  TamName: string
+  companyNameEnglish: string
+  companyNameSinhala: string
+  companyNameTamil: string
 }

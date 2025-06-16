@@ -45,11 +45,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       (data) => {
         this.COOCount = data.COOCount.COOCount;
         this.CUOCount = data.CUOCount.CUOCount;
-        this.activityLogs = data.activities.map((log: any) => {
-          log.updateAt = this.formatDate(log.updateAt);
-          this.isLoading = false; // Time only format
-          return log;
-        });
+        this.activityLogs = data.activities;
         this.isLoading = false;
 
       },

@@ -75,7 +75,9 @@ export class ViewPriceListComponent implements OnInit {
   }
 
   fetchAllPriceList(page: number = 1, limit: number = this.itemsPerPage, grade: string = this.selectGrade, search: string = this.searchText) {
+    this.isLoading = true;
     this.PriceListSrv.getAllPriceList(page, limit, grade, search).subscribe((res) => {
+      this.isLoading = false;
       this.priceListArr = res.items;
       this.totalItems = res.total;
 

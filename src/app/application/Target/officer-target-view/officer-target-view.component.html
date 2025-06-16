@@ -15,8 +15,8 @@
             </label>
             <select id="jobRole" name="jobRole" placeholder="select" required [(ngModel)]="OfficerObj.jobRole"
                 class="form-control mt-1 block w-full p-2 text-[#030308] dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500">
-                <option disabled class="p-2 text-[#534E4E] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]" value="">
-                    -- select --
+                <option disabled class="p-2 text-[#959595] italic dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]" value="">
+                    -- Select Job Role --
                 </option>
                 <option selected value="Collection Center Manager"
                     class="p-2 text-[#030308] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
@@ -31,10 +31,6 @@
                     Customer Officer
                 </option>
             </select>
-            <!-- Error: Required Field -->
-            <!-- <div *ngIf="jobRoleInput.touched && !personalData.jobRole" class="text-red-500 text-sm mt-1">
-                <div>Job Role is required</div>
-            </div> -->
         </div>
 
 
@@ -48,7 +44,7 @@
                     <p *ngIf="OfficerObj.jobRole === 'Collection Officer'">COO</p>
                     <p *ngIf="OfficerObj.jobRole === 'Customer Officer'">CUO</p>
                 </span>
-                <input type="text" name="officerId" [(ngModel)]="OfficerObj.officerId"
+                <input type="text" name="officerId" [(ngModel)]="OfficerObj.officerId" placeholder="ex : 00122"
                     class="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm pl-4  dark:bg-[#1D1D1F]  dark:placeholder-gray-400 dark:text-textDark dark:focus:ring-blue-500 dark:focus:border-blue-500">
             </div>
         </div>

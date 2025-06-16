@@ -263,6 +263,10 @@ export class CollectionComponent implements OnInit {
             icon: "success",
             title: "Downloaded",
             text: "Please check your downloads folder",
+            customClass: {
+              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+              title: 'dark:text-white',
+            }
           });
           this.isDownloading = false;
         },
@@ -271,6 +275,10 @@ export class CollectionComponent implements OnInit {
             icon: "error",
             title: "Download Failed",
             text: error.message,
+            customClass: {
+              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+              title: 'dark:text-white',
+            }
           });
           this.isDownloading = false;
         }

@@ -235,9 +235,9 @@ export class ViewOfficersComponent implements OnInit {
 
     const tableHtml = `
       <div class="container mx-auto">
-        <h1 class="text-center text-2xl font-bold mb-4">Officer Name: ${item.firstNameEnglish}</h1>
+        <h1 class="text-center text-2xl font-bold mb-4 dark:text-white">Officer Name: ${item.firstNameEnglish}</h1>
         <div>
-          <p class="text-center">Are you sure you want to approve or reject this collection?</p>
+          <p class="text-center dark:text-white">Are you sure you want to approve or reject this collection?</p>
         </div>
         <div class="flex justify-center mt-4">
           <button id="rejectButton" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg mr-2">
@@ -254,7 +254,13 @@ export class ViewOfficersComponent implements OnInit {
       html: tableHtml,
       showConfirmButton: false,
       width: 'auto',
-      allowOutsideClick: true, // Prevent closing by clicking outside
+      allowOutsideClick: true,
+      background: 'bg-white dark:bg-[#363636]', // Background styles
+      color: 'text-gray-800 dark:text-white',   // Text color styles
+      customClass: {
+        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+        title: 'dark:text-white'
+      },
       didOpen: () => {
         // Approve Button
         document.getElementById('approveButton')?.addEventListener('click', () => {
@@ -276,6 +282,11 @@ export class ViewOfficersComponent implements OnInit {
       showConfirmButton: false,
       allowEscapeKey: false,
       allowOutsideClick: false,
+      customClass: {
+        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+        title: 'dark:text-white',
+      },
+      
       didOpen: () => {
         Swal.showLoading();
       }

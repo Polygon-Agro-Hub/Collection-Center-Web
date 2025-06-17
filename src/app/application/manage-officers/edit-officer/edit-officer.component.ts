@@ -468,7 +468,11 @@ export class EditOfficerComponent implements OnInit {
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
       confirmButtonText: 'Yes, Cancel it!',
-      cancelButtonText: 'No, Stay On Page'
+      cancelButtonText: 'No, Stay On Page',
+      customClass: {
+        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+        title: 'dark:text-white',
+      }
     }).then((result) => {
       if (result.isConfirmed) {
         this.toastSrv.warning('Officer Edit Canceled.')

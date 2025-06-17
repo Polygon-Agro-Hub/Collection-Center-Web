@@ -134,6 +134,13 @@ export class CenterViewOfficersComponent implements OnInit {
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete it!',
       cancelButtonText: 'Cancel',
+      customClass: {
+        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+        title: 'dark:text-white',
+        confirmButton: 'hover:!bg-red-600 dark:hover:!bg-red-700 focus:ring-red-500 dark:focus:ring-red-800',
+        cancelButton: '',
+        actions: 'gap-2'
+      },
     }).then((result) => {
       if (result.isConfirmed) {
         this.ManageOficerSrv.deleteOfficer(id).subscribe(

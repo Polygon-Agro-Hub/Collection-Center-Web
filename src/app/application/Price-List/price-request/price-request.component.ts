@@ -97,10 +97,10 @@ export class PriceRequestComponent implements OnInit {
         console.log(res)
         console.log(res.items)
 
-        
+
         if (res.items.length === 0) {
           this.hasData = false;
-        }else{
+        } else {
           this.hasData = true;
 
         }
@@ -119,24 +119,27 @@ export class PriceRequestComponent implements OnInit {
 
     // HTML structure for the popup
     const tableHtml = `
-        <div class="container mx-auto">
-          <h1 class="text-center text-2xl font-bold mb-4">Crop Name : ${item.cropNameEnglish}</h1>
-          <h2 class="text-center text-2xl font-bold mb-4">Crop Veriety : ${item.varietyNameEnglish}</h2>
-          <h2 class="text-center text-2xl font-bold mb-4">Request Price : Rs.${item.requestPrice}/=</h2>
-          <div >
-            <p class="text-center">Are you sure you want to approve or reject this request?</p>
-          </div>
-          <div class="flex justify-center mt-4">
-            <button id="rejectButton" class="bg-red-500 text-white px-6 py-2 rounded-lg mr-2">Reject</button>
-            <button id="approveButton" class="bg-green-500 text-white px-4 py-2 rounded-lg">Approve</button>
-          </div>
-        </div>
-      `;
+  <div class="container mx-auto bg-white dark:bg-[#363636] text-gray-800 dark:text-white p-4 rounded-lg">
+    <h1 class="text-center text-2xl font-bold mb-4 dark:text-white">Crop Name : ${item.cropNameEnglish}</h1>
+    <h2 class="text-center text-2xl font-bold mb-4 dark:text-white">Crop Veriety : ${item.varietyNameEnglish}</h2>
+    <h2 class="text-center text-2xl font-bold mb-4 dark:text-white">Request Price : Rs.${item.requestPrice}/=</h2>
+    <div>
+      <p class="text-center">Are you sure you want to approve or reject this request?</p>
+    </div>
+    <div class="flex justify-center mt-4">
+      <button id="rejectButton" class="bg-red-500 text-white px-6 py-2 rounded-lg mr-2">Reject</button>
+      <button id="approveButton" class="bg-green-500 text-white px-4 py-2 rounded-lg">Approve</button>
+    </div>
+  </div>
+`;
 
     Swal.fire({
       html: tableHtml,
-      showConfirmButton: false, // Hide default confirm button
+      showConfirmButton: false,
       width: 'auto',
+      customClass: {
+        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white', // 👈 Outer popup styling
+      },
       didOpen: () => {
         document
           .getElementById('approveButton')
@@ -155,7 +158,7 @@ export class PriceRequestComponent implements OnInit {
                   });
                   this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade, this.selectStatus, this.searchText);
                 } else {
-                this.isLoading = false;
+                  this.isLoading = false;
                   Swal.fire({
                     icon: 'error',
                     title: 'Error!',
@@ -195,7 +198,7 @@ export class PriceRequestComponent implements OnInit {
                   });
                   this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade, this.selectStatus, this.searchText);
                 } else {
-                this.isLoading = false;
+                  this.isLoading = false;
                   Swal.fire({
                     icon: 'error',
                     title: 'Error!',

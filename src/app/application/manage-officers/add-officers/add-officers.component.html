@@ -338,6 +338,10 @@
                             class="text-red-500 text-sm mt-1">
                             Phone Number must be exactly 9 digits.
                         </div>
+
+                        <div *ngIf="personalData.phoneNumber02 && personalData.phoneNumber02 === personalData.phoneNumber01" class="text-red-500 text-sm mt-1">
+                            Phone Number - 2 should be different from Phone Number - 1.
+                          </div>
                     </div>
 
                     <div>

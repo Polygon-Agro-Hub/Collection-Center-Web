@@ -13,22 +13,21 @@
                     <div
                         class="border-2 rounded-xl  text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
                         <input type="date" [(ngModel)]="fromDate" name="fromDate" (change)="validateFromDate()"
-                            class="block w-full appearance-none  text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none dark:bg-[#292929]" />
+                            class="block w-full appearance-none  text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none dark:bg-[#292929] custom-date-input" />
                     </div>
                 </div>
 
                 <p class="text-lg font-semibold text-[#292929] mx-3 dark:text-white">To :</p>
 
                 <div class="relative w-56 mr-6">
-                    <div
-                        class="border-2 rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
+                    <div class="border-2 rounded-xl dark:bg-[#363638] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
                         <input type="date"
                                #toDateInput
                                [(ngModel)]="toDate"
                                name="toDate"
                                [min]="fromDate"
                                (change)="validateToDate(toDateInput)"
-                               class="block w-full appearance-none text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none dark:bg-[#292929]" />
+                               class="block w-full appearance-none text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none dark:bg-[#363638] custom-date-input" />
                     </div>
                 </div>
                 

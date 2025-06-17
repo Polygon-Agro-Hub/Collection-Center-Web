@@ -15,7 +15,7 @@
                 <div
                     class="border-2 rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
                     <input type="date" [(ngModel)]="startDate" (change)="startDateValidation()"
-                        class="block w-full appearance-none text-textLight dark:text-textDark dark:bg-[#292929] px-3 py-2 rounded-xl focus:outline-none" />
+                        class="block w-full appearance-none text-textLight dark:text-textDark dark:bg-[#292929] px-3 py-2 rounded-xl focus:outline-none custom-date-input" />
                 </div>
             </div>
 
@@ -26,7 +26,7 @@
                     class="border-2 rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
                     <input type="date" [(ngModel)]="endDate" (change)="endDateValidation()"
                         [min]="startDate | date:'yyyy-MM-dd'"
-                        class="block w-full appearance-none text-textLight dark:text-textDark dark:bg-[#292929] px-3 py-2 rounded-xl focus:outline-none" />
+                        class="block w-full appearance-none text-textLight dark:text-textDark dark:bg-[#292929] px-3 py-2 rounded-xl focus:outline-none custom-date-input" />
                 </div>
             </div>
 

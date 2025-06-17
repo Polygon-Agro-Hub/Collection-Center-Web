@@ -56,13 +56,13 @@
         <div>
             <label for="fromDate" class="block text-sm font-medium text-gray-700 dark:text-textDark">From</label>
             <input id="fromDate" name="fromDate" type="date" [(ngModel)]="OfficerObj.fromDate"
-                class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
+                class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F] custom-date-input" />
         </div>
 
         <div>
             <label for="toDate" class="block text-sm font-medium text-gray-700 dark:text-textDark">TO</label>
             <input id="toDate" name="toDate" type="date" [(ngModel)]="OfficerObj.toDate" (change)="checkToDate()"
-                class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
+                class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F] custom-date-input" />
         </div>
     </div>
 

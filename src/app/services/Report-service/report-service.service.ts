@@ -117,6 +117,7 @@ export class ReportServiceService {
   }
 
   getAllPayments(
+    
     page: number = 1,
     limit: number = 10,
     fromDate: Date | string = '',
@@ -128,7 +129,7 @@ export class ReportServiceService {
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
     });
-
+    console.log('to', toDate, 'from', fromDate, 'saerch', searchText);
     // Base URL with date range
     let url = `${this.apiUrl}/get-all-payments?page=${page}&limit=${limit}&fromDate=${fromDate}&toDate=${toDate}`;
 

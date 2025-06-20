@@ -3,17 +3,18 @@
 >
   <!-- Header -->
   <div
-    class="flex items-center gap-3 p-5 cursor-pointer mx-2"
-    (click)="toggleSidebar()"
+  class="flex items-center gap-3 p-5 cursor-pointer mx-2"
+  (click)="toggleSidebar()"
+>
+  <img src="assets/images/logo.png" class="w-10 h-10" />
+  <span
+    [ngClass]="isCollapsed ? 'hidden' : 'block'"
+    class="text-xl font-bold text-gray-800 dark:text-white whitespace-nowrap"
   >
-    <img src="assets/images/logo.png" class="w-10 h-10" />
-    <span
-      [ngClass]="isCollapsed ? 'hidden' : 'block'"
-      class="text-xl font-bold text-gray-800 dark:text-white"
-    >
-      4C Operator
-    </span>
-  </div>
+    4C Operator
+  </span>
+</div>
+
 
   <!-- Dynamic Menu -->
   <div class="flex-1 overflow-y-auto scrollbar-none">

@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DropdownModule } from 'primeng/dropdown'
@@ -36,7 +36,44 @@ export class ViewOfficersComponent implements OnInit {
   logingRole: string | null = null;
   isLoading: boolean = true;
 
+  isStatusDropdownOpen = false;
+  statusDropdownOptions = ['Approved', 'Not Approved', 'Rejected'];
 
+  toggleStatusDropdown() {
+    this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
+  }
+
+  selectStatusOption(option: string) {
+    this.selectStatus = option;
+    this.isStatusDropdownOpen = false;
+    this.applyStatusFilters();
+  }
+
+  isRoleDropdownOpen = false;
+  roleDropdownOptions = ['Collection Center Manager', 'Collection Officer', 'Customer Officer', 'Driver'];
+
+  toggleRoleDropdown() {
+    this.isRoleDropdownOpen = !this.isRoleDropdownOpen;
+  }
+
+  selectRoleOption(option: string) {
+    this.selectRole = option;
+    this.isRoleDropdownOpen = false;
+    this.applyRoleFilters();
+  }
+
+  isCenterDropdownOpen = false;
+  centerDropdownOptions = [];
+
+  toggleCenterDropdown() {
+    this.isCenterDropdownOpen = !this.isCenterDropdownOpen;
+  }
+
+  selectCenterOption(center: Center) {
+    this.selectCenters = center.id.toString(); // convert id to string
+    this.isCenterDropdownOpen = false;
+    this.applyCompanyFilters();
+  }
 
 
   constructor(
@@ -55,6 +92,30 @@ export class ViewOfficersComponent implements OnInit {
     this.getAllCenters();
     this.fetchByRole();
 
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
+    const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
+
+    const roleDropdownElement = document.querySelector('.custom-role-dropdown-container');
+    const roleDropdownClickedInside = roleDropdownElement?.contains(event.target as Node);
+
+    const centerDropdownElement = document.querySelector('.custom-center-dropdown-container');
+    const centerDropdownClickedInside = centerDropdownElement?.contains(event.target as Node);
+
+    if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
+      this.isStatusDropdownOpen = false;
+    }
+
+    if (!roleDropdownClickedInside && this.isRoleDropdownOpen) {
+      this.isRoleDropdownOpen = false;
+    }
+
+    if (!centerDropdownClickedInside && this.isCenterDropdownOpen) {
+      this.isCenterDropdownOpen = false;
+    }
   }
 
   navigate(path: string) {
@@ -132,7 +193,7 @@ export class ViewOfficersComponent implements OnInit {
       text: 'Do you really want to delete this Collection Officer? This action cannot be undone.',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6', // Default blue color
+      confirmButtonColor: '#3085d6', // Default blue
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete it!',
       cancelButtonText: 'Cancel',
@@ -140,11 +201,12 @@ export class ViewOfficersComponent implements OnInit {
         popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
         title: 'dark:text-white',
         icon: '!border-gray-200 dark:!border-gray-500',
-        confirmButton: 'hover:!bg-red-600 dark:hover:!bg-red-700 focus:ring-red-500 dark:focus:ring-red-800',
+        confirmButton: 'hover:!bg-blue-600 dark:hover:!bg-blue-500', 
         cancelButton: '',
         actions: 'gap-2'
       }
-    }).then((result) => {
+    })
+    .then((result) => {
       if (result.isConfirmed) {
         this.isLoading = true;
         this.ManageOficerSrv.deleteOfficer(id).subscribe(
@@ -174,9 +236,9 @@ export class ViewOfficersComponent implements OnInit {
 
     const tableHtml = `
       <div class="container mx-auto">
-        <h1 class="text-center text-2xl font-bold mb-4">Officer Name: ${item.firstNameEnglish}</h1>
+        <h1 class="text-center text-2xl font-bold mb-4 dark:text-white">Officer Name: ${item.firstNameEnglish}</h1>
         <div>
-          <p class="text-center">Are you sure you want to approve or reject this collection?</p>
+          <p class="text-center dark:text-white">Are you sure you want to approve or reject this collection?</p>
         </div>
         <div class="flex justify-center mt-4">
           <button id="rejectButton" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg mr-2">
@@ -193,7 +255,13 @@ export class ViewOfficersComponent implements OnInit {
       html: tableHtml,
       showConfirmButton: false,
       width: 'auto',
-      allowOutsideClick: true, // Prevent closing by clicking outside
+      allowOutsideClick: true,
+      background: 'bg-white dark:bg-[#363636]', // Background styles
+      color: 'text-gray-800 dark:text-white',   // Text color styles
+      customClass: {
+        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+        title: 'dark:text-white'
+      },
       didOpen: () => {
         // Approve Button
         document.getElementById('approveButton')?.addEventListener('click', () => {
@@ -215,6 +283,11 @@ export class ViewOfficersComponent implements OnInit {
       showConfirmButton: false,
       allowEscapeKey: false,
       allowOutsideClick: false,
+      customClass: {
+        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+        title: 'dark:text-white',
+      },
+      
       didOpen: () => {
         Swal.showLoading();
       }
@@ -242,20 +315,37 @@ export class ViewOfficersComponent implements OnInit {
     });
   }
 
+  clearStatusFilter(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
+    this.selectStatus = '';
+    this.isStatusDropdownOpen = false;
+    this.applyStatusFilters();
+  }
+
+  // Keep your existing methods
   applyStatusFilters() {
     this.fetchByRole();
   }
+
+  // applyStatusFilters() {
+  //   this.fetchByRole();
+  // }
+
+  // clearStatusFilter() {
+  //   this.selectStatus = ''
+  //   this.fetchByRole();
+  // }
 
   applyRoleFilters() {
     this.fetchByRole();
   }
 
-  clearStatusFilter() {
-    this.selectStatus = ''
-    this.fetchByRole();
-  }
-
-  clearRoleFilter() {
+  clearRoleFilter(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
     this.selectRole = ''
     this.fetchByRole();
   }
@@ -278,9 +368,10 @@ export class ViewOfficersComponent implements OnInit {
     this.fetchByRole();
   }
 
-  clearCompanyFilter() {
+  clearCompanyFilter(event: MouseEvent) {
+    event.stopPropagation();
     this.selectCenters = '';
-    this.fetchByRole();
+    this.applyCompanyFilters();
   }
 
   getAllCenters() {
@@ -290,6 +381,13 @@ export class ViewOfficersComponent implements OnInit {
 
       }
     )
+  }
+
+  get selectedCenterDisplay(): string {
+    if (!this.selectCenters) return 'Centers';
+    
+    const selectedCenter = this.centerArr.find(center => center.id.toString() === this.selectCenters);
+    return selectedCenter ? `${selectedCenter.regCode} - ${selectedCenter.centerName}` : 'Centers';
   }
 
 }

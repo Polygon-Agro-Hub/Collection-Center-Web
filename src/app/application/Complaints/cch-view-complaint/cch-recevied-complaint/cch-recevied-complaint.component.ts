@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ComplaintsService } from '../../../../services/Complaints-Service/complaints.service';
@@ -31,6 +31,19 @@ complainArr!: RecivedComplaint[];
 
   isLoading:boolean = true;
 
+  isStatusDropdownOpen = false;
+  statusDropdownOptions = ['Assigned', 'Closed'];
+
+  toggleStatusDropdown() {
+    this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
+  }
+
+  selectStatusOption(option: string) {
+    this.selectStatus = option;
+    this.isStatusDropdownOpen = false;
+    this.filterStatus();
+  }
+
   constructor(
     private router: Router,
     private ComplainSrv: ComplaintsService,
@@ -39,6 +52,17 @@ complainArr!: RecivedComplaint[];
 
   ngOnInit(): void {
     this.fetchAllreciveComplaint();
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
+    const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
+
+    if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
+      this.isStatusDropdownOpen = false;
+    }
+
   }
 
   fetchAllreciveComplaint(page: number = 1, limit: number = this.itemsPerPage, status: string = this.selectStatus, search: string = this.searchText) {
@@ -94,10 +118,18 @@ complainArr!: RecivedComplaint[];
     this.fetchAllreciveComplaint();
   }
 
-  cancelStatus() {
+  cancelStatus(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
     this.selectStatus = '';
     this.fetchAllreciveComplaint();
   }
+
+  // cancelStatus() {
+  //   this.selectStatus = '';
+  //   this.fetchAllreciveComplaint();
+  // }
 
 
   onPageChange(event: number) {

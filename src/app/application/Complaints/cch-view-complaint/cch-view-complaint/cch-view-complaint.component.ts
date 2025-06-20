@@ -60,6 +60,8 @@ export class CchViewComplaintComponent implements OnInit {
           this.isLoading = false;
           this.toastSrv.warning('Please try again')
         }
+          this.isLoading = false;
+
       },
       (error) => {
         this.isLoading = false;

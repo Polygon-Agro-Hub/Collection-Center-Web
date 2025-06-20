@@ -1,11 +1,12 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReportServiceService } from '../../../services/Report-service/report-service.service';
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 import { jsPDF } from 'jspdf';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
+import html2canvas from 'html2canvas';
 
 @Component({
   selector: 'app-collection-daily-report',
@@ -25,6 +26,7 @@ export class CollectionDailyReportComponent implements OnInit {
   loadingChart = true;
   loadingTable = true;
   chartOptions: any;
+  hasData: boolean = true;
 
 
   isLoading: boolean = true;
@@ -53,7 +55,9 @@ export class CollectionDailyReportComponent implements OnInit {
     this.isLoading = true
     this.ReportSrv.getCollectionDailyReport(this.officerId, date).subscribe(
       (res) => {
+        console.log(res);
         if (res.data.length === 0) {
+          this.hasData = false;
           this.updateChart();
           this.loadingTable = false;
           this.isLoading = false;
@@ -65,7 +69,9 @@ export class CollectionDailyReportComponent implements OnInit {
           gradeA: Number(item.gradeA) || 0,
           gradeB: Number(item.gradeB) || 0,
           gradeC: Number(item.gradeC) || 0,
+          total: Number(item.total) || 0,
         }));
+        console.log(this.dailyReportArr);
         this.updateChart();
         this.loadingTable = false;
         this.isLoading = false;
@@ -112,12 +118,15 @@ export class CollectionDailyReportComponent implements OnInit {
     this.chartOptions = {
       animationEnabled: true,
       theme: "light2",
+      color: "#000000", // Note: this sets series color (not axis title)
       axisX: {
-        title: "Crops",
+        title: "Crop Variety",
+        titleFontColor: "#000000", // Set title color (example: red)
         reversed: true,
       },
       axisY: {
-        title: "Total Weight (Kg)",
+        title: "kg",
+        titleFontColor: "#000000", // Set title color
         includeZero: true,
       },
       legend: {
@@ -127,6 +136,9 @@ export class CollectionDailyReportComponent implements OnInit {
           e.chart.render();
         },
       },
+      toolTip: {
+        shared: true
+      },
       data: [
         {
           type: "stackedBar",
@@ -134,6 +146,7 @@ export class CollectionDailyReportComponent implements OnInit {
           showInLegend: true,
           legendMarkerColor: "#2B88D9",
           dataPoints: gradeAData,
+          cursor: "pointer", // 👈 Add this
         },
         {
           type: "stackedBar",
@@ -141,6 +154,7 @@ export class CollectionDailyReportComponent implements OnInit {
           showInLegend: true,
           legendMarkerColor: "#79BAF2",
           dataPoints: gradeBData,
+          cursor: "pointer", // 👈 Add this
         },
         {
           type: "stackedBar",
@@ -148,8 +162,9 @@ export class CollectionDailyReportComponent implements OnInit {
           showInLegend: true,
           legendMarkerColor: "#A7D5F2",
           dataPoints: gradeCData,
+          cursor: "pointer", // 👈 Add this
         },
-      ],
+      ]
     };
 
     this.loadingChart = false;
@@ -157,56 +172,84 @@ export class CollectionDailyReportComponent implements OnInit {
 
   }
 
-  downloadPdf() {
+  async downloadPdf() {
     const doc = new jsPDF();
-
-    const title = `Daily Report`;
-    doc.setFontSize(18);
-    doc.text(title, 14, 10);
-
-    const title2 = `${this.officerName} - ${this.empId}`;
+    
+    // Add title and header information;
     doc.setFontSize(14);
-    doc.text(title2, 14, 20);
-
-    const dateText = `On ${this.selectDate}`;
+    doc.text(`${this.officerName} - ${this.empId}`, 14, 20);
     doc.setFontSize(12);
-    doc.text(dateText, 14, 30);
-
-    const startY = 40;
+doc.setTextColor(64, 64, 64); // Dark gray
+doc.text(`On ${this.selectDate}`, 14, 30);
+  
+    // Capture the chart as an image with reduced size
+    try {
+      const chartElement = document.querySelector('canvasjs-chart') as HTMLElement;
+      if (chartElement) {
+        // Reduce the scale to make the captured image smaller
+        const scale = 0.7; // Adjust this value (0.5-1.0) to change size
+        
+        const canvas = await html2canvas(chartElement, {
+          scale: scale,
+          logging: false,
+          useCORS: true,
+        });
+        
+        const imgData = canvas.toDataURL('image/png');
+        
+        // Set reduced dimensions for the PDF image
+        const pdfImageWidth = 150; // mm (reduced from 180)
+        const imgHeight = canvas.height * pdfImageWidth / canvas.width;
+        
+        // Add chart image to PDF
+        doc.addImage(imgData, 'PNG', 15, 40, pdfImageWidth, imgHeight);
+        
+        // Start table after the chart with some margin
+        const startY = 40 + imgHeight + 10;
+        this.addTableToPdf(doc, startY);
+      }
+    } catch (error) {
+      console.error('Error capturing chart:', error);
+      // Fallback to table only if chart capture fails
+      this.addTableToPdf(doc, 40);
+    }
+  
+    doc.save(`Daily_Report_${this.officerName}_${this.selectDate}.pdf`);
+  }
+  
+  // Helper method to add table to PDF
+  private addTableToPdf(doc: jsPDF, startY: number) {
     doc.setFontSize(10);
     const headers = ['Variety Name', 'Grade A', 'Grade B', 'Grade C', 'Total'];
-
     const rowHeight = 10;
     const columnWidths = [60, 30, 30, 30, 30];
-
+  
     let currentX = 14;
     headers.forEach((header, index) => {
       doc.rect(currentX, startY, columnWidths[index], rowHeight);
       doc.text(header, currentX + 2, startY + 7);
       currentX += columnWidths[index];
     });
-
+  
     let currentY = startY + rowHeight;
     this.dailyReportArr.forEach((report) => {
       currentX = 14;
       const rowData = [
         report.varietyNameEnglish,
-        (report.gradeA.toFixed(2)).toLocaleString() + 'Kg',
-        (report.gradeB.toFixed(2)).toLocaleString() + 'Kg',
-        (report.gradeC.toFixed(2)).toLocaleString() + 'Kg',
-        (report.total.toFixed(2)).toLocaleString() + 'Kg',
+        report.gradeA.toFixed(2) + ' kg',
+        report.gradeB.toFixed(2) + ' kg',
+        report.gradeC.toFixed(2) + ' kg',
+        report.total.toFixed(2) + ' kg',
       ];
-    
+  
       rowData.forEach((data, index) => {
         doc.rect(currentX, currentY, columnWidths[index], rowHeight);
         doc.text(data, currentX + 2, currentY + 7);
         currentX += columnWidths[index];
       });
-    
+  
       currentY += rowHeight;
     });
-    
-    doc.save(`Daily_Report_${this.officerName}_${this.selectDate}.pdf`);
   }
 
 }

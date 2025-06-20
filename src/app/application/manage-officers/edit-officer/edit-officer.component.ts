@@ -163,6 +163,8 @@ export class EditOfficerComponent implements OnInit {
       (res: any) => {
 
         this.personalData = res.officerData.collectionOfficer;
+        this.personalData.conformAccNumber = this.personalData.accNumber
+        console.log(this.personalData);
         this.ExistirmId = res.officerData.irmId;
 
         this.getUpdateLastID(res.officerData.collectionOfficer.jobRole);
@@ -292,7 +294,7 @@ export class EditOfficerComponent implements OnInit {
 
 
   nextForm(page: 'pageOne' | 'pageTwo' | 'pageThree') {
-    
+
     this.selectedPage = page;
 
 
@@ -361,9 +363,12 @@ export class EditOfficerComponent implements OnInit {
       return;
     }
 
-    if (!this.personalData.accHolderName || !this.personalData.accNumber || !this.personalData.bankName || !this.personalData.branchName || !this.personalData.city || !this.personalData.country || !this.personalData.district || !this.personalData.houseNumber) {
-      this.toastSrv.warning('Pleace fill all required feilds')
+    if (this.personalData.phoneNumber01 == this.personalData.phoneNumber02) {
+      this.toastSrv.warning('Pleace enter 2 different phone numbers')
+   }
 
+    else if (!this.personalData.accHolderName || !this.personalData.accNumber || !this.personalData.bankName || !this.personalData.branchName || !this.personalData.city || !this.personalData.country || !this.personalData.district || !this.personalData.houseNumber) {
+      this.toastSrv.warning('Pleace fill all required feilds')
 
     } else {
       this.isLoading = true;
@@ -373,13 +378,29 @@ export class EditOfficerComponent implements OnInit {
           (res: any) => {
             this.officerId = res.officerId;
             this.isLoading = false;
-            this.toastSrv.success('Collective Officer Updated Successfully')
-            this.location.back();
+            if (res && res.message) {
+              // Success response from backend
+              this.toastSrv.success(res.message);
+              this.location.back();
+            } else {
+              // Handle unexpected format
+              this.toastSrv.error('Something went wrong while updating.');
+            }
 
           },
           (error: any) => {
             this.isLoading = false;
-            this.toastSrv.error('There was an error creating the collective officer')
+            if (error.status === 409) {
+              this.toastSrv.error('NIC already exists for another collection officer');
+            } else if (error.status === 410) {
+              this.toastSrv.error('Email already exists for another collection officer');
+            } else if (error.status === 400) {
+              this.toastSrv.error('No file uploaded. Please attach required file(s).');
+            } else if (error.status === 500) {
+              this.toastSrv.error('Internal server error. Please try again later.');
+            } else {
+              this.toastSrv.error('An unexpected error occurred.');
+            }
 
           }
         );
@@ -402,17 +423,34 @@ export class EditOfficerComponent implements OnInit {
 
         this.ManageOficerSrv.CCHupdateCollectiveOfficer(this.personalData, this.editOfficerId, this.selectedImage, this.driverObj, this.licenseFrontImagePreview, this.licenseBackImagePreview, this.insurenceFrontImagePreview, this.insurenceBackImagePreview, this.vehicleFrontImagePreview, this.vehicleBackImagePreview, this.vehicleSideAImagePreview, this.vehicleSideBImagePreview).subscribe(
           (res: any) => {
-            this.officerId = res.officerId;
             this.isLoading = false;
-            this.toastSrv.success('Collective Officer Updated Successfully')
-            this.location.back();
 
+            if (res && res.message) {
+              // Success response from backend
+              this.toastSrv.success(res.message);
+              this.location.back();
+            } else {
+              // Handle unexpected format
+              this.toastSrv.error('Something went wrong while updating.');
+            }
           },
           (error: any) => {
             this.isLoading = false;
-            this.toastSrv.error('There was an error creating the collective officer')
 
+            if (error.status === 409) {
+              this.toastSrv.error('NIC already exists for another collection officer');
+            } else if (error.status === 410) {
+              this.toastSrv.error('Email already exists for another collection officer');
+            } else if (error.status === 400) {
+              this.toastSrv.error('No file uploaded. Please attach required file(s).');
+            } else if (error.status === 500) {
+              this.toastSrv.error('Internal server error. Please try again later.');
+            } else {
+              this.toastSrv.error('An unexpected error occurred.');
+            }
           }
+
+
         );
       }
 
@@ -430,7 +468,11 @@ export class EditOfficerComponent implements OnInit {
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
       confirmButtonText: 'Yes, Cancel it!',
-      cancelButtonText: 'No, Stay On Page'
+      cancelButtonText: 'No, Stay On Page',
+      customClass: {
+        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+        title: 'dark:text-white',
+      }
     }).then((result) => {
       if (result.isConfirmed) {
         this.toastSrv.warning('Officer Edit Canceled.')
@@ -501,7 +543,7 @@ export class EditOfficerComponent implements OnInit {
     // Only proceed if both banks and branches are loaded and we have existing data
     if (this.banks.length > 0 && Object.keys(this.allBranches).length > 0 &&
       this.personalData && this.personalData.bankName) {
-      
+
       // Find the bank ID that matches the existing bank name
       const matchedBank = this.banks.find(bank => bank.name === this.personalData.bankName);
 
@@ -519,7 +561,7 @@ export class EditOfficerComponent implements OnInit {
         }
       }
     }
-    
+
   }
 
 

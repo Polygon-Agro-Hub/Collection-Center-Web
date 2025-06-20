@@ -1,7 +1,7 @@
 <app-loading-spinner *ngIf="isLoading" />
 
 <div *ngIf="!isLoading"
-    class="flex flex-row items-center gap-6 font-semibold text[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
+    class="flex flex-row items-center gap-6 font-semibold text-[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
     <p onclick="history.back()">Manage Officers</p>
     <p>Add Officer</p>
 </div>
@@ -338,13 +338,17 @@
                             class="text-red-500 text-sm mt-1">
                             Phone Number must be exactly 9 digits.
                         </div>
+
+                        <div *ngIf="personalData.phoneNumber02 && personalData.phoneNumber02 === personalData.phoneNumber01" class="text-red-500 text-sm mt-1">
+                            Phone Number - 2 should be different from Phone Number - 1.
+                          </div>
                     </div>
 
                     <div>
                         <label for="nic" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">NIC
                             Number</label>
                         <input id="nic" name="nic" [(ngModel)]="personalData.nic" #nicInput="ngModel" required
-                            pattern="^\d{9}[Vv]|\d{12}$"
+                            pattern="^(\d{9}[Vv]|\d{12})$"
                             class="mt-1 block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
                         <div *ngIf="nicInput.touched && !personalData.nic" class="text-red-500 text-sm mt-1">
                             <div> NIC is required</div>
@@ -379,7 +383,7 @@
                     <button type="button"
                         class="px-6 py-2 bg-[#F6F7F9] border-gray-400 border-[2px] text-[#6B7D8C] rounded-lg mr-2"
                         (click)="onCancel()">Cancel</button>
-                    <button (click)="!PageOneForm.invalid ? nextForm('pageTwo') :  nextForm('pageOne')" type="submit"
+                    <button (click)="!PageOneForm.invalid && personalData.phoneNumber02 !== personalData.phoneNumber01  ? nextForm('pageTwo') :  nextForm('pageOne')" type="submit"
                         class="px-6 py-1 bg-[#415CFF] text-white rounded-lg">Next</button>
                 </div>
 
@@ -392,13 +396,13 @@
 
         <div *ngIf="selectedPage === 'pageTwo'">
 
-            <h2 class="text-xl mb-6 text-textLight dark:text-textDark font-semibold">Residential Details</h2>
+            <h2 class="text-xl mb-6 text-[#292929] dark:text-textDark font-semibold">Residential Details</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-4 mb-4">
                 <div>
                     <label for="house" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">House /
                         Plot Number</label>
                     <input id="houseNumber" name="houseNumber" [(ngModel)]="personalData.houseNumber"
-                        class="mt-1 block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+                        class="mt-1 block w-full p-2 border border-[#D9D9D9] hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                         #houseNumberInput="ngModel" required />
                     <div *ngIf="houseNumberInput.touched && !personalData.houseNumber"
                         class="text-red-500 text-sm mt-1">
@@ -410,7 +414,7 @@
                     <label for="street" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Street
                         Name</label>
                     <input id="streetName" name="streetName" [(ngModel)]="personalData.streetName"
-                        class="mt-1 block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+                        class="mt-1 block w-full p-2 border border-[#D9D9D9] hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                         #streetNameInput="ngModel" required />
                     <div *ngIf="streetNameInput.touched && !personalData.streetName" class="text-red-500 text-sm mt-1">
                         <div>Street Name is required</div>
@@ -420,11 +424,28 @@
                 <div>
                     <label for="city" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">City</label>
                     <input id="city" name="city" [(ngModel)]="personalData.city"
-                        class="mt-1 block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+                        class="mt-1 block w-full p-2 border border-[#D9D9D9] hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                         #cityInput="ngModel" required />
                     <div *ngIf="cityInput.touched && !personalData.city" class="text-red-500 text-sm mt-1">
                         <div>City is required</div>
                     </div>
+                    
+                </div>
+
+                <div>
+                    <label for="country"
+                        class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Country</label>
+                    <input id="country" name="country" [(ngModel)]="personalData.country" readonly
+                        class="mt-1 block w-full p-2 border border-[#D9D9D9] hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
+                </div>
+
+                <div>
+                    <label for="province" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
+                        Province
+                    </label>
+                    <input id="province" name="province" [(ngModel)]="personalData.province"
+                        class="mt-1 block w-full p-2 border border-[#D9D9D9] hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+                        readonly />
                 </div>
 
                 <div>
@@ -433,7 +454,7 @@
                     </label>
                     <select id="district" name="district" [(ngModel)]="personalData.district" #districtInput="ngModel"
                         required (change)="updateProvince($event)"
-                        class="mt-1 block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]">
+                        class="mt-1 block w-full p-2 border border-[#D9D9D9] hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]">
                         <option value="" disabled selected>Select a district</option>
                         <option *ngFor="let district of districts" [value]="district.name">
                             {{ district.name }}
@@ -444,31 +465,17 @@
                     </div>
                 </div>
 
-                <div>
-                    <label for="province" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
-                        Province
-                    </label>
-                    <input id="province" name="province" [(ngModel)]="personalData.province"
-                        class="mt-1 block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                        readonly />
-                </div>
-
-                <div>
-                    <label for="country"
-                        class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Country</label>
-                    <input id="country" name="country" [(ngModel)]="personalData.country" readonly
-                        class="mt-1 block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
-                </div>
+                
             </div>
 
             <div class="mt-24">
-                <h2 class="text-xl mb-6 text-textLight dark:text-textDark font-semibold">Add Bank Details</h2>
+                <h2 class="text-xl mb-6 text-[#292929] dark:text-textDark font-semibold">Add Bank Details</h2>
                 <div class="pb-6 pl-8">
                     <label for="accHolderName"
                         class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Account
                         Holder’s Name</label>
                     <input id="accHolderName" name="accHolderName" [(ngModel)]="personalData.accHolderName"
-                        class="mt-1 block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+                        class="mt-1 block w-full p-2 border border-[#D9D9D9] hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                         #accHolderNameInput="ngModel" required />
                     <div *ngIf="accHolderNameInput.touched && !personalData.accHolderName"
                         class="text-red-500 text-sm mt-1">
@@ -480,7 +487,7 @@
                     <label for="accNumber" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Account
                         Number</label>
                     <input type="number" id="accNumber" name="accNumber" [(ngModel)]="personalData.accNumber"
-                        class="mt-1 block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+                        class="mt-1 block w-full p-2 border border-[#D9D9D9] hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                         #accNumberInput="ngModel" required />
                     <div *ngIf="accNumberInput.touched && !personalData.accNumber" class="text-red-500 text-sm mt-1">
                         <div>Account Number is required</div>
@@ -491,7 +498,7 @@
                     <label for="accNumber" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Confirm
                         Account Number</label>
                     <input type="number" id="accNumber" name="accNumber" [(ngModel)]="personalData.conformAccNumber"
-                        class="mt-1 block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+                        class="mt-1 block w-full p-2 border border-[#D9D9D9] hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                         #conformAccNumberInput="ngModel" required />
                     <div *ngIf="conformAccNumberInput.touched && !personalData.conformAccNumber"
                         class="text-red-500 text-sm mt-1">
@@ -508,8 +515,8 @@
                         Bank Name
                     </label>
                     <select id="bankDropdown" name="bankDropdown" [(ngModel)]="selectedBankId" (change)="onBankChange()"
-                        class="mt-1 block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]">
-                        <option [ngValue]="null" disabled>Select a bank</option>
+                        class="mt-1 block w-full p-2 border border-[#D9D9D9] hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]">
+                        <option [ngValue]="null" disabled></option>
                         <option *ngFor="let bank of banks" [ngValue]="bank.ID">
                             {{ bank.name }}
                         </option>
@@ -525,8 +532,8 @@
                     </label>
                     <select id="branchDropdown" name="branchDropdown" [(ngModel)]="selectedBranchId"
                         (change)="onBranchChange()" [disabled]="!selectedBankId"
-                        class="mt-1 block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]">
-                        <option [ngValue]="null" disabled>Select a branch</option>
+                        class="mt-1 block w-full p-2 border border-[#D9D9D9] hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]">
+                        <option [ngValue]="null" disabled></option>
                         <option *ngFor="let branch of branches" [ngValue]="branch.ID">
                             {{ branch.name }}
                         </option>
@@ -539,8 +546,8 @@
 
             <div class="flex justify-end m-10">
                 <button (click)="nextForm('pageOne')" type="button"
-                    class="px-6 py-2 bg-[#F6F7F9] border-gray-400 border-[2px] text-[#6B7D8C] rounded-lg mr-2">Back</button>
-                <button type="submit" class="px-6 py-1 bg-[#415CFF] text-white rounded-lg"
+                    class="px-6 py-2 bg-[#F6F7F9] border-[#95A1AC] border-[2px] text-[#6B7D8C] rounded-lg mr-2">Back</button>
+                <button type="submit" class="px-6 py-1 bg-[#415CFF] text-[#FFFFFF] rounded-lg"
                     (click)="(!PageTwoForm.invalid && personalData.jobRole !== 'Driver') ? onSubmit() : (!PageTwoForm.invalid && personalData.jobRole === 'Driver') ? nextForm('pageThree') : nextForm('pageTwo')">
                     <span *ngIf="personalData.jobRole ==='Driver'">Next</span>
                     <span *ngIf="personalData.jobRole !=='Driver'">Sent to Approve</span>

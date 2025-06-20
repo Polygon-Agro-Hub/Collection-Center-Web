@@ -1,7 +1,7 @@
 <app-loading-spinner *ngIf="isLoading" />
 
 <div *ngIf="!isLoading"
-    class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-8 mx-5 cursor-pointer">
+    class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
     <p>Centre Target</p>
 </div>
 
@@ -43,28 +43,45 @@
                 <p class="text-lg">Filter By</p>
 
 
-                <div class="relative w-52">
-                    <div
-                        class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
-                        <select [(ngModel)]="selectStatus" (change)="filterStatus()"
-                            class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer">
-                            <option value="" selected disabled>Status</option>
+                <div class="relative w-40 custom-status-dropdown-container">
+                    <!-- Hidden native select -->
+                    <select [(ngModel)]="selectStatus" class="hidden" (change)="filterStatus()">
+                        <option value="" selected disabled>Status</option>
                             <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
                                 value="Pending">Pending</option>
                             <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
                                 value="Completed">Completed</option>
-                        </select>
-
-                        <!-- Down arrow icon -->
-                        <div *ngIf="!selectStatus"
-                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
-                            <i class="fa-solid fa-angle-down text-lg mr-3"></i>
+                    </select>
+        
+                    <!-- Custom dropdown trigger -->
+                    <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
+                        (click)="toggleStatusDropdown()">
+                        <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
+                            <span>{{ selectStatus || 'Status' }}</span>
+                            <div class="flex items-center">
+                                <!-- X icon (shown ONLY when option is selected) -->
+                                <i *ngIf="selectStatus" (click)="cancelStatus($event)"
+                                    class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
+        
+                                <!-- Arrow icon (shown when EITHER: dropdown is open OR no selection exists) -->
+                                <i *ngIf="isStatusDropdownOpen || !selectStatus"
+                                    class="fa-solid text-lg text-[#828282] transition-transform duration-200"
+                                    [class.fa-angle-down]="!isStatusDropdownOpen"
+                                    [class.fa-angle-up]="isStatusDropdownOpen"></i>
+                            </div>
                         </div>
-
-                        <!-- Cancel icon -->
-                        <div (click)="cancelStatus()" *ngIf="selectStatus"
-                            class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300 cursor-pointer z-10">
-                            <i class="fa-solid fa-xmark text-lg mr-3"></i>
+                    </div>
+        
+                    <!-- Custom dropdown options -->
+                    <div *ngIf="isStatusDropdownOpen"
+                        class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
+                        <div class="py-1">
+                            <div *ngFor="let option of statusDropdownOptions" (click)="selectStatusOption(option)"
+                                class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
+                                <span class="flex-grow">{{ option }}</span>
+                                <i
+                                    class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -111,7 +128,7 @@
                         <th class="px-6 py-3 text-left font-medium">Target (kg)</th>
                         <th class="px-6 py-3 text-left font-medium">Completed (kg)</th>
                         <th class="px-6 py-3 text-center font-medium">Status</th>
-                        <th class="px-6 py-3 text-left font-medium">Ends At</th>
+                        <!-- <th class="px-6 py-3 text-left font-medium">Ends At</th> -->
                         <!-- <th class="px-6 py-3 text-left font-medium">Validity</th> -->
                     </tr>
                 </thead>
@@ -141,12 +158,12 @@
                                 Completed
                             </span>
                         </td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
+                        <!-- <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
                             <div class="flex flex-col items-start justify-start">
                                 <p class="text-sm text-[#646464]">{{formatDate(item.date)}}</p>
-                                <!-- <p class="text-sm text-[#646464] my-1">{{formatTime(item.toTime) }}</p> -->
+                                <p class="text-sm text-[#646464] my-1">{{formatTime(item.toTime) }}</p>
                             </div>
-                        </td>
+                        </td> -->
                         <!-- <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
                             <span *ngIf="checkValidity(item.toDate) === 'Active'"
                                 class="bg-[#B7FFBE] text-[#02BB3D] text-center rounded-lg px-4 py-1">
@@ -177,32 +194,47 @@
             <p class="text-lg dark:text-white">Filter By</p>
 
 
-
-            <div class="relative w-52">
-                <div
-                    class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
-                    <select [(ngModel)]="selectAssignStatus" (change)="filterAssignStatus()"
-                        class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer">
-                        <option value="" selected disabled>Status</option>
+            <div class="relative w-40 custom-assign-status-dropdown-container">
+                <!-- Hidden native select -->
+                <select [(ngModel)]="selectAssignStatus" class="hidden" (change)="filterAssignStatus()">
+                    
                         <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
                             value="Updated">Updated</option>
                             <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
                             value="Assigned">Assigned</option>
                         <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
                             value="Not Assigned">Not Assigned</option>
-                        
-                    </select>
-
-                    <!-- Down arrow icon -->
-                    <div *ngIf="!selectAssignStatus"
-                        class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
-                        <i class="fa-solid fa-angle-down text-lg mr-3"></i>
+                </select>
+    
+                <!-- Custom dropdown trigger -->
+                <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
+                    (click)="toggleAssignStatusDropdown()">
+                    <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
+                        <span>{{ selectAssignStatus || 'Assign Status' }}</span>
+                        <div class="flex items-center">
+                            <!-- X icon (shown ONLY when option is selected) -->
+                            <i *ngIf="selectAssignStatus" (click)="cancelAssignStatus($event)"
+                                class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
+    
+                            <!-- Arrow icon (shown when EITHER: dropdown is open OR no selection exists) -->
+                            <i *ngIf="isAssignStatusDropdownOpen || !selectAssignStatus"
+                                class="fa-solid text-lg text-[#828282] transition-transform duration-200"
+                                [class.fa-angle-down]="!isAssignStatusDropdownOpen"
+                                [class.fa-angle-up]="isAssignStatusDropdownOpen"></i>
+                        </div>
                     </div>
-
-                    <!-- Cancel icon -->
-                    <div (click)="cancelAssignStatus()" *ngIf="selectAssignStatus"
-                        class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300 cursor-pointer z-10">
-                        <i class="fa-solid fa-xmark text-lg mr-3"></i>
+                </div>
+    
+                <!-- Custom dropdown options -->
+                <div *ngIf="isAssignStatusDropdownOpen"
+                    class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
+                    <div class="py-1">
+                        <div *ngFor="let option of assignStatusDropdownOptions" (click)="selectAssignStatusOption(option)"
+                            class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
+                            <span class="flex-grow">{{ option }}</span>
+                            <i
+                                class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
+                        </div>
                     </div>
                 </div>
             </div>

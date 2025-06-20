@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
@@ -30,7 +30,34 @@ export class PriceRequestComponent implements OnInit {
   selectStatus: string = '';
   today!: string;
   isPopupVisible: boolean = false
-  isLoading:boolean = true;
+  isLoading: boolean = false;
+
+  isStatusDropdownOpen = false;
+  statusDropdownOptions = ['Pending', 'Approved', 'Rejected'];
+
+  toggleStatusDropdown() {
+    this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
+  }
+
+  selectStatusOption(option: string) {
+    this.selectStatus = option;
+    this.isStatusDropdownOpen = false;
+    this.filterStatus();
+  }
+
+
+  isGradeDropdownOpen = false;
+  gradeDropdownOptions = ['A', 'B', 'C'];
+
+  toggleGradeDropdown() {
+    this.isGradeDropdownOpen = !this.isGradeDropdownOpen;
+  }
+
+  selectGradeOption(option: string) {
+    this.selectGrade = option;
+    this.isGradeDropdownOpen = false;
+    this.filterGrade();
+  }
 
   constructor(
     private router: Router,
@@ -43,15 +70,37 @@ export class PriceRequestComponent implements OnInit {
     this.fetchAllRequestPrice()
   }
 
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
+    const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
+
+    const gradeDropdownElement = document.querySelector('.custom-grade-dropdown-container');
+    const roleDropdownClickedInside = gradeDropdownElement?.contains(event.target as Node);
+
+    if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
+      this.isStatusDropdownOpen = false;
+    }
+
+    if (!roleDropdownClickedInside && this.isGradeDropdownOpen) {
+      this.isGradeDropdownOpen = false;
+    }
+
+  }
+
   fetchAllRequestPrice(page: number = 1, limit: number = this.itemsPerPage, grade: string = this.selectGrade, status: string = '', search: string = this.searchText) {
+    this.isLoading = true;
     this.PriceListSrv.getAllRequestPrice(page, limit, grade, status, search).subscribe(
       (res) => {
         this.reqPriceArr = res.items;
         this.totalItems = res.total;
-        
+        console.log(res)
+        console.log(res.items)
+
+
         if (res.items.length === 0) {
           this.hasData = false;
-        }else{
+        } else {
           this.hasData = true;
 
         }
@@ -70,24 +119,27 @@ export class PriceRequestComponent implements OnInit {
 
     // HTML structure for the popup
     const tableHtml = `
-        <div class="container mx-auto">
-          <h1 class="text-center text-2xl font-bold mb-4">Crop Name : ${item.cropNameEnglish}</h1>
-          <h2 class="text-center text-2xl font-bold mb-4">Crop Veriety : ${item.varietyNameEnglish}</h2>
-          <h2 class="text-center text-2xl font-bold mb-4">Request Price : Rs.${item.requestPrice}/=</h2>
-          <div >
-            <p class="text-center">Are you sure you want to approve or reject this request?</p>
-          </div>
-          <div class="flex justify-center mt-4">
-            <button id="rejectButton" class="bg-red-500 text-white px-6 py-2 rounded-lg mr-2">Reject</button>
-            <button id="approveButton" class="bg-green-500 text-white px-4 py-2 rounded-lg">Approve</button>
-          </div>
-        </div>
-      `;
+  <div class="container mx-auto bg-white dark:bg-[#363636] text-gray-800 dark:text-white p-4 rounded-lg">
+    <h1 class="text-center text-2xl font-bold mb-4 dark:text-white">Crop Name : ${item.cropNameEnglish}</h1>
+    <h2 class="text-center text-2xl font-bold mb-4 dark:text-white">Crop Veriety : ${item.varietyNameEnglish}</h2>
+    <h2 class="text-center text-2xl font-bold mb-4 dark:text-white">Request Price : Rs.${item.requestPrice}/=</h2>
+    <div>
+      <p class="text-center">Are you sure you want to approve or reject this request?</p>
+    </div>
+    <div class="flex justify-center mt-4">
+      <button id="rejectButton" class="bg-red-500 text-white px-6 py-2 rounded-lg mr-2">Reject</button>
+      <button id="approveButton" class="bg-green-500 text-white px-4 py-2 rounded-lg">Approve</button>
+    </div>
+  </div>
+`;
 
     Swal.fire({
       html: tableHtml,
-      showConfirmButton: false, // Hide default confirm button
+      showConfirmButton: false,
       width: 'auto',
+      customClass: {
+        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white', // 👈 Outer popup styling
+      },
       didOpen: () => {
         document
           .getElementById('approveButton')
@@ -106,7 +158,7 @@ export class PriceRequestComponent implements OnInit {
                   });
                   this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade, this.selectStatus, this.searchText);
                 } else {
-                this.isLoading = false;
+                  this.isLoading = false;
                   Swal.fire({
                     icon: 'error',
                     title: 'Error!',
@@ -146,7 +198,7 @@ export class PriceRequestComponent implements OnInit {
                   });
                   this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade, this.selectStatus, this.searchText);
                 } else {
-                this.isLoading = false;
+                  this.isLoading = false;
                   Swal.fire({
                     icon: 'error',
                     title: 'Error!',
@@ -181,22 +233,36 @@ export class PriceRequestComponent implements OnInit {
     this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade, this.selectStatus, this.searchText);
   }
 
-  cancelGrade() {
-    this.selectGrade = '';
-    this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade);
-  }
+  // cancelGrade() {
+  //   this.selectGrade = '';
+  //   this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade);
+  // }
 
   filterGrade() {
-    this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade);
+    this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade, this.selectStatus, this.searchText);
   }
 
-  cancelStatus() {
+  cancelGrade(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
+    this.selectGrade = '';
+    this.isGradeDropdownOpen = false;
+    this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade, this.selectStatus, this.searchText);
+  }
+
+
+  cancelStatus(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
     this.selectStatus = '';
-    this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade, this.selectStatus);
+    this.isStatusDropdownOpen = false;
+    this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade, this.selectStatus, this.searchText);
   }
 
   filterStatus() {
-    this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade, this.selectStatus);
+    this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade, this.selectStatus, this.searchText);
   }
 
   navigate(path: string) {

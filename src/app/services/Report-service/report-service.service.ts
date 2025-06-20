@@ -16,6 +16,7 @@ export class ReportServiceService {
   }
 
   getAllCollectionReport(role: string, page: number = 1, limit: number = 10, searchText: string = '', centerId:string=''): Observable<any> {
+    console.log('this is seacrch', searchText)
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
@@ -116,6 +117,7 @@ export class ReportServiceService {
   }
 
   getAllPayments(
+    
     page: number = 1,
     limit: number = 10,
     fromDate: Date | string = '',
@@ -127,7 +129,7 @@ export class ReportServiceService {
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
     });
-
+    console.log('to', toDate, 'from', fromDate, 'saerch', searchText);
     // Base URL with date range
     let url = `${this.apiUrl}/get-all-payments?page=${page}&limit=${limit}&fromDate=${fromDate}&toDate=${toDate}`;
 

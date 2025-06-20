@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { ComplaintsService } from '../../../../services/Complaints-Service/complaints.service';
 import { CommonModule, DatePipe } from '@angular/common';
@@ -30,6 +30,19 @@ export class ReceviedComplaintsComponent implements OnInit {
   hasData: boolean = true;
   isLoading: boolean = true;
 
+  isStatusDropdownOpen = false;
+  statusDropdownOptions = ['Assigned', 'Closed'];
+
+  toggleStatusDropdown() {
+    this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
+  }
+
+  selectStatusOption(option: string) {
+    this.selectStatus = option;
+    this.isStatusDropdownOpen = false;
+    this.filterStatus();
+  }
+
 
   constructor(
     private router: Router,
@@ -39,6 +52,17 @@ export class ReceviedComplaintsComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchAllreciveComplaint();
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
+    const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
+
+    if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
+      this.isStatusDropdownOpen = false;
+    }
+
   }
 
   fetchAllreciveComplaint(page: number = 1, limit: number = this.itemsPerPage, status: string = this.selectStatus, search: string = this.searchText) {
@@ -94,8 +118,12 @@ export class ReceviedComplaintsComponent implements OnInit {
     this.fetchAllreciveComplaint();
   }
 
-  cancelStatus() {
+  cancelStatus(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
     this.selectStatus = '';
+    this.isStatusDropdownOpen = false;
     this.fetchAllreciveComplaint();
   }
 

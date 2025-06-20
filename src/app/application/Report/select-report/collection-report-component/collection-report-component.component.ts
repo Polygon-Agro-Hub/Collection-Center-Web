@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { CommonModule } from '@angular/common';
@@ -32,6 +32,19 @@ export class CollectionReportComponentComponent implements OnInit {
   logingRole: string | null = null;
   isLoading: boolean = true;
 
+  isCenterDropdownOpen = false;
+  centerDropdownOptions = [];
+
+  toggleCenterDropdown() {
+    this.isCenterDropdownOpen = !this.isCenterDropdownOpen;
+  }
+
+  selectCenterOption(center: Center) {
+    this.selectCenters = center.id.toString(); // convert id to string
+    this.isCenterDropdownOpen = false;
+    this.applyCompanyFilters();
+  }
+
 
   constructor(
     private router: Router,
@@ -48,6 +61,17 @@ export class CollectionReportComponentComponent implements OnInit {
       this.getAllCenters();
     }
     this.fetchAllOfficers();
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+
+    const centerDropdownElement = document.querySelector('.custom-center-dropdown-container');
+    const centerDropdownClickedInside = centerDropdownElement?.contains(event.target as Node);
+
+    if (!centerDropdownClickedInside && this.isCenterDropdownOpen) {
+      this.isCenterDropdownOpen = false;
+    }
   }
 
   fetchAllOfficers(page: number = 1, limit: number = this.itemsPerPage, searchText: string = '', centerId: string = this.selectCenters) {
@@ -115,9 +139,18 @@ export class CollectionReportComponentComponent implements OnInit {
     this.fetchAllOfficers();
   }
 
-  clearCompanyFilter() {
+  clearCompanyFilter(event: MouseEvent) {
+    event.stopPropagation();
     this.selectCenters = '';
     this.fetchAllOfficers();
+  }
+
+
+  get selectedCenterDisplay(): string {
+    if (!this.selectCenters) return 'Centers';
+    
+    const selectedCenter = this.centerArr.find(center => center.id.toString() === this.selectCenters);
+    return selectedCenter ? `${selectedCenter.regCode} - ${selectedCenter.centerName}` : 'Centers';
   }
 
 }

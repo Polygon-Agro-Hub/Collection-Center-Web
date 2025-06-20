@@ -1,6 +1,6 @@
 // view-centers.component.ts
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
@@ -12,7 +12,7 @@ import { AddCenterComponent } from '../add-center/add-center.component';
 @Component({
     selector: 'app-view-centers',
     standalone: true,
-    imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, LoadingSpinnerComponent, AddCenterComponent],
+    imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, LoadingSpinnerComponent],
     templateUrl: './view-centers.component.html',
     styleUrl: './view-centers.component.css'
 })
@@ -27,8 +27,12 @@ export class ViewCentersComponent implements OnInit {
     countOfOfficers: number = 0;
 
     isLoading: boolean = true;
+    hasData: boolean = false;
 
     // Define all Sri Lanka provinces
+    isProvinceDropdownOpen = false;
+    isDistrictDropdownOpen = false;
+
     provinces: string[] = [
         'Western',
         'Central',
@@ -83,6 +87,24 @@ export class ViewCentersComponent implements OnInit {
         this.fetchAllCenterDetails();
     }
 
+    @HostListener('document:click', ['$event'])
+    onDocumentClick(event: MouseEvent) {
+        const provinceDropdownElement = document.querySelector('.custom-province-dropdown-container');
+        const proinceDropdownClickedInside = provinceDropdownElement?.contains(event.target as Node);
+
+        if (!proinceDropdownClickedInside && this.isProvinceDropdownOpen) {
+            this.isProvinceDropdownOpen = false;
+        }
+
+        const districtDropdownElement = document.querySelector('.custom-district-dropdown-container');
+        const districtDropdownClickedInside = districtDropdownElement?.contains(event.target as Node);
+
+        if (!districtDropdownClickedInside && this.isDistrictDropdownOpen) {
+            this.isDistrictDropdownOpen = false;
+        }
+
+    }
+
     fetchAllCenterDetails(province: string = this.selectProvince, district: string = this.selectDistrict, search: string = this.searchText) {
         this.isLoading = true;
         this.TargetSrv.getCenterDetails(this.currentPage, this.itemsPerPage, province, district, search).subscribe(
@@ -90,6 +112,7 @@ export class ViewCentersComponent implements OnInit {
                 this.itemsArr = res.items;
                 this.totalItems = res.totalItems;
                 this.countOfOfficers = res.items.length;
+                this.hasData = res.items.length > 0 ? true : false;
                 this.isLoading = false;
             }
         );
@@ -110,21 +133,57 @@ export class ViewCentersComponent implements OnInit {
         this.fetchAllCenterDetails();
     }
 
-    cancelProvince() {
+    toggleProvinceDropdown() {
+        this.isProvinceDropdownOpen = !this.isProvinceDropdownOpen;
+        // Close district dropdown when opening province dropdown
+        if (this.isProvinceDropdownOpen) {
+            this.isDistrictDropdownOpen = false;
+        }
+    }
+
+    selectProvinceOption(province: string) {
+        this.selectProvince = province;
+        this.isProvinceDropdownOpen = false;
+        this.filterProvince();
+    }
+
+    clearProvinceFilter(event?: MouseEvent) {
+        if (event) {
+            event.stopPropagation(); // Prevent triggering the dropdown toggle
+        }
         this.selectProvince = '';
         this.selectDistrict = ''; // Also clear district when province is cleared
         this.updateFilteredDistricts(); // Update district list
         this.fetchAllCenterDetails();
     }
 
-    filterProvince() {
-        this.selectDistrict = ''; // Clear district selection when province changes
-        this.updateFilteredDistricts(); // Update district list based on selected province
+    // District dropdown methods
+    toggleDistrictDropdown() {
+        this.isDistrictDropdownOpen = !this.isDistrictDropdownOpen;
+        // Close province dropdown when opening district dropdown
+        if (this.isDistrictDropdownOpen) {
+            this.isProvinceDropdownOpen = false;
+        }
+    }
+
+    selectDistrictOption(districtName: string) {
+        this.selectDistrict = districtName;
+        this.isDistrictDropdownOpen = false;
+        this.filterDistrict();
+    }
+
+    clearDistrictFilter(event?: MouseEvent) {
+        if (event) {
+            event.stopPropagation(); // Prevent triggering the dropdown toggle
+        }
+        this.selectDistrict = '';
         this.fetchAllCenterDetails();
     }
 
-    cancelDistrict() {
-        this.selectDistrict = '';
+    // Updated existing methods
+    filterProvince() {
+        this.selectDistrict = ''; // Clear district selection when province changes
+        this.updateFilteredDistricts(); // Update district list based on selected province
         this.fetchAllCenterDetails();
     }
 
@@ -148,6 +207,15 @@ export class ViewCentersComponent implements OnInit {
         } else {
             this.filteredDistricts = this.allDistricts;
         }
+    }
+
+    // Legacy methods (kept for compatibility, but now called by new methods)
+    cancelProvince() {
+        this.clearProvinceFilter();
+    }
+
+    cancelDistrict() {
+        this.clearDistrictFilter();
     }
 
     getTotalPages(): number {

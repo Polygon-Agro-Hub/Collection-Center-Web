@@ -2,7 +2,7 @@
 
 
 <div *ngIf="!isLoading"
-  class="flex flex-row items-center gap-6 font-semibold text[#424242] dark:text-white mb-5 mx-5 cursor-pointer">
+  class="flex flex-row items-center gap-6 font-semibold text[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
   <p onclick="history.back()"> Manage Officers</p>
   <p>Claim Officer</p>
 </div>
@@ -18,14 +18,14 @@
         Select Job Role
       </label>
       <select id="jobRole" [(ngModel)]="selectJobRole" name="selectJobRole" placeholder="select"
-        class="form-control mt-1 block w-full p-2 text-gray-700 dark:text-gray-300 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-100 dark:bg-gray-800 appearance-none focus:ring-indigo-500 focus:border-indigo-500">
-        <option disabled selected value="" class="p-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800">
+        class="form-control mt-1 block w-full p-2  border border-gray-300 dark:border-gray-600 rounded-md text-[#534E4E] bg-gray-200 dark:text-textDark  dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500">
+        <option disabled selected value="" class="p-2 text-[#534E4E] bg-gray-200 dark:text-textDark  dark:bg-[#1D1D1F]">
           --Select Job Role--
         </option>
-        <option value="Collection Officer" class="p-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800">
+        <option value="Collection Officer" class="p-2 text-[#534E4E] bg-gray-200 dark:text-textDark dark:bg-[#1D1D1F]">
           Collection Officer
         </option>
-        <option value="Customer Officer" class="p-2 text-gray-700 dark:text-gray-300 bg-gray-100 dark:bg-gray-800">
+        <option value="Customer Officer" class="p-2 text-[#534E4E] bg-gray-200 dark:text-textDark dark:bg-[#1D1D1F]">
           Customer Officer
         </option>
       </select>
@@ -35,13 +35,13 @@
       <label class="block font-medium text-gray-700 dark:text-textDark">EMP ID / User name</label>
       <div class="flex mt-1">
         <span
-          class="inline-flex h-fit items-center px-3 py-2  text-[#534E4E] bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-gray-600 dark:text-gray-400 dark:border-gray-600">
+          class="inline-flex h-fit items-center px-3 py-2  text-[#534E4E] bg-gray-200 border border-e-0 border-gray-300 dark:border-gray-600 rounded-s-md dark:text-textDark  dark:bg-[#1D1D1F]">
           <p *ngIf="selectJobRole === ''" class="text-lg"> ---</p>
           <p *ngIf="selectJobRole === 'Collection Officer'">COO</p>
           <p *ngIf="selectJobRole === 'Customer Officer'">CUO</p>
         </span>
         <input type="text" [(ngModel)]="inputId" name="inputId" placeholder="ex : 0122"
-          class="rounded-none rounded-e-lg placeholder:text bg-gray-50 border border-gray-300 text-[#534E4E] focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full  pl-4 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" />
+          class="rounded-none rounded-e-lg placeholder:text bg-gray-50 border border-gray-300 dark:border-gray-600 text-[#534E4E] focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full  pl-4 dark:text-textDark  dark:bg-[#1D1D1F] dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" />
       </div>
     </div>
   </div>
@@ -86,7 +86,7 @@
   <hr *ngIf="hasData" class="border-gray-300 border-[1px] my-8" />
 
   <div *ngIf="hasData"
-    class="flex flex-col items-center w-full h-screen px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg mt-6">
+    class="flex flex-col items-center w-full h-screen px-10 py-7 bg-tileLight dark:bg-[#363636] mt-6">
     <p class="text-[#494949] my-6 dark:text-white">
       --No User available by this EMPID--
     </p>

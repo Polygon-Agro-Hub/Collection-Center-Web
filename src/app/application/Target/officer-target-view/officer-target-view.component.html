@@ -1,4 +1,4 @@
-<div class="flex flex-row pt-0 mb-7 gap-5 cursor-pointer">
+<div class="flex flex-row pt-0 mb-4 mr-5 ml-0 gap-5 cursor-pointer">
     <p class="font-semibold text-[#424242] dark:text-white">Officer Targets</p>
     <!-- <p class="font-semibold text-sm text-[#424242] dark:text-white" onclick="history.back()">Center Dashboard</p> -->
 </div>
@@ -7,7 +7,7 @@
 <app-loading-spinner *ngIf="isLoading"/>
 
 
-<div class="w-full px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg">
+<div class="w-full px-10 py-7 bg-tileLight shadow-lg rounded-lg dark:bg-[#363636]">
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">
         <div>
             <label for="jobRole" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
@@ -15,8 +15,8 @@
             </label>
             <select id="jobRole" name="jobRole" placeholder="select" required [(ngModel)]="OfficerObj.jobRole"
                 class="form-control mt-1 block w-full p-2 text-[#030308] dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500">
-                <option disabled class="p-2 text-[#534E4E] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]" value="">
-                    -- select --
+                <option disabled class="p-2 text-[#959595] italic dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]" value="">
+                    -- Select Job Role --
                 </option>
                 <option selected value="Collection Center Manager"
                     class="p-2 text-[#030308] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
@@ -31,10 +31,6 @@
                     Customer Officer
                 </option>
             </select>
-            <!-- Error: Required Field -->
-            <!-- <div *ngIf="jobRoleInput.touched && !personalData.jobRole" class="text-red-500 text-sm mt-1">
-                <div>Job Role is required</div>
-            </div> -->
         </div>
 
 
@@ -48,7 +44,7 @@
                     <p *ngIf="OfficerObj.jobRole === 'Collection Officer'">COO</p>
                     <p *ngIf="OfficerObj.jobRole === 'Customer Officer'">CUO</p>
                 </span>
-                <input type="text" name="officerId" [(ngModel)]="OfficerObj.officerId"
+                <input type="text" name="officerId" [(ngModel)]="OfficerObj.officerId" placeholder="ex : 00122"
                     class="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm pl-4  dark:bg-[#1D1D1F]  dark:placeholder-gray-400 dark:text-textDark dark:focus:ring-blue-500 dark:focus:border-blue-500">
             </div>
         </div>
@@ -60,13 +56,13 @@
         <div>
             <label for="fromDate" class="block text-sm font-medium text-gray-700 dark:text-textDark">From</label>
             <input id="fromDate" name="fromDate" type="date" [(ngModel)]="OfficerObj.fromDate"
-                class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
+                class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F] custom-date-input" />
         </div>
 
         <div>
             <label for="toDate" class="block text-sm font-medium text-gray-700 dark:text-textDark">TO</label>
             <input id="toDate" name="toDate" type="date" [(ngModel)]="OfficerObj.toDate" (change)="checkToDate()"
-                class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
+                class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F] custom-date-input" />
         </div>
     </div>
 
@@ -76,8 +72,8 @@
 </div>
 
 
-<div *ngIf="!hasData"
-    class="flex flex-col items-center w-full min-h-screen px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg mt-6">
+<div *ngIf="!hasData "
+    class="flex flex-col items-center w-full min-h-screen px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg mt-6">
     <p class="text-[#494949] my-6 dark:text-white">
         {{responseTitle}}
     </p>
@@ -86,7 +82,7 @@
 
 
 
-<div *ngIf="hasData" class="w-full overflow-x-auto px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg mt-8">
+<div *ngIf="hasData" class="w-full overflow-x-auto px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg mt-8">
 
     <div class="">
         <p class="font-semibold mb-1 text-lg dark:text-white whitespace-nowrap">

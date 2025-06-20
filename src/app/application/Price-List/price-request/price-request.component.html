@@ -2,13 +2,13 @@
 
 
 <div *ngIf="!isLoading">
-    <p class="font-semibold text[#424242] mb-8 mx-5 dark:text-[#FFFFFF] dark:bg-black">Price Update Requests</p>
+    <p class="font-semibold text[#424242] mb-4 mr-5 ml-0 dark:text-[#FFFFFF] dark:bg-black">Price Update Requests</p>
 
 
     <div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg overflow-x-auto">
         <div class="flex flex-row items-center justify-between">
             <div class="flex flex-col justify-between">
-                <p class="font-semibold text-lg mb-1 dark:text-white">Market Price on {{today}}</p>
+                <p class="font-semibold text-lg mb-1 dark:text-white">Price Update Requests on {{today}}</p>
             </div>
             <div class="flex flex-row items-center gap-8 ">
                 <i class="fa-solid fa-list text-2xl dark:text-white ml-8"></i>
@@ -42,7 +42,7 @@
 
 
 
-                <div class="relative w-52">
+                <!-- <div class="relative w-52">
                     <div
                         class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
                         <select [(ngModel)]="selectGrade" (change)="filterGrade()"
@@ -56,16 +56,60 @@
                                 value="C">C</option>
                         </select>
 
-                        <!-- Down arrow icon -->
+                        
                         <div *ngIf="!selectGrade"
                             class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
                             <i class="fa-solid fa-angle-down text-lg mr-3"></i>
                         </div>
 
-                        <!-- Cancel icon -->
+                        
                         <div (click)="cancelGrade()" *ngIf="selectGrade"
                             class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300 cursor-pointer z-10">
                             <i class="fa-solid fa-xmark text-lg mr-3"></i>
+                        </div>
+                    </div>
+                </div> -->
+
+                <div class="relative w-36 custom-grade-dropdown-container">
+                    <!-- Hidden native select -->
+                    <select [(ngModel)]="selectGrade" class="hidden" (change)="filterGrade()">
+                        <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                                value="A">A</option>
+                            <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                                value="B">B</option>
+                            <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                                value="C">C</option>
+                    </select>
+
+                    <!-- Custom dropdown trigger -->
+                    <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
+                        (click)="toggleGradeDropdown()">
+                        <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer ">
+                            <span>{{ selectGrade || 'Grade' }}</span>
+                            <div class="flex items-center ">
+                                <!-- X icon (shown ONLY when option is selected) -->
+                                <i *ngIf="selectGrade" (click)="cancelGrade($event)"
+                                    class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
+
+                                <!-- Arrow icon (shown when EITHER: dropdown is open OR no selection exists) -->
+                                <i *ngIf="isGradeDropdownOpen || !selectGrade"
+                                    class="fa-solid text-lg text-[#828282] transition-transform duration-200"
+                                    [class.fa-angle-down]="!isGradeDropdownOpen"
+                                    [class.fa-angle-up]="isGradeDropdownOpen"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Custom dropdown options -->
+                    <div *ngIf="isGradeDropdownOpen"
+                        class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
+                        <div class="py-1">
+                            <div *ngFor="let option of gradeDropdownOptions" (click)="selectGradeOption(option)"
+                                class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
+                                <span class="flex-grow">{{ option }}</span>
+                                <i
+                                    class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -103,7 +147,7 @@
 
 
 
-                <div class="relative w-52">
+                <!-- <div class="relative w-52">
                     <div
                         class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
                         <select [(ngModel)]="selectStatus" (change)="filterStatus()"
@@ -117,23 +161,68 @@
                                 value="Rejected	">Rejected</option>
                         </select>
 
-                        <!-- Down arrow icon -->
+                        
                         <div *ngIf="!selectStatus"
                             class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
                             <i class="fa-solid fa-angle-down text-lg mr-3"></i>
                         </div>
 
-                        <!-- Cancel icon -->
+                    
                         <div (click)="cancelStatus()" *ngIf="selectStatus"
                             class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300 cursor-pointer z-10">
                             <i class="fa-solid fa-xmark text-lg mr-3"></i>
+                        </div>
+                    </div>
+                </div> -->
+
+                <div class="relative w-36 custom-status-dropdown-container">
+                    <!-- Hidden native select -->
+                    <select [(ngModel)]="selectStatus" class="hidden" (change)="filterStatus()">
+                        <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                                value="Pending">Pending</option>
+                            <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                                value="Approved">Approved</option>
+                            <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                                value="Rejected	">Rejected</option>
+                    </select>
+
+                    <!-- Custom dropdown trigger -->
+                    <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
+                        (click)="toggleStatusDropdown()">
+                        <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer ">
+                            <span>{{ selectStatus || 'Status' }}</span>
+                            <div class="flex items-center ">
+                                <!-- X icon (shown ONLY when option is selected) -->
+                                <i *ngIf="selectStatus" (click)="cancelStatus($event)"
+                                    class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
+
+                                <!-- Arrow icon (shown when EITHER: dropdown is open OR no selection exists) -->
+                                <i *ngIf="isStatusDropdownOpen || !selectStatus"
+                                    class="fa-solid text-lg text-[#828282] transition-transform duration-200"
+                                    [class.fa-angle-down]="!isStatusDropdownOpen"
+                                    [class.fa-angle-up]="isStatusDropdownOpen"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Custom dropdown options -->
+                    <div *ngIf="isStatusDropdownOpen"
+                        class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
+                        <div class="py-1">
+                            <div *ngFor="let option of statusDropdownOptions" (click)="selectStatusOption(option)"
+                                class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
+                                <span class="flex-grow">{{ option }}</span>
+                                <i
+                                    class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
+                            </div>
                         </div>
                     </div>
                 </div>
 
 
                 <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
-                    <input type="text" placeholder="Search by Crop / Variety name.." [(ngModel)]="searchText"
+                    <input type="text" placeholder="Search by Crop / Variety name.." [(ngModel)]="searchText" (keyup.enter)="onSearch()"
+                    (keyup.esc)="offSearch()"
                         class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
                     <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                         (click)="onSearch()">
@@ -166,7 +255,7 @@
         <div *ngIf="hasData"
             class="min-w-max mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
             <table class="w-full min-w-max divide-y-2 overflow-hidden">
-                <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
+                <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
                     <tr>
                         <th class="px-6 py-3 text-left font-medium">No</th>
                         <th class="px-6 py-3 text-left font-medium">Crop Name</th>
@@ -178,9 +267,12 @@
                         <th class="px-6 py-3 text-left font-medium">Time</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
-                    <tr
-                        *ngFor="let item of reqPriceArr | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index">
+                <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F] cursor-default">
+                    <tr *ngFor="let item of reqPriceArr | paginate: {
+                        itemsPerPage: itemsPerPage,
+                        currentPage: page,
+                        totalItems: totalItems
+                    }; let i = index">
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
                             {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i + 1)
                                 : (((page - 1) * itemsPerPage) + i + 1) }} </td>
@@ -188,7 +280,7 @@
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.varietyNameEnglish}}</td>
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.grade}}</td>
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.requestPrice }}</td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300 flex justify-center items-center"
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300 flex justify-center items-center cursor-pointer"
                             (click)="openPopup(item)">
                             <span *ngIf="item.status === 'Pending'"
                                 class="bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-6 py-1 ">
@@ -211,7 +303,7 @@
 
             </table>
         </div>
-        <div class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#262f45] text-right">
+         <div class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#262f45] text-right">
             <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
                 [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
                 [screenReaderCurrentLabel]="'Youre on page'">

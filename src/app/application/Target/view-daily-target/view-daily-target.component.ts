@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
@@ -41,6 +41,32 @@ export class ViewDailyTargetComponent implements OnInit {
 
   isLoading: boolean = false;
 
+  isStatusDropdownOpen = false;
+  statusDropdownOptions = ['Pending', 'Completed'];
+
+  toggleStatusDropdown() {
+    this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
+  }
+
+  selectStatusOption(option: string) {
+    this.selectStatus = option;
+    this.isStatusDropdownOpen = false;
+    this.filterStatus();
+  }
+
+  isAssignStatusDropdownOpen = false;
+  assignStatusDropdownOptions = ['Updated', 'Assigned', 'Not Assigned'];
+
+  toggleAssignStatusDropdown() {
+    this.isAssignStatusDropdownOpen = !this.isAssignStatusDropdownOpen;
+  }
+
+  selectAssignStatusOption(option: string) {
+    this.selectAssignStatus = option;
+    this.isAssignStatusDropdownOpen = false;
+    this.filterAssignStatus();
+  }
+
   constructor(
     private router: Router,
 
@@ -58,6 +84,24 @@ export class ViewDailyTargetComponent implements OnInit {
 
     this.fetchAllTarget();
     this.AssignAllDailyTarget()
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
+    const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
+
+    const assignStatusDropdownElement = document.querySelector('.custom-assign-status-dropdown-container');
+    const assignStatusDropdownClickedInside = assignStatusDropdownElement?.contains(event.target as Node);
+
+    if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
+      this.isStatusDropdownOpen = false;
+    }
+
+    if (!assignStatusDropdownClickedInside && this.isAssignStatusDropdownOpen) {
+      this.isAssignStatusDropdownOpen = false;
+    }
+
   }
 
   fetchAllTarget(page: number = 1, limit: number = this.itemsPerPage, search: string = this.searchText) {
@@ -94,7 +138,10 @@ export class ViewDailyTargetComponent implements OnInit {
     this.targetArr = this.targetArr.filter(item => item.status === this.selectStatus);
   }
 
-  cancelStatus() {
+  cancelStatus(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
     this.selectStatus = '';
     this.fetchAllTarget();
   }
@@ -196,10 +243,18 @@ export class ViewDailyTargetComponent implements OnInit {
     );
   }
 
-  cancelAssignStatus() {
+  cancelAssignStatus(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
     this.selectAssignStatus = '';
     this.AssignAllDailyTarget();
   }
+
+  // cancelAssignStatus() {
+  //   this.selectAssignStatus = '';
+  //   this.AssignAllDailyTarget();
+  // }
 
 }
 

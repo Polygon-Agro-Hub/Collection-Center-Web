@@ -18,6 +18,9 @@ export class ProfileComponent implements OnInit {
   logingRole: string | null = null;
   isLoading:boolean = true;
 
+  phone1: string = '';
+  phone2: string = '';
+
   constructor(
     private AuthSrv: AuthService,
     private router: Router,
@@ -35,7 +38,8 @@ export class ProfileComponent implements OnInit {
     this.AuthSrv.getLoggedInUser().subscribe((res: any) => {
       this.officerObj = res.officerData.collectionOfficer;
       this.isLoading = false;
-
+      this.phone1 = this.officerObj.phoneNumber01 === null ? '-' : this.officerObj.phoneCode01 + '-' + this.officerObj.phoneNumber01
+      this.phone2 = this.officerObj.phoneNumber02 === null ? '-' : this.officerObj.phoneCode02 + '-' + this.officerObj.phoneNumber02;
     });
   }
 

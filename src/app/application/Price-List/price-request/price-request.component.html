@@ -8,7 +8,7 @@
     <div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg overflow-x-auto">
         <div class="flex flex-row items-center justify-between">
             <div class="flex flex-col justify-between">
-                <p class="font-semibold text-lg mb-1 dark:text-white">Market Price on {{today}}</p>
+                <p class="font-semibold text-lg mb-1 dark:text-white">Price Update Requests on {{today}}</p>
             </div>
             <div class="flex flex-row items-center gap-8 ">
                 <i class="fa-solid fa-list text-2xl dark:text-white ml-8"></i>
@@ -255,7 +255,7 @@
         <div *ngIf="hasData"
             class="min-w-max mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
             <table class="w-full min-w-max divide-y-2 overflow-hidden">
-                <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
+                <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
                     <tr>
                         <th class="px-6 py-3 text-left font-medium">No</th>
                         <th class="px-6 py-3 text-left font-medium">Crop Name</th>
@@ -267,7 +267,7 @@
                         <th class="px-6 py-3 text-left font-medium">Time</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
+                <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F] cursor-default">
                     <tr *ngFor="let item of reqPriceArr | paginate: {
                         itemsPerPage: itemsPerPage,
                         currentPage: page,
@@ -280,7 +280,7 @@
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.varietyNameEnglish}}</td>
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.grade}}</td>
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.requestPrice }}</td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300 flex justify-center items-center"
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300 flex justify-center items-center cursor-pointer"
                             (click)="openPopup(item)">
                             <span *ngIf="item.status === 'Pending'"
                                 class="bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-6 py-1 ">

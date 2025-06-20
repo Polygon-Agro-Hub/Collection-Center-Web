@@ -193,7 +193,7 @@ export class ViewOfficersComponent implements OnInit {
       text: 'Do you really want to delete this Collection Officer? This action cannot be undone.',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6', // Default blue color
+      confirmButtonColor: '#3085d6', // Default blue
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, delete it!',
       cancelButtonText: 'Cancel',
@@ -201,11 +201,12 @@ export class ViewOfficersComponent implements OnInit {
         popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
         title: 'dark:text-white',
         icon: '!border-gray-200 dark:!border-gray-500',
-        confirmButton: 'hover:!bg-red-600 dark:hover:!bg-red-700 focus:ring-red-500 dark:focus:ring-red-800',
+        confirmButton: 'hover:!bg-blue-600 dark:hover:!bg-blue-500', 
         cancelButton: '',
         actions: 'gap-2'
       }
-    }).then((result) => {
+    })
+    .then((result) => {
       if (result.isConfirmed) {
         this.isLoading = true;
         this.ManageOficerSrv.deleteOfficer(id).subscribe(

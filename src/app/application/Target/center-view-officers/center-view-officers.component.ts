@@ -137,7 +137,7 @@ export class CenterViewOfficersComponent implements OnInit {
       customClass: {
         popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
         title: 'dark:text-white',
-        confirmButton: 'hover:!bg-red-600 dark:hover:!bg-red-700 focus:ring-red-500 dark:focus:ring-red-800',
+        confirmButton: 'hover:!bg-blue-600 dark:hover:!bg-blue-500',
         cancelButton: '',
         actions: 'gap-2'
       },

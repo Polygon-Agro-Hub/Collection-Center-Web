@@ -284,7 +284,7 @@ export const routes: Routes = [
                         component: OfficerTargetViewComponent
                     },
                     {
-                        path: 'edit-officer-target/:id',
+                        path: 'edit-officer-target/:id/:toDate/:fromDate',
                         component: OfficerTargetPassOfficerComponent
                     }
 

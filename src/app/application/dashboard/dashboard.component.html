@@ -25,19 +25,19 @@
                     [ngClass]="{'bg-[#E0E0E0] shadow-lg rounded-lg border-[2px] border-gray-300 dark:border-gray-600 dark-border-[3px] dark:bg-[#2B2B2B] dark:text-[#FFFFFF]': activeButton === 'week', 'bg-[#F5F6F6]': activeButton !== 'week'}"
                     class="px-3 py-2 font-semibold w-18 dark:bg-[#1D1D1F] dark:text-[#FFFFFF]"
                     (click)="fetchChart('week')">
-                    week
+                    07 Days
                 </button>
                 <button
                     [ngClass]="{'bg-[#E0E0E0] shadow-lg rounded-lg border-[2px] border-gray-300 dark:border-gray-600 dark-border-[3px] dark:bg-[#2B2B2B] dark:text-[#FFFFFF]': activeButton === 'month', 'bg-[#F5F6F6]': activeButton !== 'month'}"
                     class="px-3 py-2 font-semibold w-18 dark:bg-[#1D1D1F] dark:text-[#FFFFFF]"
                     (click)="fetchChart('month')">
-                    month
+                    30 Days
                 </button>
                 <button
                     [ngClass]="{'bg-[#E0E0E0] shadow-lg rounded-lg border-[2px] border-gray-300 dark:border-gray-600 dark-border-[3px] dark:bg-[#2B2B2B] dark:text-[#FFFFFF]': activeButton === 'year', 'bg-[#F5F6F6]': activeButton !== 'year'}"
                     class="px-3 py-2 font-semibold w-18 dark:bg-[#1D1D1F] dark:text-[#FFFFFF]"
                     (click)="fetchChart('year')">
-                    year
+                    12 Months
                 </button>
             </div>
 

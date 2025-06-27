@@ -19,6 +19,8 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
   filteredOfficers: Officers[] = [];
 
   targetItemId!: number;
+  toDate! :string;
+  fromDate!: string;
 
   passAmount: number = 0.00;
   amount: number = 0.00;
@@ -37,7 +39,10 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
 
   ngOnInit(): void {
     this.targetItemId = this.route.snapshot.params['id'];
-    this.fetchTargetDetalis()
+    this.toDate = this.route.snapshot.params['toDate'];
+    this.fromDate = this.route.snapshot.params['fromDate'];
+  
+    this.fetchTargetDetalis();
   }
 
   fetchTargetDetalis() {

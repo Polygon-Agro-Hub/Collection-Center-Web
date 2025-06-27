@@ -209,15 +209,18 @@
                             <p class="text-[#3E3E3E] dark:text-gray-300">{{item.createdAt | date:'hh:mm a'}}</p>
                         </div>
                     </td>
-                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300 flex items-center justify-center">
-                        <span *ngIf="item.status ==='Opened'" class="bg-[#C8E0FF] text-[#415CFF] px-3 py-1 rounded-lg">
+                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300 align-middle">
+                        <div class="flex items-center justify-center">
+                          <span *ngIf="item.status === 'Opened'" class="bg-[#C8E0FF] text-[#415CFF] px-3 py-1 rounded-lg">
                             Opened
-                        </span>
-
-                        <span *ngIf="item.status ==='Closed'" class="bg-[#B7FFBE] text-[#02BB3D] px-3 py-1 rounded-lg">
+                          </span>
+                      
+                          <span *ngIf="item.status === 'Closed'" class="bg-[#B7FFBE] text-[#02BB3D] px-3 py-1 rounded-lg">
                             Closed
-                        </span>
-                    </td>
+                          </span>
+                        </div>
+                      </td>
+                      
                     <td class="px-6 py-4">
                         <i class="fa-solid fa-reply text-[#415CFF] text-lg cursor-pointer"
                             [ngClass]="{'text-gray-200 cursor-not-allowed': item.reply === null}"

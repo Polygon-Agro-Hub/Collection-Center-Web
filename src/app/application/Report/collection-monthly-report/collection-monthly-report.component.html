@@ -147,24 +147,24 @@
 
 
         <div class="w-full mt-8 bg-white dark:bg-[#363636] p-8 ">
-            <table class="w-full border-collapse border border-[#828282] dark:border-gray-700">
+            <table class="w-full border-collapse border border-[#828282] dark:border-gray-700 dark:bg-[white]">
                 <thead>
-                    <tr class="bg-[#E4DCD3]">
-                        <th class="border text-[#000000] border-[#828282] dark:border-gray-600 px-4 py-2">Date</th>
-                        <th class="border text-[#000000] border-[#828282] dark:border-gray-600 px-4 py-2">Total Weight</th>
-                        <th class="border text-[#000000] border-[#828282] dark:border-gray-600 px-4 py-2">Total Collections</th>
+                    <tr class="bg-[#E4DCD3] dark:text-white dark:bg-[#0F0F0F] dark:border-[#202021]">
+                        <th class="border text-[#000000] border-[#828282] dark:border-[#202021] px-4 py-2">Date</th>
+                        <th class="border text-[#000000] border-[#828282] dark:border-[#202021] px-4 py-2">Total Weight</th>
+                        <th class="border text-[#000000] border-[#828282] dark:border-[#202021] px-4 py-2">Total Collections</th>
                     </tr>
                 </thead>
-                <tbody>
-                    <tr *ngFor="let item of farmerDataArr" class="bg-white">
-                        <td class="text-center text-[#000000] border border-[#828282] dark:border-gray-600 px-4 py-2">{{
+                <tbody class="border-[#828282] dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
+                    <tr *ngFor="let item of farmerDataArr" class="bg-white dark:bg-[#1D1D1F]">
+                        <td class="text-center text-[#000000] border border-[#828282] dark:border-[#1D1D1F] dark:text-gray-300 px-4 py-2">{{
                             item.ReportDate
                             |
                             date: 'yyyy-MM-dd' }}</td>
-                        <td class="text-center text-[#000000] border border-[#828282] dark:border-gray-600 px-4 py-2">
+                        <td class="text-center text-[#000000] border border-[#828282] dark:border-[#1D1D1F] dark:text-gray-300 px-4 py-2">
                             {{item.TotalQty}} kg
                         </td>
-                        <td class="text-center text-[#000000] border border-[#828282] dark:border-gray-600 px-4 py-2">
+                        <td class="text-center text-[#000000] border border-[#828282] dark:border-[#1D1D1F] dark:text-gray-300 px-4 py-2">
                             {{item.TotalFarmers}}
                         </td>
                     </tr>

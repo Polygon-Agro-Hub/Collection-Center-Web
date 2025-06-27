@@ -9,6 +9,7 @@ import { ToastrService } from 'ngx-toastr';  // Import ToastrService
 import { ToastrModule } from 'ngx-toastr';   // Import ToastrModule
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-download-target',
@@ -102,9 +103,24 @@ export class DownloadTargetComponent {
 
   goBtn() {
     if (!this.fromDate || !this.toDate) {
-      this.toastSrv.warning("Please fill in all fields");
+      Swal.fire({
+        icon: "error",
+        title: "No Date Input",
+        text: 'Please Fill the Date Inputs first',
+        customClass: {
+          popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+          title: 'dark:text-white',
+        }
+      });
+      // this.toastSrv.warning("Please fill in all fields");
       return;
     }
+
+    
+    // if (!this.fromDate || !this.toDate) {
+    //   this.toastSrv.warning("Please fill in all fields");
+    //   return;
+    // }
 
     this.fetchDownloadTarget();
   }

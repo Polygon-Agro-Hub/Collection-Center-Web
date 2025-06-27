@@ -59,15 +59,22 @@
             
     
             <div>
-                <label for="passAmount" class="block text-sm font-medium text-gray-700 dark:text-textDark">The maximum amount
-                    you can pass (kg) :</label>
-                <input id="passAmount" name="passAmount" type="number" [(ngModel)]="passAmount" 
-                    class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
+                <label for="passAmount" class="block text-sm font-medium text-gray-700 dark:text-textDark">
+                    The Amount (kg) :
+                </label>
+                <input id="passAmount" 
+                       name="passAmount" 
+                       type="number" 
+                       [(ngModel)]="passAmount" 
+                       min="1"
+                       (keydown)="preventZeroAndNegative($event)"
+                       (input)="validatePassAmount()"
+                       class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
             </div>
         </div>
     
         <div class="flex flex-row justify-center items-center gap-12 my-10">
-            <button class="text-[#6B7D8C] border-[#6B7D8C] border-[1px] rounded-lg shadow-md px-4 py-2" onclick="history.back()">Cancel</button>
+            <button class="text-[#6B7D8C] border-[#6B7D8C] border-[1px] rounded-lg shadow-md px-4 py-2" (click)="onCancel()">Cancel</button>
             <button class="bg-[#415CFF] text-white rounded-lg shadow-md px-6 py-2" (click)="onSubmit()">Save</button>
         </div>
     </div>

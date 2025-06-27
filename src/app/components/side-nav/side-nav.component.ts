@@ -101,6 +101,8 @@ export class SideNavComponent {
   isSelectTab: string = 'dashboard';
   menuItems = MENU_ITEMS;
 
+  logOutView = false;
+
   get filteredMenuItems() {
     return this.menuItems.filter(
       (item) => !item.permission || item.permission === this.role
@@ -168,23 +170,36 @@ export class SideNavComponent {
 
   logOut(): void {
     if (isPlatformBrowser(this.platformId)) {
-      Swal.fire({
-        icon: 'warning',
-        title: 'Logged Out',
-        text: 'Are you sure, you want to logged out.',
-        showCancelButton: true,
-        confirmButtonColor: '#3085d6',
-        cancelButtonColor: '#d33',
-        confirmButtonText: 'Yes',
-        cancelButtonText: 'No',
-      }).then((result) => {
-        if (result.isConfirmed) {
-          this.tokenSrv.clearLoginDetails();
-          this.router.navigate(['login']);
-          this.toastSrv.success(`<b>Logout !`);
-        }
-      });
+      this.logOutView = !this.logOutView;
+
+      // Swal.fire({
+      //   icon: 'warning',
+      //   title: 'Logged Out',
+      //   text: 'Are you sure, you want to logged out.',
+      //   showCancelButton: true,
+      //   confirmButtonColor: '#3085d6',
+      //   cancelButtonColor: '#d33',
+      //   confirmButtonText: 'Yes',
+      //   cancelButtonText: 'No',
+      // }).then((result) => {
+      //   if (result.isConfirmed) {
+      //     this.tokenSrv.clearLoginDetails();
+      //     this.router.navigate(['login']);
+      //     this.toastSrv.success(`<b>Logout !`);
+      //   }
+      // });
     }
+  }
+
+  confirmLogOut() {
+    this.logOutView = !this.logOutView;
+    this.tokenSrv.clearLoginDetails();
+    this.router.navigate(['login']);
+    this.toastSrv.success(`<b>Logout !`);
+  }
+
+  cancelLogOut() {
+    this.logOutView = !this.logOutView;
   }
 
   selectIdealTab() {

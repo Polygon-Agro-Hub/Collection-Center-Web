@@ -13,13 +13,15 @@ import { TokenServiceService } from '../../services/Token/token-service.service'
 })
 export class HeaderComponent{
 
-  userImage:string | null = localStorage.getItem('profileImage')
+  userImage: string | null = null;
 
-  constructor(private router: Router,  private tokenSrv: TokenServiceService) {
-    this.userImage = this.tokenSrv.getUserDetails().image
+  constructor(private router: Router, private tokenSrv: TokenServiceService) {}
+
+  ngOnInit(): void {
+    const userDetails = this.tokenSrv.getUserDetails();
+    this.userImage = userDetails.image;
+    console.log('user image', this.userImage);
   }
-
-
 
   navigate(route: string) {
     this.router.navigate([route]);

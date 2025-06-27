@@ -56,7 +56,8 @@ export class OfficerProfileComponent implements OnInit {
     this.ManageOficerSrv.getOfficerById(id).subscribe((res: any) => {
       console.log(res);
       this.officerObj = res.officerData.collectionOfficer;
-      console.log(this.officerObj)
+      
+      console.log(this.officerObj.empId);
       this.isLoading = false;
     });
   }
@@ -575,6 +576,7 @@ class Officer {
   province!: string;
   country!: string;
   empId!: string;
+  empIdPrefix!: string;
   jobRole!: string;
   accHolderName!: string;
   accNumber!: string;

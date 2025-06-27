@@ -23,10 +23,10 @@ export class ViewDailyTargetComponent implements OnInit {
   selectValidity: string = '';
   today!: string;
 
-  hasData: boolean = true;
+  hasData: boolean = false;
   page: number = 1;
   totalItems: number = 0;
-  itemsPerPage: number = 4;
+  itemsPerPage: number = 10;
 
   assignHasData: boolean = true;
   assignPage: number = 1;
@@ -107,7 +107,11 @@ export class ViewDailyTargetComponent implements OnInit {
   fetchAllTarget(page: number = 1, limit: number = this.itemsPerPage, search: string = this.searchText) {
     this.isLoading = true;
     this.TargetSrv.getAllDailyTarget(page, limit, search).subscribe(
+      
+      
       (res) => {
+        console.log('fetching');
+        console.log(this.hasData);
         this.targetArr = res.items;
         this.totalItems = res.totalPages
         if (res.items.length > 0) {
@@ -116,9 +120,12 @@ export class ViewDailyTargetComponent implements OnInit {
           this.hasData = false;
         }
         this.isLoading = false;
-
+        console.log(this.hasData);
       }
+      
+
     );
+    
   }
 
   onSearch() {
@@ -136,6 +143,11 @@ export class ViewDailyTargetComponent implements OnInit {
     }
 
     this.targetArr = this.targetArr.filter(item => item.status === this.selectStatus);
+    if (this.targetArr.length > 0) {
+      this.hasData = true;
+    } else {
+      this.hasData = false;
+    }
   }
 
   cancelStatus(event?: MouseEvent) {
@@ -213,8 +225,9 @@ export class ViewDailyTargetComponent implements OnInit {
   filterAssignStatus() {
     this.TargetSrv.AssignAllDailyTarget(1, 10, this.assignSearch).subscribe(
       (res) => {
-        this.assignTargetArr = res;
-
+        this.assignTargetArr = res || []; // fallback if response is null or undefined
+  
+        // Apply filtering
         if (this.selectAssignStatus === 'Updated') {
           this.assignTargetArr = this.assignTargetArr.filter(item =>
             item.isAssign === 1 &&
@@ -235,13 +248,22 @@ export class ViewDailyTargetComponent implements OnInit {
             item.assignStatusC === 0
           );
         }
-
-        // Update pagination variables
+  
+        // Set hasAssignData explicitly
+        this.assignHasData = this.assignTargetArr.length > 0 ? true : false;
+  
+        // Update pagination
         this.assignTotalItems = this.assignTargetArr.length;
         this.assignPage = 1;
+      },
+      (err) => {
+        console.error('Failed to load data', err);
+        this.assignTargetArr = [];
+        this.assignHasData = false;
       }
     );
   }
+  
 
   cancelAssignStatus(event?: MouseEvent) {
     if (event) {

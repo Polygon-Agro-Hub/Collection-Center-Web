@@ -52,18 +52,19 @@ export class CollectionDailyReportComponent implements OnInit {
   fetchDailyReport(date: string = this.selectDate) {
     this.loadingTable = true;
     this.loadingChart = true;
-    this.isLoading = true
+    this.isLoading = true;
+  
     this.ReportSrv.getCollectionDailyReport(this.officerId, date).subscribe(
       (res) => {
-        console.log(res);
-        if (res.data.length === 0) {
-          this.hasData = false;
-          this.updateChart();
-          this.loadingTable = false;
-          this.isLoading = false;
-          return;
+        console.log('response', res.data);
+  
+        this.hasData = res.data.length > 0;
+  
+        if (!this.hasData) {
+          this.updateChart(); // Optional: clear chart when no data
         }
-
+  
+        // Always map the array (even if empty — safe)
         this.dailyReportArr = res.data.map((item: any) => ({
           ...item,
           gradeA: Number(item.gradeA) || 0,
@@ -71,7 +72,9 @@ export class CollectionDailyReportComponent implements OnInit {
           gradeC: Number(item.gradeC) || 0,
           total: Number(item.total) || 0,
         }));
-        console.log(this.dailyReportArr);
+  
+        console.log('array', this.dailyReportArr);
+        
         this.updateChart();
         this.loadingTable = false;
         this.isLoading = false;
@@ -81,10 +84,10 @@ export class CollectionDailyReportComponent implements OnInit {
         this.loadingTable = false;
         this.loadingChart = false;
         this.isLoading = false;
-
       }
     );
   }
+  
 
   navigateToReports() {
     this.router.navigate(['/reports']); // Change '/reports' to your desired route
@@ -98,10 +101,13 @@ export class CollectionDailyReportComponent implements OnInit {
   updateChart() {
     this.isLoading = true;
     const gradeAData = this.dailyReportArr.map((crop) => ({
+      
       label: crop.varietyNameEnglish,
       y: crop.gradeA || 0,
       color: "#2B88D9",
     }));
+
+    console.log(gradeAData);
 
     const gradeBData = this.dailyReportArr.map((crop) => ({
       label: crop.varietyNameEnglish,
@@ -174,36 +180,36 @@ export class CollectionDailyReportComponent implements OnInit {
 
   async downloadPdf() {
     const doc = new jsPDF();
-    
+
     // Add title and header information;
     doc.setFontSize(14);
     doc.text(`${this.officerName} - ${this.empId}`, 14, 20);
     doc.setFontSize(12);
-doc.setTextColor(64, 64, 64); // Dark gray
-doc.text(`On ${this.selectDate}`, 14, 30);
-  
+    doc.setTextColor(64, 64, 64); // Dark gray
+    doc.text(`On ${this.selectDate}`, 14, 30);
+
     // Capture the chart as an image with reduced size
     try {
       const chartElement = document.querySelector('canvasjs-chart') as HTMLElement;
       if (chartElement) {
         // Reduce the scale to make the captured image smaller
         const scale = 0.7; // Adjust this value (0.5-1.0) to change size
-        
+
         const canvas = await html2canvas(chartElement, {
           scale: scale,
           logging: false,
           useCORS: true,
         });
-        
+
         const imgData = canvas.toDataURL('image/png');
-        
+
         // Set reduced dimensions for the PDF image
         const pdfImageWidth = 150; // mm (reduced from 180)
         const imgHeight = canvas.height * pdfImageWidth / canvas.width;
-        
+
         // Add chart image to PDF
         doc.addImage(imgData, 'PNG', 15, 40, pdfImageWidth, imgHeight);
-        
+
         // Start table after the chart with some margin
         const startY = 40 + imgHeight + 10;
         this.addTableToPdf(doc, startY);
@@ -213,25 +219,31 @@ doc.text(`On ${this.selectDate}`, 14, 30);
       // Fallback to table only if chart capture fails
       this.addTableToPdf(doc, 40);
     }
-  
+
     doc.save(`Daily_Report_${this.officerName}_${this.selectDate}.pdf`);
   }
-  
+
   // Helper method to add table to PDF
   private addTableToPdf(doc: jsPDF, startY: number) {
     doc.setFontSize(10);
+
     const headers = ['Variety Name', 'Grade A', 'Grade B', 'Grade C', 'Total'];
     const rowHeight = 10;
     const columnWidths = [60, 30, 30, 30, 30];
-  
+
     let currentX = 14;
+
     headers.forEach((header, index) => {
-      doc.rect(currentX, startY, columnWidths[index], rowHeight);
+      doc.setFillColor(228, 220, 211); // Background color (#E4DCD3)
+      doc.setDrawColor(0); // Optional: black border
+      doc.rect(currentX, startY, columnWidths[index], rowHeight, 'FD'); // Fill + border
+      doc.setTextColor(0, 0, 0); // Text color
       doc.text(header, currentX + 2, startY + 7);
       currentX += columnWidths[index];
     });
-  
+
     let currentY = startY + rowHeight;
+
     this.dailyReportArr.forEach((report) => {
       currentX = 14;
       const rowData = [
@@ -241,16 +253,18 @@ doc.text(`On ${this.selectDate}`, 14, 30);
         report.gradeC.toFixed(2) + ' kg',
         report.total.toFixed(2) + ' kg',
       ];
-  
+
       rowData.forEach((data, index) => {
-        doc.rect(currentX, currentY, columnWidths[index], rowHeight);
+        doc.rect(currentX, currentY, columnWidths[index], rowHeight); // Border only
         doc.text(data, currentX + 2, currentY + 7);
         currentX += columnWidths[index];
       });
-  
+
       currentY += rowHeight;
     });
   }
+
+
 
 }
 

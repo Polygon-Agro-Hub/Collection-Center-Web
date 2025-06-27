@@ -29,6 +29,8 @@ export class TargetService {
       Authorization: `Bearer ${this.token}`
     });
 
+    console.log(limit);
+
     let url = `${this.apiUrl}/get-daily-target`;
 
     if (searchText) {
@@ -131,6 +133,8 @@ export class TargetService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
+
+    // console.log(limit);
 
     let url = `${this.apiUrl}/assign-all-daily-target?page=${page}&limit=${limit}`;
 

@@ -394,6 +394,10 @@ export class EditOfficerComponent implements OnInit {
               this.toastSrv.error('NIC already exists for another collection officer');
             } else if (error.status === 410) {
               this.toastSrv.error('Email already exists for another collection officer');
+            } else if (error.status === 411) {
+              this.toastSrv.error('Phone Number 01 already exists for another collection officer');
+            } else if (error.status === 412) {
+              this.toastSrv.error('Phone Number 02 already exists for another collection officer');
             } else if (error.status === 400) {
               this.toastSrv.error('No file uploaded. Please attach required file(s).');
             } else if (error.status === 500) {

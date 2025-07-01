@@ -43,7 +43,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.isLoading = true;
     this.dashboardService.getOfficerCounts().subscribe(
       (data) => {
-        this.COOCount = data.COOCount.COOCount;
+        console.log('data', data);
+        this.COOCount = data.COOCount.COOCOUNT;
         this.CUOCount = data.CUOCount.CUOCount;
         this.activityLogs = data.activities;
         this.isLoading = false;

@@ -26,6 +26,7 @@ export class DownloadTargetComponent {
   toDate: Date | string = '';
 
   hasData: boolean = false;
+  hasDataAndTime: boolean = false;
   isLoading: boolean = false;
 
   constructor(
@@ -112,6 +113,7 @@ export class DownloadTargetComponent {
           title: 'dark:text-white',
         }
       });
+      this.hasDataAndTime = false;
       // this.toastSrv.warning("Please fill in all fields");
       return;
     }
@@ -121,7 +123,7 @@ export class DownloadTargetComponent {
     //   this.toastSrv.warning("Please fill in all fields");
     //   return;
     // }
-
+    this.hasDataAndTime = true;
     this.fetchDownloadTarget();
   }
 

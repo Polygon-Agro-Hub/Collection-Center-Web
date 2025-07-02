@@ -39,7 +39,7 @@
                 </div>
 
                 <div class="flex space-x-4">
-                    <span *ngIf="logingRole === 'Collection Center Manager'">
+                    <span *ngIf="logingRole === 'Collection Center Manager' && officerObj.jobRole !=='Collection Center Manager' ">
                         <button class="bg-[#E20000] text-white font-semibold rounded-lg shadow-md px-5 py-2"
                             (click)="toggleDisclaimView()">Disclaim</button>
                     </span>

@@ -27,7 +27,7 @@ export class ViewCenterTargetComponent implements OnInit {
 
   isDownloading = false;
 
-  hasData: boolean = true;
+  hasData: boolean = false;
   page: number = 1;
   totalItems: number = 0;
   itemsPerPage: number = 10;
@@ -79,12 +79,16 @@ export class ViewCenterTargetComponent implements OnInit {
 
   fetchAllTarget(centerId: number = this.centerId, page: number = 1, limit: number = this.itemsPerPage, status: string = this.selectStatus, search: string = this.searchText) {
     this.isLoading = true;
+    console.log('fetching')
+    console.log(this.hasData);
     this.TargetSrv.getAllCenterDailyTarget(centerId, page, limit, status, search).subscribe(
       (res) => {
         this.targetArr = res.items;
         console.log(res.items)
         if (res.items.length > 0) {
           this.hasData = true;
+          console.log('fetched')
+          console.log(this.hasData);
         } else {
           this.hasData = false;
         }

@@ -34,15 +34,21 @@
                 class="bg-[#415CFF]  text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-lg ml-5 dark:bg-[#292929] dark:text-textDark">Go</button>
         </div>
     </div>
+    
+    <div *ngIf="!hasDataAndTime"
+        class="flex flex-col items-center w-full h-screen px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg mt-6">
+        <p class="text-[#494949] my-6 dark:text-white">--Set From & To Dates first--</p>
+        <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
+    </div>
 
-    <div *ngIf="!hasData"
+    <div *ngIf="!hasData && hasDataAndTime"
         class="flex flex-col items-center w-full h-screen px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg mt-6">
         <p class="text-[#494949] my-6 dark:text-white">--No Data Availabale--</p>
         <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
     </div>
 
 
-    <div *ngIf="hasData" class="mt-8 overflow-x-auto bg-tileLight shadow-lg rounded-lg dark:text-[#FFFFFF] dark:bg-[#363636] p-8">
+    <div *ngIf="hasData && hasDataAndTime" class="mt-8 overflow-x-auto bg-tileLight shadow-lg rounded-lg dark:text-[#FFFFFF] dark:bg-[#363636] p-8">
         
     
         <div class="min-w-max mt-6 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
@@ -77,11 +83,11 @@
                                 Pending
                             </span>
                             <span *ngIf="item.status === 'Completed'"
-                                class="inline-block bg-[#C8E0FF] text-[#415CFF] text-center rounded-lg px-4 py-1 w-32">
+                                class="inline-block bg-[#B7FFBE] text-[#02BB3D] text-center rounded-lg px-4 py-1 w-32">
                                 Completed
                             </span>
                             <span *ngIf="item.status === 'Exceeded'"
-                                class="inline-block bg-[#f6c0c0] text-[#f59999] text-center rounded-lg px-4 py-1 w-32">
+                                class="inline-block bg-[#C8E0FF] text-[#415CFF] text-center rounded-lg px-4 py-1 w-32">
                                 Exceeded
                             </span>
                         </td>

@@ -201,7 +201,7 @@ export class ViewOfficersComponent implements OnInit {
         popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
         title: 'dark:text-white',
         icon: '!border-gray-200 dark:!border-gray-500',
-        confirmButton: 'hover:!bg-blue-600 dark:hover:!bg-blue-500', 
+        confirmButton: 'hover:!bg-[#3085d6] dark:hover:!bg[#3085d6]', 
         cancelButton: '',
         actions: 'gap-2'
       }

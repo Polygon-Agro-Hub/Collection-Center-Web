@@ -43,25 +43,25 @@
         <p>Loading chart...</p>
       </ng-template>
   
-      <div class="w-full mt-8">
+      <div class="w-full mt-8 rounded-lg">
         <table class="w-full border-collapse border dark:bg-[white] border-gray-300 rounded-lg">
           <thead>
-            <tr class="bg-[#E4DCD3] dark:bg-[#E4DCD3] text-[#000000]">
-              <th class="border border-[#828282] dark:border-gray-600 px-4 py-2">Crop Variety</th>
-              <th class="border border-[#828282] dark:border-gray-600 px-4 py-2">Grade A</th>
-              <th class="border border-[#828282] dark:border-gray-600 px-4 py-2">Grade B</th>
-              <th class="border border-[#828282] dark:border-gray-600 px-4 py-2">Grade C</th>
-              <th class="border border-[#828282] dark:border-gray-600 px-4 py-2">Total</th>
+            <tr class="bg-[#E4DCD3] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] text-[#000000]">
+              <th class="border border-[#828282] dark:border-[#202021] px-4 py-2">Crop Variety</th>
+              <th class="border border-[#828282] dark:border-[#202021] px-4 py-2">Grade A</th>
+              <th class="border border-[#828282] dark:border-[#202021] px-4 py-2">Grade B</th>
+              <th class="border border-[#828282] dark:border-[#202021] px-4 py-2">Grade C</th>
+              <th class="border border-[#828282] dark:border-[#202021] px-4 py-2">Total</th>
             </tr>
           </thead>
-          <tbody>
+          <tbody class="border-[#828282] dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
             <tr *ngFor="let item of dailyReportArr">
-              <td class="text-center border border-[#828282] dark:border-gray-600 px-4 py-2">{{item.varietyNameEnglish}}
+              <td class="text-center dark:text-gray-300 border border-[#828282] dark:border-[#1D1D1F] px-4 py-2">{{item.varietyNameEnglish}}
               </td>
-              <td class="text-center border border-[#828282] dark:border-gray-600 px-4 py-2">{{item.gradeA | number: '1.2-2'}}kg</td>
-              <td class="text-center border border-[#828282] dark:border-gray-600 px-4 py-2">{{item.gradeB | number: '1.2-2'}}kg</td>
-              <td class="text-center border border-[#828282] dark:border-gray-600 px-4 py-2">{{item.gradeC | number: '1.2-2'}}kg</td>
-              <td class="text-center border border-[#828282] dark:border-gray-600 px-4 py-2">{{item.total | number: '1.2-2'}}kg</td>
+              <td class="text-center  dark:text-gray-300  border border-[#828282] dark:border-[#1D1D1F] px-4 py-2">{{item.gradeA | number: '1.2-2'}}kg</td>
+              <td class="text-center dark:text-gray-300 border border-[#828282] dark:border-[#1D1D1F] px-4 py-2">{{item.gradeB | number: '1.2-2'}}kg</td>
+              <td class="text-center dark:text-gray-300 border border-[#828282] dark:border-[#1D1D1F] px-4 py-2">{{item.gradeC | number: '1.2-2'}}kg</td>
+              <td class="text-center dark:text-gray-300 border border-[#828282] dark:border-[#1D1D1F] px-4 py-2">{{item.total | number: '1.2-2'}}kg</td>
             </tr>
           </tbody>
         </table>

@@ -14,14 +14,14 @@
           <img class="w-28 h-28 rounded-full object-cover" [src]="officerObj.image" />
           <div class="ml-6">
             <!-- Profile Text with proper spacing -->
-            <p class="text-lg font-semibold dark:text-white">
+            <p class="text-lg font-semibold text-[#030308] dark:text-white">
               {{ officerObj.firstNameEnglish }} {{ officerObj.lastNameEnglish }}
             </p>
             <p class="text-[#627189] dark:text-textDark">
-              {{ officerObj.jobRole }} - {{ officerObj.empId }}
+              {{ officerObj.jobRole }} - <span class="text-[#030308] dark:text-textDark">{{ officerObj.empId }}</span> 
             </p>
 
-            <p class="font-semibold dark:text-white">
+            <p class="font-semibold text-[#030308] dark:text-white">
               {{ officerObj.centerName }}
             </p>
             <p class="text-[#627189] dark:text-textDark">{{ officerObj.companyNameEnglish }}</p>
@@ -43,48 +43,48 @@
 
       <div class="border-[#F1F7FA] border-[3px] rounded-lg p-6">
         <div class="flex flex-row justify-between">
-          <p class="font-semibold dark:text-white">Personal Infomation</p>
+          <p class="font-semibold text-[#030308] dark:text-white">Personal Infomation</p>
         </div>
 
         <div class="grid grid-cols-2 gap-4 text-[#627189] my-4">
           <div>
             <p class="text-[#627189] dark:text-textDark">First Name</p>
-            <p class="font-semibold text-[#030308] dark:text-white">
+            <p class="font-semibold text-[#000000] dark:text-white">
               {{ officerObj.firstNameEnglish }}
             </p>
           </div>
 
           <div>
             <p class="text-[#627189] dark:text-textDark">Last Name</p>
-            <p class="font-semibold text-[#030308] dark:text-white">
+            <p class="font-semibold text-[#000000] dark:text-white">
               {{ officerObj.lastNameEnglish }}
             </p>
           </div>
 
           <div>
             <p class="text-[#627189] dark:text-textDark">NIC Number</p>
-            <p class="font-semibold text-[#030308] dark:text-white">
+            <p class="font-semibold text-[#000000] dark:text-white">
               {{ officerObj.nic }}
             </p>
           </div>
 
           <div>
             <p class="text-[#627189] dark:text-textDark">Email</p>
-            <p class="font-semibold text-[#030308] dark:text-white">
+            <p class="font-semibold text-[#000000] dark:text-white">
               {{ officerObj.email }}
             </p>
           </div>
 
           <div>
             <p class="text-[#627189] dark:text-textDark">Phone Number - 1</p>
-            <p class="font-semibold text-[#030308] dark:text-white">
+            <p class="font-semibold text-[#000000] dark:text-white">
               {{ phone1 }}
             </p>
           </div>
 
           <div>
             <p class="text-[#627189] dark:text-textDark">Phone Number - 2</p>
-            <p class="font-semibold text-[#030308] dark:text-white">
+            <p class="font-semibold text-[#000000] dark:text-white">
               {{ phone2 }}
             </p>
           </div>
@@ -97,42 +97,42 @@
         <div class="grid grid-cols-2 gap-4 text-[#627189] my-4">
           <div>
             <p class="text-[#627189] dark:text-textDark">House / Plot Number</p>
-            <p class="font-semibold text-[#030308] dark:text-white">
+            <p class="font-semibold text-[#000000] dark:text-white">
               {{ officerObj.houseNumber }}
             </p>
           </div>
 
           <div>
             <p class="text-[#627189] dark:text-textDark">Street Name</p>
-            <p class="font-semibold text-[#030308] dark:text-white">
+            <p class="font-semibold text-[#000000] dark:text-white">
               {{ officerObj.streetName }}
             </p>
           </div>
 
           <div>
             <p class="text-[#627189] dark:text-textDark">City</p>
-            <p class="font-semibold text-[#030308] dark:text-white">
+            <p class="font-semibold text-[#000000] dark:text-white">
               {{ officerObj.city }}
             </p>
           </div>
 
           <div>
             <p class="text-[#627189] dark:text-textDark">Country</p>
-            <p class="font-semibold text-[#030308] dark:text-white">
+            <p class="font-semibold text-[#000000] dark:text-white">
               {{ officerObj.country }}
             </p>
           </div>
 
           <div>
             <p class="text-[#627189] dark:text-textDark">Province</p>
-            <p class="font-semibold text-[#030308] dark:text-white">
+            <p class="font-semibold text-[#000000] dark:text-white">
               {{ officerObj.province }}
             </p>
           </div>
 
           <div>
             <p class="text-[#627189] dark:text-textDark">District</p>
-            <p class="font-semibold text-[#030308] dark:text-white">
+            <p class="font-semibold text-[#000000] dark:text-white">
               {{ officerObj.district }}
             </p>
           </div>
@@ -145,28 +145,28 @@
         <div class="grid grid-cols-2 gap-4 text-[#627189] my-4">
           <div>
             <p class="text-[#627189] dark:text-textDark">Account Holder’s Name</p>
-            <p class="font-semibold text-[#030308] dark:text-white">
+            <p class="font-semibold text-[#000000] dark:text-white">
               {{ officerObj.accHolderName }}
             </p>
           </div>
 
           <div>
             <p class="text-[#627189] dark:text-textDark">Account Number</p>
-            <p class="font-semibold text-[#030308] dark:text-white">
+            <p class="font-semibold text-[#000000] dark:text-white">
               {{ officerObj.accNumber }}
             </p>
           </div>
 
           <div>
             <p class="text-[#627189] dark:text-textDark">Bank Name</p>
-            <p class="font-semibold text-[#030308] dark:text-white">
+            <p class="font-semibold text-[#000000] dark:text-white">
               {{ officerObj.bankName }}
             </p>
           </div>
 
           <div>
             <p class="text-[#627189] dark:text-textDark">Branch Name</p>
-            <p class="font-semibold text-[#030308] dark:text-white">
+            <p class="font-semibold text-[#000000] dark:text-white">
               {{ officerObj.branchName }}
             </p>
           </div>

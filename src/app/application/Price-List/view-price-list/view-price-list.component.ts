@@ -81,6 +81,8 @@ export class ViewPriceListComponent implements OnInit {
       this.priceListArr = res.items;
       this.totalItems = res.total;
 
+      // const newItems = [];
+
       console.log(res);
       if (res.items.length === 0) {
         this.hasData = false;

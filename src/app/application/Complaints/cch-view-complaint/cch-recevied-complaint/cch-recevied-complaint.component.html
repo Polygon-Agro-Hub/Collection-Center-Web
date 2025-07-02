@@ -141,7 +141,7 @@
                     <th class="px-6 py-3 text-left text-sm font-medium">Category</th>
                     <th class="px-6 py-3 text-center text-sm font-medium">Received At</th>
                     <th class="px-6 py-3 text-center text-sm font-medium">Status</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium">Action</th>
+                    <th class="px-6 py-3 text-center text-sm font-medium">Action</th>
                     <th class="px-6 py-3 text-center text-sm font-medium">Reply</th>
                 </tr>
             </thead>
@@ -154,39 +154,48 @@
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5]">{{item.complainCategory}}</td>
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5]">
                         <div class="flex flex-col items-center justify-center">
-                            <p class="text-[#3E3E3E] dark:text-[#C5C5C5]">{{item.createdAt | date:'yyyy/mm/dd'}}</p>
-                            <p class="text-[#3E3E3E] dark:text-[#C5C5C5]">{{item.createdAt | date:'hh:mm a'}}</p>
+                            <p class="text-[#3E3E3E] dark:text-gray-300">{{ item.createdAt | date:'yyyy/MM/dd' }}</p>
+                            <p class="text-[#3E3E3E] dark:text-gray-300">{{ item.createdAt | date:'hh.mm a' }}</p>
                         </div>
                     </td>
-                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5] flex items-center justify-center cursor-default">
-                        <span *ngIf="item.status ==='Assigned'"
-                            class="bg-[#C8E0FF] text-[#415CFF] px-3 py-1 rounded-lg">
-                            Assigned
-                        </span>
+                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5] cursor-default">
 
-                        <span *ngIf="item.status ==='Closed'" class="bg-[#B7FFBE] text-[#02BB3D] px-3 py-1 rounded-lg">
-                            Closed
-                        </span>
+                        <div class="flex items-center justify-center h-full">
+                            <span *ngIf="item.status ==='Assigned'"
+                                class="bg-[#C8E0FF] text-[#415CFF] px-3 py-1 rounded-lg">
+                                Assigned
+                            </span>
+
+                            <span *ngIf="item.status ==='Closed'"
+                                class="bg-[#B7FFBE] text-[#02BB3D] px-3 py-1 rounded-lg">
+                                Closed
+                            </span>
+                        </div>
                     </td>
-                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5] cursor-pointer"
-                        (click)="navigateViewReply(item.id)">
-                        <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none"
-                            xmlns="http://www.w3.org/2000/svg" stroke="">
-                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                            <g id="SVGRepo_iconCarrier">
-                                <path
-                                    d="M3 14C3 9.02944 7.02944 5 12 5C16.9706 5 21 9.02944 21 14M17 14C17 16.7614 14.7614 19 12 19C9.23858 19 7 16.7614 7 14C7 11.2386 9.23858 9 12 9C14.7614 9 17 11.2386 17 14Z"
-                                    stroke="#415CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
-                                </path>
-                            </g>
-                        </svg>
+                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5] cursor-pointer">
+                        <div class="flex items-center justify-center h-full" (click)="navigateViewReply(item.id)">
+                            <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none"
+                                xmlns="http://www.w3.org/2000/svg">
+                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                <g id="SVGRepo_iconCarrier">
+                                    <path
+                                        d="M3 14C3 9.02944 7.02944 5 12 5C16.9706 5 21 9.02944 21 14M17 14C17 16.7614 14.7614 19 12 19C9.23858 19 7 16.7614 7 14C7 11.2386 9.23858 9 12 9C14.7614 9 17 11.2386 17 14Z"
+                                        stroke="#415CFF" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round">
+                                    </path>
+                                </g>
+                            </svg>
+                        </div>
                     </td>
-                    <td class="px-6 py-4 flex justify-center space-x-4">
-                        <i class="fa-solid fa-reply text-[#415CFF] text-lg cursor-pointer"
-                            [ngClass]="{'text-gray-200 cursor-not-allowed': item.reply === null}"
-                            (click)="item.reply !== null && viewReply(item.id)">
-                        </i>
+
+                    <td class="px-6 py-4 space-x-4">
+                        <div class="flex items-center justify-center">
+                            <i class="fa-solid fa-reply text-[#415CFF] text-lg cursor-pointer"
+                                [ngClass]="{'text-gray-200 cursor-not-allowed': item.reply === null}"
+                                (click)="item.reply !== null && viewReply(item.id)">
+                            </i>
+                        </div>
                     </td>
 
                 </tr>

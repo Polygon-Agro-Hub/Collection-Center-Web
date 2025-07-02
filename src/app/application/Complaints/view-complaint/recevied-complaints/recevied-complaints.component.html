@@ -150,20 +150,25 @@
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.complainCategory}}</td>
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
                         <div class="flex flex-col items-center justify-center">
-                            <p class="text-[#3E3E3E]">{{item.createdAt | date:'yyyy/mm/dd'}}</p>
-                            <p class="text-[#3E3E3E]">{{item.createdAt | date:'hh:mm a'}}</p>
+                            <p class="text-[#3E3E3E]">{{ item.createdAt | date:'yyyy/MM/dd' }}</p>
+                            <p class="text-[#3E3E3E]">{{ item.createdAt | date:'hh.mm a' }}</p>
+                          </div>
+                          
+                    </td>
+                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300 align-middle">
+                        <div class="flex items-center justify-center h-full">
+                            <span *ngIf="item.status === 'Assigned'"
+                                  class="bg-[#C8E0FF] text-[#415CFF] px-3 py-1 rounded-lg">
+                                Assigned
+                            </span>
+                    
+                            <span *ngIf="item.status === 'Closed'"
+                                  class="bg-[#B7FFBE] text-[#02BB3D] px-3 py-1 rounded-lg">
+                                Closed
+                            </span>
                         </div>
                     </td>
-                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300 flex items-center justify-center cursor-default">
-                        <span *ngIf="item.status ==='Assigned'"
-                            class="bg-[#C8E0FF] text-[#415CFF] px-3 py-1 rounded-lg">
-                            Assigned
-                        </span>
-
-                        <span *ngIf="item.status ==='Closed'" class="bg-[#B7FFBE] text-[#02BB3D] px-3 py-1 rounded-lg">
-                            Closed
-                        </span>
-                    </td>
+                    
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300 cursor-pointer" (click)="navigateViewReply(item.id)">
                         <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none"
                             xmlns="http://www.w3.org/2000/svg" stroke="">

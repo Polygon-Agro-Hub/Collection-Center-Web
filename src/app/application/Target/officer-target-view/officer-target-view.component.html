@@ -142,7 +142,7 @@
                         Expired</option>
                     <option value="Valid"
                         class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">
-                        Valid</option>
+                        Active</option>
                     
                 </select>
 
@@ -187,8 +187,14 @@
 
     </div>
 
+    <div *ngIf="hasData && !hasData2"
+            class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6 ">
+            <p class="text-[#494949] my-6 dark:text-textDark">--No Data Availabale--</p>
+            <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
+        </div>
 
-    <div class=" mr-5 min-w-max border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+
+    <div *ngIf="hasData" class=" mr-5 min-w-max border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
         <table class="w-full min-w-max divide-y-2 overflow-hidden">
             <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
                 <tr>
@@ -236,12 +242,14 @@
                     </td>
                     <td class="px-6 py-4">
                         <i class="fa-solid fa-pen-to-square text-xl cursor-pointer"
-                            (click)="item.validity === 'Valid' && editOfficerTarget(item.id)" [ngClass]="{
-                            'text-gray-400': item.validity === 'Expired',
-                            'text-[#415CFF]': item.validity === 'Valid'
-                          }">
+                           (click)="item.validity === 'Valid' && editOfficerTarget(item.id, OfficerObj.toDate, OfficerObj.fromDate)"
+                           [ngClass]="{
+                             'text-gray-400': item.validity === 'Expired' || (item.validity === 'Valid' && (item.target === item.complete || item.target < item.complete)),
+                             'text-[#415CFF]': item.validity === 'Valid' && item.target > item.complete
+                           }">
                         </i>
-                    </td>
+                      </td>
+                      
                 </tr>
             </tbody>
         </table>

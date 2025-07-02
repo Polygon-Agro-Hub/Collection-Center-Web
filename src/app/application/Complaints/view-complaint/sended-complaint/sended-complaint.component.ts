@@ -37,6 +37,9 @@ export class SendedComplaintComponent implements OnInit {
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Opened', 'Closed'];
 
+  expandedItems: { [key: number]: boolean } = {};
+
+
   toggleStatusDropdown() {
     this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
   }
@@ -93,6 +96,7 @@ export class SendedComplaintComponent implements OnInit {
     this.ComplainSrv.getAllSentComplains(page, limit, status, emptype, search).subscribe(
       (res) => {
         this.complainArr = res.items
+        console.log(this.complainArr);
         this.totalItems = res.total;
         this.officerId = res.userId
 
@@ -170,9 +174,19 @@ export class SendedComplaintComponent implements OnInit {
     this.isReplyView = false;
   }
 
-  truncateText(text: string, maxLength: number = 150): string {
+  // truncateText(text: string, maxLength: number = 150): string {
+  //   if (!text) return '';
+  //   return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+  // }
+
+  truncateText(text: string, id: number, maxLength: number = 150): string {
     if (!text) return '';
+    if (this.expandedItems[id]) return text;
     return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+  }
+
+  toggleText(id: number): void {
+    this.expandedItems[id] = !this.expandedItems[id];
   }
 
 }

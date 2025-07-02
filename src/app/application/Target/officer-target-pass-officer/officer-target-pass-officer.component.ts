@@ -5,6 +5,7 @@ import { ToastAlertService } from '../../../services/toast-alert/toast-alert.ser
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-officer-target-pass-officer',
@@ -19,6 +20,8 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
   filteredOfficers: Officers[] = [];
 
   targetItemId!: number;
+  toDate! :string;
+  fromDate!: string;
 
   passAmount: number = 0.00;
   amount: number = 0.00;
@@ -37,7 +40,10 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
 
   ngOnInit(): void {
     this.targetItemId = this.route.snapshot.params['id'];
-    this.fetchTargetDetalis()
+    this.toDate = this.route.snapshot.params['toDate'];
+    this.fromDate = this.route.snapshot.params['fromDate'];
+  
+    this.fetchTargetDetalis();
   }
 
   fetchTargetDetalis() {
@@ -92,7 +98,7 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
     this.TargetSrv.passToTargetToOfficer(this.selectedOfficerId, this.targetItemId, this.passAmount).subscribe(
       (res) => {
         if (res.status) {
-          this.toastSrv.success(res.message);
+          this.toastSrv.success("Successfully changed the Target Amount");
           this.isLoading = false;
           this.fetchTargetDetalis()
           this.router.navigate(['/officer-target'])
@@ -102,10 +108,6 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
         }
       }
     )
-
-  }
-
-  onCancel() {
 
   }
 
@@ -136,6 +138,52 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
 
     return `${month}.${day}.${year}`;
   }
+
+  onCancel() {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you really want to cancel this form?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, Cancel it!',
+      cancelButtonText: 'No, Stay On Page',
+      customClass: {
+        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+        title: 'dark:text-white',
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.toastSrv.warning('Officer Target Edit Canceled.')
+        this.router.navigate(['/officer-target']);
+
+      }
+    });
+  }
+
+  // Prevent typing zero or negative values
+preventZeroAndNegative(event: KeyboardEvent) {
+  const inputChar = event.key;
+  const currentValue = (event.target as HTMLInputElement).value;
+  
+  // Prevent typing '-' or '0' as first character
+  if ((inputChar === '-' || inputChar === '0') && currentValue === '') {
+      event.preventDefault();
+  }
+  
+  // Prevent typing '0' after existing '0' (like "00")
+  if (inputChar === '0' && currentValue === '0') {
+      event.preventDefault();
+  }
+}
+
+// Validate the input value
+validatePassAmount() {
+  if (this.passAmount <= 0) {
+      this.passAmount = 1; // Reset to minimum valid value
+  }
+}
 
 }
 

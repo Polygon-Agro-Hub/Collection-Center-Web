@@ -23,8 +23,8 @@
     <div>
 
         <div class="flex flex-row items-center justify-between mt-5">
-            <div class="flex flex-col justify-between">
-                <p class="font-semibold text-lg mb-1">{{targetArr[0].regCode}} Centre Target on {{today}} </p>
+            <div class="flex flex-col justify-between" >
+                <p class="font-semibold text-lg mb-1" *ngIf="hasData">{{targetArr[0].regCode}} Centre Target on {{today}} </p>
             </div>
             <div class="flex flex-row items-center gap-8 ">
                 <i class="fa-solid fa-list text-2xl ml-8"></i>

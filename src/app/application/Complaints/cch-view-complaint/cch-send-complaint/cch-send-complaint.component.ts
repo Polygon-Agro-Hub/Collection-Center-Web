@@ -37,6 +37,8 @@ export class CchSendComplaintComponent implements OnInit {
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Opened', 'Closed'];
 
+  expandedItems: { [key: number]: boolean } = {};
+
   toggleStatusDropdown() {
     this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
   }
@@ -170,6 +172,16 @@ export class CchSendComplaintComponent implements OnInit {
 
   cancelViewReply() {
     this.isReplyView = false;
+  }
+
+  truncateText(text: string, id: number, maxLength: number = 150): string {
+    if (!text) return '';
+    if (this.expandedItems[id]) return text;
+    return text.length > maxLength ? text.substring(0, maxLength) + '...' : text;
+  }
+
+  toggleText(id: number): void {
+    this.expandedItems[id] = !this.expandedItems[id];
   }
 
 

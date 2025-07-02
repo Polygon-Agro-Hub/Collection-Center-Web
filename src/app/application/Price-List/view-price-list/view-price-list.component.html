@@ -118,8 +118,10 @@
 
         </div>
 
-        <div *ngIf="!hasData" class="flex justify-center items-center mt-8 mr-5 w-full h-[500px]">
-            <p class="text-3xl text-center font-semibold dark:text-white">No Data Availabale</p>
+        <div *ngIf="!hasData"
+            class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6 ">
+            <p class="text-[#494949] my-6 dark:text-textDark">--No Data Availabale--</p>
+            <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
         </div>
 
         <div *ngIf="hasData" class="min-w-max mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">

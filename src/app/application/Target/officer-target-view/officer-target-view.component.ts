@@ -31,6 +31,7 @@ export class OfficerTargetViewComponent {
   selectValidity: string = '';
 
   isDownloading: boolean = false;
+  hasData2: boolean = true;
 
   constructor(
     private router: Router,
@@ -55,23 +56,44 @@ export class OfficerTargetViewComponent {
 
     this.TargetSrv.getOfficerAvailabeTarget(this.OfficerObj, page, limit, status, validity, searchText).subscribe(
       (res) => {
-        if (res.status) {
-          this.responseTitle = res.message;
-          this.hasData = true;
+        console.log('fetching');
+        console.log(this.hasData2);
           this.targetArr = res.result;
           this.totalItems = res.total;
-          this.isLoading = false;
-        } else {
-          this.responseTitle = res.message;
-          this.hasData = false;
+          if (res.total === 0) {
+            this.hasData2 = false;
+          } else {
+            this.hasData2 = true;
+          }
           this.isLoading = false;
 
-        }
+          console.log('fetched');
+          console.log(this.hasData2);
       }
+      // (res) => {
+      //   if (res.status) {
+      //     this.responseTitle = res.message;
+      //     this.targetArr = res.result;
+      //     this.totalItems = res.total;
+      //     if (res.total === 0) {
+      //       this.hasData = false;
+      //     } else {
+      //       this.hasData = true;
+      //     }
+      //     this.isLoading = false;
+      //   } else {
+      //     this.responseTitle = res.message;
+      //     this.hasData = false;
+      //     this.isLoading = false;
+
+      //   }
+      // }
     )
   }
 
   onSubmit(page: number = this.page, limit: number = this.itemsPerPage, status: string = this.selectStatus, validity: string = this.selectValidity, searchText: string = this.searchText) {
+    console.log('subbimiting');
+    console.log(this.hasData);
     this.isLoading = true
     if (!this.OfficerObj.jobRole || !this.OfficerObj.officerId || !this.OfficerObj.fromDate || !this.OfficerObj.toDate) {
       this.toastSrv.warning('Fill All Input feilds')
@@ -88,19 +110,37 @@ export class OfficerTargetViewComponent {
     }
 
     this.TargetSrv.getOfficerAvailabeTarget(this.OfficerObj, page, limit, status, validity, searchText).subscribe(
+
       (res) => {
-        if (res.status) {
-          this.responseTitle = res.message;
-          this.hasData = true;
-          this.targetArr = res.result;
+        console.log('fetching');
+        console.log(this.hasData);
+        this.targetArr = res.result;
           this.totalItems = res.total;
-          this.isLoading = false;
-        } else {
-          this.responseTitle = res.message;
-          this.hasData = false;
+          if (res.total === 0) {
+            this.hasData = false;
+          } else {
+            this.hasData = true;
+          }
           this.isLoading = false;
 
-        }
+          console.log('fetched');
+          console.log(this.hasData);
+        // console.log('fetching');
+        // console.log(this.hasData);
+        // if (res.status) {
+        //   this.responseTitle = res.message;
+        //   this.hasData = true;
+        //   this.targetArr = res.result;
+        //   this.totalItems = res.total;
+        //   this.isLoading = false;
+        // } else {
+        //   this.responseTitle = res.message;
+        //   this.hasData = false;
+        //   this.isLoading = false;
+
+        // }
+        // console.log('fetched');
+        // console.log(this.hasData);
       }
     )
   }
@@ -115,7 +155,7 @@ export class OfficerTargetViewComponent {
   onPageChange(event: number) {
     this.page = event;
     if (this.OfficerObj.fromDate && this.OfficerObj.fromDate) {
-      this.fetchAllOfficers
+      this.fetchAllOfficers(this.page, this.itemsPerPage);
     } else {
       this.onSubmit();
     }
@@ -138,8 +178,8 @@ export class OfficerTargetViewComponent {
     }
   }
 
-  editOfficerTarget(id: number) {
-    this.router.navigate([`/officer-target/edit-officer-target/${id}`])
+  editOfficerTarget(id: number, toDate: string, fromDate: string) {
+    this.router.navigate(['/officer-target/edit-officer-target', id, toDate, fromDate]);
   }
 
   applyStatusFilters() {

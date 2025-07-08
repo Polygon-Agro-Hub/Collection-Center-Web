@@ -48,6 +48,7 @@ import { NotFoundPageComponent } from './components/not-found-page/not-found-pag
 import { UnauthorizedAccessPageComponent } from './components/unauthorized-access-page/unauthorized-access-page.component';
 import { CcmRoleGuardService } from './services/RoleGuard/ccm-role-guard.service';
 import { ViewCentresComponent } from './application/Distributed-Center/Centres/view-centres/view-centres.component';
+import { ViewDistributedOfficersComponent } from './application/Distributed-Center/distributed-manage-officers/view-distributed-officers/view-distributed-officers.component';
 
 export const routes: Routes = [
     {
@@ -299,6 +300,16 @@ export const routes: Routes = [
                     {
                         path: '',
                         component: ViewCentresComponent,
+                    }
+                ]
+            },
+            {
+                path: 'distribution-officers',
+                // canActivate:[CcmRoleGuardService],
+                children: [
+                    {
+                        path: '',
+                        component: ViewDistributedOfficersComponent,
                     }
                 ]
             },

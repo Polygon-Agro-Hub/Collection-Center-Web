@@ -90,12 +90,22 @@ export const MENU_ITEMS = [
     icon: 'fa-solid fa-triangle-exclamation',
     permission: ['Collection Center Head'],
   },
+
+  // ----------------------------------------- Distribution Center part ------------------------------------------
   {
     id: 11,
     key: 'distribution-center',
     path: '/distribution-center',
     label: 'Centres',
     icon: 'fa-solid fa-bullseye',
+    permission: ['Distribution Center Head'],
+  },
+  {
+    id: 12,
+    key: 'distribution-officers',
+    path: '/distribution-officers',
+    label: 'Manage Officers',
+    icon: 'fas fa-user-cog',
     permission: ['Distribution Center Head'],
   },
 ];

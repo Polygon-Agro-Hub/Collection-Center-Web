@@ -1,0 +1,354 @@
+<app-loading-spinner *ngIf="isLoading" />
+
+<div *ngIf="!isLoading">
+    <p class="font-semibold text-[#424242] mb-4 mr-5 ml-0 dark:text-[#FFFFFF] dark:bg-black cursor-pointer">Manage
+        Officers</p>
+
+    <div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg overflow-x-auto">
+        <div class="flex flex-row items-center justify-between">
+            <div class="flex flex-row gap-4">
+                <button
+                    class="w-28 bg-[#415CFF] text-[#FFFFFF] dark:text-white rounded-lg shadow-lg px-4 py-2 whitespace-nowrap"
+                    (click)="navigate('/manage-officers/create-officer')">
+                    Add Officer
+                </button>
+
+                <span *ngIf="logingRole === 'Collection Center Manager'">
+                    <button class="bg-[#415CFF] text-white rounded-lg shadow-lg px-4 py-2 w-28"
+                        (click)="navigate('/manage-officers/claim-officer')">
+                        Claim Officer
+                    </button>
+                </span>
+            </div>
+            <div class="flex flex-row items-center gap-5 ">
+                <i class="fa-solid fa-list text-2xl dark:text-white ml-8"></i>
+
+                <p class="font-normal dark:text-white">Filter By</p>
+
+                <div class="relative w-56 custom-role-dropdown-container">
+                    <!-- Hidden native select -->
+                    <select [(ngModel)]="selectRole" class="hidden" (change)="applyRoleFilters()">
+                        <option value="Collection Center Manager">Collection Center Manager</option>
+                        <option value="Collection Officer">Collection Officer</option>
+                        <option value="Customer Officer">Customer Officer</option>
+                        <option value="Driver">Driver</option>
+                    </select>
+
+                    <!-- Custom dropdown trigger -->
+                    <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
+                        (click)="toggleRoleDropdown()">
+                        <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
+                            <span>{{ selectRole || 'Role' }}</span>
+                            <div class="flex items-center">
+                                <!-- X icon (shown ONLY when option is selected) -->
+                                <i *ngIf="selectRole" (click)="clearRoleFilter($event)"
+                                    class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
+
+                                <!-- Arrow icon (shown when EITHER: dropdown is open OR no selection exists) -->
+                                <i *ngIf="isRoleDropdownOpen || !selectRole"
+                                    class="fa-solid text-lg text-[#828282] transition-transform duration-200"
+                                    [class.fa-angle-down]="!isRoleDropdownOpen"
+                                    [class.fa-angle-up]="isRoleDropdownOpen"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Custom dropdown options -->
+                    <div *ngIf="isRoleDropdownOpen"
+                        class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
+                        <div class="py-1">
+                            <div *ngFor="let option of roleDropdownOptions" (click)="selectRoleOption(option)"
+                                class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
+                                <span class="flex-grow">{{ option }}</span>
+                                <i
+                                    class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <!-- <div class="relative w-36">
+                    <div
+                        class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
+                        <select (change)="applyStatusFilters()" [(ngModel)]="selectStatus"
+                            class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
+                            <option value="" selected disabled>Status</option>
+                            <option value="Approved"
+                                class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">
+                                Approved</option>
+                            <option value="Not Approved"
+                                class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">
+                                Not Approved</option>
+                            <option value="Rejected"
+                                class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">
+                                Rejected</option>
+
+                        </select>
+                        <button *ngIf="selectStatus" (click)="clearStatusFilter()">
+                            <i class="fa-solid fa-xmark text-lg mr-3"></i>
+                        </button>
+
+                    </div>
+                </div> -->
+
+                <!-- <div class="relative w-52">
+                    <div
+                        class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
+                        <select [(ngModel)]="selectStatus" (change)="applyStatusFilters()"
+                            class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer">
+                            <option value="" selected disabled>Status</option>
+                            <option value="Approved"
+                                class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">
+                                Approved</option>
+                            <option value="Not Approved"
+                                class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">
+                                Not Approved</option>
+                            <option value="Rejected"
+                                class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">
+                                Rejected</option>
+                        </select>
+
+
+                        <div *ngIf="!selectStatus"
+                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
+                            <i class="fa-solid fa-angle-down text-lg text-[#828282] mr-3"></i>
+                        </div>
+
+
+                        <div (click)="clearStatusFilter()" *ngIf="selectStatus"
+                            class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300 cursor-pointer z-10">
+                            <i class="fa-solid fa-xmark text-lg text-[#828282] mr-3"></i>
+                        </div>
+                    </div>
+                </div> -->
+
+                <!-- <div *ngIf="isDropdownOpen" class="dropdown-backdrop" (click)="isDropdownOpen = false"></div> -->
+                <div class="relative w-40 custom-status-dropdown-container">
+                    <!-- Hidden native select -->
+                    <select [(ngModel)]="selectStatus" class="hidden" (change)="applyStatusFilters()">
+                        <option class="hover:bg-gray-300 dark:hover:bg-gray-300" value=""></option>
+                        <option class="hover:bg-gray-300 dark:hover:bg-gray-300" value="Approved">Approved</option>
+                        <option class="hover:bg-gray-300 dark:hover:bg-gray-300" value="Not Approved">Not Approved
+                        </option>
+                        <option class="hover:bg-gray-300 dark:hover:bg-gray-300" value="Rejected">Rejected</option>
+                    </select>
+
+                    <!-- Custom dropdown trigger -->
+                    <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
+                        (click)="toggleStatusDropdown()">
+                        <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer ">
+                            <span>{{ selectStatus || 'Status' }}</span>
+                            <div class="flex items-center ">
+                                <!-- X icon (shown ONLY when option is selected) -->
+                                <i *ngIf="selectStatus" (click)="clearStatusFilter($event)"
+                                    class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
+
+                                <!-- Arrow icon (shown when EITHER: dropdown is open OR no selection exists) -->
+                                <i *ngIf="isStatusDropdownOpen || !selectStatus"
+                                    class="fa-solid text-lg text-[#828282] transition-transform duration-200"
+                                    [class.fa-angle-down]="!isStatusDropdownOpen"
+                                    [class.fa-angle-up]="isStatusDropdownOpen"></i>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Custom dropdown options -->
+                    <div *ngIf="isStatusDropdownOpen"
+                        class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
+                        <div class="py-1">
+                            <div *ngFor="let option of statusDropdownOptions" (click)="selectStatusOption(option)"
+                                class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
+                                <span class="flex-grow">{{ option }}</span>
+                                <i
+                                    class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+                <!-- <div class="relative w-46" *ngIf="logingRole ==='Collection Center Head'">
+                    <div
+                        class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
+                        <select (change)="applyCompanyFilters()" [(ngModel)]="selectCenters"
+                            class="block w-full appearance-none  dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
+                            <option value="" selected disabled>Centers</option>
+                            <option *ngFor="let item of centerArr"
+                                class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                                [value]="item.id">{{item.centerName}}</option>
+                        </select>
+                        <button *ngIf="selectCenters" (click)="clearCompanyFilter()">
+                            <i class="fa-solid fa-xmark text-lg mr-3"></i>
+                        </button>
+
+                    </div>
+                </div> -->
+
+
+
+
+                <div class="relative w-52 custom-center-dropdown-container">
+                    <!-- Hidden native select -->
+                    <select [(ngModel)]="selectCenters" class="hidden" (change)="applyCompanyFilters()">
+                        <option value=""></option>
+                        <option *ngFor="let item of centerArr"
+                            class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                            [value]="item.id">{{item.regCode}} - {{item.centerName}}</option>
+                    </select>
+                    <!-- Custom dropdown trigger -->
+                    <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
+                        (click)="toggleCenterDropdown()">
+                        <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
+                            <span>{{ selectedCenterDisplay }}</span>
+                            <div class="flex items-center">
+                                <!-- X icon (shown ONLY when option is selected) -->
+                                <i *ngIf="selectCenters" (click)="clearCompanyFilter($event)"
+                                    class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
+                                <!-- Arrow icon (shown when EITHER: dropdown is open OR no selection exists) -->
+                                <i *ngIf="isCenterDropdownOpen || !selectCenters"
+                                    class="fa-solid text-lg text-[#828282] transition-transform duration-200"
+                                    [class.fa-angle-down]="!isCenterDropdownOpen"
+                                    [class.fa-angle-up]="isCenterDropdownOpen"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- Custom dropdown options -->
+                    <div *ngIf="isCenterDropdownOpen"
+                        class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
+                        <div class="py-1">
+                            <div *ngFor="let center of centerArr" (click)="selectCenterOption(center)"
+                                class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-300 cursor-pointer flex items-center">
+                                <span class="flex-grow">{{ center.regCode }} - {{ center.centerName }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+
+
+                <!-- <p-dropdown
+                styleClass="border border-2 rounded-xl h-8 items-center bg-[#F1F1F1] dark:bg-[#272F45] text-textLight dark:text-textDark"
+                [options]="companyArr" [checkmark]="true" optionLabel="companyNameEnglish" [showClear]="true"
+                placeholder="Role" (onChange)="applyCompanyFilters()" /> -->
+
+                <div
+                    class="flex items-center text-[#95A1AC] text-lg rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+                    <input type="text" placeholder="Search..." [(ngModel)]="searchText" (keyup.enter)="onSearch()"
+                        (keyup.esc)="offSearch()"
+                        class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
+                    <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
+                        (click)="onSearch()">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
+                        </svg>
+                    </button>
+                    <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none"
+                        (click)="offSearch()">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div *ngIf="!hasData"
+            class="flex flex-col items-center w-full h-screen px-10 py-7 bg-tileLight dark:bg-[#363636] dark:text-textDark mt-6">
+            <p class="text-[#494949] my-6 dark:text-textDark">--No Data Availabale--</p>
+            <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20 dark:text-textDark" />
+        </div>
+
+        <div *ngIf="hasData" class="min-w-max mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+            <table class="w-full min-w-max divide-y-2 border-[1px] border-gray-300 rounded-lg overflow-hidden">
+                <thead class=" text-[#4B5563] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
+                    <tr>
+                        <th class="px-2 py-3 text-left text-sm font-medium">No</th>
+                        <th class="px-3 py-3 text-left text-sm font-medium">EMP ID</th>
+                        <th class="px-3 py-3 text-left text-sm font-medium">First Name</th>
+                        <th class="px-3 py-3 text-left text-sm font-medium">Last Name</th>
+                        <th class="px-3 py-3 text-left text-sm font-medium"
+                            *ngIf="logingRole ==='Collection Center Head'">
+                            Centres</th>
+                        <th class="px-3 py-3 text-left text-sm font-medium ">Role</th>
+                        <th class="px-3 py-3 text-center text-sm font-medium ">Status</th>
+                        <th class="px-3 py-3 text-center text-sm font-medium">Phone</th>
+                        <th class="px-3 py-3 text-center text-sm font-medium">NIC</th>
+                        <th class="px-3 py-3 text-center text-sm font-medium"></th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white text-[#000000] dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
+                    <tr *ngFor="let item of OfficerArr | paginate
+                : {
+                    itemsPerPage: itemsPerPage,
+                    currentPage: page,
+                    totalItems: totalItems
+                  };  let i = index">
+                        <td class="px-2 py-4 text-sm text-gray-900 dark:text-gray-300 ">
+                            {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i + 1)
+                                : (((page - 1) * itemsPerPage) + i + 1) }} </td>
+                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.empId}}</td>
+                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.firstNameEnglish}}</td>
+                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.lastNameEnglish}}</td>
+                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300"
+                            *ngIf="logingRole ==='Collection Center Head'">{{item.centerName}}</td>
+                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.jobRole}}</td>
+                        <td class="px-3 py-4 text-center">
+                            <div class="flex justify-center items-center"
+                                [style.cursor]="logingRole === 'Collection Center Head' ? 'pointer' : 'default'"
+                                (click)="logingRole === 'Collection Center Head' && openPopup(item)">
+                                <span *ngIf="item.status === 'Approved'"
+                                    class="inline-block px-6 py-1 bg-[#C8E0FF] text-[#415CFF] text-sm font-medium rounded-md shadow-md">
+                                    Approved
+                                </span>
+                                <span *ngIf="item.status === 'Not Approved'"
+                                    class="inline-block px-3 py-1 bg-[#F8FFA6] text-[#A8A100] text-sm font-medium rounded-md shadow-md">
+                                    Not Approved
+                                </span>
+                                <span *ngIf="item.status === 'Rejected'"
+                                    class="inline-block px-8 py-1 bg-[#FFB9B7] text-[#D16D6A]  text-sm font-medium rounded-md shadow-md">
+                                    Rejected
+                                </span>
+                            </div>
+                        </td>
+
+                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300 text-center">
+                            {{ item.phoneNumber01 ? item.phoneCode01 + item.phoneNumber01 : 'N/A' }}
+                        </td>
+                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300 text-center">{{item.nic}}</td>
+                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300 text-center">
+                            <button class="text-gray-400 hover:text-gray-600 px-2" (click)="navigateToProfile(item.id)">
+                                <i class="fa-regular fa-file text-lg text-gray-600"></i>
+                            </button>
+                            <button class="text-[#415CFF] hover:text-blue-500 px-2" [ngClass]="{
+                                    'text-gray-400 hover:text-gray-600': (logingRole ==='Collection Center Manager' && (item.jobRole === 'Collection Center Manager' || item.jobRole ==='Driver'))
+                                  }"
+                                (click)="(logingRole ==='Collection Center Manager' && (item.jobRole === 'Collection Center Manager' || item.jobRole ==='Driver')) ? '' : navigateToEdit(item.id)">
+                                <i class="fa-solid fa-pen-to-square text-lg"></i>
+                            </button>
+                            <button class="text-[#FF415C] hover:text-red-500 px-2"
+                                (click)="(logingRole ==='Collection Center Manager' && item.jobRole === 'Collection Center Manager') ? '' : deleteCollectionOfficer(item.id)">
+                                <i class="fa-solid fa-trash text-lg"></i>
+                            </button>
+
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div *ngIf="hasData" class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#262f45] text-right">
+            <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
+                [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
+                [screenReaderCurrentLabel]="'Youre on page'">
+            </pagination-controls>
+        </div>
+    </div>
+</div>

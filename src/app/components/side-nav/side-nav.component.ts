@@ -14,7 +14,7 @@ export const MENU_ITEMS = [
     path: '/dashbord',
     label: 'Dashbord',
     icon: 'fas fa-th-large',
-    permission: 'Collection Center Manager',
+    permission: ['Collection Center Manager'],
   },
   {
     id: 2,
@@ -22,7 +22,7 @@ export const MENU_ITEMS = [
     path: '/target',
     label: 'Centre Target',
     icon: 'fa-solid fa-bullseye',
-    permission: 'Collection Center Manager',
+    permission: ['Collection Center Manager'],
   },
   {
     id: 3,
@@ -30,7 +30,7 @@ export const MENU_ITEMS = [
     path: '/officer-target',
     label: 'Officer Target',
     icon: 'fa-solid fa-user-plus',
-    permission: 'Collection Center Manager',
+    permission: ['Collection Center Manager'],
   },
   {
     id: 4,
@@ -38,7 +38,7 @@ export const MENU_ITEMS = [
     path: '/centers',
     label: 'Centres',
     icon: 'fa-solid fa-bullseye',
-    permission: 'Collection Center Head',
+    permission: ['Collection Center Head'],
   },
   {
     id: 5,
@@ -46,7 +46,7 @@ export const MENU_ITEMS = [
     path: '/price-list',
     label: 'Price List',
     icon: 'fa-solid fa-tag',
-    permission: 'Collection Center Manager',
+    permission: ['Collection Center Manager'],
   },
   {
     id: 6,
@@ -54,7 +54,7 @@ export const MENU_ITEMS = [
     path: '/price-request',
     label: 'Price Requests',
     icon: 'fas fa-hand-holding-usd',
-    permission: 'Collection Center Manager',
+    permission: ['Collection Center Manager'],
   },
   {
     id: 7,
@@ -62,6 +62,8 @@ export const MENU_ITEMS = [
     path: '/reports',
     label: 'Reports',
     icon: 'fa-solid fa-chart-pie',
+    permission: ['Collection Center Manager', 'Collection Center Head'],
+
   },
   {
     id: 8,
@@ -69,6 +71,8 @@ export const MENU_ITEMS = [
     path: '/manage-officers',
     label: 'Manage Officers',
     icon: 'fas fa-user-cog',
+    permission: ['Collection Center Manager', 'Collection Center Head'],
+
   },
   {
     id: 9,
@@ -76,7 +80,7 @@ export const MENU_ITEMS = [
     path: '/complaints',
     label: 'Complaints',
     icon: 'fa-solid fa-triangle-exclamation',
-    permission: 'Collection Center Manager',
+    permission: ['Collection Center Manager'],
   },
   {
     id: 10,
@@ -84,7 +88,15 @@ export const MENU_ITEMS = [
     path: '/cch-complaints',
     label: 'Complaints',
     icon: 'fa-solid fa-triangle-exclamation',
-    permission: 'Collection Center Head',
+    permission: ['Collection Center Head'],
+  },
+  {
+    id: 11,
+    key: 'distribution-center',
+    path: '/distribution-center',
+    label: 'Centres',
+    icon: 'fa-solid fa-bullseye',
+    permission: ['Distribution Center Head'],
   },
 ];
 
@@ -105,7 +117,7 @@ export class SideNavComponent {
 
   get filteredMenuItems() {
     return this.menuItems.filter(
-      (item) => !item.permission || item.permission === this.role
+      (item) => !item.permission || item.permission.includes(this.role!)
     );
   }
 
@@ -171,23 +183,6 @@ export class SideNavComponent {
   logOut(): void {
     if (isPlatformBrowser(this.platformId)) {
       this.logOutView = !this.logOutView;
-
-      // Swal.fire({
-      //   icon: 'warning',
-      //   title: 'Logged Out',
-      //   text: 'Are you sure, you want to logged out.',
-      //   showCancelButton: true,
-      //   confirmButtonColor: '#3085d6',
-      //   cancelButtonColor: '#d33',
-      //   confirmButtonText: 'Yes',
-      //   cancelButtonText: 'No',
-      // }).then((result) => {
-      //   if (result.isConfirmed) {
-      //     this.tokenSrv.clearLoginDetails();
-      //     this.router.navigate(['login']);
-      //     this.toastSrv.success(`<b>Logout !`);
-      //   }
-      // });
     }
   }
 
@@ -205,8 +200,10 @@ export class SideNavComponent {
   selectIdealTab() {
     if (this.role === 'Collection Center Manager') {
       this.isSelectTab = 'dashboard';
-    } else {
+    } else if (this.role === 'Collection Center Head') {
       this.isSelectTab = 'centers';
+    } else {
+      this.isSelectTab = 'distribution-center';
     }
   }
 }

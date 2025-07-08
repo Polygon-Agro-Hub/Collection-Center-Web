@@ -47,6 +47,7 @@ import { OfficerTargetPassOfficerComponent } from './application/Target/officer-
 import { NotFoundPageComponent } from './components/not-found-page/not-found-page.component';
 import { UnauthorizedAccessPageComponent } from './components/unauthorized-access-page/unauthorized-access-page.component';
 import { CcmRoleGuardService } from './services/RoleGuard/ccm-role-guard.service';
+import { ViewCentresComponent } from './application/Distributed-Center/Centres/view-centres/view-centres.component';
 
 export const routes: Routes = [
     {
@@ -288,6 +289,17 @@ export const routes: Routes = [
                         component: OfficerTargetPassOfficerComponent
                     }
 
+                ]
+            },
+            // ----------------------------------------- Distribution Center Routes ------------------------------------------
+            {
+                path: 'distribution-center',
+                // canActivate:[CcmRoleGuardService],
+                children: [
+                    {
+                        path: '',
+                        component: ViewCentresComponent,
+                    }
                 ]
             },
 

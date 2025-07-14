@@ -1,0 +1,235 @@
+import { CommonModule } from '@angular/common';
+import { Component, OnInit, ViewChild  } from '@angular/core';
+import { FormsModule, NgForm  } from '@angular/forms';
+import { Router } from '@angular/router';
+import { ToastAlertService } from '../../../../services/toast-alert/toast-alert.service';
+import Swal from 'sweetalert2';
+import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
+import { Location } from '@angular/common';
+import { DistributionServiceService } from '../../../../services/Distribution-Service/distribution-service.service';
+
+@Component({
+  selector: 'app-create-distribution-centre',
+  standalone: true,
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent],
+  templateUrl: './create-distribution-centre.component.html',
+  styleUrl: './create-distribution-centre.component.css'
+})
+export class CreateDistributionCentreComponent implements OnInit {
+
+  @ViewChild('centerForm') centerForm!: NgForm;
+  centerData: CenterData = new CenterData();
+
+  isLoading: boolean = false;
+
+
+  provinces: string[] = [
+    'Western',
+    'Central',
+    'Southern',
+    'Northern',
+    'Eastern',
+    'North Western',
+    'North Central',
+    'Uva',
+    'Sabaragamuwa'
+  ];
+
+  // Define all districts with their provinces
+  allDistricts = [
+    { name: 'Ampara', province: 'Eastern' },
+    { name: 'Anuradhapura', province: 'North Central' },
+    { name: 'Badulla', province: 'Uva' },
+    { name: 'Batticaloa', province: 'Eastern' },
+    { name: 'Colombo', province: 'Western' },
+    { name: 'Galle', province: 'Southern' },
+    { name: 'Gampaha', province: 'Western' },
+    { name: 'Hambantota', province: 'Southern' },
+    { name: 'Jaffna', province: 'Northern' },
+    { name: 'Kalutara', province: 'Western' },
+    { name: 'Kandy', province: 'Central' },
+    { name: 'Kegalle', province: 'Sabaragamuwa' },
+    { name: 'Kilinochchi', province: 'Northern' },
+    { name: 'Kurunegala', province: 'North Western' },
+    { name: 'Mannar', province: 'Northern' },
+    { name: 'Matale', province: 'Central' },
+    { name: 'Matara', province: 'Southern' },
+    { name: 'Monaragala', province: 'Uva' },
+    { name: 'Mullaitivu', province: 'Northern' },
+    { name: 'Nuwara Eliya', province: 'Central' },
+    { name: 'Polonnaruwa', province: 'North Central' },
+    { name: 'Puttalam', province: 'North Western' },
+    { name: 'Rathnapura', province: 'Sabaragamuwa' },
+    { name: 'Trincomalee', province: 'Eastern' },
+    { name: 'Vavuniya', province: 'Northern' },
+  ];
+
+  // Districts filtered by selected province
+  filteredDistricts: { name: string, province: string }[] = [];
+
+  constructor(
+    private router: Router,
+    private toastSrv: ToastAlertService,
+    private DistributionService: DistributionServiceService,
+    private location: Location
+  ) { }
+
+  ngOnInit(): void {
+    this.updateFilteredDistricts(); // Initialize filtered districts
+  }
+
+  // Update the filtered districts based on selected province
+  updateFilteredDistricts() {
+    if (this.centerData.province) {
+      this.filteredDistricts = this.allDistricts.filter(d => d.province === this.centerData.province);
+    } else {
+      this.filteredDistricts = this.allDistricts;
+    }
+    this.centerData.district = ''; // Clear district selection when province changes
+  }
+
+  // When district is selected, automatically set the province
+  filterDistrict() {
+    if (this.centerData.district) {
+      const selectedDistrict = this.allDistricts.find(d => d.name === this.centerData.district);
+      if (selectedDistrict) {
+        // Update the province based on the selected district
+        this.centerData.province = selectedDistrict.province;
+
+        // Update filtered districts for the selected province
+        this.filteredDistricts = this.allDistricts.filter(d => d.province === this.centerData.province);
+      }
+    }
+  }
+
+  onSubmit() {
+
+    Object.values(this.centerForm.controls).forEach(control => {
+      control.markAsTouched();
+    });
+
+    if (!this.centerForm.valid) {
+      this.toastSrv.warning('Please fill all required fields');
+      return;
+    }
+
+    this.isLoading = true;
+
+    // Validate form data
+    if (
+      !this.centerData ||
+      !this.centerData.DistributionCenterName ||
+      !this.centerData.district ||
+      !this.centerData.country ||
+      !this.centerData.longitude ||
+      !this.centerData.city ||
+      !this.centerData.latitude
+    ) {
+      this.isLoading = false;
+      this.toastSrv.warning('Please fill all required fields');
+      return;
+    }
+
+    // Call the service to create a center
+    this.DistributionService.createDistributionCenter(this.centerData).subscribe({
+      next: (res: any) => {
+        if (res.status) {
+          this.toastSrv.success('Distribution Centre Created Successfully');
+          this.router.navigate(['/distribution-center']);
+        } else {
+          this.toastSrv.error(res.message || 'There was an error creating the Distribution Centre');
+        }
+      },
+      error: (error: any) => {
+        this.isLoading = false;
+
+        // Handle different types of errors based on error status or message
+        if (error.status === 400) {
+          // Validation error or bad request
+          const errorMessage =
+            error?.error?.message ||
+            'Invalid input. Please check the data and try again.';
+          this.toastSrv.error(errorMessage);
+        } else if (error.status === 409) {
+          // Conflict error, e.g., duplicate regCode
+          const errorMessage =
+            error?.error?.message ||
+            'A Distribution Centre with this registration code already exists.';
+          this.toastSrv.error(errorMessage);
+        } else if (error.status === 500) {
+          // Server error
+          this.toastSrv.error('An internal server error occurred. Please try again later.');
+        } else {
+          // Generic error
+          const errorMessage =
+            error?.error?.message ||
+            'There was an error creating the Centre. Please try again.';
+          this.toastSrv.error(errorMessage);
+        }
+      },
+      complete: () => {
+        this.isLoading = false;
+      },
+    });
+  }
+
+  onCancel() {
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you really want to clear this form?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, cancel it!',
+      cancelButtonText: 'No, Stay On Page',
+      customClass: {
+        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+        title: 'dark:text-white',
+
+        icon: '',
+        confirmButton: 'hover:bg-red-600 dark:hover:bg-red-700 focus:ring-red-500 dark:focus:ring-red-800',
+        cancelButton: 'hover:bg-blue-600 dark:hover:bg-blue-700 focus:ring-blue-500 dark:focus:ring-blue-800',
+        actions: 'gap-2'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        this.toastSrv.warning('Distribution Centre Add Operation Canceled.')
+        this.location.back();
+      }
+    });
+  }
+
+  enforceLatitudeRange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    let value = parseFloat(input.value);
+  
+    if (value > 90) input.value = '90';
+    if (value < -90) input.value = '-90';
+  
+    this.centerData.latitude = parseFloat(input.value); // update model
+  }
+
+  enforceLongitudeRange(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    let value = parseFloat(input.value);
+  
+    if (value > 180) input.value = '180';
+    if (value < -180) input.value = '-180';
+  
+    this.centerData.longitude = parseFloat(input.value); // update model
+  }
+}
+
+class CenterData {
+  DistributionCenterName!: string;
+  district!: string;
+  province!: string;
+  country!: string;
+  latitude!: number;
+  longitude!: number;
+  city!: string;
+  regCode!: string;
+
+}

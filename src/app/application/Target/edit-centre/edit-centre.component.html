@@ -1,0 +1,162 @@
+<app-loading-spinner *ngIf="isLoading" />
+
+<div class="flex flex-row items-center gap-6 font-semibold text[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
+  <p onclick="history.back()" >Centres</p>
+  <p>Edit Centre</p>
+</div>
+<div class="p-8 mx-auto bg-tileLight dark:bg-[#363636] shadow-lg dark:text-[White] rounded-lg w-full">
+  <div class="flex justify-between items-center mb-6">
+    <h2 class="text-2xl mb-6 text-[#292929] dark:text-[White] ">Edit Collection Centre</h2>
+  </div>
+  <form class="grid grid-cols-2 gap-4" #centerForm="ngForm">
+    <!-- Collection Center Name -->
+    <div>
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Collection Centre Name</label>
+      <input
+        type="text"
+        class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F] "
+        [(ngModel)]="centerData.centerName"
+        name="centerName"
+        required
+        #centerName="ngModel"
+      />
+      <p *ngIf="centerName.invalid && centerName.touched" class="text-red-500 text-sm">
+        Center Name is required.
+      </p>
+    </div>
+    <!-- Country -->
+    <div>
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Country</label>
+      <select
+      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+        [(ngModel)]="centerData.country"
+        name="country"
+        required
+        #country="ngModel"
+      >
+
+        <option value="Sri Lanka">Sri Lanka</option>
+      </select>
+      <p *ngIf="country.invalid && country.touched" class="text-red-500 text-sm">
+        Country is required.
+      </p>
+    </div>
+    <!-- Province -->
+    <div>
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Province</label>
+      <select
+      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+        [(ngModel)]="centerData.province"
+        (change)="updateFilteredDistricts()"
+        name="province"
+        required
+        #province="ngModel"
+      >
+        <option value="" disabled>Select Province</option>
+        <option *ngFor="let province of provinces" [value]="province">
+          {{ province }}
+        </option>
+      </select>
+      <p *ngIf="province.invalid && province.touched" class="text-red-500 text-sm">
+        Province is required.
+      </p>
+    </div>
+    <!-- District -->
+    <div>
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">District</label>
+      <select
+      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+        [(ngModel)]="centerData.district"
+        name="district"
+        required
+        #district="ngModel"
+      >
+        <option value="" disabled>Select District</option>
+        <option *ngFor="let district of filteredDistricts" [value]="district.name">
+          {{ district.name }}
+        </option>
+      </select>
+      <p *ngIf="district.invalid && district.touched" class="text-red-500 text-sm">
+        District is required.
+      </p>
+    </div>
+    <!-- Building Number -->
+    <div>
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Building No</label>
+      <input
+        type="text"
+        class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+        [(ngModel)]="centerData.buildingNumber"
+        name="buildingNumber"
+        required
+        #buildingNumber="ngModel"
+      />
+      <p *ngIf="buildingNumber.invalid && buildingNumber.touched" class="text-red-500 text-sm">
+        Building Number is required.
+      </p>
+    </div>
+    <!-- Street Name -->
+    <div>
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Street Name</label>
+      <input
+        type="text"
+        class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+        [(ngModel)]="centerData.street"
+        name="street"
+        required
+        #street="ngModel"
+      />
+      <p *ngIf="street.invalid && street.touched" class="text-red-500 text-sm">
+        Street Name is required.
+      </p>
+    </div>
+    <!-- City -->
+    <div>
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">City</label>
+      <input
+        type="text"
+        class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+        [(ngModel)]="centerData.city"
+        name="city"
+        required
+        #city="ngModel"
+      />
+      <p *ngIf="city.invalid && city.touched" class="text-red-500 text-sm">
+        City is required.
+      </p>
+    </div>
+    <!-- Registration Code -->
+    <div>
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Collection Centre Reg Code</label>
+      <input
+        type="text"
+        class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+        [(ngModel)]="centerData.regCode"
+        name="regCode"
+        placeholder=" ----- "
+        required
+        #regCode="ngModel"
+      />
+      <p *ngIf="regCode.invalid && regCode.touched" class="text-red-500 text-sm">
+        Registration Code is required.
+      </p>
+    </div>
+  </form>
+  <div class="flex justify-end mt-6 space-x-4">
+    <button
+      type="button"
+      class="px-4 py-2 bg-[#F6F7F9] border-[2px] border-[#95A1AC] text-[#6B7D8C] rounded-md mr-2"
+      (click)="onCancel()"
+    >
+      Cancel
+    </button>
+    <button
+      type="submit"
+      class="px-4 py-2 bg-[#3980C0] text-[#FFFFFF] rounded-md"
+      [disabled]="!centerForm.valid"
+      (click)="onSubmit()"
+    >
+      Submit
+    </button>
+  </div>
+</div>

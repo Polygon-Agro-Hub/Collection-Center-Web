@@ -50,6 +50,7 @@ import { CcmRoleGuardService } from './services/RoleGuard/ccm-role-guard.service
 import { ViewCentresComponent } from './application/Distributed-Center/Centres/view-centres/view-centres.component';
 import { ViewDistributedOfficersComponent } from './application/Distributed-Center/distributed-manage-officers/view-distributed-officers/view-distributed-officers.component';
 import { CreateDistributionCentreComponent } from './application/Distributed-Center/Centres/create-distribution-centre/create-distribution-centre.component';
+import { EditCentreComponent } from './application/Target/edit-centre/edit-centre.component';
 
 export const routes: Routes = [
     {
@@ -253,6 +254,10 @@ export const routes: Routes = [
                     {
                         path: 'add-a-center',
                         component: AddCenterComponent
+                    },
+                    {
+                        path: 'edit-center/:id',
+                        component: EditCentreComponent
                     },
                     {
                         path: 'view-center-target/:id',

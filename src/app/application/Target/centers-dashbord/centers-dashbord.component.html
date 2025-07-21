@@ -7,7 +7,7 @@
     </div>
 
     <div class="flex flex-row items-center justify-center gap-16 dark:bg-black cursor-default">
-        <div class="flex justify-center items-center w-1/5 py-4 bg-tileLight dark:bg-[#363636]  shadow-lg rounded-lg">
+        <div class="flex justify-center items-center w-1/5 py-4 bg-tileLight dark:bg-[#363636]  shadow-lg rounded-lg" (click)="editCentre(centerNameObj.id)">
             <p class="font-bold text-black text-lg dark:text-white">{{centerNameObj.regCode}}</p>
         </div>
 

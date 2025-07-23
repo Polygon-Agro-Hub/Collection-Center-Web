@@ -52,6 +52,7 @@ import { ViewDistributedOfficersComponent } from './application/Distributed-Cent
 import { CreateDistributionCentreComponent } from './application/Distributed-Center/Centres/create-distribution-centre/create-distribution-centre.component';
 import { EditCentreComponent } from './application/Target/edit-centre/edit-centre.component';
 import { AddDistributedOfficerComponent } from './application/Distributed-Center/add-distributed-officer/add-distributed-officer.component';
+import { EditDistributedOfficerComponent } from './application/Distributed-Center/edit-distributed-officer/edit-distributed-officer.component';
 
 export const routes: Routes = [
     {
@@ -312,7 +313,9 @@ export const routes: Routes = [
                     {
                         path: 'create-distribution-centre',
                         component: CreateDistributionCentreComponent,
-                    }
+                    },
+                    
+                    
                 ]
             },
             {
@@ -326,6 +329,10 @@ export const routes: Routes = [
                     {
                         path: 'create-distribution-officer',
                         component: AddDistributedOfficerComponent
+                    },
+                    {
+                        path: 'edit-distribution-officer/:id',
+                        component: EditDistributedOfficerComponent
                     }
                 ]
             },

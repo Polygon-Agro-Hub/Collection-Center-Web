@@ -144,5 +144,27 @@ export class DistributedManageOfficersService {
     });
   }
 
+  getOfficerById(id: number) {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
+    return this.http.get(`${this.apiUrl}/manage-officers/get-officer-by-id/${id}`, {
+      headers,
+    });
+  }
+
+  updateDistributionOfficer(person: any, id: number, image: any): Observable<any> {
+    const formData = new FormData();
+    formData.append('officerData', JSON.stringify(person));
+    formData.append('file', image);
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
+    return this.http.put(`${this.apiUrl}/manage-officers/update-officer/${id}`, formData, {
+      headers,
+    });
+  }
+
 
 }

@@ -58,6 +58,10 @@ export class CentersDashbordComponent implements OnInit {
     this.selectTable = table;
   }
 
+  editCentre(id: number) {
+    this.router.navigate(['/centers/edit-center', id]);
+  }
+
   navigatePath(path: string) {
     this.router.navigate([path]);
   }

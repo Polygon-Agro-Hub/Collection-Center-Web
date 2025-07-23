@@ -7,9 +7,13 @@
     </div>
 
     <div class="flex flex-row items-center justify-center gap-16 dark:bg-black cursor-default">
-        <div class="flex justify-center items-center w-1/5 py-4 bg-tileLight dark:bg-[#363636]  shadow-lg rounded-lg">
-            <p class="font-bold text-black text-lg dark:text-white">{{centerNameObj.regCode}}</p>
+        <div class="relative flex items-center w-1/5 py-4 px-4 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg" >
+            <p class="font-bold text-black text-lg dark:text-white mx-auto">
+              {{centerNameObj.regCode}}
+            </p>
+            <i class="fa-solid fa-pencil text-[blue] absolute right-4 cursor-pointer" (click)="editCentre(centerNameObj.id)"></i>
         </div>
+          
 
         <div class="flex flex-row items-center justify-between w-2/5 gap-14 px-10 py-4 bg-tileLight shadow-lg rounded-lg cursor-pointer"
             (click)="navigateToMarketPrice()">

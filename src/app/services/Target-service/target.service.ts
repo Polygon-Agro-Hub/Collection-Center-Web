@@ -427,5 +427,28 @@ export class TargetService {
     return this.http.get(url, { headers, responseType: 'blob' });
   }
 
+  getCentreData(centreId: number): Observable<any> {
+    console.log('fetchinh')
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/get-center-data/${centreId}`;
+
+    return this.http.get<any>(url, { headers });
+  }
+
+  editCenter(centerData: any): Observable<any> {
+    const formData = new FormData();
+    formData.append('centerData', JSON.stringify(centerData));
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
+    return this.http.post(`${this.apiUrl}/edit-center`, formData, {
+      headers,
+    });
+  }
+
 }
 

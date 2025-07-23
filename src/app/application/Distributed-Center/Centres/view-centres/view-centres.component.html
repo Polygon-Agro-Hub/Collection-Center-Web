@@ -1,0 +1,187 @@
+<app-loading-spinner *ngIf="isLoading" />
+
+<div *ngIf="!isLoading">
+    <div class="flex gap-0 cursor-pointer">
+        <p class="font-semibold text[#424242] mb-4 mr-5 ml-0 dark:text-[#FFFFFF] dark:bg-blacks">Distribution Centres</p>
+    </div>
+
+    <!-- Scrollable filter section only -->
+    <div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg overflow-x-auto">
+        <div class="flex flex-row items-center justify-between min-w-max max-w-[80vw] mx-auto">
+            <div class="flex flex-col justify-between flex-shrink-0">
+                <p class="font-semibold md:text-lg lg:text-lg mb-1 dark:text-white whitespace-nowrap">Total Distribution Centres
+                    ({{countOfOfficers}})</p>
+            </div>
+            <div class="flex flex-row items-center gap-8 flex-shrink-0">
+                <i class="fa-solid fa-list md:text-2xl lg:text-lg dark:text-white flex-shrink-0 ml-8"></i>
+                <p class="md:text-2xl lg:text-lg dark:text-white whitespace-nowrap flex-shrink-0">Filter By</p>
+
+                <div class="flex gap-4 flex-shrink-0">
+                    <!-- Province Dropdown -->
+                    <div class="relative w-36 flex-shrink-0 custom-province-dropdown-container">
+                        <!-- Hidden native select -->
+                        <select [(ngModel)]="selectProvince" class="hidden" (change)="filterProvince()">
+                            <option value="" selected disabled>Province</option>
+                            <option *ngFor="let province of provinces" [value]="province">{{ province }}</option>
+                        </select>
+                
+                        <!-- Custom dropdown trigger -->
+                        <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
+                            (click)="toggleProvinceDropdown()">
+                            <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
+                                <span>{{ selectProvince || 'Province' }}</span>
+                                <div class="flex items-center">
+                                    <!-- X icon (shown ONLY when option is selected) -->
+                                    <i *ngIf="selectProvince" (click)="clearProvinceFilter($event)"
+                                        class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
+                
+                                    <!-- Arrow icon (shown when EITHER: dropdown is open OR no selection exists) -->
+                                    <i *ngIf="isProvinceDropdownOpen || !selectProvince"
+                                        class="fa-solid text-lg text-[#828282] transition-transform duration-200"
+                                        [class.fa-angle-down]="!isProvinceDropdownOpen"
+                                        [class.fa-angle-up]="isProvinceDropdownOpen"></i>
+                                </div>
+                            </div>
+                        </div>
+                
+                        <!-- Custom dropdown options -->
+                        <div *ngIf="isProvinceDropdownOpen"
+                            class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
+                            <div class="py-1">
+                                <div *ngFor="let province of provinces" (click)="selectProvinceOption(province)"
+                                    class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
+                                    <span class="flex-grow">{{ province }}</span>
+                                    <i class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                
+                    <!-- District Dropdown -->
+                    <div class="relative w-36 flex-shrink-0 custom-district-dropdown-container">
+                        <!-- Hidden native select -->
+                        <select [(ngModel)]="selectDistrict" class="hidden" (change)="filterDistrict()">
+                            <option value="" selected disabled>District</option>
+                            <option *ngFor="let district of filteredDistricts" [value]="district.name">{{ district.name }}</option>
+                        </select>
+                
+                        <!-- Custom dropdown trigger -->
+                        <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
+                            (click)="toggleDistrictDropdown()">
+                            <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
+                                <span>{{ selectDistrict || 'District' }}</span>
+                                <div class="flex items-center">
+                                    <!-- X icon (shown ONLY when option is selected) -->
+                                    <i *ngIf="selectDistrict" (click)="clearDistrictFilter($event)"
+                                        class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
+                
+                                    <!-- Arrow icon (shown when EITHER: dropdown is open OR no selection exists) -->
+                                    <i *ngIf="isDistrictDropdownOpen || !selectDistrict"
+                                        class="fa-solid text-lg text-[#828282] transition-transform duration-200"
+                                        [class.fa-angle-down]="!isDistrictDropdownOpen"
+                                        [class.fa-angle-up]="isDistrictDropdownOpen"></i>
+                                </div>
+                            </div>
+                        </div>
+                
+                        <!-- Custom dropdown options -->
+                        <div *ngIf="isDistrictDropdownOpen"
+                            class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
+                            <div class="py-1">
+                                <div *ngFor="let district of filteredDistricts" (click)="selectDistrictOption(district.name)"
+                                    class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
+                                    <span class="flex-grow">{{ district.name }}</span>
+                                    <i class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center rounded-full px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929] flex-shrink-0">
+                    <input type="text" placeholder="Search by Reg Code / Centre Name.." [(ngModel)]="searchText"
+                        class="bg-transparent outline-none w-full text-textLight dark:text-textDark"
+                        (keydown.enter)="onSearch()" (keydown.esc)="offSearch()" />
+                    <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
+                        (click)="onSearch()">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
+                        </svg>
+                    </button>
+                    <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none"
+                        (click)="offSearch()">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <div class="flex flex-row mt-3 mb-0">
+            <button class="bg-[#415CFF] text-white font-semibold px-4 py-2 rounded-lg" (click)="addCenter()">Add a
+                Distribution Centre</button>
+        </div>
+
+
+        <div *ngIf="hasData" class=" min-w-max mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+            <table class="w-full min-w-max divide-y-2">
+                <thead class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
+                    <tr>
+                        <th class="px-6 py-3 text-left font-normal w-10">No</th>
+                        <th class="px-6 py-3 text-left font-normal w-32">Reg Code</th>
+                        <th class="px-6 py-3 text-left font-normal w-48">Centre Name</th>
+                        <th class="px-6 py-3 text-center font-normal w-28">Province</th>
+                        <th class="px-6 py-3 text-center font-normal w-28">District</th>
+                        <th class="px-6 py-3 text-center font-normal w-28">City</th>
+                        <th class="px-6 py-3 text-center font-normal w-40">Contact number-1</th>
+                        <th class="px-6 py-3 text-center font-normal w-32">CCM Profiles</th>
+                        <th class="px-6 py-3 text-center font-normal w-32">COO Profiles</th>
+                    </tr>
+                </thead>
+                <tbody *ngIf="countOfOfficers != 0" class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
+                    <tr class="hover:bg-[#415CFF] hover:text-white dark:text-gray-300 cursor-pointer"
+                        *ngFor="let item of itemsArr | paginate : { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index"
+                        (click)="navigateToDashboard(item.centerId)">
+                        <td class="px-6 py-3 font-medium text-center">
+                            {{ ('0' + ((currentPage - 1) * itemsPerPage + i + 1)).slice(-2) }}
+                        </td>
+                        <td class="px-6 py-3 font-medium text-left">{{ item.regCode }}</td>
+                        <td class="px-6 py-3 font-medium text-left">{{ item.centerName }}</td>
+                        <td class="px-6 py-3 font-medium text-center">{{ item.province }}</td>
+                        <td class="px-6 py-3 font-medium text-center">{{ item.district }}</td>
+                        <td class="px-6 py-3 font-medium text-center">{{ item.city }}</td>
+                        <td class="px-6 py-3 font-medium text-center">
+                            <ng-container *ngIf="item.contact01; else noContact">
+                                {{ '+94' + item.contact01 }}
+                            </ng-container>
+                            <ng-template #noContact>
+                                N/A
+                            </ng-template>
+                        </td>
+                        <td class="px-6 py-3 font-medium text-center">{{ item.collectionCenterManagerCount }}</td>
+                        <td class="px-6 py-3 font-medium text-center">{{ item.collectionOfficerCount }}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div *ngIf="hasData" class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#262f45] text-right">
+            <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
+                [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
+                [screenReaderCurrentLabel]="'Youre on page'">
+            </pagination-controls>
+        </div>
+
+        <div *ngIf="!hasData"
+            class="flex flex-col items-center w-full h-screen px-10 py-7 bg-tileLight dark:bg-[#363636] dark:text-textDark mt-6">
+            <p class="text-[#494949] my-6 dark:text-textDark">--No Data Availabale--</p>
+            <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20 dark:text-textDark" />
+        </div>
+
+
+    </div>

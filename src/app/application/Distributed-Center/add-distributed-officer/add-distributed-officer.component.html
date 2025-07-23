@@ -511,7 +511,7 @@
                       
                     <div *ngIf="accHolderNameInput.touched && !personalData.accHolderName"
                         class="text-red-500 text-sm mt-1">
-                        <div>Account Holde's Name is required</div>
+                        <div>Account Holder's Name is required</div>
                     </div>
                     <div
   *ngIf="accHolderNameInput.touched && personalData.accHolderName && accHolderNameInput.invalid"
@@ -543,15 +543,21 @@
                         Account Number</label>
                     <input type="number" id="accNumber" name="accNumber" [(ngModel)]="personalData.conformAccNumber"
                         class="mt-1 block w-full p-2 border border-[#D9D9D9] hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                        #conformAccNumberInput="ngModel" required />
+                        #conformAccNumberInput="ngModel" required pattern="^[a-zA-Z0-9]+$"/>
                     <div *ngIf="conformAccNumberInput.touched && !personalData.conformAccNumber"
                         class="text-red-500 text-sm mt-1">
-                        <div>Account Number is required</div>
+                        <div>Confirm Account Number is required</div>
                     </div>
-                    <div *ngIf="personalData.conformAccNumber && personalData.accNumber !== personalData.conformAccNumber"
+                    <div *ngIf="personalData.conformAccNumber && (personalData.accNumber !== personalData.conformAccNumber) && !conformAccNumberInput.errors?.['pattern']"
                         class="text-red-500 text-sm mt-1">
                         <div>Confirm Account Number should be the same as Account Number.</div>
                     </div>
+                    <div
+  *ngIf="conformAccNumberInput.touched && personalData.accNumber && conformAccNumberInput.errors?.['pattern']"
+  class="text-red-500 text-sm mt-1"
+>
+  <div>Account Number cannot contain special characters</div>
+</div>
                 </div>
 
                 <div class="pb-6 pl-8">

@@ -34,9 +34,7 @@
                         </span>
                     </div>
                 </div>
-                <!-- <div class="flex justify-center pt-3 pb-9">
-                    <p *ngIf="!selectedImage" class="text-red-500 text-sm mt-2">Profile image is required.</p>
-                </div> -->
+                
 
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -74,23 +72,16 @@
                                 class="p-2 text-[#534E4E] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
                                 -- select --
                             </option>
-                            <option selected value="Distribution Manager"
+                            <option selected value="Distribution Center Manager"
                                 *ngIf="logingRole === 'Distribution Center Head'"
                                 class="p-2 text-[#030308] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
-                                Distribution Manager
+                                Distribution Center Manager
                             </option>
                             <option selected value="Distribution Officer"
                                 class="p-2 text-[#030308] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
                                 Distribution Officer
                             </option>
-                            <!-- <option value="Customer Officer"
-                                class="p-2 text-[#030308] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
-                                Customer Officer
-                            </option>
-                            <option value="Driver" *ngIf="logingRole === 'Collection Center Head'"
-                                class="p-2 text-[#030308] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
-                                Driver
-                            </option> -->
+                            
 
                         </select>
                         <!-- Error: Required Field -->
@@ -99,28 +90,7 @@
                         </div>
                     </div>
 
-                    <!-- <div *ngIf="logingRole === 'Distribution Center Head'"></div> -->
-
                     
-
-                    <!-- <div>
-                        <label class="block text-sm font-medium text-[#534E4E] dark:text-textDark">EMP ID / User
-                            name</label>
-                        <div class="flex mt-1">
-                            <span
-                                class="inline-flex items-center px-3 py-3 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 hover:bg-gray-200 rounded-s-md dark:bg-[#1D1D1F] dark:text-gray-400 ">
-                                <span *ngIf="logingRole === 'Distribution Center Head'">
-                                    <p *ngIf="personalData.jobRole === 'Distribution Manager'">DCM</p>
-                                </span>
-
-                                <p *ngIf="personalData.jobRole === 'Distribution Officer'">DIO</p>
-
-                            </span>
-                            <input type="text" [value]="lastID" name="empId"
-                                class="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 hover:bg-gray-200 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm pl-4  dark:bg-[#1D1D1F]  dark:placeholder-gray-400 dark:text-textDark dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                disabled>
-                        </div>
-                    </div> -->
 
 
                     <div

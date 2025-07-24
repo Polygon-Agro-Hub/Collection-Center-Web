@@ -125,7 +125,7 @@ export class EditDistributedOfficerComponent implements OnInit {
     console.log('editOfficerId', this.editOfficerId)
     this.centerId = this.route.snapshot.params['centerId'];
     this.fetchOffierById(this.editOfficerId);
-    this.UpdateEpmloyeIdCreate();
+    // this.UpdateEpmloyeIdCreate();
     this.setActiveTabFromRoute()
   }
 
@@ -285,37 +285,37 @@ export class EditDistributedOfficerComponent implements OnInit {
   }
 
 
-  UpdateEpmloyeIdCreate() {
-    let rolePrefix: string | undefined;
+  // UpdateEpmloyeIdCreate() {
+  //   let rolePrefix: string | undefined;
 
-    // Map job roles to their respective prefixes
-    if (this.personalData.jobRole === 'Collection Center Manager') {
-      rolePrefix = 'CCM';
-    } else if (this.personalData.jobRole === 'Customer Officer') {
-      rolePrefix = 'CUO';
-    } else if (this.personalData.jobRole === 'Driver') {
-      rolePrefix = 'DVR';
-    } else {
-      rolePrefix = 'COO';
+  //   // Map job roles to their respective prefixes
+  //   if (this.personalData.jobRole === 'Collection Center Manager') {
+  //     rolePrefix = 'CCM';
+  //   } else if (this.personalData.jobRole === 'Customer Officer') {
+  //     rolePrefix = 'CUO';
+  //   } else if (this.personalData.jobRole === 'Driver') {
+  //     rolePrefix = 'DVR';
+  //   } else {
+  //     rolePrefix = 'COO';
 
-    }
-
-
-    if (!rolePrefix) {
-      console.error(`Invalid job role: ${this.personalData.jobRole}`);
-      return;
-    }
+  //   }
 
 
-    this.getUpdateLastID(rolePrefix)
-      .then((lastId) => {
-        this.upateEmpID = rolePrefix + lastId;
+  //   if (!rolePrefix) {
+  //     console.error(`Invalid job role: ${this.personalData.jobRole}`);
+  //     return;
+  //   }
 
-      })
-      .catch((error) => {
-        console.error('Error fetching updated last ID:', error);
-      });
-  }
+
+  //   this.getUpdateLastID(rolePrefix)
+  //     .then((lastId) => {
+  //       this.upateEmpID = rolePrefix + lastId;
+
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error fetching updated last ID:', error);
+  //     });
+  // }
 
 
   onCheckboxChange(lang: string, event: any) {
@@ -422,7 +422,7 @@ export class EditDistributedOfficerComponent implements OnInit {
     } else {
       this.isLoading = true;
 
-      if (this.logingRole === 'Distribution Manager') {
+      if (this.logingRole === 'Distribution Center Manager') {
         this.ManageOficerSrv.updateCollectiveOfficer(this.personalData, this.editOfficerId, this.selectedImage).subscribe(
           (res: any) => {
             this.officerId = res.officerId;
@@ -458,7 +458,7 @@ export class EditDistributedOfficerComponent implements OnInit {
           }
         );
       } else if (this.logingRole === 'Distribution Center Head') {
-        if (this.personalData.jobRole === 'Distribution Manager') {
+        if (this.personalData.jobRole === 'Distribution Center Manager') {
           this.personalData.irmId = null;
         }
 

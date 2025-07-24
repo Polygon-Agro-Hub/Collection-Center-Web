@@ -513,7 +513,7 @@ class Personal {
   image!: any
 
   centerId: number | string = '';
-  irmId: number | string = '';
+  irmId: number | string | null = null;
 }
 
 

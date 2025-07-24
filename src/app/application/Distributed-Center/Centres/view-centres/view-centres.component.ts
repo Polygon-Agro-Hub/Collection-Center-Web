@@ -222,9 +222,14 @@ getTotalPages(): number {
     return Math.ceil(this.totalItems / this.itemsPerPage);
 }
 
-navigateToDashboard(id: number) {
-    this.router.navigate([`/centers/center-shashbord/${id}`]);
-}
+navigateToDashboard(id: number, centerName: string, regCode: string) {
+    this.router.navigate([
+      `/distribution-center/center-dashboard`,
+      id,
+      centerName,
+      regCode
+    ]);
+  }
 
 
 addCenter() {

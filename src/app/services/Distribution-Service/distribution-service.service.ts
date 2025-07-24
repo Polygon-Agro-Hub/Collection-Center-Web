@@ -50,4 +50,27 @@ export class DistributionServiceService {
       headers,
     });
   }
+
+  getAllCenterOfficersForDCH(page: number = 1, limit: number = 10, centerId: number, status: string = '', role: string = '', searchText: string = ''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    let url = `${this.apiUrl}/get-all-center-officers-for-dch?page=${page}&limit=${limit}&centerId=${centerId}`
+
+    if (status) {
+      url += `&status=${status}`
+    }
+    if (role) {
+      url += `&role=${role}`
+    }
+
+    if (searchText) {
+      url += `&searchText=${searchText}`
+    }
+    return this.http.get(url, {
+      headers,
+    });
+  }
 }

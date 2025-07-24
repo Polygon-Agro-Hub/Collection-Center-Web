@@ -53,6 +53,7 @@ import { CreateDistributionCentreComponent } from './application/Distributed-Cen
 import { EditCentreComponent } from './application/Target/edit-centre/edit-centre.component';
 import { AddDistributedOfficerComponent } from './application/Distributed-Center/add-distributed-officer/add-distributed-officer.component';
 import { EditDistributedOfficerComponent } from './application/Distributed-Center/edit-distributed-officer/edit-distributed-officer.component';
+import { CenterDashboardComponent } from './application/Distributed-Center/center-dashboard/center-dashboard.component';
 
 export const routes: Routes = [
     {
@@ -314,7 +315,18 @@ export const routes: Routes = [
                         path: 'create-distribution-centre',
                         component: CreateDistributionCentreComponent,
                     },
-                    
+                    {
+                        path: 'center-dashboard/:id/:centerName/:regCode',
+                        component: CenterDashboardComponent,
+                    },
+                    {
+                        path: 'edit-distribution-officer/:id',
+                        component: EditDistributedOfficerComponent,
+                    },
+                    {
+                        path: 'officer-profile/:id',
+                        component: EditDistributedOfficerComponent,
+                    }
                     
                 ]
             },

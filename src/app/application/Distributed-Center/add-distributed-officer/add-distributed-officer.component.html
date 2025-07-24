@@ -57,7 +57,7 @@
                         </select>
                         <div *ngIf="centerIdInput.touched && !personalData.centerId && logingRole === 'Distribution Center Head'"
                             clas="text-red-500 text-sm mt-1">
-                            <div>Collection Center is requireds</div>
+                            <div>Distribution Centre is requireds</div>
                         </div>
                     </div>
 
@@ -101,8 +101,8 @@
                         <select id="irmId" [(ngModel)]="personalData.irmId" name="irmId" placeholder="select"
                             #irmIdInput="ngModel" required (change)="checkManager()" [disabled]="!personalData.centerId"
                             class="form-control mt-1 block w-full p-2 text-[#534E4E] dark:text-textDark border border-gray-300 hover:bg-gray-200  rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500">
-                            <option disabled selected
-                                class="p-2 text-[#534E4E] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]" value="">
+                            <option disabled [ngValue]="null"
+                                class="p-2 text-[#534E4E] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
                                 -- select manager--
                             </option>
                             <option *ngFor="let item of managerArr" [value]="item.id"

@@ -138,6 +138,7 @@ export class AddDistributedOfficerComponent implements OnInit {
 
   validateLanguages() {
     this.languagesRequired = !this.personalData.languages || this.personalData.languages.trim() === '';
+    console.log('language', this.languagesRequired)
   }
 
 
@@ -506,7 +507,7 @@ class Personal {
   branchName!: string;
   conformAccNumber!: string;
 
-  jobRole: string = 'Collection Officer'
+  jobRole: string = 'Distribution Officer'
   empId!: string
   employeeType!: string;
 

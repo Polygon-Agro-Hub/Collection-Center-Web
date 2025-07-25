@@ -108,6 +108,22 @@ export const MENU_ITEMS = [
     icon: 'fas fa-user-cog',
     permission: ['Distribution Center Head'],
   },
+  {
+    id: 13,
+    key: 'distribution-center-dashboard',
+    path: '/distribution-center-dashboard',
+    label: 'Dashboard',
+    icon: 'fas fa-user-cog',
+    permission: ['Distribution Center Manager'],
+  },
+  {
+    id: 13,
+    key: 'assign-targets',
+    path: '/assign-targets',
+    label: 'Assign Targets',
+    icon: 'fas fa-user-cog',
+    permission: ['Distribution Center Manager'],
+  },
 ];
 
 @Component({

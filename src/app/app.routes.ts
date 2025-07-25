@@ -54,6 +54,7 @@ import { EditCentreComponent } from './application/Target/edit-centre/edit-centr
 import { AddDistributedOfficerComponent } from './application/Distributed-Center/add-distributed-officer/add-distributed-officer.component';
 import { EditDistributedOfficerComponent } from './application/Distributed-Center/edit-distributed-officer/edit-distributed-officer.component';
 import { CenterDashboardComponent } from './application/Distributed-Center/center-dashboard/center-dashboard.component';
+import { AssignDistributionTargetComponent } from './application/Distributed-Center/Distributed-Target/assign-distribution-target/assign-distribution-target.component';
 
 export const routes: Routes = [
     {
@@ -346,6 +347,44 @@ export const routes: Routes = [
                         path: 'edit-distribution-officer/:id',
                         component: EditDistributedOfficerComponent
                     }
+                ]
+            },
+            {
+                path: 'distribution-center-dashboard',
+                component: AddDistributedOfficerComponent
+                // canActivate:[CcmRoleGuardService],
+                // children: [
+                //     {
+                //         path: '',
+                //         component: ViewDistributedOfficersComponent,
+                //     },
+                //     {
+                //         path: 'create-distribution-officer',
+                //         component: AddDistributedOfficerComponent
+                //     },
+                //     {
+                //         path: 'edit-distribution-officer/:id',
+                //         component: EditDistributedOfficerComponent
+                //     }
+                // ]
+            },
+
+            {
+                path: 'assign-targets',
+                // canActivate:[CcmRoleGuardService],
+                children: [
+                    {
+                        path: '',
+                        component: AssignDistributionTargetComponent,
+                    },
+                    // {
+                    //     path: 'create-distribution-officer',
+                    //     component: AddDistributedOfficerComponent
+                    // },
+                    // {
+                    //     path: 'edit-distribution-officer/:id',
+                    //     component: EditDistributedOfficerComponent
+                    // }
                 ]
             },
 

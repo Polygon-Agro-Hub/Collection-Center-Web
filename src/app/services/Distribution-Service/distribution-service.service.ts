@@ -73,4 +73,42 @@ export class DistributionServiceService {
       headers,
     });
   }
+
+  // getDistributionCenterOfficers(centerData: any): Observable<any> {
+  //   const formData = new FormData();
+  //   formData.append('centerData', JSON.stringify(centerData));
+
+  //   const headers = new HttpHeaders({
+  //     Authorization: `Bearer ${this.token}`,
+  //   });
+  //   return this.http.post(`${this.apiUrl}/create-distribution-center`, formData, {
+  //     headers,
+  //   });
+  // }
+
+  getDistributionCenterOfficers(): Observable<any> {
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.get(`${this.apiUrl}/get-distribution-center-officers`, {
+      headers,
+    });
+  }
+
+  getDistributionOrders(): Observable<any> {
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.get(`${this.apiUrl}/get-distribution-orders`, {
+      headers,
+    });
+  }
 }
+
+

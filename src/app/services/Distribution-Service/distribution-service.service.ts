@@ -109,6 +109,28 @@ export class DistributionServiceService {
       headers,
     });
   }
+
+  assignOrdersToCenterOfficers(
+    assignmentPayload: { officerId: number; count: number }[],
+    orderIdList: number[]
+  ): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+  
+    const url = `${this.apiUrl}/assign-orders-to-center-officers`;
+  
+    // Construct the payload
+    const data = {
+      assignments: assignmentPayload,
+      processOrderIds: orderIdList
+    };
+
+    console.log('data', data)
+  
+    return this.http.post<any>(url, data, { headers });
+  }
+  
 }
 
 

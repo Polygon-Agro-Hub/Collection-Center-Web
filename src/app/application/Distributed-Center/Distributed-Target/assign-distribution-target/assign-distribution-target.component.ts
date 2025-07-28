@@ -29,9 +29,11 @@ export class AssignDistributionTargetComponent implements OnInit{
   ordersArr: Orders[] = []
   assignedOrdersArr!: OfficerAssignment[];
 
-  totalOrders = 0;  // Set this after fetching orders
+  totalOrders!: number;  // Set this after fetching orders
   totalAssignedOrders!: number;
-  isCountValid = true;
+  isCountValid = false;
+
+  currentDate: string = new Date().toLocaleDateString();
 
   noOfOfficers!: number;
   hasData: boolean = true;
@@ -126,6 +128,43 @@ export class AssignDistributionTargetComponent implements OnInit{
     console.log('totalAssignedOrders', this.totalAssignedOrders)
     this.isCountValid = this.totalAssignedOrders === this.totalOrders;
   }
+
+  onCancel() {
+    this.toastSrv.warning('Cancel Add New Center Target')
+    this.location.back();
+  }
+
+  onSubmit() {
+    console.log('Submitting...', this.totalOrders);
+    console.log('assignedOrdersArr', this.assignedOrdersArr);
+    console.log('ordersArr', this.ordersArr);
+  
+    // Extract officerId and count
+    const assignmentPayload = this.assignedOrdersArr.map((officer) => ({
+      officerId: officer.officerId,
+      count: officer.count,
+    }));
+  
+    // Extract all orderIds
+    const orderIdList = this.ordersArr.map((order) => order.processOrderId);
+  
+    console.log('assignmentPayload', assignmentPayload);
+    console.log('orderIdList', orderIdList);
+  
+    // Call service with new data structure
+    this.DistributionSrv.assignOrdersToCenterOfficers(assignmentPayload, orderIdList).subscribe(
+      (res) => {
+        if (res.status) {
+          this.toastSrv.success(res.message);
+        }
+      },
+      (err) => {
+        console.error('Error submitting assignments:', err);
+        this.toastSrv.error('Failed to assign orders');
+      }
+    );
+  }
+  
   
 
 }

@@ -45,6 +45,8 @@
                           [(ngModel)]="item.count"
                           (ngModelChange)="validateTotalCount()"
                           min="0"
+                          (keydown)="preventDecimal($event)"
+                          step="1"
                           class="border-[#415CFF] border-[2px] border-dotted rounded-lg w-20 px-2 py-1 text-center"
                         />
                       </td>
@@ -62,7 +64,7 @@
                           readonly
                           class="border-[#415CFF] border-[2px] border-dotted rounded-lg w-20 px-2 py-1 text-center text-gray-900 dark:text-gray-300 bg-white dark:bg-[#1E293B]"
                         />
-                        <i *ngIf="isCountValid" class="fa-solid fa-circle-check text-blue-600 ml-2 text-lg"></i>
+                        <i *ngIf="isCountValid && totalOrders !== 0" class="fa-solid fa-circle-check text-blue-600 ml-2 text-lg"></i>
                       </td>
                     </tr>
                   

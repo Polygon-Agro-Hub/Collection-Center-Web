@@ -33,7 +33,7 @@ export class AssignDistributionTargetComponent implements OnInit{
   totalAssignedOrders!: number;
   isCountValid = false;
 
-  currentDate: string = new Date().toLocaleDateString();
+  currentDate: string = new Date().toISOString().split('T')[0].replace(/-/g, '/');
 
   noOfOfficers!: number;
   hasData: boolean = true;
@@ -129,12 +129,20 @@ export class AssignDistributionTargetComponent implements OnInit{
     this.isCountValid = this.totalAssignedOrders === this.totalOrders;
   }
 
+  preventDecimal(event: KeyboardEvent): void {
+    if (event.key === '.' || event.key === ',') {
+      event.preventDefault();
+    }
+  }
+
   onCancel() {
-    this.toastSrv.warning('Cancel Add New Center Target')
-    this.location.back();
+
+    this.toastSrv.warning('Distribution Center Targets Assign Cancelled')
+    this.router.navigate([`/distribution-center-dashboard`]);
   }
 
   onSubmit() {
+    this.isLoading = true;
     console.log('Submitting...', this.totalOrders);
     console.log('assignedOrdersArr', this.assignedOrdersArr);
     console.log('ordersArr', this.ordersArr);
@@ -155,12 +163,15 @@ export class AssignDistributionTargetComponent implements OnInit{
     this.DistributionSrv.assignOrdersToCenterOfficers(assignmentPayload, orderIdList).subscribe(
       (res) => {
         if (res.status) {
-          this.toastSrv.success(res.message);
+          this.isLoading = false;
+          this.toastSrv.success('Distribution Center Targets Assigned Successfully');
+          this.router.navigate([`/distribution-center-dashboard`]);
         }
       },
       (err) => {
         console.error('Error submitting assignments:', err);
-        this.toastSrv.error('Failed to assign orders');
+        this.isLoading = false;
+        this.toastSrv.error('Failed to assign Distribution Center Targets');
       }
     );
   }

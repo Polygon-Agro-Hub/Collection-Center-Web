@@ -32,8 +32,6 @@ export class EditDistributedOfficerComponent implements OnInit {
   phone02: false,
 };
 
-
-
   languages: string[] = ['Sinhala', 'English', 'Tamil'];
   selectedPage: 'pageOne' | 'pageTwo' | 'pageThree' = 'pageOne';
   lastID!: number

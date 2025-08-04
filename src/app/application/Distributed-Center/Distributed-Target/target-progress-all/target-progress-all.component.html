@@ -1,0 +1,32 @@
+
+<div class="flex gap-0 mb-4 mr-5 ml-0">
+    <p class="font-semibold text[#424242]  dark:text-[#FFFFFF] dark:bg-blacks cursor-pointer">Target Progress</p>
+</div>
+
+<div >
+    <div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg">
+        <div class="flex flex-row justify-between items-center">
+            <div class="flex flex-row gap-6">
+                <div class="flex flex-row items-center gap-2 border-[2px] rounded-2xl px-4 py-2 cursor-pointer dark:text-textDark dark:bg-[#292929]"
+                    [ngClass]="{'text-[#415CFF] border-[#415CFF]': isSelectAll}" (click)="selectAll()">
+                    <i *ngIf="isSelectAll" class="fa-solid fa-check"></i>
+                    <p>All</p>
+                </div>
+
+                <div class="flex flex-row items-center gap-2 border-[2px] rounded-2xl px-4 py-2 cursor-pointer dark:text-textDark dark:bg-[#292929]"
+                    [ngClass]="{'text-[#415CFF] border-[#415CFF]': isSelectToDo}" (click)="selectToDo()">
+                    <i *ngIf="isSelectToDo" class="fa-solid fa-check"></i>
+                    <p>To Do</p>
+                </div>
+            </div>
+
+        </div>
+
+        <hr class="my-8 border-[1px] border-[#7F7F7F]" />
+
+        <app-target-progress-ongoing *ngIf="isSelectAll" />
+
+        <!-- <app-target-progress-todo *ngIf="isSelectToDo" /> -->
+    </div>
+
+</div>

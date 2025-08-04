@@ -55,6 +55,8 @@ import { AddDistributedOfficerComponent } from './application/Distributed-Center
 import { EditDistributedOfficerComponent } from './application/Distributed-Center/edit-distributed-officer/edit-distributed-officer.component';
 import { CenterDashboardComponent } from './application/Distributed-Center/center-dashboard/center-dashboard.component';
 import { AssignDistributionTargetComponent } from './application/Distributed-Center/Distributed-Target/assign-distribution-target/assign-distribution-target.component';
+import { ViewDistributionCenterTargetComponent } from './application/Distributed-Center/Distributed-Target/view-distribution-center-target/view-distribution-center-target.component';
+import { TargetProgressAllComponent } from './application/Distributed-Center/Distributed-Target/target-progress-all/target-progress-all.component';
 
 export const routes: Routes = [
     {
@@ -375,8 +377,35 @@ export const routes: Routes = [
                 children: [
                     {
                         path: '',
+                        component: ViewDistributionCenterTargetComponent,
+                    },
+                    {
+                        path: 'Assign',
                         component: AssignDistributionTargetComponent,
                     },
+                    // {
+                    //     path: 'create-distribution-officer',
+                    //     component: AddDistributedOfficerComponent
+                    // },
+                    // {
+                    //     path: 'edit-distribution-officer/:id',
+                    //     component: EditDistributedOfficerComponent
+                    // }
+                ]
+            },
+
+            {
+                path: 'target-progress',
+                // canActivate:[CcmRoleGuardService],
+                children: [
+                    {
+                        path: '',
+                        component: TargetProgressAllComponent,
+                    },
+                    // {
+                    //     path: 'Assign',
+                    //     component: AssignDistributionTargetComponent,
+                    // },
                     // {
                     //     path: 'create-distribution-officer',
                     //     component: AddDistributedOfficerComponent

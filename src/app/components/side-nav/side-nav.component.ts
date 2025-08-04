@@ -117,13 +117,23 @@ export const MENU_ITEMS = [
     permission: ['Distribution Center Manager'],
   },
   {
-    id: 13,
+    id: 14,
     key: 'assign-targets',
     path: '/assign-targets',
     label: 'Assign Targets',
     icon: 'fas fa-user-cog',
     permission: ['Distribution Center Manager'],
   },
+
+  {
+    id: 15,
+    key: 'target-progress',
+    path: '/target-progress',
+    label: 'Target Progress',
+    icon: 'fas fa-user-cog',
+    permission: ['Distribution Center Manager'],
+  },
+
 ];
 
 @Component({

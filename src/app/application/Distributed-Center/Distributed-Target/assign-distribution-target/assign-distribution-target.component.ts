@@ -57,7 +57,12 @@ export class AssignDistributionTargetComponent implements OnInit{
       this.noOfOfficers = officers.length;
   
       this.DistributionSrv.getDistributionOrders().subscribe((orders) => {
+        console.log('orders', orders)
         this.ordersArr = orders;
+        if (orders.length === 0 ) {
+          console.log('fasle')
+          this.hasData = false
+        }
         this.isLoading = false;
   
         this.totalOrders = this.ordersArr.length;

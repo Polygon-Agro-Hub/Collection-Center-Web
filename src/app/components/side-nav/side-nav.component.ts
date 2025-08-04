@@ -113,7 +113,7 @@ export const MENU_ITEMS = [
     key: 'distribution-center-dashboard',
     path: '/distribution-center-dashboard',
     label: 'Dashboard',
-    icon: 'fas fa-user-cog',
+    icon: 'fas fa-th-large',
     permission: ['Distribution Center Manager'],
   },
   {

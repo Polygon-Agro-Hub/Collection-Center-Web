@@ -130,6 +130,56 @@ export class DistributionServiceService {
   
     return this.http.post<any>(url, data, { headers });
   }
+
+  getAllRequests(page: number = 1, limit: number = 10, date: string = '', status: string = '', searchText: string = ''): Observable<any> {
+    console.log('date', date, 'status', status, 'search', searchText)
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    let url = `${this.apiUrl}/get-all-request?page=${page}&limit=${limit}`
+
+    if (date) {
+      url += `&date=${date}`
+    }
+
+    if (status) {
+      url += `&status=${status}`
+    }
+
+    if (searchText) {
+      url += `&searchText=${searchText}`
+    }
+
+    return this.http.get(url, {
+      headers,
+    });
+  }
+
+  approveRequest(requestObj: any): Observable<any> {
+    console.log()
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    let url = `${this.apiUrl}/approve-request`
+
+    return this.http.post(url, requestObj, { headers });
+  }
+
+  rejectRequest(requestObj: any): Observable<any> {
+    console.log()
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    let url = `${this.apiUrl}/reject-request`
+
+    return this.http.post(url, requestObj, { headers });
+  }
   
 }
 

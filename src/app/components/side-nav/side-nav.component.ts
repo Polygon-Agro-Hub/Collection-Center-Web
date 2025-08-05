@@ -134,6 +134,15 @@ export const MENU_ITEMS = [
     permission: ['Distribution Center Manager'],
   },
 
+  {
+    id: 16,
+    key: 'requests',
+    path: '/requests',
+    label: 'Requests',
+    icon: 'fas fa-user-cog',
+    permission: ['Distribution Center Manager'],
+  },
+
 ];
 
 @Component({

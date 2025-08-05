@@ -57,6 +57,7 @@ import { CenterDashboardComponent } from './application/Distributed-Center/cente
 import { AssignDistributionTargetComponent } from './application/Distributed-Center/Distributed-Target/assign-distribution-target/assign-distribution-target.component';
 import { ViewDistributionCenterTargetComponent } from './application/Distributed-Center/Distributed-Target/view-distribution-center-target/view-distribution-center-target.component';
 import { TargetProgressAllComponent } from './application/Distributed-Center/Distributed-Target/target-progress-all/target-progress-all.component';
+import { RequestsComponent } from './application/Distributed-Center/requests/requests.component';
 
 export const routes: Routes = [
     {
@@ -414,6 +415,21 @@ export const routes: Routes = [
                     //     path: 'edit-distribution-officer/:id',
                     //     component: EditDistributedOfficerComponent
                     // }
+                ]
+            },
+
+            {
+                path: 'requests',
+                // canActivate:[CcmRoleGuardService],
+                children: [
+                    {
+                        path: '',
+                        component: RequestsComponent,
+                    },
+                    // {
+                    //     path: 'Assign',
+                    //     component: AssignDistributionTargetComponent,
+                    
                 ]
             },
 

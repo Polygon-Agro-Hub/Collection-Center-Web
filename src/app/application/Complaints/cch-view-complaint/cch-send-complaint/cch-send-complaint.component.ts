@@ -203,4 +203,7 @@ class SentComplaint {
 class Reply {
   id!: number
   reply!: string
+  language: string = 'English';
+  firstNameEnglish!: string
+  lastNameEnglish!: string
 }

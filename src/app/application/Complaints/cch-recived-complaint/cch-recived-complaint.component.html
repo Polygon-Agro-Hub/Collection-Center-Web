@@ -87,14 +87,14 @@
                     <i class="fa-regular fa-envelope text-4xl"></i>
                 </div>
 
-                <div class="flex flex-col gap-y-2 w-full border-[1px] border-[#D9D9D9] py-4 px-5 rounded-lg">
+                <div class="flex flex-col gap-y-2 w-full border-[1px] border-[#D9D9D9] py-4 px-5 rounded-lg dark:text-white">
                     <p>
                         {{compalintObj.language === 'Sinhala' ? 'හිතවත් ': compalintObj.language === 'Tamil' ? 'அன்புள்ள ' : 'Dear '}}
                         <span class="font-semibold">{{compalintObj.firstNameEnglish}} {{compalintObj.lastNameEnglish}},</span>
                     </p>
 
-                    <div class="border-none outline-none dark:bg-[#1D1D1F] rounded-lg w-full h-60 p-1">
-                        <textarea class="w-full h-full border-none outline-none " cols="6" [(ngModel)]="replyObj.reply" name="reply" placeholder="[ Add message here... ]"></textarea>
+                    <div class="border-none outline-none bg-[#F6F6F6] dark:bg-[#363636] rounded-lg w-full h-60 p-1">
+                        <textarea class="bg-[#F6F6F6] dark:bg-[#363636] w-full h-full border-none outline-none " cols="6" [(ngModel)]="replyObj.reply" name="reply" placeholder="[ Add message here... ]"></textarea>
                     </div>
 
                     <p>

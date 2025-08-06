@@ -214,19 +214,26 @@
                             </button>
                           </td>
                           
-                        <!-- <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.createdAt | date: 'hh:mm a'}} --> 
-                        <!-- </td> -->
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
+                            <button class="text-gray-400 hover:text-gray-600 px-2">
+                                <i class="fa-regular fa-file text-lg text-gray-600"
+                                [ngClass]="{
+                                    'text-[#415CFF] hover:text-blue-500': item.status !== 'Approved',
+                                    'text-[#6B7D8C]': item.status === 'Approved'
+                                  }"></i>
+                            </button>
+                        </td>
                     </tr>
                 </tbody>
 
             </table>
         </div>
-         <div class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#262f45] text-right">
+         <!-- <div class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#262f45] text-right">
             <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
                 [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
                 [screenReaderCurrentLabel]="'Youre on page'">
             </pagination-controls>
-        </div>
+        </div> -->
     </div>
 </div>
 

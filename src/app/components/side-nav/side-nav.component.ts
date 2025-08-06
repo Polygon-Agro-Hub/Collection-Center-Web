@@ -143,6 +143,15 @@ export const MENU_ITEMS = [
     permission: ['Distribution Center Manager'],
   },
 
+  {
+    id: 17,
+    key: 'dcm-complaints',
+    path: '/dcm-complaints',
+    label: 'Complaints',
+    icon: 'fa-solid fa-triangle-exclamation',
+    permission: ['Distribution Center Manager'],
+  },
+
 ];
 
 @Component({

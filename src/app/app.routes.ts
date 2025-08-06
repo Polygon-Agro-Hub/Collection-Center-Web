@@ -58,6 +58,8 @@ import { AssignDistributionTargetComponent } from './application/Distributed-Cen
 import { ViewDistributionCenterTargetComponent } from './application/Distributed-Center/Distributed-Target/view-distribution-center-target/view-distribution-center-target.component';
 import { TargetProgressAllComponent } from './application/Distributed-Center/Distributed-Target/target-progress-all/target-progress-all.component';
 import { RequestsComponent } from './application/Distributed-Center/requests/requests.component';
+import { DcmComplaintsComponent } from './application/dcm-Complaints/dcm-complaints/dcm-complaints.component';
+import { ViewDcmReceiveReplyComponent } from './application/dcm-Complaints/view-dcm-receive-reply/view-dcm-receive-reply.component';
 
 export const routes: Routes = [
     {
@@ -430,6 +432,21 @@ export const routes: Routes = [
                     //     path: 'Assign',
                     //     component: AssignDistributionTargetComponent,
                     
+                ]
+            },
+
+            {
+                path: 'dcm-complaints',
+                // canActivate:[CcmRoleGuardService],
+                children: [
+                    {
+                        path: '',
+                        component: DcmComplaintsComponent,
+                    },
+                    {
+                        path: 'view-dcm-recive-complaint/:id',
+                        component: ViewDcmReceiveReplyComponent
+                    }
                 ]
             },
 

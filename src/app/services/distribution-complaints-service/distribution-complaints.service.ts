@@ -80,4 +80,35 @@ export class DistributionComplaintsService {
     let url = `${this.apiUrl}/dcm-add-complain`;
     return this.http.post<any>(url, data, { headers });
   }
+
+  dcmGetAllSentComplains(page: number = 1, limit: number = 10, status: string = '', emptype: string = '', searchText: string = ''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+
+    let url = `${this.apiUrl}/dcm-get-all-sent-complaint?page=${page}&limit=${limit}`;
+    if (status) {
+      url += `&status=${status}`
+    }
+
+    if (emptype) {
+      url += `&emptype=${emptype}`
+    }
+
+    if (searchText) {
+      url += `&searchText=${searchText}`
+    }
+
+    return this.http.get<any>(url, { headers });
+  }
+
+  dcmGetReplyByComplaintId(id: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/dcm-get-reply-by-complaint-id/${id}`;
+    return this.http.get<any>(url, { headers });
+  }
 }

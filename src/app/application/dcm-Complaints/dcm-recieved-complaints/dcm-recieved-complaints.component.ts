@@ -18,6 +18,8 @@ export class DcmRecievedComplaintsComponent implements OnInit {
 
   complainArr!: RecivedComplaint[];
   replyObj: Reply = new Reply();
+  managerDataObj: Manager = new Manager();
+  replyDataObj: ReplyData = new ReplyData();
 
   searchText: string = '';
   selectStatus: string = '';
@@ -89,10 +91,27 @@ export class DcmRecievedComplaintsComponent implements OnInit {
 
   fetchGetReply(id: number) {
     this.isLoading = true;
-    this.DistributionComplaintsSrv.dcmGetComplainById(id).subscribe(
+    this.DistributionComplaintsSrv.dcmGetReplyByComplaintId(id).subscribe(
       (res) => {
-        console.log('res', res)
-        this.replyObj = res.data;
+        console.log('replyres', res)
+        this.replyDataObj = res.data;
+        this.managerDataObj = res.dcmData;
+        console.log('reply obj', this.replyDataObj)
+        // this.replyObj.manageFirstNameEnglish = res.dcmData.manageFirstNameEnglish;
+        // this.replyObj.manageFirstNameEnglish = res.dcmData.manageFirstNameSinhala;
+        // this.replyObj.manageFirstNameEnglish = res.dcmData.manageFirstNameTamil;
+        // this.replyObj.manageLastNameEnglish = res.dcmData.manageLastNameEnglish;
+        // this.replyObj.manageLastNameEnglish = res.dcmData.manageLastNameSinhala;
+        // this.replyObj.manageLastNameEnglish = res.dcmData.manageLastNameTamil;
+        // this.replyObj.companyNameEnglish = res.dcmData.companyNameEnglish;
+        // this.replyObj.companyNameSinhala = res.dcmData.companyNameSinhala;
+        // this.replyObj.companyNameTamil = res.dcmData.companyNameTamil;
+        // this.replyObj.centerName = res.dcmData.centerName;
+        if (res.data.reply !== null) {
+          this.replyObj.reply = this.createTemplate(this.replyDataObj, this.managerDataObj)
+        }
+        
+        console.log('reply', this.replyObj.reply)
         this.isLoading = false;
       }
     )
@@ -141,6 +160,52 @@ export class DcmRecievedComplaintsComponent implements OnInit {
     this.router.navigate([`/dcm-complaints/view-dcm-recive-complaint/${id}`])
   }
 
+  createTemplate(replyDataObj: ReplyData, managerDataObj: Manager): string {
+    if (replyDataObj.language === 'Sinhala') {
+      return `
+  හිතවත් ${replyDataObj.firstNameSinhala} ${replyDataObj.lastNameSinhala},
+
+  ${replyDataObj.reply}
+
+  ඔබට තවත් ගැටළු හෝ ප්‍රශ්න තිබේ නම්, කරුණාකර අප හා සම්බන්ධ වන්න.
+  ඔබේ ඉවසීම සහ අවබෝධය වෙනුවෙන් ස්තූතියි.
+  
+  මෙයට,
+  ${managerDataObj.manageFirstNameSinhala} ${managerDataObj.manageLastNameSinhala},
+  Collection Center Manager of ${managerDataObj.centerName},
+  ${managerDataObj.companyNameSinhala}.
+      `;
+    } else if (replyDataObj.language === 'Tamil') {
+      return `
+  அன்புள்ள ${replyDataObj.firstNameTamil} ${replyDataObj.lastNameTamil},
+
+  ${replyDataObj.reply}
+  
+  உங்களுக்கு மேலும் ஏதேனும் சிக்கல்கள் அல்லது கேள்விகள் இருந்தால், தயவுசெய்து எங்களைத் தொடர்பு கொள்ளவும். உங்கள் பொறுமைக்கும் புரிதலுக்கும் நன்றி.
+  
+  இதற்கு,
+  ${managerDataObj.manageFirstNameTamil}  ${managerDataObj.manageLastNameTamil},
+  Collection Center Manager of ${managerDataObj.centerName},
+  ${managerDataObj.companyNameTamil}.
+        `;
+    } else {
+      return `
+  Dear ${replyDataObj.firstNameEnglish} ${replyDataObj.lastNameEnglish},
+
+  ${replyDataObj.reply}
+  
+  If you have any further concerns or questions, feel free to reach out.
+  Thank you for your patience and understanding.
+  
+  Sincerely, 
+  ${managerDataObj.manageFirstNameEnglish} ${managerDataObj.manageLastNameEnglish},
+  Collection Center Manager of ${managerDataObj.centerName},
+  ${managerDataObj.companyNameEnglish}.
+      `;
+    }
+  }
+  
+
 }
 
 class RecivedComplaint {
@@ -154,7 +219,44 @@ class RecivedComplaint {
   createdAt!: Date
 }
 
+class ReplyData {
+  id!: number;
+  refNo!: string;
+  complain!: string;
+  firstNameEnglish!: string;
+  firstNameSinhala!: string;
+  firstNameTamil!: string;
+  lastNameEnglish!: string;
+  lastNameSinhala!: string;
+  lastNameTamil!: string;
+  reply!: string;
+  manageFirstNameEnglish!: string;
+  manageFirstNameSinhala!: string;
+  manageFirstNameTamil!: string;
+  manageLastNameEnglish!: string;
+  manageLastNameSinhala!: string;
+  manageLastNameTamil!: string;
+  companyNameEnglish!: string;
+  companyNameSinhala!: string
+  companyNameTamil!: string;
+  centerName!: string;
+  language!: string;
+
+}
+
 class Reply {
-  id!: number
-  reply!: string
+  id!: number;
+  reply!: string;
+} 
+class Manager {
+  companyNameEnglish!: string;
+  companyNameSinhala!: string;
+  companyNameTamil!: string;
+  manageFirstNameEnglish!: string;
+  manageFirstNameSinhala!: string;
+  manageFirstNameTamil!: string;
+  manageLastNameEnglish!: string;
+  manageLastNameSinhala!: string;
+  manageLastNameTamil!: string;
+  centerName!: string;
 }

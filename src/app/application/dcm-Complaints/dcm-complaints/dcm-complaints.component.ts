@@ -6,11 +6,12 @@ import { ToastAlertService } from '../../../services/toast-alert/toast-alert.ser
 import Swal from 'sweetalert2';
 import { DcmRecievedComplaintsComponent } from '../dcm-recieved-complaints/dcm-recieved-complaints.component';
 import { DistributionComplaintsService } from '../../../services/distribution-complaints-service/distribution-complaints.service';
+import { DcmSentComplaintsComponent } from "../dcm-sent-complaints/dcm-sent-complaints.component";
 
 @Component({
   selector: 'app-dcm-complaints',
   standalone: true,
-  imports: [CommonModule, FormsModule, DcmRecievedComplaintsComponent],
+  imports: [CommonModule, FormsModule, DcmRecievedComplaintsComponent, DcmSentComplaintsComponent],
   templateUrl: './dcm-complaints.component.html',
   styleUrl: './dcm-complaints.component.css'
 })

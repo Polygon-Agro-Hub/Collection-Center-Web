@@ -1,6 +1,5 @@
 <app-loading-spinner *ngIf="isLoading" />
 
-
 <div *ngIf="!isLoading">
     <div class="flex flex-row items-center justify-between gap-4">
         <div><p class="text-lg dark:text-white whitespace-nowrap">All ({{ totalItems < 10 ? ('0' + totalItems) : totalItems }})</p></div>
@@ -16,8 +15,6 @@
                 <option value="" selected disabled>Status</option>
                 <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300" value="Pending">
                     Pending</option>
-                <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300" value="Completed">
-                    Completed</option>
                 <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300" value="Opened">
                     Opened</option>
             </select>
@@ -98,21 +95,22 @@
         <table class="w-full divide-y-2 overflow-hidden">
             <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
                 <tr>
-                    <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563]">No</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563]">Order ID</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563]">Assigned To</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563]">Delivery Time Slot</th>
-                    <th class="px-6 py-3 text-center text-sm font-medium text-[#4B5563]">Status</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">No</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">Order ID</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">Assigned To</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">Delivery Time Slot</th>
+                    <th class="px-6 py-3 text-center text-sm font-medium text-[#4B5563] dark:text-white">Status</th>
 
                 </tr>
             </thead>
             <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
                 <tr
                     *ngFor="let item of ordersArr | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index">
-                    <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
-                        {{ (i + 1) < 10 ? ('0' + (i + 1)) : (i + 1) }}
-                      </td>
-                    <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.invNo}}</td>
+                    <!-- <tr *ngFor="let item of complainArr"> -->
+                        <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
+                            {{ (i + 1) < 10 ? ('0' + (i + 1)) : (i + 1) }}
+                          </td>
+                        <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.invNo}}</td>
                     <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.firstNameEnglish}} {{item.lastNameEnglish}}</td>
                     
 

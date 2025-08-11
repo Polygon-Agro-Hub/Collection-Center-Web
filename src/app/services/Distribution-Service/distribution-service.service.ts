@@ -181,7 +181,7 @@ export class DistributionServiceService {
     return this.http.post(url, requestObj, { headers });
   }
 
-  getAllAssignOrders(page: number = 1, limit: number = 10, status: string = '', searchText: string = ''): Observable<any> {
+  getAllAssignOrders(page: number = 1, limit: number = 10, status: string = '', searchText: string = '', selectDate: string = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
@@ -195,6 +195,53 @@ export class DistributionServiceService {
     if (searchText) {
       url += `&searchText=${searchText}`
 
+    }
+
+    if (selectDate) {
+      url += `&date=${selectDate}`
+    }
+
+    return this.http.get<any>(url, { headers });
+  }
+
+  getToDoAssignOrders(page: number = 1, limit: number = 10, status: string = '', searchText: string = '', selectDate: string = ''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+
+    let url = `${this.apiUrl}/get-todo-assign-orders?page=${page}&limit=${limit}`;
+    if (status) {
+      url += `&status=${status}`
+    }
+
+    if (searchText) {
+      url += `&searchText=${searchText}`
+
+    }
+
+    if (selectDate) {
+      url += `&date=${selectDate}`
+    }
+
+    return this.http.get<any>(url, { headers });
+  }
+
+  getCompletedAssignOrders(page: number = 1, limit: number = 10, searchText: string = '', selectDate: string = ''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+
+    let url = `${this.apiUrl}/get-completed-assign-orders?page=${page}&limit=${limit}`;
+
+    if (searchText) {
+      url += `&searchText=${searchText}`
+
+    }
+
+    if (selectDate) {
+      url += `&date=${selectDate}`
     }
 
     return this.http.get<any>(url, { headers });

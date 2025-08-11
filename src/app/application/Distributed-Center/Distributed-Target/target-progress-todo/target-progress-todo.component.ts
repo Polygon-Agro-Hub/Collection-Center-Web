@@ -8,13 +8,13 @@ import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/
 import { ComplaintsService } from '../../../../services/Complaints-Service/complaints.service';
 
 @Component({
-  selector: 'app-target-progress-ongoing',
+  selector: 'app-target-progress-todo',
   standalone: true,
   imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent],
-  templateUrl: './target-progress-ongoing.component.html',
-  styleUrl: './target-progress-ongoing.component.css'
+  templateUrl: './target-progress-todo.component.html',
+  styleUrl: './target-progress-todo.component.css'
 })
-export class TargetProgressOngoingComponent implements OnInit {
+export class TargetProgressTodoComponent implements OnInit {
 
   ordersArr!: orders[];
   searchText: string = '';
@@ -30,7 +30,7 @@ export class TargetProgressOngoingComponent implements OnInit {
   isLoading:boolean = true;
 
   isStatusDropdownOpen = false;
-  statusDropdownOptions = ['Pending', 'Completed', 'Opened'];
+  statusDropdownOptions = ['Pending', 'Opened'];
 
   toggleStatusDropdown() {
     this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
@@ -50,7 +50,7 @@ export class TargetProgressOngoingComponent implements OnInit {
 
 
   ngOnInit(): void {
-    this.fetchAllAssignOrders();
+    this.fetchToDoAssignOrders();
   }
 
   @HostListener('document:click', ['$event'])
@@ -64,9 +64,9 @@ export class TargetProgressOngoingComponent implements OnInit {
 
   }
 
-  fetchAllAssignOrders(page: number = 1, limit: number = this.itemsPerPage, status: string = this.selectStatus, search: string = this.searchText, selectDate: string = this.date) {
+  fetchToDoAssignOrders(page: number = 1, limit: number = this.itemsPerPage, status: string = this.selectStatus, search: string = this.searchText, selectDate: string = this.date) {
     this.isLoading = true;
-    this.DistributionSrv.getAllAssignOrders(page, limit, status, search, selectDate).subscribe(
+    this.DistributionSrv.getToDoAssignOrders(page, limit, status, search, selectDate).subscribe(
       (res) => {
         this.ordersArr = res.items
         this.totalItems = res.total;
@@ -84,18 +84,18 @@ export class TargetProgressOngoingComponent implements OnInit {
   }
 
   onSearch() {
-    this.fetchAllAssignOrders();
+    this.fetchToDoAssignOrders();
 
   }
 
   offSearch() {
     this.searchText = '';
-    this.fetchAllAssignOrders();
+    this.fetchToDoAssignOrders();
 
   }
 
   filterStatus() {
-    this.fetchAllAssignOrders();
+    this.fetchToDoAssignOrders();
   }
 
   cancelStatus(event?: MouseEvent) {
@@ -103,18 +103,18 @@ export class TargetProgressOngoingComponent implements OnInit {
       event.stopPropagation(); // Prevent triggering the dropdown toggle
     }
     this.selectStatus = '';
-    this.fetchAllAssignOrders();
+    this.fetchToDoAssignOrders();
   }
 
   onDateChange() {
     console.log('called')
-    this.fetchAllAssignOrders();
+    this.fetchToDoAssignOrders();
   }
 
 
   onPageChange(event: number) {
     this.page = event;
-    this.fetchAllAssignOrders(this.page, this.itemsPerPage);
+    this.fetchToDoAssignOrders(this.page, this.itemsPerPage);
   }
 
   navigateViewReply(id:number){
@@ -163,4 +163,3 @@ class orders {
   firstNameEnglish!: string
   lastNameEnglish!: string
 }
-

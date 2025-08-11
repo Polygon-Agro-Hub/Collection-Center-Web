@@ -16,13 +16,11 @@ import { ComplaintsService } from '../../../../services/Complaints-Service/compl
 })
 export class TargetProgressOngoingComponent implements OnInit {
 
-  complainArr!: RecivedComplaint[];
-  replyObj: Reply = new Reply();
-
+  ordersArr!: orders[];
   searchText: string = '';
   selectStatus: string = '';
-  isReplyView: boolean = false;
-  complainId!: number;
+
+  date:  string = '';
 
   page: number = 1;
   totalItems: number = 0;
@@ -32,7 +30,7 @@ export class TargetProgressOngoingComponent implements OnInit {
   isLoading:boolean = true;
 
   isStatusDropdownOpen = false;
-  statusDropdownOptions = ['Assigned', 'Closed'];
+  statusDropdownOptions = ['Pending', 'Completed', 'Opened'];
 
   toggleStatusDropdown() {
     this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
@@ -47,11 +45,12 @@ export class TargetProgressOngoingComponent implements OnInit {
   constructor(
     private router: Router,
     private ComplainSrv: ComplaintsService,
+    private DistributionSrv: DistributionServiceService
   ) { }
 
 
   ngOnInit(): void {
-    this.fetchAllreciveComplaint();
+    this.fetchAllAssignOrders();
   }
 
   @HostListener('document:click', ['$event'])
@@ -65,11 +64,11 @@ export class TargetProgressOngoingComponent implements OnInit {
 
   }
 
-  fetchAllreciveComplaint(page: number = 1, limit: number = this.itemsPerPage, status: string = this.selectStatus, search: string = this.searchText) {
+  fetchAllAssignOrders(page: number = 1, limit: number = this.itemsPerPage, status: string = this.selectStatus, search: string = this.searchText) {
     this.isLoading = true;
-    this.ComplainSrv.getAllCCHReciveComplaints(page, limit, status, search).subscribe(
+    this.DistributionSrv.getAllAssignOrders(page, limit, status, search).subscribe(
       (res) => {
-        this.complainArr = res.items
+        this.ordersArr = res.items
         this.totalItems = res.total;
         
         if (res.items.length === 0) {
@@ -84,38 +83,23 @@ export class TargetProgressOngoingComponent implements OnInit {
     )
   }
 
-  fetchGetReply(id: number) {
-    this.isLoading = true;
-    this.ComplainSrv.getComplainById(id).subscribe(
-      (res) => {
-        this.replyObj = res.data;
-        this.isLoading = false;
-      }
-    )
-  }
-
-  viewReply(id: number) {
-    this.isReplyView = true;
-    this.fetchGetReply(id);
-  }
-
   cancelViewReply() {
     this.isReplyView = false;
   }
 
   onSearch() {
-    this.fetchAllreciveComplaint();
+    this.fetchAllAssignOrders();
 
   }
 
   offSearch() {
     this.searchText = '';
-    this.fetchAllreciveComplaint();
+    this.fetchAllAssignOrders();
 
   }
 
   filterStatus() {
-    this.fetchAllreciveComplaint();
+    this.fetchAllAssignOrders();
   }
 
   cancelStatus(event?: MouseEvent) {
@@ -123,7 +107,12 @@ export class TargetProgressOngoingComponent implements OnInit {
       event.stopPropagation(); // Prevent triggering the dropdown toggle
     }
     this.selectStatus = '';
-    this.fetchAllreciveComplaint();
+    this.fetchAllAssignOrders();
+  }
+
+  onDateChange() {
+    console.log('called')
+    this.fetchAllAssignOrders();
   }
 
   // cancelStatus() {
@@ -134,7 +123,7 @@ export class TargetProgressOngoingComponent implements OnInit {
 
   onPageChange(event: number) {
     this.page = event;
-    this.fetchAllreciveComplaint(this.page, this.itemsPerPage);
+    this.fetchAllAssignOrders(this.page, this.itemsPerPage);
   }
 
   navigateViewReply(id:number){
@@ -143,18 +132,18 @@ export class TargetProgressOngoingComponent implements OnInit {
 
 }
 
-class RecivedComplaint {
-  id!: number
-  refNo!: string
+class orders {
+  processOrderId!: number
+  orderId!: number
+  invNo!: string
+  isTargetAssigned!: boolean
   complainCategory!: string
-  complain!: string
+  sheduleDate!: Date
+  sheduleTime!: string
+  packagePackStatus!: string
   status!: string
-  empId!: string
-  reply: string | null = null
-  createdAt!: Date
+  officerId!: number
+  firstNameEnglish!: string
+  lastNameEnglish!: string
 }
 
-class Reply {
-  id!: number
-  reply!: string
-}

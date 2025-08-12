@@ -46,7 +46,7 @@
     </div>
 
     <div *ngIf="!hasData" class="flex flex-col items-center w-full h-screen mt-6">
-        <p class="text-[#494949] my-6 dark:text-white">--The centre target is empty at the moment--</p>
+        <p class="text-[#494949] my-6 dark:text-white">--No completed orders found--</p>
         <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
     </div>
 
@@ -82,6 +82,7 @@
                     <td class="px-6 py-4 text-sm text-center font-medium text-gray-900 dark:text-[#C5C5C5]">
                         {{ getDisplayDate(item.sheduleDate) }} <br/>{{ removeWithin(item.sheduleTime) }}
                     </td>
+                    
                 </tr>
             </tbody>
         </table>
@@ -92,11 +93,6 @@
             [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
             [screenReaderCurrentLabel]="'Youre on page'">
         </pagination-controls>
-    </div>
-
-    <div *ngIf="!hasData" class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6 ">
-        <p class="text-[#494949] my-6 dark:text-textDark">--No Data Availabale--</p>
-        <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
     </div>
 
 </div>
@@ -123,7 +119,7 @@
                     <span class="text-light text-whight-700 button-text text-[#6B7D8C]">Go Back</span>
                 </button>
                 <button class="bg-[#415CFF] border-[1px] border-[#415CFF] px-10 py-0.35 rounded-lg shadow-md"
-                    (click)="OutForDelivery()"><span class="font-semibold text-[#FFFFFF]">Yes,</span> <br>
+                    (click)="sendOutForDelivery()"><span class="font-semibold text-[#FFFFFF]">Yes,</span> <br>
                     <span class="text-light text-whight-700 button-text text-[#FFFFFF]">Out</span>
                 </button>
     

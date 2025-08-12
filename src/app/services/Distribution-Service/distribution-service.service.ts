@@ -246,6 +246,36 @@ export class DistributionServiceService {
 
     return this.http.get<any>(url, { headers });
   }
+
+  getOutForDeliveryOrders(page: number = 1, limit: number = 10, status: string = '', searchText: string = ''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+
+    let url = `${this.apiUrl}/get-out-for-delivery-orders?page=${page}&limit=${limit}`;
+    if (status) {
+      url += `&status=${status}`
+    }
+
+    if (searchText) {
+      url += `&searchText=${searchText}`
+
+    }
+
+    return this.http.get<any>(url, { headers });
+  }
+
+  setStatusAndTime(data: any): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+  
+    const url = `${this.apiUrl}/set-status-and-time`;
+  
+    // Sending the orderIds in request body
+    return this.http.post<any>(url, { data }, { headers });
+  }
   
 }
 

@@ -6,6 +6,7 @@ import { DistributionServiceService } from '../../../../services/Distribution-Se
 import { NgxPaginationModule } from 'ngx-pagination';
 import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
 import { ComplaintsService } from '../../../../services/Complaints-Service/complaints.service';
+import { ToastAlertService } from '../../../../services/toast-alert/toast-alert.service';
 
 @Component({
   selector: 'app-target-progress-completed',
@@ -37,7 +38,8 @@ export class TargetProgressCompletedComponent implements OnInit{
     private router: Router,
     private ComplainSrv: ComplaintsService,
     private DistributionSrv: DistributionServiceService,
-    private location: Location
+    private location: Location,
+    private toastSrv: ToastAlertService
   ) { }
 
 
@@ -168,20 +170,70 @@ deSelectAll() {
 }
 
 outForDelivery() {
-  this.isOutForDelivery = true
+  this.isOutForDelivery = true;
+}
+
+sendOutForDelivery() {
+
+  const now = new Date();
+
+const year = now.getFullYear();
+const month = String(now.getMonth() + 1).padStart(2, '0');  // Months are 0-based
+const day = String(now.getDate()).padStart(2, '0');
+
+const hours = String(now.getHours()).padStart(2, '0');
+const minutes = String(now.getMinutes()).padStart(2, '0');
+const seconds = String(now.getSeconds()).padStart(2, '0');
+
+const currentTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+
+console.log(currentTime);
+
   if (this.allChecked) {
-    console.log('allcehcke')
+    console.log('allcehcke');
   } else {
-     console.log('count', this.selectedOrderIds.length)
+    console.log('count', this.selectedOrderIds.length);
   }
+  console.log('currentTime', currentTime)
+
+  this.changeStatusAndTime({
+    orderIds: this.selectedOrderIds,
+    time: currentTime
+  });
+}
+
+changeStatusAndTime(data: { orderIds: any[]; time: string }) {
+  this.isLoading = true;
+  console.log('change status');
+  
+
+  this.DistributionSrv.setStatusAndTime(data).subscribe({
+    next: (res) => {
+      this.isLoading = false;
+
+      if (res && res.success) {
+        this.toastSrv.success(`${data.orderIds.length} orders have been sent out for delivery!`, 'Success');
+        this.isOutForDelivery = false;
+      } else {
+        this.toastSrv.error('Failed to sent out for delivery!', 'Error');
+        this.isOutForDelivery = false;
+      }
+      this.fetchCompletedAssignOrders()
+      this.allChecked = false;
+    },
+    error: (err) => {
+      this.isLoading = false;
+      console.error(err);
+      this.toastSrv.error('Something went wrong!', 'Error');
+      this.isOutForDelivery = false;
+      this.fetchCompletedAssignOrders()
+      this.allChecked = false;
+    }
+  });
 }
 
 cancelOutForDelivery() {
-  window.history.back();
-}
-
-OutForDelivery() {
-
+  this.isOutForDelivery = false;
 }
 
 }
@@ -198,4 +250,5 @@ class orders {
   officerId!: number
   firstNameEnglish!: string
   lastNameEnglish!: string
+  outDlvrDateLocal!: string
 }

@@ -276,7 +276,41 @@ export class DistributionServiceService {
     // Sending the orderIds in request body
     return this.http.post<any>(url, { data }, { headers });
   }
+
+  getofficerTargets(): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+
+    let url = `${this.apiUrl}/get-officer-targets`;
+    
+
+    return this.http.get<any>(url, { headers });
+  }
+
+  getSelectedOfficerTargets(officerId: number, searchText: string = '', status: string = ''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+  
+  
+    let url = `${this.apiUrl}/get-selected-officer-targets?officerId=${officerId}`;
+  
+    if (searchText) {
+      url += `&searchText=${searchText}`
+  
+    }
+  
+    if (status) {
+      url += `&status=${status}`
+    }
+  
+    return this.http.get<any>(url, { headers });
+  }
   
 }
+
+
 
 

@@ -127,6 +127,14 @@ export const MENU_ITEMS = [
 
   {
     id: 15,
+    key: 'officer-targets',
+    path: '/officer-targets',
+    label: 'Officer Targets',
+    icon: 'fas fa-user-cog',
+    permission: ['Distribution Center Manager'],
+  },
+  {
+    id: 16,
     key: 'target-progress',
     path: '/target-progress',
     label: 'Target Progress',
@@ -135,7 +143,7 @@ export const MENU_ITEMS = [
   },
 
   {
-    id: 16,
+    id: 17,
     key: 'requests',
     path: '/requests',
     label: 'Requests',
@@ -144,7 +152,7 @@ export const MENU_ITEMS = [
   },
 
   {
-    id: 17,
+    id: 18,
     key: 'dcm-complaints',
     path: '/dcm-complaints',
     label: 'Complaints',

@@ -87,9 +87,41 @@
                     <i class="fa-regular fa-envelope text-4xl"></i>
                 </div>
 
-                <div class="border-[1px] border-[#D9D9D9] dark:bg-[#1D1D1F] rounded-lg w-full h-60 p-1">
-                    <textarea class="w-full h-full" cols="6" [(ngModel)]="replyObj.reply" name="reply"></textarea>
+                <div class="flex flex-col gap-y-2 w-full border-[1px] border-[#D9D9D9] py-4 px-5 rounded-lg dark:text-white">
+                    <p>
+                        {{compalintObj.language === 'Sinhala' ? 'හිතවත් ': compalintObj.language === 'Tamil' ? 'அன்புள்ள ' : 'Dear '}}
+                        <span class="font-semibold">{{compalintObj.firstNameEnglish}} {{compalintObj.lastNameEnglish}},</span>
+                    </p>
+
+                    <div class="border-none outline-none bg-[#F6F6F6] dark:bg-[#363636] rounded-lg w-full h-60 p-1">
+                        <textarea class="bg-[#F6F6F6] dark:bg-[#363636] w-full h-full border-none outline-none " cols="6" [(ngModel)]="replyObj.reply" name="reply" placeholder="[ Add message here... ]"></textarea>
+                    </div>
+
+                    <p>
+                        {{
+                            compalintObj.language === 'Sinhala' ? 'ඔබට තවත් ගැටළු හෝ ප්‍රශ්න තිබේ නම්, කරුණාකර අප හා සම්බන්ධ වන්න. ඔබේ ඉවසීම සහ අවබෝධය වෙනුවෙන් ස්තූතියි. '
+                            : compalintObj.language === 'Tamil' ? 'உங்களுக்கு மேலும் ஏதேனும் சிக்கல்கள் அல்லது கேள்விகள் இருந்தால், தயவுசெய்து எங்களைத் தொடர்பு கொள்ளவும். உங்கள் பொறுமைக்கும் புரிதலுக்கும் நன்றி. ' 
+                            : 'If you have any further concerns or questions, feel free to reach out.Thank you for your patience and understanding. '
+                        }}
+
+                    </p>
+                    <p>
+                        {{
+                            compalintObj.language === 'Sinhala' ? 'මෙයට' + ' ' + templateData.EngName + ','
+                            : compalintObj.language === 'Tamil' ? 'இதற்கு' + ' ' + templateData.TamName + ','
+                            : 'Sincerely' + ' ' + templateData.EngName + ','
+                        }}
+                    </p>
+                    <p>
+                        {{
+                            compalintObj.language === 'Sinhala' ? 'Collection Centre Head of ' + templateData.companyNameSinhala
+                            : compalintObj.language === 'Tamil' ? 'Collection Centre Head of ' + templateData.companyNameTamil
+                            : 'Collection Centre Head of ' + templateData.companyNameEnglish
+                        }}
+                    </p>
                 </div>
+
+
 
                 <div class="flex flex-row justify-center items-center gap-8">
                     <button

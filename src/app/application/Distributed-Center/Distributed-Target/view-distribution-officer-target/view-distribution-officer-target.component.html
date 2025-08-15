@@ -1,0 +1,320 @@
+
+
+<app-loading-spinner *ngIf="isLoading" />
+
+<div *ngIf="!isLoading" >
+    <div class="flex gap-3 mb-4 mr-5 ml-0">
+        <p class="font-semibold text[#424242]  dark:text-[#FFFFFF] dark:bg-blacks cursor-pointer">Officer Targets</p>
+        <p class="font-semibold text[#424242]  dark:text-[#FFFFFF] dark:bg-blacks cursor-pointer">View Officer Targets</p>
+    </div>
+
+    <div *ngIf="!isPass" class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg overflow-x-auto">
+    <div class="flex flex-row items-center justify-between gap-4">
+        <div>
+            <p class="text-lg font-semibold dark:text-white whitespace-nowrap " *ngIf="ordersArr.length !== 0 ">
+              EMP ID : {{ ordersArr[0].empId}}
+            </p>
+          </div>
+    <div class="flex flex-row items-center justify-end gap-5 ">
+        
+        <i class="fa-solid fa-list text-2xl dark:text-white"></i>
+
+        <p class="text-lg dark:text-white">Filter By</p>
+
+        <div class="relative w-40 custom-status-dropdown-container">
+            <!-- Hidden native select -->
+            <select [(ngModel)]="selectStatus" class="hidden" (change)="filterStatus()">
+                <option value="" selected disabled>Status</option>
+                <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300" value="Pending">
+                    Pending</option>
+                <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300" value="Completed">
+                    Completed</option>
+                <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300" value="Opened">
+                    Opened</option>
+            </select>
+
+            <!-- Custom dropdown trigger -->
+            <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
+                (click)="toggleStatusDropdown()">
+                <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
+                    <span>{{ selectStatus || 'Status' }}</span>
+                    <div class="flex items-center">
+                        <!-- X icon (shown ONLY when option is selected) -->
+                        <i *ngIf="selectStatus" (click)="cancelStatus($event)"
+                            class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
+
+                        <!-- Arrow icon (shown when EITHER: dropdown is open OR no selection exists) -->
+                        <i *ngIf="isStatusDropdownOpen || !selectStatus"
+                            class="fa-solid text-lg text-[#828282] transition-transform duration-200"
+                            [class.fa-angle-down]="!isStatusDropdownOpen"
+                            [class.fa-angle-up]="isStatusDropdownOpen"></i>
+                    </div>
+                </div>
+            </div>
+
+            
+
+            <!-- Custom dropdown options -->
+            <div *ngIf="isStatusDropdownOpen"
+                class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
+                <div class="py-1">
+                    <div *ngFor="let option of statusDropdownOptions" (click)="selectStatusOption(option)"
+                        class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
+                        <span class="flex-grow">{{ option }}</span>
+                        <i class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- <div class="relative w-36">
+            <div
+                class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
+                <input type="date" #toDateInput [(ngModel)]="date" name="date"
+                    (change)="onDateChange()"
+                    class="block w-full appearance-none text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none dark:bg-[#292929] custom-date-input" />
+            </div>
+        </div> -->
+
+        <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+            <input type="text" placeholder="Search by Order ID.." [(ngModel)]="searchText"
+                class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
+            <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
+                (click)="onSearch()">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
+                </svg>
+            </button>
+            <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none" (click)="offSearch()">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                    stroke="currentColor">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                </svg>
+            </button>
+        </div>
+
+    </div>
+    </div>
+    
+
+    <div class="flex mt-2 flex-row gap-2" *ngIf="selectedOrderIds.length !== 0">
+         <button (click)="deSelectAll()" class="border border-[#95A1AC] font-medium rounded-lg bg-[#F6F7F9] text-[#6B7D8C] px-3 py-1" >Cancel</button>
+         <button (click)="passTarget()" class="border border-[#415CFF] font-medium rounded-lg bg-[#415CFF] text-[#FFFFFF] px-6 py-1" >Pass</button>
+         <p class="text-[#415CFF] px-3 py-1 italic" >Selected ({{selectedOrderIds.length}})</p>
+    </div>
+
+    <div *ngIf="!hasData" class="flex flex-col items-center w-full h-screen mt-6">
+        <p class="text-[#494949] my-6 dark:text-white">--The target of this officer is empty at the moment--</p>
+        <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
+    </div>
+
+
+    <div *ngIf="hasData"
+        class="min-w-max mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+        <table class="w-full min-w-max divide-y-2 overflow-hidden">
+            <thead class="text-[#4B5563] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
+                <tr>
+                    <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">
+                        <input type="checkbox" 
+                               [checked]="allChecked" 
+                               (change)="toggleAllOrders($event)">
+                    </th>
+                    <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">No</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">Invoice No</th>
+                    <th class="px-6 py-3 text-center text-sm font-medium text-[#4B5563] dark:text-white">Scheduled Delivery</th>
+                    <th class="px-6 py-3 text-center text-sm font-medium text-[#4B5563] dark:text-white">Status</th>
+                    <th class="px-6 py-3 text-center text-sm font-medium text-[#4B5563] dark:text-white">Completing Status</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white dark:bg-[#1D1D1F] text-[#000000] dark:border-[#1D1D1F] cursor-default">
+                <tr *ngFor="let item of ordersArr | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index">
+                    <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
+                        <input type="checkbox" 
+                               [checked]="isChecked(item.processOrderId)" 
+                               (change)="toggleOrder(item.processOrderId, $event)">
+                    </td>
+                    <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
+                        {{ (i + 1) < 10 ? ('0' + (i + 1)) : (i + 1) }}
+                    </td>
+                    <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.invNo}}</td>
+                    <td class="px-6 py-4 text-sm text-center font-medium text-gray-900 dark:text-[#C5C5C5]">{{ getDisplayDate(item.sheduleDate) }} {{ removeWithin(item.sheduleTime) }}</td>
+                    <!-- <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.packagePackStatus}}</td> -->
+                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5] cursor-default">
+
+                        <div class="flex font-medium items-center justify-center h-full">
+                            <span *ngIf="item.packagePackStatus ==='Completed'"
+                                class="bg-[#C8E0FF] text-[#415CFF] px-3 py-1 rounded-lg">
+                                Completed
+                            </span>
+
+                            <span *ngIf="item.packagePackStatus ==='Pending'"
+                                class="bg-[#FFD4D4] text-[#FF0000] px-3 py-1 rounded-lg">
+                                Pending
+                            </span>
+
+                            <span *ngIf="item.packagePackStatus ==='Opened'"
+                                class="bg-[#FFFDC5] text-[#A8A100] px-3 py-1 rounded-lg">
+                                Opened
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+    </div>
+</div>
+
+<div *ngIf="isPass" class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg overflow-x-auto">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 mt-5 ">
+    
+        <div>
+            <label class="block text-sm font-medium text-[#534E4E] dark:text-textDark">No. of orders selected</label>
+            <div class="flex mt-1">
+                
+                <input [(ngModel)]="selectedOrderIds.length"
+                    class="text-[#030308] w-full px-2 py-2 dark:text-textDark border border-gray-300 rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500">
+            </div>
+        </div>
+
+        <div>
+            <label for="jobRole" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
+              Select Short Stock Assignee
+            </label>
+          
+            <select
+              id="jobRole"
+              name="jobRole"
+              required
+              (change)="onOfficerChange($event)"
+              [(ngModel)]="selectedOfficerId"
+              #officerSelect="ngModel"
+              class="form-control cursor-pointer block w-full p-2 mt-1 text-[#030308] dark:text-textDark border border-gray-300 rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500"
+            >
+              <!-- Default empty option -->
+              <option value="">-- Select Officer --</option>
+          
+              <option *ngFor="let officer of officersArr" [value]="officer.id">
+                {{ officer.empId }} - {{ officer.firstNameEnglish }} {{ officer.lastNameEnglish }}
+              </option>
+            </select>
+          
+            <!-- Validation error message -->
+            <div *ngIf="officerSelect.invalid && officerSelect.touched" class="text-red-500 text-sm">
+              Please select an officer.
+            </div>
+          </div>
+          
+        
+
+    </div>
+
+    <hr class=""/>
+    <div class="flex justify-center">
+        <div 
+        class="min-w-max mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+        <table class="w-full min-w-max divide-y-2 overflow-hidden">
+            <thead class="text-[#4B5563] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
+                <tr>
+                    <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">
+                    </th>
+                    <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">No</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">Invoice No</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">Scheduled Delivery</th>
+                    <th class="px-6 py-3 text-center text-sm font-medium text-[#4B5563] dark:text-white">Status</th>
+                    <th class="px-6 py-3 text-center text-sm font-medium text-[#4B5563] dark:text-white">Completing Status</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white dark:bg-[#1D1D1F] text-[#000000] dark:border-[#1D1D1F] cursor-default">
+                <tr *ngFor="let item of filteredOrdersArr | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index">
+                    <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
+                        
+                    </td>
+                    <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
+                        {{ (i + 1) < 10 ? ('0' + (i + 1)) : (i + 1) }}
+                    </td>
+                    <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.invNo}}</td>
+                    <td class="px-6 py-4 text-sm text-left font-medium text-gray-900 dark:text-[#C5C5C5]">{{ getDisplayDate(item.sheduleDate) }} {{ removeWithin(item.sheduleTime) }}</td>
+                    <!-- <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.packagePackStatus}}</td> -->
+                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5] cursor-default">
+
+                        <div class="flex font-medium items-center justify-center h-full">
+                            <span *ngIf="item.packagePackStatus ==='Completed'"
+                                class="bg-[#C8E0FF] text-[#415CFF] px-3 py-1 rounded-lg">
+                                Completed
+                            </span>
+
+                            <span *ngIf="item.packagePackStatus ==='Pending'"
+                                class="bg-[#FFD4D4] text-[#FF0000] px-3 py-1 rounded-lg">
+                                Pending
+                            </span>
+
+                            <span *ngIf="item.packagePackStatus ==='Opened'"
+                                class="bg-[#FFFDC5] text-[#A8A100] px-3 py-1 rounded-lg">
+                                Opened
+                            </span>
+                        </div>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+
+        
+
+    </div>
+
+    <!-- <div class="">jasfjsdjfjsdjdfcld</div> -->
+
+    <!-- <div class="flex mt-2 flex-row gap-2 justify-center" >
+        <button (click)="cancell()" class="border border-[#95A1AC] font-medium rounded-lg bg-[#F6F7F9] text-[#6B7D8C] px-3 py-1" >Cancel</button>
+        <button (click)="passTargetToBackEnd()" class="border border-[#415CFF] font-medium rounded-lg bg-[#415CFF] text-[#FFFFFF] px-6 py-1" >Pass</button>
+   </div> -->
+</div>
+
+<div class="flex mt-6 flex-row gap-2 justify-center" >
+    <button (click)="cancell()" class="border border-[#95A1AC] font-medium rounded-lg shadow-lg bg-[#F6F7F9] text-[#6B7D8C] px-3 py-1" >Cancel</button>
+    <button (click)="passTargetToBackEnd()" [disabled]="!selectedOfficerId" class="border border-[#415CFF] font-medium rounded-lg shadow-lg bg-[#415CFF] text-[#FFFFFF] px-6 py-1" >Pass</button>
+</div>
+
+    
+</div>
+
+</div>
+
+<div>
+
+</div>
+
+<div *ngIf="isPassTarget" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+    <div class="bg-white dark:bg-[#363636] shadow-lg rounded-lg px-6 py-10 w-1/3">
+  
+        <div>
+            <!-- Icon -->
+            <div class="flex items-center justify-center bg-[#F6F7F9] rounded-lg shadow-sm px-4 mb-3 py-3 mx-auto w-[70px]">
+                <i class="fa-solid fa-triangle-exclamation text-[#6B7D8C] text-4xl px-1"></i>
+            </div>
+  
+            <div class="mb-8 text-center dark:text-textDark">
+                <p class="text-lg mb-2">
+                    Are you sure you want to pass this <br/> selected target to some other officer?
+                </p>
+            </div>
+  
+            <!-- Buttons -->
+            <div class="flex justify-center gap-6 ">
+                <button  class="bg-[#E8E8E8] border-[1px] border-[#6B7D8C] px-10 py-0.35 rounded-lg shadow-md"
+                    (click)="cancelPass()"><span class="font-semibold text-[#6B7D8C]">No,</span> <br>
+                    <span class="text-light text-whight-700 button-text text-[#6B7D8C]">Go Back</span>
+                </button>
+                <button class="bg-[#415CFF] border-[1px] border-[#415CFF] px-10 py-0.35 rounded-lg shadow-md"
+                    (click)="PassTarget()"><span class="font-semibold text-[#FFFFFF]">Yes,</span> <br>
+                    <span class="text-light text-whight-700 button-text text-[#FFFFFF]">Pass</span>
+                </button>
+    
+            </div>
+        </div>
+    </div>
+
+  </div>

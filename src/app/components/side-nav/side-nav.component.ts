@@ -108,6 +108,58 @@ export const MENU_ITEMS = [
     icon: 'fas fa-user-cog',
     permission: ['Distribution Center Head'],
   },
+  {
+    id: 13,
+    key: 'distribution-center-dashboard',
+    path: '/distribution-center-dashboard',
+    label: 'Dashboard',
+    icon: 'fas fa-th-large',
+    permission: ['Distribution Center Manager'],
+  },
+  {
+    id: 14,
+    key: 'assign-targets',
+    path: '/assign-targets',
+    label: 'Assign Targets',
+    icon: 'fas fa-user-cog',
+    permission: ['Distribution Center Manager'],
+  },
+
+  {
+    id: 15,
+    key: 'officer-targets',
+    path: '/officer-targets',
+    label: 'Officer Targets',
+    icon: 'fas fa-user-cog',
+    permission: ['Distribution Center Manager'],
+  },
+  {
+    id: 16,
+    key: 'target-progress',
+    path: '/target-progress',
+    label: 'Target Progress',
+    icon: 'fas fa-user-cog',
+    permission: ['Distribution Center Manager'],
+  },
+
+  {
+    id: 17,
+    key: 'requests',
+    path: '/requests',
+    label: 'Requests',
+    icon: 'fas fa-user-cog',
+    permission: ['Distribution Center Manager'],
+  },
+
+  {
+    id: 18,
+    key: 'dcm-complaints',
+    path: '/dcm-complaints',
+    label: 'Complaints',
+    icon: 'fa-solid fa-triangle-exclamation',
+    permission: ['Distribution Center Manager'],
+  },
+
 ];
 
 @Component({

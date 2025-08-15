@@ -52,6 +52,16 @@ import { ViewDistributedOfficersComponent } from './application/Distributed-Cent
 import { CreateDistributionCentreComponent } from './application/Distributed-Center/Centres/create-distribution-centre/create-distribution-centre.component';
 import { EditCentreComponent } from './application/Target/edit-centre/edit-centre.component';
 import { AddDistributedOfficerComponent } from './application/Distributed-Center/add-distributed-officer/add-distributed-officer.component';
+import { EditDistributedOfficerComponent } from './application/Distributed-Center/edit-distributed-officer/edit-distributed-officer.component';
+import { CenterDashboardComponent } from './application/Distributed-Center/center-dashboard/center-dashboard.component';
+import { AssignDistributionTargetComponent } from './application/Distributed-Center/Distributed-Target/assign-distribution-target/assign-distribution-target.component';
+import { ViewDistributionCenterTargetComponent } from './application/Distributed-Center/Distributed-Target/view-distribution-center-target/view-distribution-center-target.component';
+import { TargetProgressAllComponent } from './application/Distributed-Center/Distributed-Target/target-progress-all/target-progress-all.component';
+import { RequestsComponent } from './application/Distributed-Center/requests/requests.component';
+import { DcmComplaintsComponent } from './application/dcm-Complaints/dcm-complaints/dcm-complaints.component';
+import { ViewDcmReceiveReplyComponent } from './application/dcm-Complaints/view-dcm-receive-reply/view-dcm-receive-reply.component';
+import { OfficerTargetsComponent } from './application/Distributed-Center/Distributed-Target/officer-targets/officer-targets.component';
+import { ViewDistributionOfficerTargetComponent } from './application/Distributed-Center/Distributed-Target/view-distribution-officer-target/view-distribution-officer-target.component';
 
 export const routes: Routes = [
     {
@@ -312,7 +322,20 @@ export const routes: Routes = [
                     {
                         path: 'create-distribution-centre',
                         component: CreateDistributionCentreComponent,
+                    },
+                    {
+                        path: 'center-dashboard/:id/:centerName/:regCode',
+                        component: CenterDashboardComponent,
+                    },
+                    {
+                        path: 'edit-distribution-officer/:id',
+                        component: EditDistributedOfficerComponent,
+                    },
+                    {
+                        path: 'officer-profile/:id',
+                        component: EditDistributedOfficerComponent,
                     }
+                    
                 ]
             },
             {
@@ -326,6 +349,124 @@ export const routes: Routes = [
                     {
                         path: 'create-distribution-officer',
                         component: AddDistributedOfficerComponent
+                    },
+                    {
+                        path: 'edit-distribution-officer/:id',
+                        component: EditDistributedOfficerComponent
+                    }
+                ]
+            },
+            {
+                path: 'distribution-center-dashboard',
+                component: AddDistributedOfficerComponent
+                // canActivate:[CcmRoleGuardService],
+                // children: [
+                //     {
+                //         path: '',
+                //         component: ViewDistributedOfficersComponent,
+                //     },
+                //     {
+                //         path: 'create-distribution-officer',
+                //         component: AddDistributedOfficerComponent
+                //     },
+                //     {
+                //         path: 'edit-distribution-officer/:id',
+                //         component: EditDistributedOfficerComponent
+                //     }
+                // ]
+            },
+
+            {
+                path: 'assign-targets',
+                // canActivate:[CcmRoleGuardService],
+                children: [
+                    {
+                        path: '',
+                        component: ViewDistributionCenterTargetComponent,
+                    },
+                    {
+                        path: 'Assign',
+                        component: AssignDistributionTargetComponent,
+                    },
+                    // {
+                    //     path: 'create-distribution-officer',
+                    //     component: AddDistributedOfficerComponent
+                    // },
+                    // {
+                    //     path: 'edit-distribution-officer/:id',
+                    //     component: EditDistributedOfficerComponent
+                    // }
+                ]
+            },
+
+            {
+                path: 'officer-targets',
+                // canActivate:[CcmRoleGuardService],
+                children: [
+                    {
+                        path: '',
+                        component: OfficerTargetsComponent,
+                    },
+                    {
+                        path: 'view-officer-target/:officerId',  
+                        component: ViewDistributionOfficerTargetComponent
+                      }
+                    // {
+                    //     path: 'edit-distribution-officer/:id',
+                    //     component: EditDistributedOfficerComponent
+                    // }
+                ]
+            },
+
+            {
+                path: 'target-progress',
+                // canActivate:[CcmRoleGuardService],
+                children: [
+                    {
+                        path: '',
+                        component: TargetProgressAllComponent,
+                    },
+                    // {
+                    //     path: 'Assign',
+                    //     component: AssignDistributionTargetComponent,
+                    // },
+                    // {
+                    //     path: 'create-distribution-officer',
+                    //     component: AddDistributedOfficerComponent
+                    // },
+                    // {
+                    //     path: 'edit-distribution-officer/:id',
+                    //     component: EditDistributedOfficerComponent
+                    // }
+                ]
+            },
+
+            {
+                path: 'requests',
+                // canActivate:[CcmRoleGuardService],
+                children: [
+                    {
+                        path: '',
+                        component: RequestsComponent,
+                    },
+                    // {
+                    //     path: 'Assign',
+                    //     component: AssignDistributionTargetComponent,
+                    
+                ]
+            },
+
+            {
+                path: 'dcm-complaints',
+                // canActivate:[CcmRoleGuardService],
+                children: [
+                    {
+                        path: '',
+                        component: DcmComplaintsComponent,
+                    },
+                    {
+                        path: 'view-dcm-recive-complaint/:id',
+                        component: ViewDcmReceiveReplyComponent
                     }
                 ]
             },

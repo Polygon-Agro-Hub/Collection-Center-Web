@@ -18,11 +18,13 @@ import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/
 export class CchReceviedComplaintComponent implements OnInit{
 complainArr!: RecivedComplaint[];
   replyObj: Reply = new Reply();
+  templateData!: TemplateData;
 
   searchText: string = '';
   selectStatus: string = '';
   isReplyView: boolean = false;
   complainId!: number;
+  selectLanguage: string = 'English';
 
   page: number = 1;
   totalItems: number = 0;
@@ -157,4 +159,16 @@ class RecivedComplaint {
 class Reply {
   id!: number
   reply!: string
+  language!: string
+  firstNameEnglish:string = '';
+  lastNameEnglish:string = '';
+}
+
+interface TemplateData {
+  EngName: string
+  SinName: string
+  TamName: string
+  companyNameEnglish: string
+  companyNameSinhala: string
+  companyNameTamil: string
 }

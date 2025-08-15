@@ -50,4 +50,308 @@ export class DistributionServiceService {
       headers,
     });
   }
+
+  getAllCenterOfficersForDCH(page: number = 1, limit: number = 10, centerId: number, status: string = '', role: string = '', searchText: string = ''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    let url = `${this.apiUrl}/get-all-center-officers-for-dch?page=${page}&limit=${limit}&centerId=${centerId}`
+
+    if (status) {
+      url += `&status=${status}`
+    }
+    if (role) {
+      url += `&role=${role}`
+    }
+
+    if (searchText) {
+      url += `&searchText=${searchText}`
+    }
+    return this.http.get(url, {
+      headers,
+    });
+  }
+
+  // getDistributionCenterOfficers(centerData: any): Observable<any> {
+  //   const formData = new FormData();
+  //   formData.append('centerData', JSON.stringify(centerData));
+
+  //   const headers = new HttpHeaders({
+  //     Authorization: `Bearer ${this.token}`,
+  //   });
+  //   return this.http.post(`${this.apiUrl}/create-distribution-center`, formData, {
+  //     headers,
+  //   });
+  // }
+
+  getDistributionCenterOfficers(): Observable<any> {
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.get(`${this.apiUrl}/get-distribution-center-officers`, {
+      headers,
+    });
+  }
+
+  getDistributionOrders(): Observable<any> {
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.get(`${this.apiUrl}/get-distribution-orders`, {
+      headers,
+    });
+  }
+
+  assignOrdersToCenterOfficers(
+    assignmentPayload: { officerId: number; count: number }[],
+    orderIdList: number[]
+  ): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+  
+    const url = `${this.apiUrl}/assign-orders-to-center-officers`;
+  
+    // Construct the payload
+    const data = {
+      assignments: assignmentPayload,
+      processOrderIds: orderIdList
+    };
+
+    console.log('data', data)
+  
+    return this.http.post<any>(url, data, { headers });
+  }
+
+  getAllRequests(page: number = 1, limit: number = 10, date: string = '', status: string = '', searchText: string = ''): Observable<any> {
+    console.log('date', date, 'status', status, 'search', searchText)
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    let url = `${this.apiUrl}/get-all-request?page=${page}&limit=${limit}`
+
+    if (date) {
+      url += `&date=${date}`
+    }
+
+    if (status) {
+      url += `&status=${status}`
+    }
+
+    if (searchText) {
+      url += `&searchText=${searchText}`
+    }
+
+    return this.http.get(url, {
+      headers,
+    });
+  }
+
+  approveRequest(requestObj: any): Observable<any> {
+    console.log()
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    let url = `${this.apiUrl}/approve-request`
+
+    return this.http.post(url, requestObj, { headers });
+  }
+
+  rejectRequest(requestObj: any): Observable<any> {
+    console.log()
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    let url = `${this.apiUrl}/reject-request`
+
+    return this.http.post(url, requestObj, { headers });
+  }
+
+  getAllAssignOrders(page: number = 1, limit: number = 10, status: string = '', searchText: string = '', selectDate: string = ''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+
+    let url = `${this.apiUrl}/get-all-assign-orders?page=${page}&limit=${limit}`;
+    if (status) {
+      url += `&status=${status}`
+    }
+
+    if (searchText) {
+      url += `&searchText=${searchText}`
+
+    }
+
+    if (selectDate) {
+      url += `&date=${selectDate}`
+    }
+
+    return this.http.get<any>(url, { headers });
+  }
+
+  getToDoAssignOrders(page: number = 1, limit: number = 10, status: string = '', searchText: string = '', selectDate: string = ''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+
+    let url = `${this.apiUrl}/get-todo-assign-orders?page=${page}&limit=${limit}`;
+    if (status) {
+      url += `&status=${status}`
+    }
+
+    if (searchText) {
+      url += `&searchText=${searchText}`
+
+    }
+
+    if (selectDate) {
+      url += `&date=${selectDate}`
+    }
+
+    return this.http.get<any>(url, { headers });
+  }
+
+  getCompletedAssignOrders(page: number = 1, limit: number = 10, searchText: string = '', selectDate: string = ''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+
+    let url = `${this.apiUrl}/get-completed-assign-orders?page=${page}&limit=${limit}`;
+
+    if (searchText) {
+      url += `&searchText=${searchText}`
+
+    }
+
+    if (selectDate) {
+      url += `&date=${selectDate}`
+    }
+
+    return this.http.get<any>(url, { headers });
+  }
+
+  getOutForDeliveryOrders(page: number = 1, limit: number = 10, status: string = '', searchText: string = ''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+
+    let url = `${this.apiUrl}/get-out-for-delivery-orders?page=${page}&limit=${limit}`;
+    if (status) {
+      url += `&status=${status}`
+    }
+
+    if (searchText) {
+      url += `&searchText=${searchText}`
+
+    }
+
+    return this.http.get<any>(url, { headers });
+  }
+
+  setStatusAndTime(data: any): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+  
+    const url = `${this.apiUrl}/set-status-and-time`;
+  
+    // Sending the orderIds in request body
+    return this.http.post<any>(url, { data }, { headers });
+  }
+
+  getofficerTargets(): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+
+    let url = `${this.apiUrl}/get-officer-targets`;
+    
+
+    return this.http.get<any>(url, { headers });
+  }
+
+  getSelectedOfficerTargets(officerId: number, searchText: string = '', status: string = ''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+  
+  
+    let url = `${this.apiUrl}/get-selected-officer-targets?officerId=${officerId}`;
+  
+    if (searchText) {
+      url += `&searchText=${searchText}`
+  
+    }
+  
+    if (status) {
+      url += `&status=${status}`
+    }
+  
+    return this.http.get<any>(url, { headers });
+  }
+
+  getOfficers(): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+  
+  
+    let url = `${this.apiUrl}/get-officers`;
+
+  
+    return this.http.get<any>(url, { headers });
+  }
+
+  passTarget(processOrderIds: number[], disTargetId: number, officerId: number | '', id: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json'
+    });
+  
+    const url = `${this.apiUrl}/pass-target`; 
+  
+    const data = {
+      processOrderIds: processOrderIds,
+      distributedTargetId: disTargetId,
+      officerId: officerId,
+      previousOfficerId: id 
+    };
+  
+    return this.http.post<any>(url, data, { headers });
+  }
+
+  getAllProducts(): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json'
+    });
+  
+    const url = `${this.apiUrl}/get-all-products`; 
+  
+    return this.http.get<any>(url, { headers });
+  }
+
 }
+
+
+
+

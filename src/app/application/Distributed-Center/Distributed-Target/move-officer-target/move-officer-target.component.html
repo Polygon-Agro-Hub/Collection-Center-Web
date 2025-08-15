@@ -1,0 +1,76 @@
+<div class="flex flex-row pt-0 mb-4 mr-5 ml-0 gap-5 cursor-pointer">
+    <p class="font-semibold text-[#424242] dark:text-white">Officer Targets</p>
+    <!-- <p class="font-semibold text-sm text-[#424242] dark:text-white" onclick="history.back()">Center Dashboard</p> -->
+</div>
+
+
+<app-loading-spinner *ngIf="isLoading"/>
+
+
+<div class="w-full px-10 py-7 bg-tileLight shadow-lg rounded-lg dark:bg-[#363636]">
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">
+        <div>
+            <label for="jobRole" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
+                Job Role
+            </label>
+            <!-- <select id="jobRole" name="jobRole" placeholder="select" required [(ngModel)]="OfficerObj.jobRole"
+                class="form-control mt-1 block w-full p-2 text-[#030308] dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500">
+                <option disabled class="p-2 text-[#959595] italic dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]" value="">
+                    -- Select Job Role --
+                </option>
+                <option selected value="Collection Center Manager"
+                    class="p-2 text-[#030308] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
+                    Collection Center Manager
+                </option>
+                <option selected value="Collection Officer"
+                    class="p-2 text-[#030308] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
+                    Collection Officer
+                </option>
+                <option value="Customer Officer"
+                    class="p-2 text-[#030308] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
+                    Customer Officer
+                </option>
+            </select> -->
+        </div>
+
+
+        <div>
+            <label class="block text-sm font-medium text-[#534E4E] dark:text-textDark">EMP ID / User name</label>
+            <!-- <div class="flex mt-1">
+                <span
+                    class="inline-flex items-center px-3 py-2 text-gray-900 bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-[#1D1D1F] dark:text-gray-400 ">
+                    <p *ngIf="OfficerObj.jobRole === ''">---</p>
+                    <p *ngIf="OfficerObj.jobRole === 'Collection Center Manager'">CCM</p>
+                    <p *ngIf="OfficerObj.jobRole === 'Collection Officer'">COO</p>
+                    <p *ngIf="OfficerObj.jobRole === 'Customer Officer'">CUO</p>
+                </span>
+                <input type="text" name="officerId" [(ngModel)]="OfficerObj.officerId" placeholder="ex : 00122"
+                    class="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm pl-4  dark:bg-[#1D1D1F]  dark:placeholder-gray-400 dark:text-textDark dark:focus:ring-blue-500 dark:focus:border-blue-500">
+            </div> -->
+        </div>
+    </div>
+
+    <!-- <hr class="border-b-1 border-[#BDBDBD] my-5" /> -->
+
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">
+        <div>
+            <label for="fromDate" class="block text-sm font-medium text-gray-700 dark:text-textDark">From</label>
+            <!-- <input id="fromDate" name="fromDate" type="date" [(ngModel)]="OfficerObj.fromDate"
+                class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F] custom-date-input" /> -->
+        </div>
+
+        <div>
+            <label for="toDate" class="block text-sm font-medium text-gray-700 dark:text-textDark">TO</label>
+            <!-- <input id="toDate" name="toDate" type="date" [(ngModel)]="OfficerObj.toDate" (change)="checkToDate()"
+                class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F] custom-date-input" /> -->
+        </div>
+    </div>
+
+    <div class="flex flex-row justify-center items-center gap-12 my-10">
+        <!-- <button class="bg-[#415CFF] text-white rounded-lg shadow-md px-6 py-2" (click)="onSubmit()">Genarate</button> -->
+    </div>
+</div>
+
+
+
+

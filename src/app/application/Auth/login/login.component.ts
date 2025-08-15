@@ -117,10 +117,14 @@ export class LoginComponent {
               } else if (this.role === 'Distribution Center Head') {
                 this.router.navigate(['/distribution-center']);
                 this.isLoading = false;
+              } else if (this.role === 'Distribution Center Manager') {
+                this.router.navigate(['/distribution-center-dashboard']);
+                this.isLoading = false;
               } else {
                 this.router.navigate(['/'])
                 this.isLoading = false;
               }
+              
             } else {
               Swal.fire({
                 icon: 'error',

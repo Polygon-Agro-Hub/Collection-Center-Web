@@ -34,9 +34,7 @@
                         </span>
                     </div>
                 </div>
-                <!-- <div class="flex justify-center pt-3 pb-9">
-                    <p *ngIf="!selectedImage" class="text-red-500 text-sm mt-2">Profile image is required.</p>
-                </div> -->
+                
 
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
@@ -59,7 +57,7 @@
                         </select>
                         <div *ngIf="centerIdInput.touched && !personalData.centerId && logingRole === 'Distribution Center Head'"
                             clas="text-red-500 text-sm mt-1">
-                            <div>Collection Center is requireds</div>
+                            <div>Distribution Centre is requireds</div>
                         </div>
                     </div>
 
@@ -74,23 +72,16 @@
                                 class="p-2 text-[#534E4E] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
                                 -- select --
                             </option>
-                            <option selected value="Distribution Manager"
+                            <option selected value="Distribution Center Manager"
                                 *ngIf="logingRole === 'Distribution Center Head'"
                                 class="p-2 text-[#030308] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
-                                Distribution Manager
+                                Distribution Center Manager
                             </option>
                             <option selected value="Distribution Officer"
                                 class="p-2 text-[#030308] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
                                 Distribution Officer
                             </option>
-                            <!-- <option value="Customer Officer"
-                                class="p-2 text-[#030308] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
-                                Customer Officer
-                            </option>
-                            <option value="Driver" *ngIf="logingRole === 'Collection Center Head'"
-                                class="p-2 text-[#030308] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
-                                Driver
-                            </option> -->
+                            
 
                         </select>
                         <!-- Error: Required Field -->
@@ -99,28 +90,7 @@
                         </div>
                     </div>
 
-                    <!-- <div *ngIf="logingRole === 'Distribution Center Head'"></div> -->
-
                     
-
-                    <!-- <div>
-                        <label class="block text-sm font-medium text-[#534E4E] dark:text-textDark">EMP ID / User
-                            name</label>
-                        <div class="flex mt-1">
-                            <span
-                                class="inline-flex items-center px-3 py-3 text-sm text-gray-900 bg-gray-200 border border-e-0 border-gray-300 hover:bg-gray-200 rounded-s-md dark:bg-[#1D1D1F] dark:text-gray-400 ">
-                                <span *ngIf="logingRole === 'Distribution Center Head'">
-                                    <p *ngIf="personalData.jobRole === 'Distribution Manager'">DCM</p>
-                                </span>
-
-                                <p *ngIf="personalData.jobRole === 'Distribution Officer'">DIO</p>
-
-                            </span>
-                            <input type="text" [value]="lastID" name="empId"
-                                class="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 hover:bg-gray-200 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm pl-4  dark:bg-[#1D1D1F]  dark:placeholder-gray-400 dark:text-textDark dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                disabled>
-                        </div>
-                    </div> -->
 
 
                     <div
@@ -131,8 +101,8 @@
                         <select id="irmId" [(ngModel)]="personalData.irmId" name="irmId" placeholder="select"
                             #irmIdInput="ngModel" required (change)="checkManager()" [disabled]="!personalData.centerId"
                             class="form-control mt-1 block w-full p-2 text-[#534E4E] dark:text-textDark border border-gray-300 hover:bg-gray-200  rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500">
-                            <option disabled selected
-                                class="p-2 text-[#534E4E] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]" value="">
+                            <option disabled [ngValue]="null"
+                                class="p-2 text-[#534E4E] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
                                 -- select manager--
                             </option>
                             <option *ngFor="let item of managerArr" [value]="item.id"
@@ -506,12 +476,12 @@
                         #accHolderNameInput="ngModel"
                         required
                         maxlength="50"
-                        pattern="^[a-zA-Z\s.']*$"
+                        pattern="^[a-zA-Z0-9\s.']*$"
                       />
                       
                     <div *ngIf="accHolderNameInput.touched && !personalData.accHolderName"
                         class="text-red-500 text-sm mt-1">
-                        <div>Account Holde's Name is required</div>
+                        <div>Account Holder's Name is required</div>
                     </div>
                     <div
   *ngIf="accHolderNameInput.touched && personalData.accHolderName && accHolderNameInput.invalid"
@@ -543,15 +513,21 @@
                         Account Number</label>
                     <input type="number" id="accNumber" name="accNumber" [(ngModel)]="personalData.conformAccNumber"
                         class="mt-1 block w-full p-2 border border-[#D9D9D9] hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                        #conformAccNumberInput="ngModel" required />
+                        #conformAccNumberInput="ngModel" required pattern="^[a-zA-Z0-9]+$"/>
                     <div *ngIf="conformAccNumberInput.touched && !personalData.conformAccNumber"
                         class="text-red-500 text-sm mt-1">
-                        <div>Account Number is required</div>
+                        <div>Confirm Account Number is required</div>
                     </div>
-                    <div *ngIf="personalData.conformAccNumber && personalData.accNumber !== personalData.conformAccNumber"
+                    <div *ngIf="personalData.conformAccNumber && (personalData.accNumber !== personalData.conformAccNumber) && !conformAccNumberInput.errors?.['pattern']"
                         class="text-red-500 text-sm mt-1">
                         <div>Confirm Account Number should be the same as Account Number.</div>
                     </div>
+                    <div
+  *ngIf="conformAccNumberInput.touched && personalData.accNumber && conformAccNumberInput.errors?.['pattern']"
+  class="text-red-500 text-sm mt-1"
+>
+  <div>Account Number cannot contain special characters</div>
+</div>
                 </div>
 
                 <div class="pb-6 pl-8">

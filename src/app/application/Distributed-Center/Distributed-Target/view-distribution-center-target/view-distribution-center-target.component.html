@@ -1,0 +1,58 @@
+<app-loading-spinner *ngIf="isLoading" />
+
+<div class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
+  <p>Assign Targets</p>
+  <!-- <p>Officer Reports</p>  -->
+</div>
+
+<div *ngIf="!hasData"
+            class="flex flex-col items-center w-full h-screen px-10 py-7 rounded-lg bg-tileLight dark:bg-[#363636] dark:text-textDark mt-6">
+            
+            <img src="assets/images/all_set_timer.png" alt="add set" class="w-1/4 h-auto dark:text-textDark mt-20" />
+            <p class="text-[#000000] mt-6 mb-1 text-xl dark:text-white">You are all set!</p>
+            <p class="text-[#494949] my-1 dark:text-textDark">--New orders will be refreshed by mid night--</p>
+        </div>
+
+ <div *ngIf="hasData" class="w-full max-h-full dark:bg-[#363636] pl-7 pr-10 py-7 min-h-screen overflow-y-auto bg-tileLight rounded-lg mt-0 mb-8">
+
+    <button (click)="navigateToAssignTarget()" class="rounded-lg coursor-pointer shadow-lg px-7 py-2 bg-[#415CFF] text-[#FFFFFF]">
+    Assign
+    
+    </button>
+
+    <p class="text-lg font-semibold text-[#292929] mt-4 dark:text-[#FFFFFF]">
+        All ({{ordersArr.length < 10 ? '0' + ordersArr.length : ordersArr.length}})
+    </p>
+
+    
+
+    <div *ngIf="hasData" class="w-full md:w-2/3 max-w-full  overflow-x-auto  mt-4 mr-5 border-gray-100 dark:border-[#202021] border-[2px] rounded-lg">
+        <div class="min-w-[600px]"> <!-- Adjust min-width to match your content needs -->
+          <table class="w-full divide-y-2 divide-gray-200 dark:divide-[#202021] overflow-hidden border-[1px] border-gray-300 dark:border-[#202021] rounded-lg">
+            <thead class=" text-[#4B5563] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
+              <tr>
+                <th class="px-6 py-3 text-left font-medium">No</th>
+                <th class="px-6 py-3 text-left font-medium">Order ID</th>
+                <th class="px-6 py-3 text-left font-medium">Delivery Time Slot</th>
+              </tr>
+            </thead>
+            <tbody class="bg-white divide-y-2 divide-gray-200 dark:divide-[#202021] dark:bg-[#1D1D1F]">
+              <tr *ngFor="let item of ordersArr; let i = index">
+                <td class="px-6 py-4 text-sm text-[#000000] font-medium dark:text-gray-300">
+                  {{ (i + 1) < 10 ? '0' + (i + 1) : i + 1 }}
+                </td>
+                <td class="px-6 py-4 text-sm text-[#000000] font-medium dark:text-gray-300">{{ item.invNo }}</td>
+                <td class="px-6 py-4 text-sm text-[#415CFF] font-medium dark:text-gray-300">
+                  {{ item.scheduleLabel }} {{ item.sheduleTime }}
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+
+
+    </div>
+
+<!-- WHERE po.isTargetAssigned = false AND po.status = 'Processing'; -->

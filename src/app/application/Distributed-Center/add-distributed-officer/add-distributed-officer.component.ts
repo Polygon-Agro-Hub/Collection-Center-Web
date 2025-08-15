@@ -105,19 +105,12 @@ export class AddDistributedOfficerComponent implements OnInit {
     { name: 'Vavuniya', province: 'Northern' },
   ];
 
-  VehicleTypes = [
-    { name: 'Lorry', capacity: 2 },
-    { name: 'Dimo Batta', capacity: 3.5 },
-    { name: 'Van', capacity: 2.5 },
-    { name: 'Cab', capacity: 0.5 },
-  ]
-
   ngOnInit(): void {
     this.loadBanks()
     this.loadBranches()
     this.getAllDistributionCenters();
-    this.getLastID('COO');
-    this.EpmloyeIdCreate();
+    // this.getLastID('COO');
+    // this.EpmloyeIdCreate();
   }
 
   onCheckboxChange(lang: string, event: any) {
@@ -145,6 +138,7 @@ export class AddDistributedOfficerComponent implements OnInit {
 
   validateLanguages() {
     this.languagesRequired = !this.personalData.languages || this.personalData.languages.trim() === '';
+    console.log('language', this.languagesRequired)
   }
 
 
@@ -185,33 +179,33 @@ export class AddDistributedOfficerComponent implements OnInit {
     }
   }
 
-  getLastID(role: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      this.DistributedManageOfficerSrv.getForCreateId(role).subscribe(
-        (res) => {
-          this.lastID = res.result.empId;
-          const lastId = res.result.empId;
-          resolve(lastId); // Resolve the Promise with the empId
-        },
-        (error) => {
-          console.error('Error fetching last ID:', error);
-          reject(error);
-        }
-      );
-    });
-  }
+  // getLastID(role: string): Promise<string> {
+  //   return new Promise((resolve, reject) => {
+  //     this.DistributedManageOfficerSrv.getForCreateId(role).subscribe(
+  //       (res) => {
+  //         this.lastID = res.result.empId;
+  //         const lastId = res.result.empId;
+  //         resolve(lastId); // Resolve the Promise with the empId
+  //       },
+  //       (error) => {
+  //         console.error('Error fetching last ID:', error);
+  //         reject(error);
+  //       }
+  //     );
+  //   });
+  // }
 
-  EpmloyeIdCreate() {
-    let rolePrefix: string;
-    if (this.personalData.jobRole === 'Distribution Manager') {
-      rolePrefix = 'DBM';
-    } else {
-      rolePrefix = 'DIO';
-    }
-    this.getLastID(rolePrefix).then((lastID) => {
-      this.personalData.empId = rolePrefix + lastID;
-    });
-  }
+  // EpmloyeIdCreate() {
+  //   let rolePrefix: string;
+  //   if (this.personalData.jobRole === 'Distribution Center Manager') {
+  //     rolePrefix = 'DCM';
+  //   } else {
+  //     rolePrefix = 'DIO';
+  //   }
+  //   this.getLastID(rolePrefix).then((lastID) => {
+  //     this.personalData.empId = rolePrefix + lastID;
+  //   });
+  // }
 
   updateProvince(event: Event): void {
     const target = event.target as HTMLSelectElement; // Cast to HTMLSelectElement
@@ -484,319 +478,6 @@ export class AddDistributedOfficerComponent implements OnInit {
     }
   }
 
-
-  // Replace onFileSelected with this more specific version
-  // onLicenseFrontImageSelected(event: any): void {
-  //   const file: File = event.target.files[0];
-  //   if (file) {
-  //     // Validate file size (5MB max)
-  //     if (file.size > 5000000) {
-  //       this.toastSrv.error('License image size should not exceed 5MB');
-  //       return;
-  //     }
-
-  //     // Validate file type
-  //     const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-  //     if (!allowedTypes.includes(file.type)) {
-  //       this.toastSrv.error('License image must be JPEG, JPG or PNG format');
-  //       return;
-  //     }
-
-  //     this.licenseFrontImageFile = file;
-  //     this.licenseFrontImageFileName = file.name;
-
-  //     // Create preview
-  //     const reader = new FileReader();
-  //     reader.onload = (e: any) => {
-  //       this.licenseFrontImagePreview = e.target.result;
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // }
-
-  // Clear license image
-  // clearLicenseFrontImage(): void {
-  //   this.licenseFrontImageFile = null;
-  //   this.licenseFrontImageFileName = '';
-  //   this.licenseFrontImagePreview = null;
-  //   const fileInput = document.getElementById('licenseFrontImageUpload') as HTMLInputElement;
-  //   if (fileInput) fileInput.value = '';
-  // }
-
-  // triggerFileInputForDriver(event: Event, inputId: string): void {
-  //   event.preventDefault();
-  //   const fileInput = document.getElementById(inputId);
-  //   fileInput?.click();
-  // }
-
-  // onLicenseBackImageSelected(event: any): void {
-  //   const file: File = event.target.files[0];
-  //   if (file) {
-  //     // Validate file size (5MB max)
-  //     if (file.size > 5000000) {
-  //       this.toastSrv.error('License image size should not exceed 5MB');
-  //       return;
-  //     }
-
-  //     // Validate file type
-  //     const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-  //     if (!allowedTypes.includes(file.type)) {
-  //       this.toastSrv.error('License image must be JPEG, JPG or PNG format');
-  //       return;
-  //     }
-
-  //     this.licenseBackImageFile = file;
-  //     this.licenseBackImageFileName = file.name;
-
-  //     // Create preview
-  //     const reader = new FileReader();
-  //     reader.onload = (e: any) => {
-  //       this.licenseBackImagePreview = e.target.result;
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // }
-
-  // Clear license image
-  // clearLicenseBackImage(): void {
-  //   this.licenseBackImageFile = null;
-  //   this.licenseBackImageFileName = '';
-  //   this.licenseBackImagePreview = null;
-  //   const fileInput = document.getElementById('licenseBackImageUpload') as HTMLInputElement;
-  //   if (fileInput) fileInput.value = '';
-  // }
-
-  // onInsurenceFrontImageSelected(event: any): void {
-  //   const file: File = event.target.files[0];
-  //   if (file) {
-  //     // Validate file size (5MB max)
-  //     if (file.size > 5000000) {
-  //       this.toastSrv.error('Insurence image size should not exceed 5MB');
-  //       return;
-  //     }
-
-  //     // Validate file type
-  //     const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-  //     if (!allowedTypes.includes(file.type)) {
-  //       this.toastSrv.error('Insurence image must be JPEG, JPG or PNG format');
-  //       return;
-  //     }
-
-  //     this.insurenceFrontImageFile = file;
-  //     this.insurenceFrontImageFileName = file.name;
-
-  //     // Create preview
-  //     const reader = new FileReader();
-  //     reader.onload = (e: any) => {
-  //       this.insurenceFrontImagePreview = e.target.result;
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // }
-
-  // Clear license image
-  // clearInsurenceFrontImage(): void {
-  //   this.insurenceFrontImageFile = null;
-  //   this.insurenceFrontImageFileName = '';
-  //   this.insurenceFrontImagePreview = null;
-  //   const fileInput = document.getElementById('insurenceFrontImageUpload') as HTMLInputElement;
-  //   if (fileInput) fileInput.value = '';
-  // }
-
-
-  // onInsurenceBackImageSelected(event: any): void {
-  //   const file: File = event.target.files[0];
-  //   if (file) {
-  //     // Validate file size (5MB max)
-  //     if (file.size > 5000000) {
-  //       this.toastSrv.error('Insurence image size should not exceed 5MB');
-  //       return;
-  //     }
-
-  //     // Validate file type
-  //     const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-  //     if (!allowedTypes.includes(file.type)) {
-  //       this.toastSrv.error('Insurence image must be JPEG, JPG or PNG format');
-  //       return;
-  //     }
-
-  //     this.insurenceBackImageFile = file;
-  //     this.insurenceBackImageFileName = file.name;
-
-  //     // Create preview
-  //     const reader = new FileReader();
-  //     reader.onload = (e: any) => {
-  //       this.insurenceBackImagePreview = e.target.result;
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // }
-
-  // Clear license image
-  // clearInsurenceBackImage(): void {
-  //   this.insurenceBackImageFile = null;
-  //   this.insurenceBackImageFileName = '';
-  //   this.insurenceBackImagePreview = null;
-  //   const fileInput = document.getElementById('insuranceBackImageUpload') as HTMLInputElement;
-  //   if (fileInput) fileInput.value = '';
-  // }
-
-
-  // onVehicleFrontImageSelected(event: any): void {
-  //   const file: File = event.target.files[0];
-  //   if (file) {
-  //     // Validate file size (5MB max)
-  //     if (file.size > 5000000) {
-  //       this.toastSrv.error('License image size should not exceed 5MB');
-  //       return;
-  //     }
-
-  //     // Validate file type
-  //     const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-  //     if (!allowedTypes.includes(file.type)) {
-  //       this.toastSrv.error('License image must be JPEG, JPG or PNG format');
-  //       return;
-  //     }
-
-  //     this.vehicleFrontImageFile = file;
-  //     this.vehicleFrontImageFileName = file.name;
-
-  //     // Create preview
-  //     const reader = new FileReader();
-  //     reader.onload = (e: any) => {
-  //       this.vehicleFrontImagePreview = e.target.result;
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // }
-
-  // Clear license image
-  // clearVehicleFrontImage(): void {
-  //   this.vehicleFrontImageFile = null;
-  //   this.vehicleFrontImageFileName = '';
-  //   this.vehicleFrontImagePreview = null;
-  //   const fileInput = document.getElementById('vehicleFrontImageUpload') as HTMLInputElement;
-  //   if (fileInput) fileInput.value = '';
-  // }
-
-
-  // onVehicleBackImageSelected(event: any): void {
-  //   const file: File = event.target.files[0];
-  //   if (file) {
-  //     // Validate file size (5MB max)
-  //     if (file.size > 5000000) {
-  //       this.toastSrv.error('Vehicle Back image size should not exceed 5MB');
-  //       return;
-  //     }
-
-  //     // Validate file type
-  //     const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-  //     if (!allowedTypes.includes(file.type)) {
-  //       this.toastSrv.error('Vehicle Back image must be JPEG, JPG or PNG format');
-  //       return;
-  //     }
-
-  //     this.vehicleBackImageFile = file;
-  //     this.vehicleBackImageFileName = file.name;
-
-  //     // Create preview
-  //     const reader = new FileReader();
-  //     reader.onload = (e: any) => {
-  //       this.vehicleBackImagePreview = e.target.result;
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // }
-
-  // Clear license image
-  // clearVehicleBackImage(): void {
-  //   this.vehicleBackImageFile = null;
-  //   this.vehicleBackImageFileName = '';
-  //   this.vehicleBackImagePreview = null;
-  //   const fileInput = document.getElementById('vehicleBackImageUpload') as HTMLInputElement;
-  //   if (fileInput) fileInput.value = '';
-  // }
-
-  // onVehicleSideAImageSelected(event: any): void {
-  //   const file: File = event.target.files[0];
-  //   if (file) {
-  //     // Validate file size (5MB max)
-  //     if (file.size > 5000000) {
-  //       this.toastSrv.error('Vehicle Back image size should not exceed 5MB');
-  //       return;
-  //     }
-
-  //     // Validate file type
-  //     const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-  //     if (!allowedTypes.includes(file.type)) {
-  //       this.toastSrv.error('Vehicle Back image must be JPEG, JPG or PNG format');
-  //       return;
-  //     }
-
-  //     this.vehicleSideAImageFile = file;
-  //     this.vehicleSideAImageFileName = file.name;
-
-  //     // Create preview
-  //     const reader = new FileReader();
-  //     reader.onload = (e: any) => {
-  //       this.vehicleSideAImagePreview = e.target.result;
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // }
-
-  // Clear license image
-  // clearVehicleSideAImage(): void {
-  //   this.vehicleSideAImageFile = null;
-  //   this.vehicleSideAImageFileName = '';
-  //   this.vehicleSideAImagePreview = null;
-  //   const fileInput = document.getElementById('vehicleSideAImageUpload') as HTMLInputElement;
-  //   if (fileInput) fileInput.value = '';
-  // }
-
-
-
-  // onVehicleSideBImageSelected(event: any): void {
-  //   const file: File = event.target.files[0];
-  //   if (file) {
-  //     // Validate file size (5MB max)
-  //     if (file.size > 5000000) {
-  //       this.toastSrv.error('Vehicle Back image size should not exceed 5MB');
-  //       return;
-  //     }
-
-  //     // Validate file type
-  //     const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-  //     if (!allowedTypes.includes(file.type)) {
-  //       this.toastSrv.error('Vehicle Back image must be JPEG, JPG or PNG format');
-  //       return;
-  //     }
-
-  //     this.vehicleSideBImageFile = file;
-  //     this.vehicleSideBImageFileName = file.name;
-
-  //     // Create preview
-  //     const reader = new FileReader();
-  //     reader.onload = (e: any) => {
-  //       this.vehicleSideBImagePreview = e.target.result;
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // }
-
-  // Clear license image
-  // clearVehicleSideBImage(): void {
-  //   this.vehicleSideBImageFile = null;
-  //   this.vehicleSideBImageFileName = '';
-  //   this.vehicleSideBImagePreview = null;
-  //   const fileInput = document.getElementById('vehicleSideBImageUpload') as HTMLInputElement;
-  //   if (fileInput) fileInput.value = '';
-  // }
-
-  // vehicleChange() {
-  //   this.driverObj.vType = this.selectVehicletype.name
-  //   this.driverObj.vCapacity = this.selectVehicletype.capacity
-  // }
 }
 
 class Personal {
@@ -826,14 +507,14 @@ class Personal {
   branchName!: string;
   conformAccNumber!: string;
 
-  jobRole: string = 'Collection Officer'
+  jobRole: string = 'Distribution Officer'
   empId!: string
   employeeType!: string;
 
   image!: any
 
   centerId: number | string = '';
-  irmId: number | string = '';
+  irmId: number | string | null = null;
 }
 
 

@@ -308,7 +308,37 @@ export class DistributionServiceService {
   
     return this.http.get<any>(url, { headers });
   }
+
+  getOfficers(): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
   
+  
+    let url = `${this.apiUrl}/get-officers`;
+
+  
+    return this.http.get<any>(url, { headers });
+  }
+
+  passTarget(processOrderIds: number[], disTargetId: number, officerId: number | '', id: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json'
+    });
+  
+    const url = `${this.apiUrl}/pass-target`; 
+  
+    const data = {
+      processOrderIds: processOrderIds,
+      distributedTargetId: disTargetId,
+      officerId: officerId,
+      previousOfficerId: id 
+    };
+  
+    return this.http.post<any>(url, data, { headers });
+  }
+
 }
 
 

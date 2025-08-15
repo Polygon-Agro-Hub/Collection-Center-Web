@@ -20,6 +20,12 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
   searchText: string = '';
   selectStatus: string = '';
 
+  officersArr!: Officer[];
+
+  totalOfficers: number = 0;
+
+  isPass: boolean = false;
+
   officerId!: number;
 
   date:  string = '';
@@ -31,10 +37,14 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
 
   isLoading:boolean = true;
 
-  selectedOrderIds: number[] = []; 
-  allChecked: boolean = false; 
+  selectedOfficerId: number | '' = '';
 
-  isOutForDelivery = false;
+  selectedOrderIds: number[] = []; 
+  allChecked: boolean = false;
+  
+  filteredOrdersArr!: orders[] 
+
+  isPassTarget = false;
 
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Pending', 'Completed', 'Opened'];
@@ -63,6 +73,7 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
     this.officerId = Number(this.route.snapshot.paramMap.get('officerId'));
     console.log('Selected officerId:', this.officerId);
     this.fetchSelectedOfficerTargets();
+    this.fetchOfficers();
   }
 
   @HostListener('document:click', ['$event'])
@@ -90,6 +101,20 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
           this.hasData = true;
 
         }
+        this.isLoading = false;
+
+      }
+    )
+  }
+
+  fetchOfficers() {
+    this.isLoading = true;
+    this.DistributionSrv.getOfficers().subscribe(
+      (res) => {
+        console.log('officer', res)
+        this.officersArr = res
+        console.log('officersArr', this.officersArr)
+        this.totalOfficers = res.length;
         this.isLoading = false;
 
       }
@@ -202,38 +227,56 @@ deSelectAll() {
   this.allChecked = false;
 }
 
-outForDelivery() {
-  this.isOutForDelivery = true;
+passTarget() {
+  this.isPassTarget = true;
 }
 
-sendOutForDelivery() {
+// PassTarget() {
 
-  const now = new Date();
+//   const now = new Date();
 
-const year = now.getFullYear();
-const month = String(now.getMonth() + 1).padStart(2, '0');  // Months are 0-based
-const day = String(now.getDate()).padStart(2, '0');
+// const year = now.getFullYear();
+// const month = String(now.getMonth() + 1).padStart(2, '0');  // Months are 0-based
+// const day = String(now.getDate()).padStart(2, '0');
 
-const hours = String(now.getHours()).padStart(2, '0');
-const minutes = String(now.getMinutes()).padStart(2, '0');
-const seconds = String(now.getSeconds()).padStart(2, '0');
+// const hours = String(now.getHours()).padStart(2, '0');
+// const minutes = String(now.getMinutes()).padStart(2, '0');
+// const seconds = String(now.getSeconds()).padStart(2, '0');
 
-const currentTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+// const currentTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
 
-console.log(currentTime);
+// console.log(currentTime);
 
-  if (this.allChecked) {
-    console.log('allcehcke');
-  } else {
-    console.log('count', this.selectedOrderIds.length);
-  }
-  console.log('currentTime', currentTime)
+//   if (this.allChecked) {
+//     console.log('allcehcke');
+//   } else {
+//     console.log('count', this.selectedOrderIds.length);
+//   }
+//   console.log('currentTime', currentTime)
 
-  this.changeStatusAndTime({
-    orderIds: this.selectedOrderIds,
-    time: currentTime
-  });
+//   this.changeStatusAndTime({
+//     orderIds: this.selectedOrderIds,
+//     time: currentTime
+//   });
+// }
+
+PassTarget() {
+  this.isPass = true;
+  this.isPassTarget = false;
+  
+  // Filter orders based on selectedOrderIds
+  const filteredOrders = this.ordersArr.filter(order =>
+    this.selectedOrderIds.includes(order.processOrderId)
+  );
+
+  console.log('selected po', this.selectedOrderIds);
+  console.log('filtered orders', filteredOrders);
+
+  // If you want to store it in another property
+  this.filteredOrdersArr = filteredOrders;
+  console.log('filteredOrdersArr', this.filteredOrdersArr)
 }
+
 
 changeStatusAndTime(data: { orderIds: any[]; time: string }) {
   this.isLoading = true;
@@ -246,10 +289,10 @@ changeStatusAndTime(data: { orderIds: any[]; time: string }) {
 
       if (res && res.success) {
         this.toastSrv.success(`${data.orderIds.length} orders have been sent out for delivery!`, 'Success');
-        this.isOutForDelivery = false;
+        this.isPassTarget = false;
       } else {
         this.toastSrv.error('Failed to sent out for delivery!', 'Error');
-        this.isOutForDelivery = false;
+        this.isPassTarget = false;
       }
       this.fetchSelectedOfficerTargets()
       this.allChecked = false;
@@ -258,15 +301,58 @@ changeStatusAndTime(data: { orderIds: any[]; time: string }) {
       this.isLoading = false;
       console.error(err);
       this.toastSrv.error('Something went wrong!', 'Error');
-      this.isOutForDelivery = false;
+      this.isPassTarget = false;
       this.fetchSelectedOfficerTargets()
       this.allChecked = false;
     }
   });
 }
 
-cancelOutForDelivery() {
-  this.isOutForDelivery = false;
+cancelPass() {
+  this.isPassTarget = false;
+}
+
+cancell() {
+  this.isPass = false;
+}
+
+passTargetToBackEnd() {
+  console.log('orderIds', this.selectedOrderIds, 'distargetid', this.filteredOrdersArr[0].distributedTargetId, 'officer', this.selectedOfficerId, 'officerID', this.officerId )
+  this.DistributionSrv.passTarget(this.selectedOrderIds, this.filteredOrdersArr[0].distributedTargetId, this.selectedOfficerId, this.officerId).subscribe(
+    (res) => {
+      console.log('respass', res)
+      this.isLoading = false;
+      if (res && res.status) {
+        // Find the officer object with the selected ID
+        const selectedOfficer = this.officersArr.find(
+          officer => officer.id === this.selectedOfficerId
+        );
+      
+        // Get the empId if officer exists
+        const empId = selectedOfficer ? selectedOfficer.empId : 'Unknown';
+      
+        // Use empId in the toast message
+        this.toastSrv.success(
+          `${this.selectedOrderIds.length} orders have been passed to ${empId}!`,
+          'Success'
+        );
+      
+        this.isPass = false;
+        this.isPassTarget = false;
+        this.selectedOrderIds = [];
+      }
+       
+      else {
+        this.toastSrv.error('Failed to sent out for delivery!', 'Error');
+        this.isPass = false;
+      }
+      this.fetchSelectedOfficerTargets()
+      this.isPassTarget = false;
+      this.allChecked = false;
+      this.selectedOrderIds = [];
+    }
+
+  )
 }
 
 filterStatus() {
@@ -280,6 +366,16 @@ cancelStatus(event?: MouseEvent) {
   this.selectStatus = '';
   this.fetchSelectedOfficerTargets();
 }
+
+
+onOfficerChange(event: Event) {
+  const selectElement = event.target as HTMLSelectElement;
+  this.selectedOfficerId = selectElement.value ? Number(selectElement.value) : '';
+  console.log('Selected Officer ID:', this.selectedOfficerId);
+}
+
+
+
 }
 
 class orders {
@@ -296,5 +392,14 @@ class orders {
   firstNameEnglish!: string
   lastNameEnglish!: string
   outDlvrDateLocal!: string
+  distributedTargetId!: number
+}
+
+class Officer {
+  id!: number;
+  empId!: string;
+  firstNameEnglish!: string;
+  lastNameEnglish!: string;
+  ordersCount!: number;
 }
 

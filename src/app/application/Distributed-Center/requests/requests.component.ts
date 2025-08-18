@@ -25,7 +25,7 @@ export class RequestsComponent implements OnInit {
   productReplacementObj!: ProductReplacement
   selectedRequestObj!: Request
 
-  isViewProductReplacement: boolean = false
+  isViewProductReplacement: boolean = true
 
   selectedReplaceProductId: number | null = null;
 
@@ -52,6 +52,12 @@ export class RequestsComponent implements OnInit {
 
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Not Approved', 'Approved', 'Rejected'];
+
+  productDetails = [
+    { step: 'DEFINED PRODUCT', name: 'Carrot', qty: 1.0, unitPrice: 400.0, total: 400.0 },
+    { step: 'REQUESTED PRODUCT', name: 'Cabbage', qty: 2.0, unitPrice: 220.0, total: 440.0 },
+    { step: 'REPLACED PRODUCT', name: 'Raddish', qty: 1.0, unitPrice: 400.0, total: 400.0 },
+  ];
 
   toggleStatusDropdown() {
     this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
@@ -259,6 +265,10 @@ export class RequestsComponent implements OnInit {
 
     this.isViewProductReplacement = true;
   }
+
+  closeModal() {
+    this.isViewProductReplacement = false;
+  }
 }
 
 
@@ -312,3 +322,30 @@ class ProductReplacement {
   definedProductPrice!: number;
 
 }
+
+// SELECT 
+//     po.invNo,
+//     po.id AS processOrderId,
+//     o.id AS orderId,
+//     mpp.id AS packageId,
+//     op.id AS orderpkgId,
+//     dfp.id AS definePkgId,
+//     dfpi.id AS dfpItemId
+// FROM 
+//     market_place.processorders po
+// JOIN 
+//     market_place.orders o ON po.orderId = o.id
+// LEFT JOIN 
+//     market_place.orderpackage op ON po.id = op.orderId
+// LEFT JOIN 
+//     market_place.marketplacepackages mpp ON op.packageId = mpp.id
+// LEFT JOIN 
+//     market_place.definepackage dfp ON dfp.packageId = mpp.id
+// LEFT JOIN 
+//     market_place.definepackageitems dfpi ON dfpi.definePackageId = dfp.id 
+// JOIN 
+//     market_place.producttypes pt ON pt.id = dfpi.productType
+// JOIN 
+//     market_place.marketplaceitems mpi ON mpi.id = dfpi.productId
+// WHERE 
+//     po.id = 261

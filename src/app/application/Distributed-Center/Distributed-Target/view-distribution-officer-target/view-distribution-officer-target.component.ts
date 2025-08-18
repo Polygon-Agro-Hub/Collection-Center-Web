@@ -374,6 +374,10 @@ onOfficerChange(event: Event) {
   console.log('Selected Officer ID:', this.selectedOfficerId);
 }
 
+goBack() {
+  this.location.back();
+}
+
 
 
 }

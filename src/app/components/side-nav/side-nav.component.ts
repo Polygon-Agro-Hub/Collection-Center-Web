@@ -106,7 +106,7 @@ export const MENU_ITEMS = [
     path: '/distribution-officers',
     label: 'Manage Officers',
     icon: 'fas fa-user-cog',
-    permission: ['Distribution Center Head'],
+    permission: ['Distribution Center Head', 'Distribution Center Manager'],
   },
   {
     id: 13,
@@ -159,6 +159,15 @@ export const MENU_ITEMS = [
     icon: 'fa-solid fa-triangle-exclamation',
     permission: ['Distribution Center Manager'],
   },
+
+  // {
+  //   id: 19,
+  //   key: 'dcm-manage-officers',
+  //   path: '/dcm-manage-officers',
+  //   label: 'Manage Officers',
+  //   icon: 'fas fa-user-cog',
+  //   permission: ['Distribution Center Manager'],
+  // },
 
 ];
 

@@ -25,7 +25,7 @@ export class RequestsComponent implements OnInit {
   productReplacementObj!: ProductReplacement
   selectedRequestObj!: Request
 
-  isViewProductReplacement: boolean = true
+  isViewProductReplacement: boolean = false
 
   selectedReplaceProductId: number | null = null;
 

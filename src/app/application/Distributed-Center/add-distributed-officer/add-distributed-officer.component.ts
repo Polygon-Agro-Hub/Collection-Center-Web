@@ -179,34 +179,6 @@ export class AddDistributedOfficerComponent implements OnInit {
     }
   }
 
-  // getLastID(role: string): Promise<string> {
-  //   return new Promise((resolve, reject) => {
-  //     this.DistributedManageOfficerSrv.getForCreateId(role).subscribe(
-  //       (res) => {
-  //         this.lastID = res.result.empId;
-  //         const lastId = res.result.empId;
-  //         resolve(lastId); // Resolve the Promise with the empId
-  //       },
-  //       (error) => {
-  //         console.error('Error fetching last ID:', error);
-  //         reject(error);
-  //       }
-  //     );
-  //   });
-  // }
-
-  // EpmloyeIdCreate() {
-  //   let rolePrefix: string;
-  //   if (this.personalData.jobRole === 'Distribution Center Manager') {
-  //     rolePrefix = 'DCM';
-  //   } else {
-  //     rolePrefix = 'DIO';
-  //   }
-  //   this.getLastID(rolePrefix).then((lastID) => {
-  //     this.personalData.empId = rolePrefix + lastID;
-  //   });
-  // }
-
   updateProvince(event: Event): void {
     const target = event.target as HTMLSelectElement; // Cast to HTMLSelectElement
     const selectedDistrict = target.value;
@@ -264,25 +236,7 @@ export class AddDistributedOfficerComponent implements OnInit {
       } else if (this.logingRole === 'Distribution Center Head') {
         console.log('Distribution Center Head')
 
-        // if (this.personalData.jobRole === 'Driver') {
-        //   if (!this.licenseFrontImageFileName || !this.licenseBackImageFileName || !this.insurenceFrontImageFileName || !this.insurenceBackImageFileName || !this.vehicleFrontImageFileName || !this.vehicleBackImageFileName || !this.vehicleSideAImageFileName || !this.vehicleSideBImageFileName) {
-        //     this.isLoading = false;
-        //     this.toastSrv.warning('Pleace fill all required vehicle image upload fields')
-        //     return;
-        //   }
-
-        //   this.driverObj.licFrontName = this.licenseFrontImageFileName
-        //   this.driverObj.licBackName = this.licenseBackImageFileName
-        //   this.driverObj.insFrontName = this.insurenceFrontImageFileName
-        //   this.driverObj.insBackName = this.insurenceBackImageFileName
-        //   this.driverObj.vFrontName = this.vehicleFrontImageFileName
-        //   this.driverObj.vBackName = this.vehicleBackImageFileName
-        //   this.driverObj.vSideAName = this.vehicleSideAImageFileName
-        //   this.driverObj.vSideBName = this.vehicleSideBImageFileName
-        // }
-
-        // this.ManageOficerSrv.CCHcreateCollectiveOfficer(this.personalData, this.selectedImage, this.driverObj, this.licenseFrontImagePreview, this.licenseBackImagePreview, this.insurenceFrontImagePreview, this.insurenceBackImagePreview, this.vehicleFrontImagePreview, this.vehicleBackImagePreview, this.vehicleSideAImagePreview, this.vehicleSideBImagePreview).subscribe(
-
+       
         this.DistributedManageOfficerSrv.createDistributionOfficer(this.personalData, this.selectedImage).subscribe(
           (res: any) => {
             if (res.status) {

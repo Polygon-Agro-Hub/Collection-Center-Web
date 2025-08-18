@@ -315,82 +315,44 @@
 </div>
 
 
-<div *ngIf="isViewProductReplacement" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-white rounded-xl text-center w-[600px] shadow-xl p-6">
-        <h2 class="text-center text-xl font-semibold mb-4">Replace Product</h2>
-
-        <div class="border-2 border-dashed border-red-400 rounded-md text-center py-3 px-4 mb-6 w-3/5 mx-auto">
-            <p class="text-sm  text-gray-600 ">Selected product</p>
-            <p class="text-base font-semibold">{{selectedRequestObj.currentProduct}} -
-                {{selectedRequestObj.currentProductQty}} - Rs.{{selectedRequestObj.currentProductPrice}}</p>
-            <p class="mt-2 text-gray-600 text-sm ">
-                Relevant Product Type :
-                <br><span class="font-medium text-black">{{selectedRequestObj.currentProductTypeName}}</span>
-            </p>
-        </div>
-
-        <table class="w-full text-sm font-semibold text-gray-700 mb-6">
-            <thead class="text-gray-500 border-b">
-                <tr>
-                    <th class="text-left py-2 w-1/4">PRODUCT NAME</th>
-                    <th class="text-center py-2 w-1/4">
-                        QUANTITY ({{ selectedRequestObj.replaceUnitType || "Kg" }})
-                      </th>
-                    <th class="text-left pl-4 pr-1 py-2 w-1/4">UNIT PRICE (RS.)</th>
-                    <th class="text-left pl-2 py-2 w-1/4">TOTAL (RS.)</th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                  <!-- Product Name -->
-                  <td class="py-2 text-left">
-                    <select
-                      class="border rounded px-2 py-1"
-                      [(ngModel)]="selectedRequestObj.replaceProductId"
-                      (ngModelChange)="onProductChange($event)"
-                    >
-                      <option [value]="null">Select a product</option>
-                      <option *ngFor="let product of productsArr" [value]="product.id">
-                        {{ product.displayName }}
-                      </option>
-                    </select>
-                  </td>
-              
-                  <!-- Quantity -->
-                  <td class="text-center py-2">
-                    <input
-                      type="number"
-                      min="1"
-                      [(ngModel)]="selectedRequestObj.replaceQty"
-                      (input)="onQtyChange()"
-                      class="w-16 text-center border rounded px-1 py-0.5"
-                    />
-                    
-                  </td>
-              
-                  <!-- Unit Price -->
-                  <td class="text-left pl-4 pr-1 py-2">
-                    {{ selectedRequestObj.replaceUnitPrice }}
-                  </td>
-              
-                  <!-- Total -->
-                  <td class="text-left pl-2 py-2 text-[#415CFF] font-semibold">
-                    {{ selectedRequestObj.replacePrice }}
-                  </td>
-                </tr>
-              </tbody>
-              
+<div *ngIf="isViewProductReplacement" class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
+    <div class="bg-white rounded-lg shadow-lg w-[800px] h-[300px] dark:bg-[#363636] p-6">
+      
+      <!-- Title -->
+      <h2 class="text-lg font-semibold text-center text-[#212121] dark:text-white mb-6">Product Replacement Details</h2>
+      
+      <!-- Table -->
+      <div class="mr-5 min-w-max border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+        <table class="w-full min-w-max divide-y-2 overflow-hidden">
+          <thead class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
+            <tr>
+              <th class="px-4 py-2 text-left text-sm font-medium text-[#8492A3] dark:text-white">STEPS</th>
+              <th class="px-4 py-2 text-left text-sm font-medium text-[#8492A3] dark:text-white">PRODUCT NAME</th>
+              <th class="px-4 py-2 text-left text-sm font-medium text-[#8492A3] dark:text-white">QUANTITY (KG)</th>
+              <th class="px-4 py-2 text-left text-sm font-medium text-[#8492A3] dark:text-white">UNIT PRICE (RS.)</th>
+              <th class="px-4 py-2 text-left text-sm font-medium text-[#8492A3] dark:text-white">TOTAL PRICE (RS.)</th>
+            </tr>
+          </thead>
+          <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
+            <tr *ngFor="let item of productDetails">
+              <td class="px-4 py-2 text-sm text-black dark:text-gray-300">{{ item.step }}</td>
+              <td class="px-4 py-2 text-sm text-black dark:text-gray-300">{{ item.name }}</td>
+              <td class="px-4 py-2 text-sm text-black dark:text-gray-300">{{ item.qty }}</td>
+              <td class="px-4 py-2 text-sm text-black dark:text-gray-300">{{ item.unitPrice | number:'1.2-2' }}</td>
+              <td class="px-4 py-2 text-sm text-black dark:text-gray-300">
+                <span class="text-blue-600  hover:underline cursor-pointer">{{ item.total | number:'1.2-2' }}</span>
+              </td>
+            </tr>
+          </tbody>
         </table>
-
-        <div class="flex justify-center gap-3">
-            <button (click)="onReject()"
-                class="w-28 bg-[#FC0004] text-white px-6 py-2 rounded-lg shadow-lg font-medium hover:bg-[#FC0004]">
-                Reject
-            </button>
-            <button (click)="onApprove()"
-                class="w-28 bg-[#415CFF] text-white px-6 py-2 shadow-lg rounded-lg font-medium hover:bg-[#415CFF]">
-                Approve
-            </button>
-        </div>
+      </div>
+  
+      <!-- Close Button -->
+      <div class="flex justify-center mt-6">
+        <button (click)="closeModal()" 
+                class="px-6 py-2 w-24 bg-[#F6F7F9] border-2 border-[#95A1AC] hover:bg-gray-300 text-[#6B7D8C] rounded-lg">
+          Close
+        </button>
+      </div>
     </div>
-</div>
+  </div>

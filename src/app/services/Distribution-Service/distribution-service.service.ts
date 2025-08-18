@@ -350,7 +350,59 @@ export class DistributionServiceService {
     return this.http.get<any>(url, { headers });
   }
 
+  getCenterTarget(centerId: number, searchText: string = '', status: string = '', selectDate: string = ''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+  
+    console.log('selectDate', selectDate)
+    let url = `${this.apiUrl}/get-center-target?centerId=${centerId}`;
+  
+    if (searchText) {
+      url += `&searchText=${searchText}`
+  
+    }
+  
+    if (status) {
+      url += `&status=${status}`
+    }
+
+    if (selectDate) {
+      url += `&date=${selectDate}`
+    }
+  
+    return this.http.get<any>(url, { headers });
+  }
+
+  getCenterTargetForDelivery(centerId: number, searchText: string = '', status: string = '', selectDate: string = ''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    console.log('selectDate', selectDate)
+  
+  
+    let url = `${this.apiUrl}/get-center-target-out-for-delivery?centerId=${centerId}`;
+  
+    if (searchText) {
+      url += `&searchText=${searchText}`
+  
+    }
+  
+    if (status) {
+      url += `&status=${status}`
+    }
+
+    if (selectDate) {
+      url += `&date=${selectDate}`
+    }
+  
+    return this.http.get<any>(url, { headers });
+  }
+
 }
+
+
 
 
 

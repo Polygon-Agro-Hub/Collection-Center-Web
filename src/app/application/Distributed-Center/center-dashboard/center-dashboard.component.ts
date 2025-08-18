@@ -8,18 +8,21 @@ import { ToastAlertService } from '../../../services/toast-alert/toast-alert.ser
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { ViewCenterOfficersComponent } from "../view-center-officers/view-center-officers.component";
 import { ActivatedRoute } from '@angular/router';
+import { ViewDchCenterTargetComponent } from '../view-dch-center-target/view-dch-center-target.component';
+import { DchCenterTargetOutForDeliveryComponent } from "../dch-center-target-out-for-delivery/dch-center-target-out-for-delivery.component";
 
 @Component({
   selector: 'app-center-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, LoadingSpinnerComponent, ViewCenterOfficersComponent],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent, ViewCenterOfficersComponent, ViewDchCenterTargetComponent, DchCenterTargetOutForDeliveryComponent],
   templateUrl: './center-dashboard.component.html',
   styleUrl: './center-dashboard.component.css'
 })
 export class CenterDashboardComponent implements OnInit {
 
-  isSelectRecevied: boolean = true;
+  isSelectProgress: boolean = true;
   isSelectViewOfficers: boolean = false;
+  isSelectViewOutForDelivery: boolean =  false;
   isAddComplaintOpen: boolean = false;
   categoryArr: Category[] = [];
 
@@ -41,14 +44,22 @@ export class CenterDashboardComponent implements OnInit {
     this.centerId = Number(this.route.snapshot.paramMap.get('id'));
   }
 
-  selectRecevied() {
-    this.isSelectRecevied = true;
+  selectProgress() {
+    this.isSelectProgress = true;
     this.isSelectViewOfficers = false;
+    this.isSelectViewOutForDelivery = false;
   }
 
   selectViewOfficers() {
-    this.isSelectRecevied = false;
+    this.isSelectProgress = false;
     this.isSelectViewOfficers = true;
+    this.isSelectViewOutForDelivery = false;
+  }
+
+  selectViewOutForDelivery() {
+    this.isSelectProgress = false;
+    this.isSelectViewOfficers = false;
+    this.isSelectViewOutForDelivery = true;
   }
 
 }

@@ -327,6 +327,7 @@ export const routes: Routes = [
                         path: 'center-dashboard/:id/:centerName/:regCode',
                         component: CenterDashboardComponent,
                     },
+
                     {
                         path: 'edit-distribution-officer/:id',
                         component: EditDistributedOfficerComponent,

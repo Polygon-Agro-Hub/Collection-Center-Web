@@ -68,6 +68,7 @@ export class TargetOutForDeliveryComponent implements OnInit {
       (res) => {
         console.log('res', res)
         this.ordersArr = res.items
+        console.log('ordersArr', this.ordersArr)
         this.totalItems = res.total;
         
         if (res.items.length === 0) {

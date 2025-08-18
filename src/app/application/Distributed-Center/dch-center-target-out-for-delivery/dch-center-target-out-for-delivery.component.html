@@ -1,8 +1,18 @@
+
+
 <app-loading-spinner *ngIf="isLoading" />
 
-<div *ngIf="!isLoading">
+<div *ngIf="!isLoading" >
+
+
+    <div class="text-lg font-semibold dark:text-white whitespace-nowrap">{{regCode}} {{centerName}}</div>
+    
     <div class="flex flex-row items-center justify-between gap-4">
-        <div><p class="text-lg dark:text-white whitespace-nowrap">All ({{ totalItems < 10 ? ('0' + totalItems) : totalItems }})</p></div>
+        <div>
+            <p class="text-lg font-semibold dark:text-white whitespace-nowrap ">
+              All ({{ totalItems}})
+            </p>
+          </div>
     <div class="flex flex-row items-center justify-end gap-5 ">
         
         <i class="fa-solid fa-list text-2xl dark:text-white"></i>
@@ -17,6 +27,7 @@
                     Late</option>
                 <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300" value="On Time">
                     On Time</option>
+                
             </select>
 
             <!-- Custom dropdown trigger -->
@@ -53,6 +64,17 @@
             </div>
         </div>
 
+        
+
+        <div class="relative w-36">
+            <div
+                class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
+                <input type="date" #toDateInput [(ngModel)]="date" name="date"
+                    (change)="onDateChange()"
+                    class="block w-full appearance-none text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none dark:bg-[#292929] custom-date-input" />
+            </div>
+        </div>
+
         <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
             <input type="text" placeholder="Search by Order ID.." [(ngModel)]="searchText"
                 class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
@@ -74,18 +96,21 @@
 
     </div>
     </div>
-
+    
     <div *ngIf="!hasData" class="flex flex-col items-center w-full h-screen mt-6">
-        <p class="text-[#494949] my-6 dark:text-white">---No completed orders found--</p>
+        <p class="text-[#494949] my-6 dark:text-white">--No orders found--</p>
         <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
     </div>
 
 
     <div *ngIf="hasData"
-        class="overflow-x-auto mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
-        <table class="w-full divide-y-2 overflow-hidden">
-            <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
+        class="min-w-max mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+        <table class="w-full min-w-max divide-y-2 overflow-hidden">
+            <thead class="text-[#4B5563] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
                 <tr>
+                    <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">
+                        
+                    </th>
                     <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">No</th>
                     <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">Order ID</th>
                     <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">Completed By</th>
@@ -95,26 +120,21 @@
 
                 </tr>
             </thead>
-            <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
-                <tr
-                    *ngFor="let item of ordersArr | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index">
-                    <!-- <tr *ngFor="let item of complainArr"> -->
-                        <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
-                            {{ (i + 1) < 10 ? ('0' + (i + 1)) : (i + 1) }}
-                          </td>
-                        <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.invNo}}</td>
+            <tbody class="bg-white dark:bg-[#1D1D1F] text-[#000000] dark:border-[#1D1D1F] cursor-default">
+                <tr *ngFor="let item of ordersArr | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index">
+                    <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
+                     
+                    </td>
+                    <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
+                        {{ (i + 1) < 10 ? ('0' + (i + 1)) : (i + 1) }}
+                    </td>
+                    <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.invNo}}</td>
                     <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.firstNameEnglish}} {{item.lastNameEnglish}}</td>
-                    <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{ getDisplayDate(item.sheduleDate) }} {{ removeWithin(item.sheduleTime) }}</td>
-
-                      <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
-                        {{ item.outDlvrDateLocal | date: 'hh.mm a' : 'UTC' }}
+                    <td class="px-6 py-4 text-sm text-left font-medium text-gray-900 dark:text-[#C5C5C5]">{{ getDisplayDate(item.sheduleDate) }} {{ removeWithin(item.sheduleTime) }}</td>
+                    <td class="px-6 py-4 text-sm  text-left font-medium text-gray-900 dark:text-[#C5C5C5]">
+                        {{ item.outDlvrDate | date:'hh:mm a' }}
                       </td>
-
-                      <!-- <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
-                        {{ item.deliveryPeriod }}
-                      </td> -->
-
-                      <td class="px-6 py-4 text-sm ">
+                    <td class="px-6 py-4 text-sm text-center ">
 
                         <div class="flex font-medium items-center justify-center h-full">
                             <span *ngIf="item.deliveryPeriod ==='On Time'"
@@ -129,17 +149,16 @@
 
                         </div>
                     </td>
-
                 </tr>
             </tbody>
         </table>
 
     </div>
-    <div *ngIf="hasData" class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#262f45] text-right">
-        <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
-            [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
-            [screenReaderCurrentLabel]="'Youre on page'">
-        </pagination-controls>
-    </div>
+
 
 </div>
+
+<div>
+
+</div>
+

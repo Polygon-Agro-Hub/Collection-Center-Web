@@ -7,29 +7,6 @@
         <p class="text-lg">Filter By</p>
 
 
-        <!-- <div class="relative w-46">
-            <div
-                class="border-2 rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center">
-                <select [(ngModel)]="selectEmployee" (change)="filterEmployee()" name="selectEmployee"
-                    class="block w-full appearance-none  dark:bg-[#272F45] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
-                    <option value="" selected disabled>Employee</option>
-                    <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300" value="Own">
-                        Own Complaints</option>
-                    <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300" value="Other">
-                        Other Complaints</option>
-
-
-                </select>
-                <button *ngIf="!selectEmployee">
-                    <i class="fa-solid fa-angle-down text-lg mr-3"></i>
-                </button>
-                <button *ngIf="selectEmployee" (click)="cancelEmployee()">
-                    <i class="fa-solid fa-xmark text-lg mr-3"></i>
-                </button>
-
-            </div>
-        </div> -->
-
         <div class="relative w-40 custom-employee-dropdown-container">
             <!-- Hidden native select -->
             <select [(ngModel)]="selectStatus" class="hidden" (change)="filterEmployee()">
@@ -72,31 +49,6 @@
             </div>
         </div>
 
-
-        <!-- <div class="relative w-46">
-            <div
-                class="border-2 rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center">
-                <select [(ngModel)]="selectStatus" (change)="filterStatus()"
-                    class="block w-full appearance-none  dark:bg-[#272F45] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
-                    <option value="" selected disabled>Status</option>
-                    <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
-                        value="Assigned">
-                        Opend</option>
-                    <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
-                        value="Closed">
-                        Closed</option>
-
-                </select>
-                <button *ngIf="!selectStatus">
-                    <i class="fa-solid fa-angle-down text-lg mr-3"></i>
-                </button>
-                <button *ngIf="selectStatus" (click)="cancelStatus()">
-                    <i class="fa-solid fa-xmark text-lg mr-3"></i>
-                </button>
-
-            </div>
-        </div> -->
-
         <div class="relative w-40 custom-status-dropdown-container">
             <!-- Hidden native select -->
             <select [(ngModel)]="selectStatus" class="hidden" (change)="filterStatus()">
@@ -138,35 +90,6 @@
                 </div>
             </div>
         </div>
-
-
-
-        <!-- <div class="relative w-46">
-            <div class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
-              <select [(ngModel)]="selectStatus" (change)="filterStatus()"
-                class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer">
-                <option value="" selected disabled>Status</option>
-                <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
-                    value="Opened">
-                    Opened</option>
-                <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
-                    value="Closed">
-                    Closed</option>
-              </select>
-              
-
-              <div *ngIf="!selectStatus" class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
-                <i class="fa-solid fa-angle-down text-lg mr-3"></i>
-              </div>
-          
-
-              <div (click)="cancelStatus()" *ngIf="selectStatus" 
-                   class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300 cursor-pointer z-10">
-                <i class="fa-solid fa-xmark text-lg mr-3"></i>
-              </div>
-            </div>
-          </div> -->
-
 
         <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929] ">
             <input type="text" placeholder="Search by Ref No, EMP ID" [(ngModel)]="searchText"

@@ -62,6 +62,8 @@ import { DcmComplaintsComponent } from './application/dcm-Complaints/dcm-complai
 import { ViewDcmReceiveReplyComponent } from './application/dcm-Complaints/view-dcm-receive-reply/view-dcm-receive-reply.component';
 import { OfficerTargetsComponent } from './application/Distributed-Center/Distributed-Target/officer-targets/officer-targets.component';
 import { ViewDistributionOfficerTargetComponent } from './application/Distributed-Center/Distributed-Target/view-distribution-officer-target/view-distribution-officer-target.component';
+import { DchComplaintsComponent } from './application/dch-Complaints/dch-complaints/dch-complaints.component';
+import { DchViewRecieveComplaintComponent } from './application/dch-Complaints/dch-view-recieve-complaint/dch-view-recieve-complaint.component';
 
 export const routes: Routes = [
     {
@@ -469,6 +471,21 @@ export const routes: Routes = [
                     {
                         path: 'view-dcm-recive-complaint/:id',
                         component: ViewDcmReceiveReplyComponent
+                    }
+                ]
+            },
+
+            {
+                path: 'dch-complaints',
+                // canActivate:[CcmRoleGuardService],
+                children: [
+                    {
+                        path: '',
+                        component: DchComplaintsComponent,
+                    },
+                    {
+                        path: 'view-recieve-complaint/:id',
+                        component: DchViewRecieveComplaintComponent,
                     }
                 ]
             },

@@ -111,4 +111,81 @@ export class DistributionComplaintsService {
     let url = `${this.apiUrl}/dcm-get-reply-by-complaint-id/${id}`;
     return this.http.get<any>(url, { headers });
   }
+
+  getAllDCHReciveComplaints(page: number = 1, limit: number = 10, status: string = '', searchText: string = ''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+
+    let url = `${this.apiUrl}/get-recived-dch-complaints?page=${page}&limit=${limit}`;
+    if (status) {
+      url += `&status=${status}`
+    }
+
+    if (searchText) {
+      url += `&searchText=${searchText}`
+
+    }
+
+    return this.http.get<any>(url, { headers });
+  }
+
+  dchGetComplainById(id: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/dch-get-recived-complaints-by-id/${id}`;
+    return this.http.get<any>(url, { headers });
+  }
+
+  dchReplyToComplain(data: any): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/dch-reply-complain`;
+    return this.http.patch<any>(url, data, { headers });
+  }
+
+  forwordDCHComplain(id: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/forword-dch-complain-admin/${id}`;
+    return this.http.patch<any>(url, {}, { headers });
+  }
+
+  getAllSentDCHComplains(page: number = 1, limit: number = 10, status: string = '', emptype: string = '', searchText: string = ''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+
+    let url = `${this.apiUrl}/get-all-sent-dch-complaint?page=${page}&limit=${limit}`;
+    if (status) {
+      url += `&status=${status}`
+    }
+
+    if (emptype) {
+      url += `&emptype=${emptype}`
+    }
+
+    if (searchText) {
+      url += `&searchText=${searchText}`
+    }
+
+    return this.http.get<any>(url, { headers });
+  }
+
+  submitDCHComplaint(data: { category: string; complaint: string }): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/add-complain-dch`;
+    return this.http.post<any>(url, data, { headers });
+  }
 }

@@ -200,7 +200,7 @@
         </pagination-controls>
     </div>
 
-    <div *ngIf="isReplyView" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <!-- <div *ngIf="isReplyView" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
     <div class="bg-white dark:bg-[#363636] shadow-lg rounded-lg p-6 w-1/2">
         <div class="flex flex-col items-center justify-center gap-5">
             <div class="bg-[#F6F6F6] rounded-full shadow-md p-5">
@@ -209,7 +209,6 @@
 
             <p class="text-3xl font-bold dark:text-white">Reply from Center Head</p>
 
-            <!-- Replace the paragraph with textarea -->
             <textarea 
                 class="w-full border-[1px] border-[#D9D9D9] dark:text-textDark dark:bg-[#1D1D1F] rounded-lg p-5"
                 rows="10"
@@ -219,6 +218,81 @@
 
             <button
                 class="bg-[#F6F7F9] text-[#6B7D8C] text-lg border-2 border-gray-400 rounded-lg px-6 py-2 font-medium shadow-md hover:bg-gray-100"
+                (click)="cancelViewReply()">
+                Close
+            </button>
+        </div>
+    </div>
+</div> -->
+
+<div *ngIf="isReplyView" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+    <div class="bg-white dark:bg-[#363636] shadow-lg rounded-lg p-6 w-2/5">
+        <div class="flex flex-col items-center gap-4">
+            <!-- Envelope Icon -->
+            <div class="bg-[#F6F6F6] rounded-full shadow-md p-4 flex items-center justify-center">
+                <i class="fa-regular fa-envelope text-3xl text-gray-700"></i>
+            </div>
+
+            <!-- Title -->
+            <p class="text-2xl font-semibold text-gray-900 dark:text-white">Your Response</p>
+
+            <!-- Message Container -->
+           <div class="flex flex-col gap-y-2 w-full border-[1px] border-[#D9D9D9] dark:text-white py-4 px-5 rounded-lg">
+                <p>
+                    {{replyObj.language === 'Sinhala' ? 'හිතවත් ': replyObj.language === 'Tamil' ? 'அன்புள்ள ' : 'Dear '}}
+                    <span class="font-semibold">{{replyObj.firstNameEnglish}} {{replyObj.lastNameEnglish}},</span>
+                </p>
+
+                <p *ngIf="replyObj.language === 'Sinhala'">
+                    ඔබගේ පැමිණිල්ල නිරාකරණය කර ඇති බව ඔබට දැනුම් දීමට අපි සතුටු වෙමු.
+                </p>
+                
+                <p *ngIf="replyObj.language === 'Tamil'">
+                    உங்கள் முறையீடு தீர்வு செய்யப்பட்டதாக தெரிவித்து மகிழ்ச்சியடைகிறோம்.
+                </p>
+
+                <p *ngIf="replyObj.language !== 'Sinhala' && replyObj.language !== 'Tamil'">
+                    We are pleased to inform you that your complaint has been resolved.
+                  </p>
+
+                <div class="border-none outline-none bg-[#F6F6F6] dark:bg-[#363636] rounded-lg w-full  p-1">
+                    <textarea class="bg-[#F6F6F6] dark:bg-[#363636] w-full border-none outline-none " cols="6" [(ngModel)]="replyObj.reply" name="reply" placeholder="[ Add message here... ]" disabled=""></textarea>
+                </div>
+
+                <p>
+                    {{
+                        replyObj.language === 'Sinhala' ? 'ඔබට තවත් ගැටළු හෝ ප්‍රශ්න තිබේ නම්, කරුණාකර අප හා සම්බන්ධ වන්න. ඔබේ ඉවසීම සහ අවබෝධය වෙනුවෙන් ස්තූතියි. '
+                        : replyObj.language === 'Tamil' ? 'உங்களுக்கு மேலும் ஏதேனும் சிக்கல்கள் அல்லது கேள்விகள் இருந்தால், தயவுசெய்து எங்களைத் தொடர்பு கொள்ளவும். உங்கள் பொறுமைக்கும் புரிதலுக்கும் நன்றி. ' 
+                        : 'If you have any further concerns or questions, feel free to reach out.Thank you for your patience and understanding. '
+                    }}
+
+                </p>
+                <p *ngIf="replyObj.language === 'Sinhala'">
+                    මෙයට,<br />
+                    {{ templateData.EngName }}
+                  </p>
+                  
+                  <p *ngIf="replyObj.language === 'Tamil'">
+                    இதற்கு,<br />
+                    {{ templateData.TamName }}
+                  </p>
+                  
+                  <p *ngIf="replyObj.language !== 'Sinhala' && replyObj.language !== 'Tamil'">
+                    Sincerely,<br />
+                    {{ templateData.EngName }}
+                  </p>
+                <p>
+                    {{
+                        replyObj.language === 'Sinhala' ? 'Collection Centre Head of ' + templateData.companyNameSinhala
+                        : replyObj.language === 'Tamil' ? 'Collection Centre Head of ' + templateData.companyNameTamil
+                        : 'Collection Centre Head of ' + templateData.companyNameEnglish
+                    }}
+                </p>
+            </div>
+
+            <!-- Close Button -->
+            <button
+                class="bg-[#F6F7F9]  text-[#6B7D8C] text-lg  border-2 border-gray-400 rounded-lg px-6 py-2 font-medium shadow-md hover:bg-gray-100"
                 (click)="cancelViewReply()">
                 Close
             </button>

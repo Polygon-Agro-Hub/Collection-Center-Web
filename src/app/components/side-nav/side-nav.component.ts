@@ -160,6 +160,15 @@ export const MENU_ITEMS = [
     permission: ['Distribution Center Manager'],
   },
 
+  {
+    id: 19,
+    key: 'dch-complaints',
+    path: '/dch-complaints',
+    label: 'Complaints',
+    icon: 'fa-solid fa-triangle-exclamation',
+    permission: ['Distribution Center Head'],
+  },
+
   // {
   //   id: 19,
   //   key: 'dcm-manage-officers',

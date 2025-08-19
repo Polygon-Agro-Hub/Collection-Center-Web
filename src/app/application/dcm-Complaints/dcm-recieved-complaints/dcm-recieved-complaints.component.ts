@@ -95,21 +95,9 @@ export class DcmRecievedComplaintsComponent implements OnInit {
       (res) => {
         console.log('replyres', res)
         this.replyDataObj = res.data;
+        this.replyObj = res.data;
         this.managerDataObj = res.dcmData;
         console.log('reply obj', this.replyDataObj)
-        // this.replyObj.manageFirstNameEnglish = res.dcmData.manageFirstNameEnglish;
-        // this.replyObj.manageFirstNameEnglish = res.dcmData.manageFirstNameSinhala;
-        // this.replyObj.manageFirstNameEnglish = res.dcmData.manageFirstNameTamil;
-        // this.replyObj.manageLastNameEnglish = res.dcmData.manageLastNameEnglish;
-        // this.replyObj.manageLastNameEnglish = res.dcmData.manageLastNameSinhala;
-        // this.replyObj.manageLastNameEnglish = res.dcmData.manageLastNameTamil;
-        // this.replyObj.companyNameEnglish = res.dcmData.companyNameEnglish;
-        // this.replyObj.companyNameSinhala = res.dcmData.companyNameSinhala;
-        // this.replyObj.companyNameTamil = res.dcmData.companyNameTamil;
-        // this.replyObj.centerName = res.dcmData.centerName;
-        if (res.data.reply !== null) {
-          this.replyObj.reply = this.createTemplate(this.replyDataObj, this.managerDataObj)
-        }
         
         console.log('reply', this.replyObj.reply)
         this.isLoading = false;
@@ -248,6 +236,7 @@ class Reply {
   id!: number;
   reply!: string;
 } 
+
 class Manager {
   companyNameEnglish!: string;
   companyNameSinhala!: string;

@@ -10,10 +10,17 @@
         <div class="flex flex-row justify-between items-center">
             <div class="flex flex-row gap-6">
                 <div class="flex flex-row items-center gap-2 border-[2px] rounded-2xl px-4 py-2 cursor-pointer dark:text-textDark dark:bg-[#292929]"
-                    [ngClass]="{'text-[#415CFF] border-[#415CFF]': isSelectRecevied}" (click)="selectRecevied()">
-                    <i *ngIf="isSelectRecevied" class="fa-solid fa-check"></i>
+                    [ngClass]="{'text-[#415CFF] border-[#415CFF]': isSelectProgress}" (click)="selectProgress()">
+                    <i *ngIf="isSelectProgress" class="fa-solid fa-check"></i>
                     <p>Progress</p>
                 </div>
+
+                <div class="flex flex-row items-center gap-2 border-[2px] rounded-2xl px-4 py-2 cursor-pointer dark:text-textDark dark:bg-[#292929]"
+                    [ngClass]="{'text-[#415CFF] border-[#415CFF]': isSelectViewOutForDelivery}" (click)="selectViewOutForDelivery()">
+                    <i *ngIf="isSelectViewOutForDelivery" class="fa-solid fa-check"></i>
+                    <p>Out for Delivery</p>
+                </div>
+                
 
                 <div class="flex flex-row items-center gap-2 border-[2px] rounded-2xl px-4 py-2 cursor-pointer dark:text-textDark dark:bg-[#292929]"
                     [ngClass]="{'text-[#415CFF] border-[#415CFF]': isSelectViewOfficers}" (click)="selectViewOfficers()">
@@ -25,9 +32,11 @@
 
         <hr class="my-8 border-[1px] border-[#7F7F7F]" />
 
-        <!-- <app-cch-recevied-complaint *ngIf="isSelectRecevied" /> -->
+        <app-view-dch-center-target *ngIf="isSelectProgress" />
 
         <app-view-center-officers *ngIf="isSelectViewOfficers" />
+
+        <app-dch-center-target-out-for-delivery *ngIf="isSelectViewOutForDelivery" />
     </div>
 
 </div>

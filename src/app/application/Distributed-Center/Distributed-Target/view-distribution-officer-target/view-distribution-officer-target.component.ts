@@ -72,8 +72,9 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
   ngOnInit(): void {
     this.officerId = Number(this.route.snapshot.paramMap.get('officerId'));
     console.log('Selected officerId:', this.officerId);
-    this.fetchSelectedOfficerTargets();
     this.fetchOfficers();
+    this.fetchSelectedOfficerTargets();
+    
   }
 
   @HostListener('document:click', ['$event'])
@@ -87,25 +88,67 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
 
   }
 
-  fetchSelectedOfficerTargets(officerId: number = this.officerId, search: string = this.searchText, status: string = this.selectStatus) {
+  fetchSelectedOfficerTargets(
+    officerId: number = this.officerId, 
+    search: string = this.searchText, 
+    status: string = this.selectStatus
+  ) {
     this.isLoading = true;
     this.DistributionSrv.getSelectedOfficerTargets(officerId, search, status).subscribe(
       (res) => {
-        this.ordersArr = res.items
-        console.log('orders', this.ordersArr)
-        this.totalItems = res.total;
+        this.ordersArr = res.items.map((item: any) => {
+          let status = '';
         
-        if (res.items.length === 0) {
-          this.hasData = false;
-        } else {
-          this.hasData = true;
-
-        }
+          if (item.packageStatus === 'Pending' && (item.additionalItemsStatus === 'Unknown' || item.additionalItemsStatus === 'Pending')) {
+            status = 'Pending';
+          }
+          else if (item.packageStatus === 'Pending' && (item.additionalItemsStatus === 'Opened' || item.additionalItemsStatus === 'Completed')) {
+            status = 'Opened';
+          }
+          else if (item.packageStatus === 'Opened') {
+            status = 'Opened';
+          }
+          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Unknown') {
+            status = 'Completed';
+          }
+          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Pending') {
+            status = 'Pending';
+          }
+          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Opened') {
+            status = 'Opened';
+          }
+          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Completed') {
+            status = 'Completed';
+          }
+          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Pending') {
+            status = 'Pending';
+          }
+          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Opened') {
+            status = 'Opened';
+          }
+          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Completed') {
+            status = 'Completed';
+          }
+          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Unknown') {
+            status = 'Unknown';
+          }
+        
+          return {
+            ...item,
+            combinedStatus: status
+          };
+        });
+        
+  
+        console.log('ordersarr', this.ordersArr);
+        this.totalItems = res.total;
+  
+        this.hasData = this.ordersArr.length > 0;
         this.isLoading = false;
-
       }
-    )
+    );
   }
+  
 
   fetchOfficers() {
     this.isLoading = true;
@@ -397,6 +440,7 @@ class orders {
   lastNameEnglish!: string
   outDlvrDateLocal!: string
   distributedTargetId!: number
+  combinedStatus!: string
 }
 
 class Officer {

@@ -92,24 +92,9 @@ export const MENU_ITEMS = [
   },
 
   // ----------------------------------------- Distribution Center part ------------------------------------------
+  
   {
     id: 11,
-    key: 'distribution-center',
-    path: '/distribution-center',
-    label: 'Centres',
-    icon: 'fa-solid fa-bullseye',
-    permission: ['Distribution Center Head'],
-  },
-  {
-    id: 12,
-    key: 'distribution-officers',
-    path: '/distribution-officers',
-    label: 'Manage Officers',
-    icon: 'fas fa-user-cog',
-    permission: ['Distribution Center Head', 'Distribution Center Manager'],
-  },
-  {
-    id: 13,
     key: 'distribution-center-dashboard',
     path: '/distribution-center-dashboard',
     label: 'Dashboard',
@@ -117,37 +102,65 @@ export const MENU_ITEMS = [
     permission: ['Distribution Center Manager'],
   },
   {
-    id: 14,
-    key: 'assign-targets',
-    path: '/assign-targets',
-    label: 'Assign Targets',
+    id: 12,
+    key: 'distribution-center',
+    path: '/distribution-center',
+    label: 'Centres',
+    icon: 'fa-solid fa-bullseye',
+    permission: ['Distribution Center Head'],
+  },
+  {
+    id: 13,
+    key: 'distribution-officers',
+    path: '/distribution-officers',
+    label: 'Manage Officers',
     icon: 'fas fa-user-cog',
-    permission: ['Distribution Center Manager'],
+    permission: ['Distribution Center Head', 'Distribution Center Manager'],
+  },
+
+  {
+    id: 14,
+    key: 'dch-complaints',
+    path: '/dch-complaints',
+    label: 'Complaints',
+    icon: 'fa-solid fa-triangle-exclamation',
+    permission: ['Distribution Center Head'],
   },
 
   {
     id: 15,
-    key: 'officer-targets',
-    path: '/officer-targets',
-    label: 'Officer Targets',
-    icon: 'fas fa-user-cog',
-    permission: ['Distribution Center Manager'],
-  },
-  {
-    id: 16,
     key: 'target-progress',
     path: '/target-progress',
     label: 'Target Progress',
-    icon: 'fas fa-user-cog',
+    icon: 'fa-solid fa-bullseye',
+    permission: ['Distribution Center Manager'],
+  },
+  
+  {
+    id: 16,
+    key: 'assign-targets',
+    path: '/assign-targets',
+    label: 'Assign Targets',
+    icon: 'fa-regular fa-calendar-check',
     permission: ['Distribution Center Manager'],
   },
 
   {
     id: 17,
+    key: 'officer-targets',
+    path: '/officer-targets',
+    label: 'Officer Targets',
+    icon: 'fa-solid fa-user-plus',
+    permission: ['Distribution Center Manager'],
+  },
+  
+
+  {
+    id: 18,
     key: 'requests',
     path: '/requests',
     label: 'Requests',
-    icon: 'fas fa-user-cog',
+    icon: 'fa-solid fa-arrow-right-arrow-left',
     permission: ['Distribution Center Manager'],
   },
 
@@ -162,6 +175,15 @@ export const MENU_ITEMS = [
 
   {
     id: 19,
+    key: 'reports',
+    path: '/reports',
+    label: 'Reports',
+    icon: 'fa-solid fa-chart-pie',
+    permission: ['Distribution Center Manager'],
+  },
+
+  {
+    id: 20,
     key: 'dch-complaints',
     path: '/dch-complaints',
     label: 'Complaints',
@@ -177,6 +199,8 @@ export const MENU_ITEMS = [
   //   icon: 'fas fa-user-cog',
   //   permission: ['Distribution Center Manager'],
   // },
+
+  // <i class="fa-solid fa-file-circle-check"></i>
 
 ];
 

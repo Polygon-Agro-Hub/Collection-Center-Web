@@ -214,13 +214,13 @@ export class AddDistributedOfficerComponent implements OnInit {
     } else {
       if (this.logingRole === 'Distribution Center Manager') {
         console.log('Distribution Center Manager')
-        this.ManageOficerSrv.createCollectiveOfficer(this.personalData, this.selectedImage).subscribe(
+        this.DistributedManageOfficerSrv.createDistributionOfficerDIO(this.personalData, this.selectedImage).subscribe(
           (res: any) => {
             if (res.status) {
               this.officerId = res.officerId;
               this.isLoading = false;
               this.toastSrv.success('Ditribution Officer Created Successfully')
-              this.router.navigate(['/manage-officers'])
+              this.router.navigate(['/distribution-officers'])
             } else {
               this.isLoading = false;
               // this.toastSrv.error('There was an error creating the collective officer')

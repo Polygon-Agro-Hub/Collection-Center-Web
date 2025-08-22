@@ -356,7 +356,15 @@ export const routes: Routes = [
                     {
                         path: 'edit-distribution-officer/:id',
                         component: EditDistributedOfficerComponent
-                    }
+                    },
+                    {
+                        path: 'officer-profile/:id',
+                        component: OfficerProfileComponent
+                    },
+                    {
+                        path: 'claim-officer',
+                        component: ClaimOfficerComponent
+                    },
                 ]
             },
             {

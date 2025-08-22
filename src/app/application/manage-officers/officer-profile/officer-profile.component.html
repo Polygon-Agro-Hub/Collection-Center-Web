@@ -3,14 +3,22 @@
 <div *ngIf="!isLoading">
     <div *ngIf="naviPath ==='centers'" class="flex flex-row mb-4 mr-5 ml-0 gap-5 cursor-pointer">
         <p class="font-semibold text-sm text-[#424242] dark:text-white" (click)="navigateToCenters()">Centres</p>
-        <p class="font-semibold text-sm text-[#424242] dark:text-white" (click)="navigateToCenterDashboard()">Centre Dashboard</p>
+        <p class="font-semibold text-sm text-[#424242] dark:text-white" (click)="navigateToCenterDashboard()">Centre
+            Dashboard</p>
         <p class="font-semibold text-sm text-[#424242] dark:text-white" onclick="history.back()">Centre Officers</p>
         <p class="font-semibold text-sm text-[#424242] dark:text-white">Officer Profile</p>
     </div>
 
-    <div *ngIf="naviPath ==='manage-officers'" class="flex gap-5 font-semibold text[#424242] mb-4 mr-5 ml-0 dark:text-[#FFFFFF] dark:bg-blacks cursor-pointer">
-        <p  onclick="history.back()">Manage Officers</p>
-        <p >Officer Profile</p>
+    <div *ngIf="naviPath ==='manage-officers'"
+        class="flex gap-5 font-semibold text[#424242] mb-4 mr-5 ml-0 dark:text-[#FFFFFF] dark:bg-blacks cursor-pointer">
+        <p onclick="history.back()">Manage Officers</p>
+        <p>Officer Profile</p>
+    </div>
+
+    <div *ngIf="naviPath ==='distribution-officers'"
+        class="flex gap-5 font-semibold text[#424242] mb-4 mr-5 ml-0 dark:text-[#FFFFFF] dark:bg-blacks cursor-pointer">
+        <p onclick="history.back()">Manage Officers</p>
+        <p>Officer Profile</p>
     </div>
 
     <div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] dark:text-white shadow-lg rounded-lg">
@@ -31,15 +39,31 @@
                                 <span *ngIf="officerObj.jobRole ==='Collection Center Manager'">CCM</span>
                                 <span *ngIf="officerObj.jobRole ==='Collection Center Head'">CCH</span>
                                 <span *ngIf="officerObj.jobRole ==='Driver'">DVR</span>
-                                <span *ngIf="officerObj.jobRole ==='Collection Officer'">COO</span>{{officerObj.empId}}</span>
+                                <span *ngIf="officerObj.jobRole ==='Collection Officer'">COO</span>
+                                <span *ngIf="officerObj.jobRole ==='Distribution Officer'">DIO</span>
+                                <span *ngIf="officerObj.jobRole ==='Distribution Center Manager'">DCM</span>
+                                <span
+                                    *ngIf="officerObj.jobRole ==='Distribution Center Head'">DCH</span>{{officerObj.empId}}</span>
                         </p>
-                        <p class="font-semibold ">{{officerObj.centerName}}</p>
+                        <p class="font-semibold" *ngIf="officerObj.jobRole === 'Collection Center Manager' 
+                            || officerObj.jobRole === 'Collection Center Head' 
+                            || officerObj.jobRole === 'Collection Officer' 
+                            || officerObj.jobRole === 'Customer Officer'">
+                            {{ officerObj.regCode }} Centre
+                        </p>
+
+                        <p class="font-semibold" *ngIf="officerObj.jobRole === 'Distribution Center Manager' 
+                            || officerObj.jobRole === 'Distribution Center Head' 
+                            || officerObj.jobRole === 'Distribution Officer'">
+                            {{ officerObj.distributedCenterRegCode }} Centre
+                        </p>
                         <p class="text-[#627189] dark:text-textDark">{{officerObj.companyNameEnglish}}</p>
                     </div>
                 </div>
 
                 <div class="flex space-x-4">
-                    <span *ngIf="logingRole === 'Collection Center Manager' && officerObj.jobRole !=='Collection Center Manager' ">
+                    <span
+                        *ngIf="(logingRole === 'Collection Center Manager' && officerObj.jobRole !=='Collection Center Manager' && officerObj.claimStatus === 1 ) || (logingRole === 'Distribution Center Manager' && officerObj.jobRole !=='Distribution Center Manager' && officerObj.claimStatus === 1 ) ">
                         <button class="bg-[#E20000] text-white font-semibold rounded-lg shadow-md px-5 py-2"
                             (click)="toggleDisclaimView()">Disclaim</button>
                     </span>
@@ -81,7 +105,8 @@
 
                     <div>
                         <p class="text-[#627189] dark:text-textDark">Phone Number - 1 </p>
-                        <p class="font-semibold dark:text-white text-black">{{ officerObj.phoneNumber01 ? officerObj.phoneCode01 + officerObj.phoneNumber01 : ' - ' }}
+                        <p class="font-semibold dark:text-white text-black">{{ officerObj.phoneNumber01 ?
+                            officerObj.phoneCode01 + officerObj.phoneNumber01 : ' - ' }}
                         </p>
                     </div>
 
@@ -293,7 +318,8 @@
 
             <div>
                 <!-- Icon -->
-                <div class="flex items-center justify-center bg-[#F6F7F9] rounded-lg shadow-sm px-4 mb-3 py-3 mx-auto w-[70px]">
+                <div
+                    class="flex items-center justify-center bg-[#F6F7F9] rounded-lg shadow-sm px-4 mb-3 py-3 mx-auto w-[70px]">
                     <i class="fa-solid fa-triangle-exclamation text-[#6B7D8C] text-4xl px-1"></i>
                 </div>
 

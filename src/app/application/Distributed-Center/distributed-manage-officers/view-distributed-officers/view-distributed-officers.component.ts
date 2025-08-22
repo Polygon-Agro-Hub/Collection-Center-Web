@@ -128,7 +128,7 @@ export class ViewDistributedOfficersComponent implements OnInit {
     this.router.navigate([`/distribution-officers/edit-distribution-officer/${id}`])
   }
   navigateToProfile(id: number) {
-    this.router.navigate([`/manage-officers/officer-profile/${id}`])
+    this.router.navigate([`/distribution-officers/officer-profile/${id}`])
 
   }
 

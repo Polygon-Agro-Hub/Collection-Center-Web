@@ -181,13 +181,13 @@ export class DistributionServiceService {
     return this.http.post(url, requestObj, { headers });
   }
 
-  getAllAssignOrders(page: number = 1, limit: number = 10, status: string = '', searchText: string = '', selectDate: string = ''): Observable<any> {
+  getAllAssignOrders(status: string = '', searchText: string = '', selectDate: string = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
 
 
-    let url = `${this.apiUrl}/get-all-assign-orders?page=${page}&limit=${limit}`;
+    let url = `${this.apiUrl}/get-all-assign-orders?test=${1}`;
     if (status) {
       url += `&status=${status}`
     }

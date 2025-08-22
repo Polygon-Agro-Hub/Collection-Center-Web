@@ -4,8 +4,8 @@
 
 <div *ngIf="!isLoading" >
     <div class="flex gap-3 mb-4 mr-5 ml-0">
-        <p class="font-semibold text[#424242]  dark:text-[#FFFFFF] dark:bg-blacks cursor-pointer">Officer Targets</p>
-        <p (click)="goBack()" class="font-semibold text[#424242]  dark:text-[#FFFFFF] dark:bg-blacks cursor-pointer">View Officer Targets</p>
+        <p (click)="goBack()" class="font-semibold text[#424242]  dark:text-[#FFFFFF] dark:bg-blacks cursor-pointer">Officer Targets</p>
+        <p class="font-semibold text[#424242]  dark:text-[#FFFFFF] dark:bg-blacks cursor-pointer">View Officer Targets</p>
     </div>
 
     <div *ngIf="!isPass" class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg overflow-x-auto">
@@ -144,22 +144,23 @@
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5] cursor-default">
 
                         <div class="flex font-medium items-center justify-center h-full">
-                            <span *ngIf="item.packagePackStatus ==='Completed'"
+                            <span *ngIf="item.combinedStatus ==='Completed'"
                                 class="bg-[#C8E0FF] text-[#415CFF] px-3 py-1 rounded-lg">
                                 Completed
                             </span>
 
-                            <span *ngIf="item.packagePackStatus ==='Pending'"
+                            <span *ngIf="item.combinedStatus ==='Pending'"
                                 class="bg-[#FFD4D4] text-[#FF0000] px-3 py-1 rounded-lg">
                                 Pending
                             </span>
 
-                            <span *ngIf="item.packagePackStatus ==='Opened'"
+                            <span *ngIf="item.combinedStatus ==='Opened'"
                                 class="bg-[#FFFDC5] text-[#A8A100] px-3 py-1 rounded-lg">
                                 Opened
                             </span>
                         </div>
                     </td>
+                    <td class="px-6 py-4 text-sm text-center font-medium text-gray-900 dark:text-[#C5C5C5]"></td>
                 </tr>
             </tbody>
         </table>
@@ -257,6 +258,7 @@
                             </span>
                         </div>
                     </td>
+                    <td class="px-6 py-4 text-sm text-left font-medium text-gray-900 dark:text-[#C5C5C5]"></td>
                 </tr>
             </tbody>
         </table>

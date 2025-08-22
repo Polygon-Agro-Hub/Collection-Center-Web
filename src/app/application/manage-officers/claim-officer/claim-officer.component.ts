@@ -6,6 +6,7 @@ import { Router } from '@angular/router';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import Swal from 'sweetalert2';
+import { TokenServiceService } from '../../../services/Token/token-service.service';
 
 @Component({
   selector: 'app-claim-officer',
@@ -26,12 +27,17 @@ export class ClaimOfficerComponent implements OnInit {
 
   showClaimView = false;
 
+  logingRole: string | null = null;
+
 
   constructor(
     private ManageOficerSrv: ManageOfficersService,
     private router: Router,
-    private toastSrv: ToastAlertService
-  ) { }
+    private toastSrv: ToastAlertService,
+    private tokenSrv: TokenServiceService
+  ) {
+    this.logingRole = tokenSrv.getUserDetails().role
+   }
 
   ngOnInit(): void {
     this.selectJobRole = ''
@@ -46,9 +52,12 @@ export class ClaimOfficerComponent implements OnInit {
     let empId;
     if (this.selectJobRole === 'Customer Officer') {
       empId = 'CUO' + this.inputId
-    } else {
+    } else if (this.selectJobRole === 'Collection Officer'){
       empId = 'COO' + this.inputId
+    } else {
+      empId = 'DIO' + this.inputId
     }
+
     this.ManageOficerSrv.getOfficerByEmpId(empId).subscribe(
       (res) => {
         if (res.status) {
@@ -74,7 +83,7 @@ export class ClaimOfficerComponent implements OnInit {
 
   cancelClaim() {
     this.showClaimView = false;
-    this.router.navigate(['/manage-officers']);
+    this.router.navigate(['/distribution-officers']);
   }
 
   confirmClaim(id: number) {
@@ -113,5 +122,6 @@ class OfficerDetails {
   claimStatus!: number
   centerName!: string
   image!: string
+  distributedCenterName!: string
 }
 

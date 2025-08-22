@@ -180,8 +180,20 @@
                         <span class="font-semibold">{{replyObj.firstNameEnglish}} {{replyObj.lastNameEnglish}},</span>
                     </p>
 
-                    <div class="border-none outline-none bg-[#F6F6F6] dark:bg-[#363636] rounded-lg w-full h-60 p-1">
-                        <textarea class="bg-[#F6F6F6] dark:bg-[#363636] w-full h-full border-none outline-none " cols="6" [(ngModel)]="replyObj.reply" name="reply" placeholder="[ Add message here... ]" disabled=""></textarea>
+                    <p *ngIf="replyObj.language === 'Sinhala'">
+                        ඔබගේ පැමිණිල්ල නිරාකරණය කර ඇති බව ඔබට දැනුම් දීමට අපි සතුටු වෙමු.
+                    </p>
+                    
+                    <p *ngIf="replyObj.language === 'Tamil'">
+                        உங்கள் முறையீடு தீர்வு செய்யப்பட்டதாக தெரிவித்து மகிழ்ச்சியடைகிறோம்.
+                    </p>
+
+                    <p *ngIf="replyObj.language !== 'Sinhala' && replyObj.language !== 'Tamil'">
+                        We are pleased to inform you that your complaint has been resolved.
+                      </p>
+
+                    <div class="border-none outline-none bg-[#F6F6F6] dark:bg-[#363636] rounded-lg w-full  p-1">
+                        <textarea class="bg-[#F6F6F6] dark:bg-[#363636] w-full border-none outline-none " cols="6" [(ngModel)]="replyObj.reply" name="reply" placeholder="[ Add message here... ]" disabled=""></textarea>
                     </div>
 
                     <p>
@@ -192,13 +204,20 @@
                         }}
 
                     </p>
-                    <p>
-                        {{
-                            replyObj.language === 'Sinhala' ? 'මෙයට' + ' ' + templateData.EngName + ','
-                            : replyObj.language === 'Tamil' ? 'இதற்கு' + ' ' + templateData.TamName + ','
-                            : 'Sincerely' + ' ' + templateData.EngName + ','
-                        }}
-                    </p>
+                    <p *ngIf="replyObj.language === 'Sinhala'">
+                        මෙයට,<br />
+                        {{ templateData.EngName }}
+                      </p>
+                      
+                      <p *ngIf="replyObj.language === 'Tamil'">
+                        இதற்கு,<br />
+                        {{ templateData.TamName }}
+                      </p>
+                      
+                      <p *ngIf="replyObj.language !== 'Sinhala' && replyObj.language !== 'Tamil'">
+                        Sincerely,<br />
+                        {{ templateData.EngName }}
+                      </p>
                     <p>
                         {{
                             replyObj.language === 'Sinhala' ? 'Collection Centre Head of ' + templateData.companyNameSinhala

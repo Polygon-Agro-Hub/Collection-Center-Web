@@ -139,6 +139,7 @@ export class ManageOfficersService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
     });
+  console.log('id', id)
     return this.http.put(`${this.apiUrl}/manage-officers/disclaim-officer/${id}`, {}, {
       headers,
     });

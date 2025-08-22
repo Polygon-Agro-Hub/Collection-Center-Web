@@ -54,10 +54,10 @@ export class OfficerProfileComponent implements OnInit {
   fetchOfficer(id: number) {
     this.isLoading = true;
     this.ManageOficerSrv.getOfficerById(id).subscribe((res: any) => {
-      console.log(res);
+      console.log('res', res);
       this.officerObj = res.officerData.collectionOfficer;
       
-      console.log(this.officerObj.empId);
+      console.log('officer', this.officerObj);
       this.isLoading = false;
     });
   }
@@ -221,6 +221,18 @@ export class OfficerProfileComponent implements OnInit {
         empType = 'Driver';
         empCode = 'DVR'; // Added empCode for Driver
         break;
+      case 'Distribution Center Head':
+        empType = 'Distribution Center Head';
+        empCode = 'DCH';
+        break;
+      case 'Distribution Center Manager':
+        empType = 'Distribution Center Manager';
+        empCode = 'DCM';
+        break;
+      case 'Distribution Officer':
+        empType = 'Distribution Officer';
+        empCode = 'DIO';
+        break;
     }
 
     // Ensure empCode and empId exist
@@ -240,8 +252,27 @@ export class OfficerProfileComponent implements OnInit {
     doc.text(getValueOrNA(empCodeText), startX + textWidth, 22);
 
 
-    doc.text(getValueOrNA(this.officerObj.city), startX, 29);
-    doc.setFont("Inter", "normal");
+// Decide which value to display based on jobRole
+    let centerText = "N/A";
+    if (
+      this.officerObj.jobRole === "Collection Center Manager" ||
+      this.officerObj.jobRole === "Collection Center Head" ||
+      this.officerObj.jobRole === "Collection Officer" ||
+      this.officerObj.jobRole === "Customer Officer"
+    ) {
+      centerText = getValueOrNA(this.officerObj.regCode) + " Centre";
+    } else if (
+      this.officerObj.jobRole === "Distribution Center Manager" ||
+      this.officerObj.jobRole === "Distribution Center Head" ||
+      this.officerObj.jobRole === "Distribution Officer"
+    ) {
+      centerText = getValueOrNA(this.officerObj.distributedCenterRegCode) + " Centre";
+    }
+
+// Apply text in PDF
+doc.text(centerText, startX, 29);
+doc.setFont("Inter", "normal");
+
     doc.text(getValueOrNA(this.officerObj.companyNameEnglish), startX, 36);
 
     doc.setFontSize(12);
@@ -515,25 +546,29 @@ export class OfficerProfileComponent implements OnInit {
 
   cancelDisclaim() {
     this.showDisclaimView = false;
-    this.router.navigate(['/manage-officers']);
+    this.router.navigate(['/distribution-officers']);
   }
 
   confirmDisclaim(id: number) {
+    console.log('id', id)
     this.isLoading = true;
 
     this.ManageOficerSrv.disclaimOfficer(id).subscribe(
       (response) => {
 
+        console.log(response)
+
         this.isLoading = false;
         this.showDisclaimView = false;
-        this.router.navigate(['/manage-officers']);
+        this.router.navigate(['/distribution-officers']);
         this.toastSrv.success('Officer ID sent successfully!');
+
       },
       (error) => {
         console.error('Error sending Officer ID:', error);
         this.isLoading = false;
         this.toastSrv.error('Failed to send Officer ID!');
-        this.router.navigate(['/manage-officers']);
+        this.router.navigate(['/distribution-officers']);
       }
     );
 
@@ -543,6 +578,8 @@ export class OfficerProfileComponent implements OnInit {
     const currentPath = this.router.url.split('?')[0];
     // Extract the first segment after the initial slash
     this.naviPath = currentPath.split('/')[1];
+
+    console.log('naviPath', this.naviPath)
   }
 
   viewImage(imageUrl: string) {
@@ -585,6 +622,11 @@ class Officer {
   companyNameEnglish!: string;
   centerName!: string;
   base64Image!: string;
+  distributedCenterId!: number;
+  distributedCenterName!: string;
+  distributedCenterRegCode!: string;
+  regCode!: string;
+  claimStatus!: number;
 
 
   //driver

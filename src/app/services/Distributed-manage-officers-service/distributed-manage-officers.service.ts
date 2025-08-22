@@ -144,6 +144,20 @@ export class DistributedManageOfficersService {
     });
   }
 
+  createDistributionOfficerDIO(person: any, selectedImage: any): Observable<any> {
+    console.log('person', person)
+    console.log('selectedImage', selectedImage)
+    const formData = new FormData();
+    formData.append('officerData', JSON.stringify(person));
+    formData.append('file', selectedImage);
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
+    return this.http.post(`${this.apiUrl}/manage-officers/create-officer-dio`, formData, {
+      headers,
+    });
+  }
+
   getOfficerById(id: number) {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
@@ -162,6 +176,19 @@ export class DistributedManageOfficersService {
       Authorization: `Bearer ${this.token}`,
     });
     return this.http.put(`${this.apiUrl}/manage-officers/update-officer/${id}`, formData, {
+      headers,
+    });
+  }
+
+  updateDistributionOfficerDIO(person: any, id: number, image: any): Observable<any> {
+    const formData = new FormData();
+    formData.append('officerData', JSON.stringify(person));
+    formData.append('file', image);
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
+    return this.http.put(`${this.apiUrl}/manage-officers/update-officer-dio/${id}`, formData, {
       headers,
     });
   }

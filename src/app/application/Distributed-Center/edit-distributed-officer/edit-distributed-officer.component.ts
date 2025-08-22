@@ -151,6 +151,8 @@ export class EditDistributedOfficerComponent implements OnInit {
         this.personalData.previousQR = this.personalData.QRcode;
         this.personalData.previousImage = this.personalData.image;
 
+        
+
 
         // Initialize languages as a comma-separated string if it's not already in that format
         if (Array.isArray(this.personalData.languages)) {
@@ -421,7 +423,7 @@ export class EditDistributedOfficerComponent implements OnInit {
       this.isLoading = true;
 
       if (this.logingRole === 'Distribution Center Manager') {
-        this.ManageOficerSrv.updateCollectiveOfficer(this.personalData, this.editOfficerId, this.selectedImage).subscribe(
+        this.DistributedManageOfficerSrv.updateDistributionOfficerDIO(this.personalData, this.editOfficerId, this.selectedImage).subscribe(
           (res: any) => {
             this.officerId = res.officerId;
             this.isLoading = false;

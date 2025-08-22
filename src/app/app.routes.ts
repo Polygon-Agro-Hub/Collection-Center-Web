@@ -359,25 +359,25 @@ export const routes: Routes = [
                     }
                 ]
             },
-            // {
-            //     path: 'distribution-center-dashboard',
-            //     component: AddDistributedOfficerComponent
-            //     // canActivate:[CcmRoleGuardService],
-            //     // children: [
-            //     //     {
-            //     //         path: '',
-            //     //         component: ViewDistributedOfficersComponent,
-            //     //     },
-            //     //     {
-            //     //         path: 'create-distribution-officer',
-            //     //         component: AddDistributedOfficerComponent
-            //     //     },
-            //     //     {
-            //     //         path: 'edit-distribution-officer/:id',
-            //     //         component: EditDistributedOfficerComponent
-            //     //     }
-            //     // ]
-            // },
+            {
+                path: 'distribution-center-dashboard',
+                component: ViewDistributedOfficersComponent,
+                // canActivate:[CcmRoleGuardService],
+                // children: [
+                //     {
+                //         path: '',
+                //         component: ViewDistributedOfficersComponent,
+                //     },
+                //     {
+                //         path: 'create-distribution-officer',
+                //         component: AddDistributedOfficerComponent
+                //     },
+                //     {
+                //         path: 'edit-distribution-officer/:id',
+                //         component: EditDistributedOfficerComponent
+                //     }
+                // ]
+            },
 
             {
                 path: 'assign-targets',

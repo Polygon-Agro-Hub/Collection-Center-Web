@@ -109,26 +109,10 @@ export const MENU_ITEMS = [
     icon: 'fa-solid fa-bullseye',
     permission: ['Distribution Center Head'],
   },
+  
+
   {
     id: 13,
-    key: 'distribution-officers',
-    path: '/distribution-officers',
-    label: 'Manage Officers',
-    icon: 'fas fa-user-cog',
-    permission: ['Distribution Center Head', 'Distribution Center Manager'],
-  },
-
-  {
-    id: 14,
-    key: 'dch-complaints',
-    path: '/dch-complaints',
-    label: 'Complaints',
-    icon: 'fa-solid fa-triangle-exclamation',
-    permission: ['Distribution Center Head'],
-  },
-
-  {
-    id: 15,
     key: 'target-progress',
     path: '/target-progress',
     label: 'Target Progress',
@@ -137,7 +121,7 @@ export const MENU_ITEMS = [
   },
   
   {
-    id: 16,
+    id: 14,
     key: 'assign-targets',
     path: '/assign-targets',
     label: 'Assign Targets',
@@ -146,7 +130,7 @@ export const MENU_ITEMS = [
   },
 
   {
-    id: 17,
+    id: 15,
     key: 'officer-targets',
     path: '/officer-targets',
     label: 'Officer Targets',
@@ -156,7 +140,7 @@ export const MENU_ITEMS = [
   
 
   {
-    id: 18,
+    id: 16,
     key: 'requests',
     path: '/requests',
     label: 'Requests',
@@ -165,16 +149,7 @@ export const MENU_ITEMS = [
   },
 
   {
-    id: 18,
-    key: 'dcm-complaints',
-    path: '/dcm-complaints',
-    label: 'Complaints',
-    icon: 'fa-solid fa-triangle-exclamation',
-    permission: ['Distribution Center Manager'],
-  },
-
-  {
-    id: 19,
+    id: 17,
     key: 'reports',
     path: '/reports',
     label: 'Reports',
@@ -183,13 +158,33 @@ export const MENU_ITEMS = [
   },
 
   {
-    id: 20,
+    id: 18,
+    key: 'distribution-officers',
+    path: '/distribution-officers',
+    label: 'Manage Officers',
+    icon: 'fas fa-user-cog',
+    permission: ['Distribution Center Head', 'Distribution Center Manager'],
+  },
+
+  {
+    id: 19,
     key: 'dch-complaints',
     path: '/dch-complaints',
     label: 'Complaints',
     icon: 'fa-solid fa-triangle-exclamation',
     permission: ['Distribution Center Head'],
   },
+
+  {
+    id: 20,
+    key: 'dcm-complaints',
+    path: '/dcm-complaints',
+    label: 'Complaints',
+    icon: 'fa-solid fa-triangle-exclamation',
+    permission: ['Distribution Center Manager'],
+  },
+
+  
 
   // {
   //   id: 19,

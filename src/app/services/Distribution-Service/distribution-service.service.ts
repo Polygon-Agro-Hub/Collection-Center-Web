@@ -339,16 +339,16 @@ export class DistributionServiceService {
     return this.http.post<any>(url, data, { headers });
   }
 
-  getAllProducts(): Observable<any> {
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${this.token}`,
-      'Content-Type': 'application/json'
-    });
+  // getAllProducts(): Observable<any> {
+  //   const headers = new HttpHeaders({
+  //     Authorization: `Bearer ${this.token}`,
+  //     'Content-Type': 'application/json'
+  //   });
   
-    const url = `${this.apiUrl}/get-all-products`; 
+  //   const url = `${this.apiUrl}/get-all-products`; 
   
-    return this.http.get<any>(url, { headers });
-  }
+  //   return this.http.get<any>(url, { headers });
+  // }
 
   getCenterTarget(centerId: number, searchText: string = '', status: string = '', selectDate: string = ''): Observable<any> {
     const headers = new HttpHeaders({

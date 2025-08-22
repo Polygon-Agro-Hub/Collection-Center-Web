@@ -79,8 +79,9 @@ export class RequestsComponent implements OnInit {
   ngOnInit(): void {
     this.date = new Date().toISOString().split('T')[0];
     console.log('date', this.date)
-    this.fetchAllRequests()
-    this.fetchAllProducts();
+    this.today = new Date().toISOString().split('T')[0];
+    this.fetchAllRequests();
+    
   }
 
   @HostListener('document:click', ['$event'])
@@ -100,10 +101,13 @@ export class RequestsComponent implements OnInit {
       (res) => {
         console.log('res', res)
         this.requestArr = res.items;
+        console.log('requestArr', this.requestArr)
         this.totalItems = res.total;
         console.log(res)
         console.log(res.items)
 
+        this.productsArr = res.products;
+        console.log('productsArr', this.productsArr)
 
         if (res.items.length === 0) {
           this.hasData = false;
@@ -116,17 +120,17 @@ export class RequestsComponent implements OnInit {
     )
   }
 
-  fetchAllProducts() {
-    this.isLoading = true;
-    this.distributionSrv.getAllProducts().subscribe(
-      (res) => {
-        console.log('res', res)
-        this.productsArr = res;
-        console.log('productsArr', this.productsArr)
-        this.isLoading = false;
-      }
-    )
-  }
+  // fetchAllProducts() {
+  //   this.isLoading = true;
+  //   this.distributionSrv.getAllProducts().subscribe(
+  //     (res) => {
+  //       console.log('res', res)
+  //       this.productsArr = res;
+  //       console.log('productsArr', this.productsArr)
+  //       this.isLoading = false;
+  //     }
+  //   )
+  // }
 
   onPageChange(event: number) {
     this.page = event;
@@ -257,11 +261,11 @@ export class RequestsComponent implements OnInit {
     this.selectedRequestObj = item
     console.log('selectedRequestObj', this.selectedRequestObj);
 
-    this.productReplacementObj.replacedProductId = item.replaceProductId
-    this.productReplacementObj.replacedProduct = item.replaceProduct
-    this.productReplacementObj.definedProductPrice = item.replacePrice
-    this.productReplacementObj.replacedProductQty = item.replaceQty
-    this.productReplacementObj.replacedUnitPrice = item.replaceUnitPrice
+    // this.productReplacementObj.replacedProductId = item.replaceProductId
+    // this.productReplacementObj.replacedProduct = item.replaceProduct
+    // this.productReplacementObj.definedProductPrice = item.replacePrice
+    // this.productReplacementObj.replacedProductQty = item.replaceQty
+    // this.productReplacementObj.replacedUnitPrice = item.replaceUnitPrice
 
     this.isViewProductReplacement = true;
   }
@@ -282,6 +286,9 @@ class Request {
   currentProductPrice!: number
   currentprodcutType!: string
   currentProductTypeName!: string
+  currentProductShortCode!: string
+  currentProductUnitTypeId!: string
+  currentProductUnitPrice!: number
   isPacked!: boolean
   status!: string
   empId!: string
@@ -294,6 +301,17 @@ class Request {
   replaceProductType!: string;
   replaceUnitPrice!: number;
   replaceUnitType!: string;
+
+  prevDefineProductId!: number
+  prevDefineProduct!: string
+  prevDefineProductUnitPrice!: number
+  prevDefineProductUnitTypeId!: number
+  prevDefineProductShortCode!: string
+  prevDefineProductTypeName!: string
+  prevDefineProductTypeId!: number
+  prevDefineProductQty!: number
+  prevDefineProductPrice!: number
+
   createdAt!: Date;
 }
 

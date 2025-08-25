@@ -109,6 +109,7 @@ export class ViewCentresComponent implements OnInit {
       this.isLoading = true;
       this.DistributionSrv.getDistributionCenterDetails(this.currentPage, this.itemsPerPage, province, district, search).subscribe(
           (res) => {
+            console.log('res', res)
               this.itemsArr = res.items;
               this.totalItems = res.totalItems;
               this.countOfOfficers = res.items.length;
@@ -250,4 +251,7 @@ class CenterData {
   collectionCenterManagerCount!: number
   customerServiceCount!: number
   regCode!: string
+  distributionOfficerCount!: number
+  distributionCenterManagerCount!: number
+
 }

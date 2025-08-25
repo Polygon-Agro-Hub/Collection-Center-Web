@@ -22,9 +22,9 @@ export class TargetProgressOngoingComponent implements OnInit {
 
   date:  string = '';
 
-  page: number = 1;
+  // page: number = 1;
   totalItems: number = 0;
-  itemsPerPage: number = 10;
+  // itemsPerPage: number = 10;
   hasData: boolean = true;
 
   isLoading:boolean = true;

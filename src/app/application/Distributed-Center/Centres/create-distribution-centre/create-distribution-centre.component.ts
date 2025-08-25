@@ -226,7 +226,7 @@ class CenterData {
   DistributionCenterName!: string;
   district!: string;
   province!: string;
-  country!: string;
+  country: string = 'Sri Lanka';
   latitude!: number;
   longitude!: number;
   city!: string;

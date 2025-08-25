@@ -68,8 +68,9 @@ export class ViewDchCenterTargetComponent implements OnInit{
     this.centerName = String(this.route.snapshot.paramMap.get('centerName'));
     this.regCode = String(this.route.snapshot.paramMap.get('regCode'));
     console.log('centerId', this.centerId)
+    const today = new Date();
+    this.date = today.toISOString().split('T')[0];
     this.fetchCenterTarget();
-    
     this.fetchOfficers();
   }
 
@@ -86,20 +87,58 @@ export class ViewDchCenterTargetComponent implements OnInit{
 
   fetchCenterTarget(centerId: number = this.centerId!, search: string = this.searchText, status: string = this.selectStatus, selectDate: string = this.date) {
     this.isLoading = true;
+    console.log('selectStatus', this.selectStatus)
     this.DistributionSrv.getCenterTarget(centerId, search, status, selectDate ).subscribe(
       (res) => {
-        this.ordersArr = res.items
-        console.log('orders', this.ordersArr)
-        this.totalItems = res.total;
+        this.ordersArr = res.items.map((item: any) => {
+          let status = '';
         
-        if (res.items.length === 0) {
-          this.hasData = false;
-        } else {
-          this.hasData = true;
-
-        }
+          if (item.packageStatus === 'Pending' && (item.additionalItemsStatus === 'Unknown' || item.additionalItemsStatus === 'Pending')) {
+            status = 'Pending';
+          }
+          else if (item.packageStatus === 'Pending' && (item.additionalItemsStatus === 'Opened' || item.additionalItemsStatus === 'Completed')) {
+            status = 'Opened';
+          }
+          else if (item.packageStatus === 'Opened') {
+            status = 'Opened';
+          }
+          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Unknown') {
+            status = 'Completed';
+          }
+          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Pending') {
+            status = 'Pending';
+          }
+          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Opened') {
+            status = 'Opened';
+          }
+          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Completed') {
+            status = 'Completed';
+          }
+          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Pending') {
+            status = 'Pending';
+          }
+          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Opened') {
+            status = 'Opened';
+          }
+          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Completed') {
+            status = 'Completed';
+          }
+          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Unknown') {
+            status = 'Unknown';
+          }
+        
+          return {
+            ...item,
+            combinedStatus: status
+          };
+        });
+        
+  
+        console.log('ordersarr', this.ordersArr);
+        this.totalItems = res.total;
+  
+        this.hasData = this.ordersArr.length > 0;
         this.isLoading = false;
-
       }
     )
   }
@@ -218,6 +257,7 @@ class orders {
   lastNameEnglish!: string
   outDlvrDateLocal!: string
   distributedTargetId!: number
+  combinedStatus!: string
 }
 
 class Officer {

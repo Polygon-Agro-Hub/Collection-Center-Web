@@ -28,10 +28,9 @@
                 <div class="relative w-56 custom-role-dropdown-container">
                     <!-- Hidden native select -->
                     <select [(ngModel)]="selectRole" class="hidden" (change)="applyRoleFilters()">
-                        <option value="Collection Center Manager">Collection Center Manager</option>
-                        <option value="Collection Officer">Collection Officer</option>
-                        <option value="Customer Officer">Customer Officer</option>
-                        <option value="Driver">Driver</option>
+                        <option value="Distribution Center Manager">Distribution Center Manager</option>
+                        <option value="Distribution Officer">Distribution Officer</option>
+                        
                     </select>
 
                     <!-- Custom dropdown trigger -->
@@ -199,7 +198,7 @@
                         <th class="px-3 py-3 text-left text-sm font-medium">First Name</th>
                         <th class="px-3 py-3 text-left text-sm font-medium">Last Name</th>
                         <th class="px-3 py-3 text-left text-sm font-medium"
-                            *ngIf="logingRole ==='Collection Center Head'">
+                            *ngIf="logingRole ==='Distribution Center Head'">
                             Centres</th>
                         <th class="px-3 py-3 text-left text-sm font-medium ">Role</th>
                         <th class="px-3 py-3 text-center text-sm font-medium ">Status</th>
@@ -222,12 +221,12 @@
                         <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.firstNameEnglish}}</td>
                         <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.lastNameEnglish}}</td>
                         <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300"
-                            *ngIf="logingRole ==='Collection Center Head'">{{item.centerName}}</td>
+                            *ngIf="logingRole ==='Distribution Center Head'">{{item.centerName}}</td>
                         <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.jobRole}}</td>
                         <td class="px-3 py-4 text-center">
                             <div class="flex justify-center items-center"
-                                [style.cursor]="logingRole === 'Collection Center Head' ? 'pointer' : 'default'"
-                                (click)="logingRole === 'Collection Center Head' && openPopup(item)">
+                                [style.cursor]="logingRole === 'Distribution Center Head' ? 'pointer' : 'default'"
+                                (click)="logingRole === 'Distribution Center Head' && openPopup(item)">
                                 <span *ngIf="item.status === 'Approved'"
                                     class="inline-block px-6 py-1 bg-[#C8E0FF] text-[#415CFF] text-sm font-medium rounded-md shadow-md">
                                     Approved

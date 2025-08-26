@@ -14,7 +14,7 @@
 </div>
 
 <div *ngIf="!isLoading" class="mx-auto p-6 bg-white dark:bg-[#363636] rounded-lg shadow-mg">
-    <form #PageOneForm="ngForm" (ngSubmit)="onSubmitForm(PageOneForm)">
+    <form #PageOneForm="ngForm" (ngSubmit)="onSubmitFormPage1(PageOneForm)">
         <div *ngIf="selectedPage === 'pageOne'">
             <h2 class="text-xl mb-6 text-[#292929] dark:text-textDark">Edit Personal Details</h2>
             <div>
@@ -51,7 +51,7 @@
 
                     <div *ngIf="logingRole === 'Distribution Center Head'" (change)="getAllManagers()">
                         <label for="centerId" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">
-                            Distribution Centre Name
+                            Distribution Centre Name *
                         </label>
                         <select id="centerId" [(ngModel)]="personalData.centerId" name="centerId" placeholder="select"
                             class="form-control mt-1 block w-full p-2 text-[#292929] mb-1 dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] focus:ring-indigo-500 focus:border-indigo-500"
@@ -76,7 +76,7 @@
 
                     <div>
                         <label for="jobRole" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">
-                            Job Role
+                            Job Role *
                         </label>
                         <select id="jobRole" [(ngModel)]="personalData.jobRole"
                             name="jobRole" placeholder="select" #jobRoleInput="ngModel" required
@@ -125,7 +125,7 @@
                     <div
                         *ngIf="logingRole === 'Distribution Center Head' && (personalData.jobRole === 'Distribution Officer')">
                         <label for="irmId" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">
-                            Manager
+                            Manager *
                         </label>
                         <select id="irmId" [(ngModel)]="personalData.irmId" name="irmId" placeholder="select"
                             (change)="checkManager()" [disabled]="!personalData.centerId" #irmIdInput="ngModel" required
@@ -141,7 +141,7 @@
                             </option>
                             <div *ngIf="irmIdInput.touched && !personalData.irmId && logingRole === 'Distribution Center Head' && (personalData.jobRole === 'Distribution Officer')"
                                 class="text-red-500 text-sm mt-1">
-                                <div>Distribution Center is required</div>
+                                <div>Distribution Centre Manager is required</div>
                             </div>
                         </select>
                     </div>
@@ -152,28 +152,33 @@
 
                     <div>
                         <label for="languages" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">
-                            Staff employee type
+                            Staff employee type *
                         </label>
 
                         <div class="flex items-center space-x-4 mt-3">
                             <div class="flex items-center space-x-2">
                                 <input class="w-5 h-5" type="radio" id="sinhala" name="employeeType" value="Permanent"
-                                    [(ngModel)]="personalData.employeeType">
+                                    [(ngModel)]="personalData.employeeType" #employeeTypeInput="ngModel">
                                 <label for="sinhala"
                                     class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Permanent</label>
                             </div>
                             <div class="flex items-center space-x-2">
                                 <input class="w-5 h-5" type="radio" id="employeeType" name="employeeType"
-                                    value="Temporary" [(ngModel)]="personalData.employeeType">
+                                    value="Temporary" [(ngModel)]="personalData.employeeType" #employeeTypeInput="ngModel">
                                 <label for="english"
                                     class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Temporary</label>
                             </div>
+                        </div>
+
+                        <div *ngIf="employeeTypeInput.touched && !personalData.employeeType"
+                            class="text-red-500 text-sm mt-1">
+                            <div>Employee Type is required</div>
                         </div>
                     </div>
 
                     <div>
                         <label for="languages" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">
-                            Preferred Languages
+                            Preferred Languages *
                         </label>
 
                         <div class="flex items-center space-x-4 mt-3">
@@ -196,18 +201,22 @@
                                 <label for="tamil" class="text-[#534E4E] mb-1 dark:text-textDark">Tamil</label>
                             </div>
                         </div>
+
+                        <p *ngIf="languagesRequired" class="text-red-600 text-sm mt-2">
+                            Please select at least one preferred language.
+                        </p>
                     </div>
 
 
                     <div>
                         <label for="firstNameEnglish"
                             class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">First
-                            Name (in English)</label>
+                            Name (in English) *</label>
                         <input id="firstNameEnglish" [(ngModel)]="personalData.firstNameEnglish" name="firstNameEnglish"
                             class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                             #firstNameEnglishInput="ngModel" required 
                             (keydown)="blockSpecialChars($event)" 
-                            (input)="capitalizeFirstLetter()"/>
+                            (input)="capitalizeFirstLetter('firstNameEnglish')"/>
                         <div *ngIf="firstNameEnglishInput.touched && !personalData.firstNameEnglish"
                             class="text-red-500 text-sm mt-1">
                             <div>First Name (in English) is required</div>
@@ -217,12 +226,12 @@
                     <div>
                         <label for="lastNameEnglish"
                             class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Last
-                            Name (in English)</label>
+                            Name (in English) *</label>
                         <input id="lastNameEnglish" name="lastNameEnglish" [(ngModel)]="personalData.lastNameEnglish"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                             #lastNameEnglishInput="ngModel" required 
                             (keydown)="blockSpecialChars($event)" 
-                            (input)="capitalizeFirstLetter()" />
+                            (input)="capitalizeFirstLetter('lastNameEnglish')" />
                         <div *ngIf="lastNameEnglishInput.touched && !personalData.lastNameEnglish"
                             class="text-red-500 text-sm mt-1">
                             <div>Last Name (in English) is required</div>
@@ -232,12 +241,12 @@
                     <div>
                         <label for="firstNameSinhala"
                             class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">First
-                            Name (in Sinhala)</label>
+                            Name (in Sinhala) *</label>
                         <input id="firstNameSinhala" name="firstNameSinhala" [(ngModel)]="personalData.firstNameSinhala"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                             #firstNameSinhalaInput="ngModel" required 
                             (keydown)="blockSpecialChars($event)" 
-                            (input)="capitalizeFirstLetter()"/>
+                            (input)="capitalizeFirstLetter('firstNameSinhala')"/>
                         <div *ngIf="firstNameSinhalaInput.touched && !personalData.firstNameSinhala"
                             class="text-red-500 text-sm mt-1">
                             <div>First Name (in Sinhala) is required</div>
@@ -247,12 +256,12 @@
                     <div>
                         <label for="lastNameSinhala"
                             class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Last
-                            Name (in Sinhala)</label>
+                            Name (in Sinhala) *</label>
                         <input id="lastNameSinhala" name="lastNameSinhala" [(ngModel)]="personalData.lastNameSinhala"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                             #lastNameSinhalaInput="ngModel" required
                             (keydown)="blockSpecialChars($event)" 
-                            (input)="capitalizeFirstLetter()" />
+                            (input)="capitalizeFirstLetter('lastNameSinhala')" />
                         <div *ngIf="lastNameSinhalaInput.touched && !personalData.lastNameSinhala"
                             class="text-red-500 text-sm mt-1">
                             <div>Last Name (in Sinhala) is required</div>
@@ -262,12 +271,12 @@
                     <div>
                         <label for="firstNameTamil"
                             class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">First
-                            Name (in Tamil)</label>
+                            Name (in Tamil) *</label>
                         <input id="firstNameTamil" name="firstNameTamil" [(ngModel)]="personalData.firstNameTamil"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                             #firstNameTamilInput="ngModel" required 
                             (keydown)="blockSpecialChars($event)" 
-                            (input)="capitalizeFirstLetter()"/>
+                            (input)="capitalizeFirstLetter('firstNameTamil')"/>
                         <div *ngIf="firstNameTamilInput.touched && !personalData.firstNameTamil"
                             class="text-red-500 text-sm mt-1">
                             <div>First Name (in Tamil) is required</div>
@@ -277,12 +286,12 @@
                     <div>
                         <label for="lastNameTamil"
                             class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Last
-                            Name (in Tamil)</label>
+                            Name (in Tamil) *</label>
                         <input id="lastNameTamil" name="lastNameTamil" [(ngModel)]="personalData.lastNameTamil"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                             #lastNameTamilInput="ngModel" required
                             (keydown)="blockSpecialChars($event)" 
-                            (input)="capitalizeFirstLetter()" />
+                            (input)="capitalizeFirstLetter('lastNameTamil')" />
                         <div *ngIf="lastNameTamilInput.touched && !personalData.lastNameTamil"
                             class="text-red-500 text-sm mt-1">
                             <div>Last Name (in Tamil) is required</div>
@@ -292,7 +301,7 @@
                     <div>
                         <label for="phoneNumber01"
                             class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">
-                            Mobile Number - 1
+                            Mobile Number - 1 *
                         </label>
                         <div class="mt-1 flex">
                             <!-- Country Code Dropdown -->
@@ -333,7 +342,7 @@
 
                     <div>
                         <label for="phoNumTwo" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">
-                            Mobile Number - 2
+                            Mobile Number - 2 *
                         </label>
                         <div class="mt-1 flex">
                           <select id="phoneNumber02Code" name="phoneNumber02Code"
@@ -368,10 +377,11 @@
 
                     <div>
                         <label for="nic" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">NIC
-                            Number</label>
+                            Number *</label>
                         <input id="nic" name="nic" [(ngModel)]="personalData.nic"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                             #nicInput="ngModel" required pattern="^(\d{9}[V]|\d{12})$"
+                            (input)="onTrimInput($event, personalData, 'nic')"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
                         <div *ngIf="nicInput.touched && !personalData.nic" class="text-red-500 text-sm mt-1">
                             <div> NIC is required</div>
@@ -383,10 +393,11 @@
 
                     <div>
                         <label for="email"
-                            class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Email</label>
+                            class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Email *</label>
                         <input type="email" id="email" name="email" [(ngModel)]="personalData.email"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-tileBlack"
-                            #emailInput="ngModel" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" />
+                            #emailInput="ngModel" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$" 
+                            (input)="onTrimInput($event, personalData, 'email')"/>
                         <div *ngIf="emailInput.touched && !personalData.email" class="text-red-500 text-sm mt-1">
                             Email is required
                         </div>
@@ -407,7 +418,7 @@
                         (click)="onCancel()">Cancel</button>
                         <button 
                         (click)="
-    !PageOneForm.invalid &&
+    !PageOneForm.invalid && !languagesRequired &&
     !isPhoneInvalidMap['phone01'] &&
     (
       !personalData.phoneNumber02 ||
@@ -418,7 +429,7 @@
     )
                             ? nextForm('pageTwo') 
                             : nextForm('pageOne')"
-                        type="button"
+                        type="submit"
                         class="px-6 py-1 bg-[#415CFF] text-white rounded-lg"
                       >
                         Next
@@ -429,7 +440,7 @@
         </div>
     </form>
 
-    <form #PageTwoForm="ngForm" (ngSubmit)="onSubmitForm(PageTwoForm)">
+    <form #PageTwoForm="ngForm" (ngSubmit)="onSubmitFormPage2(PageTwoForm)">
 
         <div *ngIf="selectedPage === 'pageTwo'">
             <h2 class="text-xl mb-6 text-[#292929] dark:text-textDark">Residential Details</h2>
@@ -437,10 +448,12 @@
 
                 <div>
                     <label for="house" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">House /
-                        Plot Number</label>
+                        Plot Number *</label>
                     <input id="houseNumber" name="houseNumber" [(ngModel)]="personalData.houseNumber"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                        #houseNumberInput="ngModel" required />
+                        #houseNumberInput="ngModel" required 
+                        
+                        (input)="capitalizeFirstLetter('houseNumber')"/>
                     <div *ngIf="houseNumberInput.touched && !personalData.houseNumber"
                         class="text-red-500 text-sm mt-1">
                         <div>House / Plot Number is required</div>
@@ -449,10 +462,11 @@
 
                 <div>
                     <label for="street" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Street
-                        Name</label>
+                        Name *</label>
                     <input id="streetName" name="streetName" [(ngModel)]="personalData.streetName"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                        #streetNameInput="ngModel" required />
+                        #streetNameInput="ngModel" required
+                        (input)="capitalizeFirstLetter('streetName')" />
                     <div *ngIf="streetNameInput.touched && !personalData.streetName" class="text-red-500 text-sm mt-1">
                         <div>Street Name is required</div>
                     </div>
@@ -460,10 +474,11 @@
 
                 <div>
                     <label for="city"
-                        class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">City</label>
+                        class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">City *</label>
                     <input id="city" name="city" [(ngModel)]="personalData.city"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                        #cityInput="ngModel" required />
+                        #cityInput="ngModel" required
+                        (input)="capitalizeFirstLetter('city')" />
                     <div *ngIf="cityInput.touched && !personalData.city" class="text-red-500 text-sm mt-1">
                         <div>City is required</div>
                     </div>
@@ -471,7 +486,7 @@
 
                 <div>
                     <label for="district" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">
-                        District
+                        District *
                     </label>
                     <select id="district" name="district" [(ngModel)]="personalData.district" #districtInput="ngModel"
                         required (change)="updateProvince($event)"
@@ -488,7 +503,7 @@
 
                 <div>
                     <label for="province" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">
-                        Province
+                        Province *
                     </label>
                     <input id="province" name="province" [(ngModel)]="personalData.province"  #provinceInput="ngModel"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
@@ -501,7 +516,7 @@
 
                 <div>
                     <label for="country"
-                        class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Country</label>
+                        class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Country *</label>
                     <input readonly id="country" name="country" [(ngModel)]="personalData.country"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
                 </div>
@@ -511,11 +526,12 @@
                 <div class="pb-6">
                     <label for="accHolderName"
                         class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Account
-                        Holder’s Name</label>
+                        Holder’s Name *</label>
                     <input id="accHolderName" name="accHolderName" [(ngModel)]="personalData.accHolderName"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                         #accHolderNameInput="ngModel" required maxlength="50" pattern="^[a-zA-Z0-9\s.']*$"
                         (keydown)="blockSpecialChars($event)" 
+                        (input)="onTrimInput($event, personalData, 'accHolderName')"
           
                         />
                     <div *ngIf="accHolderNameInput.touched && !personalData.accHolderName"
@@ -533,10 +549,11 @@
                 <div class="pb-6">
                     <label for="accNumber"
                         class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Account
-                        Number</label>
+                        Number *</label>
                     <input id="accNumber" name="accNumber" [(ngModel)]="personalData.accNumber"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                        #accNumberInput="ngModel" required pattern="^[a-zA-Z0-9]+$"/>
+                        #accNumberInput="ngModel" required pattern="^[a-zA-Z0-9]+$"
+                        (input)="onTrimInput($event, personalData, 'accNumber')"/>
                     <div *ngIf="accNumberInput.touched && !personalData.accNumber" class="text-red-500 text-sm mt-1">
                         <div>Account Number is required</div>
                     </div>
@@ -551,10 +568,11 @@
                 <div class="pb-6">
                     <label for="conformAccNumber"
                         class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Confirm Account
-                        Number</label>
+                        Number *</label>
                     <input id="conformAccNumber" name="conformAccNumber" [(ngModel)]="personalData.conformAccNumber"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                        #confirmAccNumberInput="ngModel" required pattern="^[a-zA-Z0-9]+$" />
+                        #confirmAccNumberInput="ngModel" required pattern="^[a-zA-Z0-9]+$"
+                        (input)="onTrimInput($event, personalData, 'conformAccNumber')" />
                     <div *ngIf="confirmAccNumberInput.touched && !personalData.conformAccNumber" class="text-red-500 text-sm mt-1">
                         <div>Confirm Account Number is required</div>
                     </div>
@@ -591,7 +609,7 @@
                 <div class="pb-6">
                     <label for="bankDropdown"
                         class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Bank
-                        Name</label>
+                        Name *</label>
                     <select id="bankDropdown" name="bankDropdown" [(ngModel)]="selectedBankId" #selectedBank="ngModel" (change)="onBankChange()"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]">
                         <option [ngValue]="null" disabled>Select a bank</option>
@@ -607,7 +625,7 @@
                 <div class="pb-6">
                     <label for="branchDropdown"
                         class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Branch
-                        Name</label>
+                        Name *</label>
                     <select id="branchDropdown" name="branchDropdown" [(ngModel)]="selectedBranchId" #selectedBranch="ngModel"
                         (change)="onBranchChange()" [disabled]="!selectedBankId"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]">
@@ -627,8 +645,7 @@
                     class="px-8 py-2 bg-[#F6F7F9] border-gray-400 border-[2px] text-[#6B7D8C] rounded-lg mr-2">Back</button>
                 <button type="submit" class="px-6 py-1 bg-[#415CFF] text-white rounded-lg"
                     
-                (click)="!PageTwoForm.invalid ? onSubmit() : nextForm('pageTwo')">Sent to
-                        Approve</button>
+                >Sent to Approve</button>
             </div>
         </div>
     </form>

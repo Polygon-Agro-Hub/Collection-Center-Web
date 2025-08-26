@@ -58,12 +58,58 @@ export class TargetProgressCompletedComponent implements OnInit{
 
   // }
 
-  fetchCompletedAssignOrders(page: number = 1, limit: number = this.itemsPerPage, search: string = this.searchText, selectDate: string = this.date) {
+  fetchCompletedAssignOrders(search: string = this.searchText, selectDate: string = this.date) {
     this.isLoading = true;
-    this.DistributionSrv.getCompletedAssignOrders(page, limit, search, selectDate).subscribe(
+    this.DistributionSrv.getCompletedAssignOrders(search, selectDate).subscribe(
       (res) => {
-        this.ordersArr = res.items
-        this.totalItems = res.total;
+
+        this.totalItems = res.items.length;
+        this.ordersArr = res.items.map((item: any) => {
+          let status = '';
+        
+          if (item.packageStatus === 'Pending' && (item.additionalItemsStatus === 'Unknown' || item.additionalItemsStatus === 'Pending')) {
+            status = 'Pending';
+          }
+          else if (item.packageStatus === 'Pending' && (item.additionalItemsStatus === 'Opened' || item.additionalItemsStatus === 'Completed')) {
+            status = 'Opened';
+          }
+          else if (item.packageStatus === 'Opened') {
+            status = 'Opened';
+          }
+          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Unknown') {
+            status = 'Completed';
+          }
+          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Pending') {
+            status = 'Pending';
+          }
+          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Opened') {
+            status = 'Opened';
+          }
+          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Completed') {
+            status = 'Completed';
+          }
+          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Pending') {
+            status = 'Pending';
+          }
+          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Opened') {
+            status = 'Opened';
+          }
+          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Completed') {
+            status = 'Completed';
+          }
+          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Unknown') {
+            status = 'Unknown';
+          }
+        
+          return {
+            ...item,
+            combinedStatus: status
+          };
+        });
+
+        console.log('trders', this.ordersArr)
+
+        
         
         if (res.items.length === 0) {
           this.hasData = false;
@@ -94,10 +140,10 @@ export class TargetProgressCompletedComponent implements OnInit{
   }
 
 
-  onPageChange(event: number) {
-    this.page = event;
-    this.fetchCompletedAssignOrders(this.page, this.itemsPerPage);
-  }
+  // onPageChange(event: number) {
+  //   this.page = event;
+  //   this.fetchCompletedAssignOrders(this.page, this.itemsPerPage);
+  // }
 
   getDisplayDate(sheduleDate: string | Date): string {
     const today = new Date();
@@ -251,4 +297,5 @@ class orders {
   firstNameEnglish!: string
   lastNameEnglish!: string
   outDlvrDateLocal!: string
+  combinedStatus!: string
 }

@@ -50,6 +50,8 @@ export class TargetProgressTodoComponent implements OnInit {
 
 
   ngOnInit(): void {
+    const today = new Date();
+    this.date = today.toISOString().split('T')[0]; // format: YYYY-MM-DD
     this.fetchToDoAssignOrders();
   }
 
@@ -64,12 +66,58 @@ export class TargetProgressTodoComponent implements OnInit {
 
   }
 
-  fetchToDoAssignOrders(page: number = 1, limit: number = this.itemsPerPage, status: string = this.selectStatus, search: string = this.searchText, selectDate: string = this.date) {
+  fetchToDoAssignOrders(status: string = this.selectStatus, search: string = this.searchText, selectDate: string = this.date) {
     this.isLoading = true;
-    this.DistributionSrv.getToDoAssignOrders(page, limit, status, search, selectDate).subscribe(
+    this.DistributionSrv.getToDoAssignOrders(status, search, selectDate).subscribe(
       (res) => {
-        this.ordersArr = res.items
-        this.totalItems = res.total;
+
+        this.totalItems = res.items.length;
+        this.ordersArr = res.items.map((item: any) => {
+          let status = '';
+        
+          if (item.packageStatus === 'Pending' && (item.additionalItemsStatus === 'Unknown' || item.additionalItemsStatus === 'Pending')) {
+            status = 'Pending';
+          }
+          else if (item.packageStatus === 'Pending' && (item.additionalItemsStatus === 'Opened' || item.additionalItemsStatus === 'Completed')) {
+            status = 'Opened';
+          }
+          else if (item.packageStatus === 'Opened') {
+            status = 'Opened';
+          }
+          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Unknown') {
+            status = 'Completed';
+          }
+          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Pending') {
+            status = 'Pending';
+          }
+          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Opened') {
+            status = 'Opened';
+          }
+          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Completed') {
+            status = 'Completed';
+          }
+          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Pending') {
+            status = 'Pending';
+          }
+          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Opened') {
+            status = 'Opened';
+          }
+          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Completed') {
+            status = 'Completed';
+          }
+          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Unknown') {
+            status = 'Unknown';
+          }
+        
+          return {
+            ...item,
+            combinedStatus: status
+          };
+        });
+
+        console.log('trders', this.ordersArr)
+
+        
         
         if (res.items.length === 0) {
           this.hasData = false;
@@ -112,10 +160,10 @@ export class TargetProgressTodoComponent implements OnInit {
   }
 
 
-  onPageChange(event: number) {
-    this.page = event;
-    this.fetchToDoAssignOrders(this.page, this.itemsPerPage);
-  }
+  // onPageChange(event: number) {
+  //   this.page = event;
+  //   this.fetchToDoAssignOrders(this.page, this.itemsPerPage);
+  // }
 
   navigateViewReply(id:number){
     this.router.navigate([`/cch-complaints/view-recive-reply/${id}`])
@@ -162,4 +210,5 @@ class orders {
   officerId!: number
   firstNameEnglish!: string
   lastNameEnglish!: string
+  combinedStatus!: string
 }

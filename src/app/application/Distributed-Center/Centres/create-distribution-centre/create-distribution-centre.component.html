@@ -17,18 +17,21 @@
                 class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F] "
                 [(ngModel)]="centerData.DistributionCenterName" name="centerName" required #centerName="ngModel" />
             <p *ngIf="centerName.invalid && centerName.touched" class="text-red-500 text-sm">
-                Distribution Center Name is required.
+                Distribution Centre Name is required.
             </p>
         </div>
         <!-- Country -->
         <div>
             <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Country</label>
-            <select
+            <input type="text"
                 class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                [(ngModel)]="centerData.country" name="country" required #country="ngModel">
+                [(ngModel)]="centerData.country" name="country" required #country="ngModel" disabled />
+            <!-- <select
+                class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+                [(ngModel)]="centerData.country" name="country" required #country="ngModel" disabled>
 
                 <option value="Sri Lanka">Sri Lanka</option>
-            </select>
+            </select> -->
             <p *ngIf="country.invalid && country.touched" class="text-red-500 text-sm">
                 Country is required.
             </p>
@@ -67,47 +70,33 @@
         <!-- Building Number -->
         <div>
             <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Latitude</label>
-            <input
-              type="number"
-              step="any"
-              class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-              [(ngModel)]="centerData.latitude"
-              name="latitude"
-              required
-              min="-90"
-              max="90"
-              (input)="enforceLatitudeRange($event)"
-              #latitude="ngModel"
-            />
+            <input type="number" step="any"
+                class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+                [(ngModel)]="centerData.latitude" name="latitude" required min="-90" max="90"
+                (input)="enforceLatitudeRange($event)" #latitude="ngModel" />
             <p *ngIf="latitude.errors?.['required'] && latitude.touched" class="text-red-500 text-sm">
-              Latitude is required.
+                Latitude is required.
             </p>
-            <p *ngIf="(latitude.errors?.['min'] || latitude.errors?.['max']) && latitude.touched" class="text-red-500 text-sm">
-              Latitude must be between -90 and 90.
+            <p *ngIf="(latitude.errors?.['min'] || latitude.errors?.['max']) && latitude.touched"
+                class="text-red-500 text-sm">
+                Latitude must be between -90 and 90.
             </p>
-          </div>
+        </div>
         <!-- Street Name -->
         <div>
             <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Longitude</label>
-            <input
-              type="number"
-              step="any"
-              class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-              [(ngModel)]="centerData.longitude"
-              name="longitude"
-              required
-              min="-180"
-              max="180"
-              (input)="enforceLongitudeRange($event)"
-              #longitude="ngModel"
-            />
+            <input type="number" step="any"
+                class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+                [(ngModel)]="centerData.longitude" name="longitude" required min="-180" max="180"
+                (input)="enforceLongitudeRange($event)" #longitude="ngModel" />
             <p *ngIf="longitude.errors?.['required'] && longitude.touched" class="text-red-500 text-sm">
-              Longitude is required.
+                Longitude is required.
             </p>
-            <p *ngIf="(longitude.errors?.['min'] || longitude.errors?.['max']) && longitude.touched" class="text-red-500 text-sm">
-              Longitude must be between -180 and 180.
+            <p *ngIf="(longitude.errors?.['min'] || longitude.errors?.['max']) && longitude.touched"
+                class="text-red-500 text-sm">
+                Longitude must be between -180 and 180.
             </p>
-          </div>
+        </div>
         <!-- City -->
         <div>
             <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">City</label>
@@ -120,7 +109,7 @@
         </div>
         <!-- Registration Code -->
         <div>
-            <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Collection Centre Reg
+            <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Distribution Centre Reg
                 Code</label>
             <input type="text"
                 class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"

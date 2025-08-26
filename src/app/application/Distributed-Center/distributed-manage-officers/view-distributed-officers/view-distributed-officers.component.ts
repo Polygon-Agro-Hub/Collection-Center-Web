@@ -133,6 +133,7 @@ export class ViewDistributedOfficersComponent implements OnInit {
   }
 
   fetchAllOfficers(page: number = this.page, limit: number = this.itemsPerPage, status: string = this.selectStatus, role: string = this.selectRole, searchText: string = this.searchText) {
+    console.log('fetching dcm')
     this.isLoading = true;
     this.ManageOficerSrv.getAllOfficers(page, limit, status, role, searchText).subscribe(
       (res) => {
@@ -153,6 +154,7 @@ export class ViewDistributedOfficersComponent implements OnInit {
 
   //add to center filter
   fetchAllOfficersForDCH(page: number = this.page, limit: number = this.itemsPerPage, status: string = this.selectStatus, role: string = this.selectRole, searchText: string = this.searchText, selectCompany: string = this.selectCenters) {
+    console.log('fetching dch')
     this.isLoading = true;
     this.ManageOficerSrv.getAllOfficersForDCH(page, limit, status, role, searchText, selectCompany).subscribe(
       (res) => {
@@ -236,22 +238,46 @@ export class ViewDistributedOfficersComponent implements OnInit {
   openPopup(item: any) {
     this.isPopupVisible = true;
 
-    const tableHtml = `
-      <div class="container mx-auto">
-        <h1 class="text-center text-2xl font-bold mb-4 dark:text-white">Officer Name: ${item.firstNameEnglish}</h1>
-        <div>
-          <p class="text-center dark:text-white">Are you sure you want to approve or reject this collection?</p>
-        </div>
-        <div class="flex justify-center mt-4">
-          <button id="rejectButton" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg mr-2">
-            Reject
-          </button>
-          <button id="approveButton" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
-            Approve
-          </button>
-        </div>
-      </div>
-    `;
+    let message = '';
+
+if (item.status === 'Approved') {
+  message = 'Are you sure you want to reject this  Distribution Officer  ?';
+} 
+else if (item.status === 'Rejected') {
+  message = 'Are you sure you want to approve this Distribution Officer ?';
+} 
+else if (item.status === 'Not Approved') {
+  message = 'Are you sure you want to approve or reject this Distribution Officer ?';
+} 
+else {
+  message = '';
+}
+
+const rejectButton = (item.status === 'Approved' || item.status === 'Not Approved')
+  ? `<button id="rejectButton" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg mr-2">
+       Reject
+     </button>`
+  : '';
+
+const approveButton = (item.status === 'Rejected' || item.status === 'Not Approved')
+  ? `<button id="approveButton" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
+       Approve
+     </button>`
+  : '';
+
+const tableHtml = `
+  <div class="container mx-auto">
+    <h1 class="text-center text-2xl font-bold mb-4 dark:text-white">Officer Name: ${item.firstNameEnglish}</h1>
+    <div>
+      <p class="text-center dark:text-white">${message}</p>
+    </div>
+    <div class="flex justify-center mt-4">
+      ${rejectButton}
+      ${approveButton}
+    </div>
+  </div>
+`;
+
 
     const swalInstance = Swal.fire({
       html: tableHtml,
@@ -302,11 +328,12 @@ export class ViewDistributedOfficersComponent implements OnInit {
           this.isLoading = false;
           swalInstance.close();
           const action = status === 'Approved' ? 'approved' : 'rejected';
-          this.toastSrv.success(`The collection was ${action} successfully.`);
+          this.toastSrv.success(`The Distribution Officer was ${action} successfully.`);
           this.fetchByRole();
         } else {
           this.isLoading = false;
-          this.toastSrv.error(res.message || `Failed to ${status.toLowerCase()} the collection.`);
+          this.toastSrv.error(`Failed to ${status.toLowerCase()} the Distribution Officer.`);
+          console.log(`Failed to ${status.toLowerCase()} the Distribution Officer.`)
         }
       },
       error: (err) => {

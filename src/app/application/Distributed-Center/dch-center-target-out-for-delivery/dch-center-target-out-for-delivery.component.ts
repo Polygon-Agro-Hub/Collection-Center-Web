@@ -66,6 +66,9 @@ export class DchCenterTargetOutForDeliveryComponent implements OnInit{
     this.centerName = String(this.route.snapshot.paramMap.get('centerName'));
     this.regCode = String(this.route.snapshot.paramMap.get('regCode'));
     console.log('centerId', this.centerId)
+
+    const today = new Date();
+    this.date = today.toISOString().split('T')[0];
     this.fetchCenterTargetOutForDelivery();
   }
 

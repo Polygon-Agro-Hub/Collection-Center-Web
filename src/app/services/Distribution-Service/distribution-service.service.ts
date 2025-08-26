@@ -39,7 +39,8 @@ export class DistributionServiceService {
   }
 
 
-  createDistributionCenter(centerData: any): Observable<any> {
+  createDistributionCenter(centerData: any) {
+    console.log('centerData', centerData)
     const formData = new FormData();
     formData.append('centerData', JSON.stringify(centerData));
 
@@ -204,13 +205,13 @@ export class DistributionServiceService {
     return this.http.get<any>(url, { headers });
   }
 
-  getToDoAssignOrders(page: number = 1, limit: number = 10, status: string = '', searchText: string = '', selectDate: string = ''): Observable<any> {
+  getToDoAssignOrders(status: string = '', searchText: string = '', selectDate: string = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
 
 
-    let url = `${this.apiUrl}/get-todo-assign-orders?page=${page}&limit=${limit}`;
+    let url = `${this.apiUrl}/get-todo-assign-orders?test=${1}`;
     if (status) {
       url += `&status=${status}`
     }
@@ -227,13 +228,13 @@ export class DistributionServiceService {
     return this.http.get<any>(url, { headers });
   }
 
-  getCompletedAssignOrders(page: number = 1, limit: number = 10, searchText: string = '', selectDate: string = ''): Observable<any> {
+  getCompletedAssignOrders(searchText: string = '', selectDate: string = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
 
 
-    let url = `${this.apiUrl}/get-completed-assign-orders?page=${page}&limit=${limit}`;
+    let url = `${this.apiUrl}/get-completed-assign-orders?test=${1}`;
 
     if (searchText) {
       url += `&searchText=${searchText}`
@@ -247,13 +248,13 @@ export class DistributionServiceService {
     return this.http.get<any>(url, { headers });
   }
 
-  getOutForDeliveryOrders(page: number = 1, limit: number = 10, status: string = '', searchText: string = ''): Observable<any> {
+  getOutForDeliveryOrders(status: string = '', searchText: string = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
 
 
-    let url = `${this.apiUrl}/get-out-for-delivery-orders?page=${page}&limit=${limit}`;
+    let url = `${this.apiUrl}/get-out-for-delivery-orders?test=${1}`;
     if (status) {
       url += `&status=${status}`
     }

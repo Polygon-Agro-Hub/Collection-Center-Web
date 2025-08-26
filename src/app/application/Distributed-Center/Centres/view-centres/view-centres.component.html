@@ -139,8 +139,8 @@
                         <th class="px-6 py-3 text-center font-normal w-28">District</th>
                         <th class="px-6 py-3 text-center font-normal w-28">City</th>
                         <th class="px-6 py-3 text-center font-normal w-40">Contact number-1</th>
-                        <th class="px-6 py-3 text-center font-normal w-32">CCM Profiles</th>
-                        <th class="px-6 py-3 text-center font-normal w-32">COO Profiles</th>
+                        <th class="px-6 py-3 text-center font-normal w-32">DCM Profiles</th>
+                        <th class="px-6 py-3 text-center font-normal w-32">DIO Profiles</th>
                     </tr>
                 </thead>
                 <tbody *ngIf="countOfOfficers != 0" class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
@@ -163,8 +163,8 @@
                                 N/A
                             </ng-template>
                         </td>
-                        <td class="px-6 py-3 font-medium text-center">{{ item.collectionCenterManagerCount }}</td>
-                        <td class="px-6 py-3 font-medium text-center">{{ item.collectionOfficerCount }}</td>
+                        <td class="px-6 py-3 font-medium text-center">{{ item.distributionCenterManagerCount }}</td>
+                        <td class="px-6 py-3 font-medium text-center">{{ item.distributionOfficerCount }}</td>
                     </tr>
                 </tbody>
             </table>

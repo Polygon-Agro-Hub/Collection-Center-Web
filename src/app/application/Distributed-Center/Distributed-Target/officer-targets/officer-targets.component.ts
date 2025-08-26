@@ -39,6 +39,7 @@ export class OfficerTargetsComponent implements OnInit {
     this.isLoading = true;
     this.DistributionSrv.getofficerTargets().subscribe(
       (res) => {
+        console.log('res', res)
         this.officersArr = res.officers
         console.log('officersArr', this.officersArr)
         this.totalItems = res.officers.length | 0;

@@ -62,9 +62,9 @@ export class TargetOutForDeliveryComponent implements OnInit {
 
   }
 
-  fetchOutForDeliveryOrders(page: number = 1, limit: number = this.itemsPerPage, status: string = this.selectStatus, search: string = this.searchText) {
+  fetchOutForDeliveryOrders(status: string = this.selectStatus, search: string = this.searchText) {
     this.isLoading = true;
-    this.DistributionSrv.getOutForDeliveryOrders(page, limit, status, search).subscribe(
+    this.DistributionSrv.getOutForDeliveryOrders(status, search).subscribe(
       (res) => {
         console.log('res', res)
         this.ordersArr = res.items
@@ -112,10 +112,10 @@ export class TargetOutForDeliveryComponent implements OnInit {
   }
 
 
-  onPageChange(event: number) {
-    this.page = event;
-    this.fetchOutForDeliveryOrders(this.page, this.itemsPerPage);
-  }
+  // onPageChange(event: number) {
+  //   this.page = event;
+  //   this.fetchOutForDeliveryOrders(this.page, this.itemsPerPage);
+  // }
 
   getDisplayDate(sheduleDate: string | Date): string {
     const today = new Date();

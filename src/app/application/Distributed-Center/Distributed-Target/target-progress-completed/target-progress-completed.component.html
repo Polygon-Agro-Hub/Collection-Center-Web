@@ -68,7 +68,7 @@
                 </tr>
             </thead>
             <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
-                <tr *ngFor="let item of ordersArr | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index">
+                <tr *ngFor="let item of ordersArr let i = index">
                     <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
                         <input type="checkbox" 
                                [checked]="isChecked(item.processOrderId)" 
@@ -88,12 +88,12 @@
         </table>
 
     </div>
-    <div *ngIf="hasData" class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#262f45] text-right">
+    <!-- <div *ngIf="hasData" class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#262f45] text-right">
         <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
             [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
             [screenReaderCurrentLabel]="'Youre on page'">
         </pagination-controls>
-    </div>
+    </div> -->
 
 </div>
 

@@ -10,7 +10,7 @@
     <div class="flex flex-row items-center justify-between gap-4">
         <div>
             <p class="text-lg font-semibold dark:text-white whitespace-nowrap ">
-              All ({{ totalItems}})
+              All ({{ ordersArr.length < 10 ? '0' + ordersArr.length : ordersArr.length }})
             </p>
           </div>
     <div class="flex flex-row items-center justify-end gap-5 ">

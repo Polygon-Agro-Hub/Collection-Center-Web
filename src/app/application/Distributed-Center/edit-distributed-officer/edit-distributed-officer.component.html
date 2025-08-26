@@ -51,10 +51,10 @@
 
                     <div *ngIf="logingRole === 'Distribution Center Head'" (change)="getAllManagers()">
                         <label for="centerId" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">
-                            Distribution Centre
+                            Distribution Centre Name
                         </label>
                         <select id="centerId" [(ngModel)]="personalData.centerId" name="centerId" placeholder="select"
-                            class="form-control mt-1 block w-full p-2 text-[#292929] mb-1 dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500"
+                            class="form-control mt-1 block w-full p-2 text-[#292929] mb-1 dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] focus:ring-indigo-500 focus:border-indigo-500"
                             #centerIdInput="ngModel" required>
                             <option disabled selected
                                 class="p-2 text-[#292929] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]"
@@ -69,11 +69,9 @@
                         </select>
                         <div *ngIf="centerIdInput.touched && !personalData.centerId && logingRole === 'Distribution Center Head'"
                             class="text-red-500 text-sm mt-1">
-                            <div>Distribution Center is required</div>
+                            <div>Distribution Center Name is required</div>
                         </div>
                     </div>
-
-                    <div *ngIf="logingRole === 'Distribution Center Head'"></div>
 
 
                     <div>
@@ -82,7 +80,7 @@
                         </label>
                         <select id="jobRole" [(ngModel)]="personalData.jobRole"
                             name="jobRole" placeholder="select" #jobRoleInput="ngModel" required
-                            class="form-control mt-1 block w-full p-2 text-[#292929] mb-1 dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500">
+                            class="form-control mt-1 block w-full p-2 text-[#292929] mb-1 dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] focus:ring-indigo-500 focus:border-indigo-500">
                             <option disabled
                                 class="p-2 text-[#292929] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
                                 -- select --
@@ -103,14 +101,14 @@
                         </div>
                     </div>
 
-                    <div>
+                    <!-- <div>
                         <label class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">EMP ID / User
                             name</label>
                         <div class="flex mt-1">
                             <p class="inline-flex items-center px-3 py-3 text-sm text-[#534E4E] bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-[#1D1D1F] dark:text-gray-400 ">
                                 {{personalData.empIdFirst}}</p>
 
-                            <!-- <span
+                             <span
                                 class="inline-flex items-center px-3 py-3 text-sm text-[#534E4E] bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-[#1D1D1F] dark:text-gray-400 ">
                                 <span *ngIf="logingRole === 'Distribution Center Head'">
                                     <p *ngIf="personalData.jobRole === 'Distribution Manager'">DBM</p>
@@ -118,11 +116,11 @@
                             
                                 <p *ngIf="personalData.jobRole === 'Distribution Officer'">DIO</p>
 
-                            </span> -->
+                            </span>
                             <p class="rounded-none inline-flex items-center rounded-e-lg bg-gray-50 border border-gray-300 text-[#534E4E] focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm pl-4  dark:bg-[#1D1D1F]  dark:placeholder-gray-400 dark:text-textDark dark:focus:ring-blue-500 dark:focus:border-blue-500">{{personalData.empId}}</p>
                               
                         </div>
-                    </div>
+                    </div> -->
 
                     <div
                         *ngIf="logingRole === 'Distribution Center Head' && (personalData.jobRole === 'Distribution Officer')">
@@ -131,7 +129,7 @@
                         </label>
                         <select id="irmId" [(ngModel)]="personalData.irmId" name="irmId" placeholder="select"
                             (change)="checkManager()" [disabled]="!personalData.centerId" #irmIdInput="ngModel" required
-                            class="form-control mt-1 block w-full p-2 text-[#292929] mb-1 dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500">
+                            class="form-control mt-1 block w-full p-2 text-[#292929] mb-1 dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] focus:ring-indigo-500 focus:border-indigo-500">
                             <option disabled selected
                                 class="p-2 text-[#292929] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]"
                                 value="">
@@ -207,7 +205,9 @@
                             Name (in English)</label>
                         <input id="firstNameEnglish" [(ngModel)]="personalData.firstNameEnglish" name="firstNameEnglish"
                             class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                            #firstNameEnglishInput="ngModel" required />
+                            #firstNameEnglishInput="ngModel" required 
+                            (keydown)="blockSpecialChars($event)" 
+                            (input)="capitalizeFirstLetter()"/>
                         <div *ngIf="firstNameEnglishInput.touched && !personalData.firstNameEnglish"
                             class="text-red-500 text-sm mt-1">
                             <div>First Name (in English) is required</div>
@@ -220,7 +220,9 @@
                             Name (in English)</label>
                         <input id="lastNameEnglish" name="lastNameEnglish" [(ngModel)]="personalData.lastNameEnglish"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                            #lastNameEnglishInput="ngModel" required />
+                            #lastNameEnglishInput="ngModel" required 
+                            (keydown)="blockSpecialChars($event)" 
+                            (input)="capitalizeFirstLetter()" />
                         <div *ngIf="lastNameEnglishInput.touched && !personalData.lastNameEnglish"
                             class="text-red-500 text-sm mt-1">
                             <div>Last Name (in English) is required</div>
@@ -233,7 +235,9 @@
                             Name (in Sinhala)</label>
                         <input id="firstNameSinhala" name="firstNameSinhala" [(ngModel)]="personalData.firstNameSinhala"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                            #firstNameSinhalaInput="ngModel" required />
+                            #firstNameSinhalaInput="ngModel" required 
+                            (keydown)="blockSpecialChars($event)" 
+                            (input)="capitalizeFirstLetter()"/>
                         <div *ngIf="firstNameSinhalaInput.touched && !personalData.firstNameSinhala"
                             class="text-red-500 text-sm mt-1">
                             <div>First Name (in Sinhala) is required</div>
@@ -246,7 +250,9 @@
                             Name (in Sinhala)</label>
                         <input id="lastNameSinhala" name="lastNameSinhala" [(ngModel)]="personalData.lastNameSinhala"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                            #lastNameSinhalaInput="ngModel" required />
+                            #lastNameSinhalaInput="ngModel" required
+                            (keydown)="blockSpecialChars($event)" 
+                            (input)="capitalizeFirstLetter()" />
                         <div *ngIf="lastNameSinhalaInput.touched && !personalData.lastNameSinhala"
                             class="text-red-500 text-sm mt-1">
                             <div>Last Name (in Sinhala) is required</div>
@@ -259,7 +265,9 @@
                             Name (in Tamil)</label>
                         <input id="firstNameTamil" name="firstNameTamil" [(ngModel)]="personalData.firstNameTamil"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                            #firstNameTamilInput="ngModel" required />
+                            #firstNameTamilInput="ngModel" required 
+                            (keydown)="blockSpecialChars($event)" 
+                            (input)="capitalizeFirstLetter()"/>
                         <div *ngIf="firstNameTamilInput.touched && !personalData.firstNameTamil"
                             class="text-red-500 text-sm mt-1">
                             <div>First Name (in Tamil) is required</div>
@@ -272,7 +280,9 @@
                             Name (in Tamil)</label>
                         <input id="lastNameTamil" name="lastNameTamil" [(ngModel)]="personalData.lastNameTamil"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                            #lastNameTamilInput="ngModel" required />
+                            #lastNameTamilInput="ngModel" required
+                            (keydown)="blockSpecialChars($event)" 
+                            (input)="capitalizeFirstLetter()" />
                         <div *ngIf="lastNameTamilInput.touched && !personalData.lastNameTamil"
                             class="text-red-500 text-sm mt-1">
                             <div>Last Name (in Tamil) is required</div>
@@ -282,7 +292,7 @@
                     <div>
                         <label for="phoneNumber01"
                             class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">
-                            Phone Number - 1
+                            Mobile Number - 1
                         </label>
                         <div class="mt-1 flex">
                             <!-- Country Code Dropdown -->
@@ -299,7 +309,7 @@
                             <input id="phoneNumber01" name="phoneNumber01" type="tel"
                                 [(ngModel)]="personalData.phoneNumber01" #phoneNumber01Input="ngModel"
                                 class="block w-full p-2 border border-gray-300 rounded-r-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                                placeholder="Enter your phone number" required pattern="^[0-9]{9}$" minlength="9" (ngModelChange)="validateSriLankanPhone($event, 'phone01')"
+                                placeholder="Enter your mobile number" required pattern="^[0-9]{9}$" minlength="9" (ngModelChange)="validateSriLankanPhone($event, 'phone01')"
                                 maxlength="9"/>
 
                         </div>
@@ -307,15 +317,15 @@
                         <!-- Validation Messages -->
                         <div *ngIf="phoneNumber01Input.touched">
                             <div *ngIf="!personalData.phoneNumber01" class="text-red-500 text-sm mt-1">
-                                Phone Number - 1 is required.
+                                Mobile Number - 1 is required.
                             </div>
                             <div *ngIf="personalData.phoneNumber01 && phoneNumber01Input.invalid && !isPhoneInvalidMap['phone01']" 
                                 class="text-red-500 text-sm mt-1">
-                                Phone Number must be exactly 9 digits.
+                                Mobile Number must be exactly 9 digits.
                             </div>
 
                             <div *ngIf="isPhoneInvalidMap['phone01'] && personalData.phoneNumber01" class="text-red-500 text-sm mt-1">
-                                Please enter a valid Phone number (e.g., 77XXXXXXX, 72XXXXXXX, etc )
+                                Please enter a valid mobile number (format: +947XXXXXXXX)
                               </div>
                         </div>
                     </div>
@@ -323,7 +333,7 @@
 
                     <div>
                         <label for="phoNumTwo" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">
-                          Phone Number - 2
+                            Mobile Number - 2
                         </label>
                         <div class="mt-1 flex">
                           <select id="phoneNumber02Code" name="phoneNumber02Code"
@@ -337,21 +347,21 @@
                           <input id="phoneNumber02" name="phoneNumber02" type="tel"
                             [(ngModel)]="personalData.phoneNumber02" #phoneNumber02Input="ngModel"
                             class="block w-full p-2 border border-gray-300 rounded-r-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                            placeholder="Enter your phone number" pattern="^[0-9]{9}$" minlength="9" maxlength="9" (ngModelChange)="validateSriLankanPhone($event, 'phone02')"/>
+                            placeholder="Enter your mobile number" pattern="^[0-9]{9}$" minlength="9" maxlength="9" (ngModelChange)="validateSriLankanPhone($event, 'phone02')"/>
                         </div>
                       
                         <!-- Custom Validation: Same as Phone Number 1 -->
-                        <div *ngIf="personalData.phoneNumber02 && personalData.phoneNumber02 === personalData.phoneNumber01" class="text-red-500 text-sm mt-1">
-                          Phone Number - 2 should be different from Phone Number - 1.
+                        <div *ngIf="personalData.phoneNumber02 && personalData.phoneNumber02 === personalData.phoneNumber01 && !isPhoneInvalidMap['phone02'] && !phoneNumber02Input.invalid" class="text-red-500 text-sm mt-1">
+                            Mobile Number - 2 should be different from Phone Number - 1.
                         </div>
 
                         <div *ngIf="personalData.phoneNumber02 && phoneNumber02Input.invalid && !isPhoneInvalidMap['phone02']"
                             class="text-red-500 text-sm mt-1">
-                            Phone Number must be exactly 9 digits.
+                            Mobile Number must be exactly 9 digits.
                         </div>
 
                         <div *ngIf="isPhoneInvalidMap['phone02'] && personalData.phoneNumber02" class="text-red-500 text-sm mt-1">
-                            Please enter a valid Phone number (e.g., 77XXXXXXX, 72XXXXXXX, etc )
+                            Please enter a valid mobile number (format: +947XXXXXXXX)
                           </div>
                       </div>
                       
@@ -361,7 +371,7 @@
                             Number</label>
                         <input id="nic" name="nic" [(ngModel)]="personalData.nic"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                            #nicInput="ngModel" required pattern="^(\d{9}[Vv]|\d{12})$"
+                            #nicInput="ngModel" required pattern="^(\d{9}[V]|\d{12})$"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
                         <div *ngIf="nicInput.touched && !personalData.nic" class="text-red-500 text-sm mt-1">
                             <div> NIC is required</div>
@@ -383,7 +393,7 @@
 
                         <div *ngIf="emailInput.touched && emailInput.errors?.['pattern']"
                             class="text-red-500 text-sm mt-1">
-                            <p>Invalid email format (e.g., example&#64;mail.com)</p>
+                            <p>Please enter a valid email in the format: example&#64;domain.com</p>
                         </div>
                     </div>
 
@@ -480,15 +490,19 @@
                     <label for="province" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">
                         Province
                     </label>
-                    <input id="province" name="province" [(ngModel)]="personalData.province"
+                    <input id="province" name="province" [(ngModel)]="personalData.province"  #provinceInput="ngModel"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                         readonly />
+
+                        <div *ngIf="provinceInput.touched && !personalData.province" class="text-red-500 text-sm mt-1">
+                            <div>Province is required</div>
+                        </div>
                 </div>
 
                 <div>
                     <label for="country"
                         class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Country</label>
-                    <input id="country" name="country" [(ngModel)]="personalData.country"
+                    <input readonly id="country" name="country" [(ngModel)]="personalData.country"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
                 </div>
             </div>
@@ -501,6 +515,8 @@
                     <input id="accHolderName" name="accHolderName" [(ngModel)]="personalData.accHolderName"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                         #accHolderNameInput="ngModel" required maxlength="50" pattern="^[a-zA-Z0-9\s.']*$"
+                        (keydown)="blockSpecialChars($event)" 
+          
                         />
                     <div *ngIf="accHolderNameInput.touched && !personalData.accHolderName"
                         class="text-red-500 text-sm mt-1">
@@ -570,27 +586,38 @@
                     </div>
                 </div> -->
 
+                
+
                 <div class="pb-6">
                     <label for="bankDropdown"
                         class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Bank
                         Name</label>
-                    <select id="bankDropdown" name="bankDropdown" [(ngModel)]="selectedBankId" (change)="onBankChange()"
+                    <select id="bankDropdown" name="bankDropdown" [(ngModel)]="selectedBankId" #selectedBank="ngModel" (change)="onBankChange()"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]">
                         <option [ngValue]="null" disabled>Select a bank</option>
                         <option *ngFor="let bank of banks" [ngValue]="bank.ID">{{ bank.name }}</option>
                     </select>
+
+                    <div *ngIf="!selectedBankId && selectedBank.touched"
+                        class="text-red-500 text-sm mt-1">
+                        <div>Please select a bank</div>
+                    </div>
                 </div>
 
                 <div class="pb-6">
                     <label for="branchDropdown"
                         class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Branch
                         Name</label>
-                    <select id="branchDropdown" name="branchDropdown" [(ngModel)]="selectedBranchId"
+                    <select id="branchDropdown" name="branchDropdown" [(ngModel)]="selectedBranchId" #selectedBranch="ngModel"
                         (change)="onBranchChange()" [disabled]="!selectedBankId"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]">
                         <option [ngValue]="null" disabled>Select a branch</option>
                         <option *ngFor="let branch of branches" [ngValue]="branch.ID">{{ branch.name }}</option>
                     </select>
+                    <div *ngIf="!selectedBranchId && selectedBranch.touched"
+                        class="text-red-500 text-sm mt-1">
+                        <div>Please select a branch</div>
+                    </div>
                 </div>
             </div>
 

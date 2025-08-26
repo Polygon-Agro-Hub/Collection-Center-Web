@@ -10,8 +10,8 @@
     <div class="flex flex-row items-center justify-between gap-4">
         <div>
             <p class="text-lg font-semibold dark:text-white whitespace-nowrap ">
-              All ({{ totalItems}})
-            </p>
+                All ({{ ordersArr.length < 10 ? '0' + ordersArr.length : ordersArr.length }})
+              </p>
           </div>
     <div class="flex flex-row items-center justify-end gap-5 ">
         
@@ -133,17 +133,17 @@
                     <td class="px-6 py-4 text-sm text-left font-medium text-gray-900 dark:text-[#C5C5C5]">
 
                         <div class="font-medium">
-                            <span *ngIf="item.packagePackStatus ==='Completed'"
+                            <span *ngIf="item.combinedStatus ==='Completed'"
                                 class="text-[#415CFF]">
                                 {{ getDisplayDate(item.sheduleDate) }} {{ removeWithin(item.sheduleTime) }}
                             </span>
 
-                            <span *ngIf="item.packagePackStatus ==='Pending'"
+                            <span *ngIf="item.combinedStatus ==='Pending'"
                                 class="text-[#FF0000]">
                                 {{ getDisplayDate(item.sheduleDate) }} {{ removeWithin(item.sheduleTime) }}
                             </span>
 
-                            <span *ngIf="item.packagePackStatus ==='Opened'"
+                            <span *ngIf="item.combinedStatus ==='Opened'"
                                 class="">
                                 {{ getDisplayDate(item.sheduleDate) }} {{ removeWithin(item.sheduleTime) }}
                             </span>
@@ -153,17 +153,17 @@
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5] cursor-default">
 
                         <div class="flex font-medium items-center justify-center h-full">
-                            <span *ngIf="item.packagePackStatus ==='Completed'"
+                            <span *ngIf="item.combinedStatus ==='Completed'"
                                 class="bg-[#C8E0FF] text-[#415CFF] px-3 py-1 rounded-lg">
                                 Completed
                             </span>
 
-                            <span *ngIf="item.packagePackStatus ==='Pending'"
+                            <span *ngIf="item.combinedStatus ==='Pending'"
                                 class="bg-[#FFD4D4] text-[#FF0000] px-3 py-1 rounded-lg">
                                 Pending
                             </span>
 
-                            <span *ngIf="item.packagePackStatus ==='Opened'"
+                            <span *ngIf="item.combinedStatus ==='Opened'"
                                 class="bg-[#FFFDC5] text-[#A8A100] px-3 py-1 rounded-lg">
                                 Opened
                             </span>

@@ -373,8 +373,7 @@ export class AddDistributedOfficerComponent implements OnInit {
   loadBanks() {
     this.http.get<Bank[]>('assets/json/banks.json').subscribe(
       data => {
-        this.banks = data;
-
+        this.banks = data.sort((a, b) => a.name.localeCompare(b.name)); // Sort alphabetically
       },
       error => {
         console.error('Error loading banks:', error);
@@ -382,21 +381,20 @@ export class AddDistributedOfficerComponent implements OnInit {
     );
   }
 
+
   loadBranches() {
     this.http.get<BranchesData>('assets/json/branches.json').subscribe(
       data => {
+        Object.keys(data).forEach(bankID => {
+          data[bankID].sort((a, b) => a.name.localeCompare(b.name));
+        });
         this.allBranches = data;
-
       },
       error => {
         console.error('Error loading branches:', error);
       }
     );
   }
-
-
-
-
 
   onBankChange() {
     if (this.selectedBankId) {
@@ -431,6 +429,76 @@ export class AddDistributedOfficerComponent implements OnInit {
       this.personalData.branchName = '';
     }
   }
+
+  allowOnlyNumbers(event: KeyboardEvent): boolean {
+    const charCode = event.which ? event.which : event.keyCode;
+    // Only allow 0-9
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault();
+      return false;
+    }
+    return true;
+  }
+
+onTrimInput(event: Event, modelRef: any, fieldName: string): void {
+  const inputElement = event.target as HTMLInputElement;
+  const trimmedValue = inputElement.value.trimStart();
+  modelRef[fieldName] = trimmedValue;
+  inputElement.value = trimmedValue;
+}
+
+blockSpecialChars(event: KeyboardEvent) {
+  // Allow letters (A-Z, a-z), space, backspace, delete, arrow keys
+  const allowedKeys = [
+    'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', ' '
+  ];
+
+  // Regex: Only allow alphabets and spaces
+  const regex = /^[a-zA-Z\s]*$/;
+
+  // Block if key is not allowed
+  if (!allowedKeys.includes(event.key) && !regex.test(event.key)) {
+    event.preventDefault();
+  }
+}
+
+blockNonNumbers(event: KeyboardEvent) {
+  // Allow: numbers (0-9), backspace, delete, arrow keys, tab
+  const allowedKeys = [
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+    'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'
+  ];
+
+  // Block if key is not allowed
+  if (!allowedKeys.includes(event.key)) {
+    event.preventDefault();
+  }
+}
+
+capitalizeAccHolderName(event: Event): void {
+  const inputElement = event.target as HTMLInputElement;
+  let value = inputElement.value.trimStart().replace(/\s+/g, ' ');
+  
+  // Capitalize first letter
+  if (value.length > 0) {
+    value = value.charAt(0).toUpperCase() + value.slice(1);
+  }
+  
+  this.personalData.accHolderName = value;
+  inputElement.value = value;
+}
+
+capitalizeFirstLetter() {
+  if (this.personalData.firstNameEnglish) {
+    // Remove leading and trailing spaces
+    this.personalData.firstNameEnglish = this.personalData.firstNameEnglish.trim();
+
+    // Capitalize the first letter
+    this.personalData.firstNameEnglish =
+      this.personalData.firstNameEnglish.charAt(0).toUpperCase() +
+      this.personalData.firstNameEnglish.slice(1);
+  }
+}
 
 }
 

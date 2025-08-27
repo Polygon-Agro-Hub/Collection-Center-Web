@@ -83,7 +83,7 @@ export class ViewCentresComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this.updateFilteredDistricts();
+        // this.updateFilteredDistricts();
         this.fetchAllDistributionCenterDetails();
     }
 
@@ -253,5 +253,7 @@ class CenterData {
   regCode!: string
   distributionOfficerCount!: number
   distributionCenterManagerCount!: number
+  latitude!: string;
+  longitude!: string;
 
 }

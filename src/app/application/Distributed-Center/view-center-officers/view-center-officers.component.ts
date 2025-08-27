@@ -363,6 +363,9 @@ export class ViewCenterOfficersComponent implements OnInit {
   }
 
   onSearch() {
+    if (this.searchText) {
+      this.searchText = this.searchText.trim();
+    }
     this.fetchByRole();
   }
 

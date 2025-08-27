@@ -1,0 +1,81 @@
+<div class="relative w-full" [class.opacity-50]="disabled">
+  <!-- Dropdown trigger -->
+  <div
+    class="flex items-center justify-between w-full px-3 py-2 border border-gray-300 rounded-md bg-white cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+    [class.cursor-not-allowed]="disabled"
+    (click)="toggleDropdown()"
+  >
+    <span class="text-gray-700 truncate">
+      {{ selectedItem ? selectedItem.label : placeholder }}
+    </span>
+    
+    <div class="flex items-center space-x-1">
+      <!-- Clear button -->
+      @if (clearable && selectedItem && !disabled) {
+        <button
+          type="button"
+          class="text-gray-400 hover:text-gray-600 focus:outline-none"
+          (click)="clearSelection($event)"
+        >
+          <svg class="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+          </svg>
+        </button>
+      }
+      
+      <!-- Dropdown arrow -->
+      <svg
+        class="w-4 h-4 text-gray-400 transition-transform duration-200"
+        [class.transform.rotate-180]="isOpen"
+        fill="none"
+        stroke="currentColor"
+        viewBox="0 0 24 24"
+      >
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
+      </svg>
+    </div>
+  </div>
+
+  <!-- Dropdown menu -->
+  @if (isOpen && !disabled) {
+    <div class="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-auto">
+      <!-- Search input -->
+      <div class="sticky top-0 bg-white p-2 border-b border-gray-200">
+        <input
+          type="text"
+          [placeholder]="searchPlaceholder"
+          [value]="searchTerm"
+          (input)="onSearchInput($event)"
+          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
+          autofocus
+        />
+      </div>
+
+      <!-- Options list -->
+      <div class="py-1">
+        @if (filteredItems.length === 0) {
+          <div class="px-3 py-2 text-sm text-gray-500 text-center">
+            No options found
+          </div>
+        } @else {
+          @for (item of filteredItems; track item.value) {
+            <button
+              type="button"
+              class="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition-colors duration-150"
+              [class.text-gray-400.cursor-not-allowed]="item.disabled"
+              [class.bg-blue-50.text-blue-700]="selectedItem?.value === item.value && showSelected"
+              [class.hover:bg-blue-100]="selectedItem?.value === item.value && showSelected"
+              (click)="selectItem(item)"
+              [disabled]="item.disabled"
+            >
+              {{ item.label }}
+              @if (selectedItem?.value === item.value && showSelected) {
+                <span class="ml-2 text-blue-600">✓</span>
+              }
+            </button>
+          }
+        }
+      </div>
+    </div>
+  }
+</div>

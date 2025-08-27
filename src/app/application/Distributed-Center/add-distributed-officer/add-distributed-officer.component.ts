@@ -11,6 +11,7 @@ import { HttpClient } from '@angular/common/http';
 import { Location } from '@angular/common';
 import { DistributedManageOfficersService } from '../../../services/Distributed-manage-officers-service/distributed-manage-officers.service';
 
+
 @Component({
   selector: 'app-add-distributed-officer',
   standalone: true,
@@ -180,7 +181,7 @@ export class AddDistributedOfficerComponent implements OnInit {
   }
 
   updateProvince(event: Event): void {
-    const target = event.target as HTMLSelectElement; // Cast to HTMLSelectElement
+    const target = event.target as HTMLSelectElement;
     const selectedDistrict = target.value;
 
     const selected = this.districts.find(district => district.name === selectedDistrict);
@@ -365,7 +366,188 @@ export class AddDistributedOfficerComponent implements OnInit {
     );
   }
 
-  onSubmitForm(form: NgForm) {
+  onSubmitFormPage1(form: NgForm) {
+    form.form.markAllAsTouched();
+
+    this.validateLanguages();
+
+    const missingFields: string[] = [];
+
+  // Validation for pageOne fields
+  // if (!this.personalData.empType) {
+  //   missingFields.push('Staff Employee Type');
+  // }
+
+  if (!this.personalData.centerId) {
+    missingFields.push('Distribution Centre Name is required');
+  }
+
+  if (!this.personalData.irmId) {
+    missingFields.push('Distribution Centre Manager is required');
+  }
+
+  if (this.languagesRequired) {
+    missingFields.push('Please select at least one preferred language');
+  }
+
+  if (!this.personalData.employeeType) {
+    missingFields.push('Employee Type is required');
+  }
+
+  
+
+  // if (!this.personalData.companyId) {
+  //   missingFields.push('Company Name');
+  // }
+
+  if (!this.personalData.firstNameEnglish) {
+    missingFields.push('First Name (in English) is required');
+  }
+
+  if (!this.personalData.lastNameEnglish ) {
+    missingFields.push('Last Name (in English) is required');
+  }
+
+  if (!this.personalData.firstNameSinhala) {
+    missingFields.push('First Name (in Sinhala) is required');
+  }
+
+  if (!this.personalData.lastNameSinhala) {
+    missingFields.push('Last Name (in Sinhala) is required');
+  }
+
+  if (!this.personalData.firstNameTamil) {
+    missingFields.push('First Name (in Tamil) is required');
+  }
+
+  if (!this.personalData.lastNameTamil) {
+    missingFields.push('Last Name (in Tamil) is required');
+  }
+
+  if (!this.personalData.phoneNumber01) {
+    missingFields.push('Phone Number - 1 is required');
+  } else if (!/^[0-9]{9}$/.test(this.personalData.phoneNumber01) || this.isPhoneInvalidMap['phone01']) {
+    missingFields.push('Phone Number - 1 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+  }
+
+  if (this.personalData.phoneNumber02) {
+    if (!/^[0-9]{9}$/.test(this.personalData.phoneNumber02) || this.isPhoneInvalidMap['phone02']) {
+      missingFields.push('Phone Number - 2 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+    }
+    if (this.personalData.phoneNumber01 === this.personalData.phoneNumber02) {
+      missingFields.push('Phone Number - 2 - Must be different from Phone Number - 1');
+    }
+  }
+
+  if (!this.personalData.nic) {
+    missingFields.push('NIC Number is required');
+  } else if (!/^(\d{9}[V]|\d{12})$/.test(this.personalData.nic)) {
+    missingFields.push('NIC Number - Must be 9 digits followed by V or 12 digits');
+  }
+
+  if (!this.personalData.email) {
+      missingFields.push('Email is required');
+    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(this.personalData.email)) {
+      missingFields.push('Email - Must be in a valid format (format: example&#64;domain.com)');
+    }
+
+    if (missingFields.length > 0) {
+      let errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following issues:</p><ul class="list-disc pl-5">';
+      missingFields.forEach((field) => {
+        errorMessage += `<li>${field}</li>`;
+      });
+      errorMessage += '</ul></div>';
+  
+      Swal.fire({
+        icon: 'error',
+        title: 'Missing or Invalid Information',
+        html: errorMessage,
+        confirmButtonText: 'OK',
+        customClass: {
+          popup: 'bg-white dark:bg-[#363636] text-[#534E4E] dark:text-textDark',
+          title: 'font-semibold text-lg',
+          htmlContainer: 'text-left',
+        },
+      });
+      return;
+    }
+  }
+
+  
+
+  onSubmitFormPage2(form: NgForm) {
+    form.form.markAllAsTouched();
+
+    const missingFields: string[] = [];
+
+    if (!this.personalData.houseNumber) {
+      missingFields.push('House Number is required');
+    }
+  
+    if (!this.personalData.streetName) {
+      missingFields.push('Street Name is required');
+    }
+  
+    if (!this.personalData.city) {
+      missingFields.push('City is required');
+    }
+  
+    if (!this.personalData.district) {
+      missingFields.push('District is required');
+    }
+  
+    if (!this.personalData.province) {
+      missingFields.push('Province is required');
+    }
+  
+    if (!this.personalData.accHolderName) {
+      missingFields.push('Account Holder’s Name is required');
+    }
+  
+    if (!this.personalData.accNumber) {
+      missingFields.push('Account Number is required');
+    }
+  
+    if (!this.personalData.conformAccNumber) {
+      missingFields.push('Confirm Account Number is required');
+    } else if (this.personalData.accNumber !== this.personalData.conformAccNumber) {
+      missingFields.push('Confirm Account Number - Must match Account Number');
+    }
+  
+    if (!this.selectedBankId) {
+      missingFields.push('Bank Name is required');
+    }
+  
+    if (!this.selectedBranchId) {
+      missingFields.push('Branch Name is required');
+    }
+  
+    // Display errors if any
+    if (missingFields.length > 0) {
+      let errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following issues:</p><ul class="list-disc pl-5">';
+      missingFields.forEach((field) => {
+        errorMessage += `<li>${field}</li>`;
+      });
+      errorMessage += '</ul></div>';
+  
+      Swal.fire({
+        icon: 'error',
+        title: 'Missing or Invalid Information',
+        html: errorMessage,
+        confirmButtonText: 'OK',
+        customClass: {
+          popup: 'bg-white dark:bg-[#363636] text-[#534E4E] dark:text-textDark',
+          title: 'font-semibold text-lg',
+          htmlContainer: 'text-left',
+        },
+      });
+      return;
+    }
+
+    this.onSubmit();  
+  }
+
+  onSubmitFormPage3(form: NgForm) {
     form.form.markAllAsTouched();
   }
 
@@ -488,15 +670,15 @@ capitalizeAccHolderName(event: Event): void {
   inputElement.value = value;
 }
 
-capitalizeFirstLetter() {
-  if (this.personalData.firstNameEnglish) {
-    // Remove leading and trailing spaces
-    this.personalData.firstNameEnglish = this.personalData.firstNameEnglish.trim();
+capitalizeFirstLetter(field: keyof typeof this.personalData) {
+  if (this.personalData[field]) {
+    // Trim spaces
+    this.personalData[field] = this.personalData[field].trim();
 
-    // Capitalize the first letter
-    this.personalData.firstNameEnglish =
-      this.personalData.firstNameEnglish.charAt(0).toUpperCase() +
-      this.personalData.firstNameEnglish.slice(1);
+    // Capitalize first letter
+    this.personalData[field] =
+      this.personalData[field].charAt(0).toUpperCase() +
+      this.personalData[field].slice(1);
   }
 }
 

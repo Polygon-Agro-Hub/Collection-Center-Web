@@ -8,11 +8,12 @@ import { DropdownModule } from 'primeng/dropdown';
 import { TargetService } from '../../../services/Target-service/target.service'
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { AddCenterComponent } from '../add-center/add-center.component';
+import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
 
 @Component({
     selector: 'app-view-centers',
     standalone: true,
-    imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, LoadingSpinnerComponent],
+    imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, LoadingSpinnerComponent, SerchableDropdownComponent],
     templateUrl: './view-centers.component.html',
     styleUrl: './view-centers.component.css'
 })
@@ -230,6 +231,26 @@ export class ViewCentersComponent implements OnInit {
     addCenter() {
         this.router.navigate([`/centers/add-a-center`]);
     }
+
+//     dropdownItems = [
+//     { value: 'us', label: 'United States' },
+//     { value: 'ca', label: 'Canada' },
+//     { value: 'uk', label: 'United Kingdom' },
+//     { value: 'au', label: 'Australia' },
+//     { value: 'de', label: 'Germany' },
+//     { value: 'fr', label: 'France' },
+//     { value: 'jp', label: 'Japan' },
+//     { value: 'in', label: 'India' },
+//     { value: 'br', label: 'Brazil' },
+//     { value: 'mx', label: 'Mexico' }
+//   ];
+
+//   selectedValue: any = null;
+
+//   onSelectionChange(value: any): void {
+//     this.selectedValue = value;
+//     console.log('Selected:', value);
+//   }
 }
 
 class CenterData {

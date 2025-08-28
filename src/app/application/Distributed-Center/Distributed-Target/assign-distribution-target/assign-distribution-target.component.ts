@@ -75,37 +75,6 @@ export class AssignDistributionTargetComponent implements OnInit{
   }
   
 
-  // fetchDistributionCenterOfficers() {
-  //   this.isLoading = true;
-  //   this.DistributionSrv.getDistributionCenterOfficers().subscribe(
-  //     (res) => {
-  //       console.log('res', res)
-  //       this.officerArr = res
-  //       console.log('officerArr', this.officerArr)
-  //       this.noOfOfficers = res.length;
-  //       this.isLoading = false;
-  //       // this.hasData = res.length > 0 ? true : false;
-
-  //     }
-  //   )
-  // }
-
-  // fetchDistributionOrders() {
-  //   this.isLoading = true;
-  //   this.DistributionSrv.getDistributionOrders().subscribe(
-  //     (res) => {
-  //       console.log('res', res)
-  //       this.ordersArr = res
-  //       console.log('ordersArr', this.ordersArr)
-  //       this.noOfOrders = res.length;
-  //       console.log('noOfOrders', this.noOfOrders)
-  //       this.isLoading = false;
-        
-  //       // this.hasData = res.length > 0 ? true : false;
-
-  //     }
-  //   )
-  // }
   
   assignOrdersToOfficers(): OfficerAssignment[] {
     const assignments: OfficerAssignment[] = this.officerArr.map(officer => ({

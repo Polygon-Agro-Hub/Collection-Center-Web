@@ -18,7 +18,10 @@
               {{ officerObj.firstNameEnglish }} {{ officerObj.lastNameEnglish }}
             </p>
             <p class="text-[#627189] dark:text-textDark">
-              {{ officerObj.jobRole }} - <span class="text-[#030308] dark:text-textDark">{{ officerObj.empId }}</span> 
+              {{
+                officerObj.jobRole.replace('Center', 'Centre')
+              }}
+              - <span class="text-[#030308] dark:text-textDark">{{ officerObj.empId }}</span>
             </p>
 
             <p class="font-semibold text-[#030308] dark:text-white">

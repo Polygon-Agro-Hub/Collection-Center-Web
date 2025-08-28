@@ -44,6 +44,8 @@ export class TargetProgressCompletedComponent implements OnInit{
 
 
   ngOnInit(): void {
+    const today = new Date();
+    this.date = today.toISOString().split('T')[0];
     this.fetchCompletedAssignOrders();
   }
 

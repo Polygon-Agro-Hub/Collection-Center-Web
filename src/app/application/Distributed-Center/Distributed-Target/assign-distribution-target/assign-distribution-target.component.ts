@@ -139,7 +139,7 @@ export class AssignDistributionTargetComponent implements OnInit{
         if (res.status) {
           this.isLoading = false;
           this.toastSrv.success('Distribution Center Targets Assigned Successfully');
-          this.router.navigate([`/distribution-center-dashboard`]);
+          this.router.navigate([`/assign-targets`]);
         }
       },
       (err) => {

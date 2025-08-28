@@ -66,11 +66,11 @@ export class OfficerTargetsComponent implements OnInit {
 
 class Officers {
   officerId!: number
-  allOrders!: number
+  total!: number
   pending!: number
   completed!: number
   opened!: number
   empId!: string
-  firstNameEnglish!: string
-  lastNameEnglish!: string
+  name!: string
+
 }

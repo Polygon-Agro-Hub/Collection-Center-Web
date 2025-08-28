@@ -336,7 +336,7 @@ export const routes: Routes = [
                     },
                     {
                         path: 'officer-profile/:id',
-                        component: EditDistributedOfficerComponent,
+                        component: OfficerProfileComponent,
                     }
                     
                 ]
@@ -366,25 +366,6 @@ export const routes: Routes = [
                         component: ClaimOfficerComponent
                     },
                 ]
-            },
-            {
-                path: 'distribution-center-dashboard',
-                component: ViewDistributedOfficersComponent,
-                // canActivate:[CcmRoleGuardService],
-                // children: [
-                //     {
-                //         path: '',
-                //         component: ViewDistributedOfficersComponent,
-                //     },
-                //     {
-                //         path: 'create-distribution-officer',
-                //         component: AddDistributedOfficerComponent
-                //     },
-                //     {
-                //         path: 'edit-distribution-officer/:id',
-                //         component: EditDistributedOfficerComponent
-                //     }
-                // ]
             },
 
             {

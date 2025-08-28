@@ -12,20 +12,21 @@
         <!-- Collection Center Name -->
         <div>
             <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Distribution Centre
-                Name</label>
+                Name *</label>
             <input type="text"
                 class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F] "
-                [(ngModel)]="centerData.DistributionCenterName" name="centerName" required #centerName="ngModel" />
+                [(ngModel)]="centerData.DistributionCenterName" name="centerName" required #centerName="ngModel" 
+                (input)="capitalizeFirstLetter('DistributionCenterName')"/>
             <p *ngIf="centerName.invalid && centerName.touched" class="text-red-500 text-sm">
                 Distribution Centre Name is required.
             </p>
         </div>
         <!-- Country -->
         <div>
-            <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Country</label>
+            <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Country *</label>
             <input type="text"
                 class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                [(ngModel)]="centerData.country" name="country" required #country="ngModel" disabled />
+                [(ngModel)]="centerData.country" name="country" required #country="ngModel" readonly />
             <!-- <select
                 class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                 [(ngModel)]="centerData.country" name="country" required #country="ngModel" disabled>
@@ -36,9 +37,113 @@
                 Country is required.
             </p>
         </div>
+
+        <div>
+            <label for="phoneNumber01" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
+                Mobile Number - 1 *
+            </label>
+            <div class="mt-1 flex">
+                <select id="phoneNumber01Code" name="phoneNumber01Code"
+                    [(ngModel)]="centerData.phoneNumber01Code"
+                    class="block p-2 border border-gray-300 hover:bg-gray-200 rounded-l-md bg-gray-50 mr-5 text-[#534E4E] dark:text-textDark dark:bg-[#1D1D1F]">
+                    <option value="+94">+94 (LK)</option>
+                    <option value="+1">+1 (US)</option>
+                    <option value="+44">+44 (UK)</option>
+                    <option value="+91">+91 (India)</option>
+                </select>
+                <input id="phoneNumber01" name="phoneNumber01" type="tell"
+                    [(ngModel)]="centerData.phoneNumber01"
+                    class="block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-r-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+                    placeholder="Enter your mobile number" #phoneNumber01Input="ngModel" required (ngModelChange)="validateSriLankanPhone($event, 'phone01')"
+                    pattern="^[0-9]{9}$" minlength="9" maxlength="9"
+                    (keypress)="($event.charCode >= 48 && $event.charCode <= 57) ? true : $event.preventDefault()" />
+            </div>
+            <div *ngIf="phoneNumber01Input.touched && !centerData.phoneNumber01"
+                class="text-red-500 text-sm mt-1">
+                <div> Mobile Number - 1 is required</div>
+            </div>
+            <div *ngIf="centerData.phoneNumber01 && phoneNumber01Input.invalid && !isPhoneInvalidMap['phone01']"
+                class="text-red-500 text-sm mt-1">
+                Mobile Number must be exactly 9 digits.
+            </div>
+
+            <div *ngIf="isPhoneInvalidMap['phone01'] && centerData.phoneNumber01" class="text-red-500 text-sm mt-1">
+                Please enter a valid mobile number (format: +947XXXXXXXX)
+              </div>
+        </div>
+
+        <div>
+            <label for="phoNumTwo" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
+                Mobile Number - 2 *
+            </label>
+            <div class="mt-1 flex">
+                <select id="phoneNumber02Code" name="phoneNumber02Code"
+                    [(ngModel)]="centerData.phoneNumber02Code"
+                    class="block p-2 border border-gray-300 hover:bg-gray-200 rounded-l-md bg-gray-50 mr-5 text-[#534E4E] dark:text-textDark dark:bg-[#1D1D1F]">
+                    <option value="+94">+94 (LK)</option>
+                    <option value="+1">+1 (US)</option>
+                    <option value="+44">+44 (UK)</option>
+                    <option value="+91">+91 (India)</option>
+                </select>
+                <input id="phoneNumber02" name="phoneNumber02" type="tell" #phoneNumber02Input="ngModel"
+                    [(ngModel)]="centerData.phoneNumber02"
+                    class="block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-r-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+                    placeholder="Enter your mobile number" pattern="^[0-9]{9}$" minlength="9" maxlength="9"
+                    maxlength="9" (ngModelChange)="validateSriLankanPhone($event, 'phone02')"
+                    (keypress)="($event.charCode >= 48 && $event.charCode <= 57) ? true : $event.preventDefault()"/>
+
+            </div>
+            <div *ngIf="centerData.phoneNumber02 && phoneNumber02Input.invalid && !isPhoneInvalidMap['phone02']"
+                class="text-red-500 text-sm mt-1">
+                Mobile Number must be exactly 9 digits.
+            </div>
+
+            <div *ngIf="centerData.phoneNumber02 && centerData.phoneNumber02 === centerData.phoneNumber01 && !isPhoneInvalidMap['phone02'] && !phoneNumber02Input.invalid" class="text-red-500 text-sm mt-1">
+                Mobile Number - 2 should be different from Phone Number - 1.
+              </div>
+
+              <div *ngIf="isPhoneInvalidMap['phone02'] && centerData.phoneNumber02" class="text-red-500 text-sm mt-1">
+                Please enter a valid mobile number (format: +947XXXXXXXX)
+              </div>
+        </div>
+
+        <div>
+            <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Longitude *</label>
+            <input type="number" step="any"
+                class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+                [(ngModel)]="centerData.longitude" name="longitude" required min="-180" max="180"
+                (input)="enforceLongitudeRange($event)" #longitude="ngModel"
+                placeholder="e.g., 66.7267"
+                 />
+            <p *ngIf="!centerData.longitude && longitude.touched" class="text-red-500 text-sm">
+                Longitude is required.
+            </p>
+            <p *ngIf="(longitude.errors?.['min'] || longitude.errors?.['max']) && longitude.touched"
+                class="text-red-500 text-sm">
+                Longitude must be between -180 and 180.
+            </p>
+        </div>
+
+        <div>
+            <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Latitude *</label>
+            <input type="number" step="any"
+                class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+                [(ngModel)]="centerData.latitude" name="latitude" required min="-90" max="90"
+                (input)="enforceLatitudeRange($event)" #latitude="ngModel"
+                
+                placeholder="e.g., 6.7267"/>
+            <p *ngIf="!centerData.latitude && latitude.touched" class="text-red-500 text-sm">
+                Latitude is required.
+            </p>
+            <p *ngIf="(latitude.errors?.['min'] || latitude.errors?.['max']) && latitude.touched"
+                class="text-red-500 text-sm">
+                Latitude must be between -90 and 90.
+            </p>
+        </div>
+
         <!-- Province -->
         <div>
-            <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Province</label>
+            <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Province *</label>
             <select
                 class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                 [(ngModel)]="centerData.province" (change)="updateFilteredDistricts()" name="province" required
@@ -54,10 +159,11 @@
         </div>
         <!-- District -->
         <div>
-            <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">District</label>
+            <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">District *</label>
             <select
                 class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                [(ngModel)]="centerData.district" name="district" required #district="ngModel">
+                [(ngModel)]="centerData.district" name="district" required #district="ngModel"
+                (change)="onDistrictChange()">
                 <option value="" disabled>Select District</option>
                 <option *ngFor="let district of filteredDistricts" [value]="district.name">
                     {{ district.name }}
@@ -69,51 +175,64 @@
         </div>
         <!-- Building Number -->
         <div>
-            <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Latitude</label>
-            <input type="number" step="any"
+            <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Building Number *</label>
+            <input type="text"
                 class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                [(ngModel)]="centerData.latitude" name="latitude" required min="-90" max="90"
-                (input)="enforceLatitudeRange($event)" #latitude="ngModel" />
-            <p *ngIf="latitude.errors?.['required'] && latitude.touched" class="text-red-500 text-sm">
-                Latitude is required.
-            </p>
-            <p *ngIf="(latitude.errors?.['min'] || latitude.errors?.['max']) && latitude.touched"
-                class="text-red-500 text-sm">
-                Latitude must be between -90 and 90.
+                [(ngModel)]="centerData.buildingNo" name="buildingNo" required #buildingNo="ngModel"
+                (input)="onTrimInput($event, centerData, 'buildingNo')" />
+            <p *ngIf="buildingNo.invalid && buildingNo.touched" class="text-red-500 text-sm">
+                Building Number is required.
             </p>
         </div>
         <!-- Street Name -->
         <div>
-            <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Longitude</label>
-            <input type="number" step="any"
+            <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Street Name *</label>
+            <input type="text"
                 class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                [(ngModel)]="centerData.longitude" name="longitude" required min="-180" max="180"
-                (input)="enforceLongitudeRange($event)" #longitude="ngModel" />
-            <p *ngIf="longitude.errors?.['required'] && longitude.touched" class="text-red-500 text-sm">
-                Longitude is required.
-            </p>
-            <p *ngIf="(longitude.errors?.['min'] || longitude.errors?.['max']) && longitude.touched"
-                class="text-red-500 text-sm">
-                Longitude must be between -180 and 180.
+                [(ngModel)]="centerData.streetName" name="street" required #street="ngModel"
+                (input)="onTrimInput($event, centerData, 'streetName')" />
+            <p *ngIf="street.invalid && street.touched" class="text-red-500 text-sm">
+                Street Name is required.
             </p>
         </div>
         <!-- City -->
         <div>
-            <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">City</label>
+            <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">City *</label>
             <input type="text"
                 class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                [(ngModel)]="centerData.city" name="city" required #city="ngModel" />
+                [(ngModel)]="centerData.city" name="city" required #city="ngModel"
+                (input)="onTrimInput($event, centerData, 'city'); capitalizeFirstLetter('city'); onCityChange()" />
             <p *ngIf="city.invalid && city.touched" class="text-red-500 text-sm">
                 City is required.
             </p>
         </div>
+
+        <div>
+            <label for="email"
+                class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Email *</label>
+            <input type="email" id="email" name="email" [(ngModel)]="centerData.email"
+                #email="ngModel" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                (input)="onTrimInput($event, centerData, 'email')"
+                class="mt-1 block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
+
+            <div *ngIf="email.touched && !centerData.email" class="text-red-500 text-sm mt-1">
+                Email is required
+            </div>
+
+            <div *ngIf="email.touched && email.errors?.['pattern']"
+                class="text-red-500 text-sm mt-1">
+                <!-- <p>Invalid email format (e.g., example&#64;mail.com)</p> -->
+                <p>Please enter a valid email in the format: example&#64;domain.com</p>
+            </div>
+        </div>
+
         <!-- Registration Code -->
         <div>
             <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Distribution Centre Reg
                 Code</label>
             <input type="text"
                 class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                [(ngModel)]="centerData.regCode" name="regCode" placeholder=" ----- " required #regCode="ngModel" />
+                [(ngModel)]="centerData.regCode" name="regCode" placeholder=" ----- " required #regCode="ngModel" readonly />
             <p *ngIf="regCode.invalid && regCode.touched" class="text-red-500 text-sm">
                 Registration Code is required.
             </p>
@@ -125,7 +244,7 @@
             (click)="onCancel()">
             Cancel
         </button>
-        <button type="submit" class="px-4 py-2 bg-[#3980C0] text-[#FFFFFF] rounded-md" (click)="onSubmit()">
+        <button type="submit" class="px-4 py-2 bg-[#415CFF] text-[#FFFFFF] rounded-md" (click)="onSubmit(centerForm)">
             Submit
         </button>
     </div>

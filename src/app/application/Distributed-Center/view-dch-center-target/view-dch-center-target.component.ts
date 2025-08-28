@@ -158,8 +158,10 @@ export class ViewDchCenterTargetComponent implements OnInit{
   }
 
   onSearch() {
+    if (this.searchText) {
+      this.searchText = this.searchText.trim();
+    }
     this.fetchCenterTarget();
-
   }
 
   offSearch() {

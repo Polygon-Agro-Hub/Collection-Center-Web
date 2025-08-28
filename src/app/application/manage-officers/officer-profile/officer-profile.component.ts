@@ -303,7 +303,7 @@ doc.setFont("Inter", "normal");
 
     // Phone Number 1
     doc.setFont("Inter", "normal");
-    doc.text("Phone Number - 1", 14, startY + 42);
+    doc.text("Mobile Number - 1", 14, startY + 42);
 
     if (this.officerObj.phoneNumber01 == null || this.officerObj.phoneNumber01 === "") {
       doc.setFont("Inter", "bold");
@@ -317,7 +317,7 @@ doc.setFont("Inter", "normal");
 
     
     doc.setFont("Inter", "normal");
-    doc.text("Phone Number - 2", 100, startY + 42);
+    doc.text("Mobile Number - 2", 100, startY + 42);
 
     // Check if phoneNumber02 is undefined or null
     if (this.officerObj.phoneNumber02 == null || this.officerObj.phoneNumber02 === "") {

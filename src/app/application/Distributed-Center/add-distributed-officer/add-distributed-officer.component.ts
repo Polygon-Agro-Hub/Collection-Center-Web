@@ -311,6 +311,7 @@ export class AddDistributedOfficerComponent implements OnInit {
 
   getAllDistributionManagers() {
     this.isLoading = true;
+    // this.personalData.jobRole = ''
     this.DistributedManageOfficerSrv.getDistributionCenterManagers(this.personalData.centerId).subscribe(
       (res) => {
         this.managerArr = res

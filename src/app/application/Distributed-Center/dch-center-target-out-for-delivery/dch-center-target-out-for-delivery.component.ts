@@ -105,6 +105,9 @@ export class DchCenterTargetOutForDeliveryComponent implements OnInit{
   }
 
   onSearch() {
+    if (this.searchText) {
+      this.searchText = this.searchText.trim();
+    }
     this.fetchCenterTargetOutForDelivery();
 
   }

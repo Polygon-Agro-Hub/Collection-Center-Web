@@ -65,74 +65,11 @@
             </div>
         </div> -->
 
-        <div class="relative w-60">
-            <!-- Input box -->
-            <div
-              class=" w-48 h-12 border-[1.8px] border-[#828282] rounded-xl flex items-center px-3 py-2 cursor-pointer dark:bg-[#292929]"
-              (click)="toggleCalendar()"
-            >
-            <span class="flex-1 text-textLight dark:text-textDark">
-                {{ selectedDate ? (selectedDate | date: 'yyyy-MM-dd') : 'Date' }}
-              </span>
-              
-              <!-- Clear button -->
-              <button
-                *ngIf="selectedDate"
-                type="button"
-                (click)="clearDate($event)"
-                class="ml-2 text-black dark:text-textDark"
-              >
-                ✕
-              </button>
-              
-              <!-- Downward arrow (only when no date selected) -->
-              <i
-                *ngIf="!selectedDate && !showCalendar "
-                class="fa-solid fa-angle-down ml-2 text-gray-500 dark:text-gray-300"
-              ></i>
-
-              <i
-                *ngIf="showCalendar && !selectedDate"
-                class="fa-solid fa-angle-up ml-2 text-gray-500 dark:text-gray-300"
-              ></i>
-              
-            </div>
+        <app-custom-datepicker
+  [selectedDate]="selectedDate"
+  (dateChange)="onDateChange($event)"
+></app-custom-datepicker>
           
-            <!-- Calendar popup -->
-            <div
-              *ngIf="showCalendar"
-              class="absolute z-10 mt-2 p-4 bg-white dark:bg-[#292929] border border-gray-300 dark:border-gray-700 rounded-xl shadow-lg"
-            >
-              <!-- Month navigation -->
-              <div class="flex justify-between items-center mb-2">
-                <button (click)="prevMonth()" class="px-2 text-3xl dark:text-white">‹</button>
-                <span class="font-semibold text-textLight dark:text-white">
-                  {{ months[currentMonth] }} {{ currentYear }}
-                </span>
-                <button (click)="nextMonth()" class="px-2 text-3xl dark:text-white">›</button>
-              </div>
-          
-              <!-- Weekdays -->
-              <div class="grid grid-cols-7 gap-1 text-center text-md font-medium text-gray-500 dark:text-gray-400">
-                <div *ngFor="let d of weekDays">{{ d }}</div>
-              </div>
-          
-              <!-- Days -->
-              <div class="grid grid-cols-7 gap-1 text-center mt-1 dark:text-white">
-                <div *ngFor="let day of calendarDays"
-                  (click)="selectDate(day)"
-                 
-                  class="p-2 rounded cursor-pointer hover:bg-blue-300 dark:hover:bg-blue-600"
-                  [class.text-gray-400]="!day.currentMonth"
-                >
-                  {{ day.date }}
-                </div>
-              </div>
-            </div>
-          </div>
-          
-          
-
         <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
             <input type="text" placeholder="Search by Order ID.." [(ngModel)]="searchText" (keyup.enter)="onSearch()"
             (keyup.esc)="offSearch()"

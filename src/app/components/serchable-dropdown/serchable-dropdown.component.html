@@ -1,18 +1,18 @@
-<div class="relative w-full" [class.opacity-50]="disabled">
+<div class="dropdown-wrapper-1 relative w-full" [class.opacity-50]="disabled">
   <!-- Dropdown trigger -->
   <div
-    class="flex items-center justify-between w-full px-3 py-2 border border-gray-300 rounded-md bg-white cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+    class="flex items-center justify-between w-full px-3 py-2 border dark:text-white border-gray-300 rounded-md bg-white dark:bg-[#292929] cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
     [class.cursor-not-allowed]="disabled"
     (click)="toggleDropdown()"
   >
-    <span class="text-gray-700 truncate">
+    <span class="text-gray-700 dark:text-textDark truncate">
       {{ selectedItem ? selectedItem.label : placeholder }}
     </span>
     
     <div class="flex items-center space-x-1">
       <!-- Clear button -->
       @if (clearable && selectedItem && !disabled) {
-        <button
+        <button *ngIf="selectedItem"
           type="button"
           class="text-gray-400 hover:text-gray-600 focus:outline-none"
           (click)="clearSelection($event)"
@@ -24,31 +24,28 @@
       }
       
       <!-- Dropdown arrow -->
-      <svg
-        class="w-4 h-4 text-gray-400 transition-transform duration-200"
-        [class.transform.rotate-180]="isOpen"
-        fill="none"
-        stroke="currentColor"
-        viewBox="0 0 24 24"
-      >
-        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7" />
-      </svg>
+      <i *ngIf="!isOpen && !selectedItem" class="fa-solid fa-angle-down text-gray-400"></i>
+      <i *ngIf="isOpen && !selectedItem" class="fa-solid fa-angle-up text-gray-400"></i>
+      
     </div>
   </div>
 
   <!-- Dropdown menu -->
   @if (isOpen && !disabled) {
-    <div class="absolute z-50 w-full mt-1 bg-white border border-gray-200 rounded-md shadow-lg max-h-60 overflow-auto">
+    <div class="absolute z-50 w-full mt-1 bg-white border dark:bg-[#292929] dark:text-textDark border-gray-200 dark:border-[#828282] rounded-md shadow-lg max-h-60 overflow-auto">
       <!-- Search input -->
-      <div class="sticky top-0 bg-white p-2 border-b border-gray-200">
-        <input
-          type="text"
-          [placeholder]="searchPlaceholder"
-          [value]="searchTerm"
-          (input)="onSearchInput($event)"
-          class="w-full px-3 py-2 border border-gray-300 rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent text-sm"
-          autofocus
-        />
+      <div class="sticky top-0 bg-white dark:bg-[#292929] dark:text-textDark p-2 border-b border-gray-200 dark:border-[#828282]">
+        <div class="relative w-full">
+          <input
+            type="text"
+            [placeholder]="searchPlaceholder"
+            [value]="searchTerm"
+            (input)="onSearchInput($event)"
+            class="w-full px-3 py-2 pr-10 border text-lg dark:bg-[#292929] dark:text-textDark border-gray-300 dark:border-[#828282] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+            autofocus
+          />
+          <i class="fa-solid fa-magnifying-glass absolute text-lg right-3 top-1/2 transform -translate-y-1/2 text-gray-400"></i>
+        </div>
       </div>
 
       <!-- Options list -->
@@ -61,7 +58,7 @@
           @for (item of filteredItems; track item.value) {
             <button
               type="button"
-              class="w-full text-left px-3 py-2 text-sm hover:bg-gray-100 focus:outline-none focus:bg-gray-100 transition-colors duration-150"
+              class="w-full text-left px-3 py-2 text-md hover:bg-gray-100 dark:hover:bg-[#474747] focus:outline-none focus:bg-gray-100 transition-colors duration-150"
               [class.text-gray-400.cursor-not-allowed]="item.disabled"
               [class.bg-blue-50.text-blue-700]="selectedItem?.value === item.value && showSelected"
               [class.hover:bg-blue-100]="selectedItem?.value === item.value && showSelected"

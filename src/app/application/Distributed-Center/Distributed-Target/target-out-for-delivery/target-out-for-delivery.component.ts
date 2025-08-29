@@ -69,7 +69,7 @@ export class TargetOutForDeliveryComponent implements OnInit {
         console.log('res', res)
         this.ordersArr = res.items
         console.log('ordersArr', this.ordersArr)
-        this.totalItems = res.total;
+        this.totalItems = res.total | 0;
         
         if (res.items.length === 0) {
           this.hasData = false;
@@ -85,7 +85,6 @@ export class TargetOutForDeliveryComponent implements OnInit {
 
   onSearch() {
     this.fetchOutForDeliveryOrders();
-
   }
 
   offSearch() {

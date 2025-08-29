@@ -342,6 +342,18 @@ export const routes: Routes = [
                 ]
             },
             {
+                path: 'distribution-center-dashboard',
+                // canActivate:[CcmRoleGuardService],
+                children: [
+                    {
+                        path: '',
+                        component: ViewDistributedOfficersComponent,
+                    },
+                    
+                    
+                ]
+            },
+            {
                 path: 'distribution-officers',
                 // canActivate:[CcmRoleGuardService],
                 children: [

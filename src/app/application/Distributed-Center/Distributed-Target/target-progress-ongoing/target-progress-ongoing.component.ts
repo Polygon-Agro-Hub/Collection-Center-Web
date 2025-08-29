@@ -50,6 +50,8 @@ export class TargetProgressOngoingComponent implements OnInit {
 
 
   ngOnInit(): void {
+    const today = new Date();
+    this.date = today.toISOString().split('T')[0];
     this.fetchAllAssignOrders();
   }
 

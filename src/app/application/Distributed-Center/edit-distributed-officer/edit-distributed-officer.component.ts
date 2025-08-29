@@ -677,11 +677,11 @@ export class EditDistributedOfficerComponent implements OnInit {
   //   missingFields.push('Staff Employee Type');
   // }
 
-  if (!this.personalData.centerId) {
+  if (!this.personalData.centerId && this.logingRole === 'Distribution Center Head') {
     missingFields.push('Distribution Centre Name is required');
   }
 
-  if (!this.personalData.irmId) {
+  if (!this.personalData.irmId && this.logingRole === 'Distribution Center Head') {
     missingFields.push('Distribution Centre Manager is required');
   }
 

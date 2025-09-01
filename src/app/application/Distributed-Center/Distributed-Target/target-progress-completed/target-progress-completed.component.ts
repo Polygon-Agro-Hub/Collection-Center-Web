@@ -182,6 +182,7 @@ export class TargetProgressCompletedComponent implements OnInit{
 
 
 toggleOrder(orderId: number, event: Event): void {
+  console.log('toggoling order')
     const isChecked = (event.target as HTMLInputElement).checked;
     
     if (isChecked) {
@@ -283,6 +284,47 @@ changeStatusAndTime(data: { orderIds: any[]; time: string }) {
 cancelOutForDelivery() {
   this.isOutForDelivery = false;
 }
+
+getScheduleClass(item: any): string {
+  console.log('shedule class called')
+  const now = new Date();
+  const scheduleDate = new Date(item.sheduleDate);
+
+  // Remove time part for date comparison
+  const nowDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
+  console.log('nowDate', nowDate)
+  const scheduleOnlyDate = new Date(scheduleDate.getFullYear(), scheduleDate.getMonth(), scheduleDate.getDate());
+  console.log('scheduleOnlyDate', scheduleOnlyDate)
+  // Case 1: Schedule date is before today → RED
+  if (scheduleOnlyDate < nowDate) {
+    console.log('below')
+    return 'text-red-500';
+  }
+
+  // Case 2: Schedule date is today → check time
+  if (scheduleOnlyDate.getTime() === nowDate.getTime()) {
+    let upperLimitHour = 0;
+
+    if (item.sheduleTime.includes('8-12')) {
+      upperLimitHour = 12;
+    } else if (item.sheduleTime.includes('12-4')) {
+      upperLimitHour = 16;
+    } else if (item.sheduleTime.includes('4-8')) {
+      upperLimitHour = 20;
+    }
+
+    const upperLimit = new Date(now);
+    upperLimit.setHours(upperLimitHour, 0, 0, 0);
+
+    if (now <= upperLimit) {
+      return 'text-blue-500';
+    }
+  }
+
+  // Case 3: Future dates → no special style
+  return '';
+}
+
 
 }
 

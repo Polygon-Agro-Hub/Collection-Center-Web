@@ -7,11 +7,12 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { ComplaintsService } from '../../../services/Complaints-Service/complaints.service';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
+import { CustomDatepickerComponent } from "../../../components/custom-datepicker/custom-datepicker.component";
 
 @Component({
   selector: 'app-view-dch-center-target',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent, CustomDatepickerComponent],
   templateUrl: './view-dch-center-target.component.html',
   styleUrl: './view-dch-center-target.component.css'
 })
@@ -27,7 +28,7 @@ export class ViewDchCenterTargetComponent implements OnInit{
 
   officerId!: number;
 
-  date:  string = '';
+  date:  string | Date | null = null;
 
   page: number = 1;
   totalItems: number = 0;
@@ -85,7 +86,7 @@ export class ViewDchCenterTargetComponent implements OnInit{
 
   }
 
-  fetchCenterTarget(centerId: number = this.centerId!, search: string = this.searchText, status: string = this.selectStatus, selectDate: string = this.date) {
+  fetchCenterTarget(centerId: number = this.centerId!, search: string = this.searchText, status: string = this.selectStatus, selectDate: string | Date | null = this.date) {
     this.isLoading = true;
     console.log('selectStatus', this.selectStatus)
     this.DistributionSrv.getCenterTarget(centerId, search, status, selectDate ).subscribe(
@@ -170,8 +171,13 @@ export class ViewDchCenterTargetComponent implements OnInit{
 
   }
 
-  onDateChange() {
-    console.log('called')
+  // onDateChange() {
+  //   console.log('called')
+  //   this.fetchCenterTarget();
+  // }
+
+  onDateChange(newDate: string | Date | null) {
+    this.date = newDate;
     this.fetchCenterTarget();
   }
 

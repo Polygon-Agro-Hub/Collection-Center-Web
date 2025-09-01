@@ -65,14 +65,20 @@
             </div>
         </div>
 
-        <div class="relative w-36">
-            <div
+        <div class="relative w-36 mr-12">
+            <app-custom-datepicker
+  [selectedDate]="date"
+  (dateChange)="onDateChange($event)"
+></app-custom-datepicker>
+            <!-- <div
                 class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
                 <input type="date" #toDateInput [(ngModel)]="date" name="date"
                     (change)="onDateChange()"
                     class="block w-full appearance-none text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none dark:bg-[#292929] custom-date-input" />
-            </div>
+            </div> -->
         </div>
+
+        
 
         <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
             <input type="text" placeholder="Search by Order ID.." [(ngModel)]="searchText"

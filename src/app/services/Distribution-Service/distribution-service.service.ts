@@ -351,7 +351,7 @@ export class DistributionServiceService {
   //   return this.http.get<any>(url, { headers });
   // }
 
-  getCenterTarget(centerId: number, searchText: string = '', status: string = '', selectDate: string = ''): Observable<any> {
+  getCenterTarget(centerId: number, searchText: string = '', status: string = '', selectDate: string | Date | null = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
@@ -375,7 +375,7 @@ export class DistributionServiceService {
     return this.http.get<any>(url, { headers });
   }
 
-  getCenterTargetForDelivery(centerId: number, searchText: string = '', status: string = '', selectDate: string = ''): Observable<any> {
+  getCenterTargetForDelivery(centerId: number, searchText: string = '', status: string = '', selectDate: string | Date | null = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });

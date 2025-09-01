@@ -103,16 +103,25 @@ export class AssignDistributionTargetComponent implements OnInit{
     this.isCountValid = this.totalAssignedOrders === this.totalOrders;
   }
 
-  preventDecimal(event: KeyboardEvent): void {
-    if (event.key === '.' || event.key === ',') {
+  allowOnlyNumbers(event: KeyboardEvent): void {
+    const charCode = event.key;
+  
+    // allow: Backspace, Delete, Arrow keys, Tab
+    if (['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(charCode)) {
+      return;
+    }
+  
+    // block anything that's not 0–9
+    if (!/^[0-9]$/.test(charCode)) {
       event.preventDefault();
     }
   }
+  
 
   onCancel() {
 
-    this.toastSrv.warning('Distribution Center Targets Assign Cancelled')
-    this.router.navigate([`/distribution-center-dashboard`]);
+    this.toastSrv.warning('Distribution Centre Targets Assign Cancelled')
+    this.router.navigate([`/assign-targets`]);
   }
 
   onSubmit() {
@@ -138,16 +147,20 @@ export class AssignDistributionTargetComponent implements OnInit{
       (res) => {
         if (res.status) {
           this.isLoading = false;
-          this.toastSrv.success('Distribution Center Targets Assigned Successfully');
+          this.toastSrv.success('Distribution Centre Targets Assigned Successfully');
           this.router.navigate([`/assign-targets`]);
         }
       },
       (err) => {
         console.error('Error submitting assignments:', err);
         this.isLoading = false;
-        this.toastSrv.error('Failed to assign Distribution Center Targets');
+        this.toastSrv.error('Failed to assign Distribution Centre Targets');
       }
     );
+  }
+
+  goBack() {
+    this.location.back(); // navigates to previous page in history
   }
   
   

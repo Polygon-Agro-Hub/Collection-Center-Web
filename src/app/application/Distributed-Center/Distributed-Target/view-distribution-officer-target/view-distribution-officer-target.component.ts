@@ -235,6 +235,7 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
 
 
 toggleOrder(orderId: number, event: Event): void {
+  console.log('togling')
     const isChecked = (event.target as HTMLInputElement).checked;
     
     if (isChecked) {
@@ -245,9 +246,11 @@ toggleOrder(orderId: number, event: Event): void {
         this.selectedOrderIds = this.selectedOrderIds.filter(id => id !== orderId);
     }
     console.log('selectedOrderIds', this.selectedOrderIds);
+
     
 
     this.allChecked = this.selectedOrderIds.length === this.ordersArr.length;
+    console.log('allChecked', this.allChecked)
 }
 
 

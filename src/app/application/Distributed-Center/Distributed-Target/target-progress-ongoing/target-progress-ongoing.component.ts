@@ -6,11 +6,12 @@ import { DistributionServiceService } from '../../../../services/Distribution-Se
 import { NgxPaginationModule } from 'ngx-pagination';
 import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
 import { ComplaintsService } from '../../../../services/Complaints-Service/complaints.service';
+import { CustomDatepickerComponent } from "../../../../components/custom-datepicker/custom-datepicker.component";
 
 @Component({
   selector: 'app-target-progress-ongoing',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent, CustomDatepickerComponent],
   templateUrl: './target-progress-ongoing.component.html',
   styleUrl: './target-progress-ongoing.component.css'
 })
@@ -20,7 +21,7 @@ export class TargetProgressOngoingComponent implements OnInit {
   searchText: string = '';
   selectStatus: string = '';
 
-  date:  string = '';
+  selectedDate: string | Date | null = null;
 
   // page: number = 1;
   totalItems: number = 0;
@@ -31,6 +32,8 @@ export class TargetProgressOngoingComponent implements OnInit {
 
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Pending', 'Completed', 'Opened'];
+
+
 
   toggleStatusDropdown() {
     this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
@@ -46,12 +49,14 @@ export class TargetProgressOngoingComponent implements OnInit {
     private router: Router,
     private ComplainSrv: ComplaintsService,
     private DistributionSrv: DistributionServiceService
-  ) { }
+  ) {
+    
+   }
 
 
   ngOnInit(): void {
     const today = new Date();
-    this.date = today.toISOString().split('T')[0];
+    this.selectedDate = today.toISOString().split('T')[0];
     this.fetchAllAssignOrders();
   }
 
@@ -66,7 +71,7 @@ export class TargetProgressOngoingComponent implements OnInit {
 
   }
 
-  fetchAllAssignOrders(status: string = this.selectStatus, search: string = this.searchText, selectDate: string = this.date) {
+  fetchAllAssignOrders(status: string = this.selectStatus, search: string = this.searchText, selectDate: string | Date | null = this.selectedDate) {
     this.isLoading = true;
     this.DistributionSrv.getAllAssignOrders(status, search, selectDate).subscribe(
       (res) => {
@@ -154,11 +159,10 @@ export class TargetProgressOngoingComponent implements OnInit {
     this.fetchAllAssignOrders();
   }
 
-  onDateChange() {
-    console.log('called')
+  onDateChange(newDate: string | Date | null) {
+    this.selectedDate = newDate;
     this.fetchAllAssignOrders();
   }
-
 
   // onPageChange(event: number) {
   //   this.page = event;

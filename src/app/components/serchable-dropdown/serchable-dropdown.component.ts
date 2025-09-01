@@ -1,5 +1,6 @@
-import { Component, EventEmitter, forwardRef, Input, Output } from '@angular/core';
-import { NG_VALUE_ACCESSOR } from '@angular/forms';
+import { CommonModule } from '@angular/common';
+import { Component, EventEmitter, forwardRef, Input, Output, HostListener, ElementRef  } from '@angular/core';
+import { FormsModule, NG_VALUE_ACCESSOR } from '@angular/forms';
 interface DropdownItem {
   value: any;
   label: string;
@@ -9,7 +10,7 @@ interface DropdownItem {
 @Component({
   selector: 'app-searchable-dropdown',
   standalone: true,
-  imports: [],
+  imports: [CommonModule, FormsModule],
   templateUrl: './serchable-dropdown.component.html',
   styleUrl: './serchable-dropdown.component.css',
   providers: [
@@ -36,11 +37,20 @@ export class SerchableDropdownComponent {
   private onChange: (value: any) => void = () => { };
   private onTouched: () => void = () => { };
 
+  constructor(private eRef: ElementRef) {}
+
   get filteredItems(): DropdownItem[] {
     if (!this.searchTerm) return this.items;
     return this.items.filter(item =>
       item.label.toLowerCase().includes(this.searchTerm.toLowerCase())
     );
+  }
+
+  @HostListener('document:click', ['$event'])
+  handleClickOutside(event: MouseEvent) {
+    if (this.isOpen && this.eRef.nativeElement && !this.eRef.nativeElement.contains(event.target)) {
+      this.isOpen = false;
+    }
   }
 
   toggleDropdown(): void {

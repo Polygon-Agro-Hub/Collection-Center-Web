@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener } from '@angular/core';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { ManageOfficersService } from '../../../services/manage-officers-service/manage-officers.service';
@@ -10,11 +10,13 @@ import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loa
 import { HttpClient } from '@angular/common/http';
 import { Location } from '@angular/common';
 import { DistributedManageOfficersService } from '../../../services/Distributed-manage-officers-service/distributed-manage-officers.service';
+import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
+import { Country, COUNTRIES } from '../../../../assets/country-data';
 
 @Component({
   selector: 'app-edit-distributed-officer',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, LoadingSpinnerComponent, SerchableDropdownComponent],
   templateUrl: './edit-distributed-officer.component.html',
   styleUrl: './edit-distributed-officer.component.css'
 })
@@ -61,8 +63,18 @@ export class EditDistributedOfficerComponent implements OnInit {
   selectedBranchId: number | null = null;
   allBranches: BranchesData = {};
 
+  bankItems: { value: number; label: string }[] = [];
+  branchItems: { value: number; label: string }[] = [];
+
   invalidFields: Set<string> = new Set();
   naviPath!: string
+
+  countries: Country[] = COUNTRIES;
+  selectedCountry1: Country | null = null;
+  selectedCountry2: Country | null = null;
+
+  dropdownOpen = false;
+  dropdownOpen2 = false;
 
   constructor(
     private ManageOficerSrv: ManageOfficersService,
@@ -76,6 +88,9 @@ export class EditDistributedOfficerComponent implements OnInit {
 
   ) {
     this.logingRole = tokenSrv.getUserDetails().role
+    const defaultCountry = this.countries.find(c => c.code === 'lk') || null;
+    this.selectedCountry1 = defaultCountry;
+    this.selectedCountry2 = defaultCountry;
 
   }
 
@@ -107,6 +122,8 @@ export class EditDistributedOfficerComponent implements OnInit {
     { name: 'Vavuniya', province: 'Northern' },
   ];
 
+  districtItems = this.districts.map(d => ({ value: d.name, label: d.name }));
+
   VehicleTypes = [
     { name: 'Lorry', capacity: 2 },
     { name: 'Dimo Batta', capacity: 3.5 },
@@ -125,6 +142,39 @@ export class EditDistributedOfficerComponent implements OnInit {
     this.fetchOffierById(this.editOfficerId);
     // this.UpdateEpmloyeIdCreate();
     this.setActiveTabFromRoute()
+  }
+
+  @HostListener('document:click', ['$event.target'])
+  onClick(targetElement: HTMLElement) {
+    const insideDropdown1 = targetElement.closest('.dropdown-wrapper-1');
+    const insideDropdown2 = targetElement.closest('.dropdown-wrapper-2');
+  
+    // Close dropdowns only if click is outside their wrapper
+    if (!insideDropdown1) {
+      this.dropdownOpen = false;
+    }
+    if (!insideDropdown2) {
+      this.dropdownOpen2 = false;
+    }
+  }
+
+  selectCountry1(country: Country) {
+    this.selectedCountry1 = country;
+    this.personalData.phoneCode01 = country.dialCode; // update ngModel
+    console.log('sdsf', this.personalData.phoneCode01)
+    this.dropdownOpen = false;
+  }
+
+  selectCountry2(country: Country) {
+    this.selectedCountry2 = country;
+    this.personalData.phoneCode01 = country.dialCode; // update ngModel
+    console.log('sdsf', this.personalData.phoneCode01)
+    this.dropdownOpen2 = false;
+  }
+  
+  // get flag
+  getFlagUrl(code: string): string {
+    return `https://flagcdn.com/24x18/${code}.png`;
   }
 
   fetchOffierById(id: number) {
@@ -388,22 +438,29 @@ export class EditDistributedOfficerComponent implements OnInit {
     }
   }
 
-  updateProvince(event: Event): void {
-    const target = event.target as HTMLSelectElement;
-    const selectedDistrict = target.value;
+  // updateProvince(event: Event): void {
+  //   const target = event.target as HTMLSelectElement;
+  //   const selectedDistrict = target.value;
 
-    const selected = this.districts.find(district => district.name === selectedDistrict);
+  //   const selected = this.districts.find(district => district.name === selectedDistrict);
 
-    if (this.itemId === null) {
+  //   if (this.itemId === null) {
 
-      if (selected) {
-        this.personalData.province = selected.province;
-      } else {
-        this.personalData.province = '';
-      }
+  //     if (selected) {
+  //       this.personalData.province = selected.province;
+  //     } else {
+  //       this.personalData.province = '';
+  //     }
 
-    }
+  //   }
 
+  // }
+
+  onDistrictChange(districtName: string | null) {
+    if (this.itemId !== null) return; // keep your original guard
+
+    const selected = this.districts.find(d => d.name === districtName || '');
+    this.personalData.province = selected ? selected.province : '';
   }
 
   // onSubmit() {
@@ -677,11 +734,11 @@ export class EditDistributedOfficerComponent implements OnInit {
   //   missingFields.push('Staff Employee Type');
   // }
 
-  if (!this.personalData.centerId) {
+  if (!this.personalData.centerId && this.logingRole === 'Distribution Center Head') {
     missingFields.push('Distribution Centre Name is required');
   }
 
-  if (!this.personalData.irmId) {
+  if (!this.personalData.irmId && this.logingRole === 'Distribution Center Head') {
     missingFields.push('Distribution Centre Manager is required');
   }
 

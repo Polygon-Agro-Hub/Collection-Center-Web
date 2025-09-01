@@ -56,15 +56,20 @@
             </div>
         </div>
 
-        <div class="relative w-36">
+        <!-- <div class="relative w-36">
             <div
                 class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
                 <input type="date" #toDateInput [(ngModel)]="date" name="date"
                     (change)="onDateChange()"
                     class="block w-full appearance-none text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none dark:bg-[#292929] custom-date-input" />
             </div>
-        </div>
+        </div> -->
 
+        <app-custom-datepicker
+  [selectedDate]="selectedDate"
+  (dateChange)="onDateChange($event)"
+></app-custom-datepicker>
+          
         <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
             <input type="text" placeholder="Search by Order ID.." [(ngModel)]="searchText" (keyup.enter)="onSearch()"
             (keyup.esc)="offSearch()"
@@ -77,7 +82,7 @@
                         d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
                 </svg>
             </button>
-            <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none" (click)="offSearch()">
+            <button *ngIf="searchText" type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none" (click)="offSearch()">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />

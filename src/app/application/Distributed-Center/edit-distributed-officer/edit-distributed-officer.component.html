@@ -49,7 +49,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8 mb-4">
 
-                    <div *ngIf="logingRole === 'Distribution Center Head'" (change)="getAllManagers()">
+                    <div *ngIf="logingRole === 'Distribution Center Head'" (change)="changeCenter()">
                         <label for="centerId" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">
                             Distribution Centre Name *
                         </label>
@@ -82,16 +82,16 @@
                         <select id="jobRole" [(ngModel)]="personalData.jobRole"
                             name="jobRole" placeholder="select" #jobRoleInput="ngModel" required
                             class="form-control mt-1 block w-full p-2 text-[#292929] mb-1 dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] focus:ring-indigo-500 focus:border-indigo-500">
-                            <option disabled
+                            <option disabled value="''"
                                 class="p-2 text-[#292929] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
                                 -- select --
                             </option>
-                            <option selected value="Distribution Center Manager"
+                            <option value="Distribution Center Manager"
                                 *ngIf="logingRole === 'Distribution Center Head'"
                                 class="p-2 text-[#292929] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
                                 Distribution Centre Manager
                             </option>
-                            <option selected value="Distribution Officer"
+                            <option value="Distribution Officer"
                                 class="p-2 text-[#292929] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
                                 Distribution Officer
                             </option>
@@ -101,6 +101,7 @@
                             <div>Job Role is required</div>
                         </div>
                     </div>
+                    
 
                     <!-- <div>
                         <label class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">EMP ID / User

@@ -134,67 +134,73 @@
         </div>
 
 
-        <div *ngIf="hasData" class=" min-w-max mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
-            <table class="w-full min-w-max divide-y-2">
-                <thead class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
-                    <tr>
-                        <th class="px-6 py-3 text-left font-normal w-10">No</th>
-                        <th class="px-6 py-3 text-left font-normal w-32">Reg Code</th>
-                        <th class="px-6 py-3 text-left font-normal w-48">Centre Name</th>
-                        <th class="px-6 py-3 text-center font-normal w-28">Province</th>
-                        <th class="px-6 py-3 text-center font-normal w-28">District</th>
-                        <th class="px-6 py-3 text-center font-normal w-28">City</th>
-                        <th class="px-6 py-3 text-center font-normal w-40">Contact number-1</th>
-                        <th class="px-6 py-3 text-center font-normal w-40">Location</th>
-                        <th class="px-6 py-3 text-center font-normal w-32">DCM Profiles</th>
-                        <th class="px-6 py-3 text-center font-normal w-32">DIO Profiles</th>
-                    </tr>
-                </thead>
-                <tbody *ngIf="countOfOfficers != 0" class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
-                    <tr class="hover:bg-[#415CFF] hover:text-white dark:text-gray-300 cursor-pointer"
-                        *ngFor="let item of itemsArr | paginate : { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index"
-                        (click)="navigateToDashboard(item.centerId, item.centerName, item.regCode)">
-                        <td class="px-6 py-3 font-medium text-center">
-                            {{ ('0' + ((currentPage - 1) * itemsPerPage + i + 1)).slice(-2) }}
-                        </td>
-                        <td class="px-6 py-3 font-medium text-left">{{ item.regCode }}</td>
-                        <td class="px-6 py-3 font-medium text-left">{{ item.centerName }}</td>
-                        <td class="px-6 py-3 font-medium text-center">{{ item.province }}</td>
-                        <td class="px-6 py-3 font-medium text-center">{{ item.district }}</td>
-                        <td class="px-6 py-3 font-medium text-center">{{ item.city }}</td>
-                        <td class="px-6 py-3 font-medium text-center">
-                            <ng-container *ngIf="item.contact01; else noContact">
-                                {{ '+94' + item.contact01 }}
-                            </ng-container>
-                            <ng-template #noContact>
-                                N/A
-                            </ng-template>
-                        </td>
-                        <td class="px-6 py-3 font-medium text-center">
-                            <a *ngIf="item.longitude && item.latitude" href="https://www.google.com/maps?q={{ item.latitude }},{{
-                  item.longitude
-                }}" target="_blank" class="text-red-600 hover:text-blue-800 text-xl" title="View on map">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <!-- Font Awesome map pin icon -->
-                            </a>
-                            <span *ngIf="!item.longitude || !item.latitude" class="text-gray-400">
-                                <i class="fas fa-map-marker-alt"></i>
-                                <!-- Disabled/grayed out icon when no coordinates -->
-                            </span>
-                        </td>
-                        <td class="px-6 py-3 font-medium text-center">{{ item.distributionCenterManagerCount }}</td>
-                        <td class="px-6 py-3 font-medium text-center">{{ item.distributionOfficerCount }}</td>
-                    </tr>
-                </tbody>
-            </table>
+        <div class="min-w-max">
+            <div *ngIf="hasData" class=" min-w-max mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+                <table class="w-full min-w-max divide-y-2">
+                    <thead class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
+                        <tr>
+                            <th class="px-6 py-3 text-left font-normal w-10">No</th>
+                            <th class="px-6 py-3 text-left font-normal w-32">Reg Code</th>
+                            <th class="px-6 py-3 text-left font-normal w-48">Centre Name</th>
+                            <th class="px-6 py-3 text-center font-normal w-28">Province</th>
+                            <th class="px-6 py-3 text-center font-normal w-28">District</th>
+                            <th class="px-6 py-3 text-center font-normal w-28">City</th>
+                            <th class="px-6 py-3 text-center font-normal w-40">Contact number-1</th>
+                            <th class="px-6 py-3 text-center font-normal w-40">Location</th>
+                            <th class="px-6 py-3 text-center font-normal w-32">DCM Profiles</th>
+                            <th class="px-6 py-3 text-center font-normal w-32">DIO Profiles</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="countOfOfficers != 0" class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
+                        <tr class="hover:bg-[#415CFF] hover:text-white dark:text-gray-300 cursor-pointer"
+                            *ngFor="let item of itemsArr | paginate : { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index"
+                            (click)="navigateToDashboard(item.centerId, item.centerName, item.regCode)">
+                            <td class="px-6 py-3 font-medium text-center">
+                                {{ ('0' + ((currentPage - 1) * itemsPerPage + i + 1)).slice(-2) }}
+                            </td>
+                            <td class="px-6 py-3 font-medium text-left">{{ item.regCode }}</td>
+                            <td class="px-6 py-3 font-medium text-left">{{ item.centerName }}</td>
+                            <td class="px-6 py-3 font-medium text-center">{{ item.province }}</td>
+                            <td class="px-6 py-3 font-medium text-center">{{ item.district }}</td>
+                            <td class="px-6 py-3 font-medium text-center">{{ item.city }}</td>
+                            <td class="px-6 py-3 font-medium text-center">
+                                <ng-container *ngIf="item.contact01; else noContact">
+                                    {{ '+94' + item.contact01 }}
+                                </ng-container>
+                                <ng-template #noContact>
+                                    N/A
+                                </ng-template>
+                            </td>
+                            <td class="px-6 py-3 font-medium text-center">
+                                <a *ngIf="item.longitude && item.latitude" href="https://www.google.com/maps?q={{ item.latitude }},{{
+                      item.longitude
+                    }}" target="_blank" class="text-red-600 hover:text-blue-800 text-xl" title="View on map">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <!-- Font Awesome map pin icon -->
+                                </a>
+                                <span *ngIf="!item.longitude || !item.latitude" class="text-gray-400">
+                                    <i class="fas fa-map-marker-alt"></i>
+                                    <!-- Disabled/grayed out icon when no coordinates -->
+                                </span>
+                            </td>
+                            <td class="px-6 py-3 font-medium text-center">{{ item.distributionCenterManagerCount }}</td>
+                            <td class="px-6 py-3 font-medium text-center">{{ item.distributionOfficerCount }}</td>
+                        </tr>
+                    </tbody>
+                </table>
+    
+                
+            </div>
+    
+            <div *ngIf="hasData" class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#353434] text-right">
+                <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
+                    [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
+                    [screenReaderCurrentLabel]="'Youre on page'">
+                </pagination-controls>
+            </div>
         </div>
 
-        <div *ngIf="hasData" class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#262f45] text-right">
-            <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
-                [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
-                [screenReaderCurrentLabel]="'Youre on page'">
-            </pagination-controls>
-        </div>
+        
 
         <div *ngIf="!hasData"
             class="flex flex-col items-center w-full h-screen px-10 py-7 bg-tileLight dark:bg-[#363636] dark:text-textDark mt-6">

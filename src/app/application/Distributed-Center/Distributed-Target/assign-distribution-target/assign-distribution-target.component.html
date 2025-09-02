@@ -1,7 +1,9 @@
 <app-loading-spinner *ngIf="isLoading" />
 
 <div class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
+  <p (click)="goBack()" >Assign Targets</p>
   <p>Assign</p>
+  
   <!-- <p>Officer Reports</p>  -->
 </div>
 
@@ -51,7 +53,7 @@
                           [(ngModel)]="item.count"
                           (ngModelChange)="validateTotalCount()"
                           min="0"
-                          (keydown)="preventDecimal($event)"
+                          (keydown)="allowOnlyNumbers($event)"
                           step="1"
                           class="border-[#415CFF] border-[2px] dark:bg-slate-600 border-dotted rounded-lg w-20 px-2 py-1 text-center"
                         />

@@ -80,10 +80,19 @@
                     </td>
                     <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.invNo}}</td>
                     <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.firstNameEnglish}} {{item.lastNameEnglish}}</td>
-                    <td class="px-6 py-4 text-sm text-center font-medium text-gray-900 dark:text-[#C5C5C5]">
+                    <!-- <td class="px-6 py-4 text-sm text-center font-medium text-gray-900 dark:text-[#C5C5C5]">
                         {{ getDisplayDate(item.sheduleDate) }} <br/>{{ removeWithin(item.sheduleTime) }}
-                    </td>
-                    
+                    </td> -->
+
+                    <!-- <td class="px-6 py-4 text-sm text-center font-medium text-gray-900 dark:text-[#C5C5C5]"> 
+                        {{item.sheduleDate}} <br/>{{ item.sheduleTime }}
+                    </td> -->
+                    <td 
+  class="px-6 py-4 text-sm text-center font-medium"
+  [ngClass]="getScheduleClass(item)">
+  {{ getDisplayDate(item.sheduleDate) }} <br/> 
+  {{ removeWithin(item.sheduleTime) }}
+</td>
                 </tr>
             </tbody>
         </table>

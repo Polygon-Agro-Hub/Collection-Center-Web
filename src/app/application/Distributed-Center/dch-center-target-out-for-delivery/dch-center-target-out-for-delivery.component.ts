@@ -7,11 +7,12 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { ComplaintsService } from '../../../services/Complaints-Service/complaints.service';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
+import { CustomDatepickerComponent } from "../../../components/custom-datepicker/custom-datepicker.component";
 
 @Component({
   selector: 'app-dch-center-target-out-for-delivery',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent, CustomDatepickerComponent],
   templateUrl: './dch-center-target-out-for-delivery.component.html',
   styleUrl: './dch-center-target-out-for-delivery.component.css'
 })
@@ -25,7 +26,7 @@ export class DchCenterTargetOutForDeliveryComponent implements OnInit{
 
   officerId!: number;
 
-  date:  string = '';
+  date:  string | Date | null = null;
 
   page: number = 1;
   totalItems: number = 0;
@@ -83,7 +84,7 @@ export class DchCenterTargetOutForDeliveryComponent implements OnInit{
 
   }
 
-  fetchCenterTargetOutForDelivery(centerId: number = this.centerId!, search: string = this.searchText, status: string = this.selectStatus, selectDate: string = this.date) {
+  fetchCenterTargetOutForDelivery(centerId: number = this.centerId!, search: string = this.searchText, status: string = this.selectStatus, selectDate: string | Date | null = this.date) {
     console.log('selectDate', selectDate)
     this.isLoading = true;
     this.DistributionSrv.getCenterTargetForDelivery(centerId, search, status, selectDate).subscribe(
@@ -118,11 +119,16 @@ export class DchCenterTargetOutForDeliveryComponent implements OnInit{
 
   }
 
-  onDateChange() {
-    console.log('called')
+  // onDateChange() {
+  //   console.log('called')
+  //   this.fetchCenterTargetOutForDelivery();
+  // }
+  
+
+  onDateChange(newDate: string | Date | null) {
+    this.date = newDate;
     this.fetchCenterTargetOutForDelivery();
   }
-
 
   onPageChange(event: number) {
     this.page = event;

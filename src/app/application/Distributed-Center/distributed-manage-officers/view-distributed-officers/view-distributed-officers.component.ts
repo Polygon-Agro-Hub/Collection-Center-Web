@@ -194,7 +194,7 @@ export class ViewDistributedOfficersComponent implements OnInit {
   deleteCollectionOfficer(id: number) {
     Swal.fire({
       title: 'Are you sure?',
-      text: 'Do you really want to delete this Collection Officer? This action cannot be undone.',
+      text: 'Do you really want to delete this Distribution Officer? This action cannot be undone.',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6', // Default blue
@@ -380,6 +380,7 @@ const tableHtml = `
   }
 
   onSearch() {
+    this.searchText = this.searchText?.trim() || '';   // ✅ remove spaces
     this.fetchByRole();
   }
 

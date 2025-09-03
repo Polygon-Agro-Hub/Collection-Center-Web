@@ -118,8 +118,13 @@
   
             <div class="mb-8 text-center dark:text-textDark">
                 <p class="text-lg mb-2">
-                    Are you sure you want to send these<br/> <span class="font-semibold">selected {{selectedOrderIds.length < 10 ? ('0' + selectedOrderIds.length) : selectedOrderIds.length}} orders</span> out for delivery?
-                </p>
+                    Are you sure you want to send these<br/> 
+                    <span class="font-semibold">
+                      {{ selectedOrderIds.length < 10 ? ('0' + selectedOrderIds.length) : selectedOrderIds.length }}
+                      {{ selectedOrderIds.length === 1 ? 'order' : 'orders' }}
+                    </span>
+                    out for delivery?
+                  </p>
             </div>
   
             <!-- Buttons -->

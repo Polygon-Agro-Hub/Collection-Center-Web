@@ -38,7 +38,7 @@
 
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div *ngIf="logingRole === 'Distribution Center Head'" (change)="getAllDistributionManagers()">
+                    <div *ngIf="logingRole === 'Distribution Center Head'" (change)="changeCenter()">
                         <label for="centerId" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
                             Distribution Centre Name *
                         </label>
@@ -89,6 +89,8 @@
                             <div>Job Role is required</div>
                         </div>
                     </div>
+
+                    <div *ngIf="logingRole === 'Distribution Center Manager'"></div>
 
 
 

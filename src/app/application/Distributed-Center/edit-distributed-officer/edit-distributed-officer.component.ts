@@ -183,23 +183,26 @@ export class EditDistributedOfficerComponent implements OnInit {
       (res: any) => {
         console.log('res', res)
 
+        console.log('job', res.officerData.collectionOfficer.jobRole)
+        
         this.personalData = res.officerData.collectionOfficer;
-        console.log('personalData', this.personalData)
+        console.log('personalDatajon', this.personalData.jobRole)
+        console.log('PERSONAL', this.personalData)
         this.personalData.conformAccNumber = this.personalData.accNumber
         console.log(this.personalData);
         this.ExistirmId = res.officerData.irmId;
+        this.personalData.jobRole = res.officerData.collectionOfficer.jobRole
+        console.log('persjobrole' , this.personalData.jobRole)
         this.personalData.previousjobRole = res.officerData.collectionOfficer.jobRole;
         this.personalData.previousEmpId = res.officerData.collectionOfficer.empIdPrefix
         console.log('previousjobRole', this.personalData.previousjobRole)
 
         this.getUpdateLastID(res.officerData.collectionOfficer.jobRole);
-        // this.driverObj = res.officerData.driver;
-        // this.driverObj.insExpDate = this.formatDateForInput(this.driverObj.insExpDate);
-        // this.selectVehicletype = this.VehicleTypes.find(
-        //   (v) => v.name === this.driverObj.vType && v.capacity === this.driverObj.vCapacity
-        // );
+        
         this.personalData.previousQR = this.personalData.QRcode;
         this.personalData.previousImage = this.personalData.image;
+
+        console.log('personaldarta', this.personalData)
 
         
 
@@ -600,12 +603,19 @@ export class EditDistributedOfficerComponent implements OnInit {
 
       }
     )
+
+
+  }
+
+  changeCenter() {
+     this.personalData.jobRole = ''
+    this.getAllManagers()
   }
 
   getAllManagers() {
     this.DistributedManageOfficerSrv.getDistributionCenterManagers(this.personalData.centerId).subscribe(
       (res) => {
-
+        // this.personalData.jobRole = ''
         this.managerArr = res
         console.log('managerArr', this.managerArr)
 
@@ -1020,7 +1030,7 @@ class Personal {
   branchName!: string;
   conformAccNumber!: string;
 
-  jobRole: string = 'Collection Officer'
+  jobRole!: string;
   empId!: string    //empIdWithoutPrefix
   employeeType!: string;
 
@@ -1036,6 +1046,8 @@ class Personal {
   empIdFirst!: string;       //prifix
   empIdPrefix!: string; 
   previousEmpId!: string;     //entire empId
+
+  myJobRole!: string;
 
 }
 

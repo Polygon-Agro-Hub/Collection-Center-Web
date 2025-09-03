@@ -144,7 +144,7 @@
         <!-- Province -->
         <div>
             <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Province *</label>
-            <select
+            <!-- <select
                 class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                 [(ngModel)]="centerData.province" (change)="updateFilteredDistricts()" name="province" required
                 #province="ngModel">
@@ -152,15 +152,19 @@
                 <option *ngFor="let province of provinces" [value]="province">
                     {{ province }}
                 </option>
-            </select>
-            <p *ngIf="province.invalid && province.touched" class="text-red-500 text-sm">
+            </select> -->
+
+            <input id="province" name="province" [(ngModel)]="centerData.province" #province="ngModel"
+                        class="mt-1 block w-full p-2 border border-[#D9D9D9] hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+                        readonly />
+            <p *ngIf="!centerData.province && province.touched" class="text-red-500 text-sm">
                 Province is required.
             </p>
         </div>
         <!-- District -->
         <div>
             <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">District *</label>
-            <select
+            <!-- <select
                 class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                 [(ngModel)]="centerData.district" name="district" required #district="ngModel"
                 (change)="onDistrictChange()">
@@ -168,8 +172,13 @@
                 <option *ngFor="let district of filteredDistricts" [value]="district.name">
                     {{ district.name }}
                 </option>
-            </select>
-            <p *ngIf="district.invalid && district.touched" class="text-red-500 text-sm">
+            </select> -->
+
+            <app-searchable-dropdown id="district" name="district" [items]="districtItems"
+                        [placeholder]="'Select a district'" [searchPlaceholder]="'Search districts...'"
+                        [(ngModel)]="centerData.district" #district="ngModel"
+                        (ngModelChange)="onDistrictChange($event)"></app-searchable-dropdown>
+            <p *ngIf="!centerData.district && district.touched" class="text-red-500 text-sm">
                 District is required.
             </p>
         </div>

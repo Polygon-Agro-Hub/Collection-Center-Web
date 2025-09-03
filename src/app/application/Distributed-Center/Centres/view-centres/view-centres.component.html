@@ -102,14 +102,14 @@
                         </div>
                     </div> -->
 
-                    <div class="relative w-36 flex-shrink-0">
+                    <div class="relative w-44 rounded-lg flex-shrink-0">
                         <app-searchable-dropdown id="province" name="province" [items]="provinceItems"
                         [placeholder]="'Select a province'" [searchPlaceholder]="'Search provinces...'"
                         [(ngModel)]="selectProvince" #provinceInput="ngModel"
                         (ngModelChange)="filterProvince($event)"></app-searchable-dropdown>
                     </div>
 
-                    <div class="relative w-36 flex-shrink-0">
+                    <div class="relative w-44 rounderd-lg flex-shrink-0">
                         <app-searchable-dropdown id="district" name="district" [items]="districtItems"
                         [placeholder]="'Select a district'" [searchPlaceholder]="'Search districts...'"
                         [(ngModel)]="selectDistrict" #districtInput="ngModel"
@@ -205,7 +205,7 @@
                 
             </div>
     
-            <div *ngIf="hasData" class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#353434] text-right">
+            <div *ngIf="hasData" class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#1D1D1F] text-right">
                 <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
                     [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
                     [screenReaderCurrentLabel]="'Youre on page'">

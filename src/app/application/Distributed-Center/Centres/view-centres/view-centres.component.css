@@ -1,0 +1,43 @@
+/* Add this to your component's CSS file or global styles */
+
+/* Dark mode pagination styles */
+.dark pagination-controls {
+    color: #d1d5db; /* Light gray text */
+  }
+  
+  .dark pagination-controls .ngx-pagination {
+    color: #d1d5db;
+  }
+  
+  .dark pagination-controls .ngx-pagination a {
+    color: #d1d5db !important;
+    background-color: #374151;
+    border-color: #4b5563;
+  }
+  
+  .dark pagination-controls .ngx-pagination a:hover {
+    color: #ffffff !important;
+    background-color: #415CFF; /* Match your table hover color */
+  }
+  
+  .dark pagination-controls .ngx-pagination .current {
+    color: #ffffff !important;
+    background-color: #415CFF;
+    border-color: #415CFF;
+  }
+  
+  .dark pagination-controls .ngx-pagination .disabled {
+    color: #6b7280 !important;
+    background-color: #1f2937;
+  }
+  
+  /* Alternative approach using :host-context */
+  :host-context(.dark) pagination-controls {
+    color: #d1d5db;
+  }
+  
+  :host-context(.dark) pagination-controls .ngx-pagination a {
+    color: #d1d5db !important;
+    background-color: #374151;
+    border-color: #4b5563;
+  }

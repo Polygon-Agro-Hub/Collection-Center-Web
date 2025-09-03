@@ -149,6 +149,8 @@ export class OfficerProfileComponent implements OnInit {
     });
   }
 
+  
+
   const hasImage = !!this.officerObj.image;
 
   if (hasImage) {
@@ -180,16 +182,43 @@ export class OfficerProfileComponent implements OnInit {
     //   );
     // }
 
-
+ 
 
     // Adjust starting positions based on image presence
     const startX = hasImage ? 60 : 14; // If no image, start from left margin
     const startY = hasImage ? 60 : 50; // Adjust Y position based on image presence
 
+    const imageboxX = 10;
+  const imageboxY = startY - 16;  // move above heading
+  const imageboxWidth = 190;
+  
+  // The last Y position after district field
+  const imagelastY = startY - 56 
+  const imageboxHeight = (imagelastY + 2) - imageboxY; // +10 padding at bottom
+  
+  // Draw rounded border first (so it’s in background)
+  doc.setDrawColor(241, 247, 250); // border color #F1F7FA
+  doc.setLineWidth(0.5);
+  doc.roundedRect(imageboxX, imageboxY, imageboxWidth, imageboxHeight, 1.5, 1.5, "S");
+
   
     // Title
     doc.setFontSize(16);
     doc.setFont("Inter", "bold");
+
+    const personalboxX = 10;
+const personalboxY = startY - 6;  // move above heading
+const personalboxWidth = 190;
+
+// The last Y position after district field
+const personallastY = startY + 48; 
+const personalboxHeight = (personallastY + 2) - personalboxY; // +10 padding at bottom
+
+// Draw rounded border first (so it’s in background)
+doc.setDrawColor(241, 247, 250); // border color #F1F7FA
+doc.setLineWidth(0.5);
+doc.roundedRect(personalboxX, personalboxY, personalboxWidth, personalboxHeight, 3, 3, "S"); 
+
     doc.text("Personal Information", 14, startY);
 
     // Name and position info - position adjusted based on image presence
@@ -275,6 +304,7 @@ doc.setFont("Inter", "normal");
 
     doc.text(getValueOrNA(this.officerObj.companyNameEnglish), startX, 36);
 
+  
     doc.setFontSize(12);
     doc.setFont("Inter", "normal");
 
@@ -333,6 +363,22 @@ doc.setFont("Inter", "normal");
     // Address Details Section
     doc.setFontSize(16);
     doc.setFont("Inter", "bold");
+
+    // Box start above the heading
+const boxX = 10;
+const boxY = startY + 54;  // move above heading
+const boxWidth = 190;
+
+// The last Y position after district field
+const lastY = startY + 108; 
+const boxHeight = (lastY + 2) - boxY; // +10 padding at bottom
+
+// Draw rounded border first (so it’s in background)
+doc.setDrawColor(241, 247, 250); // border color #F1F7FA
+doc.setLineWidth(0.5);
+doc.roundedRect(boxX, boxY, boxWidth, boxHeight, 3, 3, "S"); 
+// "S" = Stroke only (no fill, text will stay visible)
+
     doc.text("Address Details", 14, startY + 60);
 
     doc.setFontSize(12);
@@ -376,6 +422,19 @@ doc.setFont("Inter", "normal");
     // Bank Details Section
     doc.setFontSize(16);
     doc.setFont("Inter", "bold");
+
+    const bankBoxX = 10;
+const bankBoxY = startY + 114;   // start slightly above heading
+const bankBoxWidth = 190;
+
+// Last Y position after Branch Name value
+const bankLastY = startY + 152;
+const bankBoxHeight = (bankLastY + 4) - bankBoxY; // +4 for a little padding
+
+doc.setDrawColor(241, 247, 250); // border color #F1F7FA
+doc.setLineWidth(0.5);
+doc.roundedRect(bankBoxX, bankBoxY, bankBoxWidth, bankBoxHeight, 3, 3, "S");
+
     doc.text("Bank Details", 14, startY + 120);
 
     doc.setFontSize(12);

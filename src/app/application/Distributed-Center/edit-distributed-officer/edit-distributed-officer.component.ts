@@ -58,13 +58,13 @@ export class EditDistributedOfficerComponent implements OnInit {
   isLoading: boolean = true;
 
   banks: Bank[] = [];
-  branches: Branch[] = [];
-  selectedBankId: number | null = null;
-  selectedBranchId: number | null = null;
-  allBranches: BranchesData = {};
+branches: Branch[] = [];
+selectedBankId: number | null = null;
+selectedBranchId: number | null = null;
+allBranches: BranchesData = {};
 
-  bankItems: { value: number; label: string }[] = [];
-  branchItems: { value: number; label: string }[] = [];
+bankItems: { value: number; label: string }[] = [];
+branchItems: { value: number; label: string }[] = [];
 
   invalidFields: Set<string> = new Set();
   naviPath!: string
@@ -226,7 +226,7 @@ export class EditDistributedOfficerComponent implements OnInit {
     console.log('Manager selected');
   
     this.personalData.irmId = item.id;
-    this.selectedManager = item.firstNameEnglish + '' + item.lastNameEnglish;
+    this.selectedManager = item.firstNameEnglish + ' ' + item.lastNameEnglish;
     console.log('name', item.firstNameEnglish )
     this.managerDropdownOpen = false; // close dropdown
   
@@ -267,7 +267,6 @@ export class EditDistributedOfficerComponent implements OnInit {
     this.DistributedManageOfficerSrv.getOfficerById(id).subscribe(
       (res: any) => {
         console.log('res', res)
-
         console.log('job', res.officerData.collectionOfficer.jobRole)
         
         this.personalData = res.officerData.collectionOfficer;
@@ -281,33 +280,33 @@ export class EditDistributedOfficerComponent implements OnInit {
         this.personalData.previousjobRole = res.officerData.collectionOfficer.jobRole;
         this.personalData.previousEmpId = res.officerData.collectionOfficer.empIdPrefix
         this.selectedCenterName = res.officerData.collectionOfficer.centerName
-        console.log('previousjobRole', this.personalData.previousjobRole)
 
+        this.selectedManager = res.managerName.firstNameEnglish + ' ' + res.managerName.lastNameEnglish
+        console.log('previousjobRole', this.personalData.previousjobRole)
+  
         this.getUpdateLastID(res.officerData.collectionOfficer.jobRole);
         
         this.personalData.previousQR = this.personalData.QRcode;
         this.personalData.previousImage = this.personalData.image;
-
+  
         console.log('personaldarta', this.personalData)
-
-        
-
-
+  
         // Initialize languages as a comma-separated string if it's not already in that format
         if (Array.isArray(this.personalData.languages)) {
           this.personalData.languages = this.personalData.languages.join(',');
         } else if (!this.personalData.languages) {
           this.personalData.languages = '';
         }
-
+  
         this.selectJobRole = res.officerData.collectionOfficer.jobRole;
         this.getAllManagers();
-
-
-        // this.UpdateEpmloyeIdCreate();
-        this.matchExistingBankToDropdown();
+  
+        // Load banks and branches data first, then match existing data
+        this.loadBanksAndBranches().then(() => {
+          this.matchExistingBankToDropdown();
+        });
+        
         this.isLoading = false;
-
       }
     );
   }
@@ -702,6 +701,7 @@ export class EditDistributedOfficerComponent implements OnInit {
   changeCenter() {
      this.personalData.jobRole = ''
      this.personalData.irmId = null
+     this.selectedManager = ''
     this.getAllManagers()
   }
 
@@ -725,90 +725,125 @@ export class EditDistributedOfficerComponent implements OnInit {
     }
   }
 
-  loadBanks() {
-    this.http.get<Bank[]>('assets/json/banks.json').subscribe(
-      data => {
-        this.banks = data.sort((a, b) => a.name.localeCompare(b.name)); // Sort alphabetically
-      },
-      error => {
-        console.error('Error loading banks:', error);
-      }
-    );
+  async loadBanksAndBranches(): Promise<void> {
+    try {
+      // Load both banks and branches data
+      await Promise.all([this.loadBanks(), this.loadBranches()]);
+    } catch (error) {
+      console.error('Error loading banks and branches:', error);
+    }
   }
-
-
-  loadBranches() {
-    this.http.get<BranchesData>('assets/json/branches.json').subscribe(
-      data => {
-        Object.keys(data).forEach(bankID => {
-          data[bankID].sort((a, b) => a.name.localeCompare(b.name));
-        });
-        this.allBranches = data;
-      },
-      error => {
-        console.error('Error loading branches:', error);
-      }
-    );
+  
+  loadBanks(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.http.get<Bank[]>('assets/json/banks.json').subscribe(
+        data => {
+          this.banks = data.sort((a, b) => a.name.localeCompare(b.name));
+          // Convert banks to dropdown items
+          this.bankItems = this.banks.map(bank => ({
+            value: bank.ID,
+            label: bank.name
+          }));
+          resolve();
+        },
+        error => {
+          console.error('Error loading banks:', error);
+          reject(error);
+        }
+      );
+    });
   }
-
-
-
+  
+  loadBranches(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.http.get<BranchesData>('assets/json/branches.json').subscribe(
+        data => {
+          Object.keys(data).forEach(bankID => {
+            data[bankID].sort((a, b) => a.name.localeCompare(b.name));
+          });
+          this.allBranches = data;
+          resolve();
+        },
+        error => {
+          console.error('Error loading branches:', error);
+          reject(error);
+        }
+      );
+    });
+  }
+  
   matchExistingBankToDropdown() {
-
     // Only proceed if both banks and branches are loaded and we have existing data
-    if (this.banks.length > 0 && Object.keys(this.allBranches).length > 0 &&
+    if (this.bankItems.length > 0 && Object.keys(this.allBranches).length > 0 &&
       this.personalData && this.personalData.bankName) {
-
+  
       // Find the bank ID that matches the existing bank name
-      const matchedBank = this.banks.find(bank => bank.name === this.personalData.bankName);
-
+      const matchedBank = this.bankItems.find(bank => bank.label === this.personalData.bankName);
+  
       if (matchedBank) {
-        this.selectedBankId = matchedBank.ID;
+        this.selectedBankId = matchedBank.value;
         // Load branches for this bank
-        this.branches = this.allBranches[this.selectedBankId.toString()] || [];
-
+        this.updateBranchItems(this.selectedBankId);
+  
         // If we also have a branch name, try to match it
         if (this.personalData.branchName) {
-          const matchedBranch = this.branches.find(branch => branch.name === this.personalData.branchName);
+          const matchedBranch = this.branchItems.find(branch => branch.label === this.personalData.branchName);
           if (matchedBranch) {
-            this.selectedBranchId = matchedBranch.ID;
+            this.selectedBranchId = matchedBranch.value;
           }
         }
       }
     }
-
   }
-
-
-  onBankChange() {
+  
+  updateBranchItems(bankId: number | null) {
+    if (bankId) {
+      this.branches = this.allBranches[bankId.toString()] || [];
+      this.branchItems = this.branches.map(branch => ({
+        value: branch.ID,
+        label: branch.name
+      }));
+    } else {
+      this.branches = [];
+      this.branchItems = [];
+    }
+  }
+  
+  onBankChange(selectedBankId: number | null) {
+    this.selectedBankId = selectedBankId;
+    
     if (this.selectedBankId) {
       // Update branches based on selected bank
-      this.branches = this.allBranches[this.selectedBankId.toString()] || [];
-
+      this.updateBranchItems(this.selectedBankId);
+  
       // Update company data with bank name
-      const selectedBank = this.banks.find(bank => bank.ID === this.selectedBankId);
-      if (selectedBank) {
-        this.personalData.bankName = selectedBank.name;
+      const selectedBankItem = this.bankItems.find(bank => bank.value === this.selectedBankId);
+      if (selectedBankItem) {
+        this.personalData.bankName = selectedBankItem.label;
       }
-
+  
       // Reset branch selection if the current selection doesn't belong to this bank
-      const currentBranch = this.branches.find(branch => branch.ID === this.selectedBranchId);
+      const currentBranch = this.branchItems.find(branch => branch.value === this.selectedBranchId);
       if (!currentBranch) {
         this.selectedBranchId = null;
         this.personalData.branchName = '';
       }
     } else {
-      this.branches = [];
+      this.updateBranchItems(null);
+      this.selectedBranchId = null;
       this.personalData.bankName = '';
+      this.personalData.branchName = '';
     }
   }
-
-  onBranchChange() {
+  
+  onBranchChange(selectedBranchId: number | null) {
+    this.selectedBranchId = selectedBranchId;
+    
     if (this.selectedBranchId) {
       // Update company data with branch name
-      const selectedBranch = this.branches.find(branch => branch.ID === this.selectedBranchId);
-      if (selectedBranch) {
-        this.personalData.branchName = selectedBranch.name;
+      const selectedBranchItem = this.branchItems.find(branch => branch.value === this.selectedBranchId);
+      if (selectedBranchItem) {
+        this.personalData.branchName = selectedBranchItem.label;
       }
     } else {
       this.personalData.branchName = '';

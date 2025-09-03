@@ -80,7 +80,6 @@ export class AddDistributedOfficerComponent implements OnInit {
   selectedCenterName: string = "";
   selectedManager: string = "";
   managerDropdownOpen = false;
-
   selectedManagerName: string = "";
 
 
@@ -225,8 +224,8 @@ selectManager(item: Manager) {
   console.log('Manager selected');
 
   this.personalData.irmId = item.id;
-  this.selectedManager = item.firstNameEnglish + '' + item.lastNameEnglish;
-  console.log('name', item.firstNameEnglish )
+  this.selectedManager = item.firstNameEnglish + ' ' + item.lastNameEnglish;
+  console.log('selectedManager', this.selectedManager )
   this.managerDropdownOpen = false; // close dropdown
 
   // Reset search input and filtered array

@@ -20,24 +20,24 @@
 
                 <div class="flex gap-4 flex-shrink-0">
                     <!-- Province Dropdown -->
-                    <div class="relative w-36 flex-shrink-0 custom-province-dropdown-container">
-                        <!-- Hidden native select -->
+                    <!-- <div class="relative w-36 flex-shrink-0 custom-province-dropdown-container">
+                      
                         <select [(ngModel)]="selectProvince" class="hidden" (change)="filterProvince()">
                             <option value="" selected disabled>Province</option>
                             <option *ngFor="let province of provinces" [value]="province">{{ province }}</option>
                         </select>
 
-                        <!-- Custom dropdown trigger -->
+                       
                         <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
                             (click)="toggleProvinceDropdown()">
                             <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
                                 <span>{{ selectProvince || 'Province' }}</span>
                                 <div class="flex items-center">
-                                    <!-- X icon (shown ONLY when option is selected) -->
+
                                     <i *ngIf="selectProvince" (click)="clearProvinceFilter($event)"
                                         class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
 
-                                    <!-- Arrow icon (shown when EITHER: dropdown is open OR no selection exists) -->
+                                   
                                     <i *ngIf="isProvinceDropdownOpen || !selectProvince"
                                         class="fa-solid text-lg text-[#828282] transition-transform duration-200"
                                         [class.fa-angle-down]="!isProvinceDropdownOpen"
@@ -46,7 +46,7 @@
                             </div>
                         </div>
 
-                        <!-- Custom dropdown options -->
+                        
                         <div *ngIf="isProvinceDropdownOpen"
                             class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
                             <div class="py-1">
@@ -58,28 +58,27 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
 
                     <!-- District Dropdown -->
-                    <div class="relative w-36 flex-shrink-0 custom-district-dropdown-container">
-                        <!-- Hidden native select -->
+                    <!-- <div class="relative w-36 flex-shrink-0 custom-district-dropdown-container">
+        
                         <select [(ngModel)]="selectDistrict" class="hidden" (change)="filterDistrict()">
                             <option value="" selected disabled>District</option>
                             <option *ngFor="let district of filteredDistricts" [value]="district.name">{{ district.name
                                 }}</option>
                         </select>
 
-                        <!-- Custom dropdown trigger -->
                         <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
                             (click)="toggleDistrictDropdown()">
                             <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
                                 <span>{{ selectDistrict || 'District' }}</span>
                                 <div class="flex items-center">
-                                    <!-- X icon (shown ONLY when option is selected) -->
+                                   
                                     <i *ngIf="selectDistrict" (click)="clearDistrictFilter($event)"
                                         class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
 
-                                    <!-- Arrow icon (shown when EITHER: dropdown is open OR no selection exists) -->
+                                    
                                     <i *ngIf="isDistrictDropdownOpen || !selectDistrict"
                                         class="fa-solid text-lg text-[#828282] transition-transform duration-200"
                                         [class.fa-angle-down]="!isDistrictDropdownOpen"
@@ -88,7 +87,7 @@
                             </div>
                         </div>
 
-                        <!-- Custom dropdown options -->
+                        
                         <div *ngIf="isDistrictDropdownOpen"
                             class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
                             <div class="py-1">
@@ -101,6 +100,20 @@
                                 </div>
                             </div>
                         </div>
+                    </div> -->
+
+                    <div class="relative w-44 rounded-lg flex-shrink-0">
+                        <app-searchable-dropdown id="province" name="province" [items]="provinceItems"
+                        [placeholder]="'Select a province'" [searchPlaceholder]="'Search provinces...'"
+                        [(ngModel)]="selectProvince" #provinceInput="ngModel"
+                        (ngModelChange)="filterProvince($event)"></app-searchable-dropdown>
+                    </div>
+
+                    <div class="relative w-44 rounderd-lg flex-shrink-0">
+                        <app-searchable-dropdown id="district" name="district" [items]="districtItems"
+                        [placeholder]="'Select a district'" [searchPlaceholder]="'Search districts...'"
+                        [(ngModel)]="selectDistrict" #districtInput="ngModel"
+                        (ngModelChange)="filterDistrict($event)"></app-searchable-dropdown>
                     </div>
                 </div>
 
@@ -192,7 +205,7 @@
                 
             </div>
     
-            <div *ngIf="hasData" class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#353434] text-right">
+            <div *ngIf="hasData" class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#1D1D1F] text-right">
                 <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
                     [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
                     [screenReaderCurrentLabel]="'Youre on page'">

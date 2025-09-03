@@ -73,6 +73,15 @@ export class AddDistributedOfficerComponent implements OnInit {
   dropdownOpen = false;
   dropdownOpen2 = false;
 
+  filteredCenterArr: Center[] = [];
+  filteredManagerArr: Manager[] = [];
+
+  centreDropdownOpen = false;
+  selectedCenterName: string = "";
+  selectedManager: string = "";
+  managerDropdownOpen = false;
+  selectedManagerName: string = "";
+
 
 
   constructor(
@@ -130,6 +139,7 @@ export class AddDistributedOfficerComponent implements OnInit {
     this.getAllDistributionCenters();
     // this.getLastID('COO');
     // this.EpmloyeIdCreate();
+    
   }
 
   @HostListener('document:click', ['$event.target'])
@@ -145,6 +155,92 @@ onClick(targetElement: HTMLElement) {
     this.dropdownOpen2 = false;
   }
 }
+
+// onSearchInput(event: Event) {
+//   const input = event.target as HTMLInputElement;
+//   const searchValue = input.value.toLowerCase().trim();
+
+//   // filter from original list
+//   this.filteredCenterArr = this.centerArr.filter(center =>
+//     center.centerName.toLowerCase().includes(searchValue)
+//   );
+// }
+
+onSearchInput(event: Event) {
+  const input = event.target as HTMLInputElement;
+  const value = input.value.toLowerCase();
+  console.log('value', value);
+
+  this.filteredCenterArr = this.centerArr.filter(c =>
+    (c.centerName || '').toLowerCase().includes(value)
+  );
+
+  console.log('filtered centers', this.filteredCenterArr);
+
+}
+
+
+
+toggleDropdown() {
+  this.centreDropdownOpen = !this.centreDropdownOpen;
+}
+
+toggleManagerDropdown() {
+  this.managerDropdownOpen = !this.managerDropdownOpen;
+}
+
+selectCenter(item: Center) {
+  console.log('center selected');
+
+  this.personalData.centerId = item.id;
+  this.selectedCenterName = item.centerName;
+  this.centreDropdownOpen = false; // close dropdown
+
+  // Reset search input and filtered array
+  this.filteredCenterArr = [...this.centerArr]; // show full list next time
+  const searchInput = document.querySelector<HTMLInputElement>('.dropdown-search-input');
+  if (searchInput) {
+    searchInput.value = '';
+  }
+
+  this.changeCenter();
+}
+
+onManagerSearchInput(event: Event) {
+  const input = event.target as HTMLInputElement;
+  const value = input.value.toLowerCase().trim(); // remove leading/trailing spaces
+  console.log('search value', value);
+
+  this.filteredManagerArr = this.managerArr.filter(m => {
+    const fullName = `${m.firstNameEnglish} ${m.lastNameEnglish}`.toLowerCase();
+    return fullName.includes(value);
+  });
+
+  console.log('filtered managers', this.filteredManagerArr);
+}
+
+
+selectManager(item: Manager) {
+  console.log('Manager selected');
+
+  this.personalData.irmId = item.id;
+  this.selectedManager = item.firstNameEnglish + ' ' + item.lastNameEnglish;
+  console.log('selectedManager', this.selectedManager )
+  this.managerDropdownOpen = false; // close dropdown
+
+  // Reset search input and filtered array
+  this.filteredManagerArr = [...this.managerArr]; // show full list next time
+  const searchInput = document.querySelector<HTMLInputElement>('.dropdown-manager-search-input');
+  if (searchInput) {
+    searchInput.value = '';
+  }
+
+  console.log('id', this.personalData.irmId)
+
+  // this.changeCenter();
+}
+
+
   
   selectCountry1(country: Country) {
     this.selectedCountry1 = country;
@@ -328,21 +424,21 @@ onClick(targetElement: HTMLElement) {
 
   onCancel() {
     Swal.fire({
-      title: 'Are you sure?',
-      text: 'Do you really want to cancel this form?',
+      title: 'You have unsaved changes',
+      html: 'If you leave this page now, your changes will be lost.<br>Do you want to continue without saving?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, cancel it!',
-      cancelButtonText: 'No, Stay On Page',
+      confirmButtonText: 'Leave,<br>without saving',
+      cancelButtonText: 'Stay,<br>on page',
       customClass: {
         popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
         title: 'dark:text-white',
 
         icon: '!border-gray-200 dark:!border-gray-500',
-        confirmButton: 'hover:bg-red-600 dark:hover:bg-red-700 focus:ring-red-500 dark:focus:ring-red-800',
-        cancelButton: 'hover:bg-blue-600 dark:hover:bg-blue-700 focus:ring-blue-500 dark:focus:ring-blue-800',
+        confirmButton: 'w-36  rounded-lg hover:bg-red-600 dark:hover:bg-red-700 focus:ring-red-500 dark:focus:ring-red-800',
+        cancelButton: 'w-36 rounded-lg hover:bg-blue-600 dark:hover:bg-blue-700 focus:ring-blue-500 dark:focus:ring-blue-800',
         actions: 'gap-2'
       }
     }).then((result) => {
@@ -360,6 +456,7 @@ onClick(targetElement: HTMLElement) {
     this.DistributedManageOfficerSrv.getDCHOwnCenters().subscribe(
       (res) => {
         this.centerArr = res
+        this.filteredCenterArr = [...this.centerArr];
         console.log('centerArr', this.centerArr)
         this.isLoading = false;
 
@@ -369,6 +466,7 @@ onClick(targetElement: HTMLElement) {
 
   changeCenter() {
     this.personalData.jobRole = ''
+    this.personalData.irmId = null
    this.getAllDistributionManagers()
  }
 
@@ -378,6 +476,7 @@ onClick(targetElement: HTMLElement) {
     this.DistributedManageOfficerSrv.getDistributionCenterManagers(this.personalData.centerId).subscribe(
       (res) => {
         this.managerArr = res
+        this.filteredManagerArr = [...this.managerArr];
         console.log('managerArr', this.managerArr)
         this.isLoading = false;
       }

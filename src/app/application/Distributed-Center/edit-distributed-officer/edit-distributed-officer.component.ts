@@ -76,6 +76,16 @@ export class EditDistributedOfficerComponent implements OnInit {
   dropdownOpen = false;
   dropdownOpen2 = false;
 
+  filteredCenterArr: Center[] = [];
+  filteredManagerArr: Manager[] = [];
+
+  centreDropdownOpen = false;
+  selectedCenterName: string = "";
+  selectedManager: string = "";
+  managerDropdownOpen = false;
+
+  selectedManagerName: string = "";
+
   constructor(
     private ManageOficerSrv: ManageOfficersService,
     private router: Router,
@@ -158,6 +168,81 @@ export class EditDistributedOfficerComponent implements OnInit {
     }
   }
 
+  onSearchInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const value = input.value.toLowerCase();
+    console.log('value', value);
+  
+    this.filteredCenterArr = this.centerArr.filter(c =>
+      (c.centerName || '').toLowerCase().includes(value)
+    );
+  
+    console.log('filtered centers', this.filteredCenterArr);
+  
+  }
+  
+  
+  
+  toggleDropdown() {
+    this.centreDropdownOpen = !this.centreDropdownOpen;
+  }
+  
+  toggleManagerDropdown() {
+    this.managerDropdownOpen = !this.managerDropdownOpen;
+  }
+  
+  selectCenter(item: Center) {
+    console.log('center selected');
+  
+    this.personalData.centerId = item.id;
+    this.selectedCenterName = item.centerName;
+    this.centreDropdownOpen = false; // close dropdown
+  
+    // Reset search input and filtered array
+    this.filteredCenterArr = [...this.centerArr]; // show full list next time
+    const searchInput = document.querySelector<HTMLInputElement>('.dropdown-search-input');
+    if (searchInput) {
+      searchInput.value = '';
+    }
+  
+    this.changeCenter();
+  }
+  
+  onManagerSearchInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const value = input.value.toLowerCase().trim(); // remove leading/trailing spaces
+    console.log('search value', value);
+  
+    this.filteredManagerArr = this.managerArr.filter(m => {
+      const fullName = `${m.firstNameEnglish} ${m.lastNameEnglish}`.toLowerCase();
+      return fullName.includes(value);
+    });
+  
+    console.log('filtered managers', this.filteredManagerArr);
+  }
+  
+  
+  selectManager(item: Manager) {
+    console.log('Manager selected');
+  
+    this.personalData.irmId = item.id;
+    this.selectedManager = item.firstNameEnglish + '' + item.lastNameEnglish;
+    console.log('name', item.firstNameEnglish )
+    this.managerDropdownOpen = false; // close dropdown
+  
+    // Reset search input and filtered array
+    this.filteredManagerArr = [...this.managerArr]; // show full list next time
+    const searchInput = document.querySelector<HTMLInputElement>('.dropdown-manager-search-input');
+    if (searchInput) {
+      searchInput.value = '';
+    }
+  
+    console.log('id', this.personalData.irmId)
+  
+    // this.changeCenter();
+  }
+  
+
   selectCountry1(country: Country) {
     this.selectedCountry1 = country;
     this.personalData.phoneCode01 = country.dialCode; // update ngModel
@@ -195,6 +280,7 @@ export class EditDistributedOfficerComponent implements OnInit {
         console.log('persjobrole' , this.personalData.jobRole)
         this.personalData.previousjobRole = res.officerData.collectionOfficer.jobRole;
         this.personalData.previousEmpId = res.officerData.collectionOfficer.empIdPrefix
+        this.selectedCenterName = res.officerData.collectionOfficer.centerName
         console.log('previousjobRole', this.personalData.previousjobRole)
 
         this.getUpdateLastID(res.officerData.collectionOfficer.jobRole);
@@ -604,6 +690,7 @@ export class EditDistributedOfficerComponent implements OnInit {
     this.DistributedManageOfficerSrv.getDCHOwnCenters().subscribe(
       (res) => {
         this.centerArr = res
+        this.filteredCenterArr = [...this.centerArr];
         console.log('centerArr', this.centerArr)
 
       }
@@ -614,6 +701,7 @@ export class EditDistributedOfficerComponent implements OnInit {
 
   changeCenter() {
      this.personalData.jobRole = ''
+     this.personalData.irmId = null
     this.getAllManagers()
   }
 
@@ -622,6 +710,7 @@ export class EditDistributedOfficerComponent implements OnInit {
       (res) => {
         // this.personalData.jobRole = ''
         this.managerArr = res
+        this.filteredManagerArr = [...this.managerArr];
         console.log('managerArr', this.managerArr)
 
       }
@@ -738,6 +827,7 @@ export class EditDistributedOfficerComponent implements OnInit {
   // }
 
   onSubmitFormPage1(form: NgForm) {
+    console.log('personal', this.personalData)
     form.form.markAllAsTouched();
 
     this.validateLanguages();

@@ -49,11 +49,11 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8 mb-4">
 
-                    <div *ngIf="logingRole === 'Distribution Center Head'" (change)="changeCenter()">
+                    <div *ngIf="logingRole === 'Distribution Center Head'" >
                         <label for="centerId" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">
                             Distribution Centre Name *
                         </label>
-                        <select id="centerId" [(ngModel)]="personalData.centerId" name="centerId" placeholder="select"
+                        <!-- <select id="centerId" [(ngModel)]="personalData.centerId" name="centerId" placeholder="select"
                             class="form-control mt-1 block w-full p-2 text-[#292929] mb-1 dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] focus:ring-indigo-500 focus:border-indigo-500"
                             #centerIdInput="ngModel" required>
                             <option disabled selected
@@ -66,7 +66,61 @@
                                 {{item.centerName}}
                             </option>
 
-                        </select>
+                        </select> -->
+
+                        <div class="relative w-full">
+                            <!-- Input acting as dropdown -->
+                            <div class="relative">
+                              <input
+                                type="text"
+                                id="centerId"
+                                name="centerId"
+                                [(ngModel)]="selectedCenterName"
+                                #centerIdInput="ngModel"
+                                required
+                                placeholder="-- select centre--"
+                                readonly
+                                (click)="toggleDropdown()"
+                                class="form-control mt-1 block w-full p-2 pr-10 border border-gray-300 rounded-md bg-gray-100 dark:bg-[#1D1D1F] dark:text-textDark cursor-pointer"
+                              />
+                          
+                              <!-- Arrow icon -->
+                              <i *ngIf="!centreDropdownOpen"
+                                class="fa-solid fa-angle-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"
+                              ></i>
+
+                              <i *ngIf="centreDropdownOpen"
+                                class="fa-solid fa-angle-up absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"
+                              ></i>
+                            </div>
+                          
+                            <!-- Dropdown panel -->
+                            <div *ngIf="centreDropdownOpen"
+                                 class="absolute z-50 mt-1 w-full border border-gray-300 rounded-md bg-gray-100 dark:bg-[#1D1D1F] max-h-60 overflow-y-auto shadow-lg">
+                              
+                              <!-- Sticky search input -->
+                              <div class="sticky top-0 bg-gray-100 dark:bg-[#1D1D1F] z-20">
+                                <div class="relative">
+                                  <input
+                                    type="text"
+                                    placeholder="Search..."
+                                    (input)="onSearchInput($event)"
+                                    class="dropdown-search-input form-control dark:text-textDark dark:bg-[#1D1D1F] w-full p-2 pr-10 border-b border-gray-300 rounded-t-md"
+                                  />
+                                  <i
+                                    class="fa-solid fa-magnifying-glass absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+                                  ></i>
+                                </div>
+                              </div>
+                          
+                              <!-- List -->
+                              <div *ngFor="let item of filteredCenterArr"
+                                   class="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-textDark cursor-pointer"
+                                   (click)="selectCenter(item)">
+                                {{ item.centerName }}
+                              </div>
+                            </div>
+                          </div>
                         <div *ngIf="centerIdInput.touched && !personalData.centerId && logingRole === 'Distribution Center Head'"
                             class="text-red-500 text-sm mt-1">
                             <div>Distribution Center Name is required</div>

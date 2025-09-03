@@ -467,6 +467,7 @@ selectManager(item: Manager) {
 
   changeCenter() {
     this.personalData.jobRole = ''
+    this.personalData.irmId = null
    this.getAllDistributionManagers()
  }
 

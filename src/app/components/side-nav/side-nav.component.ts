@@ -1,4 +1,4 @@
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { ThemeService } from '../../theme.service';
@@ -92,7 +92,7 @@ export const MENU_ITEMS = [
   },
 
   // ----------------------------------------- Distribution Center part ------------------------------------------
-  
+
   {
     id: 11,
     key: 'distribution-center-dashboard',
@@ -109,7 +109,7 @@ export const MENU_ITEMS = [
     icon: 'fa-solid fa-bullseye',
     permission: ['Distribution Center Head'],
   },
-  
+
 
   {
     id: 13,
@@ -119,7 +119,7 @@ export const MENU_ITEMS = [
     icon: 'fa-solid fa-bullseye',
     permission: ['Distribution Center Manager'],
   },
-  
+
   {
     id: 14,
     key: 'assign-targets',
@@ -137,7 +137,7 @@ export const MENU_ITEMS = [
     icon: 'fa-solid fa-user-plus',
     permission: ['Distribution Center Manager'],
   },
-  
+
 
   {
     id: 16,
@@ -184,7 +184,7 @@ export const MENU_ITEMS = [
     permission: ['Distribution Center Manager'],
   },
 
-  
+
 
   // {
   //   id: 19,
@@ -213,6 +213,8 @@ export class SideNavComponent {
   menuItems = MENU_ITEMS;
 
   logOutView = false;
+  companyLogo: string = '';
+  companyFavicon: string = '';
 
   get filteredMenuItems() {
     return this.menuItems.filter(
@@ -225,9 +227,13 @@ export class SideNavComponent {
     private themeService: ThemeService,
     private router: Router,
     private tokenSrv: TokenServiceService,
-    private toastSrv: ToastAlertService
+    private toastSrv: ToastAlertService,
+    @Inject(DOCUMENT) private document: Document
+
   ) {
     this.role = tokenSrv.getUserDetails().role;
+    this.companyLogo = tokenSrv.getUserDetails().logo;
+    this.companyFavicon = tokenSrv.getUserDetails().favicon;
     this.setActiveTabFromRoute();
 
     this.router.events.subscribe((event) => {
@@ -235,6 +241,10 @@ export class SideNavComponent {
         this.setActiveTabFromRoute();
       }
     });
+
+    if (this.companyFavicon !== '') {
+      this.changeFavicon(this.companyFavicon);
+    }
   }
 
   private setActiveTabFromRoute(): void {
@@ -304,5 +314,13 @@ export class SideNavComponent {
     } else {
       this.isSelectTab = 'distribution-center';
     }
+  }
+
+  changeFavicon(iconUrl: string) {
+    const link: HTMLLinkElement = this.document.querySelector("link[rel*='icon']") || this.document.createElement('link');
+    link.type = 'image/x-icon';
+    link.rel = 'shortcut icon';
+    link.href = iconUrl;
+    this.document.getElementsByTagName('head')[0].appendChild(link);
   }
 }

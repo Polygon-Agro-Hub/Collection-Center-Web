@@ -10,10 +10,12 @@ export class TokenServiceService {
   private readonly ROLE_KEY = 'CCrole:';
   private readonly PROFILE_IMAGE = 'CCprofileImage';
   private readonly EXPIRATION_KEY = 'CCTokenExpiration';
+  private readonly LOGO_KEY = 'CCLogo';
+  private readonly FAVICON_KEY = 'CCFavicon';
 
   constructor() { }
 
-  saveLoginDetails(token: string, userName: string, userId: string, role: string, expiresIn: number, image: string): Promise<void> {
+  saveLoginDetails(token: string, userName: string, userId: string, role: string, expiresIn: number, image: string, logo: string = '', favicon: string = ''): Promise<void> {
     return new Promise((resolve) => {
       const expirationTime = new Date().getTime() + expiresIn * 1000; // Convert seconds to milliseconds
       localStorage.setItem(this.TOKEN_KEY, token);
@@ -21,6 +23,8 @@ export class TokenServiceService {
       localStorage.setItem(this.USERID_KEY, userId);
       localStorage.setItem(this.ROLE_KEY, role);
       localStorage.setItem(this.PROFILE_IMAGE, image);
+      localStorage.setItem(this.LOGO_KEY, logo);
+      localStorage.setItem(this.FAVICON_KEY, favicon);
       localStorage.setItem(this.EXPIRATION_KEY, expirationTime.toString());
       resolve(); // Ensure function completes before continuing
     });
@@ -38,6 +42,8 @@ export class TokenServiceService {
       localStorage.removeItem(this.USERID_KEY);
       localStorage.removeItem(this.ROLE_KEY);
       localStorage.removeItem(this.EXPIRATION_KEY);
+      localStorage.removeItem(this.LOGO_KEY);
+      localStorage.removeItem(this.FAVICON_KEY);
       resolve();
     })
   }
@@ -57,8 +63,9 @@ export class TokenServiceService {
       userId: localStorage.getItem(this.USERID_KEY),
       role: localStorage.getItem(this.ROLE_KEY),
       image: localStorage.getItem(this.PROFILE_IMAGE),
+      logo: localStorage.getItem(this.LOGO_KEY),
+      favicon: localStorage.getItem(this.FAVICON_KEY),
       tokenExpiration: localStorage.getItem(this.EXPIRATION_KEY),
-
     };
   }
 }

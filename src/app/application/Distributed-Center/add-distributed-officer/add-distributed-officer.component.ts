@@ -367,6 +367,11 @@ onClick(targetElement: HTMLElement) {
     )
   }
 
+  changeCenter() {
+    this.personalData.jobRole = ''
+   this.getAllDistributionManagers()
+ }
+
   getAllDistributionManagers() {
     this.isLoading = true;
     // this.personalData.jobRole = ''
@@ -783,7 +788,7 @@ class Personal {
   branchName!: string;
   conformAccNumber!: string;
 
-  jobRole: string = 'Distribution Officer'
+  jobRole!: string;
   empId!: string
   employeeType!: string;
 

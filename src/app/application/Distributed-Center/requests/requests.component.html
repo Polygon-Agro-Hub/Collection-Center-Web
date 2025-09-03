@@ -211,12 +211,14 @@
                             </button> -->
 
                             <button class="px-2"
-                                (click)="(item.status === 'Not Approved' && item.isPacked) ? openReplacePopUp(item) : null">
-                                <i class="fa-solid fa-pen-to-square text-lg" [ngClass]="{
-      'text-[#415CFF] hover:text-blue-500': item.status === 'Not Approved' && item.isPacked,
-      'text-[#6B7D8C]': !(item.status === 'Not Approved' && item.isPacked)
-    }"></i>
-                            </button>
+        (click)="!item.isPacked ? openReplacePopUp(item) : null">
+  <i class="fa-solid fa-pen-to-square text-lg"
+     [ngClass]="{
+        'text-[#415CFF] hover:text-blue-500': !item.isPacked,
+        'text-[#6B7D8C]': item.isPacked
+     }">
+  </i>
+</button>
                         </td>
 
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
@@ -266,7 +268,7 @@
         <div class="border-2 border-dashed border-red-400 rounded-md text-center py-3 px-4 mb-6 w-3/5 mx-auto">
             <p class="text-sm  text-gray-600 dark:text-textDark">Selected product</p>
             <p class="text-base font-semibold dark:text-white ">{{selectedRequestObj.currentProduct}} -
-                {{selectedRequestObj.currentProductQty}} - Rs.{{selectedRequestObj.currentProductPrice}}</p>
+                {{selectedRequestObj.currentProductQty}}kg - Rs.{{selectedRequestObj.currentProductPrice}}</p>
             <p class="mt-2 text-gray-600 text-sm  dark:text-textDark">
                 Relevant Product Type :
                 <br><span class="font-medium text-black dark:text-white">{{selectedRequestObj.currentProductTypeName}}</span>
@@ -278,7 +280,8 @@
                 <tr>
                     <th class="text-left py-2 w-1/4 dark:text-white">PRODUCT NAME</th>
                     <th class="text-center py-2 w-1/4 dark:text-white">
-                        QUANTITY ({{ selectedRequestObj.replaceUnitType || "Kg" }})
+                        QUANTITY (KG) 
+                        <!-- ({{ selectedRequestObj.replaceUnitType || "Kg" }}) -->
                     </th>
                     <th class="text-left pl-4 pr-1 py-2 w-1/4 whitespace-nowrap dark:text-white">UNIT PRICE (RS.)</th>
                     <th class="text-left pl-2 py-2 w-1/4 dark:text-white">TOTAL (RS.)</th>

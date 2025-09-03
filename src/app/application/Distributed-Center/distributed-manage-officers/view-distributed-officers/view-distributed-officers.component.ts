@@ -241,16 +241,16 @@ export class ViewDistributedOfficersComponent implements OnInit {
     let message = '';
 
 if (item.status === 'Approved') {
-  message = 'Are you sure you want to reject this  Distribution Officer  ?';
+  message = `Are you sure you want to reject this ${item.jobRole} ?`;
 } 
 else if (item.status === 'Rejected') {
-  message = 'Are you sure you want to approve this Distribution Officer ?';
+  message = `Are you sure you want to approve this ${item.jobRole} ?`;
 } 
 else if (item.status === 'Not Approved') {
-  message = 'Are you sure you want to approve or reject this Distribution Officer ?';
+  message = `Are you sure you want to approve or reject this ${item.jobRole} ?`;
 } 
 else {
-  message = '';
+  message = ``;
 }
 
 const rejectButton = (item.status === 'Approved' || item.status === 'Not Approved')

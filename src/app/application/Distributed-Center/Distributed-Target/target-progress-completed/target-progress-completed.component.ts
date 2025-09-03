@@ -286,22 +286,18 @@ cancelOutForDelivery() {
 }
 
 getScheduleClass(item: any): string {
-  console.log('shedule class called')
   const now = new Date();
   const scheduleDate = new Date(item.sheduleDate);
 
-  // Remove time part for date comparison
   const nowDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  console.log('nowDate', nowDate)
   const scheduleOnlyDate = new Date(scheduleDate.getFullYear(), scheduleDate.getMonth(), scheduleDate.getDate());
-  console.log('scheduleOnlyDate', scheduleOnlyDate)
+
   // Case 1: Schedule date is before today → RED
   if (scheduleOnlyDate < nowDate) {
-    console.log('below')
     return 'text-red-500';
   }
 
-  // Case 2: Schedule date is today → check time
+  // Case 2: Schedule date is today → check slot
   if (scheduleOnlyDate.getTime() === nowDate.getTime()) {
     let upperLimitHour = 0;
 
@@ -317,13 +313,16 @@ getScheduleClass(item: any): string {
     upperLimit.setHours(upperLimitHour, 0, 0, 0);
 
     if (now <= upperLimit) {
-      return 'text-blue-500';
+      return 'text-blue-500';  // slot still valid
+    } else {
+      return 'text-red-500';   // slot expired
     }
   }
 
-  // Case 3: Future dates → no special style
+  // Case 3: Future date → no color
   return '';
 }
+
 
 
 }

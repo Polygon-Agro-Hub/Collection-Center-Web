@@ -38,28 +38,74 @@
 
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div *ngIf="logingRole === 'Distribution Center Head'" (change)="changeCenter()">
+                    <div *ngIf="logingRole === 'Distribution Center Head'">
                         <label for="centerId" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
-                            Distribution Centre Name *
+                          Distribution Centre Name *
                         </label>
-                        <select id="centerId" [(ngModel)]="personalData.centerId" name="centerId" placeholder="select"
-                            #centerIdInput="ngModel" required
-                            class="form-control mt-1 block w-full p-2 text-[#534E4E] dark:text-textDark border border-gray-300 hover:bg-gray-200  rounded-md bg-gray-100 dark:bg-[#1D1D1F] focus:ring-indigo-500 focus:border-indigo-500">
-                            <option disabled selected
-                                class="p-2 text-[#959595] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]" value="">
-                                -- select centre--
-                            </option>
-                            <option *ngFor="let item of centerArr" [value]="item.id"
-                                class="p-2 text-[#534E4E] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
-                                {{item.centerName}}
-                            </option>
+                      
+                        <!-- Dropdown container -->
+                        <div class="relative w-full">
+                            <!-- Input acting as dropdown -->
+                            <div class="relative">
+                              <input
+                                type="text"
+                                id="centerId"
+                                name="centerId"
+                                [(ngModel)]="selectedCenterName"
+                                #centerIdInput="ngModel"
+                                required
+                                placeholder="-- select centre--"
+                                readonly
+                                (click)="toggleDropdown()"
+                                class="form-control mt-1 block w-full p-2 pr-10 border border-gray-300 rounded-md bg-gray-100 dark:bg-[#1D1D1F] dark:text-textDark cursor-pointer"
+                              />
+                          
+                              <!-- Arrow icon -->
+                              <i *ngIf="!centreDropdownOpen"
+                                class="fa-solid fa-angle-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"
+                              ></i>
 
-                        </select>
-                        <div *ngIf="centerIdInput.touched && !personalData.centerId && logingRole === 'Distribution Center Head'"
-                            class="text-red-600 text-sm mt-2">
-                            <div>Distribution Centre Name is required</div>
+                              <i *ngIf="centreDropdownOpen"
+                                class="fa-solid fa-angle-up absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"
+                              ></i>
+                            </div>
+                          
+                            <!-- Dropdown panel -->
+                            <div *ngIf="centreDropdownOpen"
+                                 class="absolute z-50 mt-1 w-full border border-gray-300 rounded-md bg-gray-100 dark:bg-[#1D1D1F] max-h-60 overflow-y-auto shadow-lg">
+                              
+                              <!-- Sticky search input -->
+                              <div class="sticky top-0 bg-gray-100 dark:bg-[#1D1D1F] z-20">
+                                <div class="relative">
+                                  <input
+                                    type="text"
+                                    placeholder="Search..."
+                                    (input)="onSearchInput($event)"
+                                    class="dropdown-search-input form-control dark:text-textDark dark:bg-[#1D1D1F] w-full p-2 pr-10 border-b border-gray-300 rounded-t-md"
+                                  />
+                                  <i
+                                    class="fa-solid fa-magnifying-glass absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+                                  ></i>
+                                </div>
+                              </div>
+                          
+                              <!-- List -->
+                              <div *ngFor="let item of filteredCenterArr"
+                                   class="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-textDark cursor-pointer"
+                                   (click)="selectCenter(item)">
+                                {{ item.centerName }}
+                              </div>
+                            </div>
+                          </div>
+                          
+                      
+                        <!-- Validation -->
+                        <div *ngIf="centerIdInput.touched && !personalData.centerId"
+                             class="text-red-600 text-sm mt-2">
+                          Distribution Centre Name is required
                         </div>
-                    </div>
+                      </div>
+                      
 
                     <div>
                         <label for="jobRole" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
@@ -100,7 +146,7 @@
                         <label for="centerId" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
                             Manager *
                         </label>
-                        <select id="irmId" [(ngModel)]="personalData.irmId" name="irmId" placeholder="select"
+                        <!-- <select id="irmId" [(ngModel)]="personalData.irmId" name="irmId" placeholder="select"
                             #irmIdInput="ngModel" required (change)="checkManager()" [disabled]="!personalData.centerId"
                             class="form-control mt-1 block w-full p-2 text-[#534E4E] dark:text-textDark border border-gray-300 hover:bg-gray-200  rounded-md bg-gray-100 dark:bg-[#1D1D1F] focus:ring-indigo-500 focus:border-indigo-500">
                             <option disabled [ngValue]="null"
@@ -111,7 +157,61 @@
                                 class="p-2 text-[#534E4E] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
                                 {{item.firstNameEnglish}} {{item.lastNameEnglish}}
                             </option>
-                        </select>
+                        </select> -->
+
+                        <div class="relative w-full">
+                            <!-- Input acting as dropdown -->
+                            <div class="relative">
+                              <input
+                                type="text"
+                                id="irmId"
+                                name="irmId"
+                                [(ngModel)]="selectedManager"
+                                #irmIdInput="ngModel"
+                                required
+                                placeholder="-- select manager--"
+                                readonly
+                                (click)="toggleManagerDropdown()"
+                                class="form-control mt-1 block w-full p-2 pr-10 border border-gray-300 rounded-md bg-gray-100 dark:bg-[#1D1D1F] dark:text-textDark cursor-pointer"
+                              />
+                          
+                              <!-- Arrow icon -->
+                              <i *ngIf="!managerDropdownOpen"
+                                class="fa-solid fa-angle-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"
+                              ></i>
+
+                              <i *ngIf="managerDropdownOpen"
+                                class="fa-solid fa-angle-up absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"
+                              ></i>
+                            </div>
+                          
+                            <!-- Dropdown panel -->
+                            <div *ngIf="managerDropdownOpen"
+                                 class="absolute z-50 mt-1 w-full border border-gray-300 rounded-md bg-gray-100 dark:bg-[#1D1D1F] max-h-60 overflow-y-auto shadow-lg">
+                              
+                              <!-- Sticky search input -->
+                              <div class="sticky top-0 bg-gray-100 dark:bg-[#1D1D1F] z-20">
+                                <div class="relative">
+                                  <input
+                                    type="text"
+                                    placeholder="Search..."
+                                    (input)="onManagerSearchInput($event)"
+                                    class="dropdown-manager-search-input form-control dark:text-textDark dark:bg-[#1D1D1F] w-full p-2 pr-10 border-b border-gray-300 rounded-t-md"
+                                  />
+                                  <i
+                                    class="fa-solid fa-magnifying-glass absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+                                  ></i>
+                                </div>
+                              </div>
+                          
+                              <!-- List -->
+                              <div *ngFor="let item of filteredManagerArr"
+                                   class="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-textDark cursor-pointer"
+                                   (click)="selectManager(item)">
+                                {{ item.firstNameEnglish }} {{item.lastNameEnglish}}
+                              </div>
+                            </div>
+                          </div>
                         <div *ngIf="irmIdInput.touched && !personalData.irmId && logingRole === 'Distribution Center Head' && (personalData.jobRole === 'Distribution Officer')"
                             class="text-red-500 text-sm mt-1">
                             <div>Distribution Centre Manager is required</div>

@@ -21,6 +21,8 @@ export class DistributionServiceService {
       Authorization: `Bearer ${this.token}`
     });
 
+    console.log('province', province, 'district', district)
+
     let url = `${this.apiUrl}/get-all-distribution-centers?page=${page}&limit=${limit}`;
 
     if (province) {

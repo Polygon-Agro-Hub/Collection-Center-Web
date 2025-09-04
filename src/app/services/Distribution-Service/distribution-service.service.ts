@@ -416,6 +416,34 @@ export class DistributionServiceService {
     return this.http.post<{ regCode: string }>(url, { province, district, city }, { headers });
   }
 
+
+  downloadAllTargetProgressReport(
+    status: string,
+    date: Date | string | null,
+    searchText: string = ''
+  ): Observable<Blob> {
+    let url = `${this.apiUrl}/download-all-target-progress?test=${1}`;
+
+    if (status) {
+      url += `&status=${status}`;
+    }
+
+    if (date) {
+      url += `&date=${date}`;
+    }
+
+    if (searchText) {
+      url += `&searchText=${searchText}`;
+    }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      // Optional: 'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    });
+
+    return this.http.get(url, { headers, responseType: 'blob' });
+  }
+
 }
 
 

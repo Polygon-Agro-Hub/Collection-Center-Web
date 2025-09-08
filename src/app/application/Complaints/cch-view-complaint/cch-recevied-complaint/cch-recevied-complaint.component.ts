@@ -106,6 +106,7 @@ complainArr!: RecivedComplaint[];
   }
 
   onSearch() {
+    this.searchText = this.searchText?.trim() || '';
     this.fetchAllreciveComplaint();
 
   }

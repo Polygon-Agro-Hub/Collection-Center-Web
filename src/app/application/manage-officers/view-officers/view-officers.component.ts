@@ -50,7 +50,7 @@ export class ViewOfficersComponent implements OnInit {
   }
 
   isRoleDropdownOpen = false;
-  roleDropdownOptions = ['Collection Center Manager', 'Collection Officer', 'Customer Officer', 'Driver'];
+  roleDropdownOptions = ['Collection Center Manager', 'Collection Officer', 'Customer Officer'];
 
   toggleRoleDropdown() {
     this.isRoleDropdownOpen = !this.isRoleDropdownOpen;

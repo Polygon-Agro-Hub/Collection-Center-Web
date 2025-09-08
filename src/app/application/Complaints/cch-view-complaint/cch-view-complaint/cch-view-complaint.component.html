@@ -1,4 +1,4 @@
-<app-loading-spinner *ngIf="isLoading"/>
+<app-loading-spinner *ngIf="isLoading" />
 
 <div class="flex gap-0 mb-4 mr-5 ml-0">
     <p class="font-semibold text[#424242]  dark:text-[#FFFFFF] dark:bg-blacks cursor-pointer">Complaints</p>
@@ -57,7 +57,9 @@
 
                 <!-- Textarea -->
                 <textarea rows="4" [(ngModel)]="complaint" placeholder="Kindly submit your complaint here"
-                    class="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent resize-none mb-4 dark:bg-[#292929] dark:text-textDark"></textarea>
+                    class="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent resize-none mb-4 dark:bg-[#292929] dark:text-textDark"
+                    (input)="onTrimInput($event)">
+                </textarea>
 
                 <!-- Buttons -->
                 <div class="flex justify-center space-x-4">

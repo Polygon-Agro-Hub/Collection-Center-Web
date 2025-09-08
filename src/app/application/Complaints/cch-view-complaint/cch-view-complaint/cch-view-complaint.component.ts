@@ -98,6 +98,13 @@ export class CchViewComplaintComponent implements OnInit {
     )
   }
 
+  onTrimInput(event: Event): void {
+    const inputElement = event.target as HTMLTextAreaElement;
+    const trimmedValue = inputElement.value.trimStart();
+    this.complaint = trimmedValue;
+    inputElement.value = trimmedValue;
+  }
+
 
 }
 

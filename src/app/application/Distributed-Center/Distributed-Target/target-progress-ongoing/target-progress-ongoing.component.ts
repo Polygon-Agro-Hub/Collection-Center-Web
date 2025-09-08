@@ -7,6 +7,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
 import { ComplaintsService } from '../../../../services/Complaints-Service/complaints.service';
 import { CustomDatepickerComponent } from "../../../../components/custom-datepicker/custom-datepicker.component";
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-target-progress-ongoing',
@@ -32,6 +33,8 @@ export class TargetProgressOngoingComponent implements OnInit {
 
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Pending', 'Completed', 'Opened'];
+
+  isDownloading = false;
 
 
 
@@ -197,6 +200,46 @@ export class TargetProgressOngoingComponent implements OnInit {
 
   removeWithin(time: string): string {
     return time ? time.replace('Within ', '') : time;
+  }
+
+  downloadTemplate1() {
+    this.isDownloading = true;
+
+    this.DistributionSrv
+      .downloadAllTargetProgressReport(this.selectStatus, this.selectedDate, this.searchText )
+      .subscribe({
+        next: (blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `Target_Progress_For_${this.selectedDate}.xlsx`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+
+          Swal.fire({
+            icon: "success",
+            title: "Downloaded",
+            text: "Please check your downloads folder",
+            customClass: {
+              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+              title: 'dark:text-white',
+            }
+          });
+          this.isDownloading = false;
+        },
+        error: (error) => {
+          Swal.fire({
+            icon: "error",
+            title: "Download Failed",
+            text: error.message,
+            customClass: {
+              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+              title: 'dark:text-white',
+            }
+          });
+          this.isDownloading = false;
+        }
+      });
   }
 
 }

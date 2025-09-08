@@ -234,21 +234,44 @@ export class ViewOfficersComponent implements OnInit {
   openPopup(item: any) {
     this.isPopupVisible = true;
 
+    let message = '';
+
+if (item.status === 'Approved') {
+  message = `Are you sure you want to reject this ${item.jobRole} ?`;
+} 
+else if (item.status === 'Rejected') {
+  message = `Are you sure you want to approve this ${item.jobRole} ?`;
+} 
+else if (item.status === 'Not Approved') {
+  message = `Are you sure you want to approve or reject this ${item.jobRole} ?`;
+} 
+else {
+  message = ``;
+}
+
+const rejectButton = (item.status === 'Approved' || item.status === 'Not Approved')
+  ? `<button id="rejectButton" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg mr-2">
+       Reject
+     </button>`
+  : '';
+
+const approveButton = (item.status === 'Rejected' || item.status === 'Not Approved')
+  ? `<button id="approveButton" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
+       Approve
+     </button>`
+  : '';
+
     const tableHtml = `
-      <div class="container mx-auto">
-        <h1 class="text-center text-2xl font-bold mb-4 dark:text-white">Officer Name: ${item.firstNameEnglish}</h1>
-        <div>
-          <p class="text-center dark:text-white">Are you sure you want to approve or reject this collection?</p>
-        </div>
-        <div class="flex justify-center mt-4">
-          <button id="rejectButton" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg mr-2">
-            Reject
-          </button>
-          <button id="approveButton" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
-            Approve
-          </button>
-        </div>
-      </div>
+    <div class="container mx-auto">
+    <h1 class="text-center text-2xl font-bold mb-4 dark:text-white">Officer Name: ${item.firstNameEnglish}</h1>
+    <div>
+      <p class="text-center dark:text-white">${message}</p>
+    </div>
+    <div class="flex justify-center mt-4">
+      ${rejectButton}
+      ${approveButton}
+    </div>
+  </div>
     `;
 
     const swalInstance = Swal.fire({
@@ -300,7 +323,7 @@ export class ViewOfficersComponent implements OnInit {
           this.isLoading = false;
           swalInstance.close();
           const action = status === 'Approved' ? 'approved' : 'rejected';
-          this.toastSrv.success(`The collection was ${action} successfully.`);
+          this.toastSrv.success(`The collection officer was ${action} successfully.`);
           this.fetchByRole();
         } else {
           this.isLoading = false;
@@ -351,6 +374,7 @@ export class ViewOfficersComponent implements OnInit {
   }
 
   onSearch() {
+    this.searchText = this.searchText.trimStart(); // removes leading spaces only
     this.fetchByRole();
   }
 
@@ -384,10 +408,10 @@ export class ViewOfficersComponent implements OnInit {
   }
 
   get selectedCenterDisplay(): string {
-    if (!this.selectCenters) return 'Centers';
+    if (!this.selectCenters) return 'Centres';
     
     const selectedCenter = this.centerArr.find(center => center.id.toString() === this.selectCenters);
-    return selectedCenter ? `${selectedCenter.regCode} - ${selectedCenter.centerName}` : 'Centers';
+    return selectedCenter ? `${selectedCenter.regCode} - ${selectedCenter.centerName}` : 'Centres';
   }
 
 }

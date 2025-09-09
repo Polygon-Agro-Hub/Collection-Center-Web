@@ -444,7 +444,62 @@ export class DistributionServiceService {
     return this.http.get(url, { headers, responseType: 'blob' });
   }
 
+  downloadOutForDeliveryTargetProgressReport(
+    status: string,
+    searchText: string = ''
+  ): Observable<Blob> {
+    let url = `${this.apiUrl}/download-out-for-delivery-target-progress?test=${1}`;
+
+    if (status) {
+      url += `&status=${status}`;
+    }
+
+    if (searchText) {
+      url += `&searchText=${searchText}`;
+    }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      // Optional: 'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    });
+
+    return this.http.get(url, { headers, responseType: 'blob' });
+  }
+
+  downloadDCHOutForDeliveryTargetProgressReport(
+    status: string,
+    date: Date | string | null,
+    searchText: string = '',
+    centerId: number
+  ): Observable<Blob> {
+    let url = `${this.apiUrl}/download-dch-out-for-delivery-target-progress?centerId=${centerId}`;
+
+    if (status) {
+      url += `&status=${status}`;
+    }
+
+    if (date) {
+      url += `&date=${date}`;
+    }
+
+    if (searchText) {
+      url += `&searchText=${searchText}`;
+    }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      // Optional: 'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    });
+
+    return this.http.get(url, { headers, responseType: 'blob' });
+  }
+
 }
+
+
+
+
+
 
 
 

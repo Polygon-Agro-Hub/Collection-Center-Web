@@ -6,6 +6,7 @@ import { DistributionServiceService } from '../../../../services/Distribution-Se
 import { NgxPaginationModule } from 'ngx-pagination';
 import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
 import { ComplaintsService } from '../../../../services/Complaints-Service/complaints.service';
+import Swal from 'sweetalert2';
 
 
 @Component({
@@ -29,6 +30,8 @@ export class TargetOutForDeliveryComponent implements OnInit {
 
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Late', 'On Time'];
+
+  isDownloading = false;
 
   toggleStatusDropdown() {
     this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
@@ -142,6 +145,46 @@ export class TargetOutForDeliveryComponent implements OnInit {
 
   removeWithin(time: string): string {
     return time ? time.replace('Within ', '') : time;
+  }
+
+  downloadTemplate1() {
+    this.isDownloading = true;
+
+    this.DistributionSrv
+      .downloadOutForDeliveryTargetProgressReport(this.selectStatus, this.searchText )
+      .subscribe({
+        next: (blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `Out_For_Delivery_Report.xlsx`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+
+          Swal.fire({
+            icon: "success",
+            title: "Downloaded",
+            text: "Please check your downloads folder",
+            customClass: {
+              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+              title: 'dark:text-white',
+            }
+          });
+          this.isDownloading = false;
+        },
+        error: (error) => {
+          Swal.fire({
+            icon: "error",
+            title: "Download Failed",
+            text: error.message,
+            customClass: {
+              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+              title: 'dark:text-white',
+            }
+          });
+          this.isDownloading = false;
+        }
+      });
   }
 }
 

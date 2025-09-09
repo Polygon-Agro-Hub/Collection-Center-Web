@@ -414,10 +414,10 @@ const tableHtml = `
   }
 
   get selectedCenterDisplay(): string {
-    if (!this.selectCenters) return 'Centers';
+    if (!this.selectCenters) return 'Centres';
 
     const selectedCenter = this.centerArr.find(center => center.id.toString() === this.selectCenters);
-    return selectedCenter ? `${selectedCenter.regCode} - ${selectedCenter.centerName}` : 'Centers';
+    return selectedCenter ? `${selectedCenter.regCode} - ${selectedCenter.centerName}` : 'Centres';
   }
 
 }

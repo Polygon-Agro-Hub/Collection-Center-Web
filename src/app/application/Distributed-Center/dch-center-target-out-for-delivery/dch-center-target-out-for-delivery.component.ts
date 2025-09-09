@@ -8,6 +8,7 @@ import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loa
 import { ComplaintsService } from '../../../services/Complaints-Service/complaints.service';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { CustomDatepickerComponent } from "../../../components/custom-datepicker/custom-datepicker.component";
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-dch-center-target-out-for-delivery',
@@ -38,6 +39,8 @@ export class DchCenterTargetOutForDeliveryComponent implements OnInit{
   regCode: string | null = null;
 
   isLoading:boolean = true;
+
+  isDownloading: boolean = false;
 
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Late', 'On Time'];
@@ -170,6 +173,46 @@ export class DchCenterTargetOutForDeliveryComponent implements OnInit{
   
       return `${day}${ordinal(day)} ${month}`;
     }
+  }
+
+  downloadTemplate1() {
+    this.isDownloading = true;
+
+    this.DistributionSrv
+      .downloadDCHOutForDeliveryTargetProgressReport(this.selectStatus, this.date, this.searchText, this.centerId! )
+      .subscribe({
+        next: (blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `DCH-Out_For_Delivery_Report${this.date}.xlsx`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+
+          Swal.fire({
+            icon: "success",
+            title: "Downloaded",
+            text: "Please check your downloads folder",
+            customClass: {
+              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+              title: 'dark:text-white',
+            }
+          });
+          this.isDownloading = false;
+        },
+        error: (error) => {
+          Swal.fire({
+            icon: "error",
+            title: "Download Failed",
+            text: error.message,
+            customClass: {
+              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+              title: 'dark:text-white',
+            }
+          });
+          this.isDownloading = false;
+        }
+      });
   }
   
   

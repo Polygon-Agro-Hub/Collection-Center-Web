@@ -934,6 +934,33 @@ export class EditOfficerComponent implements OnInit {
     this.router.navigate(['/centers/center-shashbord', this.centerId]); // Change '/reports' to your desired route
   }
 
+  blockSpecialChars(event: KeyboardEvent) {
+    // Allow letters (A-Z, a-z), space, backspace, delete, arrow keys
+    const allowedKeys = [
+      'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', ' '
+    ];
+  
+    // Regex: Only allow alphabets and spaces
+    const regex = /^[a-zA-Z\s]*$/;
+  
+    // Block if key is not allowed
+    if (!allowedKeys.includes(event.key) && !regex.test(event.key)) {
+      event.preventDefault();
+    }
+  }
+
+  capitalizeFirstLetter(field: keyof typeof this.personalData) {
+    if (this.personalData[field]) {
+      // Trim spaces
+      this.personalData[field] = this.personalData[field].trim();
+  
+      // Capitalize first letter
+      this.personalData[field] =
+        this.personalData[field].charAt(0).toUpperCase() +
+        this.personalData[field].slice(1);
+    }
+  }
+
 
 
 

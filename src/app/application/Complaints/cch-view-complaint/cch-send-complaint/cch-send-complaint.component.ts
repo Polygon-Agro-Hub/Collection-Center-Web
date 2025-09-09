@@ -150,6 +150,7 @@ export class CchSendComplaintComponent implements OnInit {
   }
 
   onSearch() {
+    this.searchText = this.searchText?.trim() || '';
     this.fetchAllreciveComplaint();
 
   }

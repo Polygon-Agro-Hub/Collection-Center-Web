@@ -161,7 +161,15 @@
                             </span>
                         </div>
                     </td>
-                    <td class="px-6 py-4 text-sm text-center font-medium text-gray-900 dark:text-[#C5C5C5]"></td>
+                    <td class="px-6 py-4 text-sm text-left font-medium text-gray-900 dark:text-[#C5C5C5]">
+                        <span 
+                          [ngClass]="{
+                            'text-red-500': getStatus(item) === 'Late',
+                            'text-blue-500': getStatus(item) === 'On Time'
+                          }">
+                          {{ getStatus(item) }}
+                        </span>
+                      </td>
                 </tr>
             </tbody>
         </table>
@@ -259,7 +267,15 @@
                             </span>
                         </div>
                     </td>
-                    <td class="px-6 py-4 text-sm text-left font-medium text-gray-900 dark:text-[#C5C5C5]"></td>
+                    <td class="px-6 py-4 text-sm text-left font-medium text-gray-900 dark:text-[#C5C5C5]">
+                        <span 
+                          [ngClass]="{
+                            'text-red-500': getStatus(item) === 'Late',
+                            'text-blue-500': getStatus(item) === 'On Time'
+                          }">
+                          {{ getStatus(item) }}
+                        </span>
+                      </td>
                 </tr>
             </tbody>
         </table>

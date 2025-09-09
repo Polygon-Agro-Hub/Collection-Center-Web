@@ -424,6 +424,8 @@ export class DistributionServiceService {
   ): Observable<Blob> {
     let url = `${this.apiUrl}/download-all-target-progress?test=${1}`;
 
+    console.log('donwloading')
+
     if (status) {
       url += `&status=${status}`;
     }

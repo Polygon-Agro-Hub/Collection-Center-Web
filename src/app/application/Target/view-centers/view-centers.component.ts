@@ -130,7 +130,7 @@ export class ViewCentersComponent implements OnInit {
     }
 
     offSearch() {
-        this.searchText = '';
+        this.searchText = this.searchText?.trim() || '';
         this.fetchAllCenterDetails();
     }
 

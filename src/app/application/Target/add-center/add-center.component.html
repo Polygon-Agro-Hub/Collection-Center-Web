@@ -13,34 +13,105 @@
     <div>
       <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Collection Centre Name</label>
       <input
+        (input)="capitalizeFirstLetter('centerName')"
         type="text"
         class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F] "
         [(ngModel)]="centerData.centerName"
         name="centerName"
         required
         #centerName="ngModel"
+        
       />
       <p *ngIf="centerName.invalid && centerName.touched" class="text-red-500 text-sm">
-        Center Name is required.
+        Centre Name is Requied.
       </p>
     </div>
     <!-- Country -->
     <div>
       <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Country</label>
-      <select
+     
+      <input
       class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
         [(ngModel)]="centerData.country"
         name="country"
         required
         #country="ngModel"
-      >
-
-        <option value="Sri Lanka">Sri Lanka</option>
-      </select>
+        readonly
+      />
       <p *ngIf="country.invalid && country.touched" class="text-red-500 text-sm">
         Country is required.
       </p>
     </div>
+
+    <div>
+      <label for="phoneNumber01" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
+          Contact Number - 1 *
+      </label>
+      <div class="mt-1 flex">
+          <select id="phoneNumber01Code" name="phoneNumber01Code"
+              [(ngModel)]="centerData.phoneNumber01Code"
+              class="block p-2 border border-gray-300 hover:bg-gray-200 rounded-l-md bg-gray-50 mr-5 text-[#534E4E] dark:text-textDark dark:bg-[#1D1D1F]">
+              <option value="+94">+94 (LK)</option>
+              <option value="+1">+1 (US)</option>
+              <option value="+44">+44 (UK)</option>
+              <option value="+91">+91 (India)</option>
+          </select>
+          <input id="phoneNumber01" name="phoneNumber01" type="tell"
+              [(ngModel)]="centerData.phoneNumber01"
+              class="block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-r-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+              placeholder="Enter your contact number" #phoneNumber01Input="ngModel" required (ngModelChange)="validateSriLankanPhone($event, 'phone01')"
+              pattern="^[0-9]{9}$" minlength="9" maxlength="9"
+              (keypress)="($event.charCode >= 48 && $event.charCode <= 57) ? true : $event.preventDefault()" />
+      </div>
+      <div *ngIf="phoneNumber01Input.touched && !centerData.phoneNumber01"
+          class="text-red-500 text-sm mt-1">
+          <div> Contact Number - 1 is required</div>
+      </div>
+      <div *ngIf="centerData.phoneNumber01 && phoneNumber01Input.invalid && !isPhoneInvalidMap['phone01']"
+          class="text-red-500 text-sm mt-1">
+          Contact Number must be exactly 9 digits.
+      </div>
+
+      <div *ngIf="isPhoneInvalidMap['phone01'] && centerData.phoneNumber01" class="text-red-500 text-sm mt-1">
+          Please enter a valid Contact number (format: +947XXXXXXXX)
+        </div>
+  </div>
+
+  <div>
+    <label for="phoNumTwo" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
+      Contact Number - 2 *
+    </label>
+    <div class="mt-1 flex">
+        <select id="phoneNumber02Code" name="phoneNumber02Code"
+            [(ngModel)]="centerData.phoneNumber02Code"
+            class="block p-2 border border-gray-300 hover:bg-gray-200 rounded-l-md bg-gray-50 mr-5 text-[#534E4E] dark:text-textDark dark:bg-[#1D1D1F]">
+            <option value="+94">+94 (LK)</option>
+            <option value="+1">+1 (US)</option>
+            <option value="+44">+44 (UK)</option>
+            <option value="+91">+91 (India)</option>
+        </select>
+        <input id="phoneNumber02" name="phoneNumber02" type="tell" #phoneNumber02Input="ngModel"
+            [(ngModel)]="centerData.phoneNumber02"
+            class="block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-r-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+            placeholder="Enter your contact number" pattern="^[0-9]{9}$" minlength="9" maxlength="9"
+            maxlength="9" (ngModelChange)="validateSriLankanPhone($event, 'phone02')"
+            (keypress)="($event.charCode >= 48 && $event.charCode <= 57) ? true : $event.preventDefault()"/>
+
+    </div>
+    <div *ngIf="centerData.phoneNumber02 && phoneNumber02Input.invalid && !isPhoneInvalidMap['phone02']"
+        class="text-red-500 text-sm mt-1">
+        Contact Number must be exactly 9 digits.
+    </div>
+
+    <div *ngIf="centerData.phoneNumber02 && centerData.phoneNumber02 === centerData.phoneNumber01 && !isPhoneInvalidMap['phone02'] && !phoneNumber02Input.invalid" class="text-red-500 text-sm mt-1">
+      Contact Number - 2 should be different from Phone Number - 1.
+      </div>
+
+      <div *ngIf="isPhoneInvalidMap['phone02'] && centerData.phoneNumber02" class="text-red-500 text-sm mt-1">
+        Please enter a valid Contact number (format: +947XXXXXXXX)
+      </div>
+</div>
+
     <!-- Province -->
     <div>
       <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Province</label>
@@ -84,6 +155,7 @@
     <div>
       <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Building No</label>
       <input
+      (input)="onTrimInput($event, buildingNumber, 'buildingNumber')"
         type="text"
         class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
         [(ngModel)]="centerData.buildingNumber"
@@ -99,6 +171,7 @@
     <div>
       <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Street Name</label>
       <input
+      (input)="onTrimInput($event, street, 'street')"
         type="text"
         class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
         [(ngModel)]="centerData.street"
@@ -114,6 +187,7 @@
     <div>
       <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">City</label>
       <input
+      (input)="capitalizeFirstLetter('city')"
         type="text"
         class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
         [(ngModel)]="centerData.city"
@@ -153,8 +227,8 @@
     <button
       type="submit"
       class="px-4 py-2 bg-[#3980C0] text-[#FFFFFF] rounded-md"
-      [disabled]="!centerForm.valid"
-      (click)="onSubmit()"
+     
+      (click)="onSubmit(centerForm)"
     >
       Submit
     </button>

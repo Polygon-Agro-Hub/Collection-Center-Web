@@ -99,6 +99,7 @@ export class CollectionReportComponentComponent implements OnInit {
   }
 
   onSearch() {
+    this.searchText = this.searchText.trimStart();
     this.fetchAllOfficers(this.page, this.itemsPerPage, this.searchText);
   }
 
@@ -147,10 +148,10 @@ export class CollectionReportComponentComponent implements OnInit {
 
 
   get selectedCenterDisplay(): string {
-    if (!this.selectCenters) return 'Centers';
+    if (!this.selectCenters) return 'Centres';
     
     const selectedCenter = this.centerArr.find(center => center.id.toString() === this.selectCenters);
-    return selectedCenter ? `${selectedCenter.regCode} - ${selectedCenter.centerName}` : 'Centers';
+    return selectedCenter ? `${selectedCenter.regCode} - ${selectedCenter.centerName}` : 'Centres';
   }
 
 }

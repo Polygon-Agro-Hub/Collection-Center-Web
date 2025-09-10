@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
-import { FormsModule } from '@angular/forms';
+import { Component, OnInit, ViewChild } from '@angular/core';
+import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { TargetService } from '../../../services/Target-service/target.service'
@@ -16,6 +16,8 @@ import { Location } from '@angular/common';
   styleUrl: './add-center.component.css'
 })
 export class AddCenterComponent implements OnInit {
+
+  @ViewChild('centerForm') centerForm!: NgForm;
 
   centerData: CenterData = new CenterData();
 
@@ -33,6 +35,12 @@ export class AddCenterComponent implements OnInit {
     'Uva',
     'Sabaragamuwa'
   ];
+
+  allowedPrefixes = ['70', '71', '72', '75', '76', '77', '78'];
+  isPhoneInvalidMap: { [key: string]: boolean } = {
+  phone01: false,
+  phone02: false,
+};
 
   // Define all districts with their provinces
   allDistricts = [
@@ -101,7 +109,127 @@ export class AddCenterComponent implements OnInit {
     }
   }
 
-  onSubmit() {
+  validateSriLankanPhone(input: string, key: string): void {
+    if (!input) {
+      this.isPhoneInvalidMap[key] = false;
+      return;
+    }
+  
+    const firstDigit = input.charAt(0);
+    const prefix = input.substring(0, 2);
+    const isValidPrefix = this.allowedPrefixes.includes(prefix);
+    const isValidLength = input.length === 9;
+  
+    if (firstDigit !== '7') {
+      this.isPhoneInvalidMap[key] = true;
+      return;
+    }
+  
+    if (!isValidPrefix && input.length >= 2) {
+      this.isPhoneInvalidMap[key] = true;
+      return;
+    }
+  
+    if (input.length === 9 && isValidPrefix) {
+      this.isPhoneInvalidMap[key] = false;
+      return;
+    }
+  
+    this.isPhoneInvalidMap[key] = false;
+  }
+
+  onTrimInput(event: Event, modelRef: any, fieldName: string): void {
+    const inputElement = event.target as HTMLInputElement;
+    const trimmedValue = inputElement.value.trimStart();
+    modelRef[fieldName] = trimmedValue;
+    inputElement.value = trimmedValue;
+  }
+
+  capitalizeFirstLetter(field: keyof CenterData) {
+    if (this.centerData[field]) {
+      let value = this.centerData[field] as unknown as string;
+  
+      // Trim spaces
+      value = value.trim();
+  
+      // Capitalize first letter
+      value = value.charAt(0).toUpperCase() + value.slice(1);
+  
+      this.centerData[field] = value as never; // assign back safely
+    }
+  }
+
+  onSubmit(form: NgForm) {
+    Object.values(this.centerForm.controls).forEach(control => {
+      control.markAsTouched();
+    });
+
+    const missingFields: string[] = [];
+
+    if (!this.centerData.centerName) {
+      missingFields.push('Collection Centre Name is required');
+    }
+
+    if (!this.centerData.phoneNumber01) {
+      missingFields.push('Contact Number - 1 is required');
+    } else if (!/^[0-9]{9}$/.test(this.centerData.phoneNumber01) || this.isPhoneInvalidMap['phone01']) {
+      missingFields.push('Contact Number - 1 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+    }
+  
+    if (this.centerData.phoneNumber02) {
+      if (!/^[0-9]{9}$/.test(this.centerData.phoneNumber02) || this.isPhoneInvalidMap['phone02']) {
+        missingFields.push('Contact Number - 2 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+      }
+      if (this.centerData.phoneNumber01 === this.centerData.phoneNumber02) {
+        missingFields.push('Contact Number - 2 - Must be different from Contact Number - 1');
+      }
+    }
+
+    if (!this.centerData.province) {
+      missingFields.push('Province is required');
+    }
+
+    if (!this.centerData.district) {
+      missingFields.push('District is required');
+    }
+
+    if (!this.centerData.buildingNumber) {
+      missingFields.push('Building Number is required');
+    }
+
+    if (!this.centerData.street) {
+      missingFields.push('Street Name is required');
+    }
+
+    if (!this.centerData.city) {
+      missingFields.push('City is required');
+    }
+
+    if (!this.centerData.regCode) {
+      missingFields.push('Registration Code is required');
+    }
+
+    if (missingFields.length > 0) {
+      let errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following issues:</p><ul class="list-disc pl-5">';
+      missingFields.forEach((field) => {
+        errorMessage += `<li>${field}</li>`;
+      });
+      errorMessage += '</ul></div>';
+  
+      Swal.fire({
+        icon: 'error',
+        title: 'Missing or Invalid Information',
+        html: errorMessage,
+        confirmButtonText: 'OK',
+        customClass: {
+          popup: 'bg-white dark:bg-[#363636] text-[#534E4E] dark:text-textDark',
+          title: 'font-semibold text-lg',
+          htmlContainer: 'text-left',
+        },
+      });
+      return;
+    }
+
     this.isLoading = true;
 
     // Validate form data
@@ -196,10 +324,14 @@ class CenterData {
   centerName!: string;
   district!: string;
   province!: string;
-  country!: string;
+  country: string = 'Sri Lanka'
   buildingNumber!: string;
   street!: string;
   city!: string;
   regCode!: string;
+  phoneNumber01Code: string = '+94';
+  phoneNumber01!: string;
+  phoneNumber02Code: string = '+94';
+  phoneNumber02!: string
 
 }

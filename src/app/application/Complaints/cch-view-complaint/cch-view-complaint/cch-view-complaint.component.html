@@ -58,7 +58,7 @@
                 <!-- Textarea -->
                 <textarea rows="4" [(ngModel)]="complaint" placeholder="Kindly submit your complaint here"
                     class="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent resize-none mb-4 dark:bg-[#292929] dark:text-textDark"
-                    (input)="onTrimInput($event)">
+                    (input)="capitalizeFirstLetter($event)">
                 </textarea>
 
                 <!-- Buttons -->

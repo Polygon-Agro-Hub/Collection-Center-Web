@@ -49,7 +49,10 @@ export class ViewRecivedComplaintComponent implements OnInit {
     this.isLoading = true;
     this.ComplainSrv.getComplainById(id).subscribe(
       (res) => {
+        console.log('getting');
+        console.log('res', res)
         this.compalintObj = res.data;
+        console.log('compalintObj', this.compalintObj)
 
         this.officerName =
           (this.compalintObj?.firstNameEnglish || '') + ' ' +
@@ -92,15 +95,13 @@ export class ViewRecivedComplaintComponent implements OnInit {
     );
   }
 
-
-
   forwordComplain() {
     Swal.fire({
       title: 'Are you sure?',
       text: 'Do you want to forward this complaint?',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3085d6',
+      confirmButtonColor: '#3085d6', // Default blue
       cancelButtonColor: '#d33',
       confirmButtonText: 'Yes, forward it!',
       cancelButtonText: 'No, cancel',
@@ -109,10 +110,11 @@ export class ViewRecivedComplaintComponent implements OnInit {
         title: 'dark:text-white',
         icon: '!border-gray-200 dark:!border-gray-500',
         confirmButton: 'hover:!bg-[#3085d6] dark:hover:!bg[#3085d6]', 
-        cancelButton: 'hover:!bg-[#3085d6] dark:hover:!bg[#3085d6]',
+        cancelButton: '',
         actions: 'gap-2'
       }
-    }).then((result) => {
+    })
+    .then((result) => {
       if (result.isConfirmed) {
         this.isLoading = true
         this.ComplainSrv.forwordComplain(this.compalinId).subscribe(
@@ -131,6 +133,44 @@ export class ViewRecivedComplaintComponent implements OnInit {
       }
     });
   }
+
+  // forwordComplain() {
+  //   Swal.fire({
+  //     title: 'Are you sure?',
+  //     text: 'Do you want to forward this complaint?',
+  //     icon: 'warning',
+  //     showCancelButton: true,
+  //     confirmButtonColor: '#3085d6',
+  //     cancelButtonColor: '#d33',
+  //     confirmButtonText: 'Yes, forward it!',
+  //     cancelButtonText: 'No, cancel',
+  //     customClass: {
+  //       popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+  //       title: 'dark:text-white',
+  //       icon: '!border-gray-200 dark:!border-gray-500',
+  //       confirmButton: 'hover:!bg-[#3085d6] dark:hover:!bg[#3085d6]', 
+  //       cancelButton: 'hover:!bg-[#3085d6] dark:hover:!bg[#3085d6]',
+  //       actions: 'gap-2'
+  //     }
+  //   }).then((result) => {
+  //     if (result.isConfirmed) {
+  //       this.isLoading = true
+  //       this.ComplainSrv.forwordComplain(this.compalinId).subscribe(
+  //         (res) => {
+  //           if (res.status) {
+  //             this.isLoading = false;
+  //             this.toastSrv.success(res.message)
+  //             this.router.navigate(['/complaints']);
+  //           } else {
+  //             this.isLoading = false;
+  //             this.toastSrv.error(res.message)
+
+  //           }
+  //         }
+  //       );
+  //     }
+  //   });
+  // }
 
   replyBtn() {
     this.isReplyView = true;

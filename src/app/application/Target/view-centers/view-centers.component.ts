@@ -125,12 +125,13 @@ export class ViewCentersComponent implements OnInit {
     }
 
     onSearch() {
+        this.searchText = this.searchText?.trim() || '';
         this.currentPage = 1; // Reset to first page on new search
         this.fetchAllCenterDetails();
     }
 
     offSearch() {
-        this.searchText = this.searchText?.trim() || '';
+        
         this.fetchAllCenterDetails();
     }
 

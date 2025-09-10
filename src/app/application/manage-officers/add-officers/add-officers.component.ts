@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { ManageOfficersService } from '../../../services/manage-officers-service/manage-officers.service';
@@ -9,6 +9,7 @@ import { TokenServiceService } from '../../../services/Token/token-service.servi
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { HttpClient } from '@angular/common/http';
 import { Location } from '@angular/common';
+import { Country, COUNTRIES } from '../../../../assets/country-data';
 
 
 @Component({
@@ -55,6 +56,19 @@ export class AddOfficersComponent implements OnInit {
   allBranches: BranchesData = {};
 
   invalidFields: Set<string> = new Set();
+
+  allowedPrefixes = ['70', '71', '72', '75', '76', '77', '78'];
+  isPhoneInvalidMap: { [key: string]: boolean } = {
+  phone01: false,
+  phone02: false,
+};
+
+  countries: Country[] = COUNTRIES;
+  selectedCountry1: Country | null = null;
+  selectedCountry2: Country | null = null;
+
+  dropdownOpen = false;
+  dropdownOpen2 = false;
 
 
   // Driver Images
@@ -107,6 +121,9 @@ export class AddOfficersComponent implements OnInit {
 
   ) {
     this.logingRole = tokenSrv.getUserDetails().role
+    const defaultCountry = this.countries.find(c => c.code === 'lk') || null;
+    this.selectedCountry1 = defaultCountry;
+    this.selectedCountry2 = defaultCountry;
 
   }
 
@@ -151,9 +168,24 @@ export class AddOfficersComponent implements OnInit {
     this.loadBanks()
     this.loadBranches()
     this.getAllCenters();
-    this.getLastID('COO');
-    this.EpmloyeIdCreate();
+    
+    // this.getLastID('COO');
+    // this.EpmloyeIdCreate();
   }
+
+  @HostListener('document:click', ['$event.target'])
+onClick(targetElement: HTMLElement) {
+  const insideDropdown1 = targetElement.closest('.dropdown-wrapper-1');
+  const insideDropdown2 = targetElement.closest('.dropdown-wrapper-2');
+
+  // Close dropdowns only if click is outside their wrapper
+  if (!insideDropdown1) {
+    this.dropdownOpen = false;
+  }
+  if (!insideDropdown2) {
+    this.dropdownOpen2 = false;
+  }
+}
 
 
   onCheckboxChange(lang: string, event: any) {
@@ -176,6 +208,54 @@ export class AddOfficersComponent implements OnInit {
 
     this.validateLanguages();
 
+  }
+
+  selectCountry1(country: Country) {
+    this.selectedCountry1 = country;
+    this.personalData.phoneNumber01Code = country.dialCode; // update ngModel
+    console.log('sdsf', this.personalData.phoneNumber01Code)
+    this.dropdownOpen = false;
+  }
+
+  selectCountry2(country: Country) {
+    this.selectedCountry2 = country;
+    this.personalData.phoneNumber02Code = country.dialCode; // update ngModel
+    console.log('sdsf', this.personalData.phoneNumber02Code)
+    this.dropdownOpen2 = false;
+  }
+  
+  // get flag
+  getFlagUrl(code: string): string {
+    return `https://flagcdn.com/24x18/${code}.png`;
+  }
+
+  validateSriLankanPhone(input: string, key: string): void {
+    if (!input) {
+      this.isPhoneInvalidMap[key] = false;
+      return;
+    }
+  
+    const firstDigit = input.charAt(0);
+    const prefix = input.substring(0, 2);
+    const isValidPrefix = this.allowedPrefixes.includes(prefix);
+    const isValidLength = input.length === 9;
+  
+    if (firstDigit !== '7') {
+      this.isPhoneInvalidMap[key] = true;
+      return;
+    }
+  
+    if (!isValidPrefix && input.length >= 2) {
+      this.isPhoneInvalidMap[key] = true;
+      return;
+    }
+  
+    if (input.length === 9 && isValidPrefix) {
+      this.isPhoneInvalidMap[key] = false;
+      return;
+    }
+  
+    this.isPhoneInvalidMap[key] = false;
   }
 
 
@@ -220,38 +300,38 @@ export class AddOfficersComponent implements OnInit {
     }
   }
 
-  getLastID(role: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      this.ManageOficerSrv.getForCreateId(role).subscribe(
-        (res) => {
-          this.lastID = res.result.empId;
-          const lastId = res.result.empId;
-          resolve(lastId); // Resolve the Promise with the empId
-        },
-        (error) => {
-          console.error('Error fetching last ID:', error);
-          reject(error);
-        }
-      );
-    });
-  }
+  // getLastID(role: string): Promise<string> {
+  //   return new Promise((resolve, reject) => {
+  //     this.ManageOficerSrv.getForCreateId(role).subscribe(
+  //       (res) => {
+  //         this.lastID = res.result.empId;
+  //         const lastId = res.result.empId;
+  //         resolve(lastId); // Resolve the Promise with the empId
+  //       },
+  //       (error) => {
+  //         console.error('Error fetching last ID:', error);
+  //         reject(error);
+  //       }
+  //     );
+  //   });
+  // }
 
-  EpmloyeIdCreate() {
-    let rolePrefix: string;
-    if (this.personalData.jobRole === 'Collection Center Manager') {
-      rolePrefix = 'CCM';
-    } else if (this.personalData.jobRole === 'Customer Officer') {
-      rolePrefix = 'CUO';
-    } else if (this.personalData.jobRole === 'Driver') {
-      rolePrefix = 'DVR';
-    } else {
-      rolePrefix = 'COO';
-    }
+  // EpmloyeIdCreate() {
+  //   let rolePrefix: string;
+  //   if (this.personalData.jobRole === 'Collection Center Manager') {
+  //     rolePrefix = 'CCM';
+  //   } else if (this.personalData.jobRole === 'Customer Officer') {
+  //     rolePrefix = 'CUO';
+  //   } else if (this.personalData.jobRole === 'Driver') {
+  //     rolePrefix = 'DVR';
+  //   } else {
+  //     rolePrefix = 'COO';
+  //   }
 
-    this.getLastID(rolePrefix).then((lastID) => {
-      this.personalData.empId = rolePrefix + lastID;
-    });
-  }
+  //   this.getLastID(rolePrefix).then((lastID) => {
+  //     this.personalData.empId = rolePrefix + lastID;
+  //   });
+  // }
 
   updateProvince(event: Event): void {
     const target = event.target as HTMLSelectElement; // Cast to HTMLSelectElement
@@ -425,6 +505,8 @@ export class AddOfficersComponent implements OnInit {
 
   onSubmitForm(form: NgForm) {
     form.form.markAllAsTouched();
+
+    this.validateLanguages();
   }
 
 
@@ -831,7 +913,13 @@ export class AddOfficersComponent implements OnInit {
     }
   }
 
-
+  onTrimInput(event: Event, modelRef: any, fieldName: string): void {
+    const inputElement = event.target as HTMLInputElement;
+    const trimmedValue = inputElement.value.trimStart();
+    modelRef[fieldName] = trimmedValue;
+    inputElement.value = trimmedValue;
+  }
+  
 }
 
 

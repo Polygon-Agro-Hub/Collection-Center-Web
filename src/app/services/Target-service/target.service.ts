@@ -450,5 +450,18 @@ export class TargetService {
     });
   }
 
+  generateRegCode(
+    province: string,
+    district: string,
+    city: string): Observable<{ regCode: string }> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/generate-regcode`;
+
+    return this.http.post<{ regCode: string }>(url, { province, district, city }, { headers });
+  }
+
 }
 

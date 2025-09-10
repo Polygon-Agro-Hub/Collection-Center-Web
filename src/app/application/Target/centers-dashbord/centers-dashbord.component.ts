@@ -14,6 +14,7 @@ import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loa
 })
 export class CentersDashbordComponent implements OnInit {
   centerNameObj: CenterName = new CenterName();
+  centerData: CenterData = new CenterData();
   resentCollectionArr!: ResentCollection[];
 
   selectTable: string = 'collection';
@@ -22,6 +23,8 @@ export class CentersDashbordComponent implements OnInit {
   transAmount: number = 0.00;
   totExpences: number = 0.00;
   expencePrecentage: number = 0.00;
+
+  regCode!: string;
 
 
   isLoading: boolean = true;
@@ -43,7 +46,9 @@ export class CentersDashbordComponent implements OnInit {
   fetchCenterDashbordDetails() {
     this.isLoading = true;
     this.TargetSrv.getDashbordDetails(this.centerId).subscribe((res) => {
+
       this.centerNameObj = res.officerCount
+      this.centerData = res.centerData
       this.transCount = res.transCount.transactionCount;
       this.transAmount = res.transAmountCount.transAmountCount;
       this.resentCollectionArr = res.limitedResentCollection;
@@ -92,6 +97,12 @@ class CenterName {
   centerName!: string;
   regCode!: string;
   officerCount!: number;
+}
+
+class CenterData {
+  id!: number;
+  centerName!: string;
+  regCode!: string;
 }
 
 class ResentCollection {

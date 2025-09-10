@@ -424,7 +424,43 @@ goBack() {
   this.location.back();
 }
 
+getStatus(item: orders): string {
+  if (!item.completeTime) {
+    return 'Not Completed';
+  }
 
+  // Convert both into Date objects
+  const completeTime = new Date(item.completeTime);
+  const scheduleDate = new Date(item.sheduleDate);
+
+  // Clone scheduleDate for deadline
+  let deadline = new Date(scheduleDate);
+
+  if (item.sheduleTime) {
+    const timeSlot = item.sheduleTime.trim();
+
+    if (timeSlot === 'Within 8-12 PM') {
+      deadline.setHours(12, 0, 0, 0); // 12:00 PM
+    } else if (timeSlot === 'Within 12-4 PM') {
+      deadline.setHours(16, 0, 0, 0); // 4:00 PM
+    } else if (timeSlot === 'Within 4-8 PM') {
+      deadline.setHours(20, 0, 0, 0); // 8:00 PM
+    }
+  }
+
+  // --- Debug with Sri Lanka local time ---
+  console.log(
+    'Complete (SL):',
+    completeTime.toLocaleString('en-GB', { timeZone: 'Asia/Colombo', hour12: false })
+  );
+  console.log(
+    'Deadline (SL):',
+    deadline.toLocaleString('en-GB', { timeZone: 'Asia/Colombo', hour12: false })
+  );
+
+  // ✅ Compare using timestamps (still works for SL)
+  return completeTime.getTime() <= deadline.getTime() ? 'On Time' : 'Late';
+}
 
 }
 
@@ -444,6 +480,7 @@ class orders {
   outDlvrDateLocal!: string
   distributedTargetId!: number
   combinedStatus!: string
+  completeTime!: Date
 }
 
 class Officer {

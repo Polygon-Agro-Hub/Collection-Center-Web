@@ -86,6 +86,8 @@ branchItems: { value: number; label: string }[] = [];
 
   selectedManagerName: string = "";
 
+  isPopupVisible: boolean = false;
+
   constructor(
     private ManageOficerSrv: ManageOfficersService,
     private router: Router,
@@ -1128,6 +1130,92 @@ capitalizeFirstLetter(field: keyof typeof this.personalData) {
 
   navigateToCenterDashboard() {
     this.router.navigate(['/centers/center-shashbord', this.centerId]); // Change '/reports' to your desired route
+  }
+
+  openPopup(item: Personal) {
+    console.log('personal', item)
+    console.log('officerId', this.editOfficerId)
+    this.isPopupVisible = true;
+
+    let message = `Are you sure you want to reset password for this ${item.jobRole} ?`;
+
+    const approveButton = `
+    <button id="approveButton" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
+      Reset Password
+    </button>
+  `;
+
+const tableHtml = `
+  <div class="container mx-auto">
+    <h1 class="text-center text-2xl font-bold mb-4 dark:text-white">Officer Name: ${item.firstNameEnglish}</h1>
+    <div>
+      <p class="text-center dark:text-white">${message}</p>
+    </div>
+    <div class="flex justify-center mt-4">
+      ${approveButton}
+    </div>
+  </div>
+`;
+
+
+    const swalInstance = Swal.fire({
+      html: tableHtml,
+      showConfirmButton: false,
+      width: 'auto',
+      allowOutsideClick: true,
+      background: 'bg-white dark:bg-[#363636]', // Background styles
+      color: 'text-gray-800 dark:text-white',   // Text color styles
+      customClass: {
+        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+        title: 'dark:text-white'
+      },
+      didOpen: () => {
+        // Approve Button
+        document.getElementById('approveButton')?.addEventListener('click', () => {
+          this.handleStatusChange(swalInstance, this.editOfficerId, 'Approved');
+        });
+
+      }
+    });
+  }
+
+  private handleStatusChange(swalInstance: any, id: number, status: 'Approved' | 'Rejected') {
+    // Show loading state
+    this.isLoading = true;
+    swalInstance.update({
+      showConfirmButton: false,
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      customClass: {
+        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+        title: 'dark:text-white',
+      },
+
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+
+    this.DistributedManageOfficerSrv.ChangeStatus(id, status).subscribe({
+      next: (res) => {
+        swalInstance.close();
+        if (res.status) {
+          this.isLoading = false;
+          swalInstance.close();
+          const action = status === 'Approved' ? 'approved' : 'rejected';
+          this.toastSrv.success(`The Distribution Officer Password was reseted successfully.`);
+        } else {
+          this.isLoading = false;
+          this.toastSrv.error(`Failed to ${status.toLowerCase()} the Distribution Officer.`);
+          console.log(`Failed to reset the Distribution Officer's password.`)
+        }
+      },
+      error: (err) => {
+        swalInstance.close();
+        this.isLoading = false;
+        this.toastSrv.error(`An error occurred while reseting password. Please try again.`);
+      }
+    });
   }
 
 }

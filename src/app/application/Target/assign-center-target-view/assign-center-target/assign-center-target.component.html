@@ -45,10 +45,10 @@
         </div>
     </div>
 
-    <div *ngIf="hasData" class="w-full px-10 py-7 bg-tileLight dark:bg-tileBlack rounded-lg my-8">
+    <div *ngIf="hasData" class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636]  my-8">
         <div class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg">
             <table class="w-full divide-y-2 overflow-hidden">
-                <thead class=" dark:bg-[#272F45] text-gray-700 dark:text-gray-300">
+                <thead class=" dark:bg-[#292929] text-gray-700 dark:text-gray-300">
                     <tr>
                         <th class="px-6 py-3 text-left font-medium">ITEM ({{countCrops < 10 ? '0' + countCrops :
                                 countCrops}})</th>
@@ -59,7 +59,7 @@
                         <th class="px-6 py-3 text-left font-medium">Grade C</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white dark:bg-[#1E293B]">
+                <tbody class="bg-white dark:bg-[#292929]">
                     <tr *ngFor="let item of assignCropsArr; let i = index">
                         <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
                             {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }} </td>
@@ -67,9 +67,9 @@
                         <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.varietyNameEnglish}}</td>
 
                         <!-- Grade A Column -->
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300 ">
                             <input type="number" [(ngModel)]="item.targetA" name="targetA" min="0" (change)="checkNegativeValue(item, 'A')"
-                                class="border-[#415CFF] border-[2px] border-dotted rounded-lg w-20 px-2 py-1 mr-4"
+                                class="border-[#415CFF] dark:bg-[#363636] border-[2px] border-dotted rounded-lg w-20 px-2 py-1 mr-4"
                                 [disabled]="!isNew && !item.editingA" (change)="validateForm()" />
                             <button *ngIf="!isNew && !item.editingA && isDateValid"
                                 (click)="(item.editingA = true) && pressEditIcon(item,'A')">
@@ -88,7 +88,7 @@
                         <!-- Grade B Column -->
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
                             <input type="number" [(ngModel)]="item.targetB" name="targetB" min="0" (change)="checkNegativeValue(item, 'B')"
-                                class="border-[#415CFF] border-[2px] border-dotted rounded-lg w-20 px-2 py-1 mr-4"
+                                class="border-[#415CFF] dark:bg-[#363636] border-[2px] border-dotted rounded-lg w-20 px-2 py-1 mr-4"
                                 [disabled]="!isNew && !item.editingB" (change)="validateForm()" />
                             <button *ngIf="!isNew && !item.editingB && isDateValid"
                                 (click)="(item.editingB = true) && pressEditIcon(item,'B')">
@@ -106,7 +106,7 @@
                         <!-- Grade C Column -->
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
                             <input type="number" [(ngModel)]="item.targetC" name="targetC" min="0" (change)="checkNegativeValue(item, 'C')"
-                                class="border-[#415CFF] border-[2px] border-dotted rounded-lg w-20 px-2 py-1 mr-4"
+                                class="border-[#415CFF] dark:bg-[#363636] border-[2px] border-dotted rounded-lg w-20 px-2 py-1 mr-4"
                                 [disabled]="!isNew && !item.editingC" (change)="validateForm()" />
                             <button *ngIf="!isNew && !item.editingC && isDateValid"
                                 (click)="(item.editingC = true) && pressEditIcon(item,'C')">

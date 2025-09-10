@@ -47,7 +47,7 @@ export class CenterViewOfficersComponent implements OnInit {
   }
 
   isRoleDropdownOpen = false;
-  roleDropdownOptions = ['Collection Center Manager', 'Collection Officer', 'Customer Officer', 'Driver'];
+  roleDropdownOptions = ['Collection Center Manager', 'Collection Officer', 'Customer Officer'];
 
   toggleRoleDropdown() {
     this.isRoleDropdownOpen = !this.isRoleDropdownOpen;
@@ -264,6 +264,7 @@ export class CenterViewOfficersComponent implements OnInit {
   }
 
   onSearch() {
+    this.searchText = this.searchText.trimStart();
     this.getAllOfficers(this.centerId, this.page, this.itemsPerPage, this.selectRole, this.selectStatus, this.searchText)
 
   }

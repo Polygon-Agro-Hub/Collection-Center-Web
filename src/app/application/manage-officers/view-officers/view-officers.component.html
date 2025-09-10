@@ -47,7 +47,7 @@
                 <div class="relative w-56 custom-role-dropdown-container">
                     <!-- Hidden native select -->
                     <select [(ngModel)]="selectRole" class="hidden" (change)="applyRoleFilters()">
-                        <option value="Collection Center Manager">Collection Center Manager</option>
+                        <option value="Collection Center Manager">Collection Centre Manager</option>
                         <option value="Collection Officer">Collection Officer</option>
                         <option value="Customer Officer">Customer Officer</option>
                         
@@ -344,7 +344,7 @@
                         <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300 text-center">{{item.nic}}</td>
                         <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300 text-center">
                             <button class="text-gray-400 hover:text-gray-600 px-2" (click)="navigateToProfile(item.id)">
-                                <i class="fa-regular fa-file text-lg text-gray-600"></i>
+                                <i class="fa-regular fa-file text-lg text- dark:text-white"></i>
                             </button>
                             <button class="text-[#415CFF] hover:text-blue-500 px-2" [ngClass]="{
                                     'text-gray-400 hover:text-gray-600': (logingRole ==='Collection Center Manager' && (item.jobRole === 'Collection Center Manager' || item.jobRole ==='Driver'))

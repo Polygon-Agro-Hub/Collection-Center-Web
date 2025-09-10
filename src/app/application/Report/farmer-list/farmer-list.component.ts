@@ -66,6 +66,7 @@ export class FarmerListComponent implements OnInit {
   }
 
   onSearch() {
+    this.searchText = this.searchText.trimStart();
     this.fetchFarmerList(this.page, this.itemsPerPage, this.searchText);
   }
 

@@ -104,6 +104,7 @@ export class ViewOfficerTargetComponent implements OnInit {
   }
 
   onSearch() {
+    this.searchText = this.searchText.trimStart();
     this.fetchSelectedOfficerTarget(this.officerId, this.selectStatus, this.searchText);
   }
 

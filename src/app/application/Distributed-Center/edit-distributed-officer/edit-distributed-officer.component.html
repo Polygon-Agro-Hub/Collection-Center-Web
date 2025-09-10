@@ -46,8 +46,16 @@
                     </div>
                 </div>
 
+                <div class="w-40 mb-4" (click)="openPopup(personalData)">
+                    <button class="w-full text-normal bg-[#FF0000] py-3 px-1 text-white rounded-xl shadow-lg">
+                      Reset Password   
+                    </button>
+              </div>
+
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8 mb-4">
+
+                    
 
                     <div *ngIf="logingRole === 'Distribution Center Head'" >
                         <label for="centerId" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">

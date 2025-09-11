@@ -32,7 +32,7 @@ export class AddOfficersComponent implements OnInit {
 
 
   languages: string[] = ['Sinhala', 'English', 'Tamil'];
-  selectedPage: 'pageOne' | 'pageTwo' | 'pageThree' = 'pageOne';
+  selectedPage: 'pageOne' | 'pageTwo' | 'pageThree' = 'pageTwo';
   lastID!: number
   itemId: number | null = null;
   officerId!: number
@@ -439,8 +439,8 @@ onClick(targetElement: HTMLElement) {
 
   onCancel() {
     Swal.fire({
-      title: 'Are you sure?',
-      text: 'Do you really want to cancel this form?',
+      title: 'You have unsaved changes',
+      html: 'If you leave this page now, your changes will be lost.<br>Do you want to continue without saving?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',

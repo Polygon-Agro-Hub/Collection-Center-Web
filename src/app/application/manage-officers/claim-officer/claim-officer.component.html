@@ -83,11 +83,11 @@
   <div *ngIf="isOfficerExist && officerObj.claimStatus === 1"
     class="flex flex-col items-center w-full h-screen px-10 py-7 dark:bg-[#363636] bg-tileLight shadow-lg rounded-lg mt-6">
     <p *ngIf="logingRole === 'Distribution Center Manager'" class="text-[#494949] my-6 dark:text-white">
-      --The user already claimed By {{ officerObj.distributedCenterName }} Center.--
+      --The user already claimed By {{ officerObj.distributedCenterName }} Centre.--
     </p>
 
     <p *ngIf="logingRole === 'Collection Center Manager'" class="text-[#494949] my-6 dark:text-white">
-      --The user already claimed By {{ officerObj.centerName }} Center.--
+      --The user already claimed By {{ officerObj.centerName }} Centre.--
     </p>
     <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
   </div>

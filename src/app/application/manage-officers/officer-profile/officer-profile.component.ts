@@ -352,7 +352,7 @@ doc.setFont("Inter", "normal");
     // Check if phoneNumber02 is undefined or null
     if (this.officerObj.phoneNumber02 == null || this.officerObj.phoneNumber02 === "") {
       doc.setFont("Inter", "bold");
-      doc.text("N/A", 100, startY + 48); // Display N/A if phoneNumber02 is null or undefined
+      doc.text("-", 100, startY + 48); // Display N/A if phoneNumber02 is null or undefined
     } else {
       doc.setFont("Inter", "bold");
       doc.text(getValueOrNA(this.officerObj.phoneNumber02), 108, startY + 48);
@@ -620,13 +620,13 @@ doc.roundedRect(bankBoxX, bankBoxY, bankBoxWidth, bankBoxHeight, 3, 3, "S");
         this.isLoading = false;
         this.showDisclaimView = false;
         this.router.navigate(['/distribution-officers']);
-        this.toastSrv.success('Officer ID sent successfully!');
+        this.toastSrv.success('Officer Disclaimed successfully!');
 
       },
       (error) => {
         console.error('Error sending Officer ID:', error);
         this.isLoading = false;
-        this.toastSrv.error('Failed to send Officer ID!');
+        this.toastSrv.error('Failed to Disclam the Officer!');
         this.router.navigate(['/distribution-officers']);
       }
     );

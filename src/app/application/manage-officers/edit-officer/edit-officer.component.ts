@@ -483,9 +483,9 @@ export class EditOfficerComponent implements OnInit {
             } else if (error.status === 410) {
               this.toastSrv.error('Email already exists for another collection officer');
             } else if (error.status === 411) {
-              this.toastSrv.error('Phone Number 01 already exists for another collection officer');
+              this.toastSrv.error('Mobile Number 01 already exists for another collection officer');
             } else if (error.status === 412) {
-              this.toastSrv.error('Phone Number 02 already exists for another collection officer');
+              this.toastSrv.error('Mobile Number 02 already exists for another collection officer');
             } else if (error.status === 400) {
               this.toastSrv.error('No file uploaded. Please attach required file(s).');
             } else if (error.status === 500) {
@@ -533,7 +533,11 @@ export class EditOfficerComponent implements OnInit {
               this.toastSrv.error('NIC already exists for another collection officer');
             } else if (error.status === 410) {
               this.toastSrv.error('Email already exists for another collection officer');
-            } else if (error.status === 400) {
+            } else if (error.status === 411) {
+              this.toastSrv.error('Mobile Number 01 already exists for another collection officer');
+            } else if (error.status === 412) {
+              this.toastSrv.error('Mobile Number 02 already exists for another collection officer');
+            }else if (error.status === 400) {
               this.toastSrv.error('No file uploaded. Please attach required file(s).');
             } else if (error.status === 500) {
               this.toastSrv.error('Internal server error. Please try again later.');
@@ -553,8 +557,8 @@ export class EditOfficerComponent implements OnInit {
 
   onCancel() {
     Swal.fire({
-      title: 'Are you sure?',
-      text: 'Do you really want to clear this form?',
+      title: 'You have unsaved changes',
+      text: 'If you leave this page now, your changes will be lost.<br>Do you want to continue without saving?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',

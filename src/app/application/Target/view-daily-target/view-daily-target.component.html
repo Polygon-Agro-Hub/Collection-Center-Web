@@ -47,12 +47,12 @@
                     <!-- Hidden native select -->
                     <select [(ngModel)]="selectStatus" class="hidden" (change)="filterStatus()">
                         <option value="" selected disabled>Status</option>
-                            <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                                value="Pending">Pending</option>
-                            <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                                value="Completed">Completed</option>
+                        <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                            value="Pending">Pending</option>
+                        <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                            value="Completed">Completed</option>
                     </select>
-        
+
                     <!-- Custom dropdown trigger -->
                     <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
                         (click)="toggleStatusDropdown()">
@@ -62,7 +62,7 @@
                                 <!-- X icon (shown ONLY when option is selected) -->
                                 <i *ngIf="selectStatus" (click)="cancelStatus($event)"
                                     class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
-        
+
                                 <!-- Arrow icon (shown when EITHER: dropdown is open OR no selection exists) -->
                                 <i *ngIf="isStatusDropdownOpen || !selectStatus"
                                     class="fa-solid text-lg text-[#828282] transition-transform duration-200"
@@ -71,7 +71,7 @@
                             </div>
                         </div>
                     </div>
-        
+
                     <!-- Custom dropdown options -->
                     <div *ngIf="isStatusDropdownOpen"
                         class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
@@ -91,7 +91,7 @@
 
                 <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
                     <input type="text" placeholder="Search by Variety Name" [(ngModel)]="searchText"
-                        (keyup.enter)="onSearch()" (keyup.esc)="offSearch()"
+                        (keyup.enter)="onSearch()" (keyup.esc)="offSearch()" (input)="checkLeadingSpace()"
                         class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
                     <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                         (click)="onSearch()">
@@ -113,13 +113,12 @@
             </div>
         </div>
 
-        <div *ngIf="!hasData"
-            class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6 ">
+        <div *ngIf="!hasData" class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6 ">
             <p class="text-[#494949] my-6 dark:text-textDark">--No Data Availabale--</p>
             <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
         </div>
 
-        <div  *ngIf="hasData" class="min-w-max mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+        <div *ngIf="hasData" class="min-w-max mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
             <table class="w-full min-w-max divide-y-2 overflow-hidden">
                 <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
                     <tr>
@@ -196,24 +195,24 @@
                 <p class="font-semibold text-lg mb-1">Centre Target on {{today}} </p>
             </div>
 
-            <div class="flex flex-row items-center gap-8 " >
+            <div class="flex flex-row items-center gap-8 ">
                 <i class="fa-solid fa-list text-2xl dark:text-white ml-8"></i>
 
                 <p class="text-lg dark:text-white">Filter By</p>
-    
-    
+
+
                 <div class="relative w-40 custom-assign-status-dropdown-container">
                     <!-- Hidden native select -->
                     <select [(ngModel)]="selectAssignStatus" class="hidden" (change)="filterAssignStatus()">
-                        
-                            <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                                value="Updated">Updated</option>
-                                <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                                value="Assigned">Assigned</option>
-                            <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                                value="Not Assigned">Not Assigned</option>
+
+                        <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                            value="Updated">Updated</option>
+                        <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                            value="Assigned">Assigned</option>
+                        <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                            value="Not Assigned">Not Assigned</option>
                     </select>
-        
+
                     <!-- Custom dropdown trigger -->
                     <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
                         (click)="toggleAssignStatusDropdown()">
@@ -223,7 +222,7 @@
                                 <!-- X icon (shown ONLY when option is selected) -->
                                 <i *ngIf="selectAssignStatus" (click)="cancelAssignStatus($event)"
                                     class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
-        
+
                                 <!-- Arrow icon (shown when EITHER: dropdown is open OR no selection exists) -->
                                 <i *ngIf="isAssignStatusDropdownOpen || !selectAssignStatus"
                                     class="fa-solid text-lg text-[#828282] transition-transform duration-200"
@@ -232,12 +231,13 @@
                             </div>
                         </div>
                     </div>
-        
+
                     <!-- Custom dropdown options -->
                     <div *ngIf="isAssignStatusDropdownOpen"
                         class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
                         <div class="py-1">
-                            <div *ngFor="let option of assignStatusDropdownOptions" (click)="selectAssignStatusOption(option)"
+                            <div *ngFor="let option of assignStatusDropdownOptions"
+                                (click)="selectAssignStatusOption(option)"
                                 class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
                                 <span class="flex-grow">{{ option }}</span>
                                 <i
@@ -246,33 +246,32 @@
                         </div>
                     </div>
                 </div>
-    
-    
+
+
                 <div class="flex items-center rounded-full px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
-                    <input type="text" 
-                           placeholder="Search by Variety Name" 
-                           [(ngModel)]="assignSearch"
-                           (keyup.enter)="assignOnSearch()"
-                           (keyup.esc)="assignOffSearch()"
-                           class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
-                    <button type="button" 
-                            class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
-                            (click)="assignOnSearch()">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
+                    <input type="text" placeholder="Search by Variety Name" [(ngModel)]="assignSearch" (input)="checkLeadingSpaceAssignSearch()"
+                        (keyup.enter)="assignOnSearch()" (keyup.esc)="assignOffSearch()"
+                        class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
+                    <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
+                        (click)="assignOnSearch()">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
                         </svg>
                     </button>
-                    <button type="button" 
-                            class="text-gray-500 hover:text-gray-700 focus:outline-none"
-                            (click)="assignOffSearch()">
-                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                    <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none"
+                        (click)="assignOffSearch()">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
                         </svg>
                     </button>
                 </div>
             </div>
-        
-            
+
+
 
         </div>
 
@@ -281,8 +280,7 @@
             <p class="text-3xl text-center font-semibold">No Data Availabale</p>
         </div> -->
 
-        <div *ngIf="!assignHasData"
-            class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6 ">
+        <div *ngIf="!assignHasData" class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6 ">
             <p class="text-[#494949] my-6 dark:text-textDark">--No Data Availabale--</p>
             <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
         </div>

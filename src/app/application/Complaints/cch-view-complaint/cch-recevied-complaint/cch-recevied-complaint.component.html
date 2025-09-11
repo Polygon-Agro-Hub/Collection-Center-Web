@@ -12,7 +12,7 @@
             <!-- Hidden native select -->
             <select [(ngModel)]="selectStatus" class="hidden" (change)="filterStatus()">
                 <option value="" selected disabled>Status</option>
-                <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300" value="Assigned">
+                <option class="dark:bg-[#272F45]  text-textLight dark:text-textDark hover:bg-gray-300" value="Assigned">
                     Assigned</option>
                 <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300" value="Closed">
                     Closed</option>
@@ -109,12 +109,12 @@
 
                         <div class="flex items-center justify-center h-full">
                             <span *ngIf="item.status ==='Assigned'"
-                                class="bg-[#C8E0FF] text-[#415CFF] px-3 py-1 rounded-lg">
+                                class="bg-[#C8E0FF] w-20 text-center text-[#415CFF] px-3 py-1 rounded-lg">
                                 Assigned
                             </span>
 
                             <span *ngIf="item.status ==='Closed'"
-                                class="bg-[#B7FFBE] text-[#02BB3D] px-3 py-1 rounded-lg">
+                                class="bg-[#B7FFBE] w-20 text-center text-[#02BB3D] px-3 py-1 rounded-lg">
                                 Closed
                             </span>
                         </div>

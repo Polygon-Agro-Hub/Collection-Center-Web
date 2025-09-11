@@ -193,7 +193,7 @@ export class ManageOfficersService {
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
     });
-    return this.http.get(`${this.apiUrl}/manage-officers/get-centers-cch-own`, {
+    return this.http.get(`${this.apiUrl}/manage-officers/get-centers-with-reg-cch-own`, {
       headers,
     });
   }
@@ -240,6 +240,8 @@ export class ManageOfficersService {
   CCHcreateCollectiveOfficer(person: any, selectedImage: any, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
     const formData = new FormData();
 
+    console.log('person', person)
+
     if (person.jobRole === 'Driver') {
       formData.append('driverData', JSON.stringify(driver));
       formData.append('licFront', licFront);
@@ -265,6 +267,8 @@ export class ManageOfficersService {
 
   CCHupdateCollectiveOfficer(person: any, id: number, image: any, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
     const formData = new FormData();
+
+    console.log('person for edit' , person)
     if (person.jobRole === 'Driver') {
       formData.append('driverData', JSON.stringify(driver));
       formData.append('licFront', licFront);

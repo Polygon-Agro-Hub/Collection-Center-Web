@@ -55,7 +55,7 @@ export class ReportServiceService {
   }
 
 
-  getCollectionFarmerList(id: number, page: number = 1, limit: number = 10, searchText: string = '', date: string = ''): Observable<any> {
+  getCollectionFarmerList(id: number, page: number = 1, limit: number = 10, searchText: string = '', date: string | Date | null = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',

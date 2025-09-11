@@ -106,6 +106,19 @@ export class CchViewComplaintComponent implements OnInit {
   }
 
 
+  capitalizeFirstLetter(event: Event) {
+    if (this.complaint) {
+      // Trim spaces
+      this.complaint = this.complaint.trim();
+  
+      // Capitalize first letter
+      this.complaint =
+        this.complaint.charAt(0).toUpperCase() +
+        this.complaint.slice(1);
+    }
+  }
+
+
 }
 
 class Category {

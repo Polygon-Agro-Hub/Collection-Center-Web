@@ -50,7 +50,7 @@ export class ViewOfficersComponent implements OnInit {
   }
 
   isRoleDropdownOpen = false;
-  roleDropdownOptions = ['Collection Center Manager', 'Collection Officer', 'Customer Officer'];
+  roleDropdownOptions = ['Collection Centre Manager', 'Collection Officer', 'Customer Officer'];
 
   toggleRoleDropdown() {
     this.isRoleDropdownOpen = !this.isRoleDropdownOpen;
@@ -362,6 +362,11 @@ const approveButton = (item.status === 'Rejected' || item.status === 'Not Approv
   // }
 
   applyRoleFilters() {
+    if (this.selectRole === 'Collection Centre Manager') {
+      this.selectRole = 'Collection Center Manager'
+    }
+
+    console.log('selectRole', this.selectRole)
     this.fetchByRole();
   }
 

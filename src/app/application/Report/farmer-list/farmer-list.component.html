@@ -14,12 +14,19 @@
             <div class="flex flex-row items-center gap-4">
                 <p class="text-xl font-semibold dark:text-white">Date :</p>
                 <div class="relative w-48 mr-6">
-                    <div
+
+                    <app-custom-datepicker
+  [selectedDate]="selectedDate"
+  (dateChange)="onDateChange($event)"
+></app-custom-datepicker>
+                    <!-- <div
                         class="border-2 rounded-xl  text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
                         <input type="date" [(ngModel)]="selectDate" (change)="filterDate()"
                             class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-1 rounded-xl focus:outline-none custom-date-input" />
-                    </div>
+                    </div> -->
                 </div>
+
+                
 
             </div>
 
@@ -47,7 +54,7 @@
 
         <div class="flex flex-col justify-center items-center mt-7 ">
             <p class="text-[#292929] font-semibold text-lg dark:text-white">{{officerName}}</p>
-            <p class="text-[#494949] text-lg my-2 dark:text-textDark">On {{selectDate}}</p>
+            <p class="text-[#494949] text-lg my-2 dark:text-textDark">On {{selectedDate}}</p>
         </div>
 
         <div *ngIf="hasData">

@@ -146,7 +146,7 @@
                         {{item.complain | slice:0:100}}{{item.complain.length > 50 ? '...' : ''}}
                     </td> -->
 
-                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
+                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300 max-w-xs break-words whitespace-normal">
                         {{ truncateText(item.complain, item.id) }}
                         <ng-container *ngIf="item.complain.length > 150">
                           <span 
@@ -166,11 +166,11 @@
                     </td>
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
                         <div class="flex items-center justify-center h-full">
-                          <span *ngIf="item.status === 'Opened'" class="bg-[#C8E0FF] text-[#415CFF] px-3 py-1 rounded-lg">
+                          <span *ngIf="item.status === 'Opened'" class="bg-[#C8E0FF] w-20 text-center text-[#415CFF] px-3 py-1 rounded-lg">
                             Opened
                           </span>
                       
-                          <span *ngIf="item.status === 'Closed'" class="bg-[#B7FFBE] text-[#02BB3D] px-3 py-1 rounded-lg">
+                          <span *ngIf="item.status === 'Closed'" class="bg-[#B7FFBE] w-20 text-center text-[#02BB3D] px-3 py-1 rounded-lg">
                             Closed
                           </span>
                         </div>

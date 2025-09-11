@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { ManageOfficersService } from '../../../services/manage-officers-service/manage-officers.service';
@@ -9,6 +9,7 @@ import { TokenServiceService } from '../../../services/Token/token-service.servi
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { HttpClient } from '@angular/common/http';
 import { Location } from '@angular/common';
+import { Country, COUNTRIES } from '../../../../assets/country-data';
 
 @Component({
   selector: 'app-edit-officer',
@@ -23,7 +24,7 @@ export class EditOfficerComponent implements OnInit {
   managerArr: Manager[] = [];
   driverObj: Drivers = new Drivers()
 
-
+  languagesRequired: boolean = false;
 
 
   languages: string[] = ['Sinhala', 'English', 'Tamil'];
@@ -39,7 +40,7 @@ export class EditOfficerComponent implements OnInit {
 
   centerId!: number;
 
-
+  previousJobRole!: string;
 
   selectedFileName!: string
   selectedImage: string | ArrayBuffer | null = null;
@@ -59,6 +60,19 @@ export class EditOfficerComponent implements OnInit {
   naviPath!: string
 
   selectVehicletype: any = { name: '', capacity: '' };
+
+  countries: Country[] = COUNTRIES;
+  selectedCountry1: Country | null = null;
+  selectedCountry2: Country | null = null;
+
+  dropdownOpen = false;
+  dropdownOpen2 = false;
+
+  allowedPrefixes = ['70', '71', '72', '75', '76', '77', '78'];
+  isPhoneInvalidMap: { [key: string]: boolean } = {
+  phone01: false,
+  phone02: false,
+};
 
 
   licenseFrontImageFileName!: string;
@@ -106,6 +120,9 @@ export class EditOfficerComponent implements OnInit {
 
   ) {
     this.logingRole = tokenSrv.getUserDetails().role
+    const defaultCountry = this.countries.find(c => c.code === 'lk') || null;
+    this.selectedCountry1 = defaultCountry;
+    this.selectedCountry2 = defaultCountry;
 
   }
 
@@ -153,8 +170,22 @@ export class EditOfficerComponent implements OnInit {
     this.editOfficerId = this.route.snapshot.params['id'];
     this.centerId = this.route.snapshot.params['centerId'];
     this.fetchOffierById(this.editOfficerId);
-    this.UpdateEpmloyeIdCreate();
+    // this.UpdateEpmloyeIdCreate();
     this.setActiveTabFromRoute()
+  }
+
+  @HostListener('document:click', ['$event.target'])
+  onClick(targetElement: HTMLElement) {
+    const insideDropdown1 = targetElement.closest('.dropdown-wrapper-1');
+    const insideDropdown2 = targetElement.closest('.dropdown-wrapper-2');
+  
+    // Close dropdowns only if click is outside their wrapper
+    if (!insideDropdown1) {
+      this.dropdownOpen = false;
+    }
+    if (!insideDropdown2) {
+      this.dropdownOpen2 = false;
+    }
   }
 
   fetchOffierById(id: number) {
@@ -163,11 +194,13 @@ export class EditOfficerComponent implements OnInit {
       (res: any) => {
 
         this.personalData = res.officerData.collectionOfficer;
+        this.personalData.previousJobRole = res.officerData.collectionOfficer.jobRole;
         this.personalData.conformAccNumber = this.personalData.accNumber
+        
         console.log(this.personalData);
         this.ExistirmId = res.officerData.irmId;
 
-        this.getUpdateLastID(res.officerData.collectionOfficer.jobRole);
+        // this.getUpdateLastID(res.officerData.collectionOfficer.jobRole);
         this.driverObj = res.officerData.driver;
         this.driverObj.insExpDate = this.formatDateForInput(this.driverObj.insExpDate);
         this.selectVehicletype = this.VehicleTypes.find(
@@ -188,7 +221,7 @@ export class EditOfficerComponent implements OnInit {
         this.getAllManagers();
 
 
-        this.UpdateEpmloyeIdCreate();
+        // this.UpdateEpmloyeIdCreate();
         this.matchExistingBankToDropdown();
         this.isLoading = false;
 
@@ -204,6 +237,54 @@ export class EditOfficerComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
+  selectCountry1(country: Country) {
+    this.selectedCountry1 = country;
+    this.personalData.phoneCode01 = country.dialCode; // update ngModel
+    console.log('sdsf', this.personalData.phoneCode01)
+    this.dropdownOpen = false;
+  }
+
+  selectCountry2(country: Country) {
+    this.selectedCountry2 = country;
+    this.personalData.phoneCode01 = country.dialCode; // update ngModel
+    console.log('sdsf', this.personalData.phoneCode01)
+    this.dropdownOpen2 = false;
+  }
+  
+  // get flag
+  getFlagUrl(code: string): string {
+    return `https://flagcdn.com/24x18/${code}.png`;
+  }
+
+  validateSriLankanPhone(input: string, key: string): void {
+    if (!input) {
+      this.isPhoneInvalidMap[key] = false;
+      return;
+    }
+  
+    const firstDigit = input.charAt(0);
+    const prefix = input.substring(0, 2);
+    const isValidPrefix = this.allowedPrefixes.includes(prefix);
+    const isValidLength = input.length === 9;
+  
+    if (firstDigit !== '7') {
+      this.isPhoneInvalidMap[key] = true;
+      return;
+    }
+  
+    if (!isValidPrefix && input.length >= 2) {
+      this.isPhoneInvalidMap[key] = true;
+      return;
+    }
+  
+    if (input.length === 9 && isValidPrefix) {
+      this.isPhoneInvalidMap[key] = false;
+      return;
+    }
+  
+    this.isPhoneInvalidMap[key] = false;
+  }
+
 
   private setActiveTabFromRoute(): void {
     const currentPath = this.router.url.split('?')[0];
@@ -212,65 +293,65 @@ export class EditOfficerComponent implements OnInit {
   }
 
 
-  getUpdateLastID(role: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      this.ManageOficerSrv.getForCreateId(role).subscribe(
-        (res) => {
-          let lastId;
-          if (this.selectJobRole === this.personalData.jobRole) {
-            lastId = this.personalData.empId;
-            this.UpdatelastID = lastId;
+  // getUpdateLastID(role: string): Promise<string> {
+  //   return new Promise((resolve, reject) => {
+  //     this.ManageOficerSrv.getForCreateId(role).subscribe(
+  //       (res) => {
+  //         let lastId;
+  //         if (this.selectJobRole === this.personalData.jobRole) {
+  //           lastId = this.personalData.empId;
+  //           this.UpdatelastID = lastId;
 
 
-          } else {
-            this.UpdatelastID = res.result.empId;
-            lastId = res.result.empId
+  //         } else {
+  //           this.UpdatelastID = res.result.empId;
+  //           lastId = res.result.empId
 
 
-          }
-          ;
-          resolve(lastId); // Resolve the Promise with the empId
-        },
-        (error) => {
-          console.error('Error fetching last ID:', error);
-          reject(error);
-        }
-      );
-    });
-  }
+  //         }
+  //         ;
+  //         resolve(lastId); // Resolve the Promise with the empId
+  //       },
+  //       (error) => {
+  //         console.error('Error fetching last ID:', error);
+  //         reject(error);
+  //       }
+  //     );
+  //   });
+  // }
 
 
-  UpdateEpmloyeIdCreate() {
-    let rolePrefix: string | undefined;
+  // UpdateEpmloyeIdCreate() {
+  //   let rolePrefix: string | undefined;
 
-    // Map job roles to their respective prefixes
-    if (this.personalData.jobRole === 'Collection Center Manager') {
-      rolePrefix = 'CCM';
-    } else if (this.personalData.jobRole === 'Customer Officer') {
-      rolePrefix = 'CUO';
-    } else if (this.personalData.jobRole === 'Driver') {
-      rolePrefix = 'DVR';
-    } else {
-      rolePrefix = 'COO';
+  //   // Map job roles to their respective prefixes
+  //   if (this.personalData.jobRole === 'Collection Center Manager') {
+  //     rolePrefix = 'CCM';
+  //   } else if (this.personalData.jobRole === 'Customer Officer') {
+  //     rolePrefix = 'CUO';
+  //   } else if (this.personalData.jobRole === 'Driver') {
+  //     rolePrefix = 'DVR';
+  //   } else {
+  //     rolePrefix = 'COO';
 
-    }
-
-
-    if (!rolePrefix) {
-      console.error(`Invalid job role: ${this.personalData.jobRole}`);
-      return;
-    }
+  //   }
 
 
-    this.getUpdateLastID(rolePrefix)
-      .then((lastId) => {
-        this.upateEmpID = rolePrefix + lastId;
+  //   if (!rolePrefix) {
+  //     console.error(`Invalid job role: ${this.personalData.jobRole}`);
+  //     return;
+  //   }
 
-      })
-      .catch((error) => {
-        console.error('Error fetching updated last ID:', error);
-      });
-  }
+
+  //   this.getUpdateLastID(rolePrefix)
+  //     .then((lastId) => {
+  //       this.upateEmpID = rolePrefix + lastId;
+
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error fetching updated last ID:', error);
+  //     });
+  // }
 
 
   onCheckboxChange(lang: string, event: any) {
@@ -290,6 +371,13 @@ export class EditOfficerComponent implements OnInit {
       }
       this.personalData.languages = languagesArray.join(',');
     }
+
+    this.validateLanguages();
+  }
+
+  validateLanguages() {
+    this.languagesRequired = !this.personalData.languages || this.personalData.languages.trim() === '';
+    console.log('language', this.languagesRequired)
   }
 
 
@@ -613,7 +701,10 @@ export class EditOfficerComponent implements OnInit {
 
   onSubmitForm(form: NgForm) {
     form.form.markAllAsTouched();
+
+    this.validateLanguages();
   }
+
   onLicenseFrontImageSelected(event: any): void {
     const file: File = event.target.files[0];
     if (file) {
@@ -961,6 +1052,13 @@ export class EditOfficerComponent implements OnInit {
     }
   }
 
+  onTrimInput(event: Event, modelRef: any, fieldName: string): void {
+    const inputElement = event.target as HTMLInputElement;
+    const trimmedValue = inputElement.value.trimStart();
+    modelRef[fieldName] = trimmedValue;
+    inputElement.value = trimmedValue;
+  }
+
 
 
 
@@ -1009,6 +1107,7 @@ class Personal {
 
   centerId: number | string = '';
   irmId: number | string | null = '';
+  previousJobRole!: string;
 
 }
 

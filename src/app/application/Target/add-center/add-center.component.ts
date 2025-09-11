@@ -23,6 +23,8 @@ export class AddCenterComponent implements OnInit {
 
   isLoading: boolean = false;
 
+  isLoadingregcode: boolean = false;
+
 
   provinces: string[] = [
     'Western',
@@ -93,7 +95,10 @@ export class AddCenterComponent implements OnInit {
       this.filteredDistricts = this.allDistricts;
     }
     this.centerData.district = ''; // Clear district selection when province changes
+    this.updateRegCode();
   }
+
+  
 
   // When district is selected, automatically set the province
   filterDistrict() {
@@ -316,6 +321,47 @@ export class AddCenterComponent implements OnInit {
         this.location.back();
       }
     });
+  }
+
+  updateRegCode() {
+    console.log('update reg code');
+    const province = this.centerData.province;
+    const district = this.centerData.district;
+    const city = this.centerData.city;
+
+    console.log('province', province, 'district', district, 'city', city);
+
+    if (province && district && city) {
+      this.isLoadingregcode = true;
+      this.targetService
+        .generateRegCode(province, district, city)
+        .subscribe({
+          next: (response) => {
+            this.centerData.regCode = response.regCode;
+            this.isLoadingregcode = false;
+          },
+          error: (error) => {
+            console.error('Error generating reg code:', error);
+            // Fallback to manual generation if API fails
+            const regCode = `${province.slice(0, 2).toUpperCase()}${district
+              .slice(0, 1)
+              .toUpperCase()}${city.slice(0, 1).toUpperCase()}`;
+            console.log('regCode fallback', regCode);
+            this.centerData.regCode = '';
+            this.isLoadingregcode = false;
+          }
+        });
+    }
+  }
+
+  onCityChange() {
+    // Update reg code when city changes
+    this.updateRegCode();
+  }
+
+  onDistrictChange(newDistrict: string) {
+    console.log('District changed to:', newDistrict);
+    this.updateRegCode();
   }
 
 }

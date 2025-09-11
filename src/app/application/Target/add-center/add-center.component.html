@@ -45,7 +45,7 @@
 
     <div>
       <label for="phoneNumber01" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
-          Contact Number - 1 *
+          Contact Number - 1
       </label>
       <div class="mt-1 flex">
           <select id="phoneNumber01Code" name="phoneNumber01Code"
@@ -79,7 +79,7 @@
 
   <div>
     <label for="phoNumTwo" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
-      Contact Number - 2 *
+      Contact Number - 2
     </label>
     <div class="mt-1 flex">
         <select id="phoneNumber02Code" name="phoneNumber02Code"
@@ -141,6 +141,7 @@
         name="district"
         required
         #district="ngModel"
+        (ngModelChange)="onDistrictChange($event)"
       >
         <option value="" disabled>Select District</option>
         <option *ngFor="let district of filteredDistricts" [value]="district.name">
@@ -187,7 +188,7 @@
     <div>
       <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">City</label>
       <input
-      (input)="capitalizeFirstLetter('city')"
+      (input)="capitalizeFirstLetter('city'); onCityChange()"
         type="text"
         class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
         [(ngModel)]="centerData.city"
@@ -210,6 +211,7 @@
         placeholder=" ----- "
         required
         #regCode="ngModel"
+        readonly
       />
       <p *ngIf="regCode.invalid && regCode.touched" class="text-red-500 text-sm">
         Registration Code is required.

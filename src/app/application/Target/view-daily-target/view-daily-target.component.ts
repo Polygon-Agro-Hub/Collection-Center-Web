@@ -107,8 +107,8 @@ export class ViewDailyTargetComponent implements OnInit {
   fetchAllTarget(page: number = 1, limit: number = this.itemsPerPage, search: string = this.searchText) {
     this.isLoading = true;
     this.TargetSrv.getAllDailyTarget(page, limit, search).subscribe(
-      
-      
+
+
       (res) => {
         console.log('fetching');
         console.log(this.hasData);
@@ -122,10 +122,10 @@ export class ViewDailyTargetComponent implements OnInit {
         this.isLoading = false;
         console.log(this.hasData);
       }
-      
+
 
     );
-    
+
   }
 
   onSearch() {
@@ -226,7 +226,7 @@ export class ViewDailyTargetComponent implements OnInit {
     this.TargetSrv.AssignAllDailyTarget(1, 10, this.assignSearch).subscribe(
       (res) => {
         this.assignTargetArr = res || []; // fallback if response is null or undefined
-  
+
         // Apply filtering
         if (this.selectAssignStatus === 'Updated') {
           this.assignTargetArr = this.assignTargetArr.filter(item =>
@@ -248,10 +248,10 @@ export class ViewDailyTargetComponent implements OnInit {
             item.assignStatusC === 0
           );
         }
-  
+
         // Set hasAssignData explicitly
         this.assignHasData = this.assignTargetArr.length > 0 ? true : false;
-  
+
         // Update pagination
         this.assignTotalItems = this.assignTargetArr.length;
         this.assignPage = 1;
@@ -263,7 +263,7 @@ export class ViewDailyTargetComponent implements OnInit {
       }
     );
   }
-  
+
 
   cancelAssignStatus(event?: MouseEvent) {
     if (event) {
@@ -277,6 +277,18 @@ export class ViewDailyTargetComponent implements OnInit {
   //   this.selectAssignStatus = '';
   //   this.AssignAllDailyTarget();
   // }
+
+  checkLeadingSpace() {
+    if (this.searchText && this.searchText.startsWith(' ')) {
+      this.searchText = this.searchText.trim();
+    }
+  }
+
+  checkLeadingSpaceAssignSearch() {
+    if (this.assignSearch && this.assignSearch.startsWith(' ')) {
+      this.assignSearch = this.assignSearch.trim();
+    }
+  }
 
 }
 

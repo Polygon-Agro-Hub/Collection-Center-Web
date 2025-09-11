@@ -1,12 +1,13 @@
 <app-loading-spinner *ngIf="isLoading" />
 
-<div *ngIf="!isLoading" class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
+<div *ngIf="!isLoading"
+    class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
     <p onclick="history.back()"> Centre Target</p>
     <p>Download Collection</p>
-  </div>
+</div>
 
 <div *ngIf="!isLoading" class="w-full overflow-x-auto">
-    
+
 
     <div class="w-full px-10 py-7 bg-tileLight shadow-lg rounded-lg dark:bg-[#363636]">
         <div class="flex flex-row items-center justify-center">
@@ -15,8 +16,17 @@
             <div class="relative w-56 mr-10">
                 <div
                     class="border-2 rounded-xl  text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
-                    <input type="date" [(ngModel)]="fromDate" name="fromDate" (change)="validateFromDate()"
-                        class="block w-full appearance-none  text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none dark:bg-[#292929]" />
+                    <input type="date" [(ngModel)]="fromDate" name="fromDate" (change)="validateFromDate()" class="block w-full appearance-none text-textLight dark:text-textDark bg-white dark:bg-[#292929] px-3 py-2 rounded-xl focus:outline-none 
+                          border border-gray-300 dark:border-gray-600
+                          [color-scheme:light] dark:[color-scheme:dark]
+                          [&::-webkit-calendar-picker-indicator]:filter 
+                          [&::-webkit-calendar-picker-indicator]:cursor-pointer
+                          [&::-webkit-calendar-picker-indicator]:ml-1
+                          dark:[&::-webkit-calendar-picker-indicator]:invert
+                          [&::-webkit-datetime-edit]:text-gray-800
+                          dark:[&::-webkit-datetime-edit]:text-gray-200
+                          [&::-webkit-datetime-edit-fields-wrapper]:text-gray-800
+                          dark:[&::-webkit-datetime-edit-fields-wrapper]:text-gray-200" />
                 </div>
             </div>
 
@@ -26,15 +36,25 @@
                 <div
                     class="border-2 rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
                     <input type="date" [(ngModel)]="toDate" name="toDate" [min]="fromDate" (change)="validateToDate()"
-                        class="block w-full appearance-none text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none dark:bg-[#292929]" />
+                        class="block w-full appearance-none text-textLight dark:text-textDark bg-white dark:bg-[#292929] px-3 py-2 rounded-xl focus:outline-none 
+                          border border-gray-300 dark:border-gray-600
+                          [color-scheme:light] dark:[color-scheme:dark]
+                          [&::-webkit-calendar-picker-indicator]:filter 
+                          [&::-webkit-calendar-picker-indicator]:cursor-pointer
+                          [&::-webkit-calendar-picker-indicator]:ml-1
+                          dark:[&::-webkit-calendar-picker-indicator]:invert
+                          [&::-webkit-datetime-edit]:text-gray-800
+                          dark:[&::-webkit-datetime-edit]:text-gray-200
+                          [&::-webkit-datetime-edit-fields-wrapper]:text-gray-800
+                          dark:[&::-webkit-datetime-edit-fields-wrapper]:text-gray-200" />
                 </div>
             </div>
 
             <button (click)="goBtn()"
-                class="bg-[#415CFF]  text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-lg ml-5 dark:bg-[#292929] dark:text-textDark">Go</button>
+                class="bg-[#415CFF]  text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-lg ml-5 ">Go</button>
         </div>
     </div>
-    
+
     <div *ngIf="!hasDataAndTime"
         class="flex flex-col items-center w-full h-screen px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg mt-6">
         <p class="text-[#494949] my-6 dark:text-white">--Set From & To Dates first--</p>
@@ -48,9 +68,10 @@
     </div>
 
 
-    <div *ngIf="hasData && hasDataAndTime" class="mt-8 overflow-x-auto bg-tileLight shadow-lg rounded-lg dark:text-[#FFFFFF] dark:bg-[#363636] p-8">
-        
-    
+    <div *ngIf="hasData && hasDataAndTime"
+        class="mt-8 overflow-x-auto bg-tileLight shadow-lg rounded-lg dark:text-[#FFFFFF] dark:bg-[#363636] p-8">
+
+
         <div class="min-w-max mt-6 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
             <table class="min-w-full divide-y-2 table-fixed">
                 <thead class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
@@ -58,9 +79,9 @@
                         <th class="px-6 py-3 text-left font-medium w-16">No</th>
                         <th class="px-6 py-3 text-left font-medium w-1/6">Crop Name</th>
                         <th class="px-6 py-3 text-left font-medium w-1/6">Variety Name</th>
-                        <th class="px-6 py-3 text-left font-medium w-1/6">Grade</th>
-                        <th class="px-6 py-3 text-left font-medium w-1/6">Target (kg)</th>
-                        <th class="px-6 py-3 text-left font-medium w-1/6">Completed (kg)</th>
+                        <th class="px-6 py-3 text-center font-medium w-1/6">Grade</th>
+                        <th class="px-6 py-3 text-center font-medium whitespace-nowrap w-1/6">Target (kg)</th>
+                        <th class="px-6 py-3 text-center font-medium whitespace-nowrap w-1/6">Completed (kg)</th>
                         <th class="px-6 py-3 text-center font-medium w-24">Status</th>
                         <th class="px-6 py-3 text-center font-medium w-24">Validity</th>
                     </tr>
@@ -68,13 +89,12 @@
                 <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
                     <tr *ngFor="let item of targetArr; let i = index">
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
-                            {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }}
-                        </td>
+                            {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }} </td>
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300 truncate">{{item.cropNameEnglish}}</td>
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300 truncate">{{item.varietyNameEnglish}}</td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.grade}}</td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.target | number: '1.2-2'}}</td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300 text-center">{{item.grade}}</td>
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300 text-center">{{item.target | number: '1.2-2'}}</td>
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300 text-center">
                             {{ item.complete != null ? (item.complete | number: '1.2-2') : '-' }}
                         </td>
                         <td class="px-6 py-4 text-center">

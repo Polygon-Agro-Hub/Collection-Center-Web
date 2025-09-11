@@ -8,25 +8,25 @@
 <div *ngIf="!isLoading">
     <div class="font-semibold text[#424242] mb-8 mx-0 dark:text-[#FFFFFF] ">
         <div class="flex flex-col items-center justify-center dark:bg-tileBlack dark-border-[tileBlack] bg-[#FFFFFF] rounded-lg pt-6 mx-0 pb-4 border border-[#E5E7EB]">
-            <p class="text-lg text-black font-bold">{{targetVerity.cropNameEnglish}} :
+            <p class="text-lg text-black dark:text-[#FFFFFF] font-bold">{{targetVerity.cropNameEnglish}} :
                 {{targetVerity.varietyNameEnglish}}
             </p>
-            <p class="text-black font-semibold">Daily Target for <span class="text-[#415CFF]">{{targetVerity.formattedToDate}}</span></p>
+            <p class="text-black font-semibold dark:text-[#FFFFFF]">Daily Target for <span class="text-[#415CFF]">{{targetVerity.formattedToDate}}</span></p>
 
             <div class="border-[1px] border-[#E5E7EB] my-5 rounded-lg">
                 <table>
                     <tr class="border-b-2">
-                        <th class="px-8 py-1 text-[#4B5563] font-normal">
+                        <th class="px-8 py-1 text-[#4B5563] dark:text-[#FFFFFF] font-normal">
                             <p>Grade A</p>
-                            <p>(Kg)</p>
+                            <p>(kg)</p>
                         </th>
-                        <th class="px-8 py-1 text-[#4B5563] font-normal">
+                        <th class="px-8 py-1 text-[#4B5563] dark:text-[#FFFFFF] font-normal">
                             <p>Grade B</p>
-                            <p>(Kg)</p>
+                            <p>(kg)</p>
                         </th>
-                        <th class="px-8 py-1 text-[#4B5563] font-normal">
+                        <th class="px-8 py-1 text-[#4B5563] dark:text-[#FFFFFF] font-normal">
                             <p>Grade C</p>
-                            <p>(Kg)</p>
+                            <p>(kg)</p>
                         </th>
                     </tr>
                     <tr>
@@ -71,19 +71,19 @@
                         <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.empId}}</td>
                         <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.firstNameEnglish}}
                             {{item.lastNameEnglish}}</td>
-                        <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
+                        <td class="px-6 py-4 text-sm text-gray-900">
                             <input type="number" [(ngModel)]="officerArr[i].targetA" name="targetA"
                                 (ngModelChange)="updateTotals(i, 'A')"
                                 class="border-[#415CFF] border-[2px] border-dotted rounded-lg w-16 px-2 py-1" />
 
                         </td>
-                        <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
+                        <td class="px-6 py-4 text-sm text-gray-900">
                             <input type="number" [(ngModel)]="officerArr[i].targetB" name="targetB"
                                 (ngModelChange)="updateTotals(i, 'B')"
                                 class="border-[#415CFF] border-[2px] border-dotted rounded-lg w-16 px-2 py-1" />
 
                         </td>
-                        <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
+                        <td class="px-6 py-4 text-sm text-gray-900">
                             <input type="number" [(ngModel)]="officerArr[i].targetC" name="targetC"
                                 (ngModelChange)="updateTotals(i, 'C')"
                                 class="border-[#415CFF] border-[2px] border-dotted rounded-lg w-16 px-2 py-1" />
@@ -96,7 +96,7 @@
                         <td class="px-6 py-3 text-gray-900 dark:text-gray-300">
                             <div class="flex flex-row gap-2">
                                 <input type="number" [value]="totTargetA" disabled
-                                    class="border-[#415CFF] border-[2px] border-dotted rounded-lg w-16 px-2 py-1" />
+                                    class="border-[#415CFF] border-[2px] border-dotted rounded-lg w-16 px-2 py-1 dark:bg-tileLight text-gray-900" />
                                 <i class="fa-solid fa-circle-check text-2xl text-blue-600"
                                     *ngIf="+totTargetA === +targetVerity.qtyA"></i>
 
@@ -106,7 +106,7 @@
                         <td class="px-6 py-3  text-gray-900 dark:text-gray-300">
                             <div class="flex flex-row gap-2">
                                 <input type="number" [value]="totTargetB" disabled
-                                    class="border-[#415CFF] border-[2px] border-dotted rounded-lg w-16 px-2 py-1" />
+                                    class="border-[#415CFF] border-[2px] border-dotted rounded-lg w-16 px-2 py-1 dark:bg-tileLight text-gray-900" />
                                 <i class="fa-solid fa-circle-check text-2xl text-blue-600"
                                     *ngIf="+totTargetB === +targetVerity.qtyB"></i>
                             </div>
@@ -115,7 +115,7 @@
                         <td class="px-6 py-3 text-gray-900 dark:text-gray-300">
                             <div class="flex flex-row gap-2">
                                 <input type="number" [value]="totTargetC" disabled
-                                    class="border-[#415CFF] border-[2px] border-dotted rounded-lg w-16 px-2 py-1" />
+                                    class="border-[#415CFF] border-[2px] border-dotted rounded-lg w-16 px-2 py-1 dark:bg-tileLight text-gray-900" />
                                 <i class="fa-solid fa-circle-check text-2xl text-blue-600"
                                     *ngIf="+totTargetC == +targetVerity.qtyC"></i>
                             </div>

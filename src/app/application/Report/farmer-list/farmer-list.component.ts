@@ -94,6 +94,11 @@ export class FarmerListComponent implements OnInit {
     this.router.navigate([`reports/farmer-report/${id}`])
   }
 
+  checkLeadingSpace() {
+    if (this.searchText && this.searchText.startsWith(' ')) {
+      this.searchText = this.searchText.trim();
+    }
+  }
 
 }
 

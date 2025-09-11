@@ -36,7 +36,7 @@ export class ExpensesComponent implements OnInit {
   logingRole: string | null = null;
 
   fromDate: string = '';
-  toDate:  string = '';
+  toDate: string = '';
   maxDate: string = new Date().toISOString().split('T')[0];
 
   isPopupVisible: boolean = false;
@@ -167,7 +167,7 @@ export class ExpensesComponent implements OnInit {
 
   get selectedCenterDisplay(): string {
     if (!this.selectCenters) return 'Centres';
-    
+
     const selectedCenter = this.centerArr.find(center => center.id.toString() === this.selectCenters);
     return selectedCenter ? `${selectedCenter.regCode} - ${selectedCenter.centerName}` : 'Centres';
   }
@@ -178,24 +178,24 @@ export class ExpensesComponent implements OnInit {
 
     // Always clear toDate if fromDate is not properly set
     if (!from || isNaN(from.getTime())) {
-        if (this.toDate) {
-            this.toDate = '';           // Clear model
-            toDateInput.value = '';     // Clear input field directly
-            console.log(this.toDate);
-        }
-        this.toastSrv.warning("Please select the 'From' date first.");
-        return;
+      if (this.toDate) {
+        this.toDate = '';           // Clear model
+        toDateInput.value = '';     // Clear input field directly
+        console.log(this.toDate);
+      }
+      this.toastSrv.warning("Please select the 'From' date first.");
+      return;
     }
 
     // If toDate is set, check if it's valid against fromDate
     if (to && !isNaN(to.getTime())) {
-        if (to <= from) {
-            this.toDate = '';           // Clear model
-            toDateInput.value = '';     // Clear input field directly
-            this.toastSrv.warning("The 'To' date cannot be earlier than or same to the 'From' date.");
-        }
+      if (to <= from) {
+        this.toDate = '';           // Clear model
+        toDateInput.value = '';     // Clear input field directly
+        this.toastSrv.warning("The 'To' date cannot be earlier than or same to the 'From' date.");
+      }
     }
-}
+  }
 
 
 
@@ -280,6 +280,12 @@ export class ExpensesComponent implements OnInit {
 
   navigateToFarmerReport(invNo: string) {
     this.router.navigate([`reports/farmer-report-invoice/${invNo}`]);
+  }
+
+  checkLeadingSpace() {
+    if (this.searchText && this.searchText.startsWith(' ')) {
+      this.searchText = this.searchText.trim();
+    }
   }
 
 

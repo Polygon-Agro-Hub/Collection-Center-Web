@@ -180,7 +180,7 @@ export class CollectionComponent implements OnInit {
 
   get selectedCenterDisplay(): string {
     if (!this.selectCenters) return 'Centres';
-    
+
     const selectedCenter = this.centerArr.find(center => center.id.toString() === this.selectCenters);
     return selectedCenter ? `${selectedCenter.regCode} - ${selectedCenter.centerName}` : 'Centres';
   }
@@ -188,24 +188,24 @@ export class CollectionComponent implements OnInit {
   validateToDate(toDateInput: HTMLInputElement) {
     // Case 1: User hasn't selected fromDate yet
     if (!this.fromDate) {
-        this.toDate = '';            // Clear model
-        toDateInput.value = '';      // Clear input field
-        this.toastSrv.warning("Please select the 'From' date first.");
-        return;
+      this.toDate = '';            // Clear model
+      toDateInput.value = '';      // Clear input field
+      this.toastSrv.warning("Please select the 'From' date first.");
+      return;
     }
 
     // Case 2: toDate is earlier than fromDate
     if (this.toDate) {
-        const from = new Date(this.fromDate);
-        const to = new Date(this.toDate);
+      const from = new Date(this.fromDate);
+      const to = new Date(this.toDate);
 
-        if (to <= from) {
-            this.toDate = '';        // Clear model
-            toDateInput.value = '';  // Clear input field
-            this.toastSrv.warning("The 'To' date cannot be earlier than or same to the 'From' date.");
-        }
+      if (to <= from) {
+        this.toDate = '';        // Clear model
+        toDateInput.value = '';  // Clear input field
+        this.toastSrv.warning("The 'To' date cannot be earlier than or same to the 'From' date.");
+      }
     }
-}
+  }
 
 
   validateFromDate() {
@@ -284,6 +284,12 @@ export class CollectionComponent implements OnInit {
           this.isDownloading = false;
         }
       });
+  }
+
+  checkLeadingSpace() {
+    if (this.searchText && this.searchText.startsWith(' ')) {
+      this.searchText = this.searchText.trim();
+    }
   }
 
 

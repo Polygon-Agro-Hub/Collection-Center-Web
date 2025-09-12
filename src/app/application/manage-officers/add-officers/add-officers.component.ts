@@ -468,7 +468,7 @@ onClick(targetElement: HTMLElement) {
 
   getAllCenters() {
     this.isLoading = true;
-    this.ManageOficerSrv.getCCHOwnCenters().subscribe(
+    this.ManageOficerSrv.getCCHOwnCentersWithOutRegCode().subscribe(
       (res) => {
         this.centerArr = res
         this.isLoading = false;

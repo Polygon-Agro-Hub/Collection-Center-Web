@@ -198,6 +198,17 @@ export class ManageOfficersService {
     });
   }
 
+  getCCHOwnCentersWithOutRegCode(): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+    return this.http.get(`${this.apiUrl}/manage-officers/get-centers-cch-own`, {
+      headers,
+    });
+  }
+
+
   getAllOfficersForCCH(page: number = 1, limit: number = 10, status: string = '', role: string = '', searchText: string = '', selectcenter: string = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,

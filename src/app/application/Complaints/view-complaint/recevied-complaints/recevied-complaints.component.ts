@@ -105,6 +105,7 @@ export class ReceviedComplaintsComponent implements OnInit {
   }
 
   onSearch() {
+    this.searchText = this.searchText.trimStart();
     this.fetchAllreciveComplaint();
 
   }

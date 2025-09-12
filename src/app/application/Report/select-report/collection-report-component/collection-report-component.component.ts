@@ -149,9 +149,15 @@ export class CollectionReportComponentComponent implements OnInit {
 
   get selectedCenterDisplay(): string {
     if (!this.selectCenters) return 'Centres';
-    
+
     const selectedCenter = this.centerArr.find(center => center.id.toString() === this.selectCenters);
     return selectedCenter ? `${selectedCenter.regCode} - ${selectedCenter.centerName}` : 'Centres';
+  }
+
+  checkLeadingSpace() {
+    if (this.searchText && this.searchText.startsWith(' ')) {
+      this.searchText = this.searchText.trim();
+    }
   }
 
 }

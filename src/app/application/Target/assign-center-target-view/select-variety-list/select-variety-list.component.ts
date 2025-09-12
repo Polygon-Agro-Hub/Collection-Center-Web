@@ -24,7 +24,8 @@ export class SelectVarietyListComponent implements OnInit {
   totalItems: number = 0;
   itemsPerPage: number = 10;
   isLoading: boolean = true;
-
+  
+  isInitialData: boolean = false;
 
   cropCount: number = 0;
   searchText: string = '';
@@ -36,7 +37,23 @@ export class SelectVarietyListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.fetchCenterCrops();
+    this.fetchCenterCropsInI();
+  }
+
+  fetchCenterCropsInI(page: number = this.page, limit: number = this.itemsPerPage, search: string = this.searchText) {
+    this.isLoading = true;
+    this.TargetSrv.getCenterCrops(this.centerDetails.centerId, page, limit, search).subscribe(
+      (res) => {
+        this.cropsArr = res.items
+        this.cropCount = res.items.length;
+        this.hasData = this.cropsArr.length > 0 ? true : false;
+        console.log('hasData', this.hasData)
+        this.totalItems = res.total;
+        this.isLoading = false;
+        this.isInitialData = this.cropsArr.length > 0 ? true : false;
+        console.log('isInitialData', this.isInitialData)
+      }
+    )
   }
 
   fetchCenterCrops(page: number = this.page, limit: number = this.itemsPerPage, search: string = this.searchText) {
@@ -46,8 +63,10 @@ export class SelectVarietyListComponent implements OnInit {
         this.cropsArr = res.items
         this.cropCount = res.items.length;
         this.hasData = this.cropsArr.length > 0 ? true : false;
+        console.log('hasData', this.hasData)
         this.totalItems = res.total;
         this.isLoading = false;
+        console.log('isInitialData', this.isInitialData)
       }
     )
   }

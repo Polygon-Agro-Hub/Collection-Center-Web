@@ -131,7 +131,7 @@ export class ViewCentersComponent implements OnInit {
     }
 
     offSearch() {
-        
+        this.searchText='';
         this.fetchAllCenterDetails();
     }
 

@@ -107,6 +107,8 @@
                         </div>
                     </div>
 
+                    <div *ngIf="logingRole === 'Collection Center Manager'"></div>
+
                     <!-- <div>
                         <label class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">EMP ID / User
                             name</label>
@@ -147,7 +149,7 @@
                             </option>
                             <div *ngIf="irmIdInput.touched && !personalData.irmId && logingRole === 'Collection Center Head' && (personalData.jobRole === 'Collection Officer' || personalData.jobRole === 'Customer Officer')"
                                 class="text-red-500 text-sm mt-1">
-                                <div>Collection Center is required</div>
+                                <div>Collection Center Manager is required</div>
                             </div>
                         </select>
                     </div>
@@ -515,6 +517,27 @@
                 </div>
 
                 <div>
+                    <label for="country"
+                        class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Country *</label>
+                    <input id="country" name="country" [(ngModel)]="personalData.country" 
+                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"  
+                    />
+                </div>
+
+                <div>
+                    <label for="province" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">
+                        Province *
+                    </label>
+                    <input id="province" name="province" [(ngModel)]="personalData.province" #provinceInput="ngModel"
+                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+                        readonly />
+
+                        <div *ngIf="provinceInput.touched && !personalData.province" class="text-red-500 text-sm mt-1">
+                            <div>Province is required</div>
+                        </div>
+                </div>
+
+                <div>
                     <label for="district" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">
                         District *
                     </label>
@@ -531,21 +554,7 @@
                     </div>
                 </div>
 
-                <div>
-                    <label for="province" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">
-                        Province *
-                    </label>
-                    <input id="province" name="province" [(ngModel)]="personalData.province"
-                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                        readonly />
-                </div>
-
-                <div>
-                    <label for="country"
-                        class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Country *</label>
-                    <input id="country" name="country" [(ngModel)]="personalData.country"
-                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
-                </div>
+                
             </div>
             <div>
                 <h2 class="text-xl mt-10 mb-6 text-[#292929] dark:text-textDark">Edit Bank Details</h2>
@@ -612,7 +621,7 @@
   *ngIf="confirmAccNumberInput.touched && personalData.conformAccNumber && confirmAccNumberInput.errors?.['pattern']"
   class="text-red-500 text-sm mt-1"
 >
-  <div>Account Number cannot contain special characters</div>
+  <div>Confirm Account Number cannot contain special characters</div>
 </div>
                 </div>
 
@@ -636,11 +645,14 @@
                     <label for="bankDropdown"
                         class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Bank
                         Name *</label>
-                    <select id="bankDropdown" name="bankDropdown" [(ngModel)]="selectedBankId" (change)="onBankChange()"
+                    <select id="bankDropdown" name="bankDropdown" [(ngModel)]="selectedBankId"  #selectedBank="ngModel" (change)="onBankChange()"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]">
                         <option [ngValue]="null" disabled>Select a bank</option>
                         <option *ngFor="let bank of banks" [ngValue]="bank.ID">{{ bank.name }}</option>
                     </select>
+                    <div *ngIf="!selectedBankId && selectedBank.touched" class="text-red-500 text-sm mt-1">
+                        <div>Bank Name is Required</div>
+                      </div>
                 </div>
 
                 <div class="pb-6">
@@ -648,11 +660,14 @@
                         class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Branch
                         Name *</label>
                     <select id="branchDropdown" name="branchDropdown" [(ngModel)]="selectedBranchId"
-                        (change)="onBranchChange()" [disabled]="!selectedBankId"
+                        (change)="onBranchChange()" [disabled]="!selectedBankId"  #selectedBranch="ngModel"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]">
                         <option [ngValue]="null" disabled>Select a branch</option>
                         <option *ngFor="let branch of branches" [ngValue]="branch.ID">{{ branch.name }}</option>
                     </select>
+                    <div *ngIf="!selectedBranchId && selectedBranch.touched" class="text-red-500 text-sm mt-1">
+                        <div>Branch Name is Required</div>
+                      </div>
                 </div>
             </div>
 

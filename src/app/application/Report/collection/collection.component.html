@@ -12,25 +12,40 @@
                 <div class="relative w-56 mr-10">
                     <div
                         class="border-2 rounded-xl  text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
-                        <input type="date" [(ngModel)]="fromDate" name="fromDate" (change)="validateFromDate()"
-                            class="block w-full appearance-none  text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none dark:bg-[#292929] custom-date-input" />
+                        <input type="date" [(ngModel)]="fromDate" name="fromDate" (change)="validateFromDate()" class="block w-full appearance-none text-textLight dark:text-textDark bg-white dark:bg-[#292929] px-3 py-2 rounded-xl focus:outline-none 
+                          border border-gray-300 dark:border-gray-600
+                          [color-scheme:light] dark:[color-scheme:dark]
+                          [&::-webkit-calendar-picker-indicator]:filter 
+                          [&::-webkit-calendar-picker-indicator]:cursor-pointer
+                          [&::-webkit-calendar-picker-indicator]:ml-1
+                          dark:[&::-webkit-calendar-picker-indicator]:invert
+                          [&::-webkit-datetime-edit]:text-gray-800
+                          dark:[&::-webkit-datetime-edit]:text-gray-200
+                          [&::-webkit-datetime-edit-fields-wrapper]:text-gray-800
+                          dark:[&::-webkit-datetime-edit-fields-wrapper]:text-gray-200" />
                     </div>
                 </div>
 
                 <p class="text-lg font-semibold text-[#292929] mx-3 dark:text-white">To :</p>
 
                 <div class="relative w-56 mr-6">
-                    <div class="border-2 rounded-xl dark:bg-[#363638] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
-                        <input type="date"
-                               #toDateInput
-                               [(ngModel)]="toDate"
-                               name="toDate"
-                               [min]="fromDate"
-                               (change)="validateToDate(toDateInput)"
-                               class="block w-full appearance-none text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none dark:bg-[#363638] custom-date-input" />
+                    <div
+                        class="border-2 rounded-xl dark:bg-[#363638] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
+                        <input type="date" #toDateInput [(ngModel)]="toDate" name="toDate" [min]="fromDate"
+                            (change)="validateToDate(toDateInput)" class="block w-full appearance-none text-textLight dark:text-textDark bg-white dark:bg-[#292929] px-3 py-2 rounded-xl focus:outline-none 
+                          border border-gray-300 dark:border-gray-600
+                          [color-scheme:light] dark:[color-scheme:dark]
+                          [&::-webkit-calendar-picker-indicator]:filter 
+                          [&::-webkit-calendar-picker-indicator]:cursor-pointer
+                          [&::-webkit-calendar-picker-indicator]:ml-1
+                          dark:[&::-webkit-calendar-picker-indicator]:invert
+                          [&::-webkit-datetime-edit]:text-gray-800
+                          dark:[&::-webkit-datetime-edit]:text-gray-200
+                          [&::-webkit-datetime-edit-fields-wrapper]:text-gray-800
+                          dark:[&::-webkit-datetime-edit-fields-wrapper]:text-gray-200" />
                     </div>
                 </div>
-                
+
 
                 <button (click)="goBtn()"
                     class="bg-[#415CFF]  text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-lg ml-5  dark:text-textDark">Go</button>
@@ -49,13 +64,14 @@
                         ( {{totalItems}} )</p>
                 </div>
             </div>
-    
+
             <div class="flex flex-row items-center gap-5 ">
-                <i *ngIf="logingRole === 'Collection Center Head'" class="fa-solid fa-list text-2xl dark:text-white ml-8"></i>
-    
+                <i *ngIf="logingRole === 'Collection Center Head'"
+                    class="fa-solid fa-list text-2xl dark:text-white ml-8"></i>
+
                 <p *ngIf="logingRole === 'Collection Center Head'" class="font-normal dark:text-white">Filter By</p>
-    
-    
+
+
                 <!-- <div class="relative w-46" *ngIf="logingRole === 'Collection Center Head'">
                     <div
                         class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
@@ -81,7 +97,8 @@
                     </div>
                 </div> -->
 
-                <div class="relative w-64 custom-center-dropdown-container" *ngIf="logingRole === 'Collection Center Head'">
+                <div class="relative w-64 custom-center-dropdown-container"
+                    *ngIf="logingRole === 'Collection Center Head'">
                     <!-- Hidden native select -->
                     <select [(ngModel)]="selectCenters" class="hidden" (change)="applyCompanyFilters()">
                         <option value=""></option>
@@ -117,12 +134,11 @@
                         </div>
                     </div>
                 </div>
-    
-    
-    
+
+
+
                 <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
-                    <input type="text" placeholder="Search..." [(ngModel)]="searchText" (keyup.enter)="onSearch()"
-                        
+                    <input type="text" placeholder="Search..." [(ngModel)]="searchText" (keyup.enter)="onSearch()" (input)="checkLeadingSpace()"
                         class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
                     <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                         (click)="onSearch()">
@@ -141,11 +157,11 @@
                         </svg>
                     </button>
                 </div>
-    
+
             </div>
-    
+
         </div>
-    
+
         <div class="flex justify-end items-center mb-5 mt-3"> <!-- Changed this line -->
             <!-- <div class="text-lg font-medium">
                 <p class="font-semibold mb-1 text-lg dark:text-white whitespace-nowrap">
@@ -153,23 +169,25 @@
                     }}
                 </p>
             </div> -->
-    
+
             <button
                 class="bg-[#415CFF] text-white shadow-md font-medium rounded-lg py-2 px-5 mr-5 text-lg flex items-center"
-                (click)="downloadTemplate1()" >
+                (click)="downloadTemplate1()">
                 <i class="fa-solid fa-download px-2" *ngIf="!isDownloading"></i>
                 <i class="fa-solid fa-spinner fa-spin px-2" *ngIf="isDownloading"></i>
                 {{ isDownloading ? " Downloading..." : " Download" }}
             </button>
         </div>
-    
+
         <div *ngIf="hasData" class="min-w-max mt-4 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
             <table class="w-full min-w-max divide-y-2 border-[1px] border-gray-300 rounded-lg overflow-hidden">
                 <thead class=" dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] text-[#4B5563]">
                     <tr>
                         <th class="px-2 py-3 text-left text-sm font-medium">No</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium" *ngIf="logingRole === 'Collection Center Head'">Centre Code</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium" *ngIf="logingRole === 'Collection Center Head'">Centre Name</th>
+                        <th class="px-3 py-3 text-left text-sm font-medium"
+                            *ngIf="logingRole === 'Collection Center Head'">Centre Code</th>
+                        <th class="px-3 py-3 text-left text-sm font-medium"
+                            *ngIf="logingRole === 'Collection Center Head'">Centre Name</th>
                         <th class="px-3 py-3 text-left text-sm font-medium">Crop</th>
                         <th class="px-3 py-3 text-center text-sm font-medium ">Variety</th>
                         <th class="px-3 py-3 text-center text-sm font-medium ">Quantity A (kg)</th>
@@ -188,20 +206,25 @@
                         <td class="px-2 py-4 text-sm text-gray-900 dark:text-gray-300 ">
                             {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i + 1)
                                 : (((page - 1) * itemsPerPage) + i + 1) }} </td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300" *ngIf="logingRole === 'Collection Center Head'">{{item.centerCode}}</td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300" *ngIf="logingRole === 'Collection Center Head'">{{item.centerName}}</td>
+                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300"
+                            *ngIf="logingRole === 'Collection Center Head'">{{item.centerCode}}</td>
+                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300"
+                            *ngIf="logingRole === 'Collection Center Head'">{{item.centerName}}</td>
                         <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">
                             {{ item.cropNameEnglish || '-' }}
-                          </td>
-                          <td class="px-3 py-4 text-sm text-center text-gray-900 dark:text-gray-300">
+                        </td>
+                        <td class="px-3 py-4 text-sm text-center text-gray-900 dark:text-gray-300">
                             {{ item.varietyNameEnglish || '-' }}
-                          </td>
-                        <td class="px-3 py-4 text-center dark:text-gray-300">{{item.totalGradeAQuantity | number: '1.2-2' }}</td>
-                        <td class="px-3 py-4 text-center dark:text-gray-300">{{item.totalGradeBQuantity | number: '1.2-2' }}</td>
-                        <td class="px-3 py-4 text-center dark:text-gray-300">{{item.totalGradeCQuantity | number: '1.2-2' }}</td>
+                        </td>
+                        <td class="px-3 py-4 text-center dark:text-gray-300">{{item.totalGradeAQuantity | number:
+                            '1.2-2' }}</td>
+                        <td class="px-3 py-4 text-center dark:text-gray-300">{{item.totalGradeBQuantity | number:
+                            '1.2-2' }}</td>
+                        <td class="px-3 py-4 text-center dark:text-gray-300">{{item.totalGradeCQuantity | number:
+                            '1.2-2' }}</td>
                         <td class="px-3 py-4 text-center dark:text-gray-300">
                             {{ item.totalQuantity | number: '1.2-2' }}
-                          </td>            
+                        </td>
                     </tr>
                 </tbody>
             </table>
@@ -218,11 +241,10 @@
         <p class="text-3xl text-center font-semibold dark:text-white">--Set From & To Dates first--</p>
     </div> -->
 
-    <div *ngIf="!isDateFilterSet"
-            class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6 ">
-            <p class="text-[#494949] my-6 dark:text-textDark">--Set From & To Dates first--</p>
-            <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
-        </div>
+    <div *ngIf="!isDateFilterSet" class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6 ">
+        <p class="text-[#494949] my-6 dark:text-textDark">--Set From & To Dates first--</p>
+        <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
+    </div>
 
     <div *ngIf="!hasData && isDateFilterSet" class="h-[500px]">
         <div class="flex flex-row items-center justify-between mt-6">
@@ -232,13 +254,13 @@
                         ( {{totalItems}} )</p>
                 </div>
             </div>
-    
+
             <div class="flex flex-row items-center gap-5 ">
                 <i class="fa-solid fa-list text-2xl dark:text-white ml-8"></i>
-    
+
                 <p class="font-normal dark:text-white">Filter By</p>
-    
-    
+
+
                 <!-- <div class="relative w-46">
                     <div
                         class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
@@ -300,9 +322,9 @@
                         </div>
                     </div>
                 </div>
-    
-    
-    
+
+
+
                 <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
                     <input type="text" placeholder="Search..." [(ngModel)]="searchText" (keyup.enter)="onSearch()"
                         (keyup.esc)="offSearch()"
@@ -324,13 +346,12 @@
                         </svg>
                     </button>
                 </div>
-    
+
             </div>
-    
+
         </div>
 
-        <div 
-            class="flex flex-col items-center w-fullpx-10 py-7 mt-6 ">
+        <div class="flex flex-col items-center w-fullpx-10 py-7 mt-6 ">
             <p class="text-[#494949] my-6 dark:text-textDark">--No Data Available--</p>
             <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
         </div>

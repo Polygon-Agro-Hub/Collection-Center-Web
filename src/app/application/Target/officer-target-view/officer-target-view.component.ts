@@ -58,17 +58,17 @@ export class OfficerTargetViewComponent {
       (res) => {
         console.log('fetching');
         console.log(this.hasData2);
-          this.targetArr = res.result;
-          this.totalItems = res.total;
-          if (res.total === 0) {
-            this.hasData2 = false;
-          } else {
-            this.hasData2 = true;
-          }
-          this.isLoading = false;
+        this.targetArr = res.result;
+        this.totalItems = res.total;
+        if (res.total === 0) {
+          this.hasData2 = false;
+        } else {
+          this.hasData2 = true;
+        }
+        this.isLoading = false;
 
-          console.log('fetched');
-          console.log(this.hasData2);
+        console.log('fetched');
+        console.log(this.hasData2);
       }
       // (res) => {
       //   if (res.status) {
@@ -115,16 +115,16 @@ export class OfficerTargetViewComponent {
         console.log('fetching');
         console.log(this.hasData);
         this.targetArr = res.result;
-          this.totalItems = res.total;
-          if (res.total === 0) {
-            this.hasData = false;
-          } else {
-            this.hasData = true;
-          }
-          this.isLoading = false;
+        this.totalItems = res.total;
+        if (res.total === 0) {
+          this.hasData = false;
+        } else {
+          this.hasData = true;
+        }
+        this.isLoading = false;
 
-          console.log('fetched');
-          console.log(this.hasData);
+        console.log('fetched');
+        console.log(this.hasData);
         // console.log('fetching');
         // console.log(this.hasData);
         // if (res.status) {
@@ -231,6 +231,10 @@ export class OfficerTargetViewComponent {
           this.isDownloading = false;
         }
       });
+  }
+
+  trimedSearchText() {
+    this.searchText = this.searchText.trim()
   }
 
 

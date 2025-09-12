@@ -54,9 +54,9 @@
             </select>
 
             <!-- Textarea -->
-            <textarea rows="4" [(ngModel)]="complaint" placeholder="Kindly submit your complaint here"
+            <textarea rows="4" [(ngModel)]="complaint" placeholder="Kindly submit your complaint here" (input)="capitalizeFirstLetter($event)"
                 class="block w-full px-3 py-2 border dark:bg-[#1D1D1F] border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent resize-none mb-4 dark:text-textDark "></textarea>
-
+                
             <!-- Buttons -->
             <div class="flex justify-center space-x-4">
                 <button (click)="closeAddComplaint()"

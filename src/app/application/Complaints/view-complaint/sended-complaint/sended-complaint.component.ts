@@ -150,6 +150,7 @@ export class SendedComplaintComponent implements OnInit {
   }
 
   onSearch() {
+    this.searchText = this.searchText.trimStart();
     this.fetchAllreciveComplaint();
 
   }

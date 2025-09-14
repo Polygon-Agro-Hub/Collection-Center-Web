@@ -131,9 +131,10 @@
                         <th class=" px-6 py-3 text-left text-sm font-medium">No</th>
                         <th class=" px-6 py-3 text-left text-sm font-medium">Crop Name</th>
                         <th class=" px-6 py-3 text-left text-sm font-medium">Variety Name</th>
-                        <th class=" px-6 py-3 text-left text-sm font-medium">Grade</th>
-                        <th class=" px-6 py-3 text-left text-sm font-medium">Average Price (Rs.)</th>
-                        <th class=" px-6 py-3 text-left text-sm font-medium">Price (Rs.)</th>
+                        <th class=" px-6 py-3 text-center text-sm font-medium">Grade</th>
+                        <th class=" px-6 py-3 text-center text-sm font-medium">Indicate Price (Rs.)</th>
+                        <th class=" px-6 py-3 text-center text-sm font-medium">Average Price (Rs.)</th>
+                        <th class=" px-6 py-3 text-center text-sm font-medium">Price (Rs.)</th>
                         <th class=" px-6 py-3 text-center text-sm font-medium"></th>
                     </tr>
                 </thead>
@@ -146,15 +147,16 @@
                         <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5]">{{ item.cropNameEnglish }}</td>
                         <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5]">{{ item.varietyNameEnglish }}
                         </td>
-                        <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5]">{{ item.grade }}</td>
-                        <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5]">{{ item.averagePrice }}</td>
-                        <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5]">
+                        <td class="px-6 py-4 text-sm text-center text-gray-900 dark:text-[#C5C5C5]">{{ item.grade }}</td>
+                        <td class="px-6 py-4 text-sm text-center text-gray-900 dark:text-[#C5C5C5]">{{ item.indicatePrice }}</td>
+                        <td class="px-6 py-4 text-sm text-center text-gray-900 dark:text-[#C5C5C5]">{{ item.averagePrice }}</td>
+                        <td class="px-6 py-4 text-sm text-center text-gray-900 dark:text-[#C5C5C5]">
                             <span *ngIf="editingIndex !== i">
                                 {{ item.updatedPrice }}
                             </span>
                             <span *ngIf="editingIndex === i">
                                 <input type="number" [(ngModel)]="editValue" (input)="validateInput()"
-                                    class="border-[#415CFF] border-[2px] border-dotted rounded-lg w-16 px-2 py-1"
+                                    class="border-[#415CFF] dark:text-black border-[2px] border-dotted rounded-lg w-20 px-2 py-1"
                                     min="0" step="0.01" required />
 
                             </span>

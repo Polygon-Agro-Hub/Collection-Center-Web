@@ -99,23 +99,35 @@
 
                 <div class="relative w-64 custom-center-dropdown-container"
                     *ngIf="logingRole === 'Collection Center Head'">
-                    <!-- Hidden native select -->
-                    <select [(ngModel)]="selectCenters" class="hidden" (change)="applyCompanyFilters()">
+
+                    <app-searchable-dropdown
+                        [items]="centerDropdownItems"
+                        placeholder="Select Centre..."
+                        searchPlaceholder="Search centre..."
+                        [(ngModel)]="selectCenters"
+                        (selectionChange)="onCenterSelectionChange($event)"
+                        [clearable]="true"
+                        [showSelected]="true"
+                        [disabled]="false"
+                        class="w-full"
+                      ></app-searchable-dropdown>
+                    
+                    <!-- <select [(ngModel)]="selectCenters" class="hidden" (change)="applyCompanyFilters()">
                         <option value=""></option>
                         <option *ngFor="let item of centerArr"
                             class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
                             [value]="item.id">{{item.regCode}} - {{item.centerName}}</option>
                     </select>
-                    <!-- Custom dropdown trigger -->
+                    
                     <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
                         (click)="toggleCenterDropdown()">
                         <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
                             <span>{{ selectedCenterDisplay }}</span>
                             <div class="flex items-center">
-                                <!-- X icon (shown ONLY when option is selected) -->
+                                
                                 <i *ngIf="selectCenters" (click)="clearCompanyFilter($event)"
                                     class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
-                                <!-- Arrow icon (shown when EITHER: dropdown is open OR no selection exists) -->
+                               
                                 <i *ngIf="isCenterDropdownOpen || !selectCenters"
                                     class="fa-solid text-lg text-[#828282] transition-transform duration-200"
                                     [class.fa-angle-down]="!isCenterDropdownOpen"
@@ -123,7 +135,7 @@
                             </div>
                         </div>
                     </div>
-                    <!-- Custom dropdown options -->
+                    
                     <div *ngIf="isCenterDropdownOpen"
                         class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
                         <div class="py-1">
@@ -132,7 +144,7 @@
                                 <span class="flex-grow">{{ center.regCode }} - {{ center.centerName }}</span>
                             </div>
                         </div>
-                    </div>
+                    </div> -->
                 </div>
 
 
@@ -287,40 +299,17 @@
                 </div> -->
 
                 <div class="relative w-64 custom-center-dropdown-container">
-                    <!-- Hidden native select -->
-                    <select [(ngModel)]="selectCenters" class="hidden" (change)="applyCompanyFilters()">
-                        <option value=""></option>
-                        <option *ngFor="let item of centerArr"
-                            class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                            [value]="item.id">{{item.regCode}} - {{item.centerName}}</option>
-                    </select>
-                    <!-- Custom dropdown trigger -->
-                    <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
-                        (click)="toggleCenterDropdown()">
-                        <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
-                            <span>{{ selectedCenterDisplay }}</span>
-                            <div class="flex items-center">
-                                <!-- X icon (shown ONLY when option is selected) -->
-                                <i *ngIf="selectCenters" (click)="clearCompanyFilter($event)"
-                                    class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
-                                <!-- Arrow icon (shown when EITHER: dropdown is open OR no selection exists) -->
-                                <i *ngIf="isCenterDropdownOpen || !selectCenters"
-                                    class="fa-solid text-lg text-[#828282] transition-transform duration-200"
-                                    [class.fa-angle-down]="!isCenterDropdownOpen"
-                                    [class.fa-angle-up]="isCenterDropdownOpen"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Custom dropdown options -->
-                    <div *ngIf="isCenterDropdownOpen"
-                        class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
-                        <div class="py-1">
-                            <div *ngFor="let center of centerArr" (click)="selectCenterOption(center)"
-                                class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-300 cursor-pointer flex items-center">
-                                <span class="flex-grow">{{ center.regCode }} - {{ center.centerName }}</span>
-                            </div>
-                        </div>
-                    </div>
+                    <app-searchable-dropdown
+                        [items]="centerDropdownItems"
+                        placeholder="Select Centre..."
+                        searchPlaceholder="Search centre..."
+                        [(ngModel)]="selectCenters"
+                        (selectionChange)="onCenterSelectionChange($event)"
+                        [clearable]="true"
+                        [showSelected]="true"
+                        [disabled]="false"
+                        class="w-full"
+                      ></app-searchable-dropdown>
                 </div>
 
 

@@ -9,11 +9,12 @@ import Swal from 'sweetalert2';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { TokenServiceService } from '../../../services/Token/token-service.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
+import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
 
 @Component({
   selector: 'app-view-officers',
   standalone: true,
-  imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, LoadingSpinnerComponent, SerchableDropdownComponent],
   templateUrl: './view-officers.component.html',
   styleUrl: './view-officers.component.css'
 })
@@ -92,6 +93,24 @@ export class ViewOfficersComponent implements OnInit {
     this.getAllCenters();
     this.fetchByRole();
 
+  }
+
+  get centerDropdownItems() {
+    return this.centerArr.map(center => ({
+      value: center.id.toString(),
+      label: `${center.regCode} - ${center.centerName}`,
+      disabled: false
+    }));
+  }
+
+  // 5. Update your methods
+  onCenterSelectionChange(selectedValue: string) {
+    this.selectCenters = selectedValue || '';
+    this.applyCompanyFilters();
+  }
+
+  applyCompanyFilters() {
+    this.fetchByRole();
   }
 
   @HostListener('document:click', ['$event'])
@@ -393,15 +412,15 @@ const approveButton = (item.status === 'Rejected' || item.status === 'Not Approv
     this.fetchByRole();
   }
 
-  applyCompanyFilters() {
-    this.fetchByRole();
-  }
+  // applyCompanyFilters() {
+  //   this.fetchByRole();
+  // }
 
-  clearCompanyFilter(event: MouseEvent) {
-    event.stopPropagation();
-    this.selectCenters = '';
-    this.applyCompanyFilters();
-  }
+  // clearCompanyFilter(event: MouseEvent) {
+  //   event.stopPropagation();
+  //   this.selectCenters = '';
+  //   this.applyCompanyFilters();
+  // }
 
   getAllCenters() {
     this.ManageOficerSrv.getCCHOwnCenters().subscribe(

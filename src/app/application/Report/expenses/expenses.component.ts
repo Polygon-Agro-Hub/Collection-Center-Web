@@ -10,10 +10,11 @@ import { ToastAlertService } from '../../../services/toast-alert/toast-alert.ser
 import Swal from 'sweetalert2';
 import { environment } from '../../../environments/environment';
 import { TokenServiceService } from '../../../services/Token/token-service.service';
+import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
 @Component({
   selector: 'app-expenses',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent, SerchableDropdownComponent ],
   templateUrl: './expenses.component.html',
   styleUrl: './expenses.component.css',
   providers: [DatePipe]
@@ -79,6 +80,24 @@ export class ExpensesComponent implements OnInit {
     } else {
       this.isCenterManager = false;
     }
+  }
+
+  get centerDropdownItems() {
+    return this.centerArr.map(center => ({
+      value: center.id.toString(),
+      label: `${center.regCode} - ${center.centerName}`,
+      disabled: false
+    }));
+  }
+
+  // 5. Update your methods
+  onCenterSelectionChange(selectedValue: string) {
+    this.selectCenters = selectedValue || '';
+    this.applyCompanyFilters();
+  }
+
+  applyCompanyFilters() {
+    this.fetchFilteredPayments();
   }
 
   @HostListener('document:click', ['$event'])
@@ -155,15 +174,6 @@ export class ExpensesComponent implements OnInit {
     }
   }
 
-  applyCompanyFilters() {
-    this.fetchFilteredPayments();
-  }
-
-  clearCompanyFilter(event: MouseEvent) {
-    event.stopPropagation();
-    this.selectCenters = '';
-    this.fetchFilteredPayments();
-  }
 
   get selectedCenterDisplay(): string {
     if (!this.selectCenters) return 'Centres';

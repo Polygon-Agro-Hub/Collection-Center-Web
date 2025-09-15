@@ -10,11 +10,12 @@ import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loa
 import { HttpClient } from '@angular/common/http';
 import { Location } from '@angular/common';
 import { Country, COUNTRIES } from '../../../../assets/country-data';
+import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
 
 @Component({
   selector: 'app-edit-officer',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, LoadingSpinnerComponent, SerchableDropdownComponent],
   templateUrl: './edit-officer.component.html',
   styleUrl: './edit-officer.component.css'
 })
@@ -56,6 +57,9 @@ export class EditOfficerComponent implements OnInit {
   selectedBranchId: number | null = null;
   allBranches: BranchesData = {};
 
+  bankItems: { value: number; label: string }[] = [];
+branchItems: { value: number; label: string }[] = [];
+
   invalidFields: Set<string> = new Set();
   naviPath!: string
 
@@ -73,6 +77,16 @@ export class EditOfficerComponent implements OnInit {
   phone01: false,
   phone02: false,
 };
+
+filteredCenterArr: Center[] = [];
+  filteredManagerArr: Manager[] = [];
+
+  centreDropdownOpen = false;
+  selectedCenterName: string = "";
+  selectedManager: string = "";
+  managerDropdownOpen = false;
+
+  selectedManagerName: string = "";
 
 
   licenseFrontImageFileName!: string;
@@ -154,6 +168,8 @@ export class EditOfficerComponent implements OnInit {
     { name: 'Vavuniya', province: 'Northern' },
   ];
 
+  districtItems = this.districts.map(d => ({ value: d.name, label: d.name }));
+
   VehicleTypes = [
     { name: 'Lorry', capacity: 2 },
     { name: 'Dimo Batta', capacity: 3.5 },
@@ -188,6 +204,87 @@ export class EditOfficerComponent implements OnInit {
     }
   }
 
+  onSearchInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const value = input.value.toLowerCase();
+    console.log('value', value);
+  
+    this.filteredCenterArr = this.centerArr.filter(c =>
+      (c.centerName || '').toLowerCase().includes(value)
+    );
+  
+    console.log('filtered centers', this.filteredCenterArr);
+  
+  }
+  
+  
+  
+  toggleDropdown() {
+    this.centreDropdownOpen = !this.centreDropdownOpen;
+  }
+  
+  toggleManagerDropdown() {
+    this.managerDropdownOpen = !this.managerDropdownOpen;
+  }
+  
+  selectCenter(item: Center) {
+    console.log('center selected');
+  
+    this.personalData.centerId = item.id;
+    this.selectedCenterName = item.centerName;
+    this.centreDropdownOpen = false; // close dropdown
+  
+    // Reset search input and filtered array
+    this.filteredCenterArr = [...this.centerArr]; // show full list next time
+    const searchInput = document.querySelector<HTMLInputElement>('.dropdown-search-input');
+    if (searchInput) {
+      searchInput.value = '';
+    }
+  
+    this.changeCenter();
+  }
+
+  changeCenter() {
+    this.personalData.jobRole = ''
+    this.personalData.irmId = null
+    this.selectedManager = ''
+   this.getAllManagers()
+ }
+  
+  onManagerSearchInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const value = input.value.toLowerCase().trim(); // remove leading/trailing spaces
+    console.log('search value', value);
+  
+    this.filteredManagerArr = this.managerArr.filter(m => {
+      const fullName = `${m.firstNameEnglish} ${m.lastNameEnglish}`.toLowerCase();
+      return fullName.includes(value);
+    });
+  
+    console.log('filtered managers', this.filteredManagerArr);
+  }
+  
+  
+  selectManager(item: Manager) {
+    console.log('Manager selected');
+  
+    this.personalData.irmId = item.id;
+    this.selectedManager = item.firstNameEnglish + ' ' + item.lastNameEnglish;
+    console.log('name', item.firstNameEnglish )
+    this.managerDropdownOpen = false; // close dropdown
+  
+    // Reset search input and filtered array
+    this.filteredManagerArr = [...this.managerArr]; // show full list next time
+    const searchInput = document.querySelector<HTMLInputElement>('.dropdown-manager-search-input');
+    if (searchInput) {
+      searchInput.value = '';
+    }
+  
+    console.log('id', this.personalData.irmId)
+  
+    // this.changeCenter();
+  }
+
   fetchOffierById(id: number) {
     this.isLoading = true;
     this.ManageOficerSrv.getOfficerById(id).subscribe(
@@ -199,6 +296,9 @@ export class EditOfficerComponent implements OnInit {
         
         console.log(this.personalData);
         this.ExistirmId = res.officerData.irmId;
+
+        this.selectedCenterName = res.officerData.collectionOfficer.centerName
+        this.selectedManager = res.managerName.firstNameEnglish + ' ' + res.managerName.lastNameEnglish
 
         // this.getUpdateLastID(res.officerData.collectionOfficer.jobRole);
         this.driverObj = res.officerData.driver;
@@ -424,22 +524,29 @@ export class EditOfficerComponent implements OnInit {
     }
   }
 
-  updateProvince(event: Event): void {
-    const target = event.target as HTMLSelectElement;
-    const selectedDistrict = target.value;
+  // updateProvince(event: Event): void {
+  //   const target = event.target as HTMLSelectElement;
+  //   const selectedDistrict = target.value;
 
-    const selected = this.districts.find(district => district.name === selectedDistrict);
+  //   const selected = this.districts.find(district => district.name === selectedDistrict);
 
-    if (this.itemId === null) {
+  //   if (this.itemId === null) {
 
-      if (selected) {
-        this.personalData.province = selected.province;
-      } else {
-        this.personalData.province = '';
-      }
+  //     if (selected) {
+  //       this.personalData.province = selected.province;
+  //     } else {
+  //       this.personalData.province = '';
+  //     }
 
-    }
+  //   }
 
+  // }
+
+  onDistrictChange(districtName: string | null) {
+    if (this.itemId !== null) return; // keep your original guard
+
+    const selected = this.districts.find(d => d.name === districtName || '');
+    this.personalData.province = selected ? selected.province : '';
   }
 
 
@@ -583,6 +690,8 @@ export class EditOfficerComponent implements OnInit {
     this.ManageOficerSrv.getCCHOwnCenters().subscribe(
       (res) => {
         this.centerArr = res
+        this.filteredCenterArr = [...this.centerArr];
+        console.log('centerArr', this.centerArr)
 
       }
     )
@@ -593,6 +702,8 @@ export class EditOfficerComponent implements OnInit {
       (res) => {
 
         this.managerArr = res
+        this.filteredManagerArr = [...this.managerArr];
+        console.log('managerArr', this.managerArr)
 
       }
     )
@@ -606,90 +717,116 @@ export class EditOfficerComponent implements OnInit {
     }
   }
 
-  loadBanks() {
-    this.http.get<Bank[]>('assets/json/banks.json').subscribe(
-      data => {
-        this.banks = data.sort((a, b) => a.name.localeCompare(b.name)); // Sort alphabetically
-      },
-      error => {
-        console.error('Error loading banks:', error);
-      }
-    );
+  loadBanks(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.http.get<Bank[]>('assets/json/banks.json').subscribe(
+        data => {
+          this.banks = data.sort((a, b) => a.name.localeCompare(b.name));
+          // Convert banks to dropdown items
+          this.bankItems = this.banks.map(bank => ({
+            value: bank.ID,
+            label: bank.name
+          }));
+          resolve();
+        },
+        error => {
+          console.error('Error loading banks:', error);
+          reject(error);
+        }
+      );
+    });
   }
-
-
-  loadBranches() {
-    this.http.get<BranchesData>('assets/json/branches.json').subscribe(
-      data => {
-        Object.keys(data).forEach(bankID => {
-          data[bankID].sort((a, b) => a.name.localeCompare(b.name));
-        });
-        this.allBranches = data;
-      },
-      error => {
-        console.error('Error loading branches:', error);
-      }
-    );
+  
+  loadBranches(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.http.get<BranchesData>('assets/json/branches.json').subscribe(
+        data => {
+          Object.keys(data).forEach(bankID => {
+            data[bankID].sort((a, b) => a.name.localeCompare(b.name));
+          });
+          this.allBranches = data;
+          resolve();
+        },
+        error => {
+          console.error('Error loading branches:', error);
+          reject(error);
+        }
+      );
+    });
   }
-
-
-
+  
   matchExistingBankToDropdown() {
-
     // Only proceed if both banks and branches are loaded and we have existing data
-    if (this.banks.length > 0 && Object.keys(this.allBranches).length > 0 &&
+    if (this.bankItems.length > 0 && Object.keys(this.allBranches).length > 0 &&
       this.personalData && this.personalData.bankName) {
-
+  
       // Find the bank ID that matches the existing bank name
-      const matchedBank = this.banks.find(bank => bank.name === this.personalData.bankName);
-
+      const matchedBank = this.bankItems.find(bank => bank.label === this.personalData.bankName);
+  
       if (matchedBank) {
-        this.selectedBankId = matchedBank.ID;
+        this.selectedBankId = matchedBank.value;
         // Load branches for this bank
-        this.branches = this.allBranches[this.selectedBankId.toString()] || [];
-
+        this.updateBranchItems(this.selectedBankId);
+  
         // If we also have a branch name, try to match it
         if (this.personalData.branchName) {
-          const matchedBranch = this.branches.find(branch => branch.name === this.personalData.branchName);
+          const matchedBranch = this.branchItems.find(branch => branch.label === this.personalData.branchName);
           if (matchedBranch) {
-            this.selectedBranchId = matchedBranch.ID;
+            this.selectedBranchId = matchedBranch.value;
           }
         }
       }
     }
-
   }
-
-
-  onBankChange() {
+  
+  updateBranchItems(bankId: number | null) {
+    if (bankId) {
+      this.branches = this.allBranches[bankId.toString()] || [];
+      this.branchItems = this.branches.map(branch => ({
+        value: branch.ID,
+        label: branch.name
+      }));
+    } else {
+      this.branches = [];
+      this.branchItems = [];
+    }
+  }
+  
+  onBankChange(selectedBankId: number | null) {
+    this.selectedBankId = selectedBankId;
+    
     if (this.selectedBankId) {
       // Update branches based on selected bank
-      this.branches = this.allBranches[this.selectedBankId.toString()] || [];
-
+      this.updateBranchItems(this.selectedBankId);
+  
       // Update company data with bank name
-      const selectedBank = this.banks.find(bank => bank.ID === this.selectedBankId);
-      if (selectedBank) {
-        this.personalData.bankName = selectedBank.name;
+      const selectedBankItem = this.bankItems.find(bank => bank.value === this.selectedBankId);
+      if (selectedBankItem) {
+        this.personalData.bankName = selectedBankItem.label;
       }
-
+  
       // Reset branch selection if the current selection doesn't belong to this bank
-      const currentBranch = this.branches.find(branch => branch.ID === this.selectedBranchId);
+      const currentBranch = this.branchItems.find(branch => branch.value === this.selectedBranchId);
       if (!currentBranch) {
         this.selectedBranchId = null;
         this.personalData.branchName = '';
       }
     } else {
-      this.branches = [];
+      this.updateBranchItems(null);
+      this.selectedBranchId = null;
       this.personalData.bankName = '';
+      this.personalData.branchName = '';
     }
   }
-
-  onBranchChange() {
+  
+  onBranchChange(selectedBranchId: number | null) {
+    this.selectedBranchId = selectedBranchId;
+    
     if (this.selectedBranchId) {
       // Update company data with branch name
-      const selectedBranch = this.branches.find(branch => branch.ID === this.selectedBranchId);
-      if (selectedBranch) {
-        this.personalData.branchName = selectedBranch.name;
+      const selectedBranchItem = this.branchItems.find(branch => branch.value === this.selectedBranchId);
+      if (selectedBranchItem) {
+        this.personalData.branchName = selectedBranchItem.label;
       }
     } else {
       this.personalData.branchName = '';

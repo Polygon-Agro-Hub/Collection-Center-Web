@@ -6,11 +6,12 @@ import { SendedComplaintComponent } from '../sended-complaint/sended-complaint.c
 import { ComplaintsService } from '../../../../services/Complaints-Service/complaints.service';
 import { ToastAlertService } from '../../../../services/toast-alert/toast-alert.service';
 import Swal from 'sweetalert2';
+import { SerchableDropdownComponent } from '../../../../components/serchable-dropdown/serchable-dropdown.component';
 
 @Component({
   selector: 'app-view-complaints',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReceviedComplaintsComponent, SendedComplaintComponent],
+  imports: [CommonModule, FormsModule, ReceviedComplaintsComponent, SendedComplaintComponent, SerchableDropdownComponent],
   templateUrl: './view-complaints.component.html',
   styleUrl: './view-complaints.component.css'
 })
@@ -32,6 +33,21 @@ export class ViewComplaintsComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchAllCategory();
+  }
+
+  get categoryDropdownItems() {
+    return this.categoryArr.map(cat => ({
+      value: cat.id.toString(),
+      label: cat.categoryEnglish,
+      disabled: false
+    }));
+  }
+
+  // 5. Add selection change handler
+  onCategorySelectionChange(selectedValue: string) {
+    this.category = selectedValue || '';
+    // Add any additional logic you need when category changes
+    console.log('Category selected:', selectedValue);
   }
 
   selectRecevied() {

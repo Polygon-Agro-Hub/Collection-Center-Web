@@ -76,7 +76,7 @@ export class ViewCentersComponent implements OnInit {
     ];
 
     // Districts filtered by selected province
-    filteredDistricts: { name: string, province: string }[] = [];
+    // filteredDistricts: { name: string, province: string }[] = [];
 
     constructor(
         private router: Router,
@@ -84,9 +84,64 @@ export class ViewCentersComponent implements OnInit {
     ) { }
 
     ngOnInit(): void {
-        this.updateFilteredDistricts();
+        // this.updateFilteredDistricts();
         this.fetchAllCenterDetails();
     }
+
+    // Convert arrays to dropdown items format
+get provinceItems() {
+    return this.provinces.map(province => ({
+        value: province,
+        label: province
+    }));
+}
+
+get districtItems() {
+    const districts = this.selectProvince 
+        ? this.allDistricts.filter(d => d.province === this.selectProvince)
+        : this.allDistricts;
+    
+    return districts.map(district => ({
+        value: district.name,
+        label: district.name
+    }));
+}
+
+// Handle province selection change
+onProvinceChange(selectedProvince: string | null): void {
+    this.selectProvince = selectedProvince || '';
+    
+    // Clear district selection when province changes
+    if (!selectedProvince) {
+        this.selectDistrict = '';
+    } else {
+        // Check if current district is still valid for the selected province
+        const isDistrictValid = this.allDistricts.some(d => 
+            d.name === this.selectDistrict && d.province === selectedProvince
+        );
+        if (!isDistrictValid) {
+            this.selectDistrict = '';
+        }
+    }
+    
+    this.fetchAllCenterDetails();
+}
+
+// Handle district selection change
+onDistrictChange(selectedDistrict: string | null): void {
+    this.selectDistrict = selectedDistrict || '';
+    
+    // When district is selected, automatically set the province
+    if (selectedDistrict) {
+        const district = this.allDistricts.find(d => d.name === selectedDistrict);
+        if (district && district.province !== this.selectProvince) {
+            this.selectProvince = district.province;
+        }
+    }
+    
+    this.fetchAllCenterDetails();
+}
+
 
     @HostListener('document:click', ['$event'])
     onDocumentClick(event: MouseEvent) {
@@ -135,90 +190,90 @@ export class ViewCentersComponent implements OnInit {
         this.fetchAllCenterDetails();
     }
 
-    toggleProvinceDropdown() {
-        this.isProvinceDropdownOpen = !this.isProvinceDropdownOpen;
-        // Close district dropdown when opening province dropdown
-        if (this.isProvinceDropdownOpen) {
-            this.isDistrictDropdownOpen = false;
-        }
-    }
+    // toggleProvinceDropdown() {
+    //     this.isProvinceDropdownOpen = !this.isProvinceDropdownOpen;
+    //     // Close district dropdown when opening province dropdown
+    //     if (this.isProvinceDropdownOpen) {
+    //         this.isDistrictDropdownOpen = false;
+    //     }
+    // }
 
-    selectProvinceOption(province: string) {
-        this.selectProvince = province;
-        this.isProvinceDropdownOpen = false;
-        this.filterProvince();
-    }
+    // selectProvinceOption(province: string) {
+    //     this.selectProvince = province;
+    //     this.isProvinceDropdownOpen = false;
+    //     this.filterProvince();
+    // }
 
-    clearProvinceFilter(event?: MouseEvent) {
-        if (event) {
-            event.stopPropagation(); // Prevent triggering the dropdown toggle
-        }
-        this.selectProvince = '';
-        this.selectDistrict = ''; // Also clear district when province is cleared
-        this.updateFilteredDistricts(); // Update district list
-        this.fetchAllCenterDetails();
-    }
+    // clearProvinceFilter(event?: MouseEvent) {
+    //     if (event) {
+    //         event.stopPropagation(); // Prevent triggering the dropdown toggle
+    //     }
+    //     this.selectProvince = '';
+    //     this.selectDistrict = ''; // Also clear district when province is cleared
+    //     this.updateFilteredDistricts(); // Update district list
+    //     this.fetchAllCenterDetails();
+    // }
 
-    // District dropdown methods
-    toggleDistrictDropdown() {
-        this.isDistrictDropdownOpen = !this.isDistrictDropdownOpen;
-        // Close province dropdown when opening district dropdown
-        if (this.isDistrictDropdownOpen) {
-            this.isProvinceDropdownOpen = false;
-        }
-    }
+    // // District dropdown methods
+    // toggleDistrictDropdown() {
+    //     this.isDistrictDropdownOpen = !this.isDistrictDropdownOpen;
+    //     // Close province dropdown when opening district dropdown
+    //     if (this.isDistrictDropdownOpen) {
+    //         this.isProvinceDropdownOpen = false;
+    //     }
+    // }
 
-    selectDistrictOption(districtName: string) {
-        this.selectDistrict = districtName;
-        this.isDistrictDropdownOpen = false;
-        this.filterDistrict();
-    }
+    // selectDistrictOption(districtName: string) {
+    //     this.selectDistrict = districtName;
+    //     this.isDistrictDropdownOpen = false;
+    //     this.filterDistrict();
+    // }
 
-    clearDistrictFilter(event?: MouseEvent) {
-        if (event) {
-            event.stopPropagation(); // Prevent triggering the dropdown toggle
-        }
-        this.selectDistrict = '';
-        this.fetchAllCenterDetails();
-    }
+    // clearDistrictFilter(event?: MouseEvent) {
+    //     if (event) {
+    //         event.stopPropagation(); // Prevent triggering the dropdown toggle
+    //     }
+    //     this.selectDistrict = '';
+    //     this.fetchAllCenterDetails();
+    // }
 
-    // Updated existing methods
-    filterProvince() {
-        this.selectDistrict = ''; // Clear district selection when province changes
-        this.updateFilteredDistricts(); // Update district list based on selected province
-        this.fetchAllCenterDetails();
-    }
+    // // Updated existing methods
+    // filterProvince() {
+    //     this.selectDistrict = ''; // Clear district selection when province changes
+    //     this.updateFilteredDistricts(); // Update district list based on selected province
+    //     this.fetchAllCenterDetails();
+    // }
 
-    filterDistrict() {
-        // When district is selected, automatically set the province
-        if (this.selectDistrict) {
-            const district = this.allDistricts.find(d => d.name === this.selectDistrict);
-            if (district) {
-                this.selectProvince = district.province;
-                // Update filtered districts based on the selected province
-                this.updateFilteredDistricts();
-            }
-        }
-        this.fetchAllCenterDetails();
-    }
+    // filterDistrict() {
+    //     // When district is selected, automatically set the province
+    //     if (this.selectDistrict) {
+    //         const district = this.allDistricts.find(d => d.name === this.selectDistrict);
+    //         if (district) {
+    //             this.selectProvince = district.province;
+    //             // Update filtered districts based on the selected province
+    //             this.updateFilteredDistricts();
+    //         }
+    //     }
+    //     this.fetchAllCenterDetails();
+    // }
 
-    // Update the filtered districts based on selected province
-    updateFilteredDistricts() {
-        if (this.selectProvince) {
-            this.filteredDistricts = this.allDistricts.filter(d => d.province === this.selectProvince);
-        } else {
-            this.filteredDistricts = this.allDistricts;
-        }
-    }
+    // // Update the filtered districts based on selected province
+    // updateFilteredDistricts() {
+    //     if (this.selectProvince) {
+    //         this.filteredDistricts = this.allDistricts.filter(d => d.province === this.selectProvince);
+    //     } else {
+    //         this.filteredDistricts = this.allDistricts;
+    //     }
+    // }
 
-    // Legacy methods (kept for compatibility, but now called by new methods)
-    cancelProvince() {
-        this.clearProvinceFilter();
-    }
+    // // Legacy methods (kept for compatibility, but now called by new methods)
+    // cancelProvince() {
+    //     this.clearProvinceFilter();
+    // }
 
-    cancelDistrict() {
-        this.clearDistrictFilter();
-    }
+    // cancelDistrict() {
+    //     this.clearDistrictFilter();
+    // }
 
     getTotalPages(): number {
         return Math.ceil(this.totalItems / this.itemsPerPage);

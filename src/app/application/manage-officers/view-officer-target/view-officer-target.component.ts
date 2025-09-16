@@ -6,6 +6,7 @@ import { TargetService } from '../../../services/Target-service/target.service';
 import { DropdownModule } from 'primeng/dropdown';
 import { TokenServiceService } from '../../../services/Token/token-service.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-view-officer-target',
@@ -28,6 +29,8 @@ export class ViewOfficerTargetComponent implements OnInit {
   isLoading: boolean = true;
 
   centerName!: string;
+
+  isDownloading = false;
 
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Pending', 'Completed', 'Exceeded'];
@@ -86,6 +89,46 @@ export class ViewOfficerTargetComponent implements OnInit {
     )
   }
 
+
+  downloadTemplate1() {
+    this.isDownloading = true;
+
+    this.TargetSrv
+      .downloadTarget(this.officerId, this.selectStatus, this.searchText)
+      .subscribe({
+        next: (blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `Officer Target Report_${this.selectedOfficerDataArr[0].empId}.xlsx`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+
+          Swal.fire({
+            icon: "success",
+            title: "Downloaded",
+            text: "Please check your downloads folder",
+            customClass: {
+              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+              title: 'dark:text-white',
+            }
+          });
+          this.isDownloading = false;
+        },
+        error: (error) => {
+          Swal.fire({
+            icon: "error",
+            title: "Download Failed",
+            text: error.message,
+            customClass: {
+              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+              title: 'dark:text-white',
+            }
+          });
+          this.isDownloading = false;
+        }
+      });
+  }
 
   navigateToNewPage(id: number): void {
     this.router.navigate([`/manage-officers/edit-officer-target/${id}`]);  // Assuming you want to pass the `item.id` to the new page

@@ -20,6 +20,7 @@ export class ViewRecivedComplaintComponent implements OnInit {
 
   compalintObj: Complaint = new Complaint();
   replyObj: Reply = new Reply();
+  templateData!: TemplateData;
 
 
   compalinId!: number;
@@ -83,7 +84,8 @@ export class ViewRecivedComplaintComponent implements OnInit {
         } else {
           this.hasData = true;
         }
-        this.replyObj.reply = res.data.reply === null ? this.createTemplate(this.officerName, res.data.language, res.template) : res.data.reply;
+        this.replyObj.reply = res.data.reply
+        this.templateData = res.template
 
 
         this.isLoading = false;
@@ -109,8 +111,8 @@ export class ViewRecivedComplaintComponent implements OnInit {
         popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
         title: 'dark:text-white',
         icon: '!border-gray-200 dark:!border-gray-500',
-        confirmButton: 'hover:!bg-[#3085d6] dark:hover:!bg[#3085d6]', 
-        cancelButton: '',
+        confirmButton: '!bg-[#3085d6] !text-white hover:!bg-[#3085d6] cursor-default',
+        cancelButton: 'hover:!bg-[#d33] cursor-default',
         actions: 'gap-2'
       }
     })
@@ -263,7 +265,6 @@ class Reply {
   reply!: string
 }
 
-
 interface TemplateData {
   EngName: string
   SinName: string
@@ -271,4 +272,5 @@ interface TemplateData {
   companyNameEnglish: string
   companyNameSinhala: string
   companyNameTamil: string
+  regCode: string;
 }

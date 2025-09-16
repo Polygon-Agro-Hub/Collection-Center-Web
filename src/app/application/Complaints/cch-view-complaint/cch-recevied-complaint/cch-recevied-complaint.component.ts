@@ -90,7 +90,10 @@ complainArr!: RecivedComplaint[];
     this.isLoading = true;
     this.ComplainSrv.getComplainById(id).subscribe(
       (res) => {
+        console.log('res', res)
         this.replyObj = res.data;
+        this.templateData = res.template;
+        console.log('templateData', this.templateData)
         this.isLoading = false;
       }
     )
@@ -172,4 +175,6 @@ interface TemplateData {
   companyNameEnglish: string
   companyNameSinhala: string
   companyNameTamil: string
+  centerName: string;
+  regCode: string;
 }

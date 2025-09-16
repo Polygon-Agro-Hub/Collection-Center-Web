@@ -463,5 +463,51 @@ export class TargetService {
     return this.http.post<{ regCode: string }>(url, { province, district, city }, { headers });
   }
 
+  downloadTarget(
+    officerId: number,
+    status: string = '',
+    searchText: string = ''
+  ): Observable<Blob> {
+    let url = `${this.apiUrl}/download-officer-target?officerId=${officerId}`;
+
+    if (status) {
+      url += `&status=${status}`;
+    }
+
+    if (searchText) {
+      url += `&searchText=${searchText}`;
+    }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      // Optional: 'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    });
+
+    return this.http.get(url, { headers, responseType: 'blob' });
+  }
+
+
+  downloadMyTarget(
+    status: string = '',
+    searchText: string = ''
+  ): Observable<Blob> {
+    let url = `${this.apiUrl}/download-my-target`;
+
+    if (status) {
+      url += `&status=${status}`;
+    }
+
+    if (searchText) {
+      url += `&searchText=${searchText}`;
+    }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      // Optional: 'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    });
+
+    return this.http.get(url, { headers, responseType: 'blob' });
+  }
+
 }
 

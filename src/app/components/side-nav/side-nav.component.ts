@@ -311,7 +311,9 @@ export class SideNavComponent {
       this.isSelectTab = 'dashboard';
     } else if (this.role === 'Collection Center Head') {
       this.isSelectTab = 'centers';
-    } else {
+    } else if (this.role === 'Distribution Center Manager' ){
+      this.isSelectTab = 'distribution-center-dashboard';
+    } else if (this.role === 'Distribution Center Head') {
       this.isSelectTab = 'distribution-center';
     }
   }

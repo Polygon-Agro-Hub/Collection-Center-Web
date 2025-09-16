@@ -83,15 +83,20 @@ export const routes: Routes = [
         children: [
             {
                 path: 'profile',
+                canActivate:[RoleGuardService],
+                data: { roles: ['Collection Center Manager', 'Collection Center Head', 'Distribution Center Manager', 'Distribution Center Head'] },
                 component: ProfileComponent,
             },
             {
                 path: 'dashbord',
-                canActivate:[CcmRoleGuardService],
+                canActivate:[RoleGuardService],
+                data: { roles: ['Collection Center Manager'] },
                 component: DashboardComponent
             },
             {
                 path: 'manage-officers',
+                canActivate:[RoleGuardService],
+                data: { roles: ['Collection Center Manager', 'Collection Center Head'] },
                 children: [
                     {
                         path: 'create-officer',
@@ -128,7 +133,8 @@ export const routes: Routes = [
             },
             {
                 path: 'price-list',
-                canActivate:[CcmRoleGuardService],
+                canActivate:[RoleGuardService],
+                data: { roles: ['Collection Center Manager'] },
                 children: [
                     {
                         path: '',
@@ -139,7 +145,8 @@ export const routes: Routes = [
             },
             {
                 path: 'price-request',
-                canActivate:[CcmRoleGuardService],
+                canActivate:[RoleGuardService],
+                data: { roles: ['Collection Center Manager'] },
                 children: [
                     {
                         path: '',
@@ -149,6 +156,8 @@ export const routes: Routes = [
             },
             {
                 path: 'reports',
+                canActivate:[RoleGuardService],
+                data: { roles: ['Collection Center Manager', 'Collection Center Head'] },
                 children: [
 
                     {
@@ -190,7 +199,8 @@ export const routes: Routes = [
             },
             {
                 path: 'target',
-                canActivate:[CcmRoleGuardService],
+                canActivate:[RoleGuardService],
+                data: { roles: ['Collection Center Manager'] },
                 children: [
                     {
                         path: '',
@@ -221,7 +231,8 @@ export const routes: Routes = [
             },
             {
                 path: 'complaints',
-                canActivate:[CcmRoleGuardService],
+                canActivate:[RoleGuardService],
+                data: { roles: ['Collection Center Manager'] },
                 children: [
                     {
                         path: '',
@@ -236,6 +247,7 @@ export const routes: Routes = [
             {
                 path: 'centers',
                 canActivate: [RoleGuardService],
+                data: {roles: ['Collection Center Head']},
                 children: [
                     {
                         path: '',
@@ -285,7 +297,8 @@ export const routes: Routes = [
             },
             {
                 path: 'cch-complaints',
-                canActivate: [RoleGuardService],
+                canActivate:[RoleGuardService],
+                data: { roles: ['Collection Center Head'] },
                 children: [
                     {
                         path: '',
@@ -299,7 +312,8 @@ export const routes: Routes = [
             },
             {
                 path: 'officer-target',
-                canActivate:[CcmRoleGuardService],
+                canActivate:[RoleGuardService],
+                data: { roles: ['Collection Center Manager'] },
                 children: [
                     {
                         path: '',
@@ -315,7 +329,8 @@ export const routes: Routes = [
             // ----------------------------------------- Distribution Center Routes ------------------------------------------
             {
                 path: 'distribution-center',
-                // canActivate:[CcmRoleGuardService],
+                canActivate:[RoleGuardService],
+                data: { roles: ['Distribution Center Head'] },
                 children: [
                     {
                         path: '',
@@ -343,7 +358,8 @@ export const routes: Routes = [
             },
             {
                 path: 'distribution-center-dashboard',
-                // canActivate:[CcmRoleGuardService],
+                canActivate:[RoleGuardService],
+                data: { roles: ['Distribution Center Manager'] },
                 children: [
                     {
                         path: '',
@@ -355,7 +371,8 @@ export const routes: Routes = [
             },
             {
                 path: 'distribution-officers',
-                // canActivate:[CcmRoleGuardService],
+                canActivate:[RoleGuardService],
+                data: { roles: ['Distribution Center Manager', 'Distribution Center Head'] },
                 children: [
                     {
                         path: '',
@@ -382,7 +399,8 @@ export const routes: Routes = [
 
             {
                 path: 'assign-targets',
-                // canActivate:[CcmRoleGuardService],
+                canActivate:[RoleGuardService],
+                data: { roles: ['Distribution Center Manager'] },
                 children: [
                     {
                         path: '',
@@ -405,7 +423,8 @@ export const routes: Routes = [
 
             {
                 path: 'officer-targets',
-                // canActivate:[CcmRoleGuardService],
+                canActivate:[RoleGuardService],
+                data: { roles: ['Distribution Center Manager'] },
                 children: [
                     {
                         path: '',
@@ -424,7 +443,8 @@ export const routes: Routes = [
 
             {
                 path: 'target-progress',
-                // canActivate:[CcmRoleGuardService],
+                canActivate:[RoleGuardService],
+                data: { roles: ['Distribution Center Manager'] },
                 children: [
                     {
                         path: '',
@@ -447,7 +467,8 @@ export const routes: Routes = [
 
             {
                 path: 'requests',
-                // canActivate:[CcmRoleGuardService],
+                canActivate:[RoleGuardService],
+                data: { roles: ['Distribution Center Manager'] },
                 children: [
                     {
                         path: '',
@@ -463,7 +484,8 @@ export const routes: Routes = [
 
             {
                 path: 'dcm-complaints',
-                // canActivate:[CcmRoleGuardService],
+                canActivate:[RoleGuardService],
+                data: { roles: ['Distribution Center Manager'] },
                 children: [
                     {
                         path: '',
@@ -478,7 +500,8 @@ export const routes: Routes = [
 
             {
                 path: 'dch-complaints',
-                // canActivate:[CcmRoleGuardService],
+                canActivate:[RoleGuardService],
+                data: { roles: ['Distribution Center Head'] },
                 children: [
                     {
                         path: '',

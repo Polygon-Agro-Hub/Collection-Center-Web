@@ -203,7 +203,7 @@
 
 
     <div *ngIf="isReplyView" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-        <div class="bg-white dark:bg-[#363636] shadow-lg rounded-lg p-6 w-1/2">
+        <div class="bg-white dark:bg-[#363636] shadow-lg rounded-lg p-6 w-2/5">
             <div class="flex flex-col items-center justify-center gap-5">
                 <div class="bg-[#F6F6F6] rounded-full shadow-md p-5">
                     <i class="fa-regular fa-envelope text-4xl"></i>
@@ -217,8 +217,8 @@
                         <span class="font-semibold">{{replyObj.firstNameEnglish}} {{replyObj.lastNameEnglish}},</span>
                     </p>
 
-                    <div class="border-none outline-none bg-[#F6F6F6] dark:bg-[#363636] rounded-lg w-full h-60 p-1">
-                        <textarea class="bg-[#F6F6F6] dark:bg-[#363636] w-full h-full border-none outline-none " cols="6" [(ngModel)]="replyObj.reply" name="reply" placeholder="[ Add message here... ]" disabled=""></textarea>
+                    <div class="border-none outline-none bg-[#F6F6F6] dark:bg-[#363636] rounded-lg w-full p-1">
+                        <textarea class="bg-[#F6F6F6] resize-none dark:bg-[#363636] w-full h-full border-none outline-none " cols="6" [(ngModel)]="replyObj.reply" name="reply" placeholder="[ Add message here... ]" disabled=""></textarea>
                     </div>
 
                     <p>

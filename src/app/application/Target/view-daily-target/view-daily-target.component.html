@@ -125,9 +125,9 @@
                         <th class="px-6 py-3 text-left font-medium">No</th>
                         <th class="px-6 py-3 text-left font-medium">Crop Name</th>
                         <th class="px-6 py-3 text-left font-medium">Variety Name</th>
-                        <th class="px-6 py-3 text-left font-medium">Grade</th>
+                        <th class="px-6 py-3 text-center font-medium">Grade</th>
                         <th class="px-6 py-3 text-left font-medium">Target (kg)</th>
-                        <th class="px-6 py-3 text-left font-medium">Completed (kg)</th>
+                        <th class="px-6 py-3 text-center font-medium">Completed (kg)</th>
                         <th class="px-6 py-3 text-center font-medium">Status</th>
                         <!-- <th class="px-6 py-3 text-left font-medium">Ends At</th> -->
                         <!-- <th class="px-6 py-3 text-left font-medium">Validity</th> -->
@@ -141,11 +141,11 @@
                             {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }} </td>
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.cropNameEnglish}}</td>
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.varietyNameEnglish}}</td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.grade}}</td>
+                        <td class="px-6 py-4 text-center text-gray-900 dark:text-gray-300">{{item.grade}}</td>
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
                             {{ item.target === 0.00 ? 'Not Set' : item.target | number: '1.2-2' }}
                         </td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
+                        <td class="px-6 py-4 text-center text-gray-900 dark:text-gray-300">
                             {{ item.complete === 0.00 ? 'Empty' : item.complete | number: '1.2-2' }}
                         </td>
 
@@ -159,22 +159,7 @@
                                 Completed
                             </span>
                         </td>
-                        <!-- <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
-                            <div class="flex flex-col items-start justify-start">
-                                <p class="text-sm text-[#646464]">{{formatDate(item.date)}}</p>
-                                <p class="text-sm text-[#646464] my-1">{{formatTime(item.toTime) }}</p>
-                            </div>
-                        </td> -->
-                        <!-- <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
-                            <span *ngIf="checkValidity(item.toDate) === 'Active'"
-                                class="bg-[#B7FFBE] text-[#02BB3D] text-center rounded-lg px-4 py-1">
-                                Active
-                            </span>
-                            <span *ngIf="checkValidity(item.toDate) === 'Expired'"
-                                class="bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-4 py-1">
-                                Expired
-                            </span>
-                        </td> -->
+                        
                     </tr>
                 </tbody>
 

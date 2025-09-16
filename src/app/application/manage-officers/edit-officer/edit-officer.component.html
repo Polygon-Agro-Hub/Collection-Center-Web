@@ -136,7 +136,7 @@
                         </label>
                         <select id="jobRole" [(ngModel)]="personalData.jobRole" 
                             name="jobRole" placeholder="select" #jobRoleInput="ngModel" required
-                            class="form-control mt-1 block w-full p-2 text-[#292929] mb-1 dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500">
+                            class="form-control mt-1 block w-full p-2 text-[#292929] mb-1 dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] focus:ring-indigo-500 focus:border-indigo-500">
                             <option disabled
                                 class="p-2 text-[#292929] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
                                 -- select --
@@ -628,7 +628,7 @@
                 <div>
                     <label for="country"
                         class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Country *</label>
-                    <input id="country" name="country" [(ngModel)]="personalData.country" 
+                    <input id="country" name="country" [(ngModel)]="personalData.country" readonly
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"  
                     />
                 </div>

@@ -665,7 +665,7 @@ filteredCenterArr: Center[] = [];
   onCancel() {
     Swal.fire({
       title: 'You have unsaved changes',
-      text: 'If you leave this page now, your changes will be lost.<br>Do you want to continue without saving?',
+      text: 'If you leave this page now, your changes will be lost.\nDo you want to continue without saving?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',

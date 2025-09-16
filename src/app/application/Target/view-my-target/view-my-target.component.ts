@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { DropdownModule } from 'primeng/dropdown';
 import { TargetService } from '../../../services/Target-service/target.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-view-my-target',
@@ -22,6 +23,8 @@ export class ViewMyTargetComponent implements OnInit {
   searchText: string = '';
 
   isLoading: boolean = true;
+
+  isDownloading = false;
 
   constructor(
     private router: Router,
@@ -47,6 +50,46 @@ export class ViewMyTargetComponent implements OnInit {
         this.isLoading = false;
       }
     )
+  }
+
+  downloadTemplate1() {
+    this.isDownloading = true;
+
+    this.TargetSrv
+      .downloadMyTarget(this.selectStatus, this.searchText)
+      .subscribe({
+        next: (blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `Officer Target Report_${this.officerDataArr[0].empId  }.xlsx`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+
+          Swal.fire({
+            icon: "success",
+            title: "Downloaded",
+            text: "Please check your downloads folder",
+            customClass: {
+              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+              title: 'dark:text-white',
+            }
+          });
+          this.isDownloading = false;
+        },
+        error: (error) => {
+          Swal.fire({
+            icon: "error",
+            title: "Download Failed",
+            text: error.message,
+            customClass: {
+              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+              title: 'dark:text-white',
+            }
+          });
+          this.isDownloading = false;
+        }
+      });
   }
 
   navigateToNewPage(id: number) {

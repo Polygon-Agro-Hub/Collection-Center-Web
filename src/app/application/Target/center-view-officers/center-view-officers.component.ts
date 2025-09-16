@@ -36,6 +36,8 @@ export class CenterViewOfficersComponent implements OnInit {
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Approved', 'Not Approved', 'Rejected'];
 
+  isDownloading = false;
+
   toggleStatusDropdown() {
     this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
   }
@@ -282,6 +284,8 @@ export class CenterViewOfficersComponent implements OnInit {
   navigateToCenters() {
     this.router.navigate(['/centers']); // Change '/reports' to your desired route
   }
+
+  
 
 }
 

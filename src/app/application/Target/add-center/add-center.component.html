@@ -48,14 +48,31 @@
           Contact Number - 1
       </label>
       <div class="mt-1 flex">
-          <select id="phoneNumber01Code" name="phoneNumber01Code"
-              [(ngModel)]="centerData.phoneNumber01Code"
-              class="block p-2 border border-gray-300 hover:bg-gray-200 rounded-l-md bg-gray-50 mr-5 text-[#534E4E] dark:text-textDark dark:bg-[#1D1D1F]">
-              <option value="+94">+94 (LK)</option>
-              <option value="+1">+1 (US)</option>
-              <option value="+44">+44 (UK)</option>
-              <option value="+91">+91 (India)</option>
-          </select>
+        <div class="dropdown-wrapper-1 relative inline-block w-36 mr-2">
+          <!-- Selected item -->
+          <div class="flex items-center justify-between p-2 border border-gray-300 rounded-md bg-gray-50 dark:bg-[#1D1D1F] text-[#534E4E] dark:text-textDark cursor-pointer"
+              (click)="dropdownOpen = !dropdownOpen">
+              <div class="flex items-center gap-2">
+                  <img *ngIf="selectedCountry1" [src]="getFlagUrl(selectedCountry1.code)"
+                      width="24" height="18" alt="{{ selectedCountry1.name }}" />
+                  <span>{{ selectedCountry1?.dialCode }}</span>
+              </div>
+              <span *ngIf="!dropdownOpen"><i class="fa-solid fa-angle-down"></i></span>
+              <span *ngIf="dropdownOpen"><i class="fa-solid fa-angle-up"></i></span>
+          </div>
+
+          <!-- Dropdown list -->
+          <div *ngIf="dropdownOpen"
+              class="absolute left-0 mt-1 w-full border border-gray-300 rounded-md bg-white dark:bg-[#1D1D1F] z-10 max-h-40 overflow-y-auto">
+              <div *ngFor="let country of countries"
+                  class="flex items-center gap-2 p-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
+                  (click)="selectCountry1(country)">
+                  <img [src]="getFlagUrl(country.code)" width="24" height="18"
+                      alt="{{ country.name }}" />
+                  <span class="dark:text-white">{{ country.dialCode }}</span>
+              </div>
+          </div>
+      </div>
           <input id="phoneNumber01" name="phoneNumber01" type="tell"
               [(ngModel)]="centerData.phoneNumber01"
               class="block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-r-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
@@ -82,14 +99,31 @@
       Contact Number - 2
     </label>
     <div class="mt-1 flex">
-        <select id="phoneNumber02Code" name="phoneNumber02Code"
-            [(ngModel)]="centerData.phoneNumber02Code"
-            class="block p-2 border border-gray-300 hover:bg-gray-200 rounded-l-md bg-gray-50 mr-5 text-[#534E4E] dark:text-textDark dark:bg-[#1D1D1F]">
-            <option value="+94">+94 (LK)</option>
-            <option value="+1">+1 (US)</option>
-            <option value="+44">+44 (UK)</option>
-            <option value="+91">+91 (India)</option>
-        </select>
+      <div class="dropdown-wrapper-2 relative inline-block w-36 mr-2">
+        <!-- Selected item -->
+        <div class="flex items-center justify-between p-2 border border-gray-300 rounded-md bg-gray-50 dark:bg-[#1D1D1F] text-[#534E4E] dark:text-textDark cursor-pointer"
+            (click)="dropdownOpen2 = !dropdownOpen2">
+            <div class="flex items-center gap-2">
+                <img *ngIf="selectedCountry2" [src]="getFlagUrl(selectedCountry2.code)"
+                    width="24" height="18" alt="{{ selectedCountry2.name }}" />
+                <span>{{ selectedCountry2?.dialCode }}</span>
+            </div>
+            <span *ngIf="!dropdownOpen2"><i class="fa-solid fa-angle-down"></i></span>
+            <span *ngIf="dropdownOpen2"><i class="fa-solid fa-angle-up"></i></span>
+        </div>
+
+        <!-- Dropdown list -->
+        <div *ngIf="dropdownOpen2"
+            class="absolute left-0 mt-1 w-full border border-gray-300 rounded-md bg-white dark:bg-[#1D1D1F] z-10 max-h-40 overflow-y-auto">
+            <div *ngFor="let country of countries"
+                class="flex items-center gap-2 p-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
+                (click)="selectCountry2(country)">
+                <img [src]="getFlagUrl(country.code)" width="24" height="18"
+                    alt="{{ country.name }}" />
+                <span class="dark:text-white">{{ country.dialCode }}</span>
+            </div>
+        </div>
+    </div>
         <input id="phoneNumber02" name="phoneNumber02" type="tell" #phoneNumber02Input="ngModel"
             [(ngModel)]="centerData.phoneNumber02"
             class="block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-r-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"

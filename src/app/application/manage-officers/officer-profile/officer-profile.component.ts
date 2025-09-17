@@ -170,54 +170,35 @@ export class OfficerProfileComponent implements OnInit {
     doc.restoreGraphicsState();
   }
 
-    // Add the image at the top if it exists
-    // if (this.imagebase64) {
-    //   doc.addImage(
-    //     img,
-    //     'JPEG',
-    //     14, // X position
-    //     10, // Y position (moved to top)
-    //     40, // Width
-    //     40  // Height
-    //   );
-    // }
-
- 
-
     // Adjust starting positions based on image presence
-    const startX = hasImage ? 60 : 14; // If no image, start from left margin
-    const startY = hasImage ? 60 : 50; // Adjust Y position based on image presence
+    const startX = hasImage ? 60 : 14;
+    const startY = hasImage ? 60 : 50;
 
+    // Fix for the top section border (image and basic info)
     const imageboxX = 10;
-  const imageboxY = startY - 16;  // move above heading
-  const imageboxWidth = 190;
-  
-  // The last Y position after district field
-  const imagelastY = startY - 56 
-  const imageboxHeight = (imagelastY + 2) - imageboxY; // +10 padding at bottom
-  
-  // Draw rounded border first (so it’s in background)
-  doc.setDrawColor(241, 247, 250); // border color #F1F7FA
-  doc.setLineWidth(0.5);
-  doc.roundedRect(imageboxX, imageboxY, imageboxWidth, imageboxHeight, 1.5, 1.5, "S");
+    const imageboxY = 8; // Start from top margin
+    const imageboxWidth = 190;
+    const imageboxHeight = hasImage ? 44 : 30; // Adjust height based on image presence
+    
+    // Draw rounded border for top section
+    doc.setDrawColor(241, 247, 250);
+    doc.setLineWidth(0.5);
+    doc.roundedRect(imageboxX, imageboxY, imageboxWidth, imageboxHeight, 3, 3, "S");
 
-  
-    // Title
+    // Title - Personal Information
     doc.setFontSize(16);
     doc.setFont("Inter", "bold");
-
+    
+    // Fix for Personal Information section border
     const personalboxX = 10;
-const personalboxY = startY - 6;  // move above heading
-const personalboxWidth = 190;
-
-// The last Y position after district field
-const personallastY = startY + 48; 
-const personalboxHeight = (personallastY + 2) - personalboxY; // +10 padding at bottom
-
-// Draw rounded border first (so it’s in background)
-doc.setDrawColor(241, 247, 250); // border color #F1F7FA
-doc.setLineWidth(0.5);
-doc.roundedRect(personalboxX, personalboxY, personalboxWidth, personalboxHeight, 3, 3, "S"); 
+    const personalboxY = startY - 6;
+    const personalboxWidth = 190;
+    const personalboxHeight = 57; // Fixed height for personal info section
+    
+    // Draw rounded border for personal info section
+    doc.setDrawColor(241, 247, 250);
+    doc.setLineWidth(0.5);
+    doc.roundedRect(personalboxX, personalboxY, personalboxWidth, personalboxHeight, 3, 3, "S");
 
     doc.text("Personal Information", 14, startY);
 
@@ -371,7 +352,7 @@ const boxWidth = 190;
 
 // The last Y position after district field
 const lastY = startY + 108; 
-const boxHeight = (lastY + 2) - boxY; // +10 padding at bottom
+const boxHeight = (lastY + 4) - boxY; // +10 padding at bottom
 
 // Draw rounded border first (so it’s in background)
 doc.setDrawColor(241, 247, 250); // border color #F1F7FA

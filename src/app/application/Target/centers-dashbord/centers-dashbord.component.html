@@ -191,13 +191,13 @@
             <table class="w-full divide-y-2 overflow-hidden">
                 <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
                     <tr>
-                        <th class="px-6 py-3 text-left font-medium">No</th>
-                        <th class="px-6 py-3 text-left font-medium">Crop Name</th>
-                        <th class="px-6 py-3 text-left font-medium">Variety Name</th>
-                        <th class="px-6 py-3 text-left font-medium">Grade</th>
-                        <th class="px-6 py-3 text-left font-medium">Collected (kg)</th>
-                        <th class="px-6 py-3 text-left font-medium">Value (Rs.)</th>
-                        <th class="px-6 py-3 text-center font-medium">Date</th>
+                        <th class="px-6 py-4 text-left font-medium">No</th>
+                        <th class="px-6 py-4 text-left font-medium">Crop Name</th>
+                        <th class="px-6 py-4 text-left font-medium">Variety Name</th>
+                        <th class="px-6 py-4 text-center font-medium">Grade</th>
+                        <th class="px-6 py-4 text-center font-medium">Collected (kg)</th>
+                        <th class="px-6 py-4 text-left font-medium">Value (Rs.)</th>
+                        <th class="px-6 py-4 text-center font-medium">Date</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
@@ -207,7 +207,7 @@
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.cropNameEnglish}}</td>
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.varietyNameEnglish}}</td>
                         <td class="px-6 py-4 text-gray-900 text-center dark:text-gray-300">{{item.grade}}</td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.totQty | number: '1.2-2' }}</td>
+                        <td class="px-6 py-4 text-gray-900 text-center dark:text-gray-300">{{item.totQty | number: '1.2-2' }}</td>
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.totPrice | number: '1.2-2' }}</td>
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
                             <div class="flex flex-col items-center justify-center">

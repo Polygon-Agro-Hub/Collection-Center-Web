@@ -1,5 +1,5 @@
 <div
-  class="flex flex-col h-full bg-white dark:bg-[#272F45] border-r transition-all"
+  class="flex flex-col h-full bg-white border-r dark:border-[#1D1D1F] transition-all dark:bg-[#1D1D1F]"
 >
   <!-- Header -->
   <div
@@ -17,7 +17,7 @@
 
 
   <!-- Dynamic Menu -->
-  <div class="flex-1 overflow-y-auto scrollbar-none">
+  <div class="flex-1 overflow-y-auto scrollbar-none dark:bg-[#1D1D1F]">
     <ul class="space-y-1  pb-4 pt-9">
       <ng-container *ngFor="let item of filteredMenuItems">
         <li
@@ -130,7 +130,7 @@
     <div class="flex items-center dark:hover:text-black">
       <button
         *ngIf="!isCollapsed"
-        class="hover:bg-[#EDF5FC] w-full rounded-lg flex flex-row items-center gap-x-4 dark:text-white text-red-500 p-4 pl-5 dark:hover:text-[#272F45]"
+        class="hover:bg-[#EDF5FC] w-full rounded-lg flex flex-row items-center gap-x-4 dark:text-red-500 text-red-500 p-4 pl-5 dark:hover:text-[#272F45]"
         (click)="logOut()"
       >
         <i class="fas fa-sign-out-alt text-lg"></i>
@@ -138,7 +138,7 @@
       </button>
       <button
         *ngIf="isCollapsed"
-        class="hover:bg-[#EDF5FC] w-full flex items-center gap-4 rounded-lg dark:text-white text-red-500 p-4 pl-5 dark:hover:text-[#272F45]"
+        class="hover:bg-[#EDF5FC] w-full flex items-center gap-4 rounded-lg dark:text-red-500 text-red-500 p-4 pl-5 dark:hover:text-[#272F45]"
         (click)="logOut()"
       >
         <i class="fas fa-sign-out-alt text-lg"></i>

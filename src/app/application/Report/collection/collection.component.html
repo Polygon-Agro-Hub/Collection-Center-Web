@@ -8,47 +8,29 @@
         <div class="w-full dark:bg-[#363636]">
             <div class="flex flex-row items-center justify-center">
                 <p class="text-lg font-semibold text-[#292929] mx-3 dark:text-white">From :</p>
-
+        
                 <div class="relative w-56 mr-10">
-                    <div
-                        class="border-2 rounded-xl  text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
-                        <input type="date" [(ngModel)]="fromDate" name="fromDate" (change)="validateFromDate()" class="block w-full appearance-none text-textLight dark:text-textDark bg-white dark:bg-[#292929] px-3 py-2 rounded-xl focus:outline-none 
-                          border border-gray-300 dark:border-gray-600
-                          [color-scheme:light] dark:[color-scheme:dark]
-                          [&::-webkit-calendar-picker-indicator]:filter 
-                          [&::-webkit-calendar-picker-indicator]:cursor-pointer
-                          [&::-webkit-calendar-picker-indicator]:ml-1
-                          dark:[&::-webkit-calendar-picker-indicator]:invert
-                          [&::-webkit-datetime-edit]:text-gray-800
-                          dark:[&::-webkit-datetime-edit]:text-gray-200
-                          [&::-webkit-datetime-edit-fields-wrapper]:text-gray-800
-                          dark:[&::-webkit-datetime-edit-fields-wrapper]:text-gray-200" />
-                    </div>
+                    <app-custom-datepicker 
+                        [selectedDate]="fromDate" 
+                        [placeholder]="'--Select Date--'"
+                        (dateChange)="onFromDateChange($event)">
+                    </app-custom-datepicker>
                 </div>
-
+        
                 <p class="text-lg font-semibold text-[#292929] mx-3 dark:text-white">To :</p>
-
+        
                 <div class="relative w-56 mr-6">
-                    <div
-                        class="border-2 rounded-xl dark:bg-[#363638] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
-                        <input type="date" #toDateInput [(ngModel)]="toDate" name="toDate" [min]="fromDate"
-                            (change)="validateToDate(toDateInput)" class="block w-full appearance-none text-textLight dark:text-textDark bg-white dark:bg-[#292929] px-3 py-2 rounded-xl focus:outline-none 
-                          border border-gray-300 dark:border-gray-600
-                          [color-scheme:light] dark:[color-scheme:dark]
-                          [&::-webkit-calendar-picker-indicator]:filter 
-                          [&::-webkit-calendar-picker-indicator]:cursor-pointer
-                          [&::-webkit-calendar-picker-indicator]:ml-1
-                          dark:[&::-webkit-calendar-picker-indicator]:invert
-                          [&::-webkit-datetime-edit]:text-gray-800
-                          dark:[&::-webkit-datetime-edit]:text-gray-200
-                          [&::-webkit-datetime-edit-fields-wrapper]:text-gray-800
-                          dark:[&::-webkit-datetime-edit-fields-wrapper]:text-gray-200" />
-                    </div>
+                    <app-custom-datepicker 
+                        [selectedDate]="toDate" 
+                        [placeholder]="'--Select Date--'"
+                        (dateChange)="onToDateChange($event)">
+                    </app-custom-datepicker>
                 </div>
-
-
+        
                 <button (click)="goBtn()"
-                    class="bg-[#415CFF]  text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-lg ml-5  dark:text-textDark">Go</button>
+                    class="bg-[#415CFF] text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-lg ml-5 dark:text-textDark">
+                    Go
+                </button>
             </div>
         </div>
 

@@ -11,10 +11,11 @@ import Swal from 'sweetalert2';
 import { environment } from '../../../environments/environment';
 import { TokenServiceService } from '../../../services/Token/token-service.service';
 import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
+import { CustomDatepickerComponent } from '../../../components/custom-datepicker/custom-datepicker.component';
 @Component({
   selector: 'app-expenses',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent, SerchableDropdownComponent ],
+  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent, SerchableDropdownComponent, CustomDatepickerComponent ],
   templateUrl: './expenses.component.html',
   styleUrl: './expenses.component.css',
   providers: [DatePipe]
@@ -117,7 +118,7 @@ export class ExpensesComponent implements OnInit {
 
   fetchFilteredPayments(page: number = 1, limit: number = this.itemsPerPage) {
     this.isLoading = true;
-
+  
     this.ReportSrv.getAllPayments(
       page,
       limit,
@@ -182,60 +183,80 @@ export class ExpensesComponent implements OnInit {
     return selectedCenter ? `${selectedCenter.regCode} - ${selectedCenter.centerName}` : 'Centres';
   }
 
-  validateToDate(toDateInput: HTMLInputElement) {
+  onFromDateChange(date: string | Date | null) {
+    const selectedDate = date as string || '';
+    
+    // Validate against max date (today)
+    if (selectedDate && selectedDate > this.maxDate) {
+      this.toastSrv.warning("From date cannot be in the future.");
+      return;
+    }
+    
+    this.fromDate = selectedDate;
+    this.validateFromDate();
+  }
+  
+  onToDateChange(date: string | Date | null) {
+    const selectedDate = date as string || '';
+    
+    // Validate against max date (today)
+    if (selectedDate && selectedDate > this.maxDate) {
+      this.toastSrv.warning("To date cannot be in the future.");
+      return;
+    }
+    
+    this.toDate = selectedDate;
+    this.validateToDate();
+  }
+  
+  validateToDate() {
     const from = this.fromDate ? new Date(this.fromDate) : null;
     const to = this.toDate ? new Date(this.toDate) : null;
-
+  
     // Always clear toDate if fromDate is not properly set
     if (!from || isNaN(from.getTime())) {
       if (this.toDate) {
-        this.toDate = '';           // Clear model
-        toDateInput.value = '';     // Clear input field directly
+        this.toDate = '';
         console.log(this.toDate);
       }
       this.toastSrv.warning("Please select the 'From' date first.");
       return;
     }
-
+  
     // If toDate is set, check if it's valid against fromDate
     if (to && !isNaN(to.getTime())) {
       if (to <= from) {
-        this.toDate = '';           // Clear model
-        toDateInput.value = '';     // Clear input field directly
-        this.toastSrv.warning("The 'To' date cannot be earlier than or same to the 'From' date.");
+        this.toDate = '';
+        this.toastSrv.warning("The 'To' date cannot be earlier than or same as the 'From' date.");
       }
     }
   }
-
-
-
+  
   validateFromDate() {
-    // Case 1: User hasn't selected fromDate yet
+    // Case 1: User hasn't selected toDate yet
     if (!this.toDate) {
       return;
     }
-
-    // Case 2: toDate is earlier than fromDate
+  
+    // Case 2: Check if current toDate is still valid with new fromDate
     if (this.toDate) {
       const from = new Date(this.fromDate);
       const to = new Date(this.toDate);
-
+  
       if (to <= from) {
-        this.fromDate = ''; // Reset toDate
-        this.toastSrv.warning("The 'From' date cannot be Later than or same to the 'From' date.");
+        this.toDate = ''; // Reset toDate
+        this.toastSrv.warning("The 'To' date has been cleared because it was earlier than or same as the new 'From' date.");
       }
     }
   }
-
-
+  
   goBtn() {
     if (!this.fromDate || !this.toDate) {
       this.toastSrv.warning("Please select a date range to view the data");
       return;
     }
-
+  
     this.isDateFilterSet = true;
-
     this.fetchFilteredPayments();
   }
 

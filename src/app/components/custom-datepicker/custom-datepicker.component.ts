@@ -11,9 +11,10 @@ import { FormsModule } from '@angular/forms';
 })
 export class CustomDatepickerComponent {
 
-  @Input() selectedDate: string | Date | null = null;
+@Input() selectedDate: string | Date | null = null;
 @Output() selectedDateChange = new EventEmitter<string | Date | null>();
 @Output() dateChange = new EventEmitter<string | Date | null>();
+@Input() placeholder: string = 'Date';
   
 
   showCalendar = false;

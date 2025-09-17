@@ -11,12 +11,13 @@ import Swal from 'sweetalert2';
 import { environment } from '../../../environments/environment';
 import { TokenServiceService } from '../../../services/Token/token-service.service';
 import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
+import { CustomDatepickerComponent } from '../../../components/custom-datepicker/custom-datepicker.component';
 
 @Component({
   selector: 'app-collection',
   standalone: true,
   imports: [
-    CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent, SerchableDropdownComponent
+    CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent, SerchableDropdownComponent, CustomDatepickerComponent
   ],
   templateUrl: './collection.component.html',
   styleUrl: './collection.component.css',
@@ -118,7 +119,7 @@ export class CollectionComponent implements OnInit {
 
   fetchFilteredPayments(page: number = 1, limit: number = this.itemsPerPage) {
     this.isLoading = true;
-
+  
     this.ReportSrv.getAllCollections(
       page,
       limit,
@@ -141,7 +142,7 @@ export class CollectionComponent implements OnInit {
         this.totalItems = res.total;
         this.hasData = res.items.length > 0;
         this.isLoading = false;
-
+  
         // Calculate the total amount whenever new data is fetched
         this.calculateTotalPayments();
       },
@@ -194,56 +195,63 @@ export class CollectionComponent implements OnInit {
     return selectedCenter ? `${selectedCenter.regCode} - ${selectedCenter.centerName}` : 'Centres';
   }
 
-  validateToDate(toDateInput: HTMLInputElement) {
+  onFromDateChange(date: string | Date | null) {
+    const selectedDate = date as string || '';
+    this.fromDate = selectedDate;
+    this.validateFromDate();
+  }
+  
+  onToDateChange(date: string | Date | null) {
+    const selectedDate = date as string || '';
+    this.toDate = selectedDate;
+    this.validateToDate();
+  }
+  
+  validateToDate() {
     // Case 1: User hasn't selected fromDate yet
     if (!this.fromDate) {
-      this.toDate = '';            // Clear model
-      toDateInput.value = '';      // Clear input field
+      this.toDate = '';
       this.toastSrv.warning("Please select the 'From' date first.");
       return;
     }
-
+  
     // Case 2: toDate is earlier than fromDate
     if (this.toDate) {
       const from = new Date(this.fromDate);
       const to = new Date(this.toDate);
-
+  
       if (to <= from) {
-        this.toDate = '';        // Clear model
-        toDateInput.value = '';  // Clear input field
-        this.toastSrv.warning("The 'To' date cannot be earlier than or same to the 'From' date.");
+        this.toDate = '';
+        this.toastSrv.warning("The 'To' date cannot be earlier than or same as the 'From' date.");
       }
     }
   }
-
-
+  
   validateFromDate() {
-    // Case 1: User hasn't selected fromDate yet
+    // Case 1: User hasn't selected toDate yet
     if (!this.toDate) {
       return;
     }
-
-    // Case 2: toDate is earlier than fromDate
+  
+    // Case 2: Check if current toDate is still valid with new fromDate
     if (this.toDate) {
       const from = new Date(this.fromDate);
       const to = new Date(this.toDate);
-
+  
       if (to <= from) {
-        this.fromDate = ''; // Reset toDate
-        this.toastSrv.warning("The 'From' date cannot be Later than or same to the 'From' date.");
+        this.toDate = ''; // Reset toDate
+        this.toastSrv.warning("The 'To' date has been cleared because it was earlier than or same as the new 'From' date.");
       }
     }
   }
-
-
+  
   goBtn() {
     if (!this.fromDate || !this.toDate) {
       this.toastSrv.warning("Please fill in all fields");
       return;
     }
-
+  
     this.isDateFilterSet = true;
-
     this.fetchFilteredPayments();
   }
 

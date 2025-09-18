@@ -39,8 +39,8 @@ export class ProfileComponent implements OnInit {
       this.officerObj = res.officerData.collectionOfficer;
       console.log('this.officerObj', this.officerObj)
       this.isLoading = false;
-      this.phone1 = this.officerObj.phoneNumber01 === null ? '-' : this.officerObj.phoneCode01 + '-' + this.officerObj.phoneNumber01
-      this.phone2 = this.officerObj.phoneNumber02 === null ? '-' : this.officerObj.phoneCode02 + '-' + this.officerObj.phoneNumber02;
+      // this.phone1 = this.officerObj.phoneNumber01 === null ? '-' : this.officerObj.phoneCode01 + '-' + this.officerObj.phoneNumber01
+      // this.phone2 = this.officerObj.phoneNumber02 === null ? '-' : this.officerObj.phoneCode02 + '-' + this.officerObj.phoneNumber02;
     });
   }
 

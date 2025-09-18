@@ -76,7 +76,7 @@ export class ReportServiceService {
     });
   }
 
-  getCollectionDailyReport(id: number, date: string): Observable<any> {
+  getCollectionDailyReport(id: number, date: string | Date | null): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
@@ -90,7 +90,7 @@ export class ReportServiceService {
   }
 
 
-  getCollectionmonthlyReportOfficerData(id: number, startDate: Date, endDate: Date): Observable<any> {
+  getCollectionmonthlyReportOfficerData(id: number, startDate: Date | null, endDate: Date | null): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',

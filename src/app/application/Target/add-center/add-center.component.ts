@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
@@ -7,6 +7,7 @@ import { TargetService } from '../../../services/Target-service/target.service'
 import Swal from 'sweetalert2';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { Location } from '@angular/common';
+import { Country, COUNTRIES } from '../../../../assets/country-data';
 
 @Component({
   selector: 'app-add-center',
@@ -76,16 +77,60 @@ export class AddCenterComponent implements OnInit {
   // Districts filtered by selected province
   filteredDistricts: { name: string, province: string }[] = [];
 
+  countries: Country[] = COUNTRIES;
+  selectedCountry1: Country | null = null;
+  selectedCountry2: Country | null = null;
+
+  dropdownOpen = false;
+  dropdownOpen2 = false;
+
   constructor(
     private router: Router,
     private toastSrv: ToastAlertService,
     private targetService: TargetService,
     private location: Location
-  ) { }
+  ) {
+    const defaultCountry = this.countries.find(c => c.code === 'lk') || null;
+    this.selectedCountry1 = defaultCountry;
+    this.selectedCountry2 = defaultCountry;
+  }
 
   ngOnInit(): void {
     this.updateFilteredDistricts(); // Initialize filtered districts
   }
+
+  @HostListener('document:click', ['$event.target'])
+onClick(targetElement: HTMLElement) {
+  const insideDropdown1 = targetElement.closest('.dropdown-wrapper-1');
+  const insideDropdown2 = targetElement.closest('.dropdown-wrapper-2');
+
+  // Close dropdowns only if click is outside their wrapper
+  if (!insideDropdown1) {
+    this.dropdownOpen = false;
+  }
+  if (!insideDropdown2) {
+    this.dropdownOpen2 = false;
+  }
+}
+
+selectCountry1(country: Country) {
+  this.selectedCountry1 = country;
+  this.centerData.phoneNumber01Code = country.dialCode; // update ngModel
+  console.log('sdsf', this.centerData.phoneNumber01Code)
+  this.dropdownOpen = false;
+}
+
+selectCountry2(country: Country) {
+  this.selectedCountry2 = country;
+  this.centerData.phoneNumber02Code = country.dialCode; // update ngModel
+  console.log('sdsf', this.centerData.phoneNumber02Code)
+  this.dropdownOpen2 = false;
+}
+
+// get flag
+getFlagUrl(code: string): string {
+  return `https://flagcdn.com/24x18/${code}.png`;
+}
 
   // Update the filtered districts based on selected province
   updateFilteredDistricts() {

@@ -8,11 +8,12 @@ import { jsPDF } from 'jspdf';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import html2canvas from 'html2canvas';
 import { ThemeService } from '../../../theme.service';
+import { CustomDatepickerComponent } from '../../../components/custom-datepicker/custom-datepicker.component';
 
 @Component({
   selector: 'app-collection-daily-report',
   standalone: true,
-  imports: [CommonModule, FormsModule, CanvasJSAngularChartsModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, CanvasJSAngularChartsModule, LoadingSpinnerComponent, CustomDatepickerComponent],
   templateUrl: './collection-daily-report.component.html',
   styleUrl: './collection-daily-report.component.css',
   providers: [DatePipe]
@@ -23,7 +24,7 @@ export class CollectionDailyReportComponent implements OnInit {
   officerName!: string;
   empId!: string;
 
-  selectDate: string = '';
+  selectDate: string | Date | null = null;
   loadingChart = true;
   loadingTable = true;
   chartOptions: any;
@@ -55,7 +56,7 @@ export class CollectionDailyReportComponent implements OnInit {
     this.fetchDailyReport();
   }
 
-  fetchDailyReport(date: string = this.selectDate) {
+  fetchDailyReport(date: string | Date | null = this.selectDate) {
     this.loadingTable = true;
     this.loadingChart = true;
     this.isLoading = true;
@@ -99,9 +100,15 @@ export class CollectionDailyReportComponent implements OnInit {
     this.router.navigate(['/reports']); // Change '/reports' to your desired route
   }
 
-  filterByDate() {
+  // filterByDate() {
+  //   this.dailyReportArr = [];
+  //   this.fetchDailyReport(this.selectDate);
+  // }
+
+  onDateChange(newDate: string | Date | null) {
     this.dailyReportArr = [];
-    this.fetchDailyReport(this.selectDate);
+    this.selectDate = newDate;
+    this.fetchDailyReport();
   }
 
   updateChart() {

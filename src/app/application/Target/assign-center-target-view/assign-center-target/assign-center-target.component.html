@@ -1,9 +1,9 @@
 <app-loading-spinner *ngIf="isLoading" />
 
 
-<div *ngIf="!isLoading" class="h-screen py-8">
+<div *ngIf="!isLoading" class="">
     <div class="flex flex-row justify-between items-center">
-        <p class="text-xl font-bold dark:text-white text-[#030308]">{{centerDetails.regCode}}
+        <p class="text-xl font-bold ml-10 text-right dark:text-white text-[#030308]">{{centerDetails.regCode}}
             {{centerDetails.centerName}}</p>
         <div class="flex flex-row items-center gap-5 ">
             <i class="fa-solid fa-list text-2xl dark:text-white ml-8"></i>
@@ -50,7 +50,7 @@
             <table class="w-full divide-y-2 overflow-hidden">
                 <thead class=" dark:bg-[#292929] text-gray-700 dark:text-gray-300">
                     <tr>
-                        <th class="px-6 py-3 text-left font-medium">ITEM ({{countCrops < 10 ? '0' + countCrops :
+                        <th class="px-6 py-3 text-center font-medium">ITEM ({{countCrops < 10 ? '0' + countCrops :
                                 countCrops}})</th>
                         <th class="px-6 py-3 text-left font-medium">Crop</th>
                         <th class="px-6 py-3 text-left font-medium">Variety</th>
@@ -61,13 +61,13 @@
                 </thead>
                 <tbody class="bg-white dark:bg-[#292929]">
                     <tr *ngFor="let item of assignCropsArr; let i = index">
-                        <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
+                        <td class="px-6 py-3 text-center text-sm text-gray-900 dark:text-gray-300">
                             {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }} </td>
-                        <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.cropNameEnglish}}</td>
-                        <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.varietyNameEnglish}}</td>
+                        <td class="px-6 py-3 text-sm text-gray-900 dark:text-gray-300">{{item.cropNameEnglish}}</td>
+                        <td class="px-6 py-3 text-sm text-gray-900 dark:text-gray-300">{{item.varietyNameEnglish}}</td>
 
                         <!-- Grade A Column -->
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300 ">
+                        <td class="px-6 py-3 text-gray-900 dark:text-gray-300 ">
                             <input type="number" [(ngModel)]="item.targetA" name="targetA" min="0" (change)="checkNegativeValue(item, 'A')"
                                 class="border-[#415CFF] dark:bg-[#363636] border-[2px] border-dotted rounded-lg w-20 px-2 py-1 mr-4"
                                 [disabled]="!isNew && !item.editingA" (change)="validateForm()" />

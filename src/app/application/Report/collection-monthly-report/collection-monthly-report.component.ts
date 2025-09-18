@@ -8,11 +8,12 @@ import html2canvas from 'html2canvas';
 import jsPDF from 'jspdf';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
+import { CustomDatepickerComponent } from '../../../components/custom-datepicker/custom-datepicker.component';
 
 @Component({
   selector: 'app-collection-monthly-report',
   standalone: true,
-  imports: [CommonModule, FormsModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent, CustomDatepickerComponent],
   templateUrl: './collection-monthly-report.component.html',
   styleUrl: './collection-monthly-report.component.css',
   providers: [DatePipe]
@@ -23,8 +24,9 @@ export class CollectionMonthlyReportComponent implements OnInit {
   farmerDataArr!: FarmerDetails[]
   officerId!: number;
   currentDate: Date = new Date();
-  startDate!: Date ;
-  endDate!: Date;
+  startDate: string | null = null;
+  endDate: string | null = null;
+
   maxDate: string = new Date().toISOString().split('T')[0];
 
   hasData: boolean = false;
@@ -45,8 +47,13 @@ export class CollectionMonthlyReportComponent implements OnInit {
   }
 
   fetchOfficerData() {
-    this.isLoading = true
-    this.ReportSrv.getCollectionmonthlyReportOfficerData(this.officerId, this.startDate, this.endDate).subscribe(
+    this.isLoading = true;
+    
+    // Convert string dates to Date objects for API call if needed
+    const startDateObj = this.startDate ? new Date(this.startDate) : null;
+    const endDateObj = this.endDate ? new Date(this.endDate) : null;
+    
+    this.ReportSrv.getCollectionmonthlyReportOfficerData(this.officerId, startDateObj, endDateObj).subscribe(
       (res) => {
         this.officerDataObj = res.officer;
         this.farmerDataArr = res.dates;
@@ -60,24 +67,22 @@ export class CollectionMonthlyReportComponent implements OnInit {
       (err) => {
         this.hasData = false;
         this.isLoading = false;
-
       }
-    )
+    );
   }
 
   filterDate() {
-
-    console.log('filterung')
+    console.log('filtering');
     const startEntered = !!this.startDate;
     const endEntered = !!this.endDate;
 
-    console.log(this.startDate, this.endDate)
-  
+    console.log(this.startDate, this.endDate);
+
     if (startEntered && endEntered) {
       this.fetchOfficerData();
     } else {
       let msg = '';
-  
+
       if (!startEntered && !endEntered) {
         msg = 'Please enter both Start Date and End Date.';
       } else if (!startEntered) {
@@ -85,7 +90,7 @@ export class CollectionMonthlyReportComponent implements OnInit {
       } else if (!endEntered) {
         msg = 'Please enter the End Date.';
       }
-  
+
       Swal.fire({
         icon: 'warning',
         title: 'Missing Date Input',
@@ -101,40 +106,91 @@ export class CollectionMonthlyReportComponent implements OnInit {
   }
 
 
-  startDateValidation() {
+  onStartDateChange(selectedDate: string | Date | null) {
+    if (!selectedDate) {
+      this.startDate = null;
+      return;
+    }
+
+    // Convert to Date if it's a string
+    const dateToValidate = typeof selectedDate === 'string' ? new Date(selectedDate) : selectedDate;
+    
+    // Validate the start date
+    if (this.validateStartDate(dateToValidate)) {
+      this.startDate = typeof selectedDate === 'string' ? selectedDate : this.formatDateToString(selectedDate);
+    }
+  }
+
+  // Handle end date changes with validation
+  onEndDateChange(selectedDate: string | Date | null) {
+    if (!selectedDate) {
+      this.endDate = null;
+      return;
+    }
+
+    // Convert to Date if it's a string
+    const dateToValidate = typeof selectedDate === 'string' ? new Date(selectedDate) : selectedDate;
+    
+    // Validate the end date
+    if (this.validateEndDate(dateToValidate)) {
+      this.endDate = typeof selectedDate === 'string' ? selectedDate : this.formatDateToString(selectedDate);
+    }
+  }
+
+  // Start date validation logic
+  private validateStartDate(selectedDate: Date): boolean {
     const today = new Date();
-    const selectedDate = new Date(this.startDate);
+    today.setHours(23, 59, 59, 999); // Set to end of today for comparison
 
     // Check if start date is in the future
     if (selectedDate > today) {
       this.toastSrv.warning('<b>Start date</b> cannot be a future date.');
-      this.startDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());
-      return;
+      this.startDate = this.formatDateToString(new Date());
+      return false;
     }
 
     // Check if end date is already selected and start date is after end date
     if (this.endDate && selectedDate > new Date(this.endDate)) {
       this.toastSrv.warning('<b>Start date</b> cannot be after the selected end date.');
-      this.startDate = new Date(this.endDate);
+      this.startDate = this.endDate;
+      return false;
     }
+
+    return true;
   }
 
-  endDateValidation() {
+  // End date validation logic
+  private validateEndDate(selectedDate: Date): boolean {
     const today = new Date();
-    const selectedEndDate = new Date(this.endDate);
+    today.setHours(23, 59, 59, 999); // Set to end of today for comparison
 
     if (!this.startDate) {
-      this.toastSrv.success('Please select a <b>start date</b> before selecting an end date.')
-
-      this.endDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());;
-      return;
+      this.toastSrv.success('Please select a <b>start date</b> before selecting an end date.');
+      this.endDate = null;
+      return false;
     }
 
-    if (selectedEndDate > today) {
-
-      this.toastSrv.error('<b>End date cannot be a future date.')
-      this.endDate = new Date(today.getFullYear(), today.getMonth(), today.getDate());;
+    if (selectedDate > today) {
+      this.toastSrv.error('<b>End date cannot be a future date.');
+      this.endDate = this.formatDateToString(new Date());
+      return false;
     }
+
+    // Check if end date is before start date
+    if (selectedDate < new Date(this.startDate)) {
+      this.toastSrv.warning('<b>End date</b> cannot be before the start date.');
+      return false;
+    }
+
+    return true;
+  }
+
+  // Helper method to format Date to string
+  private formatDateToString(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
   }
 
 

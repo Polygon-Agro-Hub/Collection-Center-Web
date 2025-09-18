@@ -111,8 +111,8 @@ export class ViewRecivedComplaintComponent implements OnInit {
         popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
         title: 'dark:text-white',
         icon: '!border-gray-200 dark:!border-gray-500',
-        confirmButton: '!bg-[#3085d6] !text-white hover:!bg-[#3085d6] cursor-default',
-        cancelButton: 'hover:!bg-[#d33] cursor-default',
+        // confirmButton: '!bg-[#3085d6] !text-white hover:!bg-[#3085d6] cursor-default',
+        // cancelButton: 'hover:!bg-[#d33] cursor-default',
         actions: 'gap-2'
       }
     })

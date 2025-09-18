@@ -41,6 +41,8 @@ export class ExpensesComponent implements OnInit {
   toDate: string = '';
   maxDate: string = new Date().toISOString().split('T')[0];
 
+  dateValidationMassage: string = '';
+
   isPopupVisible: boolean = false;
   isLoading: boolean = false;
   isDateFilterSet: boolean = false;

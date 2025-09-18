@@ -175,6 +175,8 @@ export class ViewOfficersComponent implements OnInit {
       (res) => {
         this.OfficerArr = res.items
         this.totalItems = res.total
+
+        console.log('total', this.totalItems)
         if (res.items.length === 0) {
           this.hasData = false;
         } else {

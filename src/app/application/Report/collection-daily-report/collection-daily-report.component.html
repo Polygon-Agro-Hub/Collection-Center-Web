@@ -13,7 +13,7 @@
       <div class="flex flex-row items-center gap-4">
         <p class="text-xl font-semibold dark:text-white">Date :</p>
         <div class="relative w-48 mr-6">
-          <div
+          <!-- <div
             class="border-2 rounded-xl dark:bg-[#363638] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
             <input type="date" [(ngModel)]="selectDate" (change)="filterByDate()" class="block w-full appearance-none text-textLight dark:text-textDark bg-white dark:bg-[#292929] px-3 py-2 rounded-xl focus:outline-none 
                           border border-gray-300 dark:border-gray-600
@@ -26,7 +26,12 @@
                           dark:[&::-webkit-datetime-edit]:text-gray-200
                           [&::-webkit-datetime-edit-fields-wrapper]:text-gray-800
                           dark:[&::-webkit-datetime-edit-fields-wrapper]:text-gray-200" />
-          </div>
+          </div> -->
+
+          <app-custom-datepicker
+  [selectedDate]="selectDate"
+  (dateChange)="onDateChange($event)"
+></app-custom-datepicker>
         </div>
       </div>
     </div>

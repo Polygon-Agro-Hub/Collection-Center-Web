@@ -643,7 +643,7 @@
                         class="mt-1 block w-full p-2 border border-[#D9D9D9] hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                         #accHolderNameInput="ngModel" required maxlength="50" pattern="^[a-zA-Z0-9\s.']*$"
                         (keydown)="blockSpecialChars($event)"
-                        (input)="onTrimInput($event, personalData, 'accHolderName')" />
+                        (input)="onTrimInputCapitalize($event, personalData, 'accHolderName')" />
 
                     <div *ngIf="accHolderNameInput.touched && !personalData.accHolderName"
                         class="text-red-500 text-sm mt-1">

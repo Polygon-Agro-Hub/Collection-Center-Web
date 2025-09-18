@@ -1111,6 +1111,19 @@ onTrimInput(event: Event, modelRef: any, fieldName: string): void {
   inputElement.value = trimmedValue;
 }
 
+onTrimInputCapitalize(event: Event, modelRef: any, fieldName: string): void {
+  const inputElement = event.target as HTMLInputElement;
+  let trimmedValue = inputElement.value.trimStart();
+
+  // ✅ Capitalize the first letter if value is not empty
+  if (trimmedValue.length > 0) {
+    trimmedValue = trimmedValue.charAt(0).toUpperCase() + trimmedValue.slice(1);
+  }
+
+  modelRef[fieldName] = trimmedValue;
+  inputElement.value = trimmedValue;
+}
+
 capitalizeFirstLetter(field: keyof typeof this.personalData) {
   if (this.personalData[field]) {
     // Trim spaces

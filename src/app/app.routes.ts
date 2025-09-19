@@ -394,6 +394,10 @@ export const routes: Routes = [
                         path: 'claim-officer',
                         component: ClaimOfficerComponent
                     },
+                    {
+                        path: 'view-officer-target/:officerId/:centerName',
+                        component: ViewOfficerTargetComponent
+                    },
                 ]
             },
 

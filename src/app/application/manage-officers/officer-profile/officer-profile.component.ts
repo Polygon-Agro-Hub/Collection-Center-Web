@@ -30,7 +30,6 @@ export class OfficerProfileComponent implements OnInit {
   centerId!: number;
 
 
-
   constructor(
     private ManageOficerSrv: ManageOfficersService,
     private router: Router,
@@ -581,7 +580,12 @@ doc.roundedRect(bankBoxX, bankBoxY, bankBoxWidth, bankBoxHeight, 3, 3, "S");
   }
 
   viewOfficerTarget(officerId: number, centerName: string) {
-    this.router.navigate([`/manage-officers/view-officer-target/${officerId}/${centerName}`]);
+
+    if (this.logingRole === 'Collection Center Head' || this.logingRole === 'Collection Center Manager') {
+      this.router.navigate([`/manage-officers/view-officer-target/${officerId}/${centerName}`]);
+    } else if (this.logingRole === 'Distribution Center Head' || this.logingRole === 'Distribution Center Manager') {
+      this.router.navigate([`/distribution-officers/view-officer-target/${officerId}/${centerName}`]);
+    } 
   }
 
   cancelDisclaim() {

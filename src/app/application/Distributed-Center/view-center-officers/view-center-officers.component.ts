@@ -79,7 +79,7 @@ export class ViewCenterOfficersComponent implements OnInit {
   }
 
   isRoleDropdownOpen = false;
-  roleDropdownOptions = ['Distribution Center Manager', 'Distribution Officer'];
+  roleDropdownOptions = ['Distribution Centre Manager', 'Distribution Officer'];
 
   toggleRoleDropdown() {
     this.isRoleDropdownOpen = !this.isRoleDropdownOpen;
@@ -246,22 +246,45 @@ export class ViewCenterOfficersComponent implements OnInit {
   openPopup(item: any) {
     this.isPopupVisible = true;
 
-    const tableHtml = `
-      <div class="container mx-auto">
-        <h1 class="text-center text-2xl font-bold mb-4 dark:text-white">Officer Name: ${item.firstNameEnglish}</h1>
-        <div>
-          <p class="text-center dark:text-white">Are you sure you want to approve or reject this Officer?</p>
-        </div>
-        <div class="flex justify-center mt-4">
-          <button id="rejectButton" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg mr-2">
-            Reject
-          </button>
-          <button id="approveButton" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
-            Approve
-          </button>
-        </div>
-      </div>
-    `;
+    let message = '';
+
+if (item.status === 'Approved') {
+  message = `Are you sure you want to reject this ${item.jobRole} ?`;
+} 
+else if (item.status === 'Rejected') {
+  message = `Are you sure you want to approve this ${item.jobRole} ?`;
+} 
+else if (item.status === 'Not Approved') {
+  message = `Are you sure you want to approve or reject this ${item.jobRole} ?`;
+} 
+else {
+  message = ``;
+}
+
+const rejectButton = (item.status === 'Approved' || item.status === 'Not Approved')
+  ? `<button id="rejectButton" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg mr-2">
+       Reject
+     </button>`
+  : '';
+
+const approveButton = (item.status === 'Rejected' || item.status === 'Not Approved')
+  ? `<button id="approveButton" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
+       Approve
+     </button>`
+  : '';
+
+const tableHtml = `
+  <div class="container mx-auto">
+    <h1 class="text-center text-2xl font-bold mb-4 dark:text-white">Officer Name: ${item.firstNameEnglish}</h1>
+    <div>
+      <p class="text-center dark:text-white">${message}</p>
+    </div>
+    <div class="flex justify-center mt-4">
+      ${rejectButton}
+      ${approveButton}
+    </div>
+  </div>
+`;
 
     const swalInstance = Swal.fire({
       html: tableHtml,
@@ -312,7 +335,7 @@ export class ViewCenterOfficersComponent implements OnInit {
           this.isLoading = false;
           swalInstance.close();
           const action = status === 'Approved' ? 'approved' : 'rejected';
-          this.toastSrv.success(`The collection was ${action} successfully.`);
+          this.toastSrv.success(`The Distribution Officer ${action} successfully.`);
           this.fetchByRole();
         } else {
           this.isLoading = false;
@@ -351,6 +374,11 @@ export class ViewCenterOfficersComponent implements OnInit {
   // }
 
   applyRoleFilters() {
+
+    if (this.selectRole === 'Distribution Centre Manager') {
+      this.selectRole = 'Distribution Center Manager'
+    }
+
     this.fetchByRole();
   }
 

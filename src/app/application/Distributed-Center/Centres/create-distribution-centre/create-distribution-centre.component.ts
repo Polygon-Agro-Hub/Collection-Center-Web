@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, ViewChild  } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild  } from '@angular/core';
 import { FormsModule, NgForm  } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastAlertService } from '../../../../services/toast-alert/toast-alert.service';
@@ -8,6 +8,7 @@ import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/
 import { Location } from '@angular/common';
 import { DistributionServiceService } from '../../../../services/Distribution-Service/distribution-service.service';
 import { SerchableDropdownComponent } from '../../../../components/serchable-dropdown/serchable-dropdown.component';
+import { Country, COUNTRIES } from '../../../../../assets/country-data';
 
 @Component({
   selector: 'app-create-distribution-centre',
@@ -30,6 +31,13 @@ export class CreateDistributionCentreComponent implements OnInit {
   phone01: false,
   phone02: false,
 };
+
+  countries: Country[] = COUNTRIES;
+  selectedCountry1: Country | null = null;
+  selectedCountry2: Country | null = null;
+
+  dropdownOpen = false;
+  dropdownOpen2 = false;  
 
 
   provinces: string[] = [
@@ -83,7 +91,11 @@ export class CreateDistributionCentreComponent implements OnInit {
     private toastSrv: ToastAlertService,
     private DistributionService: DistributionServiceService,
     private location: Location
-  ) { }
+  ) { 
+    const defaultCountry = this.countries.find(c => c.code === 'lk') || null;
+    this.selectedCountry1 = defaultCountry;
+    this.selectedCountry2 = defaultCountry;
+  }
 
   ngOnInit(): void {
     // this.updateFilteredDistricts(); // Initialize filtered districts
@@ -114,6 +126,39 @@ export class CreateDistributionCentreComponent implements OnInit {
   //       });
   //   }
   // }
+
+  @HostListener('document:click', ['$event.target'])
+onClick(targetElement: HTMLElement) {
+  const insideDropdown1 = targetElement.closest('.dropdown-wrapper-1');
+  const insideDropdown2 = targetElement.closest('.dropdown-wrapper-2');
+
+  // Close dropdowns only if click is outside their wrapper
+  if (!insideDropdown1) {
+    this.dropdownOpen = false;
+  }
+  if (!insideDropdown2) {
+    this.dropdownOpen2 = false;
+  }
+}
+
+selectCountry1(country: Country) {
+  this.selectedCountry1 = country;
+  this.centerData.phoneNumber01Code = country.dialCode; // update ngModel
+  console.log('sdsf', this.centerData.phoneNumber01Code)
+  this.dropdownOpen = false;
+}
+
+selectCountry2(country: Country) {
+  this.selectedCountry2 = country;
+  this.centerData.phoneNumber02Code = country.dialCode; // update ngModel
+  console.log('sdsf', this.centerData.phoneNumber02Code)
+  this.dropdownOpen2 = false;
+}
+
+// get flag
+getFlagUrl(code: string): string {
+  return `https://flagcdn.com/24x18/${code}.png`;
+}
 
   updateRegCode() {
     console.log('update reg code');

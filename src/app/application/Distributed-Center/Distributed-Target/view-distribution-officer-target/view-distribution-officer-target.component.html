@@ -126,7 +126,7 @@
                     <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">Invoice No</th>
                     <th class="px-6 py-3 text-center text-sm font-medium text-[#4B5563] dark:text-white">Scheduled Delivery</th>
                     <th class="px-6 py-3 text-center text-sm font-medium text-[#4B5563] dark:text-white">Status</th>
-                    <th class="px-6 py-3 text-center text-sm font-medium text-[#4B5563] dark:text-white">Completing Status</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">Completing Status</th>
                 </tr>
             </thead>
             <tbody class="bg-white dark:bg-[#1D1D1F] text-[#000000] dark:border-[#1D1D1F] cursor-default">
@@ -142,7 +142,7 @@
                     <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.invNo}}</td>
                     <td class="px-6 py-4 text-sm text-center font-medium text-gray-900 dark:text-[#C5C5C5]">{{ getDisplayDate(item.sheduleDate) }} {{ removeWithin(item.sheduleTime) }}</td>
                     <!-- <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.packagePackStatus}}</td> -->
-                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5] cursor-default">
+                    <td class="px-6 py-4 text-sm text-left text-gray-900 dark:text-[#C5C5C5] cursor-default">
 
                         <div class="flex font-medium items-center justify-center h-full">
                             <span *ngIf="item.combinedStatus ==='Completed'"

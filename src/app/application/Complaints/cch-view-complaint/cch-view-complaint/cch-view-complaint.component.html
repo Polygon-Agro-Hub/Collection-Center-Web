@@ -1,4 +1,4 @@
-<app-loading-spinner *ngIf="isLoading"/>
+<app-loading-spinner *ngIf="isLoading" />
 
 <div class="flex gap-0 mb-4 mr-5 ml-0">
     <p class="font-semibold text[#424242]  dark:text-[#FFFFFF] dark:bg-blacks cursor-pointer">Complaints</p>
@@ -49,15 +49,29 @@
                 <label for="category" class="block text-sm font-medium text-gray-700 dark:text-textDark mb-2">
                     Select Complain Category
                 </label>
-                <select id="category" [(ngModel)]="category"
+                <!-- <select id="category" [(ngModel)]="category"
                     class="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent mb-4 dark:bg-[#292929] dark:text-textDark">
                     <option value="">Select Category</option>
                     <option *ngFor="let item of categoryArr" [value]="item.id">{{item.categoryEnglish}}</option>
-                </select>
+                </select> -->
+
+                <app-searchable-dropdown
+              [items]="categoryDropdownItems"
+              placeholder="Select Category"
+              searchPlaceholder="Search categories..."
+              [(ngModel)]="category"
+              (selectionChange)="onCategorySelectionChange($event)"
+              [clearable]="true"
+              [showSelected]="true"
+              [disabled]="false"
+              class="block w-full mb-4"
+            ></app-searchable-dropdown>
 
                 <!-- Textarea -->
                 <textarea rows="4" [(ngModel)]="complaint" placeholder="Kindly submit your complaint here"
-                    class="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent resize-none mb-4 dark:bg-[#292929] dark:text-textDark"></textarea>
+                    class="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent resize-none mb-4 dark:bg-[#292929] dark:text-textDark"
+                    (input)="capitalizeFirstLetter($event)">
+                </textarea>
 
                 <!-- Buttons -->
                 <div class="flex justify-center space-x-4">

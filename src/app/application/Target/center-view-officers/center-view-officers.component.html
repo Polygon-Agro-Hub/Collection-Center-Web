@@ -54,8 +54,7 @@
                             value="Collection Officer">Collection Officer</option>
                         <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
                             value="Customer Officer">Customer Officer</option>
-                        <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                            value="Driver">Driver</option>
+                        
                     </select>
         
                     <!-- Custom dropdown trigger -->
@@ -268,12 +267,14 @@
                 </table>
             </div>
 
-            <div class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#262f45] text-right">
+            <div class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#1D1D1F] text-right">
                 <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true"
                     [previousLabel]="'Previous'" [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'"
                     [screenReaderPageLabel]="'page'" [screenReaderCurrentLabel]="'Youre on page'">
                 </pagination-controls>
             </div>
         </div>
+
+        
     </div>
 </div>

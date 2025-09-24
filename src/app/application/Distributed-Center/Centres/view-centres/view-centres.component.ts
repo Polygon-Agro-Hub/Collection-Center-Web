@@ -6,12 +6,13 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { DropdownModule } from 'primeng/dropdown';
 import { DistributionServiceService } from '../../../../services/Distribution-Service/distribution-service.service'
 import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
+import { SerchableDropdownComponent } from '../../../../components/serchable-dropdown/serchable-dropdown.component';
 // import { AddCenterComponent } from '../add-center/add-center.component';
 
 @Component({
   selector: 'app-view-centres',
   standalone: true,
-  imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, LoadingSpinnerComponent, SerchableDropdownComponent],
   templateUrl: './view-centres.component.html',
   styleUrl: './view-centres.component.css'
 })
@@ -33,17 +34,19 @@ export class ViewCentresComponent implements OnInit {
     isProvinceDropdownOpen = false;
     isDistrictDropdownOpen = false;
 
-    provinces: string[] = [
-        'Western',
-        'Central',
-        'Southern',
-        'Northern',
-        'Eastern',
-        'North Western',
-        'North Central',
-        'Uva',
-        'Sabaragamuwa'
-    ];
+    itemId1: number | null = null;
+    itemId2: number | null = null;
+    provinceItems = [
+        { value: 'Western', label: 'Western' },
+        { value: 'Central', label: 'Central' },
+        { value: 'Southern', label: 'Southern' },
+        { value: 'Northern', label: 'Northern' },
+        { value: 'Eastern', label: 'Eastern' },
+        { value: 'North Western', label: 'North Western' },
+        { value: 'North Central', label: 'North Central' },
+        { value: 'Uva', label: 'Uva' },
+        { value: 'Sabaragamuwa', label: 'Sabaragamuwa' }
+      ];
 
     // Define all districts with their provinces
     allDistricts = [
@@ -74,8 +77,11 @@ export class ViewCentresComponent implements OnInit {
         { name: 'Vavuniya', province: 'Northern' },
     ];
 
+    // districtItems = this.allDistricts.map(d => ({ value: d.name, label: d.name }));
+
     // Districts filtered by selected province
     filteredDistricts: { name: string, province: string }[] = [];
+    districtItems = this.filteredDistricts.map(d => ({ value: d.name, label: d.name }));
 
     constructor(
         private router: Router,
@@ -109,6 +115,7 @@ export class ViewCentresComponent implements OnInit {
       this.isLoading = true;
       this.DistributionSrv.getDistributionCenterDetails(this.currentPage, this.itemsPerPage, province, district, search).subscribe(
           (res) => {
+            console.log('res', res)
               this.itemsArr = res.items;
               this.totalItems = res.totalItems;
               this.countOfOfficers = res.items.length;
@@ -141,21 +148,21 @@ toggleProvinceDropdown() {
     }
 }
 
-selectProvinceOption(province: string) {
-    this.selectProvince = province;
-    this.isProvinceDropdownOpen = false;
-    this.filterProvince();
-}
+// selectProvinceOption(province: string) {
+//     this.selectProvince = province;
+//     this.isProvinceDropdownOpen = false;
+//     this.filterProvince();
+// }
 
-clearProvinceFilter(event?: MouseEvent) {
-    if (event) {
-        event.stopPropagation(); // Prevent triggering the dropdown toggle
-    }
-    this.selectProvince = '';
-    this.selectDistrict = ''; // Also clear district when province is cleared
-    this.updateFilteredDistricts(); // Update district list
-    this.fetchAllDistributionCenterDetails();
-}
+// clearProvinceFilter(event?: MouseEvent) {
+//     if (event) {
+//         event.stopPropagation(); // Prevent triggering the dropdown toggle
+//     }
+//     this.selectProvince = '';
+//     this.selectDistrict = ''; // Also clear district when province is cleared
+//     this.updateFilteredDistricts(); // Update district list
+//     this.fetchAllDistributionCenterDetails();
+// }
 
 // District dropdown methods
 toggleDistrictDropdown() {
@@ -166,11 +173,11 @@ toggleDistrictDropdown() {
     }
 }
 
-selectDistrictOption(districtName: string) {
-    this.selectDistrict = districtName;
-    this.isDistrictDropdownOpen = false;
-    this.filterDistrict();
-}
+// selectDistrictOption(districtName: string) {
+//     this.selectDistrict = districtName;
+//     this.isDistrictDropdownOpen = false;
+//     this.filterDistrict();
+// }
 
 clearDistrictFilter(event?: MouseEvent) {
     if (event) {
@@ -181,38 +188,71 @@ clearDistrictFilter(event?: MouseEvent) {
 }
 
 // Updated existing methods
-filterProvince() {
-    this.selectDistrict = ''; // Clear district selection when province changes
-    this.updateFilteredDistricts(); // Update district list based on selected province
-    this.fetchAllDistributionCenterDetails();
-}
+// filterProvince() {
+//     this.selectDistrict = ''; // Clear district selection when province changes
+//     this.updateFilteredDistricts(); // Update district list based on selected province
+//     this.fetchAllDistributionCenterDetails();
+// }
 
-filterDistrict() {
-    // When district is selected, automatically set the province
-    if (this.selectDistrict) {
-        const district = this.allDistricts.find(d => d.name === this.selectDistrict);
-        if (district) {
-            this.selectProvince = district.province;
-            // Update filtered districts based on the selected province
-            this.updateFilteredDistricts();
-        }
-    }
+filterDistrict(districtName: string | null) {
+    if (this.itemId1 !== null) {
+        this.selectDistrict = ''
+        this.fetchAllDistributionCenterDetails();
+    } // keep your original guard
+
+    const selected = this.allDistricts.find(d => d.name === districtName || '');
+    this.selectProvince = selected ? selected.province : '';
+    console.log('selectProvince', this.selectProvince)
+    console.log('selectDistrict', this.selectDistrict)
+
     this.fetchAllDistributionCenterDetails();
-}
+  }
+
+  filterProvince(provinceName: string | null) {
+    if (this.itemId2 !== null) {
+        this.selectProvince = ''
+        this.fetchAllDistributionCenterDetails();
+    }; // keep your original guard
+
+    const selected = this.provinceItems.find(p => p.value === provinceName || '');
+    this.updateFilteredDistricts(); 
+    // this.selectProvince = selected ? selected.province : '';
+    console.log('selectProvince', this.selectProvince)
+    console.log('selectDistrict', this.selectDistrict)
+
+    this.fetchAllDistributionCenterDetails();
+  }
+
+
+// filterDistrict() {
+//     // When district is selected, automatically set the province
+//     if (this.selectDistrict) {
+//         const district = this.allDistricts.find(d => d.name === this.selectDistrict);
+//         if (district) {
+//             this.selectProvince = district.province;
+//             // Update filtered districts based on the selected province
+//             this.updateFilteredDistricts();
+//         }
+//     }
+//     this.fetchAllDistributionCenterDetails();
+// }
 
 // Update the filtered districts based on selected province
 updateFilteredDistricts() {
     if (this.selectProvince) {
         this.filteredDistricts = this.allDistricts.filter(d => d.province === this.selectProvince);
+       this.districtItems = this.filteredDistricts.map(d => ({ value: d.name, label: d.name }));
     } else {
         this.filteredDistricts = this.allDistricts;
+        console.log('filteredDistricts', this.filteredDistricts)
+        this.districtItems = this.filteredDistricts.map(d => ({ value: d.name, label: d.name }));
     }
 }
 
 // Legacy methods (kept for compatibility, but now called by new methods)
-cancelProvince() {
-    this.clearProvinceFilter();
-}
+// cancelProvince() {
+//     this.clearProvinceFilter();
+// }
 
 cancelDistrict() {
     this.clearDistrictFilter();
@@ -222,9 +262,14 @@ getTotalPages(): number {
     return Math.ceil(this.totalItems / this.itemsPerPage);
 }
 
-navigateToDashboard(id: number) {
-    this.router.navigate([`/centers/center-shashbord/${id}`]);
-}
+navigateToDashboard(id: number, centerName: string, regCode: string) {
+    this.router.navigate([
+      `/distribution-center/center-dashboard`,
+      id,
+      centerName,
+      regCode
+    ]);
+  }
 
 
 addCenter() {
@@ -245,4 +290,9 @@ class CenterData {
   collectionCenterManagerCount!: number
   customerServiceCount!: number
   regCode!: string
+  distributionOfficerCount!: number
+  distributionCenterManagerCount!: number
+  latitude!: string;
+  longitude!: string;
+
 }

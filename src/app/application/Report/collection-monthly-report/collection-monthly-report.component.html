@@ -1,7 +1,8 @@
 <app-loading-spinner *ngIf="isLoading" />
 
 <div *ngIf="!isLoading">
-    <div class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
+    <div
+        class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
         <p (click)="navigateToReports()">Reports</p>
         <p onclick="history.back()">Officer Reports</p>
         <p>Monthly Report</p>
@@ -10,28 +11,27 @@
     <div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg">
         <div class="flex flex-row items-center justify-center">
             <p class="text-xl font-semibold text-[#292929] mx-3 dark:text-white">From :</p>
-
-            <div class="relative w-56 mr-10">
-                <div
-                    class="border-2 rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
-                    <input type="date" [(ngModel)]="startDate" (change)="startDateValidation()"
-                        class="block w-full appearance-none text-textLight dark:text-textDark dark:bg-[#292929] px-3 py-2 rounded-xl focus:outline-none custom-date-input" />
-                </div>
+        
+            <div class="mr-10">
+                <app-custom-datepicker 
+                    [selectedDate]="startDate" 
+                    (dateChange)="onStartDateChange($event)"
+                    placeholder="Start Date">
+                </app-custom-datepicker>
             </div>
-
+        
             <p class="text-xl font-semibold text-[#292929] mx-3 dark:text-white">To :</p>
-
-            <div class="relative w-56 mr-6">
-                <div
-                    class="border-2 rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
-                    <input type="date" [(ngModel)]="endDate" (change)="endDateValidation()"
-                        [min]="startDate | date:'yyyy-MM-dd'"
-                        class="block w-full appearance-none text-textLight dark:text-textDark dark:bg-[#292929] px-3 py-2 rounded-xl focus:outline-none custom-date-input" />
-                </div>
+        
+            <div class="mr-6">
+                <app-custom-datepicker 
+                    [selectedDate]="endDate" 
+                    (dateChange)="onEndDateChange($event)"
+                    placeholder="End Date">
+                </app-custom-datepicker>
             </div>
-
+        
             <button (click)="filterDate()"
-                class="bg-[#415CFF]  text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-lg ml-5  dark:text-textDark">Go</button>
+                class="bg-[#415CFF] text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-lg ml-5 dark:text-textDark">Go</button>
         </div>
 
 
@@ -65,7 +65,7 @@
                     {{ startDate | date: 'yyyy-MM-dd' }}
                 </span>
             </div>
-            
+
 
             <div class="flex">
                 <span
@@ -73,62 +73,62 @@
                     To
                 </span>
                 <span
-                class="rounded-none rounded-e-lg border border-s-0 bg-gray-50 border-[#D9D9D9] font-semibold focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full p-2.5 dark:text-white dark:bg-[#1D1D1F] dark:border-gray-600">
+                    class="rounded-none rounded-e-lg border border-s-0 bg-gray-50 border-[#D9D9D9] font-semibold focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full p-2.5 dark:text-white dark:bg-[#1D1D1F] dark:border-gray-600">
                     {{endDate | date: 'yyyy-MM-dd'}}
                 </span>
             </div>
 
             <div class="flex">
                 <span
-                class="inline-flex items-center px-4 text-[#292929] border font-semibold border-e border-[#D9D9D9] rounded-s-md dark:bg-[#292929] dark:text-textDark dark:border-gray-600">
+                    class="inline-flex items-center px-4 text-[#292929] border font-semibold border-e border-[#D9D9D9] rounded-s-md dark:bg-[#292929] dark:text-textDark dark:border-gray-600">
                     EMP ID
                 </span>
                 <span
-                class="rounded-none rounded-e-lg border border-s-0 bg-gray-50 border-[#D9D9D9] font-semibold focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full p-2.5 dark:text-white dark:bg-[#1D1D1F] dark:border-gray-600">
+                    class="rounded-none rounded-e-lg border border-s-0 bg-gray-50 border-[#D9D9D9] font-semibold focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full p-2.5 dark:text-white dark:bg-[#1D1D1F] dark:border-gray-600">
                     {{officerDataObj.empId}}
                 </span>
             </div>
 
             <div class="flex">
                 <span
-                class="inline-flex items-center px-4 text-[#292929] border font-semibold border-e border-[#D9D9D9] rounded-s-md dark:bg-[#292929] dark:text-textDark dark:border-gray-600">
+                    class="inline-flex items-center px-4 text-[#292929] border font-semibold border-e border-[#D9D9D9] rounded-s-md dark:bg-[#292929] dark:text-textDark dark:border-gray-600">
                     Role
                 </span>
                 <span
-                class="rounded-none rounded-e-lg border border-s-0 bg-gray-50 border-[#D9D9D9] font-semibold focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full p-2.5 dark:text-white dark:bg-[#1D1D1F] dark:border-gray-600">
+                    class="rounded-none rounded-e-lg border border-s-0 bg-gray-50 border-[#D9D9D9] font-semibold focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full p-2.5 dark:text-white dark:bg-[#1D1D1F] dark:border-gray-600">
                     {{officerDataObj.jobRole}}
                 </span>
             </div>
 
             <div class="flex">
                 <span
-                class="inline-flex items-center px-4 text-[#292929] border font-semibold border-e border-[#D9D9D9] rounded-s-md dark:bg-[#292929] dark:text-textDark dark:border-gray-600">
+                    class="inline-flex items-center px-4 text-[#292929] border font-semibold border-e border-[#D9D9D9] rounded-s-md dark:bg-[#292929] dark:text-textDark dark:border-gray-600">
                     First Name
                 </span>
                 <span
-                class="rounded-none rounded-e-lg border border-s-0 bg-gray-50 border-[#D9D9D9] font-semibold focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full p-2.5 dark:text-white dark:bg-[#1D1D1F] dark:border-gray-600">
+                    class="rounded-none rounded-e-lg border border-s-0 bg-gray-50 border-[#D9D9D9] font-semibold focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full p-2.5 dark:text-white dark:bg-[#1D1D1F] dark:border-gray-600">
                     {{officerDataObj.firstNameEnglish}}
                 </span>
             </div>
 
             <div class="flex">
                 <span
-                class="inline-flex items-center px-4 text-[#292929] border font-semibold border-e border-[#D9D9D9] rounded-s-md dark:bg-[#292929] dark:text-textDark dark:border-gray-600">
+                    class="inline-flex items-center px-4 text-[#292929] border font-semibold border-e border-[#D9D9D9] rounded-s-md dark:bg-[#292929] dark:text-textDark dark:border-gray-600">
                     Last Name
                 </span>
                 <span
-                class="rounded-none rounded-e-lg border border-s-0 bg-gray-50 border-[#D9D9D9] font-semibold focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full p-2.5 dark:text-white dark:bg-[#1D1D1F] dark:border-gray-600">
+                    class="rounded-none rounded-e-lg border border-s-0 bg-gray-50 border-[#D9D9D9] font-semibold focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full p-2.5 dark:text-white dark:bg-[#1D1D1F] dark:border-gray-600">
                     {{officerDataObj.lastNameEnglish}}
                 </span>
             </div>
 
             <div class="flex">
                 <span
-                class="inline-flex items-center px-4 text-[#292929] border font-semibold border-e border-[#D9D9D9] rounded-s-md dark:bg-[#292929] dark:text-textDark dark:border-gray-600">
+                    class="inline-flex items-center px-4 text-[#292929] border font-semibold border-e border-[#D9D9D9] rounded-s-md dark:bg-[#292929] dark:text-textDark dark:border-gray-600">
                     Weight
                 </span>
                 <span
-                class="rounded-none rounded-e-lg border border-s-0 bg-gray-50 border-[#D9D9D9] font-semibold focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full p-2.5 dark:text-white dark:bg-[#1D1D1F] dark:border-gray-600">
+                    class="rounded-none rounded-e-lg border border-s-0 bg-gray-50 border-[#D9D9D9] font-semibold focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full p-2.5 dark:text-white dark:bg-[#1D1D1F] dark:border-gray-600">
                     {{officerDataObj.TotalQty}} kg
                 </span>
             </div>
@@ -139,7 +139,7 @@
                     Collections
                 </span>
                 <span
-                class="rounded-none rounded-e-lg border border-s-0 bg-gray-50 border-[#D9D9D9] font-semibold focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full p-2.5 dark:text-white dark:bg-[#1D1D1F] dark:border-gray-600">
+                    class="rounded-none rounded-e-lg border border-s-0 bg-gray-50 border-[#D9D9D9] font-semibold focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full p-2.5 dark:text-white dark:bg-[#1D1D1F] dark:border-gray-600">
                     {{officerDataObj.TotalFarmers}}
                 </span>
             </div>
@@ -147,24 +147,35 @@
 
 
         <div class="w-full mt-8 bg-white dark:bg-[#363636] ">
-            <table class="w-full border-collapse border-[1px] rounded-lg border-[#828282] dark:border-gray-700 dark:bg-[white]">
+            <table
+                class="w-full border-collapse border-[1px] rounded-lg border-[#828282] dark:border-gray-700 dark:bg-[white]">
                 <thead>
                     <tr class="bg-[#E4DCD3] dark:text-textDark dark:bg-[#0F0F0F] dark:border-[#202021]">
-                        <th class="w-1/3 border text-[#000000] dark:text-textDark border-[#828282] dark:border-[#202021] px-4 py-2">Date</th>
-                        <th class="w-1/3 border text-[#000000] dark:text-textDark border-[#828282] dark:border-[#202021] px-4 py-2">Total Weight</th>
-                        <th class="w-1/3 border text-[#000000] dark:text-textDark border-[#828282] dark:border-[#202021] px-4 py-2">Total Collections</th>
+                        <th
+                            class="w-1/3 border text-[#000000] dark:text-textDark border-[#828282] dark:border-[#202021] px-4 py-2">
+                            Date</th>
+                        <th
+                            class="w-1/3 border text-[#000000] dark:text-textDark border-[#828282] dark:border-[#202021] px-4 py-2">
+                            Total Weight</th>
+                        <th
+                            class="w-1/3 border text-[#000000] dark:text-textDark border-[#828282] dark:border-[#202021] px-4 py-2">
+                            Total Collections</th>
                     </tr>
                 </thead>
                 <tbody class="border-[#828282] dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
                     <tr *ngFor="let item of farmerDataArr" class="bg-white dark:bg-[#1D1D1F]">
-                        <td class="text-center text-[#000000] border border-[#828282] dark:border-[#1D1D1F] dark:text-gray-300 px-4 py-2">{{
+                        <td
+                            class="text-center text-[#000000] border border-[#828282] dark:border-[#1D1D1F] dark:text-gray-300 px-4 py-2">
+                            {{
                             item.ReportDate
                             |
                             date: 'yyyy-MM-dd' }}</td>
-                        <td class="text-center text-[#000000] border border-[#828282] dark:border-[#1D1D1F] dark:text-gray-300 px-4 py-2">
+                        <td
+                            class="text-center text-[#000000] border border-[#828282] dark:border-[#1D1D1F] dark:text-gray-300 px-4 py-2">
                             {{item.TotalQty}} kg
                         </td>
-                        <td class="text-center text-[#000000] border border-[#828282] dark:border-[#1D1D1F] dark:text-gray-300 px-4 py-2">
+                        <td
+                            class="text-center text-[#000000] border border-[#828282] dark:border-[#1D1D1F] dark:text-gray-300 px-4 py-2">
                             {{item.TotalFarmers}}
                         </td>
                     </tr>

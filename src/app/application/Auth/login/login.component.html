@@ -19,13 +19,13 @@
             <img src="assets/images/logo.png" alt="logo"
                 class="hidden md:block absolute top-5 right-5 max-w-[150px] h-auto z-10">
             <h1 class="text-3xl font-bold text-gray-800 mb-4">Welcome back!</h1>
-            <p class="text-gray-500 mb-6">Start managing your Collection Center Eddited </p>
+            <p class="text-gray-500 mb-6">Start managing your Centre</p>
 
             <!-- Form -->
             <div *ngIf="userNameInput.touched && !loginObj.userName" class="text-red-500 font-normal">
                 <div class="flex flex-row items-center gap-2 mx-3">
                     <i class="fa-solid fa-triangle-exclamation"></i>
-                    <p>User Name is required</p>
+                    <p>Your Employee ID</p>
                 </div>
             </div>
             <div class="relative mb-6">
@@ -43,9 +43,9 @@
                         </g>
                     </svg>
                 </div>
-                <input type="text" [(ngModel)]="loginObj.userName" id="email" name="userName" #userNameInput="ngModel"
+                <input type="text" [(ngModel)]="loginObj.userName" (ngModelChange)="loginObj.userName = $event.toUpperCase()"  id="email" name="userName" #userNameInput="ngModel"
                     class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full ps-10 p-2.5 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                    placeholder="Your User Name" (keydown.enter)="onLogin()">
+                    placeholder="Your Employee ID" (keydown.enter)="onLogin()">
             </div>
 
 

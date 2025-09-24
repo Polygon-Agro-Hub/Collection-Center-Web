@@ -8,28 +8,29 @@
         <div class="w-full dark:bg-[#363636]">
             <div class="flex flex-row items-center justify-center">
                 <p class="text-lg font-semibold text-[#292929] mx-3 dark:text-white">From :</p>
-
+        
                 <div class="relative w-56 mr-10">
-                    <div
-                        class="border-2 rounded-xl  text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
-                        <input type="date" [(ngModel)]="fromDate" name="fromDate" (change)="validateFromDate()" [max]="maxDate"
-                            class="block w-full appearance-none  text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none dark:bg-[#292929] custom-date-input" />
-                    </div>
+                    <app-custom-datepicker 
+                        [placeholder]="'--Select Date--'"
+                        [selectedDate]="fromDate" 
+                        (dateChange)="onFromDateChange($event)">
+                    </app-custom-datepicker>
                 </div>
-
+        
                 <p class="text-lg font-semibold text-[#292929] mx-3 dark:text-white">To :</p>
-
+        
                 <div class="relative w-56 mr-6">
-                    <div
-                        class="border-2 rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
-                        <input type="date" #toDateInput [(ngModel)]="toDate" name="toDate" [min]="fromDate"
-                            (change)="validateToDate(toDateInput)"
-                            class="block w-full appearance-none text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none dark:bg-[#292929] custom-date-input" />
-                    </div>
+                    <app-custom-datepicker 
+                        [placeholder]="'--Select Date--'" 
+                        [selectedDate]="toDate" 
+                        (dateChange)="onToDateChange($event)">
+                    </app-custom-datepicker>
                 </div>
-
+        
                 <button (click)="goBtn()"
-                    class="bg-[#415CFF]  text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-lg ml-5  dark:text-textDark">Go</button>
+                    class="bg-[#415CFF] text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-lg ml-5 dark:text-textDark">
+                    Go
+                </button>
             </div>
         </div>
 
@@ -81,47 +82,57 @@
 
                 <div class="relative w-52 custom-center-dropdown-container">
                     <div *ngIf="logingRole === 'Collection Center Head'">
-                        <!-- Hidden native select -->
-                    <select [(ngModel)]="selectCenters" class="hidden" (change)="applyCompanyFilters()">
-                        <option value=""></option>
-                        <option *ngFor="let item of centerArr"
-                            class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                            [value]="item.id">{{item.regCode}} - {{item.centerName}}</option>
-                    </select>
-                    <!-- Custom dropdown trigger -->
-                    <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
-                        (click)="toggleCenterDropdown()">
-                        <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
-                            <span>{{ selectedCenterDisplay }}</span>
-                            <div class="flex items-center">
-                                <!-- X icon (shown ONLY when option is selected) -->
-                                <i *ngIf="selectCenters" (click)="clearCompanyFilter($event)"
-                                    class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
-                                <!-- Arrow icon (shown when EITHER: dropdown is open OR no selection exists) -->
-                                <i *ngIf="isCenterDropdownOpen || !selectCenters"
-                                    class="fa-solid text-lg text-[#828282] transition-transform duration-200"
-                                    [class.fa-angle-down]="!isCenterDropdownOpen"
-                                    [class.fa-angle-up]="isCenterDropdownOpen"></i>
+                        <app-searchable-dropdown
+                        [items]="centerDropdownItems"
+                        placeholder="Select Centre..."
+                        searchPlaceholder="Search centre..."
+                        [(ngModel)]="selectCenters"
+                        (selectionChange)="onCenterSelectionChange($event)"
+                        [clearable]="true"
+                        [showSelected]="true"
+                        [disabled]="false"
+                        class="w-full"
+                      ></app-searchable-dropdown>
+                        <!-- <select [(ngModel)]="selectCenters" class="hidden" (change)="applyCompanyFilters()">
+                            <option value=""></option>
+                            <option *ngFor="let item of centerArr"
+                                class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                                [value]="item.id">{{item.regCode}} - {{item.centerName}}</option>
+                        </select>
+                       
+                        <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
+                            (click)="toggleCenterDropdown()">
+                            <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
+                                <span>{{ selectedCenterDisplay }}</span>
+                                <div class="flex items-center">
+                                    
+                                    <i *ngIf="selectCenters" (click)="clearCompanyFilter($event)"
+                                        class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
+                                    
+                                    <i *ngIf="isCenterDropdownOpen || !selectCenters"
+                                        class="fa-solid text-lg text-[#828282] transition-transform duration-200"
+                                        [class.fa-angle-down]="!isCenterDropdownOpen"
+                                        [class.fa-angle-up]="isCenterDropdownOpen"></i>
+                                </div>
                             </div>
                         </div>
-                    </div>
-                    <!-- Custom dropdown options -->
-                    <div *ngIf="isCenterDropdownOpen"
-                        class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
-                        <div class="py-1">
-                            <div *ngFor="let center of centerArr" (click)="selectCenterOption(center)"
-                                class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-300 cursor-pointer flex items-center">
-                                <span class="flex-grow">{{ center.regCode }} - {{ center.centerName }}</span>
+                        
+                        <div *ngIf="isCenterDropdownOpen"
+                            class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
+                            <div class="py-1">
+                                <div *ngFor="let center of centerArr" (click)="selectCenterOption(center)"
+                                    class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-300 cursor-pointer flex items-center">
+                                    <span class="flex-grow">{{ center.regCode }} - {{ center.centerName }}</span>
+                                </div>
                             </div>
-                        </div>
-                    </div>
+                        </div> -->
                     </div>
                 </div>
 
 
 
                 <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
-                    <input type="text" placeholder="Search..." [(ngModel)]="searchText" (keyup.enter)="onSearch()"
+                    <input type="text" placeholder="Search..." [(ngModel)]="searchText" (keyup.enter)="onSearch()"  (input)="checkLeadingSpace()"
                         (keyup.esc)="offSearch()"
                         class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
                     <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
@@ -215,7 +226,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#262f45] text-right">
+        <div class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#1D1D1F] text-right">
             <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
                 [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
                 [screenReaderCurrentLabel]="'Youre on page'">
@@ -227,11 +238,10 @@
         <p class="text-3xl text-center font-semibold dark:text-white">--Set From & To Dates first--</p>
     </div> -->
 
-    <div *ngIf="!isDateFilterSet"
-            class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6 ">
-            <p class="text-[#494949] my-6 dark:text-textDark">--Set From & To Dates first--</p>
-            <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
-        </div>
+    <div *ngIf="!isDateFilterSet" class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6 ">
+        <p class="text-[#494949] my-6 dark:text-textDark">--Set From & To Dates first--</p>
+        <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
+    </div>
 
     <div *ngIf="!hasData && isDateFilterSet" class="h-[500px]">
         <div class="flex flex-row items-center justify-between mt-6">
@@ -273,41 +283,19 @@
                     </div>
                 </div> -->
 
-                <div class="relative w-64 custom-center-dropdown-container" *ngIf="logingRole === 'Collection Center Head'">
-                    <!-- Hidden native select -->
-                    <select [(ngModel)]="selectCenters" class="hidden" (change)="applyCompanyFilters()">
-                        <option value=""></option>
-                        <option *ngFor="let item of centerArr"
-                            class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                            [value]="item.id">{{item.regCode}} - {{item.centerName}}</option>
-                    </select>
-                    <!-- Custom dropdown trigger -->
-                    <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
-                        (click)="toggleCenterDropdown()">
-                        <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
-                            <span>{{ selectedCenterDisplay }}</span>
-                            <div class="flex items-center">
-                                <!-- X icon (shown ONLY when option is selected) -->
-                                <i *ngIf="selectCenters" (click)="clearCompanyFilter($event)"
-                                    class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
-                                <!-- Arrow icon (shown when EITHER: dropdown is open OR no selection exists) -->
-                                <i *ngIf="isCenterDropdownOpen || !selectCenters"
-                                    class="fa-solid text-lg text-[#828282] transition-transform duration-200"
-                                    [class.fa-angle-down]="!isCenterDropdownOpen"
-                                    [class.fa-angle-up]="isCenterDropdownOpen"></i>
-                            </div>
-                        </div>
-                    </div>
-                    <!-- Custom dropdown options -->
-                    <div *ngIf="isCenterDropdownOpen"
-                        class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
-                        <div class="py-1">
-                            <div *ngFor="let center of centerArr" (click)="selectCenterOption(center)"
-                                class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-300 cursor-pointer flex items-center">
-                                <span class="flex-grow">{{ center.regCode }} - {{ center.centerName }}</span>
-                            </div>
-                        </div>
-                    </div>
+                <div class="relative w-64 custom-center-dropdown-container"
+                    *ngIf="logingRole === 'Collection Center Head'">
+                    <app-searchable-dropdown
+                        [items]="centerDropdownItems"
+                        placeholder="Select Centre..."
+                        searchPlaceholder="Search centre..."
+                        [(ngModel)]="selectCenters"
+                        (selectionChange)="onCenterSelectionChange($event)"
+                        [clearable]="true"
+                        [showSelected]="true"
+                        [disabled]="false"
+                        class="w-full"
+                      ></app-searchable-dropdown>
                 </div>
 
 

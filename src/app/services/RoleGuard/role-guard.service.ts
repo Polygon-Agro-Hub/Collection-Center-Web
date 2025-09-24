@@ -5,19 +5,17 @@ import { TokenServiceService } from '../Token/token-service.service';
 @Injectable({
   providedIn: 'root'
 })
-export class RoleGuardService {
-  userRole: string | null = null;
-
-  constructor(private router: Router, private tokenSrv: TokenServiceService) {
-    this.userRole = this.tokenSrv.getUserDetails().role;
-  }
+export class RoleGuardService implements CanActivate {
+  constructor(private router: Router, private tokenSrv: TokenServiceService) {}
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
+    const userRole = this.tokenSrv.getUserDetails().role;
+    const allowedRoles: string[] = route.data['roles'] || [];
 
-    if (this.userRole === 'Collection Center Head') {
+    if (allowedRoles.includes(userRole)) {
       return true;
     } else {
-      this.router.navigate(['/451']);
+      this.router.navigate(['/451']); // Unauthorized page
       return false;
     }
   }

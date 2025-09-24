@@ -7,11 +7,12 @@ import { ReportServiceService } from '../../../../services/Report-service/report
 import { TokenServiceService } from '../../../../services/Token/token-service.service';
 import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
 import { ManageOfficersService } from '../../../../services/manage-officers-service/manage-officers.service';
+import { SerchableDropdownComponent } from '../../../../components/serchable-dropdown/serchable-dropdown.component';
 
 @Component({
   selector: 'app-collection-report-component',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent, SerchableDropdownComponent],
   templateUrl: './collection-report-component.component.html',
   styleUrl: './collection-report-component.component.css'
 })
@@ -63,6 +64,24 @@ export class CollectionReportComponentComponent implements OnInit {
     this.fetchAllOfficers();
   }
 
+  get centerDropdownItems() {
+    return this.centerArr.map(center => ({
+      value: center.id.toString(),
+      label: `${center.regCode} - ${center.centerName}`,
+      disabled: false
+    }));
+  }
+
+  // 5. Update your methods
+  onCenterSelectionChange(selectedValue: string) {
+    this.selectCenters = selectedValue || '';
+    this.applyCompanyFilters();
+  }
+
+  applyCompanyFilters() {
+    this.fetchAllOfficers();
+  }
+
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
 
@@ -99,6 +118,7 @@ export class CollectionReportComponentComponent implements OnInit {
   }
 
   onSearch() {
+    this.searchText = this.searchText.trimStart();
     this.fetchAllOfficers(this.page, this.itemsPerPage, this.searchText);
   }
 
@@ -135,9 +155,9 @@ export class CollectionReportComponentComponent implements OnInit {
     )
   }
 
-  applyCompanyFilters() {
-    this.fetchAllOfficers();
-  }
+  // applyCompanyFilters() {
+  //   this.fetchAllOfficers();
+  // }
 
   clearCompanyFilter(event: MouseEvent) {
     event.stopPropagation();
@@ -147,10 +167,16 @@ export class CollectionReportComponentComponent implements OnInit {
 
 
   get selectedCenterDisplay(): string {
-    if (!this.selectCenters) return 'Centers';
-    
+    if (!this.selectCenters) return 'Centres';
+
     const selectedCenter = this.centerArr.find(center => center.id.toString() === this.selectCenters);
-    return selectedCenter ? `${selectedCenter.regCode} - ${selectedCenter.centerName}` : 'Centers';
+    return selectedCenter ? `${selectedCenter.regCode} - ${selectedCenter.centerName}` : 'Centres';
+  }
+
+  checkLeadingSpace() {
+    if (this.searchText && this.searchText.startsWith(' ')) {
+      this.searchText = this.searchText.trim();
+    }
   }
 
 }

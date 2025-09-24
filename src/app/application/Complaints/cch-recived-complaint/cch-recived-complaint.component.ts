@@ -19,6 +19,7 @@ import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loa
 export class CchRecivedComplaintComponent {
   compalintObj: Complaint = new Complaint();
   replyObj: Reply = new Reply();
+  templateData!: TemplateData;
 
 
   compalinId!: number;
@@ -48,13 +49,16 @@ export class CchRecivedComplaintComponent {
     this.isLoading = true;
     this.ComplainSrv.getComplainById(id).subscribe(
       (res) => {
+        console.log('res', res)
         this.compalintObj = res.data
+        console.log('compalintObj', this.compalintObj)
         this.officerName = this.compalintObj.firstNameEnglish + " " + this.compalintObj.lastNameEnglish
         console.log(this.compalintObj);
         this.phone1 = this.compalintObj.phoneNumber01 === null ? '-' : this.compalintObj.phoneCode01 + " - " + this.compalintObj.phoneNumber01;
         this.phone2 = this.compalintObj.phoneNumber02 === null ? '-' : this.compalintObj.phoneCode02 + " - " + this.compalintObj.phoneNumber02;
-        this.replyObj.reply = res.data.reply === null ? this.createTemplate(this.officerName, res.data.language, res.template) : res.data.reply;
+        this.replyObj.reply = res.data.reply;
         console.log(this.replyObj.reply);
+        this.templateData = res.template
 
 
 
@@ -85,8 +89,8 @@ export class CchRecivedComplaintComponent {
         title: 'dark:text-white',
 
         icon: '',
-        confirmButton: 'hover:bg-red-600 dark:hover:bg-red-700 focus:ring-red-500 dark:focus:ring-red-800',
-        cancelButton: 'hover:bg-blue-600 dark:hover:bg-blue-700 focus:ring-blue-500 dark:focus:ring-blue-800',
+        // confirmButton: 'hover:bg-red-600 dark:hover:bg-red-700 focus:ring-red-500 dark:focus:ring-red-800',
+        // cancelButton: 'hover:bg-blue-600 dark:hover:bg-blue-700 focus:ring-blue-500 dark:focus:ring-blue-800',
         actions: 'gap-2'
       }
     }).then((result) => {
@@ -140,41 +144,41 @@ export class CchRecivedComplaintComponent {
     )
   }
 
-  createTemplate(fname: string = '', language: string = 'English', templateData: TemplateData): string {
-    if (language === 'Sinhala') {
-      return `
-හිතවත් ${fname},
+//   createTemplate(fname: string = '', language: string = 'English', templateData: TemplateData): string {
+//     if (language === 'Sinhala') {
+//       return `
+// හිතවත් ${fname},
 
-ඔබට තවත් ගැටළු හෝ ප්‍රශ්න තිබේ නම්, කරුණාකර අප හා සම්බන්ධ වන්න. ඔබේ ඉවසීම සහ අවබෝධය වෙනුවෙන් ස්තූතියි.
+// ඔබට තවත් ගැටළු හෝ ප්‍රශ්න තිබේ නම්, කරුණාකර අප හා සම්බන්ධ වන්න. ඔබේ ඉවසීම සහ අවබෝධය වෙනුවෙන් ස්තූතියි.
 
-මෙයට,
-${templateData.SinName}
-Collection Center Head of ${templateData.companyNameSinhala}
-    `
-    } else if (language === 'Tamil') {
-      return `
-அன்புள்ள ${fname},
+// මෙයට,
+// ${templateData.SinName}
+// Collection Center Head of ${templateData.companyNameSinhala}
+//     `
+//     } else if (language === 'Tamil') {
+//       return `
+// அன்புள்ள ${fname},
 
-உங்களுக்கு மேலும் ஏதேனும் சிக்கல்கள் அல்லது கேள்விகள் இருந்தால், தயவுசெய்து எங்களைத் தொடர்பு கொள்ளவும். உங்கள் பொறுமைக்கும் புரிதலுக்கும் நன்றி.
+// உங்களுக்கு மேலும் ஏதேனும் சிக்கல்கள் அல்லது கேள்விகள் இருந்தால், தயவுசெய்து எங்களைத் தொடர்பு கொள்ளவும். உங்கள் பொறுமைக்கும் புரிதலுக்கும் நன்றி.
 
-இதற்கு,
-${templateData.TamName}
-Collection Center Head of ${templateData.companyNameTamil}
-      `
-    } else {
-      return `
-Dear ${fname},
+// இதற்கு,
+// ${templateData.TamName}
+// Collection Center Head of ${templateData.companyNameTamil}
+//       `
+//     } else {
+//       return `
+// Dear ${fname},
 
-If you have any further concerns or questions, feel free to reach out.
-Thank you for your patience and understanding.
+// If you have any further concerns or questions, feel free to reach out.
+// Thank you for your patience and understanding.
 
 
-Sincerely, ${templateData.EngName}
-Collection Center Head of  ${templateData.companyNameEnglish}
-  `
-    }
+// Sincerely, ${templateData.EngName}
+// Collection Center Head of  ${templateData.companyNameEnglish}
+//   `
+//     }
 
-  }
+//   }
 
 
 }

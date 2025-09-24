@@ -150,6 +150,7 @@ export class CchSendComplaintComponent implements OnInit {
   }
 
   onSearch() {
+    this.searchText = this.searchText?.trim() || '';
     this.fetchAllreciveComplaint();
 
   }
@@ -203,4 +204,7 @@ class SentComplaint {
 class Reply {
   id!: number
   reply!: string
+  language: string = 'English';
+  firstNameEnglish!: string
+  lastNameEnglish!: string
 }

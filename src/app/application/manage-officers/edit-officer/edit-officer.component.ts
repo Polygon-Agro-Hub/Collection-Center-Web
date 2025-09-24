@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { ManageOfficersService } from '../../../services/manage-officers-service/manage-officers.service';
@@ -9,11 +9,13 @@ import { TokenServiceService } from '../../../services/Token/token-service.servi
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { HttpClient } from '@angular/common/http';
 import { Location } from '@angular/common';
+import { Country, COUNTRIES } from '../../../../assets/country-data';
+import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
 
 @Component({
   selector: 'app-edit-officer',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, LoadingSpinnerComponent, SerchableDropdownComponent],
   templateUrl: './edit-officer.component.html',
   styleUrl: './edit-officer.component.css'
 })
@@ -23,7 +25,7 @@ export class EditOfficerComponent implements OnInit {
   managerArr: Manager[] = [];
   driverObj: Drivers = new Drivers()
 
-
+  languagesRequired: boolean = false;
 
 
   languages: string[] = ['Sinhala', 'English', 'Tamil'];
@@ -39,7 +41,7 @@ export class EditOfficerComponent implements OnInit {
 
   centerId!: number;
 
-
+  previousJobRole!: string;
 
   selectedFileName!: string
   selectedImage: string | ArrayBuffer | null = null;
@@ -55,10 +57,36 @@ export class EditOfficerComponent implements OnInit {
   selectedBranchId: number | null = null;
   allBranches: BranchesData = {};
 
+  bankItems: { value: number; label: string }[] = [];
+branchItems: { value: number; label: string }[] = [];
+
   invalidFields: Set<string> = new Set();
   naviPath!: string
 
   selectVehicletype: any = { name: '', capacity: '' };
+
+  countries: Country[] = COUNTRIES;
+  selectedCountry1: Country | null = null;
+  selectedCountry2: Country | null = null;
+
+  dropdownOpen = false;
+  dropdownOpen2 = false;
+
+  allowedPrefixes = ['70', '71', '72', '75', '76', '77', '78'];
+  isPhoneInvalidMap: { [key: string]: boolean } = {
+  phone01: false,
+  phone02: false,
+};
+
+filteredCenterArr: Center[] = [];
+  filteredManagerArr: Manager[] = [];
+
+  centreDropdownOpen = false;
+  selectedCenterName: string = "";
+  selectedManager: string = "";
+  managerDropdownOpen = false;
+
+  selectedManagerName: string = "";
 
 
   licenseFrontImageFileName!: string;
@@ -106,6 +134,9 @@ export class EditOfficerComponent implements OnInit {
 
   ) {
     this.logingRole = tokenSrv.getUserDetails().role
+    const defaultCountry = this.countries.find(c => c.code === 'lk') || null;
+    this.selectedCountry1 = defaultCountry;
+    this.selectedCountry2 = defaultCountry;
 
   }
 
@@ -137,6 +168,8 @@ export class EditOfficerComponent implements OnInit {
     { name: 'Vavuniya', province: 'Northern' },
   ];
 
+  districtItems = this.districts.map(d => ({ value: d.name, label: d.name }));
+
   VehicleTypes = [
     { name: 'Lorry', capacity: 2 },
     { name: 'Dimo Batta', capacity: 3.5 },
@@ -153,8 +186,103 @@ export class EditOfficerComponent implements OnInit {
     this.editOfficerId = this.route.snapshot.params['id'];
     this.centerId = this.route.snapshot.params['centerId'];
     this.fetchOffierById(this.editOfficerId);
-    this.UpdateEpmloyeIdCreate();
+    // this.UpdateEpmloyeIdCreate();
     this.setActiveTabFromRoute()
+  }
+
+  @HostListener('document:click', ['$event.target'])
+  onClick(targetElement: HTMLElement) {
+    const insideDropdown1 = targetElement.closest('.dropdown-wrapper-1');
+    const insideDropdown2 = targetElement.closest('.dropdown-wrapper-2');
+  
+    // Close dropdowns only if click is outside their wrapper
+    if (!insideDropdown1) {
+      this.dropdownOpen = false;
+    }
+    if (!insideDropdown2) {
+      this.dropdownOpen2 = false;
+    }
+  }
+
+  onSearchInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const value = input.value.toLowerCase();
+    console.log('value', value);
+  
+    this.filteredCenterArr = this.centerArr.filter(c =>
+      (c.centerName || '').toLowerCase().includes(value)
+    );
+  
+    console.log('filtered centers', this.filteredCenterArr);
+  
+  }
+  
+  
+  
+  toggleDropdown() {
+    this.centreDropdownOpen = !this.centreDropdownOpen;
+  }
+  
+  toggleManagerDropdown() {
+    this.managerDropdownOpen = !this.managerDropdownOpen;
+  }
+  
+  selectCenter(item: Center) {
+    console.log('center selected');
+  
+    this.personalData.centerId = item.id;
+    this.selectedCenterName = item.centerName;
+    this.centreDropdownOpen = false; // close dropdown
+  
+    // Reset search input and filtered array
+    this.filteredCenterArr = [...this.centerArr]; // show full list next time
+    const searchInput = document.querySelector<HTMLInputElement>('.dropdown-search-input');
+    if (searchInput) {
+      searchInput.value = '';
+    }
+  
+    this.changeCenter();
+  }
+
+  changeCenter() {
+    this.personalData.jobRole = ''
+    this.personalData.irmId = null
+    this.selectedManager = ''
+   this.getAllManagers()
+ }
+  
+  onManagerSearchInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const value = input.value.toLowerCase().trim(); // remove leading/trailing spaces
+    console.log('search value', value);
+  
+    this.filteredManagerArr = this.managerArr.filter(m => {
+      const fullName = `${m.firstNameEnglish} ${m.lastNameEnglish}`.toLowerCase();
+      return fullName.includes(value);
+    });
+  
+    console.log('filtered managers', this.filteredManagerArr);
+  }
+  
+  
+  selectManager(item: Manager) {
+    console.log('Manager selected');
+  
+    this.personalData.irmId = item.id;
+    this.selectedManager = item.firstNameEnglish + ' ' + item.lastNameEnglish;
+    console.log('name', item.firstNameEnglish )
+    this.managerDropdownOpen = false; // close dropdown
+  
+    // Reset search input and filtered array
+    this.filteredManagerArr = [...this.managerArr]; // show full list next time
+    const searchInput = document.querySelector<HTMLInputElement>('.dropdown-manager-search-input');
+    if (searchInput) {
+      searchInput.value = '';
+    }
+  
+    console.log('id', this.personalData.irmId)
+  
+    // this.changeCenter();
   }
 
   fetchOffierById(id: number) {
@@ -163,11 +291,16 @@ export class EditOfficerComponent implements OnInit {
       (res: any) => {
 
         this.personalData = res.officerData.collectionOfficer;
+        this.personalData.previousJobRole = res.officerData.collectionOfficer.jobRole;
         this.personalData.conformAccNumber = this.personalData.accNumber
+        
         console.log(this.personalData);
         this.ExistirmId = res.officerData.irmId;
 
-        this.getUpdateLastID(res.officerData.collectionOfficer.jobRole);
+        this.selectedCenterName = res.officerData.collectionOfficer.centerName
+        this.selectedManager = res.managerName.firstNameEnglish + ' ' + res.managerName.lastNameEnglish
+
+        // this.getUpdateLastID(res.officerData.collectionOfficer.jobRole);
         this.driverObj = res.officerData.driver;
         this.driverObj.insExpDate = this.formatDateForInput(this.driverObj.insExpDate);
         this.selectVehicletype = this.VehicleTypes.find(
@@ -188,7 +321,7 @@ export class EditOfficerComponent implements OnInit {
         this.getAllManagers();
 
 
-        this.UpdateEpmloyeIdCreate();
+        // this.UpdateEpmloyeIdCreate();
         this.matchExistingBankToDropdown();
         this.isLoading = false;
 
@@ -204,6 +337,54 @@ export class EditOfficerComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
+  selectCountry1(country: Country) {
+    this.selectedCountry1 = country;
+    this.personalData.phoneCode01 = country.dialCode; // update ngModel
+    console.log('sdsf', this.personalData.phoneCode01)
+    this.dropdownOpen = false;
+  }
+
+  selectCountry2(country: Country) {
+    this.selectedCountry2 = country;
+    this.personalData.phoneCode01 = country.dialCode; // update ngModel
+    console.log('sdsf', this.personalData.phoneCode01)
+    this.dropdownOpen2 = false;
+  }
+  
+  // get flag
+  getFlagUrl(code: string): string {
+    return `https://flagcdn.com/24x18/${code}.png`;
+  }
+
+  validateSriLankanPhone(input: string, key: string): void {
+    if (!input) {
+      this.isPhoneInvalidMap[key] = false;
+      return;
+    }
+  
+    const firstDigit = input.charAt(0);
+    const prefix = input.substring(0, 2);
+    const isValidPrefix = this.allowedPrefixes.includes(prefix);
+    const isValidLength = input.length === 9;
+  
+    if (firstDigit !== '7') {
+      this.isPhoneInvalidMap[key] = true;
+      return;
+    }
+  
+    if (!isValidPrefix && input.length >= 2) {
+      this.isPhoneInvalidMap[key] = true;
+      return;
+    }
+  
+    if (input.length === 9 && isValidPrefix) {
+      this.isPhoneInvalidMap[key] = false;
+      return;
+    }
+  
+    this.isPhoneInvalidMap[key] = false;
+  }
+
 
   private setActiveTabFromRoute(): void {
     const currentPath = this.router.url.split('?')[0];
@@ -212,65 +393,65 @@ export class EditOfficerComponent implements OnInit {
   }
 
 
-  getUpdateLastID(role: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      this.ManageOficerSrv.getForCreateId(role).subscribe(
-        (res) => {
-          let lastId;
-          if (this.selectJobRole === this.personalData.jobRole) {
-            lastId = this.personalData.empId;
-            this.UpdatelastID = lastId;
+  // getUpdateLastID(role: string): Promise<string> {
+  //   return new Promise((resolve, reject) => {
+  //     this.ManageOficerSrv.getForCreateId(role).subscribe(
+  //       (res) => {
+  //         let lastId;
+  //         if (this.selectJobRole === this.personalData.jobRole) {
+  //           lastId = this.personalData.empId;
+  //           this.UpdatelastID = lastId;
 
 
-          } else {
-            this.UpdatelastID = res.result.empId;
-            lastId = res.result.empId
+  //         } else {
+  //           this.UpdatelastID = res.result.empId;
+  //           lastId = res.result.empId
 
 
-          }
-          ;
-          resolve(lastId); // Resolve the Promise with the empId
-        },
-        (error) => {
-          console.error('Error fetching last ID:', error);
-          reject(error);
-        }
-      );
-    });
-  }
+  //         }
+  //         ;
+  //         resolve(lastId); // Resolve the Promise with the empId
+  //       },
+  //       (error) => {
+  //         console.error('Error fetching last ID:', error);
+  //         reject(error);
+  //       }
+  //     );
+  //   });
+  // }
 
 
-  UpdateEpmloyeIdCreate() {
-    let rolePrefix: string | undefined;
+  // UpdateEpmloyeIdCreate() {
+  //   let rolePrefix: string | undefined;
 
-    // Map job roles to their respective prefixes
-    if (this.personalData.jobRole === 'Collection Center Manager') {
-      rolePrefix = 'CCM';
-    } else if (this.personalData.jobRole === 'Customer Officer') {
-      rolePrefix = 'CUO';
-    } else if (this.personalData.jobRole === 'Driver') {
-      rolePrefix = 'DVR';
-    } else {
-      rolePrefix = 'COO';
+  //   // Map job roles to their respective prefixes
+  //   if (this.personalData.jobRole === 'Collection Center Manager') {
+  //     rolePrefix = 'CCM';
+  //   } else if (this.personalData.jobRole === 'Customer Officer') {
+  //     rolePrefix = 'CUO';
+  //   } else if (this.personalData.jobRole === 'Driver') {
+  //     rolePrefix = 'DVR';
+  //   } else {
+  //     rolePrefix = 'COO';
 
-    }
-
-
-    if (!rolePrefix) {
-      console.error(`Invalid job role: ${this.personalData.jobRole}`);
-      return;
-    }
+  //   }
 
 
-    this.getUpdateLastID(rolePrefix)
-      .then((lastId) => {
-        this.upateEmpID = rolePrefix + lastId;
+  //   if (!rolePrefix) {
+  //     console.error(`Invalid job role: ${this.personalData.jobRole}`);
+  //     return;
+  //   }
 
-      })
-      .catch((error) => {
-        console.error('Error fetching updated last ID:', error);
-      });
-  }
+
+  //   this.getUpdateLastID(rolePrefix)
+  //     .then((lastId) => {
+  //       this.upateEmpID = rolePrefix + lastId;
+
+  //     })
+  //     .catch((error) => {
+  //       console.error('Error fetching updated last ID:', error);
+  //     });
+  // }
 
 
   onCheckboxChange(lang: string, event: any) {
@@ -290,6 +471,13 @@ export class EditOfficerComponent implements OnInit {
       }
       this.personalData.languages = languagesArray.join(',');
     }
+
+    this.validateLanguages();
+  }
+
+  validateLanguages() {
+    this.languagesRequired = !this.personalData.languages || this.personalData.languages.trim() === '';
+    console.log('language', this.languagesRequired)
   }
 
 
@@ -336,22 +524,29 @@ export class EditOfficerComponent implements OnInit {
     }
   }
 
-  updateProvince(event: Event): void {
-    const target = event.target as HTMLSelectElement;
-    const selectedDistrict = target.value;
+  // updateProvince(event: Event): void {
+  //   const target = event.target as HTMLSelectElement;
+  //   const selectedDistrict = target.value;
 
-    const selected = this.districts.find(district => district.name === selectedDistrict);
+  //   const selected = this.districts.find(district => district.name === selectedDistrict);
 
-    if (this.itemId === null) {
+  //   if (this.itemId === null) {
 
-      if (selected) {
-        this.personalData.province = selected.province;
-      } else {
-        this.personalData.province = '';
-      }
+  //     if (selected) {
+  //       this.personalData.province = selected.province;
+  //     } else {
+  //       this.personalData.province = '';
+  //     }
 
-    }
+  //   }
 
+  // }
+
+  onDistrictChange(districtName: string | null) {
+    if (this.itemId !== null) return; // keep your original guard
+
+    const selected = this.districts.find(d => d.name === districtName || '');
+    this.personalData.province = selected ? selected.province : '';
   }
 
 
@@ -395,9 +590,9 @@ export class EditOfficerComponent implements OnInit {
             } else if (error.status === 410) {
               this.toastSrv.error('Email already exists for another collection officer');
             } else if (error.status === 411) {
-              this.toastSrv.error('Phone Number 01 already exists for another collection officer');
+              this.toastSrv.error('Mobile Number 01 already exists for another collection officer');
             } else if (error.status === 412) {
-              this.toastSrv.error('Phone Number 02 already exists for another collection officer');
+              this.toastSrv.error('Mobile Number 02 already exists for another collection officer');
             } else if (error.status === 400) {
               this.toastSrv.error('No file uploaded. Please attach required file(s).');
             } else if (error.status === 500) {
@@ -445,7 +640,11 @@ export class EditOfficerComponent implements OnInit {
               this.toastSrv.error('NIC already exists for another collection officer');
             } else if (error.status === 410) {
               this.toastSrv.error('Email already exists for another collection officer');
-            } else if (error.status === 400) {
+            } else if (error.status === 411) {
+              this.toastSrv.error('Mobile Number 01 already exists for another collection officer');
+            } else if (error.status === 412) {
+              this.toastSrv.error('Mobile Number 02 already exists for another collection officer');
+            }else if (error.status === 400) {
               this.toastSrv.error('No file uploaded. Please attach required file(s).');
             } else if (error.status === 500) {
               this.toastSrv.error('Internal server error. Please try again later.');
@@ -465,8 +664,8 @@ export class EditOfficerComponent implements OnInit {
 
   onCancel() {
     Swal.fire({
-      title: 'Are you sure?',
-      text: 'Do you really want to clear this form?',
+      title: 'You have unsaved changes',
+      text: 'If you leave this page now, your changes will be lost.\nDo you want to continue without saving?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',
@@ -491,6 +690,8 @@ export class EditOfficerComponent implements OnInit {
     this.ManageOficerSrv.getCCHOwnCenters().subscribe(
       (res) => {
         this.centerArr = res
+        this.filteredCenterArr = [...this.centerArr];
+        console.log('centerArr', this.centerArr)
 
       }
     )
@@ -501,6 +702,8 @@ export class EditOfficerComponent implements OnInit {
       (res) => {
 
         this.managerArr = res
+        this.filteredManagerArr = [...this.managerArr];
+        console.log('managerArr', this.managerArr)
 
       }
     )
@@ -514,90 +717,116 @@ export class EditOfficerComponent implements OnInit {
     }
   }
 
-  loadBanks() {
-    this.http.get<Bank[]>('assets/json/banks.json').subscribe(
-      data => {
-        this.banks = data.sort((a, b) => a.name.localeCompare(b.name)); // Sort alphabetically
-      },
-      error => {
-        console.error('Error loading banks:', error);
-      }
-    );
+  loadBanks(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.http.get<Bank[]>('assets/json/banks.json').subscribe(
+        data => {
+          this.banks = data.sort((a, b) => a.name.localeCompare(b.name));
+          // Convert banks to dropdown items
+          this.bankItems = this.banks.map(bank => ({
+            value: bank.ID,
+            label: bank.name
+          }));
+          resolve();
+        },
+        error => {
+          console.error('Error loading banks:', error);
+          reject(error);
+        }
+      );
+    });
   }
-
-
-  loadBranches() {
-    this.http.get<BranchesData>('assets/json/branches.json').subscribe(
-      data => {
-        Object.keys(data).forEach(bankID => {
-          data[bankID].sort((a, b) => a.name.localeCompare(b.name));
-        });
-        this.allBranches = data;
-      },
-      error => {
-        console.error('Error loading branches:', error);
-      }
-    );
+  
+  loadBranches(): Promise<void> {
+    return new Promise((resolve, reject) => {
+      this.http.get<BranchesData>('assets/json/branches.json').subscribe(
+        data => {
+          Object.keys(data).forEach(bankID => {
+            data[bankID].sort((a, b) => a.name.localeCompare(b.name));
+          });
+          this.allBranches = data;
+          resolve();
+        },
+        error => {
+          console.error('Error loading branches:', error);
+          reject(error);
+        }
+      );
+    });
   }
-
-
-
+  
   matchExistingBankToDropdown() {
-
     // Only proceed if both banks and branches are loaded and we have existing data
-    if (this.banks.length > 0 && Object.keys(this.allBranches).length > 0 &&
+    if (this.bankItems.length > 0 && Object.keys(this.allBranches).length > 0 &&
       this.personalData && this.personalData.bankName) {
-
+  
       // Find the bank ID that matches the existing bank name
-      const matchedBank = this.banks.find(bank => bank.name === this.personalData.bankName);
-
+      const matchedBank = this.bankItems.find(bank => bank.label === this.personalData.bankName);
+  
       if (matchedBank) {
-        this.selectedBankId = matchedBank.ID;
+        this.selectedBankId = matchedBank.value;
         // Load branches for this bank
-        this.branches = this.allBranches[this.selectedBankId.toString()] || [];
-
+        this.updateBranchItems(this.selectedBankId);
+  
         // If we also have a branch name, try to match it
         if (this.personalData.branchName) {
-          const matchedBranch = this.branches.find(branch => branch.name === this.personalData.branchName);
+          const matchedBranch = this.branchItems.find(branch => branch.label === this.personalData.branchName);
           if (matchedBranch) {
-            this.selectedBranchId = matchedBranch.ID;
+            this.selectedBranchId = matchedBranch.value;
           }
         }
       }
     }
-
   }
-
-
-  onBankChange() {
+  
+  updateBranchItems(bankId: number | null) {
+    if (bankId) {
+      this.branches = this.allBranches[bankId.toString()] || [];
+      this.branchItems = this.branches.map(branch => ({
+        value: branch.ID,
+        label: branch.name
+      }));
+    } else {
+      this.branches = [];
+      this.branchItems = [];
+    }
+  }
+  
+  onBankChange(selectedBankId: number | null) {
+    this.selectedBankId = selectedBankId;
+    
     if (this.selectedBankId) {
       // Update branches based on selected bank
-      this.branches = this.allBranches[this.selectedBankId.toString()] || [];
-
+      this.updateBranchItems(this.selectedBankId);
+  
       // Update company data with bank name
-      const selectedBank = this.banks.find(bank => bank.ID === this.selectedBankId);
-      if (selectedBank) {
-        this.personalData.bankName = selectedBank.name;
+      const selectedBankItem = this.bankItems.find(bank => bank.value === this.selectedBankId);
+      if (selectedBankItem) {
+        this.personalData.bankName = selectedBankItem.label;
       }
-
+  
       // Reset branch selection if the current selection doesn't belong to this bank
-      const currentBranch = this.branches.find(branch => branch.ID === this.selectedBranchId);
+      const currentBranch = this.branchItems.find(branch => branch.value === this.selectedBranchId);
       if (!currentBranch) {
         this.selectedBranchId = null;
         this.personalData.branchName = '';
       }
     } else {
-      this.branches = [];
+      this.updateBranchItems(null);
+      this.selectedBranchId = null;
       this.personalData.bankName = '';
+      this.personalData.branchName = '';
     }
   }
-
-  onBranchChange() {
+  
+  onBranchChange(selectedBranchId: number | null) {
+    this.selectedBranchId = selectedBranchId;
+    
     if (this.selectedBranchId) {
       // Update company data with branch name
-      const selectedBranch = this.branches.find(branch => branch.ID === this.selectedBranchId);
-      if (selectedBranch) {
-        this.personalData.branchName = selectedBranch.name;
+      const selectedBranchItem = this.branchItems.find(branch => branch.value === this.selectedBranchId);
+      if (selectedBranchItem) {
+        this.personalData.branchName = selectedBranchItem.label;
       }
     } else {
       this.personalData.branchName = '';
@@ -613,7 +842,10 @@ export class EditOfficerComponent implements OnInit {
 
   onSubmitForm(form: NgForm) {
     form.form.markAllAsTouched();
+
+    this.validateLanguages();
   }
+
   onLicenseFrontImageSelected(event: any): void {
     const file: File = event.target.files[0];
     if (file) {
@@ -934,6 +1166,40 @@ export class EditOfficerComponent implements OnInit {
     this.router.navigate(['/centers/center-shashbord', this.centerId]); // Change '/reports' to your desired route
   }
 
+  blockSpecialChars(event: KeyboardEvent) {
+    // Allow letters (A-Z, a-z), space, backspace, delete, arrow keys
+    const allowedKeys = [
+      'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', ' '
+    ];
+  
+    // Regex: Only allow alphabets and spaces
+    const regex = /^[a-zA-Z\s]*$/;
+  
+    // Block if key is not allowed
+    if (!allowedKeys.includes(event.key) && !regex.test(event.key)) {
+      event.preventDefault();
+    }
+  }
+
+  capitalizeFirstLetter(field: keyof typeof this.personalData) {
+    if (this.personalData[field]) {
+      // Trim spaces
+      this.personalData[field] = this.personalData[field].trim();
+  
+      // Capitalize first letter
+      this.personalData[field] =
+        this.personalData[field].charAt(0).toUpperCase() +
+        this.personalData[field].slice(1);
+    }
+  }
+
+  onTrimInput(event: Event, modelRef: any, fieldName: string): void {
+    const inputElement = event.target as HTMLInputElement;
+    const trimmedValue = inputElement.value.trimStart();
+    modelRef[fieldName] = trimmedValue;
+    inputElement.value = trimmedValue;
+  }
+
 
 
 
@@ -982,6 +1248,7 @@ class Personal {
 
   centerId: number | string = '';
   irmId: number | string | null = '';
+  previousJobRole!: string;
 
 }
 

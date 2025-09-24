@@ -30,7 +30,6 @@ export class OfficerProfileComponent implements OnInit {
   centerId!: number;
 
 
-
   constructor(
     private ManageOficerSrv: ManageOfficersService,
     private router: Router,
@@ -54,10 +53,10 @@ export class OfficerProfileComponent implements OnInit {
   fetchOfficer(id: number) {
     this.isLoading = true;
     this.ManageOficerSrv.getOfficerById(id).subscribe((res: any) => {
-      console.log(res);
+      console.log('res', res);
       this.officerObj = res.officerData.collectionOfficer;
       
-      console.log(this.officerObj.empId);
+      console.log('officer', this.officerObj);
       this.isLoading = false;
     });
   }
@@ -149,6 +148,8 @@ export class OfficerProfileComponent implements OnInit {
     });
   }
 
+  
+
   const hasImage = !!this.officerObj.image;
 
   if (hasImage) {
@@ -168,28 +169,36 @@ export class OfficerProfileComponent implements OnInit {
     doc.restoreGraphicsState();
   }
 
-    // Add the image at the top if it exists
-    // if (this.imagebase64) {
-    //   doc.addImage(
-    //     img,
-    //     'JPEG',
-    //     14, // X position
-    //     10, // Y position (moved to top)
-    //     40, // Width
-    //     40  // Height
-    //   );
-    // }
-
-
-
     // Adjust starting positions based on image presence
-    const startX = hasImage ? 60 : 14; // If no image, start from left margin
-    const startY = hasImage ? 60 : 50; // Adjust Y position based on image presence
+    const startX = hasImage ? 60 : 14;
+    const startY = hasImage ? 60 : 50;
 
-  
-    // Title
+    // Fix for the top section border (image and basic info)
+    const imageboxX = 10;
+    const imageboxY = 8; // Start from top margin
+    const imageboxWidth = 190;
+    const imageboxHeight = hasImage ? 44 : 30; // Adjust height based on image presence
+    
+    // Draw rounded border for top section
+    doc.setDrawColor(241, 247, 250);
+    doc.setLineWidth(0.5);
+    doc.roundedRect(imageboxX, imageboxY, imageboxWidth, imageboxHeight, 3, 3, "S");
+
+    // Title - Personal Information
     doc.setFontSize(16);
     doc.setFont("Inter", "bold");
+    
+    // Fix for Personal Information section border
+    const personalboxX = 10;
+    const personalboxY = startY - 6;
+    const personalboxWidth = 190;
+    const personalboxHeight = 57; // Fixed height for personal info section
+    
+    // Draw rounded border for personal info section
+    doc.setDrawColor(241, 247, 250);
+    doc.setLineWidth(0.5);
+    doc.roundedRect(personalboxX, personalboxY, personalboxWidth, personalboxHeight, 3, 3, "S");
+
     doc.text("Personal Information", 14, startY);
 
     // Name and position info - position adjusted based on image presence
@@ -221,6 +230,18 @@ export class OfficerProfileComponent implements OnInit {
         empType = 'Driver';
         empCode = 'DVR'; // Added empCode for Driver
         break;
+      case 'Distribution Center Head':
+        empType = 'Distribution Center Head';
+        empCode = 'DCH';
+        break;
+      case 'Distribution Center Manager':
+        empType = 'Distribution Center Manager';
+        empCode = 'DCM';
+        break;
+      case 'Distribution Officer':
+        empType = 'Distribution Officer';
+        empCode = 'DIO';
+        break;
     }
 
     // Ensure empCode and empId exist
@@ -240,10 +261,30 @@ export class OfficerProfileComponent implements OnInit {
     doc.text(getValueOrNA(empCodeText), startX + textWidth, 22);
 
 
-    doc.text(getValueOrNA(this.officerObj.city), startX, 29);
-    doc.setFont("Inter", "normal");
+// Decide which value to display based on jobRole
+    let centerText = "N/A";
+    if (
+      this.officerObj.jobRole === "Collection Center Manager" ||
+      this.officerObj.jobRole === "Collection Center Head" ||
+      this.officerObj.jobRole === "Collection Officer" ||
+      this.officerObj.jobRole === "Customer Officer"
+    ) {
+      centerText = getValueOrNA(this.officerObj.regCode) + " Centre";
+    } else if (
+      this.officerObj.jobRole === "Distribution Center Manager" ||
+      this.officerObj.jobRole === "Distribution Center Head" ||
+      this.officerObj.jobRole === "Distribution Officer"
+    ) {
+      centerText = getValueOrNA(this.officerObj.distributedCenterRegCode) + " Centre";
+    }
+
+// Apply text in PDF
+doc.text(centerText, startX, 29);
+doc.setFont("Inter", "normal");
+
     doc.text(getValueOrNA(this.officerObj.companyNameEnglish), startX, 36);
 
+  
     doc.setFontSize(12);
     doc.setFont("Inter", "normal");
 
@@ -272,7 +313,7 @@ export class OfficerProfileComponent implements OnInit {
 
     // Phone Number 1
     doc.setFont("Inter", "normal");
-    doc.text("Phone Number - 1", 14, startY + 42);
+    doc.text("Mobile Number - 1", 14, startY + 42);
 
     if (this.officerObj.phoneNumber01 == null || this.officerObj.phoneNumber01 === "") {
       doc.setFont("Inter", "bold");
@@ -286,12 +327,12 @@ export class OfficerProfileComponent implements OnInit {
 
     
     doc.setFont("Inter", "normal");
-    doc.text("Phone Number - 2", 100, startY + 42);
+    doc.text("Mobile Number - 2", 100, startY + 42);
 
     // Check if phoneNumber02 is undefined or null
     if (this.officerObj.phoneNumber02 == null || this.officerObj.phoneNumber02 === "") {
       doc.setFont("Inter", "bold");
-      doc.text("N/A", 100, startY + 48); // Display N/A if phoneNumber02 is null or undefined
+      doc.text("-", 100, startY + 48); // Display N/A if phoneNumber02 is null or undefined
     } else {
       doc.setFont("Inter", "bold");
       doc.text(getValueOrNA(this.officerObj.phoneNumber02), 108, startY + 48);
@@ -302,6 +343,22 @@ export class OfficerProfileComponent implements OnInit {
     // Address Details Section
     doc.setFontSize(16);
     doc.setFont("Inter", "bold");
+
+    // Box start above the heading
+const boxX = 10;
+const boxY = startY + 54;  // move above heading
+const boxWidth = 190;
+
+// The last Y position after district field
+const lastY = startY + 108; 
+const boxHeight = (lastY + 4) - boxY; // +10 padding at bottom
+
+// Draw rounded border first (so it’s in background)
+doc.setDrawColor(241, 247, 250); // border color #F1F7FA
+doc.setLineWidth(0.5);
+doc.roundedRect(boxX, boxY, boxWidth, boxHeight, 3, 3, "S"); 
+// "S" = Stroke only (no fill, text will stay visible)
+
     doc.text("Address Details", 14, startY + 60);
 
     doc.setFontSize(12);
@@ -345,6 +402,19 @@ export class OfficerProfileComponent implements OnInit {
     // Bank Details Section
     doc.setFontSize(16);
     doc.setFont("Inter", "bold");
+
+    const bankBoxX = 10;
+const bankBoxY = startY + 114;   // start slightly above heading
+const bankBoxWidth = 190;
+
+// Last Y position after Branch Name value
+const bankLastY = startY + 152;
+const bankBoxHeight = (bankLastY + 4) - bankBoxY; // +4 for a little padding
+
+doc.setDrawColor(241, 247, 250); // border color #F1F7FA
+doc.setLineWidth(0.5);
+doc.roundedRect(bankBoxX, bankBoxY, bankBoxWidth, bankBoxHeight, 3, 3, "S");
+
     doc.text("Bank Details", 14, startY + 120);
 
     doc.setFontSize(12);
@@ -510,30 +580,39 @@ export class OfficerProfileComponent implements OnInit {
   }
 
   viewOfficerTarget(officerId: number, centerName: string) {
-    this.router.navigate([`/manage-officers/view-officer-target/${officerId}/${centerName}`]);
+
+    if (this.logingRole === 'Collection Center Head' || this.logingRole === 'Collection Center Manager') {
+      this.router.navigate([`/manage-officers/view-officer-target/${officerId}/${centerName}`]);
+    } else if (this.logingRole === 'Distribution Center Head' || this.logingRole === 'Distribution Center Manager') {
+      this.router.navigate([`/distribution-officers/view-officer-target/${officerId}/${centerName}`]);
+    } 
   }
 
   cancelDisclaim() {
     this.showDisclaimView = false;
-    this.router.navigate(['/manage-officers']);
+    this.router.navigate(['/distribution-officers']);
   }
 
   confirmDisclaim(id: number) {
+    console.log('id', id)
     this.isLoading = true;
 
     this.ManageOficerSrv.disclaimOfficer(id).subscribe(
       (response) => {
 
+        console.log(response)
+
         this.isLoading = false;
         this.showDisclaimView = false;
-        this.router.navigate(['/manage-officers']);
-        this.toastSrv.success('Officer ID sent successfully!');
+        this.router.navigate(['/distribution-officers']);
+        this.toastSrv.success('Officer Disclaimed successfully!');
+
       },
       (error) => {
         console.error('Error sending Officer ID:', error);
         this.isLoading = false;
-        this.toastSrv.error('Failed to send Officer ID!');
-        this.router.navigate(['/manage-officers']);
+        this.toastSrv.error('Failed to Disclam the Officer!');
+        this.router.navigate(['/distribution-officers']);
       }
     );
 
@@ -543,6 +622,8 @@ export class OfficerProfileComponent implements OnInit {
     const currentPath = this.router.url.split('?')[0];
     // Extract the first segment after the initial slash
     this.naviPath = currentPath.split('/')[1];
+
+    console.log('naviPath', this.naviPath)
   }
 
   viewImage(imageUrl: string) {
@@ -585,6 +666,11 @@ class Officer {
   companyNameEnglish!: string;
   centerName!: string;
   base64Image!: string;
+  distributedCenterId!: number;
+  distributedCenterName!: string;
+  distributedCenterRegCode!: string;
+  regCode!: string;
+  claimStatus!: number;
 
 
   //driver

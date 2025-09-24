@@ -18,11 +18,13 @@ import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/
 export class CchReceviedComplaintComponent implements OnInit{
 complainArr!: RecivedComplaint[];
   replyObj: Reply = new Reply();
+  templateData!: TemplateData;
 
   searchText: string = '';
   selectStatus: string = '';
   isReplyView: boolean = false;
   complainId!: number;
+  selectLanguage: string = 'English';
 
   page: number = 1;
   totalItems: number = 0;
@@ -88,7 +90,10 @@ complainArr!: RecivedComplaint[];
     this.isLoading = true;
     this.ComplainSrv.getComplainById(id).subscribe(
       (res) => {
+        console.log('res', res)
         this.replyObj = res.data;
+        this.templateData = res.template;
+        console.log('templateData', this.templateData)
         this.isLoading = false;
       }
     )
@@ -104,6 +109,7 @@ complainArr!: RecivedComplaint[];
   }
 
   onSearch() {
+    this.searchText = this.searchText?.trim() || '';
     this.fetchAllreciveComplaint();
 
   }
@@ -157,4 +163,18 @@ class RecivedComplaint {
 class Reply {
   id!: number
   reply!: string
+  language!: string
+  firstNameEnglish:string = '';
+  lastNameEnglish:string = '';
+}
+
+interface TemplateData {
+  EngName: string
+  SinName: string
+  TamName: string
+  companyNameEnglish: string
+  companyNameSinhala: string
+  companyNameTamil: string
+  centerName: string;
+  regCode: string;
 }

@@ -117,33 +117,50 @@ export class PriceRequestComponent implements OnInit {
   openPopup(item: any) {
     this.isPopupVisible = true;
 
+    // Determine which buttons to show based on status
+    const isPending = item.status === 'Pending';
+    const isApproved = item.status === 'Approved';
+    const isRejected = item.status === 'Rejected';
+
+    // Set the message based on status
+    let message = '';
+    if (isPending) {
+      message = 'Are you sure you want to approve or reject this request?';
+    } else if (isApproved) {
+      message = 'Are you sure you want to reject this request?';
+    } else if (isRejected) {
+      message = 'Are you sure you want to approve this request?';
+    }
+
     // HTML structure for the popup
     const tableHtml = `
-  <div class="container mx-auto bg-white dark:bg-[#363636] text-gray-800 dark:text-white p-4 rounded-lg">
-    <h1 class="text-center text-2xl font-bold mb-4 dark:text-white">Crop Name : ${item.cropNameEnglish}</h1>
-    <h2 class="text-center text-2xl font-bold mb-4 dark:text-white">Crop Veriety : ${item.varietyNameEnglish}</h2>
-    <h2 class="text-center text-2xl font-bold mb-4 dark:text-white">Request Price : Rs.${item.requestPrice}/=</h2>
-    <div>
-      <p class="text-center">Are you sure you want to approve or reject this request?</p>
-    </div>
-    <div class="flex justify-center mt-4">
-      <button id="rejectButton" class="bg-red-500 text-white px-6 py-2 rounded-lg mr-2">Reject</button>
-      <button id="approveButton" class="bg-green-500 text-white px-4 py-2 rounded-lg">Approve</button>
-    </div>
-  </div>
-`;
+        <div class="container mx-auto bg-white dark:bg-[#363636] text-gray-800 dark:text-white p-4 rounded-lg">
+            <h1 class="text-center text-2xl font-bold mb-4 dark:text-white">Crop Name : ${item.cropNameEnglish}</h1>
+            <h2 class="text-center text-2xl font-bold mb-4 dark:text-white">Crop Variety : ${item.varietyNameEnglish}</h2>
+            <h2 class="text-center text-2xl font-bold mb-4 dark:text-white">Request Price : Rs.${item.requestPrice}/=</h2>
+            <h2 class="text-center text-xl font-bold mb-4 dark:text-white">Current Status : ${item.status}</h2>
+            <div>
+                <p class="text-center">${message}</p>
+            </div>
+            <div class="flex justify-center mt-4">
+                ${isPending || isApproved ? `<button id="rejectButton" class="bg-red-500 text-white px-6 py-2 rounded-lg mr-2">Reject</button>` : ''}
+                ${isPending || isRejected ? `<button id="approveButton" class="bg-green-500 text-white px-4 py-2 rounded-lg">Approve</button>` : ''}
+            </div>
+        </div>
+    `;
 
     Swal.fire({
       html: tableHtml,
       showConfirmButton: false,
       width: 'auto',
       customClass: {
-        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white', // 👈 Outer popup styling
+        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
       },
       didOpen: () => {
-        document
-          .getElementById('approveButton')
-          ?.addEventListener('click', () => {
+        // Handle the "Approve" button click
+        const approveButton = document.getElementById('approveButton');
+        if (approveButton) {
+          approveButton.addEventListener('click', () => {
             this.isPopupVisible = false;
             this.PriceListSrv.ChangeRequestStatus(item.id, 'Approved').subscribe(
               (res) => {
@@ -180,11 +197,12 @@ export class PriceRequestComponent implements OnInit {
               }
             );
           });
+        }
 
         // Handle the "Reject" button click
-        document
-          .getElementById('rejectButton')
-          ?.addEventListener('click', () => {
+        const rejectButton = document.getElementById('rejectButton');
+        if (rejectButton) {
+          rejectButton.addEventListener('click', () => {
             this.isLoading = true;
             this.PriceListSrv.ChangeRequestStatus(item.id, 'Rejected').subscribe(
               (res) => {
@@ -220,6 +238,7 @@ export class PriceRequestComponent implements OnInit {
               }
             );
           });
+        }
       },
     });
   }
@@ -267,6 +286,12 @@ export class PriceRequestComponent implements OnInit {
 
   navigate(path: string) {
     this.router.navigate([`${path}`]);
+  }
+
+  trimmedSearchText() {
+    if (this.searchText && this.searchText.startsWith(' ')) {
+      this.searchText = this.searchText.trim();
+    }
   }
 
 }

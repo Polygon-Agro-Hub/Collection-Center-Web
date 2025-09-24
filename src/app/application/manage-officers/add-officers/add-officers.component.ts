@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { ManageOfficersService } from '../../../services/manage-officers-service/manage-officers.service';
@@ -9,12 +9,14 @@ import { TokenServiceService } from '../../../services/Token/token-service.servi
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { HttpClient } from '@angular/common/http';
 import { Location } from '@angular/common';
+import { Country, COUNTRIES } from '../../../../assets/country-data';
+import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
 
 
 @Component({
   selector: 'app-add-officers',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, LoadingSpinnerComponent, SerchableDropdownComponent],
   templateUrl: './add-officers.component.html',
   styleUrl: './add-officers.component.css'
 })
@@ -54,7 +56,23 @@ export class AddOfficersComponent implements OnInit {
   selectedBranchId: number | null = null;
   allBranches: BranchesData = {};
 
+  bankItems: { value: number; label: string }[] = [];
+  branchItems: { value: number; label: string }[] = [];
+
   invalidFields: Set<string> = new Set();
+
+  allowedPrefixes = ['70', '71', '72', '75', '76', '77', '78'];
+  isPhoneInvalidMap: { [key: string]: boolean } = {
+  phone01: false,
+  phone02: false,
+};
+
+  countries: Country[] = COUNTRIES;
+  selectedCountry1: Country | null = null;
+  selectedCountry2: Country | null = null;
+
+  dropdownOpen = false;
+  dropdownOpen2 = false;
 
 
   // Driver Images
@@ -92,9 +110,14 @@ export class AddOfficersComponent implements OnInit {
 
   isAppireImgValidation: boolean = false;
 
+  filteredCenterArr: Center[] = [];
+  filteredManagerArr: Manager[] = [];
 
-
-
+  centreDropdownOpen = false;
+  selectedCenterName: string = "";
+  selectedManager: string = "";
+  managerDropdownOpen = false;
+  selectedManagerName: string = "";
 
   constructor(
     private ManageOficerSrv: ManageOfficersService,
@@ -107,6 +130,9 @@ export class AddOfficersComponent implements OnInit {
 
   ) {
     this.logingRole = tokenSrv.getUserDetails().role
+    const defaultCountry = this.countries.find(c => c.code === 'lk') || null;
+    this.selectedCountry1 = defaultCountry;
+    this.selectedCountry2 = defaultCountry;
 
   }
 
@@ -138,6 +164,8 @@ export class AddOfficersComponent implements OnInit {
     { name: 'Vavuniya', province: 'Northern' },
   ];
 
+  districtItems = this.districts.map(d => ({ value: d.name, label: d.name }));
+
   VehicleTypes = [
     { name: 'Lorry', capacity: 2 },
     { name: 'Dimo Batta', capacity: 3.5 },
@@ -151,9 +179,95 @@ export class AddOfficersComponent implements OnInit {
     this.loadBanks()
     this.loadBranches()
     this.getAllCenters();
-    this.getLastID('COO');
-    this.EpmloyeIdCreate();
+    
+    // this.getLastID('COO');
+    // this.EpmloyeIdCreate();
   }
+
+  toggleDropdown() {
+    this.centreDropdownOpen = !this.centreDropdownOpen;
+  }
+  
+  toggleManagerDropdown() {
+    this.managerDropdownOpen = !this.managerDropdownOpen;
+  }
+  
+  selectCenter(item: Center) {
+    console.log('center selected');
+  
+    this.personalData.centerId = item.id;
+    this.selectedCenterName = item.centerName;
+    this.centreDropdownOpen = false; // close dropdown
+  
+    // Reset search input and filtered array
+    this.filteredCenterArr = [...this.centerArr]; // show full list next time
+    const searchInput = document.querySelector<HTMLInputElement>('.dropdown-search-input');
+    if (searchInput) {
+      searchInput.value = '';
+    }
+  
+    this.changeCenter();
+  }
+
+  changeCenter() {
+    console.log('changing')
+    console.log('perosnal center change,',  this.personalData)
+    this.personalData.jobRole = ''
+    this.personalData.irmId = null
+    this.selectedManager = ''
+    this.filteredManagerArr = []
+    console.log('personalData.irmId', this.personalData.irmId)
+    console.log('filteredManagerArr', this.filteredManagerArr)
+   this.getAllManagers()
+ }
+  
+  onManagerSearchInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const value = input.value.toLowerCase().trim(); // remove leading/trailing spaces
+    console.log('search value', value);
+  
+    this.filteredManagerArr = this.managerArr.filter(m => {
+      const fullName = `${m.firstNameEnglish} ${m.lastNameEnglish}`.toLowerCase();
+      return fullName.includes(value);
+    });
+  
+    console.log('filtered managers', this.filteredManagerArr);
+  }
+  
+  
+  selectManager(item: Manager) {
+    console.log('Manager selected');
+  
+    this.personalData.irmId = item.id;
+    this.selectedManager = item.firstNameEnglish + ' ' + item.lastNameEnglish;
+    console.log('selectedManager', this.selectedManager )
+    this.managerDropdownOpen = false; // close dropdown
+  
+    // Reset search input and filtered array
+    this.filteredManagerArr = [...this.managerArr]; // show full list next time
+    const searchInput = document.querySelector<HTMLInputElement>('.dropdown-manager-search-input');
+    if (searchInput) {
+      searchInput.value = '';
+    }
+  
+    console.log('id', this.personalData.irmId)
+  
+    // this.changeCenter();
+  }
+
+  @HostListener('document:click', ['$event.target'])
+onClick(targetElement: HTMLElement) {
+  const insideDropdown1 = targetElement.closest('.dropdown-wrapper-1');
+  const insideDropdown2 = targetElement.closest('.dropdown-wrapper-2');
+
+  // Close dropdowns only if click is outside their wrapper
+  if (!insideDropdown1) {
+    this.dropdownOpen = false;
+  }
+  if (!insideDropdown2) {
+    this.dropdownOpen2 = false;
+  }
+}
 
 
   onCheckboxChange(lang: string, event: any) {
@@ -176,6 +290,67 @@ export class AddOfficersComponent implements OnInit {
 
     this.validateLanguages();
 
+  }
+
+  onSearchInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+    const value = input.value.toLowerCase();
+    console.log('value', value);
+  
+    this.filteredCenterArr = this.centerArr.filter(c =>
+      (c.centerName || '').toLowerCase().includes(value)
+    );
+  
+    console.log('filtered centers', this.filteredCenterArr);
+  
+  }
+
+  selectCountry1(country: Country) {
+    this.selectedCountry1 = country;
+    this.personalData.phoneNumber01Code = country.dialCode; // update ngModel
+    console.log('sdsf', this.personalData.phoneNumber01Code)
+    this.dropdownOpen = false;
+  }
+
+  selectCountry2(country: Country) {
+    this.selectedCountry2 = country;
+    this.personalData.phoneNumber02Code = country.dialCode; // update ngModel
+    console.log('sdsf', this.personalData.phoneNumber02Code)
+    this.dropdownOpen2 = false;
+  }
+  
+  // get flag
+  getFlagUrl(code: string): string {
+    return `https://flagcdn.com/24x18/${code}.png`;
+  }
+
+  validateSriLankanPhone(input: string, key: string): void {
+    if (!input) {
+      this.isPhoneInvalidMap[key] = false;
+      return;
+    }
+  
+    const firstDigit = input.charAt(0);
+    const prefix = input.substring(0, 2);
+    const isValidPrefix = this.allowedPrefixes.includes(prefix);
+    const isValidLength = input.length === 9;
+  
+    if (firstDigit !== '7') {
+      this.isPhoneInvalidMap[key] = true;
+      return;
+    }
+  
+    if (!isValidPrefix && input.length >= 2) {
+      this.isPhoneInvalidMap[key] = true;
+      return;
+    }
+  
+    if (input.length === 9 && isValidPrefix) {
+      this.isPhoneInvalidMap[key] = false;
+      return;
+    }
+  
+    this.isPhoneInvalidMap[key] = false;
   }
 
 
@@ -220,55 +395,62 @@ export class AddOfficersComponent implements OnInit {
     }
   }
 
-  getLastID(role: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      this.ManageOficerSrv.getForCreateId(role).subscribe(
-        (res) => {
-          this.lastID = res.result.empId;
-          const lastId = res.result.empId;
-          resolve(lastId); // Resolve the Promise with the empId
-        },
-        (error) => {
-          console.error('Error fetching last ID:', error);
-          reject(error);
-        }
-      );
-    });
-  }
+  // getLastID(role: string): Promise<string> {
+  //   return new Promise((resolve, reject) => {
+  //     this.ManageOficerSrv.getForCreateId(role).subscribe(
+  //       (res) => {
+  //         this.lastID = res.result.empId;
+  //         const lastId = res.result.empId;
+  //         resolve(lastId); // Resolve the Promise with the empId
+  //       },
+  //       (error) => {
+  //         console.error('Error fetching last ID:', error);
+  //         reject(error);
+  //       }
+  //     );
+  //   });
+  // }
 
-  EpmloyeIdCreate() {
-    let rolePrefix: string;
-    if (this.personalData.jobRole === 'Collection Center Manager') {
-      rolePrefix = 'CCM';
-    } else if (this.personalData.jobRole === 'Customer Officer') {
-      rolePrefix = 'CUO';
-    } else if (this.personalData.jobRole === 'Driver') {
-      rolePrefix = 'DVR';
-    } else {
-      rolePrefix = 'COO';
-    }
+  // EpmloyeIdCreate() {
+  //   let rolePrefix: string;
+  //   if (this.personalData.jobRole === 'Collection Center Manager') {
+  //     rolePrefix = 'CCM';
+  //   } else if (this.personalData.jobRole === 'Customer Officer') {
+  //     rolePrefix = 'CUO';
+  //   } else if (this.personalData.jobRole === 'Driver') {
+  //     rolePrefix = 'DVR';
+  //   } else {
+  //     rolePrefix = 'COO';
+  //   }
 
-    this.getLastID(rolePrefix).then((lastID) => {
-      this.personalData.empId = rolePrefix + lastID;
-    });
-  }
+  //   this.getLastID(rolePrefix).then((lastID) => {
+  //     this.personalData.empId = rolePrefix + lastID;
+  //   });
+  // }
 
-  updateProvince(event: Event): void {
-    const target = event.target as HTMLSelectElement; // Cast to HTMLSelectElement
-    const selectedDistrict = target.value;
+  // updateProvince(event: Event): void {
+  //   const target = event.target as HTMLSelectElement; // Cast to HTMLSelectElement
+  //   const selectedDistrict = target.value;
 
-    const selected = this.districts.find(district => district.name === selectedDistrict);
+  //   const selected = this.districts.find(district => district.name === selectedDistrict);
 
-    if (this.itemId === null) {
+  //   if (this.itemId === null) {
 
-      if (selected) {
-        this.personalData.province = selected.province;
-      } else {
-        this.personalData.province = '';
-      }
+  //     if (selected) {
+  //       this.personalData.province = selected.province;
+  //     } else {
+  //       this.personalData.province = '';
+  //     }
 
-    }
+  //   }
 
+  // }
+
+  onDistrictChange(districtName: string | null) {
+    if (this.itemId !== null) return; // keep your original guard
+
+    const selected = this.districts.find(d => d.name === districtName || '');
+    this.personalData.province = selected ? selected.province : '';
   }
 
   onSubmit() {
@@ -359,8 +541,8 @@ export class AddOfficersComponent implements OnInit {
 
   onCancel() {
     Swal.fire({
-      title: 'Are you sure?',
-      text: 'Do you really want to cancel this form?',
+      title: 'You have unsaved changes',
+      html: 'If you leave this page now, your changes will be lost.<br>Do you want to continue without saving?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',
@@ -388,20 +570,28 @@ export class AddOfficersComponent implements OnInit {
 
   getAllCenters() {
     this.isLoading = true;
-    this.ManageOficerSrv.getCCHOwnCenters().subscribe(
+    this.ManageOficerSrv.getCCHOwnCentersWithOutRegCode().subscribe(
       (res) => {
         this.centerArr = res
+        this.filteredCenterArr = [...this.centerArr];
+        console.log('centerArr', this.centerArr)
         this.isLoading = false;
 
       }
     )
   }
 
+  
+
   getAllManagers() {
     this.isLoading = true;
     this.ManageOficerSrv.getCenterManagers(this.personalData.centerId).subscribe(
       (res) => {
         this.managerArr = res
+        this.filteredManagerArr = [];
+        this.filteredManagerArr = [...this.managerArr];
+        console.log('managerArr', this.managerArr)
+        console.log('perosnal,',  this.personalData)
         this.isLoading = false;
 
 
@@ -425,62 +615,75 @@ export class AddOfficersComponent implements OnInit {
 
   onSubmitForm(form: NgForm) {
     form.form.markAllAsTouched();
+
+    this.validateLanguages();
   }
 
 
   loadBanks() {
     this.http.get<Bank[]>('assets/json/banks.json').subscribe(
       data => {
-        this.banks = data;
-
+        this.banks = data.sort((a, b) => a.name.localeCompare(b.name));
+  
+        // Map to dropdown items
+        this.bankItems = this.banks.map(b => ({
+          value: b.ID,
+          label: b.name
+        }));
       },
       error => {
         console.error('Error loading banks:', error);
       }
     );
   }
-
+  
   loadBranches() {
     this.http.get<BranchesData>('assets/json/branches.json').subscribe(
       data => {
+        Object.keys(data).forEach(bankID => {
+          data[bankID].sort((a, b) => a.name.localeCompare(b.name));
+        });
         this.allBranches = data;
-
       },
       error => {
         console.error('Error loading branches:', error);
       }
     );
   }
-
-
-
-
-
-  onBankChange() {
-    if (this.selectedBankId) {
-      // Update branches based on selected bank
-      this.branches = this.allBranches[this.selectedBankId.toString()] || [];
-
-      // Update company data with bank name
-      const selectedBank = this.banks.find(bank => bank.ID === this.selectedBankId);
+  
+  onBankChange(bankId: number | null) {
+    if (bankId) {
+      this.selectedBankId = bankId;
+  
+      // Update branches
+      this.branches = this.allBranches[bankId.toString()] || [];
+      this.branchItems = this.branches.map(br => ({
+        value: br.ID,
+        label: br.name
+      }));
+  
+      // Update personalData
+      const selectedBank = this.banks.find(bank => bank.ID === bankId);
       if (selectedBank) {
         this.personalData.bankName = selectedBank.name;
         this.invalidFields.delete('bankName');
       }
-
+  
       // Reset branch selection
       this.selectedBranchId = null;
       this.personalData.branchName = '';
     } else {
       this.branches = [];
+      this.branchItems = [];
       this.personalData.bankName = '';
     }
   }
-
-  onBranchChange() {
-    if (this.selectedBranchId) {
-      // Update company data with branch name
-      const selectedBranch = this.branches.find(branch => branch.ID === this.selectedBranchId);
+  
+  onBranchChange(branchId: number | null) {
+    if (branchId) {
+      this.selectedBranchId = branchId;
+  
+      const selectedBranch = this.branches.find(branch => branch.ID === branchId);
       if (selectedBranch) {
         this.personalData.branchName = selectedBranch.name;
         this.invalidFields.delete('branchName');
@@ -804,7 +1007,40 @@ export class AddOfficersComponent implements OnInit {
     this.driverObj.vCapacity = this.selectVehicletype.capacity
   }
 
+  blockSpecialChars(event: KeyboardEvent) {
+    // Allow letters (A-Z, a-z), space, backspace, delete, arrow keys
+    const allowedKeys = [
+      'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', ' '
+    ];
+  
+    // Regex: Only allow alphabets and spaces
+    const regex = /^[a-zA-Z\s]*$/;
+  
+    // Block if key is not allowed
+    if (!allowedKeys.includes(event.key) && !regex.test(event.key)) {
+      event.preventDefault();
+    }
+  }
 
+  capitalizeFirstLetter(field: keyof typeof this.personalData) {
+    if (this.personalData[field]) {
+      // Trim spaces
+      this.personalData[field] = this.personalData[field].trim();
+  
+      // Capitalize first letter
+      this.personalData[field] =
+        this.personalData[field].charAt(0).toUpperCase() +
+        this.personalData[field].slice(1);
+    }
+  }
+
+  onTrimInput(event: Event, modelRef: any, fieldName: string): void {
+    const inputElement = event.target as HTMLInputElement;
+    const trimmedValue = inputElement.value.trimStart();
+    modelRef[fieldName] = trimmedValue;
+    inputElement.value = trimmedValue;
+  }
+  
 }
 
 
@@ -844,7 +1080,7 @@ class Personal {
   image!: any
 
   centerId: number | string = '';
-  irmId: number | string = '';
+  irmId: number | string | null = null;
 }
 
 

@@ -98,6 +98,7 @@ export class ViewPriceListComponent implements OnInit {
   }
 
   onPageChange(event: number) {
+    this.editingIndex = null;
     this.page = event;
     this.fetchAllPriceList(this.page, this.itemsPerPage);
   }
@@ -133,8 +134,14 @@ export class ViewPriceListComponent implements OnInit {
   }
 
   validateInput() {
+    // Ensure value is not negative
     if (this.editValue < 0) {
       this.editValue = 0;
+    }
+
+    // Round to 2 decimal places
+    if (this.editValue !== null && this.editValue !== undefined) {
+      this.editValue = parseFloat(this.editValue.toFixed(2));
     }
   }
 
@@ -149,7 +156,7 @@ export class ViewPriceListComponent implements OnInit {
   hasUnsavedChanges(): boolean {
     return this.editingIndex !== null;
   }
-  
+
   // Modified saveRow method to reset the editing state
   saveRow(id: number, crop: string, variety: string, grade: string) {
     if (this.editValue != null) {
@@ -181,18 +188,18 @@ export class ViewPriceListComponent implements OnInit {
       this.editingIndex = null;
     }
   }
-  
+
   cancelEdit() {
     this.editingIndex = null;
   }
 
-  leaveWithoutSaving() { 
+  leaveWithoutSaving() {
     this.isExit = false;
     this.editingIndex = null;
     this.router.navigate(['/dashbord'])
   }
-  
-  stayOnPage() { 
+
+  stayOnPage() {
     this.isExit = false;
   }
 }
@@ -204,5 +211,6 @@ class PriceList {
   averagePrice!: string;
   grade!: string;
   updatedPrice!: number;
+  indicatePrice!: number;
   createdAt!: string;
 }

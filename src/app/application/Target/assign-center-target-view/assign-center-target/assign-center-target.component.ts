@@ -61,6 +61,7 @@ export class AssignCenterTargetComponent implements OnInit {
   }
 
   onSubmit() {
+    this.isLoading = true;
     this.newTargetObj.companyCenterId = this.companyCenterId
     this.newTargetObj.date = this.selectDate
     this.newTargetObj.crop = this.assignCropsArr
@@ -69,6 +70,7 @@ export class AssignCenterTargetComponent implements OnInit {
     this.TargetSrv.addNewCenterTarget(this.newTargetObj).subscribe(
       (res) => {
         if (res.status) {
+          this.isLoading = false;
           this.toastSrv.success(res.message)
           this.fetchSavedCenterCrops();
         }

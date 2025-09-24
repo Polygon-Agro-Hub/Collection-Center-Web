@@ -55,39 +55,42 @@ export class OfficerTargetViewComponent {
     }
 
     this.TargetSrv.getOfficerAvailabeTarget(this.OfficerObj, page, limit, status, validity, searchText).subscribe(
+      // (res) => {
+      //   console.log('fetching');
+      //   console.log(this.hasData2);
+      //   this.targetArr = res.result;
+      //   this.totalItems = res.total;
+      //   if (res.total === 0) {
+      //     this.hasData2 = false;
+      //   } else {
+      //     this.hasData2 = true;
+      //   }
+      //   this.isLoading = false;
+
+      //   console.log('fetched');
+      //   console.log(this.hasData2);
+      // }
       (res) => {
-        console.log('fetching');
-        console.log(this.hasData2);
+        if (res.status) {
+          this.responseTitle = res.message;
           this.targetArr = res.result;
           this.totalItems = res.total;
           if (res.total === 0) {
-            this.hasData2 = false;
+            this.hasData = false;
           } else {
-            this.hasData2 = true;
+            this.hasData = true;
           }
           this.isLoading = false;
+        } else {
+          this.responseTitle = res.message;
+          this.hasData = false;
+          this.isLoading = false;
 
-          console.log('fetched');
-          console.log(this.hasData2);
+        }
+
+        console.log(this.responseTitle, this.hasData);
+        
       }
-      // (res) => {
-      //   if (res.status) {
-      //     this.responseTitle = res.message;
-      //     this.targetArr = res.result;
-      //     this.totalItems = res.total;
-      //     if (res.total === 0) {
-      //       this.hasData = false;
-      //     } else {
-      //       this.hasData = true;
-      //     }
-      //     this.isLoading = false;
-      //   } else {
-      //     this.responseTitle = res.message;
-      //     this.hasData = false;
-      //     this.isLoading = false;
-
-      //   }
-      // }
     )
   }
 
@@ -97,6 +100,7 @@ export class OfficerTargetViewComponent {
     this.isLoading = true
     if (!this.OfficerObj.jobRole || !this.OfficerObj.officerId || !this.OfficerObj.fromDate || !this.OfficerObj.toDate) {
       this.toastSrv.warning('Fill All Input feilds')
+      this.isLoading = false;
       return;
     }
 
@@ -112,35 +116,35 @@ export class OfficerTargetViewComponent {
     this.TargetSrv.getOfficerAvailabeTarget(this.OfficerObj, page, limit, status, validity, searchText).subscribe(
 
       (res) => {
-        console.log('fetching');
-        console.log(this.hasData);
-        this.targetArr = res.result;
-          this.totalItems = res.total;
-          if (res.total === 0) {
-            this.hasData = false;
-          } else {
-            this.hasData = true;
-          }
-          this.isLoading = false;
-
-          console.log('fetched');
-          console.log(this.hasData);
         // console.log('fetching');
         // console.log(this.hasData);
-        // if (res.status) {
-        //   this.responseTitle = res.message;
-        //   this.hasData = true;
-        //   this.targetArr = res.result;
-        //   this.totalItems = res.total;
-        //   this.isLoading = false;
-        // } else {
-        //   this.responseTitle = res.message;
+        // this.targetArr = res.result;
+        // this.totalItems = res.total;
+        // if (res.total === 0) {
         //   this.hasData = false;
-        //   this.isLoading = false;
-
+        // } else {
+        //   this.hasData = true;
         // }
+        // this.isLoading = false;
+
         // console.log('fetched');
         // console.log(this.hasData);
+        // console.log('fetching');
+        // console.log(this.hasData);
+        if (res.status) {
+          this.responseTitle = res.message;
+          this.hasData = true;
+          this.targetArr = res.result;
+          this.totalItems = res.total;
+          this.isLoading = false;
+        } else {
+          this.responseTitle = res.message;
+          this.hasData = false;
+          this.isLoading = false;
+
+        }
+        console.log('fetched');
+        console.log(this.hasData);
       }
     )
   }
@@ -231,6 +235,10 @@ export class OfficerTargetViewComponent {
           this.isDownloading = false;
         }
       });
+  }
+
+  trimedSearchText() {
+    this.searchText = this.searchText.trim()
   }
 
 

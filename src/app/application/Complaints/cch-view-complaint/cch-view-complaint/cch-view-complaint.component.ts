@@ -6,11 +6,12 @@ import { CchSendComplaintComponent } from '../cch-send-complaint/cch-send-compla
 import { ComplaintsService } from '../../../../services/Complaints-Service/complaints.service';
 import { ToastAlertService } from '../../../../services/toast-alert/toast-alert.service';
 import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
+import { SerchableDropdownComponent } from '../../../../components/serchable-dropdown/serchable-dropdown.component';
 
 @Component({
   selector: 'app-cch-view-complaint',
   standalone: true,
-  imports: [CommonModule, FormsModule, CchReceviedComplaintComponent, CchSendComplaintComponent, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, CchReceviedComplaintComponent, CchSendComplaintComponent, SerchableDropdownComponent, LoadingSpinnerComponent],
   templateUrl: './cch-view-complaint.component.html',
   styleUrl: './cch-view-complaint.component.css'
 })
@@ -33,6 +34,21 @@ export class CchViewComplaintComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchAllCategory();
+  }
+
+  get categoryDropdownItems() {
+    return this.categoryArr.map(cat => ({
+      value: cat.id.toString(),
+      label: cat.categoryEnglish,
+      disabled: false
+    }));
+  }
+
+  // 5. Add selection change handler
+  onCategorySelectionChange(selectedValue: string) {
+    this.category = selectedValue || '';
+    // Add any additional logic you need when category changes
+    console.log('Category selected:', selectedValue);
   }
 
   onSubmit() {
@@ -96,6 +112,26 @@ export class CchViewComplaintComponent implements OnInit {
         this.categoryArr = res;
       }
     )
+  }
+
+  onTrimInput(event: Event): void {
+    const inputElement = event.target as HTMLTextAreaElement;
+    const trimmedValue = inputElement.value.trimStart();
+    this.complaint = trimmedValue;
+    inputElement.value = trimmedValue;
+  }
+
+
+  capitalizeFirstLetter(event: Event) {
+    if (this.complaint) {
+      // Trim spaces
+      this.complaint = this.complaint.trim();
+  
+      // Capitalize first letter
+      this.complaint =
+        this.complaint.charAt(0).toUpperCase() +
+        this.complaint.slice(1);
+    }
   }
 
 

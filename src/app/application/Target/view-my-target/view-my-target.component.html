@@ -1,9 +1,10 @@
-<app-loading-spinner *ngIf="isLoading"/>
+<app-loading-spinner *ngIf="isLoading" />
 
 <div *ngIf="!isLoading">
     <div class="flex flex-row ">
         <p class="font-semibold text-[#424242] mb-4 mr-5 ml-0 dark:text-[#FFFFFF] dark:bg-[#0F0F0F] text-l">Profile</p>
-        <p class="font-semibold text-[#424242] mb-4 mr-5 ml-0 dark:text-[#FFFFFF] dark:bg-[#0F0F0F] text-l">View My Target
+        <p class="font-semibold text-[#424242] mb-4 mr-5 ml-0 dark:text-[#FFFFFF] dark:bg-[#0F0F0F] text-l">View My
+            Target
         </p>
     </div>
 
@@ -88,7 +89,7 @@
                         <th class="px-6 py-3 text-center font-semibold">To Do (kg)</th>
                         <th class="px-6 py-3 text-left font-semibold">Completed (kg)</th>
                         <th class="px-6 py-3 text-center font-semibold">Status</th>
-                        <th class="px-6 py-3 text-left font-semibold">Ends At</th>
+                        <!-- <th class="px-6 py-3 text-left font-semibold">Ends At</th> -->
                         <th class="px-6 py-3 text-left font-semibold"></th>
                     </tr>
                 </thead>
@@ -99,7 +100,8 @@
                         <td class="px-6 py-4 text-black font-semibold dark:text-gray-300">{{item.cropNameEnglish}}</td>
                         <td class="px-6 py-4 text-black font-semibold dark:text-gray-300">{{item.varietyNameEnglish}}
                         </td>
-                        <td class="px-6 py-4 text-black text-center font-semibold dark:text-gray-300">{{item.grade}}</td>
+                        <td class="px-6 py-4 text-black text-center font-semibold dark:text-gray-300">{{item.grade}}
+                        </td>
                         <td class="px-6 py-4 text-black font-semibold dark:text-gray-300">{{item.target}}</td>
                         <td class="px-6 py-4 text-black font-semibold dark:text-gray-300">{{item.remaining}}</td>
                         <td class="px-6 py-4 text-black font-semibold dark:text-gray-300">{{item.complete}}</td>
@@ -118,10 +120,10 @@
                                 Exceeded
                             </span>
                         </td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
+                        <!-- <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
                             <p class="text-[#646464] text-sm">{{ item.toDate | date: 'yyyy/MM/dd' }}</p>
-                            <!-- <p class="text-[#646464] text-sm">{{ item.toDate | date: 'hh:mm a' }}</p> -->
-                        </td>
+                            <p class="text-[#646464] text-sm">{{ item.toDate | date: 'hh:mm a' }}</p>
+                        </td> -->
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
                             <i *ngIf="item.status === 'Pending'"
                                 class="fa-solid fa-pen-to-square text-blue-600 cursor-pointer"
@@ -134,6 +136,15 @@
                 </tbody>
 
             </table>
+        </div>
+        <div class="flex items-center justify-center text-center mt-6">
+            <button
+                class="bg-[#415CFF] text-white text-center shadow-md font-medium rounded-lg py-2 px-5 mr-5 text-lg flex items-center"
+                (click)="downloadTemplate1()">
+                <i class="fa-solid fa-download px-2" *ngIf="!isDownloading"></i>
+                <i class="fa-solid fa-spinner fa-spin px-2" *ngIf="isDownloading"></i>
+                {{ isDownloading ? " Downloading..." : " Download" }}
+            </button>
         </div>
     </div>
 </div>

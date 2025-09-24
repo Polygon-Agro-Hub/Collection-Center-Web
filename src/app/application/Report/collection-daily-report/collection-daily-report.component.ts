@@ -7,11 +7,13 @@ import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 import { jsPDF } from 'jspdf';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import html2canvas from 'html2canvas';
+import { ThemeService } from '../../../theme.service';
+import { CustomDatepickerComponent } from '../../../components/custom-datepicker/custom-datepicker.component';
 
 @Component({
   selector: 'app-collection-daily-report',
   standalone: true,
-  imports: [CommonModule, FormsModule, CanvasJSAngularChartsModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, CanvasJSAngularChartsModule, LoadingSpinnerComponent, CustomDatepickerComponent],
   templateUrl: './collection-daily-report.component.html',
   styleUrl: './collection-daily-report.component.css',
   providers: [DatePipe]
@@ -22,12 +24,12 @@ export class CollectionDailyReportComponent implements OnInit {
   officerName!: string;
   empId!: string;
 
-  selectDate: string = '';
+  selectDate: string | Date | null = null;
   loadingChart = true;
   loadingTable = true;
   chartOptions: any;
   hasData: boolean = true;
-
+  isDarkTheam: boolean = false;
 
   isLoading: boolean = true;
 
@@ -35,8 +37,12 @@ export class CollectionDailyReportComponent implements OnInit {
     private router: Router,
     private ReportSrv: ReportServiceService,
     private route: ActivatedRoute,
-    private datePipe: DatePipe
-  ) { }
+    private datePipe: DatePipe,
+    private themeService: ThemeService,
+
+  ) { 
+    this.isDarkTheam = this.themeService.getActiveTheme() === 'dark' ? true : false;
+  }
 
   ngOnInit(): void {
     this.officerId = this.route.snapshot.params['id'];
@@ -45,25 +51,26 @@ export class CollectionDailyReportComponent implements OnInit {
 
     const today = new Date();
     this.selectDate = today.toISOString().split('T')[0];
+    // this.isDarkTheam = localStorage.getItem('selectedTheme') === 'dark' ? true : false;
 
     this.fetchDailyReport();
   }
 
-  fetchDailyReport(date: string = this.selectDate) {
+  fetchDailyReport(date: string | Date | null = this.selectDate) {
     this.loadingTable = true;
     this.loadingChart = true;
     this.isLoading = true;
-  
+
     this.ReportSrv.getCollectionDailyReport(this.officerId, date).subscribe(
       (res) => {
         console.log('response', res.data);
-  
+
         this.hasData = res.data.length > 0;
-  
+
         if (!this.hasData) {
           this.updateChart(); // Optional: clear chart when no data
         }
-  
+
         // Always map the array (even if empty — safe)
         this.dailyReportArr = res.data.map((item: any) => ({
           ...item,
@@ -72,9 +79,9 @@ export class CollectionDailyReportComponent implements OnInit {
           gradeC: Number(item.gradeC) || 0,
           total: Number(item.total) || 0,
         }));
-  
+
         console.log('array', this.dailyReportArr);
-        
+
         this.updateChart();
         this.loadingTable = false;
         this.isLoading = false;
@@ -87,21 +94,26 @@ export class CollectionDailyReportComponent implements OnInit {
       }
     );
   }
-  
+
 
   navigateToReports() {
     this.router.navigate(['/reports']); // Change '/reports' to your desired route
   }
 
-  filterByDate() {
+  // filterByDate() {
+  //   this.dailyReportArr = [];
+  //   this.fetchDailyReport(this.selectDate);
+  // }
+
+  onDateChange(newDate: string | Date | null) {
     this.dailyReportArr = [];
-    this.fetchDailyReport(this.selectDate);
+    this.selectDate = newDate;
+    this.fetchDailyReport();
   }
 
   updateChart() {
     this.isLoading = true;
     const gradeAData = this.dailyReportArr.map((crop) => ({
-      
       label: crop.varietyNameEnglish,
       y: crop.gradeA || 0,
       color: "#2B88D9",
@@ -121,29 +133,45 @@ export class CollectionDailyReportComponent implements OnInit {
       color: "#A7D5F2",
     }));
 
+    // Set colors based on theme
+    const backgroundColor = this.isDarkTheam ? "#1F2937" : "#FFFFFF";
+    const textColor = this.isDarkTheam ? "#FFFFFF" : "#000000";
+    const gridColor = this.isDarkTheam ? "#374151" : "#E5E7EB";
+
     this.chartOptions = {
       animationEnabled: true,
-      theme: "light2",
-      color: "#000000", // Note: this sets series color (not axis title)
+      theme: this.isDarkTheam ? "dark2" : "light2", // Use appropriate theme
+      backgroundColor: backgroundColor, // Set background color
       axisX: {
         title: "Crop Variety",
-        titleFontColor: "#000000", // Set title color (example: red)
+        titleFontColor: textColor,
+        labelFontColor: textColor,
+        lineColor: gridColor,
+        tickColor: gridColor,
         reversed: true,
       },
       axisY: {
         title: "kg",
-        titleFontColor: "#000000", // Set title color
+        titleFontColor: textColor,
+        labelFontColor: textColor,
+        lineColor: gridColor,
+        tickColor: gridColor,
+        gridColor: gridColor,
         includeZero: true,
       },
       legend: {
         cursor: "pointer",
+        fontColor: textColor, // Legend text color
         itemclick: (e: any) => {
           e.dataSeries.visible = typeof e.dataSeries.visible === "undefined" || e.dataSeries.visible;
           e.chart.render();
         },
       },
       toolTip: {
-        shared: true
+        shared: true,
+        backgroundColor: this.isDarkTheam ? "#374151" : "#FFFFFF",
+        fontColor: textColor,
+        borderColor: gridColor
       },
       data: [
         {
@@ -152,7 +180,7 @@ export class CollectionDailyReportComponent implements OnInit {
           showInLegend: true,
           legendMarkerColor: "#2B88D9",
           dataPoints: gradeAData,
-          cursor: "pointer", // 👈 Add this
+          cursor: "pointer",
         },
         {
           type: "stackedBar",
@@ -160,7 +188,7 @@ export class CollectionDailyReportComponent implements OnInit {
           showInLegend: true,
           legendMarkerColor: "#79BAF2",
           dataPoints: gradeBData,
-          cursor: "pointer", // 👈 Add this
+          cursor: "pointer",
         },
         {
           type: "stackedBar",
@@ -168,14 +196,13 @@ export class CollectionDailyReportComponent implements OnInit {
           showInLegend: true,
           legendMarkerColor: "#A7D5F2",
           dataPoints: gradeCData,
-          cursor: "pointer", // 👈 Add this
+          cursor: "pointer",
         },
       ]
     };
 
     this.loadingChart = false;
     this.isLoading = false;
-
   }
 
   async downloadPdf() {

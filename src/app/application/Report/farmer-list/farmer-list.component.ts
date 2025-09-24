@@ -5,11 +5,12 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { ReportServiceService } from '../../../services/Report-service/report-service.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
+import { CustomDatepickerComponent } from "../../../components/custom-datepicker/custom-datepicker.component";
 
 @Component({
   selector: 'app-farmer-list',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent, CustomDatepickerComponent],
   templateUrl: './farmer-list.component.html',
   styleUrl: './farmer-list.component.css'
 })
@@ -24,8 +25,7 @@ export class FarmerListComponent implements OnInit {
   hasData: boolean = true;
 
   searchText: string = '';
-  selectDate: string = '';
-
+  selectedDate: string | Date | null = null;
   isLoading: boolean = true;
 
   constructor(
@@ -37,14 +37,15 @@ export class FarmerListComponent implements OnInit {
   ngOnInit(): void {
     this.officerId = this.route.snapshot.params['id'];
     this.officerName = this.route.snapshot.params['officer'];
-    this.selectDate = new Date().toISOString().slice(0, 10);
+    const today = new Date();
+    this.selectedDate = today.toISOString().split('T')[0];
 
     this.fetchFarmerList();
 
 
   }
 
-  fetchFarmerList(page: number = 1, limit: number = this.itemsPerPage, searchText: string = '', date: string = this.selectDate) {
+  fetchFarmerList(page: number = 1, limit: number = this.itemsPerPage, searchText: string = '', date: string | Date | null = this.selectedDate) {
     this.isLoading = true;
     this.ReportSrv.getCollectionFarmerList(this.officerId, page, limit, searchText, date).subscribe(
       (res) => {
@@ -66,6 +67,7 @@ export class FarmerListComponent implements OnInit {
   }
 
   onSearch() {
+    this.searchText = this.searchText.trimStart();
     this.fetchFarmerList(this.page, this.itemsPerPage, this.searchText);
   }
 
@@ -74,8 +76,13 @@ export class FarmerListComponent implements OnInit {
     this.fetchFarmerList(this.page, this.itemsPerPage, this.searchText);
   }
 
-  filterDate() {
-    this.fetchFarmerList(this.page, this.itemsPerPage, this.searchText, this.selectDate);
+  // filterDate() {
+  //   this.fetchFarmerList(this.page, this.itemsPerPage, this.searchText, this.selectDate);
+  // }
+
+  onDateChange(newDate: string | Date | null) {
+    this.selectedDate = newDate;
+    this.fetchFarmerList();
   }
 
   onPageChange(event: number) {
@@ -87,6 +94,11 @@ export class FarmerListComponent implements OnInit {
     this.router.navigate([`reports/farmer-report/${id}`])
   }
 
+  checkLeadingSpace() {
+    if (this.searchText && this.searchText.startsWith(' ')) {
+      this.searchText = this.searchText.trim();
+    }
+  }
 
 }
 

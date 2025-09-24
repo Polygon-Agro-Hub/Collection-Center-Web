@@ -1,7 +1,8 @@
 <app-loading-spinner *ngIf="isLoading" />
 
 <div *ngIf="!isLoading">
-  <div class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
+  <div
+    class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
     <p (click)="navigateToReports()">Reports</p>
     <p onclick="history.back()">Officer Reports</p>
     <p>Daily Report</p>
@@ -12,25 +13,40 @@
       <div class="flex flex-row items-center gap-4">
         <p class="text-xl font-semibold dark:text-white">Date :</p>
         <div class="relative w-48 mr-6">
-          <div
+          <!-- <div
             class="border-2 rounded-xl dark:bg-[#363638] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
-            <input type="date" [(ngModel)]="selectDate" (change)="filterByDate()"
-              class="block w-full appearance-none dark:bg-[#363638] text-textLight dark:text-textDark px-3 py-1 rounded-xl focus:outline-none custom-date-input" />
-          </div>
+            <input type="date" [(ngModel)]="selectDate" (change)="filterByDate()" class="block w-full appearance-none text-textLight dark:text-textDark bg-white dark:bg-[#292929] px-3 py-2 rounded-xl focus:outline-none 
+                          border border-gray-300 dark:border-gray-600
+                          [color-scheme:light] dark:[color-scheme:dark]
+                          [&::-webkit-calendar-picker-indicator]:filter 
+                          [&::-webkit-calendar-picker-indicator]:cursor-pointer
+                          [&::-webkit-calendar-picker-indicator]:ml-1
+                          dark:[&::-webkit-calendar-picker-indicator]:invert
+                          [&::-webkit-datetime-edit]:text-gray-800
+                          dark:[&::-webkit-datetime-edit]:text-gray-200
+                          [&::-webkit-datetime-edit-fields-wrapper]:text-gray-800
+                          dark:[&::-webkit-datetime-edit-fields-wrapper]:text-gray-200" />
+          </div> -->
+
+          <app-custom-datepicker
+  [selectedDate]="selectDate"
+  (dateChange)="onDateChange($event)"
+></app-custom-datepicker>
         </div>
       </div>
     </div>
 
     <div class="flex flex-col items-center justify-center my-5">
-      <p class="text-xl text-[#292929] dark:text-textDark font-semibold">{{officerName}} - <span class="dark:text-white">{{empId}}</span></p>
+      <p class="text-xl text-[#292929] dark:text-textDark font-semibold">{{officerName}} - <span
+          class="dark:text-white">{{empId}}</span></p>
       <p class="text-lg text-[#534E4E] dark:text-textDark">On <span class="dark:text-white">{{selectDate}}</span></p>
     </div>
 
     <div *ngIf="!hasData"
-            class="flex flex-col items-center w-full h-screen px-10 py-7 bg-tileLight dark:bg-[#363636] dark:text-textDark mt-6">
-            <p class="text-[#494949] my-6 dark:text-textDark">--No Data Availabale--</p>
-            <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20 dark:text-textDark" />
-        </div>
+      class="flex flex-col items-center w-full h-screen px-10 py-7 bg-tileLight dark:bg-[#363636] dark:text-textDark mt-6">
+      <p class="text-[#494949] my-6 dark:text-textDark">--No Data Availabale--</p>
+      <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20 dark:text-textDark" />
+    </div>
 
     <div *ngIf="hasData">
       <div *ngIf="!loadingChart; else loading">
@@ -38,11 +54,11 @@
           <canvasjs-chart *ngIf="chartOptions" [options]="chartOptions"></canvasjs-chart>
         </div>
       </div>
-      
+
       <ng-template #loading>
         <p>Loading chart...</p>
       </ng-template>
-  
+
       <div class="w-full mt-8 rounded-lg">
         <table class="w-full border-collapse border dark:bg-[white] border-gray-300 rounded-lg">
           <thead>
@@ -56,12 +72,17 @@
           </thead>
           <tbody class="border-[#828282] dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
             <tr *ngFor="let item of dailyReportArr">
-              <td class="text-center dark:text-gray-300 border border-[#828282] dark:border-[#1D1D1F] px-4 py-2">{{item.varietyNameEnglish}}
+              <td class="text-center dark:text-gray-300 border border-[#828282] dark:border-[#1D1D1F] px-4 py-2">
+                {{item.varietyNameEnglish}}
               </td>
-              <td class="text-center  dark:text-gray-300  border border-[#828282] dark:border-[#1D1D1F] px-4 py-2">{{item.gradeA | number: '1.2-2'}}kg</td>
-              <td class="text-center dark:text-gray-300 border border-[#828282] dark:border-[#1D1D1F] px-4 py-2">{{item.gradeB | number: '1.2-2'}}kg</td>
-              <td class="text-center dark:text-gray-300 border border-[#828282] dark:border-[#1D1D1F] px-4 py-2">{{item.gradeC | number: '1.2-2'}}kg</td>
-              <td class="text-center dark:text-gray-300 border border-[#828282] dark:border-[#1D1D1F] px-4 py-2">{{item.total | number: '1.2-2'}}kg</td>
+              <td class="text-center  dark:text-gray-300  border border-[#828282] dark:border-[#1D1D1F] px-4 py-2">
+                {{item.gradeA | number: '1.2-2'}}kg</td>
+              <td class="text-center dark:text-gray-300 border border-[#828282] dark:border-[#1D1D1F] px-4 py-2">
+                {{item.gradeB | number: '1.2-2'}}kg</td>
+              <td class="text-center dark:text-gray-300 border border-[#828282] dark:border-[#1D1D1F] px-4 py-2">
+                {{item.gradeC | number: '1.2-2'}}kg</td>
+              <td class="text-center dark:text-gray-300 border border-[#828282] dark:border-[#1D1D1F] px-4 py-2">
+                {{item.total | number: '1.2-2'}}kg</td>
             </tr>
           </tbody>
         </table>

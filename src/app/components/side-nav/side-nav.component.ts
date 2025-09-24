@@ -1,4 +1,4 @@
-import { CommonModule, isPlatformBrowser } from '@angular/common';
+import { CommonModule, DOCUMENT, isPlatformBrowser } from '@angular/common';
 import { Component, Inject, PLATFORM_ID } from '@angular/core';
 import { NavigationEnd, Router } from '@angular/router';
 import { ThemeService } from '../../theme.service';
@@ -92,22 +92,111 @@ export const MENU_ITEMS = [
   },
 
   // ----------------------------------------- Distribution Center part ------------------------------------------
+
   {
     id: 11,
+    key: 'distribution-center-dashboard',
+    path: '/distribution-center-dashboard',
+    label: 'Dashboard',
+    icon: 'fas fa-th-large',
+    permission: ['Distribution Center Manager'],
+  },
+  {
+    id: 12,
     key: 'distribution-center',
     path: '/distribution-center',
     label: 'Centres',
     icon: 'fa-solid fa-bullseye',
     permission: ['Distribution Center Head'],
   },
+
+
   {
-    id: 12,
+    id: 13,
+    key: 'target-progress',
+    path: '/target-progress',
+    label: 'Target Progress',
+    icon: 'fa-solid fa-bullseye',
+    permission: ['Distribution Center Manager'],
+  },
+
+  {
+    id: 14,
+    key: 'assign-targets',
+    path: '/assign-targets',
+    label: 'Assign Targets',
+    icon: 'fa-regular fa-calendar-check',
+    permission: ['Distribution Center Manager'],
+  },
+
+  {
+    id: 15,
+    key: 'officer-targets',
+    path: '/officer-targets',
+    label: 'Officer Targets',
+    icon: 'fa-solid fa-user-plus',
+    permission: ['Distribution Center Manager'],
+  },
+
+
+  {
+    id: 16,
+    key: 'requests',
+    path: '/requests',
+    label: 'Requests',
+    icon: 'fa-solid fa-arrow-right-arrow-left',
+    permission: ['Distribution Center Manager'],
+  },
+
+  {
+    id: 17,
+    key: 'reports',
+    path: '/reports',
+    label: 'Reports',
+    icon: 'fa-solid fa-chart-pie',
+    permission: ['Distribution Center Manager'],
+  },
+
+  {
+    id: 18,
     key: 'distribution-officers',
     path: '/distribution-officers',
     label: 'Manage Officers',
     icon: 'fas fa-user-cog',
+    permission: ['Distribution Center Head', 'Distribution Center Manager'],
+  },
+
+  {
+    id: 19,
+    key: 'dch-complaints',
+    path: '/dch-complaints',
+    label: 'Complaints',
+    icon: 'fa-solid fa-triangle-exclamation',
     permission: ['Distribution Center Head'],
   },
+
+  {
+    id: 20,
+    key: 'dcm-complaints',
+    path: '/dcm-complaints',
+    label: 'Complaints',
+    icon: 'fa-solid fa-triangle-exclamation',
+    permission: ['Distribution Center Manager'],
+  },
+
+
+
+  // {
+  //   id: 19,
+  //   key: 'dcm-manage-officers',
+  //   path: '/dcm-manage-officers',
+  //   label: 'Manage Officers',
+  //   icon: 'fas fa-user-cog',
+  //   permission: ['Distribution Center Manager'],
+  // },
+
+  // <i class="fa-solid fa-file-circle-check"></i>
+
 ];
 
 @Component({
@@ -124,6 +213,8 @@ export class SideNavComponent {
   menuItems = MENU_ITEMS;
 
   logOutView = false;
+  companyLogo: string = '';
+  companyFavicon: string = '';
 
   get filteredMenuItems() {
     return this.menuItems.filter(
@@ -136,9 +227,13 @@ export class SideNavComponent {
     private themeService: ThemeService,
     private router: Router,
     private tokenSrv: TokenServiceService,
-    private toastSrv: ToastAlertService
+    private toastSrv: ToastAlertService,
+    @Inject(DOCUMENT) private document: Document
+
   ) {
     this.role = tokenSrv.getUserDetails().role;
+    this.companyLogo = tokenSrv.getUserDetails().logo;
+    this.companyFavicon = tokenSrv.getUserDetails().favicon;
     this.setActiveTabFromRoute();
 
     this.router.events.subscribe((event) => {
@@ -146,6 +241,10 @@ export class SideNavComponent {
         this.setActiveTabFromRoute();
       }
     });
+
+    if (this.companyFavicon !== '') {
+      this.changeFavicon(this.companyFavicon);
+    }
   }
 
   private setActiveTabFromRoute(): void {
@@ -200,7 +299,7 @@ export class SideNavComponent {
     this.logOutView = !this.logOutView;
     this.tokenSrv.clearLoginDetails();
     this.router.navigate(['login']);
-    this.toastSrv.success(`<b>Logout !`);
+    this.toastSrv.success(`<b>Logged Out!`);
   }
 
   cancelLogOut() {
@@ -212,8 +311,18 @@ export class SideNavComponent {
       this.isSelectTab = 'dashboard';
     } else if (this.role === 'Collection Center Head') {
       this.isSelectTab = 'centers';
-    } else {
+    } else if (this.role === 'Distribution Center Manager' ){
+      this.isSelectTab = 'distribution-center-dashboard';
+    } else if (this.role === 'Distribution Center Head') {
       this.isSelectTab = 'distribution-center';
     }
+  }
+
+  changeFavicon(iconUrl: string) {
+    const link: HTMLLinkElement = this.document.querySelector("link[rel*='icon']") || this.document.createElement('link');
+    link.type = 'image/x-icon';
+    link.rel = 'shortcut icon';
+    link.href = iconUrl;
+    this.document.getElementsByTagName('head')[0].appendChild(link);
   }
 }

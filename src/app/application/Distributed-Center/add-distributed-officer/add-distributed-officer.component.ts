@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, HostListener  } from '@angular/core';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { ManageOfficersService } from '../../../services/manage-officers-service/manage-officers.service';
@@ -10,11 +10,13 @@ import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loa
 import { HttpClient } from '@angular/common/http';
 import { Location } from '@angular/common';
 import { DistributedManageOfficersService } from '../../../services/Distributed-manage-officers-service/distributed-manage-officers.service';
+import { Country, COUNTRIES } from '../../../../assets/country-data';
+import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
 
 @Component({
   selector: 'app-add-distributed-officer',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, LoadingSpinnerComponent, SerchableDropdownComponent],
   templateUrl: './add-distributed-officer.component.html',
   styleUrl: './add-distributed-officer.component.css'
 })
@@ -52,6 +54,9 @@ export class AddDistributedOfficerComponent implements OnInit {
   selectedBranchId: number | null = null;
   allBranches: BranchesData = {};
 
+  bankItems: { value: number; label: string }[] = [];
+  branchItems: { value: number; label: string }[] = [];
+
   invalidFields: Set<string> = new Set();
   
   //phone pattern validation
@@ -60,6 +65,24 @@ export class AddDistributedOfficerComponent implements OnInit {
   phone01: false,
   phone02: false,
 };
+
+  countries: Country[] = COUNTRIES;
+  selectedCountry1: Country | null = null;
+  selectedCountry2: Country | null = null;
+
+  dropdownOpen = false;
+  dropdownOpen2 = false;
+
+  filteredCenterArr: Center[] = [];
+  filteredManagerArr: Manager[] = [];
+
+  centreDropdownOpen = false;
+  selectedCenterName: string = "";
+  selectedManager: string = "";
+  managerDropdownOpen = false;
+  selectedManagerName: string = "";
+
+
 
   constructor(
     private ManageOficerSrv: ManageOfficersService,
@@ -74,6 +97,9 @@ export class AddDistributedOfficerComponent implements OnInit {
   ) {
     this.logingRole = tokenSrv.getUserDetails().role
     console.log('this.logingRole', this.logingRole)
+    const defaultCountry = this.countries.find(c => c.code === 'lk') || null;
+    this.selectedCountry1 = defaultCountry;
+    this.selectedCountry2 = defaultCountry;
 
   }
 
@@ -105,19 +131,134 @@ export class AddDistributedOfficerComponent implements OnInit {
     { name: 'Vavuniya', province: 'Northern' },
   ];
 
-  VehicleTypes = [
-    { name: 'Lorry', capacity: 2 },
-    { name: 'Dimo Batta', capacity: 3.5 },
-    { name: 'Van', capacity: 2.5 },
-    { name: 'Cab', capacity: 0.5 },
-  ]
+  districtItems = this.districts.map(d => ({ value: d.name, label: d.name }));
 
   ngOnInit(): void {
     this.loadBanks()
     this.loadBranches()
     this.getAllDistributionCenters();
-    this.getLastID('COO');
-    this.EpmloyeIdCreate();
+    // this.getLastID('COO');
+    // this.EpmloyeIdCreate();
+    
+  }
+
+  @HostListener('document:click', ['$event.target'])
+onClick(targetElement: HTMLElement) {
+  const insideDropdown1 = targetElement.closest('.dropdown-wrapper-1');
+  const insideDropdown2 = targetElement.closest('.dropdown-wrapper-2');
+
+  // Close dropdowns only if click is outside their wrapper
+  if (!insideDropdown1) {
+    this.dropdownOpen = false;
+  }
+  if (!insideDropdown2) {
+    this.dropdownOpen2 = false;
+  }
+}
+
+// onSearchInput(event: Event) {
+//   const input = event.target as HTMLInputElement;
+//   const searchValue = input.value.toLowerCase().trim();
+
+//   // filter from original list
+//   this.filteredCenterArr = this.centerArr.filter(center =>
+//     center.centerName.toLowerCase().includes(searchValue)
+//   );
+// }
+
+onSearchInput(event: Event) {
+  const input = event.target as HTMLInputElement;
+  const value = input.value.toLowerCase();
+  console.log('value', value);
+
+  this.filteredCenterArr = this.centerArr.filter(c =>
+    (c.centerName || '').toLowerCase().includes(value)
+  );
+
+  console.log('filtered centers', this.filteredCenterArr);
+
+}
+
+
+
+toggleDropdown() {
+  this.centreDropdownOpen = !this.centreDropdownOpen;
+}
+
+toggleManagerDropdown() {
+  this.managerDropdownOpen = !this.managerDropdownOpen;
+}
+
+selectCenter(item: Center) {
+  console.log('center selected');
+
+  this.personalData.centerId = item.id;
+  this.selectedCenterName = item.centerName;
+  this.centreDropdownOpen = false; // close dropdown
+
+  // Reset search input and filtered array
+  this.filteredCenterArr = [...this.centerArr]; // show full list next time
+  const searchInput = document.querySelector<HTMLInputElement>('.dropdown-search-input');
+  if (searchInput) {
+    searchInput.value = '';
+  }
+
+  this.changeCenter();
+}
+
+onManagerSearchInput(event: Event) {
+  const input = event.target as HTMLInputElement;
+  const value = input.value.toLowerCase().trim(); // remove leading/trailing spaces
+  console.log('search value', value);
+
+  this.filteredManagerArr = this.managerArr.filter(m => {
+    const fullName = `${m.firstNameEnglish} ${m.lastNameEnglish}`.toLowerCase();
+    return fullName.includes(value);
+  });
+
+  console.log('filtered managers', this.filteredManagerArr);
+}
+
+
+selectManager(item: Manager) {
+  console.log('Manager selected');
+
+  this.personalData.irmId = item.id;
+  this.selectedManager = item.firstNameEnglish + ' ' + item.lastNameEnglish;
+  console.log('selectedManager', this.selectedManager )
+  this.managerDropdownOpen = false; // close dropdown
+
+  // Reset search input and filtered array
+  this.filteredManagerArr = [...this.managerArr]; // show full list next time
+  const searchInput = document.querySelector<HTMLInputElement>('.dropdown-manager-search-input');
+  if (searchInput) {
+    searchInput.value = '';
+  }
+
+  console.log('id', this.personalData.irmId)
+
+  // this.changeCenter();
+}
+
+
+  
+  selectCountry1(country: Country) {
+    this.selectedCountry1 = country;
+    this.personalData.phoneNumber01Code = country.dialCode; // update ngModel
+    console.log('sdsf', this.personalData.phoneNumber01Code)
+    this.dropdownOpen = false;
+  }
+
+  selectCountry2(country: Country) {
+    this.selectedCountry2 = country;
+    this.personalData.phoneNumber02Code = country.dialCode; // update ngModel
+    console.log('sdsf', this.personalData.phoneNumber02Code)
+    this.dropdownOpen2 = false;
+  }
+  
+  // get flag
+  getFlagUrl(code: string): string {
+    return `https://flagcdn.com/24x18/${code}.png`;
   }
 
   onCheckboxChange(lang: string, event: any) {
@@ -145,6 +286,7 @@ export class AddDistributedOfficerComponent implements OnInit {
 
   validateLanguages() {
     this.languagesRequired = !this.personalData.languages || this.personalData.languages.trim() === '';
+    console.log('language', this.languagesRequired)
   }
 
 
@@ -185,50 +327,29 @@ export class AddDistributedOfficerComponent implements OnInit {
     }
   }
 
-  getLastID(role: string): Promise<string> {
-    return new Promise((resolve, reject) => {
-      this.DistributedManageOfficerSrv.getForCreateId(role).subscribe(
-        (res) => {
-          this.lastID = res.result.empId;
-          const lastId = res.result.empId;
-          resolve(lastId); // Resolve the Promise with the empId
-        },
-        (error) => {
-          console.error('Error fetching last ID:', error);
-          reject(error);
-        }
-      );
-    });
-  }
+  // updateProvince(event: Event): void {
+  //   const target = event.target as HTMLSelectElement;
+  //   const selectedDistrict = target.value;
 
-  EpmloyeIdCreate() {
-    let rolePrefix: string;
-    if (this.personalData.jobRole === 'Distribution Manager') {
-      rolePrefix = 'DBM';
-    } else {
-      rolePrefix = 'DIO';
-    }
-    this.getLastID(rolePrefix).then((lastID) => {
-      this.personalData.empId = rolePrefix + lastID;
-    });
-  }
+  //   const selected = this.districts.find(district => district.name === selectedDistrict);
 
-  updateProvince(event: Event): void {
-    const target = event.target as HTMLSelectElement; // Cast to HTMLSelectElement
-    const selectedDistrict = target.value;
+  //   if (this.itemId === null) {
 
-    const selected = this.districts.find(district => district.name === selectedDistrict);
+  //     if (selected) {
+  //       this.personalData.province = selected.province;
+  //     } else {
+  //       this.personalData.province = '';
+  //     }
 
-    if (this.itemId === null) {
+  //   }
 
-      if (selected) {
-        this.personalData.province = selected.province;
-      } else {
-        this.personalData.province = '';
-      }
+  // }
 
-    }
+  onDistrictChange(districtName: string | null) {
+    if (this.itemId !== null) return; // keep your original guard
 
+    const selected = this.districts.find(d => d.name === districtName || '');
+    this.personalData.province = selected ? selected.province : '';
   }
 
   onSubmit() {
@@ -247,14 +368,14 @@ export class AddDistributedOfficerComponent implements OnInit {
 
     } else {
       if (this.logingRole === 'Distribution Center Manager') {
-        console.log('Collection Center Manager')
-        this.ManageOficerSrv.createCollectiveOfficer(this.personalData, this.selectedImage).subscribe(
+        console.log('Distribution Center Manager')
+        this.DistributedManageOfficerSrv.createDistributionOfficerDIO(this.personalData, this.selectedImage).subscribe(
           (res: any) => {
             if (res.status) {
               this.officerId = res.officerId;
               this.isLoading = false;
-              this.toastSrv.success('Collective Officer Created Successfully')
-              this.router.navigate(['/manage-officers'])
+              this.toastSrv.success('Ditribution Officer Created Successfully')
+              this.router.navigate(['/distribution-officers'])
             } else {
               this.isLoading = false;
               // this.toastSrv.error('There was an error creating the collective officer')
@@ -270,25 +391,7 @@ export class AddDistributedOfficerComponent implements OnInit {
       } else if (this.logingRole === 'Distribution Center Head') {
         console.log('Distribution Center Head')
 
-        // if (this.personalData.jobRole === 'Driver') {
-        //   if (!this.licenseFrontImageFileName || !this.licenseBackImageFileName || !this.insurenceFrontImageFileName || !this.insurenceBackImageFileName || !this.vehicleFrontImageFileName || !this.vehicleBackImageFileName || !this.vehicleSideAImageFileName || !this.vehicleSideBImageFileName) {
-        //     this.isLoading = false;
-        //     this.toastSrv.warning('Pleace fill all required vehicle image upload fields')
-        //     return;
-        //   }
-
-        //   this.driverObj.licFrontName = this.licenseFrontImageFileName
-        //   this.driverObj.licBackName = this.licenseBackImageFileName
-        //   this.driverObj.insFrontName = this.insurenceFrontImageFileName
-        //   this.driverObj.insBackName = this.insurenceBackImageFileName
-        //   this.driverObj.vFrontName = this.vehicleFrontImageFileName
-        //   this.driverObj.vBackName = this.vehicleBackImageFileName
-        //   this.driverObj.vSideAName = this.vehicleSideAImageFileName
-        //   this.driverObj.vSideBName = this.vehicleSideBImageFileName
-        // }
-
-        // this.ManageOficerSrv.CCHcreateCollectiveOfficer(this.personalData, this.selectedImage, this.driverObj, this.licenseFrontImagePreview, this.licenseBackImagePreview, this.insurenceFrontImagePreview, this.insurenceBackImagePreview, this.vehicleFrontImagePreview, this.vehicleBackImagePreview, this.vehicleSideAImagePreview, this.vehicleSideBImagePreview).subscribe(
-
+       
         this.DistributedManageOfficerSrv.createDistributionOfficer(this.personalData, this.selectedImage).subscribe(
           (res: any) => {
             if (res.status) {
@@ -321,21 +424,21 @@ export class AddDistributedOfficerComponent implements OnInit {
 
   onCancel() {
     Swal.fire({
-      title: 'Are you sure?',
-      text: 'Do you really want to cancel this form?',
+      title: 'You have unsaved changes',
+      html: 'If you leave this page now, your changes will be lost.<br>Do you want to continue without saving?',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, cancel it!',
-      cancelButtonText: 'No, Stay On Page',
+      confirmButtonText: 'Leave,<br>without saving',
+      cancelButtonText: 'Stay,<br>on page',
       customClass: {
         popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
         title: 'dark:text-white',
 
         icon: '!border-gray-200 dark:!border-gray-500',
-        confirmButton: 'hover:bg-red-600 dark:hover:bg-red-700 focus:ring-red-500 dark:focus:ring-red-800',
-        cancelButton: 'hover:bg-blue-600 dark:hover:bg-blue-700 focus:ring-blue-500 dark:focus:ring-blue-800',
+        confirmButton: 'w-36  rounded-lg hover:bg-red-600 dark:hover:bg-red-700 focus:ring-red-500 dark:focus:ring-red-800',
+        cancelButton: 'w-36 rounded-lg hover:bg-blue-600 dark:hover:bg-blue-700 focus:ring-blue-500 dark:focus:ring-blue-800',
         actions: 'gap-2'
       }
     }).then((result) => {
@@ -353,6 +456,7 @@ export class AddDistributedOfficerComponent implements OnInit {
     this.DistributedManageOfficerSrv.getDCHOwnCenters().subscribe(
       (res) => {
         this.centerArr = res
+        this.filteredCenterArr = [...this.centerArr];
         console.log('centerArr', this.centerArr)
         this.isLoading = false;
 
@@ -360,11 +464,20 @@ export class AddDistributedOfficerComponent implements OnInit {
     )
   }
 
+  changeCenter() {
+    this.personalData.jobRole = ''
+    this.personalData.irmId = null
+    this.selectedManager = ''
+   this.getAllDistributionManagers()
+ }
+
   getAllDistributionManagers() {
     this.isLoading = true;
+    // this.personalData.jobRole = ''
     this.DistributedManageOfficerSrv.getDistributionCenterManagers(this.personalData.centerId).subscribe(
       (res) => {
         this.managerArr = res
+        this.filteredManagerArr = [...this.managerArr];
         console.log('managerArr', this.managerArr)
         this.isLoading = false;
       }
@@ -417,7 +530,188 @@ export class AddDistributedOfficerComponent implements OnInit {
     );
   }
 
-  onSubmitForm(form: NgForm) {
+  onSubmitFormPage1(form: NgForm) {
+    form.form.markAllAsTouched();
+
+    this.validateLanguages();
+
+    const missingFields: string[] = [];
+
+  // Validation for pageOne fields
+  // if (!this.personalData.empType) {
+  //   missingFields.push('Staff Employee Type');
+  // }
+
+  if (!this.personalData.centerId && this.personalData.jobRole === 'Distribution Officer') {
+    missingFields.push('Distribution Centre Name is required');
+  }
+
+  if (!this.personalData.irmId && this.personalData.jobRole === 'Distribution Officer') {
+    missingFields.push('Distribution Centre Manager is required');
+  }
+
+  if (this.languagesRequired) {
+    missingFields.push('Please select at least one preferred language');
+  }
+
+  if (!this.personalData.employeeType) {
+    missingFields.push('Employee Type is required');
+  }
+
+  
+
+  // if (!this.personalData.companyId) {
+  //   missingFields.push('Company Name');
+  // }
+
+  if (!this.personalData.firstNameEnglish) {
+    missingFields.push('First Name (in English) is required');
+  }
+
+  if (!this.personalData.lastNameEnglish ) {
+    missingFields.push('Last Name (in English) is required');
+  }
+
+  if (!this.personalData.firstNameSinhala) {
+    missingFields.push('First Name (in Sinhala) is required');
+  }
+
+  if (!this.personalData.lastNameSinhala) {
+    missingFields.push('Last Name (in Sinhala) is required');
+  }
+
+  if (!this.personalData.firstNameTamil) {
+    missingFields.push('First Name (in Tamil) is required');
+  }
+
+  if (!this.personalData.lastNameTamil) {
+    missingFields.push('Last Name (in Tamil) is required');
+  }
+
+  if (!this.personalData.phoneNumber01) {
+    missingFields.push('Phone Number - 1 is required');
+  } else if (!/^[0-9]{9}$/.test(this.personalData.phoneNumber01) || this.isPhoneInvalidMap['phone01']) {
+    missingFields.push('Phone Number - 1 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+  }
+
+  if (this.personalData.phoneNumber02) {
+    if (!/^[0-9]{9}$/.test(this.personalData.phoneNumber02) || this.isPhoneInvalidMap['phone02']) {
+      missingFields.push('Phone Number - 2 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+    }
+    if (this.personalData.phoneNumber01 === this.personalData.phoneNumber02) {
+      missingFields.push('Phone Number - 2 - Must be different from Phone Number - 1');
+    }
+  }
+
+  if (!this.personalData.nic) {
+    missingFields.push('NIC Number is required');
+  } else if (!/^(\d{9}[V]|\d{12})$/.test(this.personalData.nic)) {
+    missingFields.push('NIC Number - Must be 9 digits followed by V or 12 digits');
+  }
+
+  if (!this.personalData.email) {
+      missingFields.push('Email is required');
+    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(this.personalData.email)) {
+      missingFields.push('Email - Must be in a valid format (format: example&#64;domain.com)');
+    }
+
+    if (missingFields.length > 0) {
+      let errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following issues:</p><ul class="list-disc pl-5">';
+      missingFields.forEach((field) => {
+        errorMessage += `<li>${field}</li>`;
+      });
+      errorMessage += '</ul></div>';
+  
+      Swal.fire({
+        icon: 'error',
+        title: 'Missing or Invalid Information',
+        html: errorMessage,
+        confirmButtonText: 'OK',
+        customClass: {
+          popup: 'bg-white dark:bg-[#363636] text-[#534E4E] dark:text-textDark',
+          title: 'font-semibold text-lg',
+          htmlContainer: 'text-left',
+        },
+      });
+      return;
+    }
+  }
+
+  
+
+  onSubmitFormPage2(form: NgForm) {
+    form.form.markAllAsTouched();
+
+    const missingFields: string[] = [];
+
+    if (!this.personalData.houseNumber) {
+      missingFields.push('House Number is required');
+    }
+  
+    if (!this.personalData.streetName) {
+      missingFields.push('Street Name is required');
+    }
+  
+    if (!this.personalData.city) {
+      missingFields.push('City is required');
+    }
+  
+    if (!this.personalData.district) {
+      missingFields.push('District is required');
+    }
+  
+    if (!this.personalData.province) {
+      missingFields.push('Province is required');
+    }
+  
+    if (!this.personalData.accHolderName) {
+      missingFields.push('Account Holder’s Name is required');
+    }
+  
+    if (!this.personalData.accNumber) {
+      missingFields.push('Account Number is required');
+    }
+  
+    if (!this.personalData.conformAccNumber) {
+      missingFields.push('Confirm Account Number is required');
+    } else if (this.personalData.accNumber !== this.personalData.conformAccNumber) {
+      missingFields.push('Confirm Account Number - Must match Account Number');
+    }
+  
+    if (!this.selectedBankId) {
+      missingFields.push('Bank Name is required');
+    }
+  
+    if (!this.selectedBranchId) {
+      missingFields.push('Branch Name is required');
+    }
+  
+    // Display errors if any
+    if (missingFields.length > 0) {
+      let errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following issues:</p><ul class="list-disc pl-5">';
+      missingFields.forEach((field) => {
+        errorMessage += `<li>${field}</li>`;
+      });
+      errorMessage += '</ul></div>';
+  
+      Swal.fire({
+        icon: 'error',
+        title: 'Missing or Invalid Information',
+        html: errorMessage,
+        confirmButtonText: 'OK',
+        customClass: {
+          popup: 'bg-white dark:bg-[#363636] text-[#534E4E] dark:text-textDark',
+          title: 'font-semibold text-lg',
+          htmlContainer: 'text-left',
+        },
+      });
+      return;
+    }
+
+    this.onSubmit();  
+  }
+
+  onSubmitFormPage3(form: NgForm) {
     form.form.markAllAsTouched();
   }
 
@@ -425,56 +719,67 @@ export class AddDistributedOfficerComponent implements OnInit {
   loadBanks() {
     this.http.get<Bank[]>('assets/json/banks.json').subscribe(
       data => {
-        this.banks = data;
-
+        this.banks = data.sort((a, b) => a.name.localeCompare(b.name));
+  
+        // Map to dropdown items
+        this.bankItems = this.banks.map(b => ({
+          value: b.ID,
+          label: b.name
+        }));
       },
       error => {
         console.error('Error loading banks:', error);
       }
     );
   }
-
+  
   loadBranches() {
     this.http.get<BranchesData>('assets/json/branches.json').subscribe(
       data => {
+        Object.keys(data).forEach(bankID => {
+          data[bankID].sort((a, b) => a.name.localeCompare(b.name));
+        });
         this.allBranches = data;
-
       },
       error => {
         console.error('Error loading branches:', error);
       }
     );
   }
-
-
-
-
-
-  onBankChange() {
-    if (this.selectedBankId) {
-      // Update branches based on selected bank
-      this.branches = this.allBranches[this.selectedBankId.toString()] || [];
-
-      // Update company data with bank name
-      const selectedBank = this.banks.find(bank => bank.ID === this.selectedBankId);
+  
+  onBankChange(bankId: number | null) {
+    if (bankId) {
+      this.selectedBankId = bankId;
+  
+      // Update branches
+      this.branches = this.allBranches[bankId.toString()] || [];
+      this.branchItems = this.branches.map(br => ({
+        value: br.ID,
+        label: br.name
+      }));
+  
+      // Update personalData
+      const selectedBank = this.banks.find(bank => bank.ID === bankId);
       if (selectedBank) {
         this.personalData.bankName = selectedBank.name;
         this.invalidFields.delete('bankName');
       }
-
+  
       // Reset branch selection
       this.selectedBranchId = null;
       this.personalData.branchName = '';
     } else {
       this.branches = [];
+      this.branchItems = [];
       this.personalData.bankName = '';
     }
   }
-
-  onBranchChange() {
-    if (this.selectedBranchId) {
-      // Update company data with branch name
-      const selectedBranch = this.branches.find(branch => branch.ID === this.selectedBranchId);
+  
+  onBranchChange(branchId: number | null) {
+    if (branchId) {
+      this.selectedBranchId = branchId;
+  
+      const selectedBranch = this.branches.find(branch => branch.ID === branchId);
       if (selectedBranch) {
         this.personalData.branchName = selectedBranch.name;
         this.invalidFields.delete('branchName');
@@ -484,319 +789,90 @@ export class AddDistributedOfficerComponent implements OnInit {
     }
   }
 
+  allowOnlyNumbers(event: KeyboardEvent): boolean {
+    const charCode = event.which ? event.which : event.keyCode;
+    // Only allow 0-9
+    if (charCode < 48 || charCode > 57) {
+      event.preventDefault();
+      return false;
+    }
+    return true;
+  }
 
-  // Replace onFileSelected with this more specific version
-  // onLicenseFrontImageSelected(event: any): void {
-  //   const file: File = event.target.files[0];
-  //   if (file) {
-  //     // Validate file size (5MB max)
-  //     if (file.size > 5000000) {
-  //       this.toastSrv.error('License image size should not exceed 5MB');
-  //       return;
-  //     }
+onTrimInput(event: Event, modelRef: any, fieldName: string): void {
+  const inputElement = event.target as HTMLInputElement;
+  const trimmedValue = inputElement.value.trimStart();
+  modelRef[fieldName] = trimmedValue;
+  inputElement.value = trimmedValue;
+}
 
-  //     // Validate file type
-  //     const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-  //     if (!allowedTypes.includes(file.type)) {
-  //       this.toastSrv.error('License image must be JPEG, JPG or PNG format');
-  //       return;
-  //     }
+onTrimInputCapitalize(event: Event, modelRef: any, fieldName: string): void {
+  const inputElement = event.target as HTMLInputElement;
+  let trimmedValue = inputElement.value.trimStart();
 
-  //     this.licenseFrontImageFile = file;
-  //     this.licenseFrontImageFileName = file.name;
+  // ✅ Capitalize the first letter if value is not empty
+  if (trimmedValue.length > 0) {
+    trimmedValue = trimmedValue.charAt(0).toUpperCase() + trimmedValue.slice(1);
+  }
 
-  //     // Create preview
-  //     const reader = new FileReader();
-  //     reader.onload = (e: any) => {
-  //       this.licenseFrontImagePreview = e.target.result;
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // }
-
-  // Clear license image
-  // clearLicenseFrontImage(): void {
-  //   this.licenseFrontImageFile = null;
-  //   this.licenseFrontImageFileName = '';
-  //   this.licenseFrontImagePreview = null;
-  //   const fileInput = document.getElementById('licenseFrontImageUpload') as HTMLInputElement;
-  //   if (fileInput) fileInput.value = '';
-  // }
-
-  // triggerFileInputForDriver(event: Event, inputId: string): void {
-  //   event.preventDefault();
-  //   const fileInput = document.getElementById(inputId);
-  //   fileInput?.click();
-  // }
-
-  // onLicenseBackImageSelected(event: any): void {
-  //   const file: File = event.target.files[0];
-  //   if (file) {
-  //     // Validate file size (5MB max)
-  //     if (file.size > 5000000) {
-  //       this.toastSrv.error('License image size should not exceed 5MB');
-  //       return;
-  //     }
-
-  //     // Validate file type
-  //     const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-  //     if (!allowedTypes.includes(file.type)) {
-  //       this.toastSrv.error('License image must be JPEG, JPG or PNG format');
-  //       return;
-  //     }
-
-  //     this.licenseBackImageFile = file;
-  //     this.licenseBackImageFileName = file.name;
-
-  //     // Create preview
-  //     const reader = new FileReader();
-  //     reader.onload = (e: any) => {
-  //       this.licenseBackImagePreview = e.target.result;
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // }
-
-  // Clear license image
-  // clearLicenseBackImage(): void {
-  //   this.licenseBackImageFile = null;
-  //   this.licenseBackImageFileName = '';
-  //   this.licenseBackImagePreview = null;
-  //   const fileInput = document.getElementById('licenseBackImageUpload') as HTMLInputElement;
-  //   if (fileInput) fileInput.value = '';
-  // }
-
-  // onInsurenceFrontImageSelected(event: any): void {
-  //   const file: File = event.target.files[0];
-  //   if (file) {
-  //     // Validate file size (5MB max)
-  //     if (file.size > 5000000) {
-  //       this.toastSrv.error('Insurence image size should not exceed 5MB');
-  //       return;
-  //     }
-
-  //     // Validate file type
-  //     const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-  //     if (!allowedTypes.includes(file.type)) {
-  //       this.toastSrv.error('Insurence image must be JPEG, JPG or PNG format');
-  //       return;
-  //     }
-
-  //     this.insurenceFrontImageFile = file;
-  //     this.insurenceFrontImageFileName = file.name;
-
-  //     // Create preview
-  //     const reader = new FileReader();
-  //     reader.onload = (e: any) => {
-  //       this.insurenceFrontImagePreview = e.target.result;
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // }
-
-  // Clear license image
-  // clearInsurenceFrontImage(): void {
-  //   this.insurenceFrontImageFile = null;
-  //   this.insurenceFrontImageFileName = '';
-  //   this.insurenceFrontImagePreview = null;
-  //   const fileInput = document.getElementById('insurenceFrontImageUpload') as HTMLInputElement;
-  //   if (fileInput) fileInput.value = '';
-  // }
+  modelRef[fieldName] = trimmedValue;
+  inputElement.value = trimmedValue;
+}
 
 
-  // onInsurenceBackImageSelected(event: any): void {
-  //   const file: File = event.target.files[0];
-  //   if (file) {
-  //     // Validate file size (5MB max)
-  //     if (file.size > 5000000) {
-  //       this.toastSrv.error('Insurence image size should not exceed 5MB');
-  //       return;
-  //     }
+blockSpecialChars(event: KeyboardEvent) {
+  // Allow letters (A-Z, a-z), space, backspace, delete, arrow keys
+  const allowedKeys = [
+    'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', ' '
+  ];
 
-  //     // Validate file type
-  //     const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-  //     if (!allowedTypes.includes(file.type)) {
-  //       this.toastSrv.error('Insurence image must be JPEG, JPG or PNG format');
-  //       return;
-  //     }
+  // Regex: Only allow alphabets and spaces
+  const regex = /^[a-zA-Z\s]*$/;
 
-  //     this.insurenceBackImageFile = file;
-  //     this.insurenceBackImageFileName = file.name;
+  // Block if key is not allowed
+  if (!allowedKeys.includes(event.key) && !regex.test(event.key)) {
+    event.preventDefault();
+  }
+}
 
-  //     // Create preview
-  //     const reader = new FileReader();
-  //     reader.onload = (e: any) => {
-  //       this.insurenceBackImagePreview = e.target.result;
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // }
+blockNonNumbers(event: KeyboardEvent) {
+  // Allow: numbers (0-9), backspace, delete, arrow keys, tab
+  const allowedKeys = [
+    '0', '1', '2', '3', '4', '5', '6', '7', '8', '9',
+    'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'
+  ];
 
-  // Clear license image
-  // clearInsurenceBackImage(): void {
-  //   this.insurenceBackImageFile = null;
-  //   this.insurenceBackImageFileName = '';
-  //   this.insurenceBackImagePreview = null;
-  //   const fileInput = document.getElementById('insuranceBackImageUpload') as HTMLInputElement;
-  //   if (fileInput) fileInput.value = '';
-  // }
+  // Block if key is not allowed
+  if (!allowedKeys.includes(event.key)) {
+    event.preventDefault();
+  }
+}
 
+capitalizeAccHolderName(event: Event): void {
+  const inputElement = event.target as HTMLInputElement;
+  let value = inputElement.value.trimStart().replace(/\s+/g, ' ');
+  
+  // Capitalize first letter
+  if (value.length > 0) {
+    value = value.charAt(0).toUpperCase() + value.slice(1);
+  }
+  
+  this.personalData.accHolderName = value;
+  inputElement.value = value;
+}
 
-  // onVehicleFrontImageSelected(event: any): void {
-  //   const file: File = event.target.files[0];
-  //   if (file) {
-  //     // Validate file size (5MB max)
-  //     if (file.size > 5000000) {
-  //       this.toastSrv.error('License image size should not exceed 5MB');
-  //       return;
-  //     }
+capitalizeFirstLetter(field: keyof typeof this.personalData) {
+  if (this.personalData[field]) {
+    // Trim spaces
+    this.personalData[field] = this.personalData[field].trim();
 
-  //     // Validate file type
-  //     const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-  //     if (!allowedTypes.includes(file.type)) {
-  //       this.toastSrv.error('License image must be JPEG, JPG or PNG format');
-  //       return;
-  //     }
+    // Capitalize first letter
+    this.personalData[field] =
+      this.personalData[field].charAt(0).toUpperCase() +
+      this.personalData[field].slice(1);
+  }
+}
 
-  //     this.vehicleFrontImageFile = file;
-  //     this.vehicleFrontImageFileName = file.name;
-
-  //     // Create preview
-  //     const reader = new FileReader();
-  //     reader.onload = (e: any) => {
-  //       this.vehicleFrontImagePreview = e.target.result;
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // }
-
-  // Clear license image
-  // clearVehicleFrontImage(): void {
-  //   this.vehicleFrontImageFile = null;
-  //   this.vehicleFrontImageFileName = '';
-  //   this.vehicleFrontImagePreview = null;
-  //   const fileInput = document.getElementById('vehicleFrontImageUpload') as HTMLInputElement;
-  //   if (fileInput) fileInput.value = '';
-  // }
-
-
-  // onVehicleBackImageSelected(event: any): void {
-  //   const file: File = event.target.files[0];
-  //   if (file) {
-  //     // Validate file size (5MB max)
-  //     if (file.size > 5000000) {
-  //       this.toastSrv.error('Vehicle Back image size should not exceed 5MB');
-  //       return;
-  //     }
-
-  //     // Validate file type
-  //     const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-  //     if (!allowedTypes.includes(file.type)) {
-  //       this.toastSrv.error('Vehicle Back image must be JPEG, JPG or PNG format');
-  //       return;
-  //     }
-
-  //     this.vehicleBackImageFile = file;
-  //     this.vehicleBackImageFileName = file.name;
-
-  //     // Create preview
-  //     const reader = new FileReader();
-  //     reader.onload = (e: any) => {
-  //       this.vehicleBackImagePreview = e.target.result;
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // }
-
-  // Clear license image
-  // clearVehicleBackImage(): void {
-  //   this.vehicleBackImageFile = null;
-  //   this.vehicleBackImageFileName = '';
-  //   this.vehicleBackImagePreview = null;
-  //   const fileInput = document.getElementById('vehicleBackImageUpload') as HTMLInputElement;
-  //   if (fileInput) fileInput.value = '';
-  // }
-
-  // onVehicleSideAImageSelected(event: any): void {
-  //   const file: File = event.target.files[0];
-  //   if (file) {
-  //     // Validate file size (5MB max)
-  //     if (file.size > 5000000) {
-  //       this.toastSrv.error('Vehicle Back image size should not exceed 5MB');
-  //       return;
-  //     }
-
-  //     // Validate file type
-  //     const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-  //     if (!allowedTypes.includes(file.type)) {
-  //       this.toastSrv.error('Vehicle Back image must be JPEG, JPG or PNG format');
-  //       return;
-  //     }
-
-  //     this.vehicleSideAImageFile = file;
-  //     this.vehicleSideAImageFileName = file.name;
-
-  //     // Create preview
-  //     const reader = new FileReader();
-  //     reader.onload = (e: any) => {
-  //       this.vehicleSideAImagePreview = e.target.result;
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // }
-
-  // Clear license image
-  // clearVehicleSideAImage(): void {
-  //   this.vehicleSideAImageFile = null;
-  //   this.vehicleSideAImageFileName = '';
-  //   this.vehicleSideAImagePreview = null;
-  //   const fileInput = document.getElementById('vehicleSideAImageUpload') as HTMLInputElement;
-  //   if (fileInput) fileInput.value = '';
-  // }
-
-
-
-  // onVehicleSideBImageSelected(event: any): void {
-  //   const file: File = event.target.files[0];
-  //   if (file) {
-  //     // Validate file size (5MB max)
-  //     if (file.size > 5000000) {
-  //       this.toastSrv.error('Vehicle Back image size should not exceed 5MB');
-  //       return;
-  //     }
-
-  //     // Validate file type
-  //     const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
-  //     if (!allowedTypes.includes(file.type)) {
-  //       this.toastSrv.error('Vehicle Back image must be JPEG, JPG or PNG format');
-  //       return;
-  //     }
-
-  //     this.vehicleSideBImageFile = file;
-  //     this.vehicleSideBImageFileName = file.name;
-
-  //     // Create preview
-  //     const reader = new FileReader();
-  //     reader.onload = (e: any) => {
-  //       this.vehicleSideBImagePreview = e.target.result;
-  //     };
-  //     reader.readAsDataURL(file);
-  //   }
-  // }
-
-  // Clear license image
-  // clearVehicleSideBImage(): void {
-  //   this.vehicleSideBImageFile = null;
-  //   this.vehicleSideBImageFileName = '';
-  //   this.vehicleSideBImagePreview = null;
-  //   const fileInput = document.getElementById('vehicleSideBImageUpload') as HTMLInputElement;
-  //   if (fileInput) fileInput.value = '';
-  // }
-
-  // vehicleChange() {
-  //   this.driverObj.vType = this.selectVehicletype.name
-  //   this.driverObj.vCapacity = this.selectVehicletype.capacity
-  // }
 }
 
 class Personal {
@@ -826,14 +902,14 @@ class Personal {
   branchName!: string;
   conformAccNumber!: string;
 
-  jobRole: string = 'Collection Officer'
+  jobRole!: string;
   empId!: string
   employeeType!: string;
 
   image!: any
 
   centerId: number | string = '';
-  irmId: number | string = '';
+  irmId: number | string | null = null;
 }
 
 

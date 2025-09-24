@@ -125,14 +125,15 @@ export class ViewDistributedOfficersComponent implements OnInit {
   }
 
   navigateToEdit(id: number) {
-    this.router.navigate([`/manage-officers/edit-officer/${id}`])
+    this.router.navigate([`/distribution-officers/edit-distribution-officer/${id}`])
   }
   navigateToProfile(id: number) {
-    this.router.navigate([`/manage-officers/officer-profile/${id}`])
+    this.router.navigate([`/distribution-officers/officer-profile/${id}`])
 
   }
 
   fetchAllOfficers(page: number = this.page, limit: number = this.itemsPerPage, status: string = this.selectStatus, role: string = this.selectRole, searchText: string = this.searchText) {
+    console.log('fetching dcm')
     this.isLoading = true;
     this.ManageOficerSrv.getAllOfficers(page, limit, status, role, searchText).subscribe(
       (res) => {
@@ -153,6 +154,7 @@ export class ViewDistributedOfficersComponent implements OnInit {
 
   //add to center filter
   fetchAllOfficersForDCH(page: number = this.page, limit: number = this.itemsPerPage, status: string = this.selectStatus, role: string = this.selectRole, searchText: string = this.searchText, selectCompany: string = this.selectCenters) {
+    console.log('fetching dch')
     this.isLoading = true;
     this.ManageOficerSrv.getAllOfficersForDCH(page, limit, status, role, searchText, selectCompany).subscribe(
       (res) => {
@@ -192,7 +194,7 @@ export class ViewDistributedOfficersComponent implements OnInit {
   deleteCollectionOfficer(id: number) {
     Swal.fire({
       title: 'Are you sure?',
-      text: 'Do you really want to delete this Collection Officer? This action cannot be undone.',
+      text: 'Do you really want to delete this Distribution Officer? This action cannot be undone.',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3085d6', // Default blue
@@ -236,22 +238,46 @@ export class ViewDistributedOfficersComponent implements OnInit {
   openPopup(item: any) {
     this.isPopupVisible = true;
 
-    const tableHtml = `
-      <div class="container mx-auto">
-        <h1 class="text-center text-2xl font-bold mb-4 dark:text-white">Officer Name: ${item.firstNameEnglish}</h1>
-        <div>
-          <p class="text-center dark:text-white">Are you sure you want to approve or reject this collection?</p>
-        </div>
-        <div class="flex justify-center mt-4">
-          <button id="rejectButton" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg mr-2">
-            Reject
-          </button>
-          <button id="approveButton" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
-            Approve
-          </button>
-        </div>
-      </div>
-    `;
+    let message = '';
+
+if (item.status === 'Approved') {
+  message = `Are you sure you want to reject this ${item.jobRole} ?`;
+} 
+else if (item.status === 'Rejected') {
+  message = `Are you sure you want to approve this ${item.jobRole} ?`;
+} 
+else if (item.status === 'Not Approved') {
+  message = `Are you sure you want to approve or reject this ${item.jobRole} ?`;
+} 
+else {
+  message = ``;
+}
+
+const rejectButton = (item.status === 'Approved' || item.status === 'Not Approved')
+  ? `<button id="rejectButton" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg mr-2">
+       Reject
+     </button>`
+  : '';
+
+const approveButton = (item.status === 'Rejected' || item.status === 'Not Approved')
+  ? `<button id="approveButton" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
+       Approve
+     </button>`
+  : '';
+
+const tableHtml = `
+  <div class="container mx-auto">
+    <h1 class="text-center text-2xl font-bold mb-4 dark:text-white">Officer Name: ${item.firstNameEnglish}</h1>
+    <div>
+      <p class="text-center dark:text-white">${message}</p>
+    </div>
+    <div class="flex justify-center mt-4">
+      ${rejectButton}
+      ${approveButton}
+    </div>
+  </div>
+`;
+
 
     const swalInstance = Swal.fire({
       html: tableHtml,
@@ -302,11 +328,12 @@ export class ViewDistributedOfficersComponent implements OnInit {
           this.isLoading = false;
           swalInstance.close();
           const action = status === 'Approved' ? 'approved' : 'rejected';
-          this.toastSrv.success(`The collection was ${action} successfully.`);
+          this.toastSrv.success(`The Distribution Officer was ${action} successfully.`);
           this.fetchByRole();
         } else {
           this.isLoading = false;
-          this.toastSrv.error(res.message || `Failed to ${status.toLowerCase()} the collection.`);
+          this.toastSrv.error(`Failed to ${status.toLowerCase()} the Distribution Officer.`);
+          console.log(`Failed to ${status.toLowerCase()} the Distribution Officer.`)
         }
       },
       error: (err) => {
@@ -353,6 +380,7 @@ export class ViewDistributedOfficersComponent implements OnInit {
   }
 
   onSearch() {
+    this.searchText = this.searchText?.trim() || '';   // ✅ remove spaces
     this.fetchByRole();
   }
 
@@ -386,10 +414,10 @@ export class ViewDistributedOfficersComponent implements OnInit {
   }
 
   get selectedCenterDisplay(): string {
-    if (!this.selectCenters) return 'Centers';
+    if (!this.selectCenters) return 'Centre';
 
     const selectedCenter = this.centerArr.find(center => center.id.toString() === this.selectCenters);
-    return selectedCenter ? `${selectedCenter.regCode} - ${selectedCenter.centerName}` : 'Centers';
+    return selectedCenter ? `${selectedCenter.regCode} - ${selectedCenter.centerName}` : 'Centre';
   }
 
 }

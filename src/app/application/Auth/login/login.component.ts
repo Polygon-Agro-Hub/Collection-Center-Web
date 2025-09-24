@@ -1,6 +1,6 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, DOCUMENT } from '@angular/common';
 import { HttpClient } from '@angular/common/http';
-import { Component } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import Swal from 'sweetalert2';
@@ -27,7 +27,8 @@ export class LoginComponent {
     private authService: AuthService,
     private http: HttpClient,
     private router: Router,
-    private tokenService: TokenServiceService
+    private tokenService: TokenServiceService,
+    @Inject(DOCUMENT) private document: Document
   ) {
     this.loginObj = new Login();
   }
@@ -91,8 +92,15 @@ export class LoginComponent {
             res.userId,
             res.role,
             res.expiresIn,
-            res.image
+            res.image,
+            res.companyImage === null ? '' : res.companyImage,
+            res.companyFavicon === null ? '' : res.companyFavicon
           );
+          
+          if (res.companyFavicon !== null) {
+            this.changeFavicon(res.companyFavicon);
+          }
+
           Swal.fire({
             icon: 'success',
             title: 'Logged',
@@ -117,10 +125,14 @@ export class LoginComponent {
               } else if (this.role === 'Distribution Center Head') {
                 this.router.navigate(['/distribution-center']);
                 this.isLoading = false;
+              } else if (this.role === 'Distribution Center Manager') {
+                this.router.navigate(['/distribution-center-dashboard']);
+                this.isLoading = false;
               } else {
                 this.router.navigate(['/'])
                 this.isLoading = false;
               }
+
             } else {
               Swal.fire({
                 icon: 'error',
@@ -150,6 +162,14 @@ export class LoginComponent {
 
   togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
+  }
+
+  changeFavicon(iconUrl: string) {
+    const link: HTMLLinkElement = this.document.querySelector("link[rel*='icon']") || this.document.createElement('link');
+    link.type = 'image/x-icon';
+    link.rel = 'shortcut icon';
+    link.href = iconUrl;
+    this.document.getElementsByTagName('head')[0].appendChild(link);
   }
 }
 

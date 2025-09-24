@@ -14,18 +14,25 @@
             <div class="flex flex-row items-center gap-4">
                 <p class="text-xl font-semibold dark:text-white">Date :</p>
                 <div class="relative w-48 mr-6">
-                    <div
+
+                    <app-custom-datepicker
+  [selectedDate]="selectedDate"
+  (dateChange)="onDateChange($event)"
+></app-custom-datepicker>
+                    <!-- <div
                         class="border-2 rounded-xl  text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
                         <input type="date" [(ngModel)]="selectDate" (change)="filterDate()"
                             class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-1 rounded-xl focus:outline-none custom-date-input" />
-                    </div>
+                    </div> -->
                 </div>
+
+                
 
             </div>
 
             <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
                 <input type="text" placeholder="Search by First / Last name, NIC" [(ngModel)]="searchText"
-                    class="bg-transparent outline-none w-full text-textLight dark:text-textDark" (keyup.enter)="onSearch()" (keyup.esc)="offSearch()"/>
+                    class="bg-transparent outline-none w-full text-textLight dark:text-textDark" (keyup.enter)="onSearch()" (keyup.esc)="offSearch()" (input)="checkLeadingSpace()"/>
                 <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                     (click)="onSearch()">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -47,7 +54,7 @@
 
         <div class="flex flex-col justify-center items-center mt-7 ">
             <p class="text-[#292929] font-semibold text-lg dark:text-white">{{officerName}}</p>
-            <p class="text-[#494949] text-lg my-2 dark:text-textDark">On {{selectDate}}</p>
+            <p class="text-[#494949] text-lg my-2 dark:text-textDark">On {{selectedDate}}</p>
         </div>
 
         <div *ngIf="hasData">

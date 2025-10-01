@@ -49,7 +49,7 @@
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8 mb-4">
 
-                    <div *ngIf="logingRole === 'Collection Center Head'" (change)="getAllManagers()">
+                    <div *ngIf="logingRole === 'Collection Centre Head'" (change)="getAllManagers()">
                         <label for="centerId" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">
                             Collection Centre *
                         </label>
@@ -121,13 +121,13 @@
                               </div>
                             </div>
                           </div>
-                        <div *ngIf="centerIdInput.touched && !personalData.centerId && logingRole === 'Collection Center Head'"
+                        <div *ngIf="centerIdInput.touched && !personalData.centerId && logingRole === 'Collection Centre Head'"
                             class="text-red-500 text-sm mt-1">
-                            <div>Collection Center is required</div>
+                            <div>Collection Centre is required</div>
                         </div>
                     </div>
 
-                    <div *ngIf="logingRole === 'Collection Center Head'"></div>
+                    <div *ngIf="logingRole === 'Collection Centre Head'"></div>
 
 
                     <div>
@@ -141,10 +141,10 @@
                                 class="p-2 text-[#292929] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
                                 -- select --
                             </option>
-                            <option selected value="Collection Center Manager"
-                                *ngIf="logingRole === 'Collection Center Head'"
+                            <option selected value="Collection Centre Manager"
+                                *ngIf="logingRole === 'Collection Centre Head'"
                                 class="p-2 text-[#292929] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
-                                Collection Center Manager
+                                Collection Centre Manager
                             </option>
                             <option selected value="Collection Officer"
                                 class="p-2 text-[#292929] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
@@ -161,31 +161,11 @@
                         </div>
                     </div>
 
-                    <div *ngIf="logingRole === 'Collection Center Manager'"></div>
+                    <div *ngIf="logingRole === 'Collection Centre Manager'"></div>
 
-                    <!-- <div>
-                        <label class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">EMP ID / User
-                            name</label>
-                        <div class="flex mt-1">
-                            <span
-                                class="inline-flex items-center px-3 py-3 text-sm text-[#534E4E] bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-[#1D1D1F] dark:text-gray-400 ">
-                                <span *ngIf="logingRole === 'Collection Center Head'">
-                                    <p *ngIf="personalData.jobRole === 'Collection Center Manager'">CCM</p>
-                                </span>
-                                <span *ngIf="logingRole === 'Collection Center Head'">
-                                    <p *ngIf="personalData.jobRole === 'Driver'">DVR</p>
-                                </span>
-                                <p *ngIf="personalData.jobRole === 'Collection Officer'">COO</p>
-                                <p *ngIf="personalData.jobRole === 'Customer Officer'">CUO</p>
-                            </span>
-                            <input type="text" [value]="UpdatelastID" name="empId"
-                                class="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-[#534E4E] focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm pl-4  dark:bg-[#1D1D1F]  dark:placeholder-gray-400 dark:text-textDark dark:focus:ring-blue-500 dark:focus:border-blue-500"
-                                disabled>
-                        </div>
-                    </div> -->
 
                     <div
-                        *ngIf="logingRole === 'Collection Center Head' && (personalData.jobRole === 'Collection Officer' || personalData.jobRole === 'Customer Officer')">
+                        *ngIf="logingRole === 'Collection Centre Head' && (personalData.jobRole === 'Collection Officer' || personalData.jobRole === 'Customer Officer')">
                         <label for="irmId" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">
                             Manager *
                         </label>
@@ -257,15 +237,11 @@
                               </div>
                             </div>
                           </div>
-                        <div *ngIf="irmIdInput.touched && !personalData.irmId && logingRole === 'Collection Center Head' && (personalData.jobRole === 'Collection Officer' || personalData.jobRole === 'Customer Officer')"
+                        <div *ngIf="irmIdInput.touched && !personalData.irmId && logingRole === 'Collection Centre Head' && (personalData.jobRole === 'Collection Officer' || personalData.jobRole === 'Customer Officer')"
                                 class="text-red-500 text-sm mt-1">
-                                <div>Collection Center Manager is required</div>
+                                <div>Collection Centre Manager is required</div>
                             </div>
                     </div>
-
-                    <!-- <div
-                        *ngIf="logingRole === 'Collection Center Head' && (personalData.jobRole === 'Collection Officer' || personalData.jobRole === 'Customer Officer')">
-                    </div> -->
 
                     <div>
                         <label for="languages" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">

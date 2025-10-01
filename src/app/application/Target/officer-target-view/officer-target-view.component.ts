@@ -46,7 +46,7 @@ export class OfficerTargetViewComponent {
 
   fetchAllOfficers(page: number = this.page, limit: number = this.itemsPerPage, status: string = this.selectStatus, validity: string = this.selectValidity, searchText: string = this.searchText) {
     this.isLoading = true;
-    if (this.OfficerObj.jobRole === 'Collection Center Manager') {
+    if (this.OfficerObj.jobRole === 'Collection Centre Manager') {
       this.OfficerObj.empId = 'CCM' + this.OfficerObj.officerId;
     } else if (this.OfficerObj.jobRole === 'Collection Officer') {
       this.OfficerObj.empId = 'COO' + this.OfficerObj.officerId;
@@ -105,7 +105,7 @@ export class OfficerTargetViewComponent {
     }
 
 
-    if (this.OfficerObj.jobRole === 'Collection Center Manager') {
+    if (this.OfficerObj.jobRole === 'Collection Centre Manager') {
       this.OfficerObj.empId = 'CCM' + this.OfficerObj.officerId;
     } else if (this.OfficerObj.jobRole === 'Collection Officer') {
       this.OfficerObj.empId = 'COO' + this.OfficerObj.officerId;

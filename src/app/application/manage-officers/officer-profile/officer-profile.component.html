@@ -33,11 +33,11 @@
                     <div class="ml-6">
                         <p class="text-lg font-semibold">{{officerObj.firstNameEnglish}} {{officerObj.lastNameEnglish}}
                         </p>
-                        <p class="text-[#627189] dark:text-textDark">{{officerObj.jobRole.replace('Center', 'Centre')}} - <span
+                        <p class="text-[#627189] dark:text-textDark">{{officerObj.jobRole}} - <span
                                 class="text-black font-semibold dark:text-white">
                                 <span *ngIf="officerObj.jobRole ==='Customer Officer'">CUO</span>
-                                <span *ngIf="officerObj.jobRole ==='Collection Center Manager'">CCM</span>
-                                <span *ngIf="officerObj.jobRole ==='Collection Center Head'">CCH</span>
+                                <span *ngIf="officerObj.jobRole ==='Collection Centre Manager'">CCM</span>
+                                <span *ngIf="officerObj.jobRole ==='Collection Centre Head'">CCH</span>
                                 <span *ngIf="officerObj.jobRole ==='Driver'">DVR</span>
                                 <span *ngIf="officerObj.jobRole ==='Collection Officer'">COO</span>
                                 <span *ngIf="officerObj.jobRole ==='Distribution Officer'">DIO</span>
@@ -45,15 +45,15 @@
                                 <span
                                     *ngIf="officerObj.jobRole ==='Distribution Center Head'">DCH</span>{{officerObj.empId}}</span>
                         </p>
-                        <p class="font-semibold" *ngIf="officerObj.jobRole === 'Collection Center Manager' 
-                            || officerObj.jobRole === 'Collection Center Head' 
+                        <p class="font-semibold" *ngIf="officerObj.jobRole === 'Collection Centre Manager' 
+                            || officerObj.jobRole === 'Collection Centre Head' 
                             || officerObj.jobRole === 'Collection Officer' 
                             || officerObj.jobRole === 'Customer Officer'">
                             {{ officerObj.regCode }} Centre
                         </p>
 
-                        <p class="font-semibold" *ngIf="officerObj.jobRole === 'Distribution Center Manager' 
-                            || officerObj.jobRole === 'Distribution Center Head' 
+                        <p class="font-semibold" *ngIf="officerObj.jobRole === 'Distribution Centre Manager' 
+                            || officerObj.jobRole === 'Distribution Centre Head' 
                             || officerObj.jobRole === 'Distribution Officer'">
                             {{ officerObj.distributedCenterRegCode }} Centre
                         </p>
@@ -63,7 +63,7 @@
 
                 <div class="flex space-x-4">
                     <span
-                        *ngIf="(logingRole === 'Collection Center Manager' && officerObj.jobRole !=='Collection Center Manager' && officerObj.claimStatus === 1 ) || (logingRole === 'Distribution Center Manager' && officerObj.jobRole !=='Distribution Center Manager' && officerObj.claimStatus === 1 ) ">
+                        *ngIf="(logingRole === 'Collection Centre Manager' && officerObj.jobRole !=='Collection Centre Manager' && officerObj.claimStatus === 1 ) || (logingRole === 'Distribution Center Manager' && officerObj.jobRole !=='Distribution Center Manager' && officerObj.claimStatus === 1 ) ">
                         <button class="bg-[#E20000] text-white font-semibold rounded-lg shadow-md px-5 py-2"
                             (click)="toggleDisclaimView()">Disclaim</button>
                     </span>

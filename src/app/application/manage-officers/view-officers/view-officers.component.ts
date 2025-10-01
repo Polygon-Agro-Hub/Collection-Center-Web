@@ -190,9 +190,9 @@ export class ViewOfficersComponent implements OnInit {
   }
 
   fetchByRole() {
-    if (this.logingRole === 'Collection Center Head') {
+    if (this.logingRole === 'Collection Centre Head') {
       this.fetchAllOfficersForCCH();
-    } else if (this.logingRole === 'Collection Center Manager') {
+    } else if (this.logingRole === 'Collection Centre Manager') {
       this.fetchAllOfficers();
     } else {
       this.hasData = true;
@@ -383,10 +383,6 @@ const approveButton = (item.status === 'Rejected' || item.status === 'Not Approv
   // }
 
   applyRoleFilters() {
-    if (this.selectRole === 'Collection Centre Manager') {
-      this.selectRole = 'Collection Center Manager'
-    }
-
     console.log('selectRole', this.selectRole)
     this.fetchByRole();
   }

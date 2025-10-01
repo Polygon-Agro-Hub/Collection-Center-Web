@@ -41,9 +41,9 @@
                                 <span *ngIf="officerObj.jobRole ==='Driver'">DVR</span>
                                 <span *ngIf="officerObj.jobRole ==='Collection Officer'">COO</span>
                                 <span *ngIf="officerObj.jobRole ==='Distribution Officer'">DIO</span>
-                                <span *ngIf="officerObj.jobRole ==='Distribution Center Manager'">DCM</span>
+                                <span *ngIf="officerObj.jobRole ==='Distribution Centre Manager'">DCM</span>
                                 <span
-                                    *ngIf="officerObj.jobRole ==='Distribution Center Head'">DCH</span>{{officerObj.empId}}</span>
+                                    *ngIf="officerObj.jobRole ==='Distribution Centre Head'">DCH</span>{{officerObj.empId}}</span>
                         </p>
                         <p class="font-semibold" *ngIf="officerObj.jobRole === 'Collection Centre Manager' 
                             || officerObj.jobRole === 'Collection Centre Head' 
@@ -63,7 +63,7 @@
 
                 <div class="flex space-x-4">
                     <span
-                        *ngIf="(logingRole === 'Collection Centre Manager' && officerObj.jobRole !=='Collection Centre Manager' && officerObj.claimStatus === 1 ) || (logingRole === 'Distribution Center Manager' && officerObj.jobRole !=='Distribution Center Manager' && officerObj.claimStatus === 1 ) ">
+                        *ngIf="(logingRole === 'Collection Centre Manager' && officerObj.jobRole !=='Collection Centre Manager' && officerObj.claimStatus === 1 ) || (logingRole === 'Distribution Centre Manager' && officerObj.jobRole !=='Distribution Centre Manager' && officerObj.claimStatus === 1 ) ">
                         <button class="bg-[#E20000] text-white font-semibold rounded-lg shadow-md px-5 py-2"
                             (click)="toggleDisclaimView()">Disclaim</button>
                     </span>

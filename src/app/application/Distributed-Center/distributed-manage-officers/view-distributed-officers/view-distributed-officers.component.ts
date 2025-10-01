@@ -67,7 +67,7 @@ export class ViewDistributedOfficersComponent implements OnInit {
   }
 
   isRoleDropdownOpen = false;
-  roleDropdownOptions = ['Distribution Center Manager', 'Distribution Officer'];
+  roleDropdownOptions = ['Distribution Centre Manager', 'Distribution Officer'];
 
   toggleRoleDropdown() {
     this.isRoleDropdownOpen = !this.isRoleDropdownOpen;
@@ -173,9 +173,9 @@ export class ViewDistributedOfficersComponent implements OnInit {
   }
 
   fetchByRole() {
-    if (this.logingRole === 'Distribution Center Head') {
+    if (this.logingRole === 'Distribution Centre Head') {
       this.fetchAllOfficersForDCH();
-    } else if (this.logingRole === 'Distribution Center Manager') {
+    } else if (this.logingRole === 'Distribution Centre Manager') {
       this.fetchAllOfficers();
     } else {
       this.hasData = true;

@@ -184,19 +184,6 @@ export const MENU_ITEMS = [
     permission: ['Distribution Centre Manager'],
   },
 
-
-
-  // {
-  //   id: 19,
-  //   key: 'dcm-manage-officers',
-  //   path: '/dcm-manage-officers',
-  //   label: 'Manage Officers',
-  //   icon: 'fas fa-user-cog',
-  //   permission: ['Distribution Center Manager'],
-  // },
-
-  // <i class="fa-solid fa-file-circle-check"></i>
-
 ];
 
 @Component({

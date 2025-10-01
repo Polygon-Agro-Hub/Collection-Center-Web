@@ -283,7 +283,9 @@ branchItems: { value: number; label: string }[] = [];
         this.personalData.previousEmpId = res.officerData.collectionOfficer.empIdPrefix
         this.selectedCenterName = res.officerData.collectionOfficer.centerName
 
-        this.selectedManager = res.managerName.firstNameEnglish + ' ' + res.managerName.lastNameEnglish
+        if (res.officerData.collectionOfficer.irmId != null) {
+          this.selectedManager = res.managerName.firstNameEnglish + ' ' + res.managerName.lastNameEnglish
+        }
         console.log('previousjobRole', this.personalData.previousjobRole)
   
         this.getUpdateLastID(res.officerData.collectionOfficer.jobRole);
@@ -576,7 +578,7 @@ branchItems: { value: number; label: string }[] = [];
     } else {
       this.isLoading = true;
 
-      if (this.logingRole === 'Distribution Center Manager') {
+      if (this.logingRole === 'Distribution Centre Manager') {
         this.DistributedManageOfficerSrv.updateDistributionOfficerDIO(this.personalData, this.editOfficerId, this.selectedImage).subscribe(
           (res: any) => {
             this.officerId = res.officerId;
@@ -611,8 +613,8 @@ branchItems: { value: number; label: string }[] = [];
 
           }
         );
-      } else if (this.logingRole === 'Distribution Center Head') {
-        if (this.personalData.jobRole === 'Distribution Center Manager') {
+      } else if (this.logingRole === 'Distribution Centre Head') {
+        if (this.personalData.jobRole === 'Distribution Centre Manager') {
           this.personalData.irmId = null;
         }
 

@@ -230,12 +230,12 @@ export class OfficerProfileComponent implements OnInit {
         empType = 'Driver';
         empCode = 'DVR'; // Added empCode for Driver
         break;
-      case 'Distribution Center Head':
-        empType = 'Distribution Center Head';
+      case 'Distribution Centre Head':
+        empType = 'Distribution Centre Head';
         empCode = 'DCH';
         break;
-      case 'Distribution Center Manager':
-        empType = 'Distribution Center Manager';
+      case 'Distribution Centre Manager':
+        empType = 'Distribution Centre Manager';
         empCode = 'DCM';
         break;
       case 'Distribution Officer':

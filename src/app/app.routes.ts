@@ -64,6 +64,7 @@ import { OfficerTargetsComponent } from './application/Distributed-Center/Distri
 import { ViewDistributionOfficerTargetComponent } from './application/Distributed-Center/Distributed-Target/view-distribution-officer-target/view-distribution-officer-target.component';
 import { DchComplaintsComponent } from './application/dch-Complaints/dch-complaints/dch-complaints.component';
 import { DchViewRecieveComplaintComponent } from './application/dch-Complaints/dch-view-recieve-complaint/dch-view-recieve-complaint.component';
+import { PendingTargetAssignGuard } from './guards/pending-target-assign.guard';
 
 export const routes: Routes = [
     {
@@ -413,6 +414,7 @@ export const routes: Routes = [
                     {
                         path: 'Assign',
                         component: AssignDistributionTargetComponent,
+                        canDeactivate: [PendingTargetAssignGuard]
                     },
                     
                 ]

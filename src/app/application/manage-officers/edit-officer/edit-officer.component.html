@@ -308,7 +308,8 @@
                         <input id="firstNameEnglish" [(ngModel)]="personalData.firstNameEnglish" name="firstNameEnglish"
                             class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                             #firstNameEnglishInput="ngModel" required (keydown)="blockSpecialChars($event)"
-                            (input)="capitalizeFirstLetter('firstNameEnglish')"/>
+                            (input)="onFormatInput($event, personalData, 'firstNameEnglish')"
+                            />
                         <div *ngIf="firstNameEnglishInput.touched && !personalData.firstNameEnglish"
                             class="text-red-500 text-sm mt-1">
                             <div>First Name (in English) is required</div>
@@ -323,7 +324,7 @@
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                             #lastNameEnglishInput="ngModel" required 
                             (keydown)="blockSpecialChars($event)"
-                            (input)="capitalizeFirstLetter('lastNameEnglish')"/>
+                            (input)="onFormatInput($event, personalData, 'lastNameEnglish')"/>
                         <div *ngIf="lastNameEnglishInput.touched && !personalData.lastNameEnglish"
                             class="text-red-500 text-sm mt-1">
                             <div>Last Name (in English) is required</div>
@@ -338,7 +339,7 @@
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                             #firstNameSinhalaInput="ngModel" required 
                             (keydown)="blockSpecialChars($event)"
-                            (input)="capitalizeFirstLetter('firstNameSinhala')"/>
+                            (input)="onFormatInput($event, personalData, 'firstNameSinhala')"/>
                         <div *ngIf="firstNameSinhalaInput.touched && !personalData.firstNameSinhala"
                             class="text-red-500 text-sm mt-1">
                             <div>First Name (in Sinhala) is required</div>
@@ -353,7 +354,7 @@
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                             #lastNameSinhalaInput="ngModel" required 
                             (keydown)="blockSpecialChars($event)"
-                            (input)="capitalizeFirstLetter('lastNameSinhala')"/>
+                            (input)="onFormatInput($event, personalData, 'lastNameSinhala')"/>
                         <div *ngIf="lastNameSinhalaInput.touched && !personalData.lastNameSinhala"
                             class="text-red-500 text-sm mt-1">
                             <div>Last Name (in Sinhala) is required</div>
@@ -368,7 +369,7 @@
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                             #firstNameTamilInput="ngModel" required 
                             (keydown)="blockSpecialChars($event)"
-                            (input)="capitalizeFirstLetter('firstNameTamil')"/>
+                            (input)="onFormatInput($event, personalData, 'firstNameTamil')"/>
                         <div *ngIf="firstNameTamilInput.touched && !personalData.firstNameTamil"
                             class="text-red-500 text-sm mt-1">
                             <div>First Name (in Tamil) is required</div>
@@ -383,7 +384,7 @@
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                             #lastNameTamilInput="ngModel" required 
                             (keydown)="blockSpecialChars($event)"
-                            (input)="capitalizeFirstLetter('lastNameTamil')"/>
+                            (input)="onFormatInput($event, personalData, 'firstNameTamil')"/>
                         <div *ngIf="lastNameTamilInput.touched && !personalData.lastNameTamil"
                             class="text-red-500 text-sm mt-1">
                             <div>Last Name (in Tamil) is required</div>
@@ -482,7 +483,8 @@
                           <input id="phoneNumber02" name="phoneNumber02" type="tel"
                             [(ngModel)]="personalData.phoneNumber02" #phoneNumber02Input="ngModel"
                             class="block w-full p-2 border border-gray-300 rounded-r-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                            placeholder="Enter your mobile number" pattern="^[0-9]{9}$" minlength="9" maxlength="9" (ngModelChange)="validateSriLankanPhone($event, 'phone02')"/>
+                            placeholder="Enter your mobile number" pattern="^[0-9]{9}$" minlength="9" maxlength="9" (ngModelChange)="validateSriLankanPhone($event, 'phone02')"
+                            (keypress)="($event.charCode >= 48 && $event.charCode <= 57) ? true : $event.preventDefault()"/>
                         </div>
                       
                         <!-- Custom Validation: Same as Phone Number 1 -->
@@ -570,7 +572,8 @@
                     <input id="houseNumber" name="houseNumber" [(ngModel)]="personalData.houseNumber"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                         #houseNumberInput="ngModel" required 
-                        (input)="capitalizeFirstLetter('houseNumber')"/>
+                        (input)="onFormatInput($event, personalData, 'houseNumber')"
+/>
                     <div *ngIf="houseNumberInput.touched && !personalData.houseNumber"
                         class="text-red-500 text-sm mt-1">
                         <div>House / Plot Number is required</div>
@@ -583,7 +586,8 @@
                     <input id="streetName" name="streetName" [(ngModel)]="personalData.streetName"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                         #streetNameInput="ngModel" required 
-                        (input)="capitalizeFirstLetter('streetName')"/>
+                        (input)="onFormatInput($event, personalData, 'streetName')"
+                        />
                     <div *ngIf="streetNameInput.touched && !personalData.streetName" class="text-red-500 text-sm mt-1">
                         <div>Street Name is required</div>
                     </div>
@@ -595,7 +599,7 @@
                     <input id="city" name="city" [(ngModel)]="personalData.city"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                         #cityInput="ngModel" required 
-                        (input)="capitalizeFirstLetter('city')"/>
+                        (input)="onFormatInput($event, personalData, 'city')"/>
                     <div *ngIf="cityInput.touched && !personalData.city" class="text-red-500 text-sm mt-1">
                         <div>City is required</div>
                     </div>
@@ -657,7 +661,7 @@
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                         #accHolderNameInput="ngModel" required 
                         (keydown)="blockSpecialChars($event)" 
-                        (input)="capitalizeFirstLetter('accHolderName')" pattern="^[a-zA-Z0-9\s.']*$"/>
+                        (input)="onTrimInput($event, personalData, 'accHolderName')" pattern="^[a-zA-Z0-9\s.']*$"/>
                         <div *ngIf="accHolderNameInput.touched && !personalData.accHolderName"
                         class="text-red-500 text-sm mt-1">
                         <div>Account Holder's Name is required</div>
@@ -704,7 +708,7 @@
                     <div *ngIf="confirmAccNumberInput.touched && !personalData.conformAccNumber" class="text-red-500 text-sm mt-1">
                         <div>Confirm Account Number is required</div>
                     </div>
-                    <div *ngIf="personalData.conformAccNumber && personalData.accNumber !== personalData.conformAccNumber"
+                    <div *ngIf="personalData.conformAccNumber && (personalData.accNumber !== personalData.conformAccNumber) && !accNumberInput.errors?.['pattern']"
                         class="text-red-500 text-sm mt-1">
                         <div>Confirm Account Number should be the same as Account Number.</div>
                     </div>
@@ -716,32 +720,11 @@
 </div>
                 </div>
 
-                <!-- <div class="pb-6">
-                    <label for="accNumber" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Confirm
-                        Account Number</label>
-                    <input type="number" id="accNumber" name="accNumber" [(ngModel)]="personalData.conformAccNumber"
-                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                        #conformAccNumberInput="ngModel" required />
-                    <div *ngIf="conformAccNumberInput.touched && !personalData.conformAccNumber"
-                        class="text-red-500 text-sm mt-1">
-                        <div>Account Number is required</div>
-                    </div>
-                    <div *ngIf="personalData.conformAccNumber && personalData.accNumber !== personalData.conformAccNumber"
-                        class="text-red-500 text-sm mt-1">
-                        <div>Confirm Account Number should be the same as Account Number.</div>
-                    </div>
-                </div> -->
-
                 <div class="pb-6">
                     <label for="bankDropdown"
                         class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Bank
                         Name *</label>
-                    <!-- <select id="bankDropdown" name="bankDropdown" [(ngModel)]="selectedBankId"  #selectedBank="ngModel" (change)="onBankChange()"
-                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]">
-                        <option [ngValue]="null" disabled>Select a bank</option>
-                        <option *ngFor="let bank of banks" [ngValue]="bank.ID">{{ bank.name }}</option>
-                    </select> -->
-
+                    
                     <app-searchable-dropdown
                       [items]="bankItems"
                       placeholder="Select a bank"
@@ -762,13 +745,7 @@
                     <label for="branchDropdown"
                         class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Branch
                         Name *</label>
-                    <!-- <select id="branchDropdown" name="branchDropdown" [(ngModel)]="selectedBranchId"
-                        (change)="onBranchChange()" [disabled]="!selectedBankId"  #selectedBranch="ngModel"
-                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]">
-                        <option [ngValue]="null" disabled>Select a branch</option>
-                        <option *ngFor="let branch of branches" [ngValue]="branch.ID">{{ branch.name }}</option>
-                    </select> -->
-
+                    
                     <app-searchable-dropdown
                       [items]="branchItems"
                       placeholder="Select a branch"
@@ -846,9 +823,6 @@
                         </button>
                     </div>
 
-                    <!-- <div *ngIf="!licenseFrontImageFileName" class="text-red-500 text-sm mt-1">
-                        <div>License Front Image is required</div>
-                    </div> -->
                 </div>
 
                 <div>

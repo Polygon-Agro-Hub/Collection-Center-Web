@@ -1107,27 +1107,49 @@ filteredCenterArr: Center[] = [];
     }
   }
 
-  capitalizeFirstLetter(field: keyof typeof this.personalData) {
-    if (this.personalData[field]) {
-      // Trim spaces
-      this.personalData[field] = this.personalData[field].trim();
+  // capitalizeFirstLetter(field: keyof typeof this.personalData) {
+  //   if (this.personalData[field]) {
+  //     // Trim spaces
+  //     this.personalData[field] = this.personalData[field].trim();
   
-      // Capitalize first letter
-      this.personalData[field] =
-        this.personalData[field].charAt(0).toUpperCase() +
-        this.personalData[field].slice(1);
-    }
-  }
+  //     // Capitalize first letter
+  //     this.personalData[field] =
+  //       this.personalData[field].charAt(0).toUpperCase() +
+  //       this.personalData[field].slice(1);
+  //   }
+  // }
 
   onTrimInput(event: Event, modelRef: any, fieldName: string): void {
     const inputElement = event.target as HTMLInputElement;
-    const trimmedValue = inputElement.value.trimStart();
-    modelRef[fieldName] = trimmedValue;
-    inputElement.value = trimmedValue;
+  
+    if (inputElement) {
+      // Trim spaces at start and end
+      const trimmedValue = inputElement.value.trim();
+  
+      // Update model and input
+      modelRef[fieldName] = trimmedValue;
+      inputElement.value = trimmedValue;
+    }
   }
+  
 
-
-
+  onFormatInput(event: Event, modelRef: any, fieldName: string): void {
+    const inputElement = event.target as HTMLInputElement;
+  
+    if (inputElement && inputElement.value) {
+      // Trim spaces at start & end
+      let value = inputElement.value.trim();
+  
+      // Capitalize first letter
+      value = value.charAt(0).toUpperCase() + value.slice(1);
+  
+      // Update model
+      modelRef[fieldName] = value;
+  
+      // Update input box value
+      inputElement.value = value;
+    }
+  }
 
 }
 

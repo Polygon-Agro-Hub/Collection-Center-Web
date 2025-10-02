@@ -414,14 +414,7 @@ export const routes: Routes = [
                         path: 'Assign',
                         component: AssignDistributionTargetComponent,
                     },
-                    // {
-                    //     path: 'create-distribution-officer',
-                    //     component: AddDistributedOfficerComponent
-                    // },
-                    // {
-                    //     path: 'edit-distribution-officer/:id',
-                    //     component: EditDistributedOfficerComponent
-                    // }
+                    
                 ]
             },
 
@@ -438,10 +431,7 @@ export const routes: Routes = [
                         path: 'view-officer-target/:officerId',  
                         component: ViewDistributionOfficerTargetComponent
                       }
-                    // {
-                    //     path: 'edit-distribution-officer/:id',
-                    //     component: EditDistributedOfficerComponent
-                    // }
+                   
                 ]
             },
 
@@ -454,18 +444,7 @@ export const routes: Routes = [
                         path: '',
                         component: TargetProgressAllComponent,
                     },
-                    // {
-                    //     path: 'Assign',
-                    //     component: AssignDistributionTargetComponent,
-                    // },
-                    // {
-                    //     path: 'create-distribution-officer',
-                    //     component: AddDistributedOfficerComponent
-                    // },
-                    // {
-                    //     path: 'edit-distribution-officer/:id',
-                    //     component: EditDistributedOfficerComponent
-                    // }
+                   
                 ]
             },
 
@@ -478,9 +457,6 @@ export const routes: Routes = [
                         path: '',
                         component: RequestsComponent,
                     },
-                    // {
-                    //     path: 'Assign',
-                    //     component: AssignDistributionTargetComponent,
                     
                 ]
             },

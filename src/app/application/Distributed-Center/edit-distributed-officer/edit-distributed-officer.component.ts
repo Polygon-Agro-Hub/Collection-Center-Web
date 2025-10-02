@@ -426,40 +426,6 @@ branchItems: { value: number; label: string }[] = [];
     });
   }
 
-
-  // UpdateEpmloyeIdCreate() {
-  //   let rolePrefix: string | undefined;
-
-  //   // Map job roles to their respective prefixes
-  //   if (this.personalData.jobRole === 'Collection Center Manager') {
-  //     rolePrefix = 'CCM';
-  //   } else if (this.personalData.jobRole === 'Customer Officer') {
-  //     rolePrefix = 'CUO';
-  //   } else if (this.personalData.jobRole === 'Driver') {
-  //     rolePrefix = 'DVR';
-  //   } else {
-  //     rolePrefix = 'COO';
-
-  //   }
-
-
-  //   if (!rolePrefix) {
-  //     console.error(`Invalid job role: ${this.personalData.jobRole}`);
-  //     return;
-  //   }
-
-
-  //   this.getUpdateLastID(rolePrefix)
-  //     .then((lastId) => {
-  //       this.upateEmpID = rolePrefix + lastId;
-
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error fetching updated last ID:', error);
-  //     });
-  // }
-
-
   onCheckboxChange(lang: string, event: any) {
     if (event.target.checked) {
       if (this.personalData.languages) {

@@ -142,7 +142,7 @@
                     <th class="px-3 py-3 text-left font-semibold">Completed (kg)</th>
                     <th class="px-3 py-3 text-center font-semibold">Status</th>
                     <th class="px-3 py-3 text-left font-semibold">Ends At</th>
-                    <th class="px-3 py-3 text-left font-semibold" *ngIf="logingRole === 'Collection Center Manager'">
+                    <th class="px-3 py-3 text-left font-semibold" *ngIf="logingRole === 'Collection Centre Manager'">
                     </th>
                 </tr>
             </thead>
@@ -177,7 +177,7 @@
                         <p class="text-[#646464] text-sm">{{ item.toDate | date: 'hh:mm a' }}</p>
                     </td>
                     <td class="px-3 py-4 text-gray-900 dark:text-gray-300"
-                        *ngIf="logingRole === 'Collection Center Manager'">
+                        *ngIf="logingRole === 'Collection Centre Manager'">
                         <i *ngIf="item.status === 'Pending'"
                             class="fa-solid fa-pen-to-square text-blue-600 cursor-pointer"
                             (click)="navigateToNewPage(item.id)">

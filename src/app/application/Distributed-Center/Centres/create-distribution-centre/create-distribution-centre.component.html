@@ -9,7 +9,7 @@
         <h2 class="text-2xl mb-6 text-[#292929] dark:text-[White] ">Add Distribution Centre</h2>
     </div>
     <form class="grid grid-cols-2 gap-4" #centerForm="ngForm">
-        <!-- Collection Center Name -->
+        
         <div>
             <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Distribution Centre
                 Name *</label>
@@ -27,12 +27,7 @@
             <input type="text"
                 class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                 [(ngModel)]="centerData.country" name="country" required #country="ngModel" readonly />
-            <!-- <select
-                class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                [(ngModel)]="centerData.country" name="country" required #country="ngModel" disabled>
-
-                <option value="Sri Lanka">Sri Lanka</option>
-            </select> -->
+            
             <p *ngIf="country.invalid && country.touched" class="text-red-500 text-sm">
                 Country is required.
             </p>
@@ -178,15 +173,6 @@
         <!-- Province -->
         <div>
             <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Province *</label>
-            <!-- <select
-                class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                [(ngModel)]="centerData.province" (change)="updateFilteredDistricts()" name="province" required
-                #province="ngModel">
-                <option value="" disabled>Select Province</option>
-                <option *ngFor="let province of provinces" [value]="province">
-                    {{ province }}
-                </option>
-            </select> -->
 
             <input id="province" name="province" [(ngModel)]="centerData.province" #province="ngModel"
                         class="mt-1 block w-full p-2 border border-[#D9D9D9] hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"

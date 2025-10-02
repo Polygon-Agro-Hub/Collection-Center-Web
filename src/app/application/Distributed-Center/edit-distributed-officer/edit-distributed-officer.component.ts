@@ -283,7 +283,9 @@ branchItems: { value: number; label: string }[] = [];
         this.personalData.previousEmpId = res.officerData.collectionOfficer.empIdPrefix
         this.selectedCenterName = res.officerData.collectionOfficer.centerName
 
-        this.selectedManager = res.managerName.firstNameEnglish + ' ' + res.managerName.lastNameEnglish
+        if (res.officerData.collectionOfficer.irmId != null) {
+          this.selectedManager = res.managerName.firstNameEnglish + ' ' + res.managerName.lastNameEnglish
+        }
         console.log('previousjobRole', this.personalData.previousjobRole)
   
         this.getUpdateLastID(res.officerData.collectionOfficer.jobRole);
@@ -424,40 +426,6 @@ branchItems: { value: number; label: string }[] = [];
     });
   }
 
-
-  // UpdateEpmloyeIdCreate() {
-  //   let rolePrefix: string | undefined;
-
-  //   // Map job roles to their respective prefixes
-  //   if (this.personalData.jobRole === 'Collection Center Manager') {
-  //     rolePrefix = 'CCM';
-  //   } else if (this.personalData.jobRole === 'Customer Officer') {
-  //     rolePrefix = 'CUO';
-  //   } else if (this.personalData.jobRole === 'Driver') {
-  //     rolePrefix = 'DVR';
-  //   } else {
-  //     rolePrefix = 'COO';
-
-  //   }
-
-
-  //   if (!rolePrefix) {
-  //     console.error(`Invalid job role: ${this.personalData.jobRole}`);
-  //     return;
-  //   }
-
-
-  //   this.getUpdateLastID(rolePrefix)
-  //     .then((lastId) => {
-  //       this.upateEmpID = rolePrefix + lastId;
-
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error fetching updated last ID:', error);
-  //     });
-  // }
-
-
   onCheckboxChange(lang: string, event: any) {
     if (event.target.checked) {
       if (this.personalData.languages) {
@@ -576,7 +544,7 @@ branchItems: { value: number; label: string }[] = [];
     } else {
       this.isLoading = true;
 
-      if (this.logingRole === 'Distribution Center Manager') {
+      if (this.logingRole === 'Distribution Centre Manager') {
         this.DistributedManageOfficerSrv.updateDistributionOfficerDIO(this.personalData, this.editOfficerId, this.selectedImage).subscribe(
           (res: any) => {
             this.officerId = res.officerId;
@@ -611,8 +579,8 @@ branchItems: { value: number; label: string }[] = [];
 
           }
         );
-      } else if (this.logingRole === 'Distribution Center Head') {
-        if (this.personalData.jobRole === 'Distribution Center Manager') {
+      } else if (this.logingRole === 'Distribution Centre Head') {
+        if (this.personalData.jobRole === 'Distribution Centre Manager') {
           this.personalData.irmId = null;
         }
 

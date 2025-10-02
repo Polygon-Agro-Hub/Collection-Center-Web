@@ -22,14 +22,14 @@
         <option disabled selected value="" class="p-2 text-[#534E4E] bg-gray-200 dark:text-textDark  dark:bg-[#1D1D1F]">
           --Select Job Role--
         </option>
-        <option *ngIf="logingRole === 'Collection Center Manager'" value="Collection Officer" class="p-2 text-[#534E4E] bg-gray-200 dark:text-textDark dark:bg-[#1D1D1F]">
+        <option *ngIf="logingRole === 'Collection Centre Manager'" value="Collection Officer" class="p-2 text-[#534E4E] bg-gray-200 dark:text-textDark dark:bg-[#1D1D1F]">
           Collection Officer
         </option>
-        <option *ngIf="logingRole === 'Collection Center Manager'" value="Customer Officer" class="p-2 text-[#534E4E] bg-gray-200 dark:text-textDark dark:bg-[#1D1D1F]">
+        <option *ngIf="logingRole === 'Collection Centre Manager'" value="Customer Officer" class="p-2 text-[#534E4E] bg-gray-200 dark:text-textDark dark:bg-[#1D1D1F]">
           Customer Officer
         </option>
 
-        <option *ngIf="logingRole === 'Distribution Center Manager'" value="Distribution Officer" class="p-2 text-[#534E4E] bg-gray-200 dark:text-textDark dark:bg-[#1D1D1F]">
+        <option *ngIf="logingRole === 'Distribution Centre Manager'" value="Distribution Officer" class="p-2 text-[#534E4E] bg-gray-200 dark:text-textDark dark:bg-[#1D1D1F]">
           Distribution Officer
         </option>
       </select>
@@ -82,11 +82,11 @@
 
   <div *ngIf="isOfficerExist && officerObj.claimStatus === 1"
     class="flex flex-col items-center w-full h-screen px-10 py-7 dark:bg-[#363636] bg-tileLight shadow-lg rounded-lg mt-6">
-    <p *ngIf="logingRole === 'Distribution Center Manager'" class="text-[#494949] my-6 dark:text-white">
+    <p *ngIf="logingRole === 'Distribution Centre Manager'" class="text-[#494949] my-6 dark:text-white">
       --The user already claimed By {{ officerObj.distributedCenterName }} Centre.--
     </p>
 
-    <p *ngIf="logingRole === 'Collection Center Manager'" class="text-[#494949] my-6 dark:text-white">
+    <p *ngIf="logingRole === 'Collection Centre Manager'" class="text-[#494949] my-6 dark:text-white">
       --The user already claimed By {{ officerObj.centerName }} Centre.--
     </p>
     <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />

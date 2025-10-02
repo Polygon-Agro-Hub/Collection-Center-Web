@@ -353,6 +353,7 @@ selectManager(item: Manager) {
   }
 
   onSubmit() {
+    console.log('this.personalData', this.personalData)
     // this.personalData.image = this.selectedFile;
     if (this.personalData.accNumber !== this.personalData.conformAccNumber) {
       return;
@@ -367,8 +368,8 @@ selectManager(item: Manager) {
       return;
 
     } else {
-      if (this.logingRole === 'Distribution Center Manager') {
-        console.log('Distribution Center Manager')
+      if (this.logingRole === 'Distribution Centre Manager') {
+        console.log('Distribution Centre Manager')
         this.DistributedManageOfficerSrv.createDistributionOfficerDIO(this.personalData, this.selectedImage).subscribe(
           (res: any) => {
             if (res.status) {
@@ -388,8 +389,8 @@ selectManager(item: Manager) {
             this.toastSrv.error('There was an error creating the collective officer')
           }
         );
-      } else if (this.logingRole === 'Distribution Center Head') {
-        console.log('Distribution Center Head')
+      } else if (this.logingRole === 'Distribution Centre Head') {
+        console.log('Distribution Centre Head')
 
        
         this.DistributedManageOfficerSrv.createDistributionOfficer(this.personalData, this.selectedImage).subscribe(
@@ -542,11 +543,11 @@ selectManager(item: Manager) {
   //   missingFields.push('Staff Employee Type');
   // }
 
-  if (!this.personalData.centerId && this.personalData.jobRole === 'Distribution Officer') {
+  if (!this.personalData.centerId && this.logingRole === 'Distribution Centre Head') {
     missingFields.push('Distribution Centre Name is required');
   }
 
-  if (!this.personalData.irmId && this.personalData.jobRole === 'Distribution Officer') {
+  if (!this.personalData.irmId && this.personalData.jobRole === 'Distribution Officer' && this.logingRole === 'Distribution Centre Head') {
     missingFields.push('Distribution Centre Manager is required');
   }
 

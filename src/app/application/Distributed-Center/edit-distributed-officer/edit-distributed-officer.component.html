@@ -57,7 +57,7 @@
 
                     
 
-                    <div *ngIf="logingRole === 'Distribution Center Head'" >
+                    <div *ngIf="logingRole === 'Distribution Centre Head'" >
                         <label for="centerId" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">
                             Distribution Centre Name *
                         </label>
@@ -129,9 +129,9 @@
                               </div>
                             </div>
                           </div>
-                        <div *ngIf="centerIdInput.touched && !personalData.centerId && logingRole === 'Distribution Center Head'"
+                        <div *ngIf="centerIdInput.touched && !personalData.centerId && logingRole === 'Distribution Centre Head'"
                             class="text-red-500 text-sm mt-1">
-                            <div>Distribution Center Name is required</div>
+                            <div>Distribution Centre Name is required</div>
                         </div>
                     </div>
 
@@ -148,8 +148,8 @@
                                 class="p-2 text-[#292929] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
                                 -- select --
                             </option>
-                            <option value="Distribution Center Manager"
-                                *ngIf="logingRole === 'Distribution Center Head'"
+                            <option value="Distribution Centre Manager"
+                                *ngIf="logingRole === 'Distribution Centre Head'"
                                 class="p-2 text-[#292929] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
                                 Distribution Centre Manager
                             </option>
@@ -164,50 +164,11 @@
                         </div>
                     </div>
                     
-
-                    <!-- <div>
-                        <label class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">EMP ID / User
-                            name</label>
-                        <div class="flex mt-1">
-                            <p class="inline-flex items-center px-3 py-3 text-sm text-[#534E4E] bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-[#1D1D1F] dark:text-gray-400 ">
-                                {{personalData.empIdFirst}}</p>
-
-                             <span
-                                class="inline-flex items-center px-3 py-3 text-sm text-[#534E4E] bg-gray-200 border border-e-0 border-gray-300 rounded-s-md dark:bg-[#1D1D1F] dark:text-gray-400 ">
-                                <span *ngIf="logingRole === 'Distribution Center Head'">
-                                    <p *ngIf="personalData.jobRole === 'Distribution Manager'">DBM</p>
-                                </span>
-                            
-                                <p *ngIf="personalData.jobRole === 'Distribution Officer'">DIO</p>
-
-                            </span>
-                            <p class="rounded-none inline-flex items-center rounded-e-lg bg-gray-50 border border-gray-300 text-[#534E4E] focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm pl-4  dark:bg-[#1D1D1F]  dark:placeholder-gray-400 dark:text-textDark dark:focus:ring-blue-500 dark:focus:border-blue-500">{{personalData.empId}}</p>
-                              
-                        </div>
-                    </div> -->
-
                     <div
-                        *ngIf="logingRole === 'Distribution Center Head' && (personalData.jobRole === 'Distribution Officer')">
+                        *ngIf="logingRole === 'Distribution Centre Head' && (personalData.jobRole === 'Distribution Officer')">
                         <label for="irmId" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">
                             Manager *
                         </label>
-                        <!-- <select id="irmId" [(ngModel)]="personalData.irmId" name="irmId" placeholder="select"
-                            (change)="checkManager()" [disabled]="!personalData.centerId" #irmIdInput="ngModel" required
-                            class="form-control mt-1 block w-full p-2 text-[#292929] mb-1 dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] focus:ring-indigo-500 focus:border-indigo-500">
-                            <option disabled selected
-                                class="p-2 text-[#292929] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]"
-                                value="">
-                                -- select manager--
-                            </option>
-                            <option *ngFor="let item of managerArr" [value]="item.id"
-                                class="p-2 text-[#292929] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
-                                {{item.firstNameEnglish}} {{item.lastNameEnglish}}
-                            </option>
-                            <div *ngIf="irmIdInput.touched && !personalData.irmId && logingRole === 'Distribution Center Head' && (personalData.jobRole === 'Distribution Officer')"
-                                class="text-red-500 text-sm mt-1">
-                                <div>Distribution Centre Manager is required</div>
-                            </div>
-                        </select> -->
 
                         <div class="relative w-full">
                             <!-- Input acting as dropdown -->
@@ -263,15 +224,15 @@
                             </div>
                           </div>
 
-                          <div *ngIf="irmIdInput.touched && !personalData.irmId && logingRole === 'Distribution Center Head'"
+                          <div *ngIf="irmIdInput.touched && !personalData.irmId && logingRole === 'Distribution Centre Head'"
                             class="text-red-500 text-sm mt-1">
-                            <div>Distribution Center Manager is required</div>
+                            <div>Distribution Centre Manager is required</div>
                         </div>
                     </div>
 
-                    <div
-                        *ngIf="(logingRole === 'Distribution Center Head' || logingRole === 'Distribution Center Manager') && (personalData.jobRole === 'Distribution Officer')">
-                    </div>
+                    <!-- <div
+                        *ngIf="(logingRole === 'Distribution Centre Head' || logingRole === 'Distribution Centre Manager') && (personalData.jobRole === 'Distribution Officer')">
+                    </div> -->
 
                     <div>
                         <label for="languages" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">

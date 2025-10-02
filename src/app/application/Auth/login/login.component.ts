@@ -116,16 +116,16 @@ export class LoginComponent {
               this.router.navigate(['/change-password']);
               this.isLoading = false;
             } else if (res.updatedPassword == 1) {
-              if (this.role === 'Collection Center Manager') {
+              if (this.role === 'Collection Centre Manager') {
                 this.router.navigate(['/dashbord']);
                 this.isLoading = false;
-              } else if (this.role === 'Collection Center Head') {
+              } else if (this.role === 'Collection Centre Head') {
                 this.router.navigate(['/centers']);
                 this.isLoading = false;
-              } else if (this.role === 'Distribution Center Head') {
+              } else if (this.role === 'Distribution Centre Head') {
                 this.router.navigate(['/distribution-center']);
                 this.isLoading = false;
-              } else if (this.role === 'Distribution Center Manager') {
+              } else if (this.role === 'Distribution Centre Manager') {
                 this.router.navigate(['/distribution-center-dashboard']);
                 this.isLoading = false;
               } else {

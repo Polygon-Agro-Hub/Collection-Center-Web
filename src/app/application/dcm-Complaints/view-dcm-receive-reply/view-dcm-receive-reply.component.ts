@@ -183,43 +183,6 @@ export class ViewDcmReceiveReplyComponent implements OnInit {
     )
   }
 
-//   createTemplate(fname: string = '', language: string = 'English', templateData: TemplateData): string {
-//     if (language === 'Sinhala') {
-//       return `
-// හිතවත් ${fname},
-
-// ඔබට තවත් ගැටළු හෝ ප්‍රශ්න තිබේ නම්, කරුණාකර අප හා සම්බන්ධ වන්න. ඔබේ ඉවසීම සහ අවබෝධය වෙනුවෙන් ස්තූතියි.
-
-// මෙයට,
-// ${templateData.SinName}
-// Collection Center Manager of ${templateData.companyNameSinhala}
-//     `
-//     } else if (language === 'Tamil') {
-//       return `
-// அன்புள்ள ${fname},
-
-// உங்களுக்கு மேலும் ஏதேனும் சிக்கல்கள் அல்லது கேள்விகள் இருந்தால், தயவுசெய்து எங்களைத் தொடர்பு கொள்ளவும். உங்கள் பொறுமைக்கும் புரிதலுக்கும் நன்றி.
-
-// இதற்கு,
-//   ${templateData.TamName}
-// Collection Center Manager of ${templateData.companyNameTamil}
-//       `
-//     } else {
-//       return `
-// Dear ${fname},
-
-// If you have any further concerns or questions, feel free to reach out.
-// Thank you for your patience and understanding.
-
-
-// Sincerely, ${templateData.EngName}
-// Collection Center Manager of  ${templateData.companyNameEnglish}
-
-//   `
-//     }
-
-//   }
-
 }
 
 class Complaint {

@@ -213,7 +213,7 @@ export class ViewRecivedComplaintComponent implements OnInit {
 
 මෙයට,
 ${templateData.SinName}
-Collection Center Manager of ${templateData.companyNameSinhala}
+Collection Centre Manager of ${templateData.companyNameSinhala}
     `
     } else if (language === 'Tamil') {
       return `
@@ -223,7 +223,7 @@ Collection Center Manager of ${templateData.companyNameSinhala}
 
 இதற்கு,
   ${templateData.TamName}
-Collection Center Manager of ${templateData.companyNameTamil}
+Collection Centre Manager of ${templateData.companyNameTamil}
       `
     } else {
       return `
@@ -234,7 +234,7 @@ Thank you for your patience and understanding.
 
 
 Sincerely, ${templateData.EngName}
-Collection Center Manager of  ${templateData.companyNameEnglish}
+Collection Centre Manager of  ${templateData.companyNameEnglish}
 
   `
     }

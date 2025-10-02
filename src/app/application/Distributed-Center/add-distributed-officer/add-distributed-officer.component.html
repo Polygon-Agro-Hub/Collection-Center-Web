@@ -38,7 +38,7 @@
 
 
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
-                    <div *ngIf="logingRole === 'Distribution Center Head'">
+                    <div *ngIf="logingRole === 'Distribution Centre Head'">
                         <label for="centerId" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
                           Distribution Centre Name *
                         </label>
@@ -118,8 +118,8 @@
                                 class="p-2 text-[#534E4E] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
                                 -- select --
                             </option>
-                            <option selected value="Distribution Center Manager"
-                                *ngIf="logingRole === 'Distribution Center Head'"
+                            <option selected value="Distribution Centre Manager"
+                                *ngIf="logingRole === 'Distribution Centre Head'"
                                 class="p-2 text-[#030308] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
                                 Distribution Centre Manager
                             </option>
@@ -136,13 +136,13 @@
                         </div>
                     </div>
 
-                    <div *ngIf="logingRole === 'Distribution Center Manager'"></div>
+                    <div *ngIf="logingRole === 'Distribution Centre Manager'"></div>
 
 
 
 
                     <div
-                        *ngIf="logingRole === 'Distribution Center Head' && (personalData.jobRole === 'Distribution Officer')">
+                        *ngIf="logingRole === 'Distribution Centre Head' && (personalData.jobRole === 'Distribution Officer')">
                         <label for="centerId" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
                             Manager *
                         </label>
@@ -212,7 +212,7 @@
                               </div>
                             </div>
                           </div>
-                        <div *ngIf="irmIdInput.touched && !personalData.irmId && logingRole === 'Distribution Center Head' && (personalData.jobRole === 'Distribution Officer')"
+                        <div *ngIf="irmIdInput.touched && !personalData.irmId && logingRole === 'Distribution Centre Head' && (personalData.jobRole === 'Distribution Officer')"
                             class="text-red-500 text-sm mt-1">
                             <div>Distribution Centre Manager is required</div>
                         </div>
@@ -221,7 +221,7 @@
                     <div *ngIf="personalData.jobRole === 'Distribution Officer'"></div>
 
                     <div
-                        *ngIf="logingRole === 'Collection Center Head' && (personalData.jobRole === 'Collection Officer' || personalData.jobRole === 'Customer Officer')">
+                        *ngIf="logingRole === 'Collection Centre Head' && (personalData.jobRole === 'Collection Officer' || personalData.jobRole === 'Customer Officer')">
                     </div>
 
                     <div>

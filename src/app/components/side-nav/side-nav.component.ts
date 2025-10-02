@@ -14,7 +14,7 @@ export const MENU_ITEMS = [
     path: '/dashbord',
     label: 'Dashbord',
     icon: 'fas fa-th-large',
-    permission: ['Collection Center Manager'],
+    permission: ['Collection Centre Manager'],
   },
   {
     id: 2,
@@ -22,7 +22,7 @@ export const MENU_ITEMS = [
     path: '/target',
     label: 'Centre Target',
     icon: 'fa-solid fa-bullseye',
-    permission: ['Collection Center Manager'],
+    permission: ['Collection Centre Manager'],
   },
   {
     id: 3,
@@ -30,7 +30,7 @@ export const MENU_ITEMS = [
     path: '/officer-target',
     label: 'Officer Target',
     icon: 'fa-solid fa-user-plus',
-    permission: ['Collection Center Manager'],
+    permission: ['Collection Centre Manager'],
   },
   {
     id: 4,
@@ -38,7 +38,7 @@ export const MENU_ITEMS = [
     path: '/centers',
     label: 'Centres',
     icon: 'fa-solid fa-bullseye',
-    permission: ['Collection Center Head'],
+    permission: ['Collection Centre Head'],
   },
   {
     id: 5,
@@ -46,7 +46,7 @@ export const MENU_ITEMS = [
     path: '/price-list',
     label: 'Price List',
     icon: 'fa-solid fa-tag',
-    permission: ['Collection Center Manager'],
+    permission: ['Collection Centre Manager'],
   },
   {
     id: 6,
@@ -54,7 +54,7 @@ export const MENU_ITEMS = [
     path: '/price-request',
     label: 'Price Requests',
     icon: 'fas fa-hand-holding-usd',
-    permission: ['Collection Center Manager'],
+    permission: ['Collection Centre Manager'],
   },
   {
     id: 7,
@@ -62,7 +62,7 @@ export const MENU_ITEMS = [
     path: '/reports',
     label: 'Reports',
     icon: 'fa-solid fa-chart-pie',
-    permission: ['Collection Center Manager', 'Collection Center Head'],
+    permission: ['Collection Centre Manager', 'Collection Centre Head'],
 
   },
   {
@@ -71,7 +71,7 @@ export const MENU_ITEMS = [
     path: '/manage-officers',
     label: 'Manage Officers',
     icon: 'fas fa-user-cog',
-    permission: ['Collection Center Manager', 'Collection Center Head'],
+    permission: ['Collection Centre Manager', 'Collection Centre Head'],
 
   },
   {
@@ -80,7 +80,7 @@ export const MENU_ITEMS = [
     path: '/complaints',
     label: 'Complaints',
     icon: 'fa-solid fa-triangle-exclamation',
-    permission: ['Collection Center Manager'],
+    permission: ['Collection Centre Manager'],
   },
   {
     id: 10,
@@ -88,10 +88,10 @@ export const MENU_ITEMS = [
     path: '/cch-complaints',
     label: 'Complaints',
     icon: 'fa-solid fa-triangle-exclamation',
-    permission: ['Collection Center Head'],
+    permission: ['Collection Centre Head'],
   },
 
-  // ----------------------------------------- Distribution Center part ------------------------------------------
+  // ----------------------------------------- Distribution Centre part ------------------------------------------
 
   {
     id: 11,
@@ -99,7 +99,7 @@ export const MENU_ITEMS = [
     path: '/distribution-center-dashboard',
     label: 'Dashboard',
     icon: 'fas fa-th-large',
-    permission: ['Distribution Center Manager'],
+    permission: ['Distribution Centre Manager'],
   },
   {
     id: 12,
@@ -107,7 +107,7 @@ export const MENU_ITEMS = [
     path: '/distribution-center',
     label: 'Centres',
     icon: 'fa-solid fa-bullseye',
-    permission: ['Distribution Center Head'],
+    permission: ['Distribution Centre Head'],
   },
 
 
@@ -117,7 +117,7 @@ export const MENU_ITEMS = [
     path: '/target-progress',
     label: 'Target Progress',
     icon: 'fa-solid fa-bullseye',
-    permission: ['Distribution Center Manager'],
+    permission: ['Distribution Centre Manager'],
   },
 
   {
@@ -126,7 +126,7 @@ export const MENU_ITEMS = [
     path: '/assign-targets',
     label: 'Assign Targets',
     icon: 'fa-regular fa-calendar-check',
-    permission: ['Distribution Center Manager'],
+    permission: ['Distribution Centre Manager'],
   },
 
   {
@@ -135,7 +135,7 @@ export const MENU_ITEMS = [
     path: '/officer-targets',
     label: 'Officer Targets',
     icon: 'fa-solid fa-user-plus',
-    permission: ['Distribution Center Manager'],
+    permission: ['Distribution Centre Manager'],
   },
 
 
@@ -145,7 +145,7 @@ export const MENU_ITEMS = [
     path: '/requests',
     label: 'Requests',
     icon: 'fa-solid fa-arrow-right-arrow-left',
-    permission: ['Distribution Center Manager'],
+    permission: ['Distribution Centre Manager'],
   },
 
   {
@@ -154,7 +154,7 @@ export const MENU_ITEMS = [
     path: '/reports',
     label: 'Reports',
     icon: 'fa-solid fa-chart-pie',
-    permission: ['Distribution Center Manager'],
+    permission: ['Distribution Centre Manager'],
   },
 
   {
@@ -163,7 +163,7 @@ export const MENU_ITEMS = [
     path: '/distribution-officers',
     label: 'Manage Officers',
     icon: 'fas fa-user-cog',
-    permission: ['Distribution Center Head', 'Distribution Center Manager'],
+    permission: ['Distribution Centre Head', 'Distribution Centre Manager'],
   },
 
   {
@@ -172,7 +172,7 @@ export const MENU_ITEMS = [
     path: '/dch-complaints',
     label: 'Complaints',
     icon: 'fa-solid fa-triangle-exclamation',
-    permission: ['Distribution Center Head'],
+    permission: ['Distribution Centre Head'],
   },
 
   {
@@ -181,21 +181,8 @@ export const MENU_ITEMS = [
     path: '/dcm-complaints',
     label: 'Complaints',
     icon: 'fa-solid fa-triangle-exclamation',
-    permission: ['Distribution Center Manager'],
+    permission: ['Distribution Centre Manager'],
   },
-
-
-
-  // {
-  //   id: 19,
-  //   key: 'dcm-manage-officers',
-  //   path: '/dcm-manage-officers',
-  //   label: 'Manage Officers',
-  //   icon: 'fas fa-user-cog',
-  //   permission: ['Distribution Center Manager'],
-  // },
-
-  // <i class="fa-solid fa-file-circle-check"></i>
 
 ];
 
@@ -232,6 +219,7 @@ export class SideNavComponent {
 
   ) {
     this.role = tokenSrv.getUserDetails().role;
+    console.log('role', this.role)
     this.companyLogo = tokenSrv.getUserDetails().logo;
     this.companyFavicon = tokenSrv.getUserDetails().favicon;
     this.setActiveTabFromRoute();
@@ -307,13 +295,13 @@ export class SideNavComponent {
   }
 
   selectIdealTab() {
-    if (this.role === 'Collection Center Manager') {
+    if (this.role === 'Collection Centre Manager') {
       this.isSelectTab = 'dashboard';
-    } else if (this.role === 'Collection Center Head') {
+    } else if (this.role === 'Collection Centre Head') {
       this.isSelectTab = 'centers';
-    } else if (this.role === 'Distribution Center Manager' ){
+    } else if (this.role === 'Distribution Centre Manager' ){
       this.isSelectTab = 'distribution-center-dashboard';
-    } else if (this.role === 'Distribution Center Head') {
+    } else if (this.role === 'Distribution Centre Head') {
       this.isSelectTab = 'distribution-center';
     }
   }

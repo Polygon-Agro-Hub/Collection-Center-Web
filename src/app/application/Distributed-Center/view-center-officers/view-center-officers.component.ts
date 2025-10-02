@@ -181,9 +181,9 @@ export class ViewCenterOfficersComponent implements OnInit {
   }
 
   fetchByRole() {
-    if (this.logingRole === 'Distribution Center Head') {
+    if (this.logingRole === 'Distribution Centre Head') {
       this.fetchAllCenterOfficersForDCH();
-    } else if (this.logingRole === 'Distribution Center Manager') {
+    } else if (this.logingRole === 'Distribution Centre Manager') {
       this.fetchAllOfficers();
     } else {
       this.hasData = true;
@@ -376,7 +376,7 @@ const tableHtml = `
   applyRoleFilters() {
 
     if (this.selectRole === 'Distribution Centre Manager') {
-      this.selectRole = 'Distribution Center Manager'
+      this.selectRole = 'Distribution Centre Manager'
     }
 
     this.fetchByRole();

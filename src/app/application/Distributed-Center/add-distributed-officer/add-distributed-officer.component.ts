@@ -807,6 +807,24 @@ onTrimInput(event: Event, modelRef: any, fieldName: string): void {
   inputElement.value = trimmedValue;
 }
 
+onFormatInput(event: Event, modelRef: any, fieldName: string): void {
+  const inputElement = event.target as HTMLInputElement;
+
+  if (inputElement && inputElement.value) {
+    // Trim spaces at start & end
+    let value = inputElement.value.trim();
+
+    // Capitalize first letter
+    value = value.charAt(0).toUpperCase() + value.slice(1);
+
+    // Update model
+    modelRef[fieldName] = value;
+
+    // Update input box value
+    inputElement.value = value;
+  }
+}
+
 onTrimInputCapitalize(event: Event, modelRef: any, fieldName: string): void {
   const inputElement = event.target as HTMLInputElement;
   let trimmedValue = inputElement.value.trimStart();

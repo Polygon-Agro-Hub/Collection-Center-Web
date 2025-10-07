@@ -64,6 +64,7 @@ import { OfficerTargetsComponent } from './application/Distributed-Center/Distri
 import { ViewDistributionOfficerTargetComponent } from './application/Distributed-Center/Distributed-Target/view-distribution-officer-target/view-distribution-officer-target.component';
 import { DchComplaintsComponent } from './application/dch-Complaints/dch-complaints/dch-complaints.component';
 import { DchViewRecieveComplaintComponent } from './application/dch-Complaints/dch-view-recieve-complaint/dch-view-recieve-complaint.component';
+import { PendingTargetAssignGuard } from './guards/pending-target-assign.guard';
 
 export const routes: Routes = [
     {
@@ -413,15 +414,9 @@ export const routes: Routes = [
                     {
                         path: 'Assign',
                         component: AssignDistributionTargetComponent,
+                        canDeactivate: [PendingTargetAssignGuard]
                     },
-                    // {
-                    //     path: 'create-distribution-officer',
-                    //     component: AddDistributedOfficerComponent
-                    // },
-                    // {
-                    //     path: 'edit-distribution-officer/:id',
-                    //     component: EditDistributedOfficerComponent
-                    // }
+                    
                 ]
             },
 
@@ -438,10 +433,7 @@ export const routes: Routes = [
                         path: 'view-officer-target/:officerId',  
                         component: ViewDistributionOfficerTargetComponent
                       }
-                    // {
-                    //     path: 'edit-distribution-officer/:id',
-                    //     component: EditDistributedOfficerComponent
-                    // }
+                   
                 ]
             },
 
@@ -454,18 +446,7 @@ export const routes: Routes = [
                         path: '',
                         component: TargetProgressAllComponent,
                     },
-                    // {
-                    //     path: 'Assign',
-                    //     component: AssignDistributionTargetComponent,
-                    // },
-                    // {
-                    //     path: 'create-distribution-officer',
-                    //     component: AddDistributedOfficerComponent
-                    // },
-                    // {
-                    //     path: 'edit-distribution-officer/:id',
-                    //     component: EditDistributedOfficerComponent
-                    // }
+                   
                 ]
             },
 
@@ -478,9 +459,6 @@ export const routes: Routes = [
                         path: '',
                         component: RequestsComponent,
                     },
-                    // {
-                    //     path: 'Assign',
-                    //     component: AssignDistributionTargetComponent,
                     
                 ]
             },

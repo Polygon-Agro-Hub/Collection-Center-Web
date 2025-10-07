@@ -100,6 +100,32 @@
         </div>
 
     </div>
+</div>
 
+<div *ngIf="isExitAssignTarget" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
+  <div class="flex flex-col justify-center items-center gap-y-5 bg-white dark:bg-[#363636] shadow-lg rounded-lg p-6 w-1/3">
+      <div class="flex items-center justify-center bg-[#F6F7F9] rounded-lg shadow-sm px-4 py-3">
+          <i class="fa-solid fa-triangle-exclamation text-[#6B7D8C] text-4xl"></i>
+      </div>
 
+      <div class="flex flex-col items-center justify-center text-center">
+          <p class="text-[#4B5563] text-lg">You have unsaved changes.</p>
+          <p class="text-[#4B5563] text-lg">If you leave this page now, your changes will be lost.</p>
+          <p class="text-[#4B5563] text-lg">Do you want to continue without saving?</p>
+      </div>
+
+      <div class="flex flex-row items-center justify-center gap-x-4">
+          <button (click)="leaveWithoutSaving()"
+              class="bg-[#F6F7F9] text-[#4B5563] px-4 py-2 rounded-lg hover:bg-gray-200 flex flex-col items-center justify-center">
+              <span class="font-semibold">Leave</span>
+              <span>without saving</span>
+          </button>
+
+          <button (click)="stayOnPage()"
+              class="bg-[#415CFF] text-white px-10 py-2 rounded-lg hover:bg-blue-600 flex flex-col items-center justify-center">
+              <span class="font-semibold">Stay</span>
+              <span>on page</span>
+          </button>
+      </div>
+  </div>
 </div>

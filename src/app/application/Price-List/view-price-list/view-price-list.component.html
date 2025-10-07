@@ -16,35 +16,6 @@
                 <i class="fa-solid fa-list text-2xl dark:text-white"></i>
 
                 <p class="text-lg dark:text-white">Filter By</p>
-
-                <!-- <div class="relative w-46 ">
-                    <div
-                        class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-white flex flex-row justify-between items-center ">
-                        <select [(ngModel)]="selectGrade" (change)="filterGrade()"
-                            class="block w-full appearance-none  dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
-                            <option value="" selected disabled>Grade</option>
-                            <option
-                                class=" dark:bg-[#292929] text-textLight dark:text-white hover:bg-gray-300 dark:hover:bg-[#292929]"
-                                value="A">A</option>
-                            <option
-                                class=" dark:bg-[#292929] text-textLight dark:text-white hover:bg-gray-300 dark:hover:bg-[#292929]"
-                                value="B">B</option>
-                            <option
-                                class=" dark:bg-[#292929] text-textLight dark:text-white hover:bg-gray-300 dark:hover:bg-[#292929]"
-                                value="C">C</option>
-
-                        </select>
-                        <button *ngIf="!selectGrade">
-                            <i class="fa-solid fa-angle-down text-lg mr-3 dark:bg-[#292929]"></i>
-                        </button>
-                        <button *ngIf="selectGrade" (click)="cancelGrade()">
-                            <i class="fa-solid fa-xmark text-lg mr-3 dark:bg-[#292929]"></i>
-                        </button>
-
-                    </div>
-                </div> -->
-
-
                 <div class="relative w-36 custom-grade-dropdown-container">
                     <!-- Hidden native select -->
                     <select [(ngModel)]="selectGrade" class="hidden" (change)="filterGrade()">

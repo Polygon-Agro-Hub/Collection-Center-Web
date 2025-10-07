@@ -7,11 +7,13 @@ import { DropdownModule } from 'primeng/dropdown';
 import { PriceListService } from '../../../services/Price-List-Service/price-list.service';
 import Swal from 'sweetalert2';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
+import { TokenServiceService } from '../../../services/Token/token-service.service';
+import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
 
 @Component({
   selector: 'app-price-request',
   standalone: true,
-  imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, LoadingSpinnerComponent, SerchableDropdownComponent],
   templateUrl: './price-request.component.html',
   styleUrl: './price-request.component.css',
   providers: [DatePipe]
@@ -19,6 +21,12 @@ import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loa
 })
 export class PriceRequestComponent implements OnInit {
   reqPriceArr!: RequestPrice[];
+  cropGroupArr: CropGroup[] = [];
+  cropVarietyArr: CropVariety[] = [];
+
+  gradeOptions: string[] = ["A", "B", "C"];
+
+  priceRequestObject: Request = new Request();
 
   page: number = 1;
   totalItems: number = 0;
@@ -34,6 +42,12 @@ export class PriceRequestComponent implements OnInit {
 
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Pending', 'Approved', 'Rejected'];
+
+  logingRole: string | null = null;
+
+  isForwardViewOpen: boolean = false;
+  isAddRequestOpen: boolean = false;
+  forwardId!: number;
 
   toggleStatusDropdown() {
     this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
@@ -62,8 +76,9 @@ export class PriceRequestComponent implements OnInit {
   constructor(
     private router: Router,
     private PriceListSrv: PriceListService,
-    private datePipe: DatePipe
-  ) { }
+    private datePipe: DatePipe,
+    private tokenSrv: TokenServiceService,
+  ) {this.logingRole = tokenSrv.getUserDetails().role}
 
   ngOnInit(): void {
     this.today = this.datePipe.transform(new Date(), 'yyyy/MM/dd') || '';
@@ -107,6 +122,85 @@ export class PriceRequestComponent implements OnInit {
         this.isLoading = false;
       }
     )
+  }
+
+  fetchCropGroup() {
+    this.isLoading = true;
+    this.PriceListSrv.getCropGroup().subscribe(
+      (res) => {
+        this.cropGroupArr = res.items;
+        console.log(res)
+        console.log(this.cropGroupArr)
+        this.isLoading = false;
+      }
+    )
+  }
+
+  fetchCropVariety(cropGroupId: number) {
+    this.isLoading = true;
+    this.PriceListSrv.getCropVariety(cropGroupId).subscribe(
+      (res) => {
+        this.cropVarietyArr = res.items;
+        console.log(res)
+        console.log(this.cropVarietyArr)
+        this.isLoading = false;
+      }
+    )
+  }
+
+  fetchCurrentPrice(cropGroupId: number, cropVarietyId: number, grade: string) {
+    console.log('called', cropVarietyId, cropGroupId, grade)
+    this.isLoading = true;
+    this.PriceListSrv.getCurrentPrice(cropGroupId, cropVarietyId, grade ).subscribe(
+      (res) => {
+        console.log('res', res)
+        this.priceRequestObject.currentPrice = res;
+        
+        console.log(this.priceRequestObject.currentPrice)
+        this.isLoading = false;
+      }
+    )
+  }
+
+  get cropGroupDropdownItems() {
+    return this.cropGroupArr.map(crop => ({
+      value: crop.id.toString(),
+      label: crop.cropNameEnglish,
+      disabled: false
+    }));
+  }
+
+  onCropGroupSelectionChange(selectedValue: number) {
+    this.priceRequestObject.cropGroupId = selectedValue || null;
+    console.log('crop selected:', this.priceRequestObject.cropGroupId);
+    this.fetchCropVariety(this.priceRequestObject.cropGroupId!);
+  }
+
+  get cropVarietyDropdownItems() {
+    return this.cropVarietyArr.map(variety => ({
+      value: variety.id.toString(),
+      label: variety.varietyNameEnglish,
+      disabled: false
+    }));
+  }
+
+  onCropVarietySelectionChange(selectedValue: number) {
+    this.priceRequestObject.cropVarietyId = selectedValue || null;
+    console.log('crop selected:', this.priceRequestObject.cropVarietyId);
+  }
+
+  get gradeDropDownItems() {
+    return this.gradeOptions.map(grade => ({
+      value: grade,
+      label: grade,
+      disabled: false
+    }));
+  }
+
+  onGradeSelectionChange(selectedValue: string) {
+    this.priceRequestObject.grade = selectedValue || 'null';
+    console.log('crop selected:', this.priceRequestObject.cropVarietyId);
+    this.fetchCurrentPrice(this.priceRequestObject.cropGroupId!, this.priceRequestObject.cropVarietyId!, this.priceRequestObject.grade!);
   }
 
   onPageChange(event: number) {
@@ -294,6 +388,71 @@ export class PriceRequestComponent implements OnInit {
     }
   }
 
+  forwardRequest(id: number) {
+    this.forwardId = id;
+    
+    this.isForwardViewOpen = true;
+  }
+
+  confirmForward() {
+    this.isForwardViewOpen = !this.isForwardViewOpen;
+
+    console.log(this.forwardId);
+    this.isLoading = true;
+    this.PriceListSrv.forwardRequest(this.forwardId).subscribe(
+      
+      (res) => {
+        if (res.status) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: 'The request was forwarded successfully.',
+            showConfirmButton: false,
+            timer: 3000,
+            customClass: {
+              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+              title: 'dark:text-white',
+            },
+          });
+          this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade, this.selectStatus, this.searchText);
+        } else {
+          this.isLoading = false;
+          Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: 'Something went wrong while forwaring the request. Please try again.',
+            showConfirmButton: false,
+            timer: 3000,
+            customClass: {
+              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+              title: 'dark:text-white',
+            },
+          });
+        }
+      }
+    )
+
+    // this.router.navigate(['login']);
+
+  }
+
+  cancelForward() {
+    this.isForwardViewOpen = !this.isForwardViewOpen;
+  }
+
+  openAddRequest() {
+    this.isAddRequestOpen = true;
+    this.fetchCropGroup();
+  }
+
+  closeAddRequest() {
+    this.isAddRequestOpen = false;
+  }
+
+  submitRequest() {
+
+  }
+
 }
 
 
@@ -306,4 +465,23 @@ class RequestPrice {
   varietyNameEnglish!: string
   cropNameEnglish!: string
   createdAt!: string
+  assignRole!: string
 }
+
+class CropGroup {
+  id!: number
+  cropNameEnglish!: string
+}
+
+class CropVariety {
+  id!: number
+  varietyNameEnglish!: string
+}
+
+class Request {
+  cropGroupId: number | null = null;
+  cropVarietyId: number | null = null;
+  grade: string = ''
+  currentPrice: number | null = null;
+}
+

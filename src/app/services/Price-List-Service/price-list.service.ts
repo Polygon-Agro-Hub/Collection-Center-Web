@@ -82,5 +82,56 @@ export class PriceListService {
     });
   }
 
+  forwardRequest(id: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
+    return this.http.patch(`${this.apiUrl}/forward-request/${id}`, {}, {
+      headers,
+    });
+  }
+
+  getCropGroup(): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    let url = `${this.apiUrl}/get-all-crop-group`
+
+    return this.http.get(url, {
+      headers,
+    });
+  }
+
+  getCropVariety(cropGroupId: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    let url = `${this.apiUrl}/get-all-crop-variety/${cropGroupId}`
+
+    return this.http.get(url, {
+      headers,
+    });
+  }
+
+  getCurrentPrice(cropGroupId: number, cropVarietyId: number, grade: string): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    const url = `${this.apiUrl}/get-current-price/${cropGroupId}/${cropVarietyId}/${grade}`;
+
+    return this.http.get(url, {
+      headers,
+    });
+  }
+
+
+  
+
 
 }

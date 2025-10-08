@@ -154,7 +154,8 @@ export class PriceRequestComponent implements OnInit {
     this.PriceListSrv.getCurrentPrice(cropGroupId, cropVarietyId, grade ).subscribe(
       (res) => {
         console.log('res', res)
-        this.priceRequestObject.currentPrice = res;
+        this.priceRequestObject.currentPrice = res.items[0].price;
+        this.priceRequestObject.id = res.items[0].id;
         
         console.log(this.priceRequestObject.currentPrice)
         this.isLoading = false;
@@ -450,8 +451,54 @@ export class PriceRequestComponent implements OnInit {
   }
 
   submitRequest() {
-
+    this.isLoading = true;
+    console.log('price', this.priceRequestObject)
+    this.PriceListSrv.addRequest(this.priceRequestObject).subscribe(
+      
+      (res) => {
+        if (res.status) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: 'The request added successfully.',
+            showConfirmButton: false,
+            timer: 3000,
+            customClass: {
+              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+              title: 'dark:text-white',
+            },
+          });
+          this.isAddRequestOpen = false;
+          this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade, this.selectStatus, this.searchText);
+        } else {
+          this.isLoading = false;
+          Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: 'Something went wrong while adding the request. Please try again.',
+            showConfirmButton: false,
+            timer: 3000,
+            customClass: {
+              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+              title: 'dark:text-white',
+            },
+          });
+        }
+      }
+    )
+       
   }
+
+  preventMinus(event: KeyboardEvent) {
+    if (event.key === '-' || event.key === 'Subtract') {
+      event.preventDefault();
+    }
+  }
+
+  log() {
+    console.log('log', this.priceRequestObject.requstPrice)
+  }
+  
 
 }
 
@@ -479,9 +526,11 @@ class CropVariety {
 }
 
 class Request {
+  id!: number;
   cropGroupId: number | null = null;
   cropVarietyId: number | null = null;
   grade: string = ''
   currentPrice: number | null = null;
+  requstPrice: number | null = null;
 }
 

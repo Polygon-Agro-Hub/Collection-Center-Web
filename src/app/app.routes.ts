@@ -65,6 +65,9 @@ import { ViewDistributionOfficerTargetComponent } from './application/Distribute
 import { DchComplaintsComponent } from './application/dch-Complaints/dch-complaints/dch-complaints.component';
 import { DchViewRecieveComplaintComponent } from './application/dch-Complaints/dch-view-recieve-complaint/dch-view-recieve-complaint.component';
 import { PendingTargetAssignGuard } from './guards/pending-target-assign.guard';
+import { CchPriceRequestComponent } from './application/Price-List/cch-price-request/cch-price-request.component';
+import { CchCenterPriceListComponent } from './application/Price-List/cch-center-price-list/cch-center-price-list.component';
+import { pendingPricelistUpdateCchGuard } from './guards/pending-pricelist-update-cch.guard';
 
 export const routes: Routes = [
     {
@@ -308,6 +311,23 @@ export const routes: Routes = [
                     {
                         path: 'view-recive-reply/:id',
                         component: CchRecivedComplaintComponent
+                    }
+                ]
+            },
+
+            {
+                path: 'cch-price-request',
+                canActivate:[RoleGuardService],
+                data: { roles: ['Collection Centre Head'] },
+                children: [
+                    {
+                        path: '',
+                        component: CchPriceRequestComponent
+                    },
+                    {
+                        path: 'cch-center-price-list/:requestId/:officerId',
+                        component: CchCenterPriceListComponent,
+                        canDeactivate: [pendingPricelistUpdateCchGuard]
                     }
                 ]
             },

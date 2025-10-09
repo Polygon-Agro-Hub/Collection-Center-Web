@@ -188,10 +188,14 @@
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.createdAt | date: 'hh:mm a'}}
                         </td>
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300 text-center">
-                            <button (click)="openChangeStatusPopUp(item.id, item.requestPrice)" [disabled]="item.assignRole === 'CCH' || item.empId.startsWith('CCM') || item.status !== 'Pending'" [ngClass]="{
-                                'text-gray-400 cursor-not-allowed': item.assignRole === 'CCH' || item.empId.startsWith('CCM') || item.status !== 'Pending',
-                                'text-blue-500 hover:text-blue-700': item.assignRole !== 'CCH' && !item.empId.startsWith('CCM') || item.status === 'Pending'
-                              }" class="p-2 transition">
+                            <button (click)="openChangeStatusPopUp(item.id, item.requestPrice)" [disabled]="item.assignRole === 'CCH' || item.empId.startsWith('CCM') || item.status !== 'Pending'" 
+                            [ngClass]="{
+                                'text-gray-400 cursor-not-allowed':
+                                  item.assignRole === 'CCH' || item.empId.startsWith('CCM') || item.status !== 'Pending',
+                                'text-blue-500 hover:text-blue-700':
+                                  (item.assignRole !== 'CCH' && !item.empId.startsWith('CCM') && item.status === 'Pending')
+                              }"
+                               class="p-2 transition">
                                 <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none"
                                     xmlns="http://www.w3.org/2000/svg"
                                     [attr.stroke]="item.assignRole === 'CCH' || item.empId.startsWith('CCM') ? '#9CA3AF' : '#415CFF'">

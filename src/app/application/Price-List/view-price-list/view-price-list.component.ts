@@ -31,6 +31,7 @@ export class ViewPriceListComponent implements OnInit {
   today!: string;
   editingIndex: number | null = null;
   editValue!: number;
+  rangeValidationMassage: string = '';
 
   originalValue!: number;
 
@@ -151,8 +152,10 @@ export class ViewPriceListComponent implements OnInit {
   
       if (value < minAllowed || value > maxAllowed) {
         this.isUpdateAllowed = false;
+        this.rangeValidationMassage = `Allowed range: ${minAllowed}-${maxAllowed}`;
       } else {
         this.isUpdateAllowed = true;
+        this.rangeValidationMassage = '';
       }
     } else {
       this.isUpdateAllowed = false; // fallback

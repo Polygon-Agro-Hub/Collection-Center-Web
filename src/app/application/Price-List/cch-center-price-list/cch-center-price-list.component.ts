@@ -238,32 +238,18 @@ export class CchCenterPriceListComponent implements OnInit {
       
       (res) => {
         if (res.status) {
-          Swal.fire({
-            icon: 'success',
-            title: 'Success!',
-            text: 'The request Rejected successfully.',
-            showConfirmButton: false,
-            timer: 3000,
-            customClass: {
-              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-              title: 'dark:text-white',
-            },
-          });
+          this.toastSrv.success(
+            'The request Rejected successfully.'
+          );
+          
           this.isChangeStatusViewOpen = false;
           this.fetchAllPriceList(this.userId, this.page, this.itemsPerPage, this.selectGrade, this.searchText);
         } else {
           this.isLoading = false;
-          Swal.fire({
-            icon: 'error',
-            title: 'Error!',
-            text: 'Something went wrong while Rejecting the request. Please try again.',
-            showConfirmButton: false,
-            timer: 3000,
-            customClass: {
-              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-              title: 'dark:text-white',
-            },
-          });
+          this.toastSrv.success(
+            'Something went wrong while Rejecting the request. Please try again.'
+          );
+          
           this.isChangeStatusViewOpen = false;
         }
       }
@@ -277,32 +263,18 @@ export class CchCenterPriceListComponent implements OnInit {
       
       (res) => {
         if (res.status) {
-          Swal.fire({
-            icon: 'success',
-            title: 'Success!',
-            text: 'The request Approved successfully.',
-            showConfirmButton: false,
-            timer: 3000,
-            customClass: {
-              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-              title: 'dark:text-white',
-            },
-          });
+          this.toastSrv.success(
+            'The request Approved successfully.'
+          );
+          
           this.isChangeStatusViewOpen = false;
           this.fetchAllPriceList(this.userId, this.page, this.itemsPerPage, this.selectGrade, this.searchText);
         } else {
           this.isLoading = false;
-          Swal.fire({
-            icon: 'error',
-            title: 'Error!',
-            text: 'Something went wrong while Approving the request. Please try again.',
-            showConfirmButton: false,
-            timer: 3000,
-            customClass: {
-              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-              title: 'dark:text-white',
-            },
-          });
+          this.toastSrv.success(
+            'Something went wrong while Approving the request. Please try again.'
+          );
+          
           this.isChangeStatusViewOpen = false;
         }
       }

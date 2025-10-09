@@ -9,6 +9,7 @@ import Swal from 'sweetalert2';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { TokenServiceService } from '../../../services/Token/token-service.service';
 import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
+import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 
 @Component({
   selector: 'app-price-request',
@@ -81,6 +82,7 @@ export class PriceRequestComponent implements OnInit {
     private PriceListSrv: PriceListService,
     private datePipe: DatePipe,
     private tokenSrv: TokenServiceService,
+    private toastSrv: ToastAlertService,
   ) {this.logingRole = tokenSrv.getUserDetails().role}
 
   ngOnInit(): void {
@@ -516,32 +518,28 @@ export class PriceRequestComponent implements OnInit {
       
       (res) => {
         if (res.status) {
-          Swal.fire({
-            icon: 'success',
-            title: 'Success!',
-            text: 'The request Rejected successfully.',
-            showConfirmButton: false,
-            timer: 3000,
-            customClass: {
-              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-              title: 'dark:text-white',
-            },
-          });
+          this.toastSrv.success(
+            'The request Rejected successfully.'
+          );
+          // Swal.fire({
+          //   icon: 'success',
+          //   title: 'Success!',
+          //   text: 'The request Rejected successfully.',
+          //   showConfirmButton: false,
+          //   timer: 3000,
+          //   customClass: {
+          //     popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+          //     title: 'dark:text-white',
+          //   },
+          // });
           this.isChangeStatusViewOpen = false;
           this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade, this.selectStatus, this.searchText);
         } else {
           this.isLoading = false;
-          Swal.fire({
-            icon: 'error',
-            title: 'Error!',
-            text: 'Something went wrong while Rejecting the request. Please try again.',
-            showConfirmButton: false,
-            timer: 3000,
-            customClass: {
-              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-              title: 'dark:text-white',
-            },
-          });
+          this.toastSrv.error(
+            'Something went wrong while Rejecting the request. Please try again.'
+          );
+          
           this.isChangeStatusViewOpen = false;
         }
       }
@@ -554,32 +552,17 @@ export class PriceRequestComponent implements OnInit {
       
       (res) => {
         if (res.status) {
-          Swal.fire({
-            icon: 'success',
-            title: 'Success!',
-            text: 'The request Approved successfully.',
-            showConfirmButton: false,
-            timer: 3000,
-            customClass: {
-              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-              title: 'dark:text-white',
-            },
-          });
+          this.toastSrv.success(
+            'The request Approved successfully.'
+          );
           this.isChangeStatusViewOpen = false;
           this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade, this.selectStatus, this.searchText);
         } else {
           this.isLoading = false;
-          Swal.fire({
-            icon: 'error',
-            title: 'Error!',
-            text: 'Something went wrong while Approving the request. Please try again.',
-            showConfirmButton: false,
-            timer: 3000,
-            customClass: {
-              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-              title: 'dark:text-white',
-            },
-          });
+          this.toastSrv.success(
+            'Something went wrong while Approving the request. Please try again.'
+          );
+          
           this.isChangeStatusViewOpen = false;
         }
       }

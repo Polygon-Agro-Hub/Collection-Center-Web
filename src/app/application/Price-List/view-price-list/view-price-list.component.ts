@@ -36,6 +36,7 @@ export class ViewPriceListComponent implements OnInit {
 
   isLoading: boolean = true;
   isExit: boolean = false;
+  isUpdateAllowed = true;
 
   isGradeDropdownOpen = false;
   gradeDropdownOptions = ['A', 'B', 'C'];
@@ -134,16 +135,38 @@ export class ViewPriceListComponent implements OnInit {
   }
 
   validateInput() {
-    // Ensure value is not negative
-    if (this.editValue < 0) {
+    // Convert to number safely
+    const value = Number(this.editValue);
+    const original = Number(this.originalValue);
+  
+    // Ensure non-negative
+    if (value < 0) {
       this.editValue = 0;
     }
-
-    // Round to 2 decimal places
-    if (this.editValue !== null && this.editValue !== undefined) {
-      this.editValue = parseFloat(this.editValue.toFixed(2));
+  
+    // Only check if both values are valid numbers
+    if (!isNaN(value) && !isNaN(original)) {
+      const minAllowed = original - 15;
+      const maxAllowed = original + 15;
+  
+      if (value < minAllowed || value > maxAllowed) {
+        this.isUpdateAllowed = false;
+      } else {
+        this.isUpdateAllowed = true;
+      }
+    } else {
+      this.isUpdateAllowed = false; // fallback
     }
+  
+    // Round to 2 decimals (only after validation)
+    if (this.editValue !== null && this.editValue !== undefined && !isNaN(value)) {
+      this.editValue = parseFloat(value.toFixed(2));
+    }
+  
+    console.log('edit', this.editValue, 'allowed?', this.isUpdateAllowed);
   }
+  
+  
 
   editRow(index: number, currentValue: number) {
     this.editingIndex = index; // Set the row index being edited

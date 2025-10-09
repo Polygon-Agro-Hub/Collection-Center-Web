@@ -39,6 +39,9 @@ export class PriceRequestComponent implements OnInit {
   today!: string;
   isPopupVisible: boolean = false
   isLoading: boolean = false;
+  isChangeStatusViewOpen =  false;
+  requestPrice!: string;
+  requestId!: number;
 
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Pending', 'Approved', 'Rejected'];
@@ -497,6 +500,90 @@ export class PriceRequestComponent implements OnInit {
 
   log() {
     console.log('log', this.priceRequestObject.requstPrice)
+  }
+
+  openChangeStatusPopUp(requestId: number, requestPrice: string) {
+    this.requestId = requestId
+    this.requestPrice = requestPrice
+    this.isChangeStatusViewOpen = true;
+    
+  }
+
+  RejectStatus() {
+    this.isLoading = true;
+    console.log('price', this.requestId)
+    this.PriceListSrv.rejectStatus(this.requestId).subscribe(
+      
+      (res) => {
+        if (res.status) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: 'The request Rejected successfully.',
+            showConfirmButton: false,
+            timer: 3000,
+            customClass: {
+              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+              title: 'dark:text-white',
+            },
+          });
+          this.isChangeStatusViewOpen = false;
+          this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade, this.selectStatus, this.searchText);
+        } else {
+          this.isLoading = false;
+          Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: 'Something went wrong while Rejecting the request. Please try again.',
+            showConfirmButton: false,
+            timer: 3000,
+            customClass: {
+              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+              title: 'dark:text-white',
+            },
+          });
+          this.isChangeStatusViewOpen = false;
+        }
+      }
+    )
+  }
+
+  ApproveStatus() {
+    this.isLoading = true;
+    this.PriceListSrv.changeStatusCCM(this.requestId, this.requestPrice ).subscribe(
+      
+      (res) => {
+        if (res.status) {
+          Swal.fire({
+            icon: 'success',
+            title: 'Success!',
+            text: 'The request Approved successfully.',
+            showConfirmButton: false,
+            timer: 3000,
+            customClass: {
+              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+              title: 'dark:text-white',
+            },
+          });
+          this.isChangeStatusViewOpen = false;
+          this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade, this.selectStatus, this.searchText);
+        } else {
+          this.isLoading = false;
+          Swal.fire({
+            icon: 'error',
+            title: 'Error!',
+            text: 'Something went wrong while Approving the request. Please try again.',
+            showConfirmButton: false,
+            timer: 3000,
+            customClass: {
+              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+              title: 'dark:text-white',
+            },
+          });
+          this.isChangeStatusViewOpen = false;
+        }
+      }
+    )
   }
   
 

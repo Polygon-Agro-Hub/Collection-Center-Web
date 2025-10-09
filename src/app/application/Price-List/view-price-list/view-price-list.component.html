@@ -129,6 +129,9 @@
                                 <input type="number" [(ngModel)]="editValue" (input)="validateInput()"
                                     class="border-[#415CFF] dark:text-black border-[2px] border-dotted rounded-lg w-20 px-2 py-1"
                                     min="0" step="0.01" required />
+                                <div *ngIf="!isUpdateAllowed" class="text-red-600">
+                                     exceeds the allowed range
+                                </div>
 
                             </span>
                         </td>
@@ -139,10 +142,10 @@
                             </button>
                             <button *ngIf="editingIndex === i" 
                                 [ngClass]="{
-                                'bg-[#415CFF] text-white hover:text-blue-500': !isInvalidInput(),
-                                'bg-gray-400 text-gray-200 cursor-not-allowed': isInvalidInput()
+                                'bg-[#415CFF] text-white hover:text-blue-500': !isInvalidInput() && isUpdateAllowed,
+                                'bg-gray-400 text-gray-200 cursor-not-allowed': isInvalidInput() || !isUpdateAllowed
                                 }" 
-                                class="px-2 py-1 rounded-lg" [disabled]="isInvalidInput()"
+                                class="px-2 py-1 rounded-lg" [disabled]="isInvalidInput() || !isUpdateAllowed"
                                 (click)="saveRow(item.id, item.cropNameEnglish, item.grade, item.varietyNameEnglish)">
                                 Save
                             </button>

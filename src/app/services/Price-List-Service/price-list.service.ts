@@ -216,4 +216,13 @@ export class PriceListService {
     });
   }
 
+  changeStatusCCM(requestId: number, requestPrice: string): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
+    return this.http.patch(`${this.apiUrl}/change-status-ccm/${requestId}/${requestPrice}`, {}, {
+      headers,
+    });
+  }
+
 }

@@ -122,11 +122,7 @@ export class LoginComponent {
             text: 'Successfully Logged In',
             showConfirmButton: false,
             timer: 1500,
-            customClass: {
-              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white rounded-lg',
-              title: 'dark:text-white',
-              
-            }
+           
           });
 
           this.role = res.role;

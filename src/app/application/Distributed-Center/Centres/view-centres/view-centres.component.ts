@@ -276,6 +276,11 @@ addCenter() {
     this.router.navigate([`/distribution-center/create-distribution-centre`]);
 }
 
+navigateToAssignCities() {
+    this.router.navigate([`/distribution-center/assign-cities`]);
+}
+
+
 }
 
 class CenterData {

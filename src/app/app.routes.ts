@@ -68,6 +68,7 @@ import { PendingTargetAssignGuard } from './guards/pending-target-assign.guard';
 import { CchPriceRequestComponent } from './application/Price-List/cch-price-request/cch-price-request.component';
 import { CchCenterPriceListComponent } from './application/Price-List/cch-center-price-list/cch-center-price-list.component';
 import { pendingPricelistUpdateCchGuard } from './guards/pending-pricelist-update-cch.guard';
+import { AssignCitiesComponent } from './application/Distributed-Center/Centres/assign-cities/assign-cities.component';
 
 export const routes: Routes = [
     {
@@ -373,7 +374,11 @@ export const routes: Routes = [
                     {
                         path: 'officer-profile/:id',
                         component: OfficerProfileComponent,
-                    }
+                    },
+                    {
+                        path: 'assign-cities',
+                        component: AssignCitiesComponent,
+                    },
                     
                 ]
             },

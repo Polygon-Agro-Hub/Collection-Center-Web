@@ -228,8 +228,8 @@ export class AssignCitiesComponent implements OnInit {
           text: 'City assigned to centre successfully!',
           icon: 'success',
           customClass: {
-            popup: 'bg-tileLight dark:bg-tileBlack text-black dark:text-white',
-            title: 'font-semibold',
+            popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+            title: 'dark:text-white',
           },
         });
       },
@@ -240,8 +240,8 @@ export class AssignCitiesComponent implements OnInit {
           text: 'Failed to assign city to centre',
           icon: 'error',
           customClass: {
-            popup: 'bg-tileLight dark:bg-tileBlack text-black dark:text-white',
-            title: 'font-semibold',
+            popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+            title: 'dark:text-white',
           },
         });
         this.assignments.set(cityId, -1);
@@ -264,8 +264,8 @@ export class AssignCitiesComponent implements OnInit {
           text: 'City removed from centre successfully!',
           icon: 'success',
           customClass: {
-            popup: 'bg-tileLight dark:bg-tileBlack text-black dark:text-white',
-            title: 'font-semibold',
+            popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+            title: 'dark:text-white',
           },
         });
       },
@@ -276,8 +276,8 @@ export class AssignCitiesComponent implements OnInit {
           text: 'Failed to remove city from centre',
           icon: 'error',
           customClass: {
-            popup: 'bg-tileLight dark:bg-tileBlack text-black dark:text-white',
-            title: 'font-semibold',
+            popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+            title: 'dark:text-white',
           },
         });
         this.assignments.set(cityId, centerId);

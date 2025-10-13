@@ -568,6 +568,10 @@ export class PriceRequestComponent implements OnInit {
       }
     )
   }
+
+  closeChangeStatus() {
+    this.isChangeStatusViewOpen = false;
+  }
   
 
 }

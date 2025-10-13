@@ -91,6 +91,15 @@ export const MENU_ITEMS = [
     permission: ['Collection Centre Head'],
   },
 
+  {
+    id: 6,
+    key: 'cch-price-request',
+    path: '/cch-price-request',
+    label: 'Price Requests',
+    icon: 'fas fa-hand-holding-usd',
+    permission: ['Collection Centre Head'],
+  },
+
   // ----------------------------------------- Distribution Centre part ------------------------------------------
 
   {

@@ -82,5 +82,147 @@ export class PriceListService {
     });
   }
 
+  forwardRequest(id: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
+    return this.http.patch(`${this.apiUrl}/forward-request/${id}`, {}, {
+      headers,
+    });
+  }
+
+  getCropGroup(): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    let url = `${this.apiUrl}/get-all-crop-group`
+
+    return this.http.get(url, {
+      headers,
+    });
+  }
+
+  getCropVariety(cropGroupId: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    let url = `${this.apiUrl}/get-all-crop-variety/${cropGroupId}`
+
+    return this.http.get(url, {
+      headers,
+    });
+  }
+
+  getCurrentPrice(cropGroupId: number, cropVarietyId: number, grade: string): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    const url = `${this.apiUrl}/get-current-price/${cropGroupId}/${cropVarietyId}/${grade}`;
+
+    return this.http.get(url, {
+      headers,
+    });
+  }
+
+  addRequest(priceRequestObject: any): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
+    return this.http.put(`${this.apiUrl}/add-request`, priceRequestObject, {
+      headers,
+    });
+  }
+
+  getAllRequestPriceCCH(page: number = 1, limit: number = 10, grade: string = '', status: string = '', searchText: string = ''): Observable<any> {
+    console.log('grade', grade, 'status', status, 'search', searchText)
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    let url = `${this.apiUrl}/get-all-price-request-cch?page=${page}&limit=${limit}`
+
+    if (grade) {
+      url += `&grade=${grade}`
+    }
+
+    if (status) {
+      url += `&status=${status}`
+    }
+
+    if (searchText) {
+      url += `&searchText=${searchText}`
+    }
+
+    return this.http.get(url, {
+      headers,
+    });
+  }
+  
+  getPriceRequestCCH(requestId: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    let url = `${this.apiUrl}/get-selected-price-request-cch/${requestId}`
+    return this.http.get(url, {
+      headers,
+    });
+  }
+
+  getAllPriceListCCH(userId: number, page: number = 1, limit: number = 10, grade: string = '', searchText: string = ''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    let url = `${this.apiUrl}/view-all-price-cch?userId=${userId}&page=${page}&limit=${limit}`
+
+    if (grade) {
+      url += `&grade=${grade}`
+    }
+
+    if (searchText) {
+      url += `&searchText=${searchText}`
+    }
+
+    return this.http.get(url, {
+      headers,
+    });
+  }
+
+  changeStatus(requestId: number, requestPrice: string, centerId: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
+    return this.http.patch(`${this.apiUrl}/change-status/${requestId}/${requestPrice}/${centerId}`, {}, {
+      headers,
+    });
+  }
+
+  rejectStatus(requestId: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
+    return this.http.patch(`${this.apiUrl}/reject-status/${requestId}`, {}, {
+      headers,
+    });
+  }
+
+  changeStatusCCM(requestId: number, requestPrice: string): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
+    return this.http.patch(`${this.apiUrl}/change-status-ccm/${requestId}/${requestPrice}`, {}, {
+      headers,
+    });
+  }
 
 }

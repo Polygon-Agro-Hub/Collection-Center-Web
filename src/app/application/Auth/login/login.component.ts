@@ -61,6 +61,11 @@ export class LoginComponent {
         icon: 'error',
         title: 'Unsuccessful',
         text: 'User Name is required',
+        customClass: {
+          popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white rounded-lg',
+          title: 'dark:text-white',
+          
+        }
       });
     }
 
@@ -69,6 +74,11 @@ export class LoginComponent {
         icon: 'error',
         title: 'Unsuccessful',
         text: 'Password is required',
+        customClass: {
+          popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white rounded-lg',
+          title: 'dark:text-white',
+          
+        }
       });
 
     }
@@ -78,6 +88,11 @@ export class LoginComponent {
         icon: 'error',
         title: 'Unsuccessful',
         text: 'User Name and Password is required',
+        customClass: {
+          popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white rounded-lg',
+          title: 'dark:text-white',
+          
+        }
       });
 
     }
@@ -106,7 +121,8 @@ export class LoginComponent {
             title: 'Logged',
             text: 'Successfully Logged In',
             showConfirmButton: false,
-            timer: 1500
+            timer: 1500,
+           
           });
 
           this.role = res.role;
@@ -138,6 +154,11 @@ export class LoginComponent {
                 icon: 'error',
                 title: 'Unsuccessful',
                 text: 'Error occurred. Please contact Agro World Admin',
+                customClass: {
+                  popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white rounded-lg',
+                  title: 'dark:text-white',
+                  
+                }
               });
               this.isLoading = false;
             }
@@ -151,6 +172,11 @@ export class LoginComponent {
             icon: 'error',
             title: 'Unsuccessful',
             text: this.disError,
+            customClass: {
+              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white rounded-lg',
+              title: 'dark:text-white',
+              
+            }
           });
         }
       );

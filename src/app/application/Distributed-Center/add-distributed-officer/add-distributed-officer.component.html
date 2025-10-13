@@ -295,7 +295,7 @@
                         <input id="firstNameEnglish" [(ngModel)]="personalData.firstNameEnglish" name="firstNameEnglish"
                             class="form-control mt-1 block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                             #firstNameEnglishInput="ngModel" required (keydown)="blockSpecialChars($event)"
-                            (input)="capitalizeFirstLetter('firstNameEnglish')" />
+                            (input)="onFormatInput($event, personalData, 'firstNameEnglish')"/>
                         <div *ngIf="firstNameEnglishInput.touched && !personalData.firstNameEnglish"
                             class="text-red-500 text-sm mt-1">
                             <div>First Name (in English) is required</div>
@@ -309,7 +309,7 @@
                         <input id="lastNameEnglish" name="lastNameEnglish" [(ngModel)]="personalData.lastNameEnglish"
                             class="mt-1 block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                             #lastNameEnglishInput="ngModel" required (keydown)="blockSpecialChars($event)"
-                            (input)="capitalizeFirstLetter('lastNameEnglish')" />
+                            (input)="onFormatInput($event, personalData, 'lastNameEnglish')"/>
                         <div *ngIf="lastNameEnglishInput.touched && !personalData.lastNameEnglish"
                             class="text-red-500 text-sm mt-1">
                             <div>Last Name (in English) is required</div>
@@ -323,7 +323,7 @@
                         <input id="firstNameSinhala" name="firstNameSinhala" [(ngModel)]="personalData.firstNameSinhala"
                             class="mt-1 block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                             #firstNameSinhalaInput="ngModel" required (keydown)="blockSpecialChars($event)"
-                            (input)="capitalizeFirstLetter('firstNameSinhala')" />
+                            (input)="onFormatInput($event, personalData, 'firstNameSinhala')" />
                         <div *ngIf="firstNameSinhalaInput.touched && !personalData.firstNameSinhala"
                             class="text-red-500 text-sm mt-1">
                             <div>First Name (in Sinhala) is required</div>
@@ -337,7 +337,7 @@
                         <input id="lastNameSinhala" name="lastNameSinhala" [(ngModel)]="personalData.lastNameSinhala"
                             class="mt-1 block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                             #lastNameSinhalaInput="ngModel" required (keydown)="blockSpecialChars($event)"
-                            (input)="capitalizeFirstLetter('lastNameSinhala')" />
+                            (input)="onFormatInput($event, personalData, 'lastNameSinhala')" />
                         <div *ngIf="lastNameSinhalaInput.touched && !personalData.lastNameSinhala"
                             class="text-red-500 text-sm mt-1">
                             <div>Last Name (in Sinhala) is required</div>
@@ -351,7 +351,7 @@
                         <input id="firstNameTamil" name="firstNameTamil" [(ngModel)]="personalData.firstNameTamil"
                             class="mt-1 block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                             #firstNameTamilInput="ngModel" required (keydown)="blockSpecialChars($event)"
-                            (input)="capitalizeFirstLetter('firstNameTamil')" />
+                            (input)="onFormatInput($event, personalData, 'firstNameTamil')"/>
                         <div *ngIf="firstNameTamilInput.touched && !personalData.firstNameTamil"
                             class="text-red-500 text-sm mt-1">
                             <div>First Name (in Tamil) is required</div>
@@ -365,7 +365,7 @@
                         <input id="lastNameTamil" name="lastNameTamil" [(ngModel)]="personalData.lastNameTamil"
                             class="mt-1 block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                             #lastNameTamilInput="ngModel" required (keydown)="blockSpecialChars($event)"
-                            (input)="capitalizeFirstLetter('lastNameTamil')" />
+                            (input)="onFormatInput($event, personalData, 'lastNameTamil')" />
                         <div *ngIf="lastNameTamilInput.touched && !personalData.lastNameTamil"
                             class="text-red-500 text-sm mt-1">
                             <div>Last Name (in Tamil) is required</div>

@@ -1,4 +1,4 @@
-import { Router } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 import { PriceListService } from "../../../services/Price-List-Service/price-list.service";
 import { CommonModule, DatePipe } from "@angular/common";
 import { FormsModule } from "@angular/forms";
@@ -11,15 +11,17 @@ import { TargetService } from '../../../services/Target-service/target.service';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 
 @Component({
-  selector: 'app-view-price-list',
+  selector: 'app-cch-center-price-list',
   standalone: true,
   imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, LoadingSpinnerComponent],
-  templateUrl: './view-price-list.component.html',
-  styleUrl: './view-price-list.component.css',
+  templateUrl: './cch-center-price-list.component.html',
+  styleUrl: './cch-center-price-list.component.css',
   providers: [DatePipe]
 })
-export class ViewPriceListComponent implements OnInit {
+export class CchCenterPriceListComponent implements OnInit {
+
   priceListArr!: PriceList[];
+  priceRequestObj: RequestPrice = new RequestPrice();
 
   page: number = 1;
   totalItems: number = 0;
@@ -31,13 +33,14 @@ export class ViewPriceListComponent implements OnInit {
   today!: string;
   editingIndex: number | null = null;
   editValue!: number;
-  rangeValidationMassage: string = '';
+  requestId!: number;
+  userId!: number;
 
   originalValue!: number;
 
   isLoading: boolean = true;
   isExit: boolean = false;
-  isUpdateAllowed = true;
+  isChangeStatusViewOpen: boolean = false;
 
   isGradeDropdownOpen = false;
   gradeDropdownOptions = ['A', 'B', 'C'];
@@ -58,11 +61,17 @@ export class ViewPriceListComponent implements OnInit {
     private PriceListSrv: PriceListService,
     private datePipe: DatePipe,
     private toastSrv: ToastAlertService,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
+    
+    this.requestId = Number(this.route.snapshot.paramMap.get('requestId'));
+    this.userId = Number(this.route.snapshot.paramMap.get('officerId'));
     this.fetchAllPriceList();
+
     this.today = this.datePipe.transform(new Date(), 'yyyy/MM/dd') || '';
+    this.fetchPriceRequest();
   }
 
   @HostListener('document:click', ['$event'])
@@ -76,9 +85,9 @@ export class ViewPriceListComponent implements OnInit {
 
   }
 
-  fetchAllPriceList(page: number = 1, limit: number = this.itemsPerPage, grade: string = this.selectGrade, search: string = this.searchText) {
+  fetchAllPriceList(userId: number = this.userId, page: number = 1, limit: number = this.itemsPerPage, grade: string = this.selectGrade, search: string = this.searchText) {
     this.isLoading = true;
-    this.PriceListSrv.getAllPriceList(page, limit, grade, search).subscribe((res) => {
+    this.PriceListSrv.getAllPriceListCCH(userId, page, limit, grade, search).subscribe((res) => {
       this.isLoading = false;
       this.priceListArr = res.items;
       this.totalItems = res.total;
@@ -95,6 +104,18 @@ export class ViewPriceListComponent implements OnInit {
     });
   }
 
+  fetchPriceRequest(requestId: number = this.requestId) {
+    this.isLoading = true;
+    this.PriceListSrv.getPriceRequestCCH(requestId).subscribe(
+      (res) => {
+        this.priceRequestObj = res.items[0];
+        console.log(res)
+        console.log('object', this.priceRequestObj)
+        this.isLoading = false;
+      }
+    )
+  }
+
   navigate(path: string) {
     this.router.navigate([`${path}`]);
   }
@@ -106,7 +127,7 @@ export class ViewPriceListComponent implements OnInit {
   }
 
   filterGrade() {
-    this.fetchAllPriceList(this.page, this.itemsPerPage, this.selectGrade, this.searchText);
+    this.fetchAllPriceList(this.userId, this.page, this.itemsPerPage, this.selectGrade, this.searchText);
   }
 
   cancelGrade(event?: MouseEvent) {
@@ -115,16 +136,16 @@ export class ViewPriceListComponent implements OnInit {
     }
     this.selectGrade = '';
     this.isGradeDropdownOpen = false;
-    this.fetchAllPriceList(this.page, this.itemsPerPage, this.selectGrade, this.searchText);
+    this.fetchAllPriceList(this.userId, this.page, this.itemsPerPage, this.selectGrade, this.searchText);
   }
 
   onSearch() {
-    this.fetchAllPriceList(this.page, this.itemsPerPage, this.selectGrade, this.searchText);
+    this.fetchAllPriceList(this.userId, this.page, this.itemsPerPage, this.selectGrade, this.searchText);
   }
 
   offSearch() {
     this.searchText = '';
-    this.fetchAllPriceList(this.page, this.itemsPerPage, this.selectGrade, this.searchText);
+    this.fetchAllPriceList(this.userId, this.page, this.itemsPerPage, this.selectGrade, this.searchText);
   }
 
   isInvalidInput(): boolean {
@@ -136,40 +157,16 @@ export class ViewPriceListComponent implements OnInit {
   }
 
   validateInput() {
-    // Convert to number safely
-    const value = Number(this.editValue);
-    const original = Number(this.originalValue);
-  
-    // Ensure non-negative
-    if (value < 0) {
+    // Ensure value is not negative
+    if (this.editValue < 0) {
       this.editValue = 0;
     }
-  
-    // Only check if both values are valid numbers
-    if (!isNaN(value) && !isNaN(original)) {
-      const minAllowed = original - 15;
-      const maxAllowed = original + 15;
-  
-      if (value < minAllowed || value > maxAllowed) {
-        this.isUpdateAllowed = false;
-        this.rangeValidationMassage = `Allowed range: ${minAllowed}-${maxAllowed}`;
-      } else {
-        this.isUpdateAllowed = true;
-        this.rangeValidationMassage = '';
-      }
-    } else {
-      this.isUpdateAllowed = false; // fallback
+
+    // Round to 2 decimal places
+    if (this.editValue !== null && this.editValue !== undefined) {
+      this.editValue = parseFloat(this.editValue.toFixed(2));
     }
-  
-    // Round to 2 decimals (only after validation)
-    if (this.editValue !== null && this.editValue !== undefined && !isNaN(value)) {
-      this.editValue = parseFloat(value.toFixed(2));
-    }
-  
-    console.log('edit', this.editValue, 'allowed?', this.isUpdateAllowed);
   }
-  
-  
 
   editRow(index: number, currentValue: number) {
     this.editingIndex = index; // Set the row index being edited
@@ -202,6 +199,7 @@ export class ViewPriceListComponent implements OnInit {
             this.toastSrv.error('Failed to assign the target!');
           }
           this.editingIndex = null; // Reset editing state after successful save
+          console.log('fetching')
           this.fetchAllPriceList(this.page, this.itemsPerPage);
         },
         (error) => {
@@ -228,6 +226,60 @@ export class ViewPriceListComponent implements OnInit {
   stayOnPage() {
     this.isExit = false;
   }
+
+  openPopUp() {
+    this.isChangeStatusViewOpen = true;
+  }
+
+  RejectStatus() {
+    this.isLoading = true;
+    console.log('price', this.priceRequestObj)
+    this.PriceListSrv.rejectStatus(this.priceRequestObj.id).subscribe(
+      
+      (res) => {
+        if (res.status) {
+          this.toastSrv.success(
+            'The request Rejected successfully.'
+          );
+          
+          this.isChangeStatusViewOpen = false;
+          this.fetchAllPriceList(this.userId, this.page, this.itemsPerPage, this.selectGrade, this.searchText);
+        } else {
+          this.isLoading = false;
+          this.toastSrv.success(
+            'Something went wrong while Rejecting the request. Please try again.'
+          );
+          
+          this.isChangeStatusViewOpen = false;
+        }
+      }
+    )
+  }
+
+  ApproveStatus() {
+    this.isLoading = true;
+    console.log('price', this.priceRequestObj)
+    this.PriceListSrv.changeStatus(this.priceRequestObj.id, this.priceRequestObj.requestPrice, this.priceRequestObj.centerId).subscribe(
+      
+      (res) => {
+        if (res.status) {
+          this.toastSrv.success(
+            'The request Approved successfully.'
+          );
+          
+          this.isChangeStatusViewOpen = false;
+          this.fetchAllPriceList(this.userId, this.page, this.itemsPerPage, this.selectGrade, this.searchText);
+        } else {
+          this.isLoading = false;
+          this.toastSrv.success(
+            'Something went wrong while Approving the request. Please try again.'
+          );
+          
+          this.isChangeStatusViewOpen = false;
+        }
+      }
+    )
+  }
 }
 
 class PriceList {
@@ -240,3 +292,19 @@ class PriceList {
   indicatePrice!: number;
   createdAt!: string;
 }
+
+class RequestPrice {
+  id!: number
+  requestPrice!: string
+  status!: string
+  empId!: string
+  grade!: string
+  varietyNameEnglish!: string
+  cropNameEnglish!: string
+  createdAt!: string
+  assignRole!: string
+  centerName!: string
+  regCode!: string;
+  centerId!: number;
+}
+

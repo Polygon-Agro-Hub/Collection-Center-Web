@@ -200,7 +200,7 @@ export class CchCenterPriceListComponent implements OnInit {
           }
           this.editingIndex = null; // Reset editing state after successful save
           console.log('fetching')
-          this.fetchAllPriceList(this.page, this.itemsPerPage);
+          this.fetchAllPriceList(this.userId, this.page, this.itemsPerPage);
         },
         (error) => {
           console.error('Error updating price:', error);
@@ -243,6 +243,7 @@ export class CchCenterPriceListComponent implements OnInit {
           );
           
           this.isChangeStatusViewOpen = false;
+          this.fetchPriceRequest();
           this.fetchAllPriceList(this.userId, this.page, this.itemsPerPage, this.selectGrade, this.searchText);
         } else {
           this.isLoading = false;
@@ -268,6 +269,7 @@ export class CchCenterPriceListComponent implements OnInit {
           );
           
           this.isChangeStatusViewOpen = false;
+          this.fetchPriceRequest();
           this.fetchAllPriceList(this.userId, this.page, this.itemsPerPage, this.selectGrade, this.searchText);
         } else {
           this.isLoading = false;
@@ -279,6 +281,10 @@ export class CchCenterPriceListComponent implements OnInit {
         }
       }
     )
+  }
+
+  closeChangeStatusView() {
+    this.isChangeStatusViewOpen = false;
   }
 }
 

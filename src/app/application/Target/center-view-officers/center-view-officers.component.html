@@ -17,39 +17,12 @@
 
                 <p class="font-normal dark:text-white">Filter By</p>
 
-                <!-- <div class="relative w-52">
-                    <div
-                        class="border-2 w-full rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
-                        <select (change)="applyRoleFilters()" [(ngModel)]="selectRole"
-                            class="block w-full appearance-none  dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none cursor-pointer">
-                            <option value="" selected disabled>Role</option>
-                            <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                                value="Collection Center Manager">Collection Center Manager</option>
-                            <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                                value="Collection Officer">Collection Officer</option>
-                            <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                                value="Customer Officer">Customer Officer</option>
-                            <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                                value="Driver">Driver</option>
-
-
-                        </select>
-                        <button *ngIf="!selectRole" class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-[#000000] dark:text-gray-300">
-                            <i class="fa-solid fa-angle-down text-lg mr-3"></i>
-                        </button>
-                        <button *ngIf="selectRole" (click)="clearRoleFilter()" class="absolute inset-y-0 right-0 flex items-center px-2 text-[#000000] dark:text-gray-300 cursor-pointer z-10">
-                            <i class="fa-solid fa-xmark text-lg mr-3"></i>
-                        </button>
-
-                    </div>
-                </div> -->
-
                 <div class="relative w-64 custom-role-dropdown-container">
                     <!-- Hidden native select -->
                     <select [(ngModel)]="selectRole" class="hidden" (change)="applyRoleFilters()">
                         <option value="" selected disabled>Role</option>
                         <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                            value="Collection Center Manager">Collection Center Manager</option>
+                            value="Collection Centre Manager">Collection Centre Manager</option>
                         <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
                             value="Collection Officer">Collection Officer</option>
                         <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"

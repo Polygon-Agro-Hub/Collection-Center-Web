@@ -160,7 +160,7 @@ export class DcmRecievedComplaintsComponent implements OnInit {
   
   මෙයට,
   ${managerDataObj.manageFirstNameSinhala} ${managerDataObj.manageLastNameSinhala},
-  Collection Center Manager of ${managerDataObj.centerName},
+  Collection Centre Manager of ${managerDataObj.centerName},
   ${managerDataObj.companyNameSinhala}.
       `;
     } else if (replyDataObj.language === 'Tamil') {
@@ -173,7 +173,7 @@ export class DcmRecievedComplaintsComponent implements OnInit {
   
   இதற்கு,
   ${managerDataObj.manageFirstNameTamil}  ${managerDataObj.manageLastNameTamil},
-  Collection Center Manager of ${managerDataObj.centerName},
+  Collection Centre Manager of ${managerDataObj.centerName},
   ${managerDataObj.companyNameTamil}.
         `;
     } else {
@@ -187,7 +187,7 @@ export class DcmRecievedComplaintsComponent implements OnInit {
   
   Sincerely, 
   ${managerDataObj.manageFirstNameEnglish} ${managerDataObj.manageLastNameEnglish},
-  Collection Center Manager of ${managerDataObj.centerName},
+  Collection Centre Manager of ${managerDataObj.centerName},
   ${managerDataObj.companyNameEnglish}.
       `;
     }

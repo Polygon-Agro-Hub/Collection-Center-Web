@@ -298,7 +298,11 @@ filteredCenterArr: Center[] = [];
         this.ExistirmId = res.officerData.irmId;
 
         this.selectedCenterName = res.officerData.collectionOfficer.centerName
-        this.selectedManager = res.managerName.firstNameEnglish + ' ' + res.managerName.lastNameEnglish
+        if (res.officerData.collectionOfficer.irmId) {
+          this.selectedManager = res.managerName.firstNameEnglish + ' ' + res.managerName.lastNameEnglish
+        } else {
+          this.selectedManager = ''
+        }
 
         // this.getUpdateLastID(res.officerData.collectionOfficer.jobRole);
         this.driverObj = res.officerData.driver;
@@ -392,68 +396,6 @@ filteredCenterArr: Center[] = [];
     this.naviPath = currentPath.split('/')[1];
   }
 
-
-  // getUpdateLastID(role: string): Promise<string> {
-  //   return new Promise((resolve, reject) => {
-  //     this.ManageOficerSrv.getForCreateId(role).subscribe(
-  //       (res) => {
-  //         let lastId;
-  //         if (this.selectJobRole === this.personalData.jobRole) {
-  //           lastId = this.personalData.empId;
-  //           this.UpdatelastID = lastId;
-
-
-  //         } else {
-  //           this.UpdatelastID = res.result.empId;
-  //           lastId = res.result.empId
-
-
-  //         }
-  //         ;
-  //         resolve(lastId); // Resolve the Promise with the empId
-  //       },
-  //       (error) => {
-  //         console.error('Error fetching last ID:', error);
-  //         reject(error);
-  //       }
-  //     );
-  //   });
-  // }
-
-
-  // UpdateEpmloyeIdCreate() {
-  //   let rolePrefix: string | undefined;
-
-  //   // Map job roles to their respective prefixes
-  //   if (this.personalData.jobRole === 'Collection Center Manager') {
-  //     rolePrefix = 'CCM';
-  //   } else if (this.personalData.jobRole === 'Customer Officer') {
-  //     rolePrefix = 'CUO';
-  //   } else if (this.personalData.jobRole === 'Driver') {
-  //     rolePrefix = 'DVR';
-  //   } else {
-  //     rolePrefix = 'COO';
-
-  //   }
-
-
-  //   if (!rolePrefix) {
-  //     console.error(`Invalid job role: ${this.personalData.jobRole}`);
-  //     return;
-  //   }
-
-
-  //   this.getUpdateLastID(rolePrefix)
-  //     .then((lastId) => {
-  //       this.upateEmpID = rolePrefix + lastId;
-
-  //     })
-  //     .catch((error) => {
-  //       console.error('Error fetching updated last ID:', error);
-  //     });
-  // }
-
-
   onCheckboxChange(lang: string, event: any) {
     if (event.target.checked) {
       if (this.personalData.languages) {
@@ -524,24 +466,6 @@ filteredCenterArr: Center[] = [];
     }
   }
 
-  // updateProvince(event: Event): void {
-  //   const target = event.target as HTMLSelectElement;
-  //   const selectedDistrict = target.value;
-
-  //   const selected = this.districts.find(district => district.name === selectedDistrict);
-
-  //   if (this.itemId === null) {
-
-  //     if (selected) {
-  //       this.personalData.province = selected.province;
-  //     } else {
-  //       this.personalData.province = '';
-  //     }
-
-  //   }
-
-  // }
-
   onDistrictChange(districtName: string | null) {
     if (this.itemId !== null) return; // keep your original guard
 
@@ -551,6 +475,8 @@ filteredCenterArr: Center[] = [];
 
 
   onSubmit() {
+
+    console.log('personal data', this.personalData)
 
     this.personalData.empId = this.upateEmpID;
 
@@ -568,7 +494,7 @@ filteredCenterArr: Center[] = [];
     } else {
       this.isLoading = true;
 
-      if (this.logingRole === 'Collection Center Manager') {
+      if (this.logingRole === 'Collection Centre Manager') {
         this.ManageOficerSrv.updateCollectiveOfficer(this.personalData, this.editOfficerId, this.selectedImage).subscribe(
           (res: any) => {
             this.officerId = res.officerId;
@@ -603,8 +529,8 @@ filteredCenterArr: Center[] = [];
 
           }
         );
-      } else if (this.logingRole === 'Collection Center Head') {
-        if (this.personalData.jobRole === 'Collection Center Manager') {
+      } else if (this.logingRole === 'Collection Centre Head') {
+        if (this.personalData.jobRole === 'Collection Centre Manager') {
           this.personalData.irmId = null;
         }
 
@@ -1181,27 +1107,49 @@ filteredCenterArr: Center[] = [];
     }
   }
 
-  capitalizeFirstLetter(field: keyof typeof this.personalData) {
-    if (this.personalData[field]) {
-      // Trim spaces
-      this.personalData[field] = this.personalData[field].trim();
+  // capitalizeFirstLetter(field: keyof typeof this.personalData) {
+  //   if (this.personalData[field]) {
+  //     // Trim spaces
+  //     this.personalData[field] = this.personalData[field].trim();
   
-      // Capitalize first letter
-      this.personalData[field] =
-        this.personalData[field].charAt(0).toUpperCase() +
-        this.personalData[field].slice(1);
-    }
-  }
+  //     // Capitalize first letter
+  //     this.personalData[field] =
+  //       this.personalData[field].charAt(0).toUpperCase() +
+  //       this.personalData[field].slice(1);
+  //   }
+  // }
 
   onTrimInput(event: Event, modelRef: any, fieldName: string): void {
     const inputElement = event.target as HTMLInputElement;
-    const trimmedValue = inputElement.value.trimStart();
-    modelRef[fieldName] = trimmedValue;
-    inputElement.value = trimmedValue;
+  
+    if (inputElement) {
+      // Trim spaces at start and end
+      const trimmedValue = inputElement.value.trim();
+  
+      // Update model and input
+      modelRef[fieldName] = trimmedValue;
+      inputElement.value = trimmedValue;
+    }
   }
+  
 
-
-
+  onFormatInput(event: Event, modelRef: any, fieldName: string): void {
+    const inputElement = event.target as HTMLInputElement;
+  
+    if (inputElement && inputElement.value) {
+      // Trim spaces at start & end
+      let value = inputElement.value.trim();
+  
+      // Capitalize first letter
+      value = value.charAt(0).toUpperCase() + value.slice(1);
+  
+      // Update model
+      modelRef[fieldName] = value;
+  
+      // Update input box value
+      inputElement.value = value;
+    }
+  }
 
 }
 

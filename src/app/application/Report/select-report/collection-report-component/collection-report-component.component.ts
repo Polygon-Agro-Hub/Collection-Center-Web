@@ -58,7 +58,7 @@ export class CollectionReportComponentComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    if (this.logingRole === 'Collection Center Head') {
+    if (this.logingRole === 'Collection Centre Head') {
       this.getAllCenters();
     }
     this.fetchAllOfficers();
@@ -96,7 +96,7 @@ export class CollectionReportComponentComponent implements OnInit {
   fetchAllOfficers(page: number = 1, limit: number = this.itemsPerPage, searchText: string = '', centerId: string = this.selectCenters) {
     this.isLoading = true;
     let role: string;
-    if (this.logingRole === 'Collection Center Head') {
+    if (this.logingRole === 'Collection Centre Head') {
       role = "CCH"
     } else {
       role = "CCM"

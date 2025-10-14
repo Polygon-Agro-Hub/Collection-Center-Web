@@ -94,9 +94,10 @@ export class EditCentreComponent implements OnInit{
         this.isLoading = false;
         this.centerData = res.centreData[0];
         console.log(this.centerData)
+        this.isLoading = false;
       }
     );
-    this.isLoading = false;
+    
   }
 
   // Update the filtered districts based on selected province

@@ -49,7 +49,7 @@ export class CenterViewOfficersComponent implements OnInit {
   }
 
   isRoleDropdownOpen = false;
-  roleDropdownOptions = ['Collection Center Manager', 'Collection Officer', 'Customer Officer'];
+  roleDropdownOptions = ['Collection Centre Manager', 'Collection Officer', 'Customer Officer'];
 
   toggleRoleDropdown() {
     this.isRoleDropdownOpen = !this.isRoleDropdownOpen;

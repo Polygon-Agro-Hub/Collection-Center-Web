@@ -14,7 +14,7 @@ export class CcmRoleGuardService {
 
   canActivate(route: ActivatedRouteSnapshot, state: RouterStateSnapshot): boolean {
 
-    if (this.userRole === 'Collection Center Manager') {
+    if (this.userRole === 'Collection Centre Manager') {
       return true;
     } else {
       this.router.navigate(['/451']);

@@ -496,6 +496,38 @@ export class DistributionServiceService {
     return this.http.get(url, { headers, responseType: 'blob' });
   }
 
+  getAssignForCityes(province: string, district: string): Observable<any> {
+    // province = 'Western',
+    // district = 'Colombo'
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+    return this.http.get(`${this.apiUrl}/get-all-assigning-cities/${province}/${district}`, {
+      headers,
+    });
+  }
+
+  AssigCityToDistributedCenter(data: any): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+    return this.http.post(`${this.apiUrl}/assign-city-to-distributed-center`, data, {
+      headers,
+    });
+  }
+
+  removeAssigCityToDistributedCenter(data: any): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+    return this.http.post(`${this.apiUrl}/remove-assign-city-to-distributed-center`, data, {
+      headers,
+    });
+  }
+
 }
 
 

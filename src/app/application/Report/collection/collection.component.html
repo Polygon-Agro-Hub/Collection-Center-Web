@@ -48,39 +48,13 @@
             </div>
 
             <div class="flex flex-row items-center gap-5 ">
-                <i *ngIf="logingRole === 'Collection Center Head'"
+                <i *ngIf="logingRole === 'Collection Centre Head'"
                     class="fa-solid fa-list text-2xl dark:text-white ml-8"></i>
 
-                <p *ngIf="logingRole === 'Collection Center Head'" class="font-normal dark:text-white">Filter By</p>
-
-
-                <!-- <div class="relative w-46" *ngIf="logingRole === 'Collection Center Head'">
-                    <div
-                        class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
-                        <select [(ngModel)]="selectCenters" (change)="applyCompanyFilters()"
-                            class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer">
-                            <option value="" selected disabled>Centres</option>
-                            <option *ngFor="let item of centerArr"
-                                class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                                [value]="item.id">{{item.regCode}} - {{item.centerName}}</option>
-                        </select>
-    
-    
-                        <div *ngIf="!selectCenters"
-                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
-                            <i class="fa-solid fa-angle-down text-lg mr-3"></i>
-                        </div>
-    
-    
-                        <div (click)="clearCompanyFilter()" *ngIf="selectCenters"
-                            class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300 cursor-pointer z-10">
-                            <i class="fa-solid fa-xmark text-lg mr-3"></i>
-                        </div>
-                    </div>
-                </div> -->
+                <p *ngIf="logingRole === 'Collection Centre Head'" class="font-normal dark:text-white">Filter By</p>
 
                 <div class="relative w-64 custom-center-dropdown-container"
-                    *ngIf="logingRole === 'Collection Center Head'">
+                    *ngIf="logingRole === 'Collection Centre Head'">
 
                     <app-searchable-dropdown
                         [items]="centerDropdownItems"
@@ -94,39 +68,6 @@
                         class="w-full"
                       ></app-searchable-dropdown>
                     
-                    <!-- <select [(ngModel)]="selectCenters" class="hidden" (change)="applyCompanyFilters()">
-                        <option value=""></option>
-                        <option *ngFor="let item of centerArr"
-                            class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                            [value]="item.id">{{item.regCode}} - {{item.centerName}}</option>
-                    </select>
-                    
-                    <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
-                        (click)="toggleCenterDropdown()">
-                        <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
-                            <span>{{ selectedCenterDisplay }}</span>
-                            <div class="flex items-center">
-                                
-                                <i *ngIf="selectCenters" (click)="clearCompanyFilter($event)"
-                                    class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
-                               
-                                <i *ngIf="isCenterDropdownOpen || !selectCenters"
-                                    class="fa-solid text-lg text-[#828282] transition-transform duration-200"
-                                    [class.fa-angle-down]="!isCenterDropdownOpen"
-                                    [class.fa-angle-up]="isCenterDropdownOpen"></i>
-                            </div>
-                        </div>
-                    </div>
-                    
-                    <div *ngIf="isCenterDropdownOpen"
-                        class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
-                        <div class="py-1">
-                            <div *ngFor="let center of centerArr" (click)="selectCenterOption(center)"
-                                class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-300 cursor-pointer flex items-center">
-                                <span class="flex-grow">{{ center.regCode }} - {{ center.centerName }}</span>
-                            </div>
-                        </div>
-                    </div> -->
                 </div>
 
 
@@ -179,9 +120,9 @@
                     <tr>
                         <th class="px-2 py-3 text-left text-sm font-medium">No</th>
                         <th class="px-3 py-3 text-left text-sm font-medium"
-                            *ngIf="logingRole === 'Collection Center Head'">Centre Code</th>
+                            *ngIf="logingRole === 'Collection Centre Head'">Centre Code</th>
                         <th class="px-3 py-3 text-left text-sm font-medium"
-                            *ngIf="logingRole === 'Collection Center Head'">Centre Name</th>
+                            *ngIf="logingRole === 'Collection Centre Head'">Centre Name</th>
                         <th class="px-3 py-3 text-left text-sm font-medium">Crop</th>
                         <th class="px-3 py-3 text-center text-sm font-medium ">Variety</th>
                         <th class="px-3 py-3 text-center text-sm font-medium ">Quantity A (kg)</th>
@@ -201,9 +142,9 @@
                             {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i + 1)
                                 : (((page - 1) * itemsPerPage) + i + 1) }} </td>
                         <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300"
-                            *ngIf="logingRole === 'Collection Center Head'">{{item.centerCode}}</td>
+                            *ngIf="logingRole === 'Collection Centre Head'">{{item.centerCode}}</td>
                         <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300"
-                            *ngIf="logingRole === 'Collection Center Head'">{{item.centerName}}</td>
+                            *ngIf="logingRole === 'Collection Centre Head'">{{item.centerName}}</td>
                         <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">
                             {{ item.cropNameEnglish || '-' }}
                         </td>
@@ -254,31 +195,6 @@
 
                 <p class="font-normal dark:text-white">Filter By</p>
 
-
-                <!-- <div class="relative w-46">
-                    <div
-                        class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
-                        <select [(ngModel)]="selectCenters" (change)="applyCompanyFilters()"
-                            class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer">
-                            <option value="" selected disabled>Centers</option>
-                            <option *ngFor="let item of centerArr"
-                                class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                                [value]="item.id">{{item.regCode}} - {{item.centerName}}</option>
-                        </select>
-    
-    
-                        <div *ngIf="!selectCenters"
-                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
-                            <i class="fa-solid fa-angle-down text-lg mr-3"></i>
-                        </div>
-    
-    
-                        <div (click)="clearCompanyFilter()" *ngIf="selectCenters"
-                            class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300 cursor-pointer z-10">
-                            <i class="fa-solid fa-xmark text-lg mr-3"></i>
-                        </div>
-                    </div>
-                </div> -->
 
                 <div class="relative w-64 custom-center-dropdown-container">
                     <app-searchable-dropdown

@@ -16,35 +16,6 @@
                 <i class="fa-solid fa-list text-2xl dark:text-white"></i>
 
                 <p class="text-lg dark:text-white">Filter By</p>
-
-                <!-- <div class="relative w-46 ">
-                    <div
-                        class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-white flex flex-row justify-between items-center ">
-                        <select [(ngModel)]="selectGrade" (change)="filterGrade()"
-                            class="block w-full appearance-none  dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
-                            <option value="" selected disabled>Grade</option>
-                            <option
-                                class=" dark:bg-[#292929] text-textLight dark:text-white hover:bg-gray-300 dark:hover:bg-[#292929]"
-                                value="A">A</option>
-                            <option
-                                class=" dark:bg-[#292929] text-textLight dark:text-white hover:bg-gray-300 dark:hover:bg-[#292929]"
-                                value="B">B</option>
-                            <option
-                                class=" dark:bg-[#292929] text-textLight dark:text-white hover:bg-gray-300 dark:hover:bg-[#292929]"
-                                value="C">C</option>
-
-                        </select>
-                        <button *ngIf="!selectGrade">
-                            <i class="fa-solid fa-angle-down text-lg mr-3 dark:bg-[#292929]"></i>
-                        </button>
-                        <button *ngIf="selectGrade" (click)="cancelGrade()">
-                            <i class="fa-solid fa-xmark text-lg mr-3 dark:bg-[#292929]"></i>
-                        </button>
-
-                    </div>
-                </div> -->
-
-
                 <div class="relative w-36 custom-grade-dropdown-container">
                     <!-- Hidden native select -->
                     <select [(ngModel)]="selectGrade" class="hidden" (change)="filterGrade()">
@@ -158,6 +129,9 @@
                                 <input type="number" [(ngModel)]="editValue" (input)="validateInput()"
                                     class="border-[#415CFF] dark:text-black border-[2px] border-dotted rounded-lg w-20 px-2 py-1"
                                     min="0" step="0.01" required />
+                                <div *ngIf="!isUpdateAllowed" class="text-red-600 mt-1 text-right">
+                                    {{rangeValidationMassage}}
+                                </div>
 
                             </span>
                         </td>
@@ -168,10 +142,10 @@
                             </button>
                             <button *ngIf="editingIndex === i" 
                                 [ngClass]="{
-                                'bg-[#415CFF] text-white hover:text-blue-500': !isInvalidInput(),
-                                'bg-gray-400 text-gray-200 cursor-not-allowed': isInvalidInput()
+                                'bg-[#415CFF] text-white hover:text-blue-500': !isInvalidInput() && isUpdateAllowed,
+                                'bg-gray-400 text-gray-200 cursor-not-allowed': isInvalidInput() || !isUpdateAllowed
                                 }" 
-                                class="px-2 py-1 rounded-lg" [disabled]="isInvalidInput()"
+                                class="px-2 py-1 rounded-lg" [disabled]="isInvalidInput() || !isUpdateAllowed"
                                 (click)="saveRow(item.id, item.cropNameEnglish, item.grade, item.varietyNameEnglish)">
                                 Save
                             </button>

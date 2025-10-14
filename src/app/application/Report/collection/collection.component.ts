@@ -78,7 +78,7 @@ export class CollectionComponent implements OnInit {
 
   ngOnInit(): void {
     this.getAllCenters();
-    if (this.logingRole === "Collection Center Manager") {
+    if (this.logingRole === "Collection Centre Manager") {
       this.isCenterManager = true;
     } else {
       this.isCenterManager = false;

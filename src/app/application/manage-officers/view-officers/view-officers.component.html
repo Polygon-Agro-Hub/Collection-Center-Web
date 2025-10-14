@@ -13,7 +13,7 @@
                     Add Officer
                 </button>
 
-                <span *ngIf="logingRole === 'Collection Center Manager'">
+                <span *ngIf="logingRole === 'Collection Centre Manager'">
                     <button class="bg-[#415CFF] text-white text-center rounded-lg shadow-lg  py-2 w-28 whitespace-nowrap"
                         (click)="navigate('/manage-officers/claim-officer')">
                         Claim Officer
@@ -30,7 +30,7 @@
                 <div class="relative w-52 md:w-52 lg:w-44 custom-role-dropdown-container">
                     <!-- Hidden native select -->
                     <select [(ngModel)]="selectRole" class="hidden" (change)="applyRoleFilters()">
-                        <option value="Collection Center Manager">Collection Center Manager</option>
+                        <option value="Collection Centre Manager">Collection Centre Manager</option>
                         <option value="Collection Officer">Collection Officer</option>
                         <option value="Customer Officer">Customer Officer</option>
                         
@@ -114,10 +114,10 @@
                 </div>
 
                 <div class="relative w-64 custom-center-dropdown-container"
-                    *ngIf="logingRole === 'Collection Center Head'">
+                    *ngIf="logingRole === 'Collection Centre Head'">
                     <app-searchable-dropdown
                         [items]="centerDropdownItems"
-                        placeholder="Select Centre..."
+                        placeholder="Centre..."
                         searchPlaceholder="Search centre..."
                         [(ngModel)]="selectCenters"
                         (selectionChange)="onCenterSelectionChange($event)"
@@ -171,7 +171,7 @@
                         <th class="px-3 py-3 text-left text-sm font-medium">First Name</th>
                         <th class="px-3 py-3 text-left text-sm font-medium">Last Name</th>
                         <th class="px-3 py-3 text-left text-sm font-medium"
-                            *ngIf="logingRole ==='Collection Center Head'">
+                            *ngIf="logingRole ==='Collection Centre Head'">
                             Centre</th>
                         <th class="px-3 py-3 text-left text-sm font-medium ">Role</th>
                         <th class="px-3 py-3 text-center text-sm font-medium ">Status</th>
@@ -194,12 +194,12 @@
                         <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.firstNameEnglish}}</td>
                         <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.lastNameEnglish}}</td>
                         <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300"
-                            *ngIf="logingRole ==='Collection Center Head'">{{item.centerName}}</td>
+                            *ngIf="logingRole ==='Collection Centre Head'">{{item.centerName}}</td>
                         <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.jobRole}}</td>
                         <td class="px-3 py-4 text-center">
                             <div class="flex justify-center items-center"
-                                [style.cursor]="logingRole === 'Collection Center Head' ? 'pointer' : 'default'"
-                                (click)="logingRole === 'Collection Center Head' && openPopup(item)">
+                                [style.cursor]="logingRole === 'Collection Centre Head' ? 'pointer' : 'default'"
+                                (click)="logingRole === 'Collection Centre Head' && openPopup(item)">
                                 <span *ngIf="item.status === 'Approved'"
                                     class="inline-block px-6 py-1 bg-[#C8E0FF] text-[#415CFF] text-sm font-medium rounded-md shadow-md">
                                     Approved
@@ -224,13 +224,13 @@
                                 <i class="fa-regular fa-file text-lg text- dark:text-white"></i>
                             </button>
                             <button class="text-[#415CFF] hover:text-blue-500 px-2" [ngClass]="{
-                                    'text-gray-400 hover:text-gray-600': (logingRole ==='Collection Center Manager' && (item.jobRole === 'Collection Center Manager' || item.jobRole ==='Driver'))
+                                    'text-gray-400 hover:text-gray-600': (logingRole ==='Collection Centre Manager' && (item.jobRole === 'Collection Centre Manager' || item.jobRole ==='Driver'))
                                   }"
-                                (click)="(logingRole ==='Collection Center Manager' && (item.jobRole === 'Collection Center Manager' || item.jobRole ==='Driver')) ? '' : navigateToEdit(item.id)">
+                                (click)="(logingRole ==='Collection Centre Manager' && (item.jobRole === 'Collection Centre Manager' || item.jobRole ==='Driver')) ? '' : navigateToEdit(item.id)">
                                 <i class="fa-solid fa-pen-to-square text-lg"></i>
                             </button>
                             <button class="text-[#FF415C] hover:text-red-500 px-2"
-                                (click)="(logingRole ==='Collection Center Manager' && item.jobRole === 'Collection Center Manager') ? '' : deleteCollectionOfficer(item.id)">
+                                (click)="(logingRole ==='Collection Centre Manager' && item.jobRole === 'Collection Centre Manager') ? '' : deleteCollectionOfficer(item.id)">
                                 <i class="fa-solid fa-trash text-lg"></i>
                             </button>
 

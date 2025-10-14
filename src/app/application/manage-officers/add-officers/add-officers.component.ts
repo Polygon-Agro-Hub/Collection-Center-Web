@@ -395,57 +395,6 @@ onClick(targetElement: HTMLElement) {
     }
   }
 
-  // getLastID(role: string): Promise<string> {
-  //   return new Promise((resolve, reject) => {
-  //     this.ManageOficerSrv.getForCreateId(role).subscribe(
-  //       (res) => {
-  //         this.lastID = res.result.empId;
-  //         const lastId = res.result.empId;
-  //         resolve(lastId); // Resolve the Promise with the empId
-  //       },
-  //       (error) => {
-  //         console.error('Error fetching last ID:', error);
-  //         reject(error);
-  //       }
-  //     );
-  //   });
-  // }
-
-  // EpmloyeIdCreate() {
-  //   let rolePrefix: string;
-  //   if (this.personalData.jobRole === 'Collection Center Manager') {
-  //     rolePrefix = 'CCM';
-  //   } else if (this.personalData.jobRole === 'Customer Officer') {
-  //     rolePrefix = 'CUO';
-  //   } else if (this.personalData.jobRole === 'Driver') {
-  //     rolePrefix = 'DVR';
-  //   } else {
-  //     rolePrefix = 'COO';
-  //   }
-
-  //   this.getLastID(rolePrefix).then((lastID) => {
-  //     this.personalData.empId = rolePrefix + lastID;
-  //   });
-  // }
-
-  // updateProvince(event: Event): void {
-  //   const target = event.target as HTMLSelectElement; // Cast to HTMLSelectElement
-  //   const selectedDistrict = target.value;
-
-  //   const selected = this.districts.find(district => district.name === selectedDistrict);
-
-  //   if (this.itemId === null) {
-
-  //     if (selected) {
-  //       this.personalData.province = selected.province;
-  //     } else {
-  //       this.personalData.province = '';
-  //     }
-
-  //   }
-
-  // }
-
   onDistrictChange(districtName: string | null) {
     if (this.itemId !== null) return; // keep your original guard
 
@@ -454,6 +403,7 @@ onClick(targetElement: HTMLElement) {
   }
 
   onSubmit() {
+    console.log('personal data', this.personalData);
     // this.personalData.image = this.selectedFile;
     if (this.personalData.accNumber !== this.personalData.conformAccNumber) {
       return;
@@ -468,7 +418,7 @@ onClick(targetElement: HTMLElement) {
       return;
 
     } else {
-      if (this.logingRole === 'Collection Center Manager') {
+      if (this.logingRole === 'Collection Centre Manager') {
         this.ManageOficerSrv.createCollectiveOfficer(this.personalData, this.selectedImage).subscribe(
           (res: any) => {
             if (res.status) {
@@ -488,7 +438,7 @@ onClick(targetElement: HTMLElement) {
             this.toastSrv.error('There was an error creating the collective officer')
           }
         );
-      } else if (this.logingRole === 'Collection Center Head') {
+      } else if (this.logingRole === 'Collection Centre Head') {
 
         if (this.personalData.jobRole === 'Driver') {
           if (!this.licenseFrontImageFileName || !this.licenseBackImageFileName || !this.insurenceFrontImageFileName || !this.insurenceBackImageFileName || !this.vehicleFrontImageFileName || !this.vehicleBackImageFileName || !this.vehicleSideAImageFileName || !this.vehicleSideBImageFileName) {
@@ -614,6 +564,8 @@ onClick(targetElement: HTMLElement) {
   }
 
   onSubmitForm(form: NgForm) {
+
+    console.log('personal data', this.personalData);
     form.form.markAllAsTouched();
 
     this.validateLanguages();
@@ -1036,9 +988,33 @@ onClick(targetElement: HTMLElement) {
 
   onTrimInput(event: Event, modelRef: any, fieldName: string): void {
     const inputElement = event.target as HTMLInputElement;
-    const trimmedValue = inputElement.value.trimStart();
-    modelRef[fieldName] = trimmedValue;
-    inputElement.value = trimmedValue;
+  
+    if (inputElement) {
+      // Trim spaces at start and end
+      const trimmedValue = inputElement.value.trim();
+  
+      // Update model and input
+      modelRef[fieldName] = trimmedValue;
+      inputElement.value = trimmedValue;
+    }
+  }
+
+  onFormatInput(event: Event, modelRef: any, fieldName: string): void {
+    const inputElement = event.target as HTMLInputElement;
+  
+    if (inputElement && inputElement.value) {
+      // Trim spaces at start & end
+      let value = inputElement.value.trim();
+  
+      // Capitalize first letter
+      value = value.charAt(0).toUpperCase() + value.slice(1);
+  
+      // Update model
+      modelRef[fieldName] = value;
+  
+      // Update input box value
+      inputElement.value = value;
+    }
   }
   
 }

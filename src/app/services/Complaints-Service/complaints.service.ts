@@ -86,6 +86,7 @@ export class ComplaintsService {
   }
 
   submitComplaint(data: { category: string; complaint: string }): Observable<any> {
+    console.log('add-complain')
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });

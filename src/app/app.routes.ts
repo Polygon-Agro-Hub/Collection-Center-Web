@@ -64,6 +64,11 @@ import { OfficerTargetsComponent } from './application/Distributed-Center/Distri
 import { ViewDistributionOfficerTargetComponent } from './application/Distributed-Center/Distributed-Target/view-distribution-officer-target/view-distribution-officer-target.component';
 import { DchComplaintsComponent } from './application/dch-Complaints/dch-complaints/dch-complaints.component';
 import { DchViewRecieveComplaintComponent } from './application/dch-Complaints/dch-view-recieve-complaint/dch-view-recieve-complaint.component';
+import { PendingTargetAssignGuard } from './guards/pending-target-assign.guard';
+import { CchPriceRequestComponent } from './application/Price-List/cch-price-request/cch-price-request.component';
+import { CchCenterPriceListComponent } from './application/Price-List/cch-center-price-list/cch-center-price-list.component';
+import { pendingPricelistUpdateCchGuard } from './guards/pending-pricelist-update-cch.guard';
+import { AssignCitiesComponent } from './application/Distributed-Center/Centres/assign-cities/assign-cities.component';
 
 export const routes: Routes = [
     {
@@ -84,19 +89,19 @@ export const routes: Routes = [
             {
                 path: 'profile',
                 canActivate:[RoleGuardService],
-                data: { roles: ['Collection Center Manager', 'Collection Center Head', 'Distribution Center Manager', 'Distribution Center Head'] },
+                data: { roles: ['Collection Centre Manager', 'Collection Centre Head', 'Distribution Centre Manager', 'Distribution Centre Head'] },
                 component: ProfileComponent,
             },
             {
                 path: 'dashbord',
                 canActivate:[RoleGuardService],
-                data: { roles: ['Collection Center Manager'] },
+                data: { roles: ['Collection Centre Manager'] },
                 component: DashboardComponent
             },
             {
                 path: 'manage-officers',
                 canActivate:[RoleGuardService],
-                data: { roles: ['Collection Center Manager', 'Collection Center Head'] },
+                data: { roles: ['Collection Centre Manager', 'Collection Centre Head'] },
                 children: [
                     {
                         path: 'create-officer',
@@ -134,7 +139,7 @@ export const routes: Routes = [
             {
                 path: 'price-list',
                 canActivate:[RoleGuardService],
-                data: { roles: ['Collection Center Manager'] },
+                data: { roles: ['Collection Centre Manager'] },
                 children: [
                     {
                         path: '',
@@ -146,7 +151,7 @@ export const routes: Routes = [
             {
                 path: 'price-request',
                 canActivate:[RoleGuardService],
-                data: { roles: ['Collection Center Manager'] },
+                data: { roles: ['Collection Centre Manager'] },
                 children: [
                     {
                         path: '',
@@ -157,7 +162,7 @@ export const routes: Routes = [
             {
                 path: 'reports',
                 canActivate:[RoleGuardService],
-                data: { roles: ['Collection Center Manager', 'Collection Center Head'] },
+                data: { roles: ['Collection Centre Manager', 'Collection Centre Head'] },
                 children: [
 
                     {
@@ -200,7 +205,7 @@ export const routes: Routes = [
             {
                 path: 'target',
                 canActivate:[RoleGuardService],
-                data: { roles: ['Collection Center Manager'] },
+                data: { roles: ['Collection Centre Manager'] },
                 children: [
                     {
                         path: '',
@@ -232,7 +237,7 @@ export const routes: Routes = [
             {
                 path: 'complaints',
                 canActivate:[RoleGuardService],
-                data: { roles: ['Collection Center Manager'] },
+                data: { roles: ['Collection Centre Manager'] },
                 children: [
                     {
                         path: '',
@@ -247,7 +252,7 @@ export const routes: Routes = [
             {
                 path: 'centers',
                 canActivate: [RoleGuardService],
-                data: {roles: ['Collection Center Head']},
+                data: {roles: ['Collection Centre Head']},
                 children: [
                     {
                         path: '',
@@ -298,7 +303,7 @@ export const routes: Routes = [
             {
                 path: 'cch-complaints',
                 canActivate:[RoleGuardService],
-                data: { roles: ['Collection Center Head'] },
+                data: { roles: ['Collection Centre Head'] },
                 children: [
                     {
                         path: '',
@@ -310,10 +315,27 @@ export const routes: Routes = [
                     }
                 ]
             },
+
+            {
+                path: 'cch-price-request',
+                canActivate:[RoleGuardService],
+                data: { roles: ['Collection Centre Head'] },
+                children: [
+                    {
+                        path: '',
+                        component: CchPriceRequestComponent
+                    },
+                    {
+                        path: 'cch-center-price-list/:requestId/:officerId',
+                        component: CchCenterPriceListComponent,
+                        canDeactivate: [pendingPricelistUpdateCchGuard]
+                    }
+                ]
+            },
             {
                 path: 'officer-target',
                 canActivate:[RoleGuardService],
-                data: { roles: ['Collection Center Manager'] },
+                data: { roles: ['Collection Centre Manager'] },
                 children: [
                     {
                         path: '',
@@ -326,11 +348,11 @@ export const routes: Routes = [
 
                 ]
             },
-            // ----------------------------------------- Distribution Center Routes ------------------------------------------
+            // ----------------------------------------- Distribution Centre Routes ------------------------------------------
             {
                 path: 'distribution-center',
                 canActivate:[RoleGuardService],
-                data: { roles: ['Distribution Center Head'] },
+                data: { roles: ['Distribution Centre Head'] },
                 children: [
                     {
                         path: '',
@@ -352,14 +374,18 @@ export const routes: Routes = [
                     {
                         path: 'officer-profile/:id',
                         component: OfficerProfileComponent,
-                    }
+                    },
+                    {
+                        path: 'assign-cities',
+                        component: AssignCitiesComponent,
+                    },
                     
                 ]
             },
             {
                 path: 'distribution-center-dashboard',
                 canActivate:[RoleGuardService],
-                data: { roles: ['Distribution Center Manager'] },
+                data: { roles: ['Distribution Centre Manager'] },
                 children: [
                     {
                         path: '',
@@ -372,7 +398,7 @@ export const routes: Routes = [
             {
                 path: 'distribution-officers',
                 canActivate:[RoleGuardService],
-                data: { roles: ['Distribution Center Manager', 'Distribution Center Head'] },
+                data: { roles: ['Distribution Centre Manager', 'Distribution Centre Head'] },
                 children: [
                     {
                         path: '',
@@ -404,7 +430,7 @@ export const routes: Routes = [
             {
                 path: 'assign-targets',
                 canActivate:[RoleGuardService],
-                data: { roles: ['Distribution Center Manager'] },
+                data: { roles: ['Distribution Centre Manager'] },
                 children: [
                     {
                         path: '',
@@ -413,22 +439,16 @@ export const routes: Routes = [
                     {
                         path: 'Assign',
                         component: AssignDistributionTargetComponent,
+                        canDeactivate: [PendingTargetAssignGuard]
                     },
-                    // {
-                    //     path: 'create-distribution-officer',
-                    //     component: AddDistributedOfficerComponent
-                    // },
-                    // {
-                    //     path: 'edit-distribution-officer/:id',
-                    //     component: EditDistributedOfficerComponent
-                    // }
+                    
                 ]
             },
 
             {
                 path: 'officer-targets',
                 canActivate:[RoleGuardService],
-                data: { roles: ['Distribution Center Manager'] },
+                data: { roles: ['Distribution Centre Manager'] },
                 children: [
                     {
                         path: '',
@@ -438,49 +458,32 @@ export const routes: Routes = [
                         path: 'view-officer-target/:officerId',  
                         component: ViewDistributionOfficerTargetComponent
                       }
-                    // {
-                    //     path: 'edit-distribution-officer/:id',
-                    //     component: EditDistributedOfficerComponent
-                    // }
+                   
                 ]
             },
 
             {
                 path: 'target-progress',
                 canActivate:[RoleGuardService],
-                data: { roles: ['Distribution Center Manager'] },
+                data: { roles: ['Distribution Centre Manager'] },
                 children: [
                     {
                         path: '',
                         component: TargetProgressAllComponent,
                     },
-                    // {
-                    //     path: 'Assign',
-                    //     component: AssignDistributionTargetComponent,
-                    // },
-                    // {
-                    //     path: 'create-distribution-officer',
-                    //     component: AddDistributedOfficerComponent
-                    // },
-                    // {
-                    //     path: 'edit-distribution-officer/:id',
-                    //     component: EditDistributedOfficerComponent
-                    // }
+                   
                 ]
             },
 
             {
                 path: 'requests',
                 canActivate:[RoleGuardService],
-                data: { roles: ['Distribution Center Manager'] },
+                data: { roles: ['Distribution Centre Manager'] },
                 children: [
                     {
                         path: '',
                         component: RequestsComponent,
                     },
-                    // {
-                    //     path: 'Assign',
-                    //     component: AssignDistributionTargetComponent,
                     
                 ]
             },
@@ -489,7 +492,7 @@ export const routes: Routes = [
             {
                 path: 'dcm-complaints',
                 canActivate:[RoleGuardService],
-                data: { roles: ['Distribution Center Manager'] },
+                data: { roles: ['Distribution Centre Manager'] },
                 children: [
                     {
                         path: '',
@@ -505,7 +508,7 @@ export const routes: Routes = [
             {
                 path: 'dch-complaints',
                 canActivate:[RoleGuardService],
-                data: { roles: ['Distribution Center Head'] },
+                data: { roles: ['Distribution Centre Head'] },
                 children: [
                     {
                         path: '',

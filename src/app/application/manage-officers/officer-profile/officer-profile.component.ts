@@ -214,12 +214,12 @@ export class OfficerProfileComponent implements OnInit {
         empType = 'Customer Officer';
         empCode = 'CUO';
         break;
-      case 'Collection Center Manager':
-        empType = 'Collection Center Manager';
+      case 'Collection Centre Manager':
+        empType = 'Collection Centre Manager';
         empCode = 'CCM';
         break;
-      case 'Collection Center Head':
-        empType = 'Collection Center Head';
+      case 'Collection Centre Head':
+        empType = 'Collection Centre Head';
         empCode = 'CCH';
         break;
       case 'Collection Officer':
@@ -230,12 +230,12 @@ export class OfficerProfileComponent implements OnInit {
         empType = 'Driver';
         empCode = 'DVR'; // Added empCode for Driver
         break;
-      case 'Distribution Center Head':
-        empType = 'Distribution Center Head';
+      case 'Distribution Centre Head':
+        empType = 'Distribution Centre Head';
         empCode = 'DCH';
         break;
-      case 'Distribution Center Manager':
-        empType = 'Distribution Center Manager';
+      case 'Distribution Centre Manager':
+        empType = 'Distribution Centre Manager';
         empCode = 'DCM';
         break;
       case 'Distribution Officer':
@@ -264,15 +264,15 @@ export class OfficerProfileComponent implements OnInit {
 // Decide which value to display based on jobRole
     let centerText = "N/A";
     if (
-      this.officerObj.jobRole === "Collection Center Manager" ||
-      this.officerObj.jobRole === "Collection Center Head" ||
+      this.officerObj.jobRole === "Collection Centre Manager" ||
+      this.officerObj.jobRole === "Collection Centre Head" ||
       this.officerObj.jobRole === "Collection Officer" ||
       this.officerObj.jobRole === "Customer Officer"
     ) {
       centerText = getValueOrNA(this.officerObj.regCode) + " Centre";
     } else if (
-      this.officerObj.jobRole === "Distribution Center Manager" ||
-      this.officerObj.jobRole === "Distribution Center Head" ||
+      this.officerObj.jobRole === "Distribution Centre Manager" ||
+      this.officerObj.jobRole === "Distribution Centre Head" ||
       this.officerObj.jobRole === "Distribution Officer"
     ) {
       centerText = getValueOrNA(this.officerObj.distributedCenterRegCode) + " Centre";
@@ -581,9 +581,9 @@ doc.roundedRect(bankBoxX, bankBoxY, bankBoxWidth, bankBoxHeight, 3, 3, "S");
 
   viewOfficerTarget(officerId: number, centerName: string) {
 
-    if (this.logingRole === 'Collection Center Head' || this.logingRole === 'Collection Center Manager') {
+    if (this.logingRole === 'Collection Centre Head' || this.logingRole === 'Collection Centre Manager') {
       this.router.navigate([`/manage-officers/view-officer-target/${officerId}/${centerName}`]);
-    } else if (this.logingRole === 'Distribution Center Head' || this.logingRole === 'Distribution Center Manager') {
+    } else if (this.logingRole === 'Distribution Centre Head' || this.logingRole === 'Distribution Centre Manager') {
       this.router.navigate([`/distribution-officers/view-officer-target/${officerId}/${centerName}`]);
     } 
   }

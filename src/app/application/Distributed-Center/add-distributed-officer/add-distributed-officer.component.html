@@ -35,8 +35,6 @@
                     </div>
                 </div>
 
-
-
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div *ngIf="logingRole === 'Distribution Centre Head'">
                         <label for="centerId" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
@@ -218,11 +216,15 @@
                         </div>
                     </div>
 
-                    <div *ngIf="personalData.jobRole === 'Distribution Officer'"></div>
+                    <!-- <div *ngIf="personalData.jobRole === 'Distribution Officer'"></div> -->
 
                     <div
                         *ngIf="logingRole === 'Collection Centre Head' && (personalData.jobRole === 'Collection Officer' || personalData.jobRole === 'Customer Officer')">
                     </div>
+                </div>
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+                
 
                     <div>
                         <label for="languages" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">

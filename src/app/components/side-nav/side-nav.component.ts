@@ -157,14 +157,14 @@ export const MENU_ITEMS = [
     permission: ['Distribution Centre Manager'],
   },
 
-  {
-    id: 17,
-    key: 'reports',
-    path: '/reports',
-    label: 'Reports',
-    icon: 'fa-solid fa-chart-pie',
-    permission: ['Distribution Centre Manager'],
-  },
+  // {
+  //   id: 17,
+  //   key: 'reports',
+  //   path: '/reports',
+  //   label: 'Reports',
+  //   icon: 'fa-solid fa-chart-pie',
+  //   permission: ['Distribution Centre Manager'],
+  // },
 
   {
     id: 18,

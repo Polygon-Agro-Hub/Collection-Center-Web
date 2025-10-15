@@ -23,33 +23,6 @@
 
             <p class="text-lg dark:text-white">Filter By</p>
 
-
-            <!-- <div class="relative w-46 ">
-                <div
-                    class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
-                    <select [(ngModel)]="selectStatus" (change)="filterStatus()"
-                        class="block w-full appearance-none  dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl cursor-pointer focus:outline-none">
-                        <option value="" selected disabled>Status</option>
-                        <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                            value="Pending">Pending</option>
-                        <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                            value="Completed">Completed</option>
-                        <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                            value="Exceeded">Exceeded</option>
-
-                    </select>
-                    <button *ngIf="!selectStatus"
-                        class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
-                        <i class=" fa-solid fa-angle-down text-lg mr-3"></i>
-                    </button>
-                    <button *ngIf="selectStatus" (click)="cancelStatus()"
-                    >
-                        <i class="fa-solid fa-xmark text-lg mr-3"></i>
-                    </button>
-
-                </div>
-            </div> -->
-
             <div class="relative w-40 custom-status-dropdown-container">
                 <!-- Hidden native select -->
                 <select [(ngModel)]="selectStatus" class="hidden" (change)="filterStatus()">

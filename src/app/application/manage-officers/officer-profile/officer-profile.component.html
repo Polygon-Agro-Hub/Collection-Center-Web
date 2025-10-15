@@ -67,7 +67,7 @@
                         <button class="bg-[#E20000] text-white font-semibold rounded-lg shadow-md px-5 py-2"
                             (click)="toggleDisclaimView()">Disclaim</button>
                     </span>
-                    <button class="bg-blue-600 text-white font-semibold rounded-lg shadow-md px-5 py-2"
+                    <button *ngIf="(logingRole === 'Collection Centre Manager' || logingRole === 'Collection Centre Head')" class="bg-blue-600 text-white font-semibold rounded-lg shadow-md px-5 py-2"
                         (click)="viewOfficerTarget(officerId, officerObj.centerName)">View Target</button>
                 </div>
 

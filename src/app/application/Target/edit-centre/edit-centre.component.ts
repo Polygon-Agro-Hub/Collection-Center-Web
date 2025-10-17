@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
@@ -8,6 +8,7 @@ import { TargetService } from '../../../services/Target-service/target.service'
 import Swal from 'sweetalert2';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { Location } from '@angular/common';
+import { Country, COUNTRIES } from '../../../../assets/country-data';
 
 
 @Component({
@@ -22,6 +23,12 @@ export class EditCentreComponent implements OnInit{
   centerData: CenterData = new CenterData();
 
   isLoading: boolean = false;
+
+  allowedPrefixes = ['70', '71', '72', '75', '76', '77', '78'];
+  isPhoneInvalidMap: { [key: string]: boolean } = {
+  phone01: false,
+  phone02: false,
+};
 
 
   provinces: string[] = [
@@ -68,6 +75,13 @@ export class EditCentreComponent implements OnInit{
   // Districts filtered by selected province
   filteredDistricts: { name: string, province: string }[] = [];
 
+  countries: Country[] = COUNTRIES;
+  selectedCountry1: Country | null = null;
+  selectedCountry2: Country | null = null;
+
+  dropdownOpen = false;
+  dropdownOpen2 = false;
+
   centreId: number | null = null;
 
   constructor(
@@ -76,7 +90,11 @@ export class EditCentreComponent implements OnInit{
     private toastSrv: ToastAlertService,
     private targetService: TargetService,
     private location: Location
-  ) {}
+  ) {
+    const defaultCountry = this.countries.find(c => c.code === 'lk') || null;
+    this.selectedCountry1 = defaultCountry;
+    this.selectedCountry2 = defaultCountry;
+  }
 
   ngOnInit() {
     const idParam = this.route.snapshot.paramMap.get('id');
@@ -85,6 +103,40 @@ export class EditCentreComponent implements OnInit{
     this.updateFilteredDistricts();
     this.fetchCentreData(this.centreId!)
   }
+
+
+  @HostListener('document:click', ['$event.target'])
+onClick(targetElement: HTMLElement) {
+  const insideDropdown1 = targetElement.closest('.dropdown-wrapper-1');
+  const insideDropdown2 = targetElement.closest('.dropdown-wrapper-2');
+
+  // Close dropdowns only if click is outside their wrapper
+  if (!insideDropdown1) {
+    this.dropdownOpen = false;
+  }
+  if (!insideDropdown2) {
+    this.dropdownOpen2 = false;
+  }
+}
+
+selectCountry1(country: Country) {
+  this.selectedCountry1 = country;
+  this.centerData.phoneNumber01Code = country.dialCode; // update ngModel
+  console.log('sdsf', this.centerData.phoneNumber01Code)
+  this.dropdownOpen = false;
+}
+
+selectCountry2(country: Country) {
+  this.selectedCountry2 = country;
+  this.centerData.phoneNumber02Code = country.dialCode; // update ngModel
+  console.log('sdsf', this.centerData.phoneNumber02Code)
+  this.dropdownOpen2 = false;
+}
+
+// get flag
+getFlagUrl(code: string): string {
+  return `https://flagcdn.com/24x18/${code}.png`;
+}
 
   fetchCentreData(centreId: number) {
     this.isLoading = true;
@@ -124,6 +176,36 @@ export class EditCentreComponent implements OnInit{
     }
   }
 
+
+  validateSriLankanPhone(input: string, key: string): void {
+    if (!input) {
+      this.isPhoneInvalidMap[key] = false;
+      return;
+    }
+  
+    const firstDigit = input.charAt(0);
+    const prefix = input.substring(0, 2);
+    const isValidPrefix = this.allowedPrefixes.includes(prefix);
+    const isValidLength = input.length === 9;
+  
+    if (firstDigit !== '7') {
+      this.isPhoneInvalidMap[key] = true;
+      return;
+    }
+  
+    if (!isValidPrefix && input.length >= 2) {
+      this.isPhoneInvalidMap[key] = true;
+      return;
+    }
+  
+    if (input.length === 9 && isValidPrefix) {
+      this.isPhoneInvalidMap[key] = false;
+      return;
+    }
+  
+    this.isPhoneInvalidMap[key] = false;
+  }
+
   onSubmit() {
     this.isLoading = true;
 
@@ -147,7 +229,7 @@ export class EditCentreComponent implements OnInit{
       next: (res: any) => {
         if (res.status) {
           this.toastSrv.success('Centre Updated Successfully');
-          this.router.navigate(['/centers']);
+          this.location.back();
         } else {
           this.toastSrv.error(res.message || 'There was an error Updating the Centre');
         }
@@ -224,5 +306,9 @@ class CenterData {
   street!: string;
   city!: string;
   regCode!: string;
+  phoneNumber01Code: string = '+94';
+  phoneNumber01!: string;
+  phoneNumber02Code: string = '+94';
+  phoneNumber02!: string
 
 }

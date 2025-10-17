@@ -6,12 +6,13 @@ import { TargetService } from '../../../../services/Target-service/target.servic
 import { ToastAlertService } from '../../../../services/toast-alert/toast-alert.service';
 import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
 import { Location } from '@angular/common';
+import { CustomDatepickerComponent } from "../../../../components/custom-datepicker/custom-datepicker.component";
 
 
 @Component({
   selector: 'app-assign-center-target',
   standalone: true,
-  imports: [CommonModule, FormsModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent, CustomDatepickerComponent],
   templateUrl: './assign-center-target.component.html',
   styleUrl: './assign-center-target.component.css'
 })
@@ -20,10 +21,12 @@ export class AssignCenterTargetComponent implements OnInit {
   assignCropsArr: AssignCrops[] = [];
   newTargetObj: NewTarget = new NewTarget();
 
+  selectDatePickerDate: string | Date | null = null;
+
   isFormValid: boolean = false;
   countCrops: number = 0;
   searchText: string = '';
-  selectDate: string = new Date().toISOString().split('T')[0];
+  selectDate!: string; 
   isNew: boolean = true;
   companyCenterId!: number;
   isLoading: boolean = true;
@@ -41,12 +44,26 @@ export class AssignCenterTargetComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
+    const today = new Date();
+    this.selectDate = today.toISOString().split('T')[0];
+    this.selectDatePickerDate = this.selectDate;
     this.fetchSavedCenterCrops()
+  }
+
+  onDateChange(newDate: string | Date | null) {
+    console.log('newDate', newDate)
+    this.selectDatePickerDate = newDate;
+    this.selectDate = this.selectDatePickerDate
+  ? this.selectDatePickerDate.toString().split('T')[0]
+  : '';
+
+    console.log('selectDatePickerDate', this.selectDatePickerDate)
+    this.fetchSavedCenterCrops();
   }
 
   fetchSavedCenterCrops() {
     this.isLoading = true;
-    this.validateSelectDate()
+    // this.validateSelectDate()
     this.TargetSrv.getSavedCenterCrops(this.centerDetails.centerId, this.selectDate, this.searchText).subscribe(
       (res) => {
         this.assignCropsArr = res.result.data

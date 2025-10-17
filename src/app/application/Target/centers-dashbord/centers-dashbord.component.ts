@@ -26,6 +26,8 @@ export class CentersDashbordComponent implements OnInit {
 
   regCode!: string;
 
+  hasData: boolean = false;
+
 
   isLoading: boolean = true;
 
@@ -55,6 +57,12 @@ export class CentersDashbordComponent implements OnInit {
       this.totExpences = res.totExpences.totExpences;
       this.expencePrecentage = res.difExpences
       this.isLoading = false;
+
+      if (this.resentCollectionArr.length >= 0) {
+        this.hasData = true;
+      } else {
+        this.hasData = false;
+    }
 
     });
   }

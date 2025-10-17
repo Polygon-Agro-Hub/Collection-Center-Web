@@ -106,8 +106,8 @@
                 </div>
 
                 <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
-                    <input (keyup.enter)="onSearch()" (keyup.esc)="offSearch()" type="text"
-                        placeholder="Search by Variety Name" [(ngModel)]="searchText"
+                    <input (keyup.enter)="onSearch()" (keyup.esc)="offSearch()" type="text"  
+                        placeholder="Search by Variety Name" [(ngModel)]="searchText" (ngModelChange)="searchText = $event.trimStart()"
                         class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
                     <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                         (click)="onSearch()">

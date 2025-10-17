@@ -9,11 +9,12 @@ import { ManageOfficersService } from '../../../services/manage-officers-service
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import Swal from 'sweetalert2';
 import { environment } from '../../../environments/environment';
+import { CustomDatepickerComponent } from "../../../components/custom-datepicker/custom-datepicker.component";
 
 @Component({
   selector: 'app-center-collection-expense',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent, CustomDatepickerComponent],
   templateUrl: './center-collection-expense.component.html',
   styleUrl: './center-collection-expense.component.css',
   providers: [DatePipe]
@@ -40,6 +41,9 @@ export class CenterCollectionExpenseComponent implements OnInit {
   logingRole: string | null = null;
   isLoading: boolean = false;
   isDateFilterSet: boolean = false;
+
+  selectedFromDate: string | Date | null = null;
+  selectedToDate: string | Date | null = null;
 
 
   isDownloading = false;
@@ -117,6 +121,24 @@ export class CenterCollectionExpenseComponent implements OnInit {
     this.fetchFilteredPayments(this.page, this.itemsPerPage);
   }
 
+  onFromDateChange(newDate: string | Date | null) {
+    this.selectedFromDate = newDate;
+
+    this.fromDate = this.selectedFromDate
+  ? this.selectedFromDate.toString().split('T')[0]
+  : '';
+   this.validateFromDate();
+  }
+
+  onToDateChange(newDate: string | Date | null) {
+    this.selectedToDate = newDate;
+
+    this.toDate = this.selectedToDate
+  ? this.selectedToDate.toString().split('T')[0]
+  : '';
+   this.validateToDate();
+  }
+
 
   validateToDate() {
     // Case 1: User hasn't selected fromDate yet
@@ -133,6 +155,7 @@ export class CenterCollectionExpenseComponent implements OnInit {
 
       if (to <= from) {
         this.toDate = ''; // Reset toDate
+        this.selectedToDate = null;
         this.toastSrv.warning("The 'To' date cannot be earlier than or same to the 'From' date.");
       }
     }
@@ -151,6 +174,7 @@ export class CenterCollectionExpenseComponent implements OnInit {
 
       if (to <= from) {
         this.fromDate = ''; // Reset toDate
+        this.selectedFromDate = null;
         this.toastSrv.warning("The 'From' date cannot be Later than or same to the 'From' date.");
       }
     }

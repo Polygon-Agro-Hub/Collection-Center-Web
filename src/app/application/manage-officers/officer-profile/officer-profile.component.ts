@@ -572,7 +572,7 @@ doc.roundedRect(bankBoxX, bankBoxY, bankBoxWidth, bankBoxHeight, 3, 3, "S");
     }
 
     // Save PDF
-    doc.save(`Personal_Details_${getValueOrNA(this.officerObj.firstNameEnglish)}.pdf`);
+    doc.save(`${getValueOrNA(this.officerObj.empIdPrefix)}-${getValueOrNA(this.officerObj.firstNameEnglish)} ${getValueOrNA(this.officerObj.lastNameEnglish)}.pdf`);
   }
 
   toggleDisclaimView() {

@@ -58,7 +58,7 @@ export class EditOfficerComponent implements OnInit {
   allBranches: BranchesData = {};
 
   bankItems: { value: number; label: string }[] = [];
-branchItems: { value: number; label: string }[] = [];
+  branchItems: { value: number; label: string }[] = [];
 
   invalidFields: Set<string> = new Set();
   naviPath!: string
@@ -78,7 +78,7 @@ branchItems: { value: number; label: string }[] = [];
   phone02: false,
 };
 
-filteredCenterArr: Center[] = [];
+  filteredCenterArr: Center[] = [];
   filteredManagerArr: Manager[] = [];
 
   centreDropdownOpen = false;
@@ -87,6 +87,16 @@ filteredCenterArr: Center[] = [];
   managerDropdownOpen = false;
 
   selectedManagerName: string = "";
+
+  isJobRoleOpen = false;
+
+  jobRoles = [
+    'Collection Centre Manager',
+    'Collection Officer',
+    'Customer Officer'
+  ];
+
+  jobRoleInputTouched = false;
 
 
   licenseFrontImageFileName!: string;
@@ -202,6 +212,22 @@ filteredCenterArr: Center[] = [];
     if (!insideDropdown2) {
       this.dropdownOpen2 = false;
     }
+  }
+
+  toggleJobRoleDropdown() {
+    this.isJobRoleOpen = !this.isJobRoleOpen;
+
+    this.jobRoleInputTouched = true;
+
+    console.log('jobRoleInputTouched', this.jobRoleInputTouched)
+  }
+
+  getJobRole(role: string) {
+    this.personalData.jobRole = role;
+    this.isJobRoleOpen = false;
+    this.jobRoleInputTouched = true;
+
+    console.log('jobRoleInputTouched', this.jobRoleInputTouched)
   }
 
   onSearchInput(event: Event) {
@@ -768,6 +794,7 @@ filteredCenterArr: Center[] = [];
 
   onSubmitForm(form: NgForm) {
     form.form.markAllAsTouched();
+    this.jobRoleInputTouched = true;
 
     this.validateLanguages();
   }
@@ -1149,6 +1176,33 @@ filteredCenterArr: Center[] = [];
       // Update input box value
       inputElement.value = value;
     }
+  }
+
+
+  onNicInput(event: any) {
+    // Get value and trim leading/trailing spaces
+    let value: string = event.target.value.trimStart().toUpperCase();
+  
+    // Remove all invalid characters except digits and V
+    value = value.replace(/[^0-9V]/g, '');
+  
+    // Prevent entering V anywhere except last character of 10-char NIC
+    if (value.includes('V') && value.length !== 10) {
+      value = value.replace(/V/g, '');
+    }
+  
+    // Handle 10-char NIC ending with V
+    if (value.length === 10 && value.endsWith('V')) {
+      value = value.slice(0, 10);
+    }
+  
+    // Limit 12-digit NIC
+    if (value.length > 12) {
+      value = value.slice(0, 12);
+    }
+  
+    // Update the model
+    this.personalData.nic = value;
   }
 
 }

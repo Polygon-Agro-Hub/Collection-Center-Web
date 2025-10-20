@@ -23,42 +23,42 @@
 
         <div class="grid grid-cols-4 gap-6 mb-6">
             <div class="flex flex-row items-center gap-5 col-span-2">
-                <p class="font-medium text-gray-600 dark:text-textDark">Category</p>
+                <p class="font-medium text-gray-600 dark:text-textDark mr-16">Category</p>
                 <input type="text"
                     class="w-full bg-gray-100 dark:bg-[#1D1D1F] text-gray-900 dark:text-textDark border rounded-lg px-3 py-2"
                     [value]="compalintObj.complainCategory" disabled />
             </div>
 
             <div class="flex flex-row items-start gap-5 col-span-4">
-                <p class="font-medium text-gray-600 dark:text-textDark">Complain</p>
+                <p class="font-medium text-gray-600 dark:text-textDark mr-14">Complaint</p>
                 <textarea
                     class="w-full bg-gray-100 dark:bg-[#1D1D1F] text-gray-900 dark:text-textDark border rounded-lg px-3 py-2"
                     rows="6" [value]="compalintObj.complain" disabled>
                 </textarea>
             </div>
 
-            <div class="flex flex-row items-center gap-5 col-span-2">
-                <p class="font-medium text-gray-600 dark:text-textDark">Complainant</p>
+            <div class="flex flex-row items-center gap-5 col-span-2 ">
+                <p class="font-medium text-gray-600 dark:text-textDark mr-10">Complainant</p>
                 <input type="text"
                     class="w-1/2 bg-gray-100 dark:bg-[#1D1D1F] text-gray-900 dark:text-textDark border rounded-lg px-3 py-2"
                     [value]="officerName" disabled />
             </div>
 
             <div class="flex flex-row items-center gap-16 col-span-2">
-                <p class="font-medium text-gray-600 dark:text-textDark">EMP ID</p>
+                <p class="font-medium text-gray-600 dark:text-textDark mr-10">EMP ID</p>
                 <input type="text"
                     class="w-1/2 bg-gray-100 dark:bg-[#1D1D1F] text-gray-900 dark:text-textDark border rounded-lg px-3 py-2"
                     [value]="compalintObj.empId" disabled />
             </div>
 
             <div class="flex flex-row items-center gap-5 col-span-2">
-                <p class="font-medium text-gray-600 dark:text-textDark">Phone No - 1</p>
+                <p class="font-medium text-gray-600 dark:text-textDark">Mobile Number 01</p>
                 <input type="text"
                     class="w-1/2 bg-gray-100 dark:bg-[#1D1D1F] text-gray-900 dark:text-textDark border rounded-lg px-3 py-2"
                     [value]="phone1" disabled />
             </div>
             <div class="flex flex-row items-center gap-5 col-span-2">
-                <p class="font-medium text-gray-600 dark:text-textDark">Phone No - 2</p>
+                <p class="font-medium text-gray-600 dark:text-textDark">Mobile Number 02</p>
                 <input type="text"
                     class="w-1/2 bg-gray-100 dark:bg-[#1D1D1F] text-gray-900 dark:text-textDark border rounded-lg px-3 py-2"
                     [value]="phone2" disabled />
@@ -107,11 +107,20 @@
                     </p>
                     <p>
                         {{
-                            compalintObj.language === 'Sinhala' ? 'මෙයට' + ' ' + templateData.EngName + ','
-                            : compalintObj.language === 'Tamil' ? 'இதற்கு' + ' ' + templateData.TamName + ','
-                            : 'Sincerely' + ' ' + templateData.EngName + ','
+                            compalintObj.language === 'Sinhala' ? 'මෙයට,'
+                            : compalintObj.language === 'Tamil' ? 'இதற்கு,'
+                            : 'Sincerely,'
                         }}
                     </p>
+
+                    <p>
+                        {{
+                            compalintObj.language === 'Sinhala' ? templateData.SinName
+                            : compalintObj.language === 'Tamil' ? templateData.TamName
+                            : templateData.EngName
+                        }}
+                    </p>
+                    
                     <p>
                         {{
                             compalintObj.language === 'Sinhala' ? 'Collection Centre Head of ' + templateData.companyNameSinhala

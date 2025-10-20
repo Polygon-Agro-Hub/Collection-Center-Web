@@ -62,6 +62,8 @@ export class ViewComplaintsComponent implements OnInit {
 
   closeAddComplaint() {
     this.isAddComplaintOpen = false;
+    this.category = '';
+    this.complaint = '';
   }
 
   openAddComplaint() {

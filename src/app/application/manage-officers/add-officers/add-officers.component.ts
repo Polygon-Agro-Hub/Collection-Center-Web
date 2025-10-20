@@ -74,6 +74,16 @@ export class AddOfficersComponent implements OnInit {
   dropdownOpen = false;
   dropdownOpen2 = false;
 
+  isJobRoleOpen = false;
+
+  jobRoles = [
+    'Collection Centre Manager',
+    'Collection Officer',
+    'Customer Officer'
+  ];
+
+  jobRoleInputTouched = false;
+
 
   // Driver Images
   licenseFrontImageFileName!: string;
@@ -184,6 +194,23 @@ export class AddOfficersComponent implements OnInit {
     // this.EpmloyeIdCreate();
   }
 
+
+  toggleJobRoleDropdown() {
+    this.isJobRoleOpen = !this.isJobRoleOpen;
+
+    this.jobRoleInputTouched = true;
+
+    console.log('jobRoleInputTouched', this.jobRoleInputTouched)
+  }
+
+  getJobRole(role: string) {
+    this.personalData.jobRole = role;
+    this.isJobRoleOpen = false;
+    this.jobRoleInputTouched = true;
+
+    console.log('jobRoleInputTouched', this.jobRoleInputTouched)
+  }
+
   toggleDropdown() {
     this.centreDropdownOpen = !this.centreDropdownOpen;
   }
@@ -268,6 +295,14 @@ onClick(targetElement: HTMLElement) {
     this.dropdownOpen2 = false;
   }
 }
+
+@HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.relative')) {
+      this.isJobRoleOpen = false;
+    }
+  }
 
 
   onCheckboxChange(lang: string, event: any) {
@@ -567,6 +602,7 @@ onClick(targetElement: HTMLElement) {
 
     console.log('personal data', this.personalData);
     form.form.markAllAsTouched();
+    this.jobRoleInputTouched = true;
 
     this.validateLanguages();
   }
@@ -998,6 +1034,34 @@ onClick(targetElement: HTMLElement) {
       inputElement.value = trimmedValue;
     }
   }
+
+
+  onNicInput(event: any) {
+    // Get value and trim leading/trailing spaces
+    let value: string = event.target.value.trimStart().toUpperCase();
+  
+    // Remove all invalid characters except digits and V
+    value = value.replace(/[^0-9V]/g, '');
+  
+    // Prevent entering V anywhere except last character of 10-char NIC
+    if (value.includes('V') && value.length !== 10) {
+      value = value.replace(/V/g, '');
+    }
+  
+    // Handle 10-char NIC ending with V
+    if (value.length === 10 && value.endsWith('V')) {
+      value = value.slice(0, 10);
+    }
+  
+    // Limit 12-digit NIC
+    if (value.length > 12) {
+      value = value.slice(0, 12);
+    }
+  
+    // Update the model
+    this.personalData.nic = value;
+  }
+  
 
   onFormatInput(event: Event, modelRef: any, fieldName: string): void {
     const inputElement = event.target as HTMLInputElement;

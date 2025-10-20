@@ -50,7 +50,7 @@
         <button
           *ngFor="let year of yearRange"
           (click)="selectYear(year)"
-          class="p-3 rounded cursor-pointer hover:bg-blue-300 dark:hover:bg-[#415CFF] dark:text-white"
+          class="p-3 rounded cursor-pointer hover:bg-blue-300 dark:hover:bg-blue-600 dark:text-white"
           [class.bg-blue-500]="year === currentYear"
           [class.text-white]="year === currentYear"
         >
@@ -60,7 +60,7 @@
       
       <button 
         (click)="toggleYearPicker()" 
-        class="w-full mt-4 py-2 bg-gray-200 dark:bg-gray-700 dark:text-white rounded hover:bg-blue-600 dark:hover:bg-[#415CFF]"
+        class="w-full mt-4 py-2 bg-gray-200 dark:bg-gray-700 dark:text-white rounded hover:bg-blue-600 dark:hover:bg-blue-600"
       >
         Back to Calendar
       </button>

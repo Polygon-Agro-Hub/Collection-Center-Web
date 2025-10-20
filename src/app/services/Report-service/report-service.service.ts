@@ -120,8 +120,8 @@ export class ReportServiceService {
     
     page: number = 1,
     limit: number = 10,
-    fromDate: Date | string = '',
-    toDate: Date | string = '',
+    fromDate: Date | string | null = '',
+    toDate: Date | string | null = '',
     center: string = '',
     searchText: string = ''
   ): Observable<any> {
@@ -146,8 +146,8 @@ export class ReportServiceService {
   }
 
   downloadPaymentReportFile(
-    fromDate: Date | string,
-    toDate: Date | string,
+    fromDate: Date | string | null,
+    toDate: Date | string | null,
     center: string = '',
     searchText: string = ''
   ): Observable<Blob> {

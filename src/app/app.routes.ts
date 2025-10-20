@@ -69,6 +69,7 @@ import { CchPriceRequestComponent } from './application/Price-List/cch-price-req
 import { CchCenterPriceListComponent } from './application/Price-List/cch-center-price-list/cch-center-price-list.component';
 import { pendingPricelistUpdateCchGuard } from './guards/pending-pricelist-update-cch.guard';
 import { AssignCitiesComponent } from './application/Distributed-Center/Centres/assign-cities/assign-cities.component';
+import { MyComponentComponent } from './application/Complaints/my-component/my-component.component';
 
 export const routes: Routes = [
     {
@@ -307,7 +308,7 @@ export const routes: Routes = [
                 children: [
                     {
                         path: '',
-                        component: CchViewComplaintComponent
+                        component: MyComponentComponent
                     },
                     {
                         path: 'view-recive-reply/:id',

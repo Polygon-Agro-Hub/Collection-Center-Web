@@ -54,8 +54,13 @@ export class CchRecivedComplaintComponent {
         console.log('compalintObj', this.compalintObj)
         this.officerName = this.compalintObj.firstNameEnglish + " " + this.compalintObj.lastNameEnglish
         console.log(this.compalintObj);
-        this.phone1 = this.compalintObj.phoneNumber01 === null ? '-' : this.compalintObj.phoneCode01 + " - " + this.compalintObj.phoneNumber01;
-        this.phone2 = this.compalintObj.phoneNumber02 === null ? '-' : this.compalintObj.phoneCode02 + " - " + this.compalintObj.phoneNumber02;
+        this.phone1 = !this.compalintObj.phoneNumber01
+          ? '-'
+          : this.compalintObj.phoneCode01 + " - " + this.compalintObj.phoneNumber01;
+
+        this.phone2 = !this.compalintObj.phoneNumber02
+          ? '-'
+          : this.compalintObj.phoneCode02 + " - " + this.compalintObj.phoneNumber02;
         this.replyObj.reply = res.data.reply;
         console.log(this.replyObj.reply);
         this.templateData = res.template

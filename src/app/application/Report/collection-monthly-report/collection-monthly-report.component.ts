@@ -263,7 +263,7 @@ export class CollectionMonthlyReportComponent implements OnInit {
 
     // Fourth row - Weight and Farmer
     leftY = addField('Weight', String(this.officerDataObj.TotalQty) + ' kg', margin + 5, y, halfWidth);
-    rightY = addField('Farmer', String(this.officerDataObj.TotalFarmers), margin + halfWidth + 10, y, halfWidth);
+    rightY = addField('Collections', String(this.officerDataObj.TotalFarmers), margin + halfWidth + 10, y, halfWidth);
     y = Math.max(leftY, rightY) + 15;
 
     // Table
@@ -286,7 +286,7 @@ doc.setFont('helvetica', 'bold');
 doc.setFontSize(10);
 doc.text('Date', startX + colWidths[0] / 2, y + 6, { align: 'center' });
 doc.text('Total Weight', startX + colWidths[0] + colWidths[1] / 2, y + 6, { align: 'center' });
-doc.text('Total Farmers', startX + colWidths[0] + colWidths[1] + colWidths[2] / 2, y + 6, { align: 'center' });
+doc.text('Total Collections', startX + colWidths[0] + colWidths[1] + colWidths[2] / 2, y + 6, { align: 'center' });
 
 y += 10;
 
@@ -324,7 +324,7 @@ this.farmerDataArr.forEach(row => {
     doc.text(timestamp, margin + 5, y);
 
     // Save the PDF
-    const fileName = `collection_officer_report(${this.officerDataObj.empId}_from_${this.startDate}_to_${this.endDate}).pdf`;
+    const fileName = `Collection_officer_report(${this.officerDataObj.empId}_from_${this.startDate}_to_${this.endDate}).pdf`;
     doc.save(fileName);
 
   }

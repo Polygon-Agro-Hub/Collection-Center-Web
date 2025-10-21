@@ -53,20 +53,7 @@
                         <label for="centerId" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">
                             Collection Centre *
                         </label>
-                        <!-- <select id="centerId" [(ngModel)]="personalData.centerId" name="centerId" placeholder="select"
-                            class="form-control mt-1 block w-full p-2 text-[#292929] mb-1 dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500"
-                            #centerIdInput="ngModel" required>
-                            <option disabled selected
-                                class="p-2 text-[#292929] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]"
-                                value="">
-                                -- select centre--
-                            </option>
-                            <option *ngFor="let item of centerArr" [value]="item.id"
-                                class="p-2 text-[#292929] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
-                                {{item.centerName}}
-                            </option>
 
-                        </select> -->
 
                         <div class="relative w-full">
                             <!-- Input acting as dropdown -->
@@ -130,36 +117,40 @@
                     <div *ngIf="logingRole === 'Collection Centre Head'"></div>
 
 
-                    <div>
+                    <div class="relative" (clickOutside)="isJobRoleOpen = false">
                         <label for="jobRole" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">
-                            Job Role *
+                          Job Role *
                         </label>
-                        <select id="jobRole" [(ngModel)]="personalData.jobRole" 
-                            name="jobRole" placeholder="select" #jobRoleInput="ngModel" required
-                            class="form-control mt-1 block w-full p-2 text-[#292929] mb-1 dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] focus:ring-indigo-500 focus:border-indigo-500">
-                            <option disabled
-                                class="p-2 text-[#292929] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
-                                -- select --
-                            </option>
-                            <option selected value="Collection Centre Manager"
-                                *ngIf="logingRole === 'Collection Centre Head'"
-                                class="p-2 text-[#292929] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
-                                Collection Centre Manager
-                            </option>
-                            <option selected value="Collection Officer"
-                                class="p-2 text-[#292929] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
-                                Collection Officer
-                            </option>
-                            <option value="Customer Officer"
-                                class="p-2 text-[#292929] mb-1 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
-                                Customer Officer
-                            </option>
-                            
-                        </select>
-                        <div *ngIf="jobRoleInput.touched && !personalData.jobRole" class="text-red-500 text-sm mt-1">
-                            <div>Job Role is required</div>
+                      
+                        <!-- Dropdown button -->
+                        <div
+                          class="flex justify-between items-center w-full p-2 border border-gray-300 rounded-md bg-gray-100 dark:bg-[#1D1D1F] dark:text-textDark cursor-pointer"
+                          (click)="toggleJobRoleDropdown()"
+                        >
+                          <span class="dark:text-textDark">{{ personalData.jobRole || '-- select --' }}</span>
+                          <i class="fa-solid" [ngClass]="isJobRoleOpen ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
                         </div>
-                    </div>
+                      
+                        <!-- Options -->
+                        <div
+                          *ngIf="isJobRoleOpen"
+                          class="absolute mt-1 w-full bg-white dark:bg-[#1D1D1F] border border-gray-300 rounded-md shadow-lg z-10"
+                        >
+                          <div
+                            *ngFor="let role of jobRoles"
+                            (click)="getJobRole(role)"
+                            class="flex dark:text-textDark items-center justify-between px-4 py-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-[#333] transition"
+                          >
+                            <span>{{ role }}</span>
+                            <i class="fa-solid fa-hand-pointer text-gray-500 opacity-0 group-hover:opacity-100 transition"></i>
+                          </div>
+                        </div>
+                      
+                        <div *ngIf="jobRoleInputTouched && !personalData.jobRole" class="text-red-500 text-sm mt-1">
+                            Job Role is required
+                          </div>
+                      </div>
+                    
 
                     <div *ngIf="logingRole === 'Collection Centre Manager'"></div>
 
@@ -250,13 +241,13 @@
 
                         <div class="flex items-center space-x-4 mt-3">
                             <div class="flex items-center space-x-2">
-                                <input class="w-5 h-5" type="radio" id="sinhala" name="employeeType" value="Permanent"
+                                <input class="w-5 h-5 cursor-pointer" type="radio" id="sinhala" name="employeeType" value="Permanent"
                                     [(ngModel)]="personalData.employeeType" #employeeTypeInput="ngModel">
                                 <label for="sinhala"
                                     class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Permanent</label>
                             </div>
                             <div class="flex items-center space-x-2">
-                                <input class="w-5 h-5" type="radio" id="employeeType" name="employeeType"
+                                <input class="w-5 h-5 cursor-pointer" type="radio" id="employeeType" name="employeeType"
                                     value="Temporary" [(ngModel)]="personalData.employeeType" #employeeTypeInput="ngModel">
                                 <label for="english"
                                     class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Temporary</label>
@@ -276,19 +267,19 @@
 
                         <div class="flex items-center space-x-4 mt-3">
                             <div class="flex items-center space-x-2">
-                                <input class="w-5 h-5" type="checkbox" id="sinhala" name="languages" value="Sinhala"
+                                <input class="w-5 h-5 cursor-pointer" type="checkbox" id="sinhala" name="languages" value="Sinhala"
                                     [checked]="personalData.languages.includes('Sinhala')"
                                     (change)="onCheckboxChange('Sinhala', $event)" />
                                 <label for="sinhala" class="text-[#534E4E] mb-1 dark:text-textDark">Sinhala</label>
                             </div>
                             <div class="flex items-center space-x-2">
-                                <input class="w-5 h-5" type="checkbox" id="english" name="languages" value="English"
+                                <input class="w-5 h-5 cursor-pointer" type="checkbox" id="english" name="languages" value="English"
                                     [checked]="personalData.languages.includes('English')"
                                     (change)="onCheckboxChange('English', $event)" />
                                 <label for="english" class="text-[#534E4E] mb-1 dark:text-textDark">English</label>
                             </div>
                             <div class="flex items-center space-x-2">
-                                <input class="w-5 h-5" type="checkbox" id="tamil" name="languages" value="Tamil"
+                                <input class="w-5 h-5 cursor-pointer" type="checkbox" id="tamil" name="languages" value="Tamil"
                                     [checked]="personalData.languages.includes('Tamil')"
                                     (change)="onCheckboxChange('Tamil', $event)" />
                                 <label for="tamil" class="text-[#534E4E] mb-1 dark:text-textDark">Tamil</label>
@@ -489,7 +480,7 @@
                       
                         <!-- Custom Validation: Same as Phone Number 1 -->
                         <div *ngIf="personalData.phoneNumber02 && personalData.phoneNumber02 === personalData.phoneNumber01 && !isPhoneInvalidMap['phone02'] && !phoneNumber02Input.invalid" class="text-red-500 text-sm mt-1">
-                            Mobile Number - 2 should be different from Phone Number - 1.
+                            Mobile Number - 2 should be different from Mobile Number - 1.
                         </div>
 
                         <div *ngIf="personalData.phoneNumber02 && phoneNumber02Input.invalid && !isPhoneInvalidMap['phone02']"
@@ -507,8 +498,8 @@
                             Number *</label>
                         <input id="nic" name="nic" [(ngModel)]="personalData.nic"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                            #nicInput="ngModel" required pattern="^(\d{9}[V]|\d{12})$"
-                            (input)="onTrimInput($event, personalData, 'nic')"
+                            #nicInput="ngModel" required pattern="^(\d{9}[V]|\d{12})$" maxlength="12"
+                            (input)="onNicInput($event)"
                             class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
                         <div *ngIf="nicInput.touched && !personalData.nic" class="text-red-500 text-sm mt-1">
                             <div> NIC is required</div>

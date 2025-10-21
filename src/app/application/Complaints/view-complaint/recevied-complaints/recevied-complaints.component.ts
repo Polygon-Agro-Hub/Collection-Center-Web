@@ -138,6 +138,7 @@ export class ReceviedComplaintsComponent implements OnInit {
   navigateViewReply(id: number) {
     this.router.navigate([`/complaints/view-recive-reply/${id}`])
   }
+  
 
 }
 

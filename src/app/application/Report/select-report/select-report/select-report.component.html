@@ -26,34 +26,19 @@
             </div>
         </div> -->
 
-    <div class="relative w-52">
-      <div
-        class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
-        <select [(ngModel)]="selectedtype"
-          class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer">
-          <option value="" selected>--Select--</option>
-          <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-            value="Collection Report">
-            Collection Reports
-          </option>
-          <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300" value="Sales Report">
-            Sales Reports
-          </option>
-        </select>
+    <div class="relative w-52 mt-4">
+      <app-searchable-dropdown
+              [items]="categoryDropdownItems"
+              placeholder="--Select--"
+              searchPlaceholder="Search..."
+              [(ngModel)]="reportType"
+              (selectionChange)="onCategorySelectionChange($event)"
+              [clearable]="true"
+              [showSelected]="true"
+              [disabled]="false"
+              class="block w-full mb-4"
+            ></app-searchable-dropdown>
 
-        <!-- Down arrow icon -->
-        <div *ngIf="!selectedtype"
-          class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
-          <i class="fa-solid fa-angle-down text-lg mr-3"></i>
-        </div>
-
-        <!-- Cancel icon -->
-        <div *ngIf="selectedtype"
-          class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300 cursor-pointer z-10"
-          (click)="clearSelection()">
-          <i class="fa-solid fa-xmark text-lg mr-3"></i>
-        </div>
-      </div>
     </div>
 
     <button
@@ -61,7 +46,7 @@
       (click)="GoBtn()">
       Go
     </button>
-  </div>
+
 </div>
 
 <div *ngIf="type === ''"
@@ -70,10 +55,10 @@
   <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20 dark:text-black" />
 </div>
 
-<div *ngIf="type === 'Collection Report'">
+<div *ngIf="type === 'Collection Reports'">
   <app-collection-report-component />
 </div>
 
-<div *ngIf="type === 'Sales Report'">
+<div *ngIf="type === 'Sales Reports'">
   <app-sales-report-component />
 </div>

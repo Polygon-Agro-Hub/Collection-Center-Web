@@ -9,12 +9,13 @@ import Swal from 'sweetalert2';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { Location } from '@angular/common';
 import { Country, COUNTRIES } from '../../../../assets/country-data';
+import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
 
 
 @Component({
   selector: 'app-edit-centre',
   standalone: true,
-  imports: [CommonModule, FormsModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent, SerchableDropdownComponent],
   templateUrl: './edit-centre.component.html',
   styleUrl: './edit-centre.component.css'
 })
@@ -31,49 +32,46 @@ export class EditCentreComponent implements OnInit{
 };
 
 
-  provinces: string[] = [
-    'Western',
-    'Central',
-    'Southern',
-    'Northern',
-    'Eastern',
-    'North Western',
-    'North Central',
-    'Uva',
-    'Sabaragamuwa'
-  ];
+provinces: string[] = [
+  'Western',
+  'Central',
+  'Southern',
+  'Northern',
+  'Eastern',
+  'North Western',
+  'North Central',
+  'Uva',
+  'Sabaragamuwa'
+];
 
-  // Define all districts with their provinces
-  allDistricts = [
-    { name: 'Ampara', province: 'Eastern' },
-    { name: 'Anuradhapura', province: 'North Central' },
-    { name: 'Badulla', province: 'Uva' },
-    { name: 'Batticaloa', province: 'Eastern' },
-    { name: 'Colombo', province: 'Western' },
-    { name: 'Galle', province: 'Southern' },
-    { name: 'Gampaha', province: 'Western' },
-    { name: 'Hambantota', province: 'Southern' },
-    { name: 'Jaffna', province: 'Northern' },
-    { name: 'Kalutara', province: 'Western' },
-    { name: 'Kandy', province: 'Central' },
-    { name: 'Kegalle', province: 'Sabaragamuwa' },
-    { name: 'Kilinochchi', province: 'Northern' },
-    { name: 'Kurunegala', province: 'North Western' },
-    { name: 'Mannar', province: 'Northern' },
-    { name: 'Matale', province: 'Central' },
-    { name: 'Matara', province: 'Southern' },
-    { name: 'Monaragala', province: 'Uva' },
-    { name: 'Mullaitivu', province: 'Northern' },
-    { name: 'Nuwara Eliya', province: 'Central' },
-    { name: 'Polonnaruwa', province: 'North Central' },
-    { name: 'Puttalam', province: 'North Western' },
-    { name: 'Rathnapura', province: 'Sabaragamuwa' },
-    { name: 'Trincomalee', province: 'Eastern' },
-    { name: 'Vavuniya', province: 'Northern' },
-  ];
-
-  // Districts filtered by selected province
-  filteredDistricts: { name: string, province: string }[] = [];
+// Define all districts with their provinces
+allDistricts = [
+  { name: 'Ampara', province: 'Eastern' },
+  { name: 'Anuradhapura', province: 'North Central' },
+  { name: 'Badulla', province: 'Uva' },
+  { name: 'Batticaloa', province: 'Eastern' },
+  { name: 'Colombo', province: 'Western' },
+  { name: 'Galle', province: 'Southern' },
+  { name: 'Gampaha', province: 'Western' },
+  { name: 'Hambantota', province: 'Southern' },
+  { name: 'Jaffna', province: 'Northern' },
+  { name: 'Kalutara', province: 'Western' },
+  { name: 'Kandy', province: 'Central' },
+  { name: 'Kegalle', province: 'Sabaragamuwa' },
+  { name: 'Kilinochchi', province: 'Northern' },
+  { name: 'Kurunegala', province: 'North Western' },
+  { name: 'Mannar', province: 'Northern' },
+  { name: 'Matale', province: 'Central' },
+  { name: 'Matara', province: 'Southern' },
+  { name: 'Monaragala', province: 'Uva' },
+  { name: 'Mullaitivu', province: 'Northern' },
+  { name: 'Nuwara Eliya', province: 'Central' },
+  { name: 'Polonnaruwa', province: 'North Central' },
+  { name: 'Puttalam', province: 'North Western' },
+  { name: 'Rathnapura', province: 'Sabaragamuwa' },
+  { name: 'Trincomalee', province: 'Eastern' },
+  { name: 'Vavuniya', province: 'Northern' },
+];
 
   countries: Country[] = COUNTRIES;
   selectedCountry1: Country | null = null;
@@ -100,9 +98,26 @@ export class EditCentreComponent implements OnInit{
     const idParam = this.route.snapshot.paramMap.get('id');
     this.centreId = idParam !== null ? Number(idParam) : null;
     console.log('Received ID:', this.centreId);
-    this.updateFilteredDistricts();
     this.fetchCentreData(this.centreId!)
   }
+
+  get provinceItems() {
+    return this.provinces.map(province => ({
+        value: province,
+        label: province
+    }));
+}
+
+get districtItems() {
+    const districts = this.centerData.province 
+        ? this.allDistricts.filter(d => d.province === this.centerData.province)
+        : this.allDistricts;
+    
+    return districts.map(district => ({
+        value: district.name,
+        label: district.name
+    }));
+}
 
 
   @HostListener('document:click', ['$event.target'])
@@ -151,31 +166,44 @@ getFlagUrl(code: string): string {
     );
     
   }
+  onProvinceChange(selectedProvince: string | null): void {
+    this.centerData.province = selectedProvince || '';
 
-  // Update the filtered districts based on selected province
-  updateFilteredDistricts() {
-    if (this.centerData.province) {
-      this.filteredDistricts = this.allDistricts.filter(d => d.province === this.centerData.province);
+    console.log('this.centerData.province 1 ', this.centerData.province )
+    
+    // Clear district selection when province changes
+    if (!selectedProvince) {
+        this.centerData.province = '';
+        console.log('this.centerData.province 2', this.centerData.province )
     } else {
-      this.filteredDistricts = this.allDistricts;
-    }
-    this.centerData.district = ''; // Clear district selection when province changes
-  }
-
-  // When district is selected, automatically set the province
-  filterDistrict() {
-    if (this.centerData.district) {
-      const selectedDistrict = this.allDistricts.find(d => d.name === this.centerData.district);
-      if (selectedDistrict) {
-        // Update the province based on the selected district
-        this.centerData.province = selectedDistrict.province;
-
-        // Update filtered districts for the selected province
-        this.filteredDistricts = this.allDistricts.filter(d => d.province === this.centerData.province);
-      }
+        // Check if current district is still valid for the selected province
+        const isDistrictValid = this.allDistricts.some(d => 
+            d.name === this.centerData.district && d.province === selectedProvince
+        );
+        if (!isDistrictValid) {
+            this.centerData.district = '';
+        }
     }
   }
 
+// Handle district selection change
+onDistrictChange(selectedDistrict: string | null): void {
+    this.centerData.district = selectedDistrict || '';
+
+    console.log('this.centerData.district 1', this.centerData.district )
+    
+    // When district is selected, automatically set the province
+    if (selectedDistrict) {
+        const district = this.allDistricts.find(d => d.name === selectedDistrict);
+        if (district && district.province !== this.centerData.province) {
+            this.centerData.province = district.province;
+
+            console.log('this.centerData.province 1', this.centerData.province )
+        }
+    }
+    
+    // this.fetchAllCenterDetails();
+}
 
   validateSriLankanPhone(input: string, key: string): void {
     if (!input) {

@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ReportServiceService } from '../../../services/Report-service/report-service.service';
@@ -25,6 +25,9 @@ import { CustomDatepickerComponent } from '../../../components/custom-datepicker
 })
 export class CollectionComponent implements OnInit {
 
+  @ViewChild('fromDatePicker') fromDatePicker!: CustomDatepickerComponent;
+  @ViewChild('toDatePicker') toDatePicker!: CustomDatepickerComponent;
+
   farmerPaymentsArr!: FarmerPayments[];
   centerArr: Center[] = [];
   totalPaymentsAmount: number = 0; // New variable to store the sum of all payments
@@ -47,6 +50,8 @@ export class CollectionComponent implements OnInit {
   logingRole: string | null = null;
   isLoading: boolean = false;
   isDateFilterSet: boolean = false;
+
+  maxDate: string = new Date().toISOString().split('T')[0];
 
 
   isDownloading = false;
@@ -197,12 +202,37 @@ export class CollectionComponent implements OnInit {
 
   onFromDateChange(date: string | Date | null) {
     const selectedDate = date as string || '';
+
+    if (selectedDate && selectedDate > this.maxDate) {
+      this.fromDate = ''; 
+
+      if (this.fromDatePicker) {
+        this.fromDatePicker.selectedDate = null;
+      }
+      console.log('this.fromDate', this.fromDate)
+      this.toastSrv.warning("From date cannot be in the future.");
+      return;
+    }
+    
     this.fromDate = selectedDate;
+    
     this.validateFromDate();
   }
   
   onToDateChange(date: string | Date | null) {
     const selectedDate = date as string || '';
+
+    if (selectedDate && selectedDate > this.maxDate) {
+
+      this.toDate = '';
+      if (this.toDatePicker) {
+        this.toDatePicker.selectedDate = null;
+      }
+
+      this.toastSrv.warning("To date cannot be in the future.");
+      return;
+    }
+
     this.toDate = selectedDate;
     this.validateToDate();
   }
@@ -211,6 +241,9 @@ export class CollectionComponent implements OnInit {
     // Case 1: User hasn't selected fromDate yet
     if (!this.fromDate) {
       this.toDate = '';
+      if (this.toDatePicker) {
+        this.toDatePicker.selectedDate = null;
+      }
       this.toastSrv.warning("Please select the 'From' date first.");
       return;
     }
@@ -222,6 +255,9 @@ export class CollectionComponent implements OnInit {
   
       if (to <= from) {
         this.toDate = '';
+        if (this.toDatePicker) {
+          this.toDatePicker.selectedDate = null;
+        }
         this.toastSrv.warning("The 'To' date cannot be earlier than or same as the 'From' date.");
       }
     }
@@ -240,6 +276,9 @@ export class CollectionComponent implements OnInit {
   
       if (to <= from) {
         this.toDate = ''; // Reset toDate
+        if (this.toDatePicker) {
+          this.toDatePicker.selectedDate = null;
+        }
         this.toastSrv.warning("The 'To' date has been cleared because it was earlier than or same as the new 'From' date.");
       }
     }
@@ -248,6 +287,8 @@ export class CollectionComponent implements OnInit {
   goBtn() {
     if (!this.fromDate || !this.toDate) {
       this.toastSrv.warning("Please fill in all fields");
+      this.hasData = false;
+      this.isDateFilterSet = false;
       return;
     }
   

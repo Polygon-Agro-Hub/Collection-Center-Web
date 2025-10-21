@@ -261,22 +261,31 @@ export class OfficerProfileComponent implements OnInit {
     doc.text(getValueOrNA(empCodeText), startX + textWidth, 22);
 
 
-// Decide which value to display based on jobRole
-    let centerText = "N/A";
-    if (
-      this.officerObj.jobRole === "Collection Centre Manager" ||
-      this.officerObj.jobRole === "Collection Centre Head" ||
-      this.officerObj.jobRole === "Collection Officer" ||
-      this.officerObj.jobRole === "Customer Officer"
-    ) {
-      centerText = getValueOrNA(this.officerObj.regCode) + " Centre";
-    } else if (
-      this.officerObj.jobRole === "Distribution Centre Manager" ||
-      this.officerObj.jobRole === "Distribution Centre Head" ||
-      this.officerObj.jobRole === "Distribution Officer"
-    ) {
-      centerText = getValueOrNA(this.officerObj.distributedCenterRegCode) + " Centre";
-    }
+// Generate center text
+let centerText = 'Officer has been disclaimed - No Assigned Centre';
+
+const ccRoles = [
+  'Collection Centre Manager',
+  'Collection Centre Head',
+  'Collection Officer',
+  'Customer Officer'
+];
+
+const dcRoles = [
+  'Distribution Centre Manager',
+  'Distribution Centre Head',
+  'Distribution Officer'
+];
+
+if (ccRoles.includes(this.officerObj.jobRole)) {
+  if (this.officerObj.regCode) {
+    centerText = `${this.officerObj.regCode} Centre`;
+  }
+} else if (dcRoles.includes(this.officerObj.jobRole)) {
+  if (this.officerObj.distributedCenterRegCode) {
+    centerText = `${this.officerObj.distributedCenterRegCode} Centre`;
+  }
+}
 
 // Apply text in PDF
 doc.text(centerText, startX, 29);
@@ -581,8 +590,12 @@ doc.roundedRect(bankBoxX, bankBoxY, bankBoxWidth, bankBoxHeight, 3, 3, "S");
 
   viewOfficerTarget(officerId: number, centerName: string) {
 
+    const newCenterName = centerName ? centerName : 'Disclaimed'
+
+    console.log('newCenterName', newCenterName)
+
     if (this.logingRole === 'Collection Centre Head' || this.logingRole === 'Collection Centre Manager') {
-      this.router.navigate([`/manage-officers/view-officer-target/${officerId}/${centerName}`]);
+      this.router.navigate([`/manage-officers/view-officer-target/${officerId}/${newCenterName}`]);
     } else if (this.logingRole === 'Distribution Centre Head' || this.logingRole === 'Distribution Centre Manager') {
       this.router.navigate([`/distribution-officers/view-officer-target/${officerId}/${centerName}`]);
     } 
@@ -604,7 +617,13 @@ doc.roundedRect(bankBoxX, bankBoxY, bankBoxWidth, bankBoxHeight, 3, 3, "S");
 
         this.isLoading = false;
         this.showDisclaimView = false;
-        this.router.navigate(['/distribution-officers']);
+
+        if (this.logingRole === 'Distribution Centre Manager') {
+          this.router.navigate(['/distribution-officers']);
+        } else if (this.logingRole === 'Collection Centre Manager') {
+          this.router.navigate(['/manage-officers']);
+        }
+        
         this.toastSrv.success('Officer Disclaimed successfully!');
 
       },
@@ -612,7 +631,11 @@ doc.roundedRect(bankBoxX, bankBoxY, bankBoxWidth, bankBoxHeight, 3, 3, "S");
         console.error('Error sending Officer ID:', error);
         this.isLoading = false;
         this.toastSrv.error('Failed to Disclam the Officer!');
-        this.router.navigate(['/distribution-officers']);
+        if (this.logingRole === 'Distribution Centre Manager') {
+          this.router.navigate(['/distribution-officers']);
+        } else if (this.logingRole === 'Collection Centre Manager') {
+          this.router.navigate(['/manage-officers']);
+        }
       }
     );
 

@@ -14,6 +14,7 @@
         
             <div class="mr-10">
                 <app-custom-datepicker 
+                    #fromDatePicker
                     [selectedDate]="startDate" 
                     (dateChange)="onStartDateChange($event)"
                     placeholder="Start Date">
@@ -24,6 +25,7 @@
         
             <div class="mr-6">
                 <app-custom-datepicker 
+                    #toDatePicker
                     [selectedDate]="endDate" 
                     (dateChange)="onEndDateChange($event)"
                     placeholder="End Date">

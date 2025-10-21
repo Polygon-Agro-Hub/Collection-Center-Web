@@ -344,45 +344,6 @@ branchItems: { value: number; label: string }[] = [];
     this.isPhoneInvalidMap[key] = false;
   }
 
-  // fetchOffierById(id: number) {
-  //   this.isLoading = true;
-  //   this.ManageOficerSrv.getOfficerById(id).subscribe(
-  //     (res: any) => {
-
-  //       this.personalData = res.officerData.collectionOfficer;
-  //       this.personalData.conformAccNumber = this.personalData.accNumber
-  //       console.log(this.personalData);
-  //       this.ExistirmId = res.officerData.irmId;
-
-  //       this.getUpdateLastID(res.officerData.collectionOfficer.jobRole);
-  //       this.driverObj = res.officerData.driver;
-  //       this.driverObj.insExpDate = this.formatDateForInput(this.driverObj.insExpDate);
-  //       this.selectVehicletype = this.VehicleTypes.find(
-  //         (v) => v.name === this.driverObj.vType && v.capacity === this.driverObj.vCapacity
-  //       );
-  //       this.personalData.previousQR = this.personalData.QRcode;
-  //       this.personalData.previousImage = this.personalData.image;
-
-
-  //       // Initialize languages as a comma-separated string if it's not already in that format
-  //       if (Array.isArray(this.personalData.languages)) {
-  //         this.personalData.languages = this.personalData.languages.join(',');
-  //       } else if (!this.personalData.languages) {
-  //         this.personalData.languages = '';
-  //       }
-
-  //       this.selectJobRole = res.officerData.collectionOfficer.jobRole;
-  //       this.getAllManagers();
-
-
-  //       this.UpdateEpmloyeIdCreate();
-  //       this.matchExistingBankToDropdown();
-  //       this.isLoading = false;
-
-  //     }
-  //   );
-  // }
-
   formatDateForInput(date: string | Date): string {
     const d = new Date(date);
     const year = d.getFullYear();
@@ -496,34 +457,12 @@ branchItems: { value: number; label: string }[] = [];
     }
   }
 
-  // updateProvince(event: Event): void {
-  //   const target = event.target as HTMLSelectElement;
-  //   const selectedDistrict = target.value;
-
-  //   const selected = this.districts.find(district => district.name === selectedDistrict);
-
-  //   if (this.itemId === null) {
-
-  //     if (selected) {
-  //       this.personalData.province = selected.province;
-  //     } else {
-  //       this.personalData.province = '';
-  //     }
-
-  //   }
-
-  // }
-
   onDistrictChange(districtName: string | null) {
     if (this.itemId !== null) return; // keep your original guard
 
     const selected = this.districts.find(d => d.name === districtName || '');
     this.personalData.province = selected ? selected.province : '';
   }
-
-  // onSubmit() {
-  //     console.log('personaldata', this.personalData)
-  // }
 
   onSubmit() {
     console.log('personaldata', this.personalData)

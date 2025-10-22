@@ -1,7 +1,7 @@
 import { Component, HostListener, OnInit } from '@angular/core';
 import { ActivatedRoute } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { TargetService } from '../../../services/Target-service/target.service'
@@ -24,6 +24,8 @@ export class EditCentreComponent implements OnInit{
   centerData: CenterData = new CenterData();
 
   isLoading: boolean = false;
+
+  isLoadingregcode = false;
 
   allowedPrefixes = ['70', '71', '72', '75', '76', '77', '78'];
   isPhoneInvalidMap: { [key: string]: boolean } = {
@@ -184,6 +186,8 @@ getFlagUrl(code: string): string {
             this.centerData.district = '';
         }
     }
+
+    this.updateRegCode();
   }
 
 // Handle district selection change
@@ -201,8 +205,9 @@ onDistrictChange(selectedDistrict: string | null): void {
             console.log('this.centerData.province 1', this.centerData.province )
         }
     }
-    
-    // this.fetchAllCenterDetails();
+
+    this.updateRegCode();
+  
 }
 
   validateSriLankanPhone(input: string, key: string): void {
@@ -232,6 +237,89 @@ onDistrictChange(selectedDistrict: string | null): void {
     }
   
     this.isPhoneInvalidMap[key] = false;
+  }
+
+  onSubmitForm(form: NgForm) {
+
+    console.log('submitting')
+
+    form.form.markAllAsTouched();
+
+    const missingFields: string[] = [];
+
+    if (!this.centerData.centerName) {
+      missingFields.push('Centre Name is required');
+    }
+  
+    if (!this.centerData.country) {
+      missingFields.push('Country is required');
+    }
+  
+    if (!this.centerData.province) {
+      missingFields.push('Province is required');
+    }
+  
+    if (!this.centerData.district) {
+      missingFields.push('District is required');
+    }
+  
+    if (!this.centerData.buildingNumber) {
+      missingFields.push('Building number is required');
+    }
+  
+    if (!this.centerData.street) {
+      missingFields.push('Street name is required');
+    }
+  
+    if (!this.centerData.city) {
+      missingFields.push('City is required');
+    }
+  
+    if (!this.centerData.regCode) {
+      missingFields.push('Reg code is required');
+    }
+
+    if (!this.centerData.phoneNumber01) {
+      missingFields.push('Mobile Number - 1 is required');
+    } else if (!/^[0-9]{9}$/.test(this.centerData.phoneNumber01) || this.isPhoneInvalidMap['phone01']) {
+      missingFields.push('Mobile Number - 1 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+    }
+  
+    if (this.centerData.phoneNumber02) {
+      if (!/^[0-9]{9}$/.test(this.centerData.phoneNumber02) || this.isPhoneInvalidMap['phone02']) {
+        missingFields.push('Mobile Number - 2 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+      }
+      if (this.centerData.phoneNumber01 === this.centerData.phoneNumber02) {
+        missingFields.push('Mobile Number - 2 - Must be different from Mobile Number - 1');
+      }
+    }
+  
+    
+  
+    // Display errors if any
+    if (missingFields.length > 0) {
+      let errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following issues:</p><ul class="list-disc pl-5">';
+      missingFields.forEach((field) => {
+        errorMessage += `<li>${field}</li>`;
+      });
+      errorMessage += '</ul></div>';
+  
+      Swal.fire({
+        icon: 'error',
+        title: 'Missing or Invalid Information',
+        html: errorMessage,
+        confirmButtonText: 'OK',
+        customClass: {
+          popup: 'bg-white dark:bg-[#363636] text-[#534E4E] dark:text-textDark',
+          title: 'font-semibold text-lg',
+          htmlContainer: 'text-left',
+        },
+      });
+      return;
+    }
+
+     this.onSubmit();
+    
   }
 
   onSubmit() {
@@ -293,6 +381,56 @@ onDistrictChange(selectedDistrict: string | null): void {
         this.isLoading = false;
       },
     });
+  }
+
+  capitalizeFirstLetter(field: keyof CenterData) {
+    if (this.centerData[field]) {
+      let value = this.centerData[field] as unknown as string;
+  
+      // Trim spaces
+      value = value.trim();
+  
+      // Capitalize first letter
+      value = value.charAt(0).toUpperCase() + value.slice(1);
+  
+      this.centerData[field] = value as never; // assign back safely
+    }
+  }
+
+  onCityChange() {
+    // Update reg code when city changes
+    this.updateRegCode();
+  }
+
+  updateRegCode() {
+    console.log('update reg code');
+    const province = this.centerData.province;
+    const district = this.centerData.district;
+    const city = this.centerData.city;
+
+    console.log('province', province, 'district', district, 'city', city);
+
+    if (province && district && city) {
+      this.isLoadingregcode = true;
+      this.targetService
+        .generateRegCode(province, district, city)
+        .subscribe({
+          next: (response) => {
+            this.centerData.regCode = response.regCode;
+            this.isLoadingregcode = false;
+          },
+          error: (error) => {
+            console.error('Error generating reg code:', error);
+            // Fallback to manual generation if API fails
+            const regCode = `${province.slice(0, 2).toUpperCase()}${district
+              .slice(0, 1)
+              .toUpperCase()}${city.slice(0, 1).toUpperCase()}`;
+            console.log('regCode fallback', regCode);
+            this.centerData.regCode = '';
+            this.isLoadingregcode = false;
+          }
+        });
+    }
   }
 
   onCancel() {

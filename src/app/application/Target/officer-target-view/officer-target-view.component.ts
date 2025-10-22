@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component } from '@angular/core';
+import { Component, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TargetService } from '../../../services/Target-service/target.service';
@@ -7,17 +7,24 @@ import { ToastAlertService } from '../../../services/toast-alert/toast-alert.ser
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { NgxPaginationModule } from 'ngx-pagination';
 import Swal from 'sweetalert2';
+import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
+import { CustomDatepickerComponent } from '../../../components/custom-datepicker/custom-datepicker.component';
 
 @Component({
   selector: 'app-officer-target-view',
   standalone: true,
-  imports: [CommonModule, FormsModule, LoadingSpinnerComponent, NgxPaginationModule],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent, NgxPaginationModule, CustomDatepickerComponent, SerchableDropdownComponent],
   templateUrl: './officer-target-view.component.html',
   styleUrl: './officer-target-view.component.css'
 })
 export class OfficerTargetViewComponent {
+
+  @ViewChild('fromDatePicker') fromDatePicker!: CustomDatepickerComponent;
+  @ViewChild('toDatePicker') toDatePicker!: CustomDatepickerComponent;
+
   OfficerObj: Officer = new Officer();
   hasData: boolean = false;
+  isInitialDataSet: boolean = false;
   responseTitle: string = '--Fill input fields first--';
   targetArr: Target[] = [];
 
@@ -44,6 +51,20 @@ export class OfficerTargetViewComponent {
     this.onSubmit()
   }
 
+  get jobRoleDropdownItems() {
+    return [
+      { value: 'Collection Centre Manager', label: 'Collection Centre Manager', disabled: false },
+      { value: 'Collection Officer', label: 'Collection Officer', disabled: false },
+    ];
+  }
+
+  // 5. Add selection change handler
+  onJobRoleSelectionChange(selectedValue: string) {
+    this.OfficerObj.jobRole = selectedValue || '';
+    // Add any additional logic you need when category changes
+    console.log('Job Role selected:', selectedValue);
+  }
+
   fetchAllOfficers(page: number = this.page, limit: number = this.itemsPerPage, status: string = this.selectStatus, validity: string = this.selectValidity, searchText: string = this.searchText) {
     this.isLoading = true;
     if (this.OfficerObj.jobRole === 'Collection Centre Manager') {
@@ -55,21 +76,7 @@ export class OfficerTargetViewComponent {
     }
 
     this.TargetSrv.getOfficerAvailabeTarget(this.OfficerObj, page, limit, status, validity, searchText).subscribe(
-      // (res) => {
-      //   console.log('fetching');
-      //   console.log(this.hasData2);
-      //   this.targetArr = res.result;
-      //   this.totalItems = res.total;
-      //   if (res.total === 0) {
-      //     this.hasData2 = false;
-      //   } else {
-      //     this.hasData2 = true;
-      //   }
-      //   this.isLoading = false;
-
-      //   console.log('fetched');
-      //   console.log(this.hasData2);
-      // }
+      
       (res) => {
         if (res.status) {
           this.responseTitle = res.message;
@@ -98,11 +105,18 @@ export class OfficerTargetViewComponent {
     console.log('subbimiting');
     console.log(this.hasData);
     this.isLoading = true
+
+    console.log('from', this.OfficerObj.fromDate, 'to', this.OfficerObj.toDate)
     if (!this.OfficerObj.jobRole || !this.OfficerObj.officerId || !this.OfficerObj.fromDate || !this.OfficerObj.toDate) {
+      this.responseTitle = 'Fill input fields first'
       this.toastSrv.warning('Fill All Input feilds')
       this.isLoading = false;
+      this.hasData = false;
+      this.isInitialDataSet = false;
       return;
     }
+
+    this.isInitialDataSet = true;
 
 
     if (this.OfficerObj.jobRole === 'Collection Centre Manager') {
@@ -113,27 +127,23 @@ export class OfficerTargetViewComponent {
       this.OfficerObj.empId = 'CUO' + this.OfficerObj.officerId;
     }
 
-    this.TargetSrv.getOfficerAvailabeTarget(this.OfficerObj, page, limit, status, validity, searchText).subscribe(
+    this.searchText = '';
+    this.selectStatus = '';
+    this.selectValidity = '';
+
+    this.TargetSrv.getOfficerAvailabeTarget(this.OfficerObj, page, limit, status = '', validity = '', searchText = '').subscribe(
 
       (res) => {
-        // console.log('fetching');
-        // console.log(this.hasData);
-        // this.targetArr = res.result;
-        // this.totalItems = res.total;
-        // if (res.total === 0) {
-        //   this.hasData = false;
-        // } else {
-        //   this.hasData = true;
-        // }
-        // this.isLoading = false;
 
-        // console.log('fetched');
-        // console.log(this.hasData);
-        // console.log('fetching');
-        // console.log(this.hasData);
+        console.log('res', res)
+        
         if (res.status) {
           this.responseTitle = res.message;
-          this.hasData = true;
+          if (res.result.length === 0) {
+            this.hasData = false;
+          } else {
+            this.hasData = true;
+          }
           this.targetArr = res.result;
           this.totalItems = res.total;
           this.isLoading = false;
@@ -166,8 +176,22 @@ export class OfficerTargetViewComponent {
 
   }
 
-  checkToDate() {
+  checkFromDate(date: string | Date | null) {
+    const selectedDate = date as string || '';
+    
+    this.OfficerObj.fromDate = selectedDate;
+    console.log('from date', this.OfficerObj.fromDate)
+}
+
+  checkToDate(date: string | Date | null) {
+
+    const selectedDate = date as string || '';
+    this.OfficerObj.toDate = selectedDate;
+
     if (!this.OfficerObj.fromDate) {
+      if (this.toDatePicker) {
+        this.toDatePicker.selectedDate = null;
+      }
       this.toastSrv.warning('Please select the "From" date first.');
       this.OfficerObj.toDate = '';
       return;
@@ -178,6 +202,9 @@ export class OfficerTargetViewComponent {
 
     if (to < from) {
       this.toastSrv.warning('"To" date cannot be earlier than "From" date.');
+      if (this.toDatePicker) {
+        this.toDatePicker.selectedDate = null;
+      }
       this.OfficerObj.toDate = '';
     }
   }

@@ -18,6 +18,7 @@ import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/
 export class ReceviedComplaintsComponent implements OnInit {
   complainArr!: RecivedComplaint[];
   replyObj: Reply = new Reply();
+  templateData!: TemplateData;
 
   searchText: string = '';
   selectStatus: string = '';
@@ -89,7 +90,10 @@ export class ReceviedComplaintsComponent implements OnInit {
     this.isLoading = true;
     this.ComplainSrv.getComplainById(id).subscribe(
       (res) => {
+        console.log('res', res)
         this.replyObj = res.data;
+        this.templateData = res.template;
+        console.log('templateData', this.templateData)
         this.isLoading = false;
       }
     )
@@ -156,4 +160,18 @@ class RecivedComplaint {
 class Reply {
   id!: number
   reply!: string
+  language!: string
+  firstNameEnglish:string = '';
+  lastNameEnglish:string = '';
+}
+
+interface TemplateData {
+  EngName: string
+  SinName: string
+  TamName: string
+  companyNameEnglish: string
+  companyNameSinhala: string
+  companyNameTamil: string
+  centerName: string;
+  regCode: string;
 }

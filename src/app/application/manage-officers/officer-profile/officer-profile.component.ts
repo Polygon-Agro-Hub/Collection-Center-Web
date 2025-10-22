@@ -61,34 +61,6 @@ export class OfficerProfileComponent implements OnInit {
     });
   }
 
-  // async downloadPDF() {
-  //   try {
-  //     // Step 1: Convert image to Base64 if not already done
-  //     if (!this.imagebase64) {
-  //       this.imagebase64 = await this.convertImageToBase64(this.officerObj.image);
-  //     }
-  
-  //     // Step 2: Call your function that needs the Base64 image
-  //     this.generatePDF();
-  //   } catch (error) {
-  //     console.error("Failed to fetch profile image. PDF not generated.", error);
-  //   }
-  // }
-  
-  // // Helper function to convert image URL to Base64
-  // async convertImageToBase64(imageUrl: string): Promise<string> {
-  //   const response = await fetch(imageUrl);
-  //   const blob = await response.blob();
-  
-  //   return new Promise<string>((resolve, reject) => {
-  //     const reader = new FileReader();
-  //     reader.onloadend = () => resolve(reader.result as string);
-  //     reader.onerror = reject;
-  //     reader.readAsDataURL(blob); // Converts blob to Base64
-  //   });
-  // }
-  
-  
   async generatePDF() {
 
     // this.fetchProfileImageBase64(this.officerId);
@@ -603,7 +575,7 @@ doc.roundedRect(bankBoxX, bankBoxY, bankBoxWidth, bankBoxHeight, 3, 3, "S");
 
   cancelDisclaim() {
     this.showDisclaimView = false;
-    this.router.navigate(['/distribution-officers']);
+
   }
 
   confirmDisclaim(id: number) {
@@ -618,11 +590,12 @@ doc.roundedRect(bankBoxX, bankBoxY, bankBoxWidth, bankBoxHeight, 3, 3, "S");
         this.isLoading = false;
         this.showDisclaimView = false;
 
-        if (this.logingRole === 'Distribution Centre Manager') {
-          this.router.navigate(['/distribution-officers']);
-        } else if (this.logingRole === 'Collection Centre Manager') {
-          this.router.navigate(['/manage-officers']);
-        }
+        // if (this.logingRole === 'Distribution Centre Manager') {
+        //   this.router.navigate(['/distribution-officers']);
+        // } else if (this.logingRole === 'Collection Centre Manager') {
+        //   this.router.navigate(['/manage-officers']);
+        // }
+        this.fetchOfficer(this.officerId);
         
         this.toastSrv.success('Officer Disclaimed successfully!');
 
@@ -713,80 +686,6 @@ class Officer {
   vehSideImgB!: string;
 
 }
-
-
-// function loadImageAsBase64(url: string): Promise<string> {
-//   return new Promise((resolve, reject) => {
-//     const xhr = new XMLHttpRequest();
-//     xhr.onload = function () {
-//       console.log('XHR succeeded for', url);
-//       const reader = new FileReader();
-//       reader.onloadend = function () {
-//         console.log('FileReader loaded:', reader.result?.toString().slice(0, 30), '...');
-//         resolve(reader.result as string);
-//       };
-//       reader.readAsDataURL(xhr.response);
-//     };
-//     xhr.onerror = function () {
-//       console.warn('XHR failed, falling back to Image for', url);
-
-//       const img = new Image();
-//       img.crossOrigin = 'Anonymous';
-//       img.onload = function () {
-//         console.log('Fallback image loaded:', url);
-//         const canvas = document.createElement('canvas');
-//         const ctx = canvas.getContext('2d');
-//         canvas.width = img.width;
-//         canvas.height = img.height;
-//         ctx?.drawImage(img, 0, 0);
-//         try {
-//           const dataUrl = canvas.toDataURL('image/png');
-//           console.log('Canvas toDataURL result:', dataUrl.slice(0, 30), '...');
-//           resolve(dataUrl);
-//         } catch (e) {
-//           console.error('Canvas toDataURL failed:', e);
-//           resolve('');
-//         }
-//       };
-//       img.onerror = function () {
-//         console.warn('Image load failed:', url);
-//         resolve('');
-//       };
-//       img.src = url;
-//     };
-//     xhr.open('GET', url);
-//     xhr.responseType = 'blob';
-//     xhr.setRequestHeader('Accept', 'image/png,image/*');
-//     try {
-//       xhr.send();
-//     } catch (error) {
-//       console.error('XHR send error:', error);
-//       reject(error);
-//     }
-//   });
-// }
-
-
-//   const appendCacheBuster = (url: string) => {
-//     if (!url) return '';
-//     const separator = url.includes('?') ? '&' : '?';
-//     return `${url}${separator}t=${new Date().getTime()}`;
-//   };
-
-//   // Load the image first
-//   let imagebase64 = this.officerObj.base64Image;
-//   try {
-//     if (this.officerObj.image) {
-//       const modifiedImageUrl = appendCacheBuster(this.officerObj.image);
-      
-//       imagebase64 = await loadImageAsBase64(modifiedImageUrl);
-//       console.log('this is image base 64 one', imagebase64)
-//     }
-//   } catch (error) {
-//     console.error('Error loading image:', error);
-//   }
-
-
 
 
 

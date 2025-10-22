@@ -341,7 +341,8 @@
                         "{{officerObj.firstNameEnglish}} {{officerObj.lastNameEnglish}}"" (EMP ID -
                         "{{officerObj.empIdPrefix}}")
                         <span class="font-normal">from centre</span> <br>
-                        "{{officerObj.distributedCenterName}}"?
+                        <span *ngIf="officerObj.jobRole ==='Collection Officer'">"{{officerObj.regCode}}"?</span>
+                        <span *ngIf="officerObj.jobRole ==='Distribution Officer'">"{{officerObj.distributedCenterRegCode}}"?</span>
                     </p>
 
                     <p class="text-red-500 mb-6 italic">

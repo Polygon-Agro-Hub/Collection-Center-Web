@@ -277,6 +277,8 @@ export class ExpensesComponent implements OnInit {
   goBtn() {
     if (!this.fromDate || !this.toDate) {
       this.toastSrv.warning("Please select a date range to view the data");
+      this.hasData = false;
+      this.isDateFilterSet = false;
       return;
     }
   

@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReportServiceService } from '../../../services/Report-service/report-service.service';
@@ -20,6 +20,10 @@ import { CustomDatepickerComponent } from '../../../components/custom-datepicker
 
 })
 export class CollectionMonthlyReportComponent implements OnInit {
+
+  @ViewChild('fromDatePicker') fromDatePicker!: CustomDatepickerComponent;
+  @ViewChild('toDatePicker') toDatePicker!: CustomDatepickerComponent;
+
   officerDataObj: OfficerDetails = new OfficerDetails();
   farmerDataArr!: FarmerDetails[]
   officerId!: number;
@@ -98,6 +102,9 @@ export class CollectionMonthlyReportComponent implements OnInit {
         confirmButtonText: 'OK'
       });
     }
+
+    this.hasData = false;
+
   }
   
 

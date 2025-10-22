@@ -90,11 +90,7 @@ export class EditOfficerComponent implements OnInit {
 
   isJobRoleOpen = false;
 
-  jobRoles = [
-    'Collection Centre Manager',
-    'Collection Officer',
-    'Customer Officer'
-  ];
+  jobRoles: string[] = [];
 
   jobRoleInputTouched = false;
 
@@ -196,6 +192,8 @@ export class EditOfficerComponent implements OnInit {
     this.editOfficerId = this.route.snapshot.params['id'];
     this.centerId = this.route.snapshot.params['centerId'];
     this.fetchOffierById(this.editOfficerId);
+
+    this.setJobRoles();
     // this.UpdateEpmloyeIdCreate();
     this.setActiveTabFromRoute()
   }
@@ -211,6 +209,24 @@ export class EditOfficerComponent implements OnInit {
     }
     if (!insideDropdown2) {
       this.dropdownOpen2 = false;
+    }
+  }
+
+  setJobRoles() {
+    if (this.logingRole === 'Collection Centre Manager') {
+      // Only allow Collection Officer
+      this.jobRoles = ['Collection Officer'];
+    } 
+    else if (this.logingRole === 'Collection Centre Head') {
+      // Allow all roles
+      this.jobRoles = [
+        'Collection Centre Manager',
+        'Collection Officer'
+      ];
+    } 
+    else {
+      // Default (if needed)
+      this.jobRoles = [];
     }
   }
 
@@ -537,22 +553,47 @@ export class EditOfficerComponent implements OnInit {
           },
           (error: any) => {
             this.isLoading = false;
-            if (error.status === 409) {
-              this.toastSrv.error('NIC already exists for another collection officer');
-            } else if (error.status === 410) {
-              this.toastSrv.error('Email already exists for another collection officer');
-            } else if (error.status === 411) {
-              this.toastSrv.error('Mobile Number 01 already exists for another collection officer');
-            } else if (error.status === 412) {
-              this.toastSrv.error('Mobile Number 02 already exists for another collection officer');
-            } else if (error.status === 400) {
-              this.toastSrv.error('No file uploaded. Please attach required file(s).');
-            } else if (error.status === 500) {
-              this.toastSrv.error('Internal server error. Please try again later.');
-            } else {
-              this.toastSrv.error('An unexpected error occurred.');
+            let errorMessage = 'An unexpected error occurred';
+            let messages: string[] = [];
+
+            if (error.error && Array.isArray(error.error.errors)) {
+              messages = error.error.errors.map((err: string) => {
+                switch (err) {
+                  case 'NIC':
+                    return 'The NIC number is already registered.';
+                  case 'Email':
+                    return 'Email already exists.';
+                  case 'PhoneNumber01':
+                    return 'Mobile Number 1 already exists.';
+                  case 'PhoneNumber02':
+                    return 'Mobile Number 2 already exists.';
+                  default:
+                    return 'Validation error: ' + err;
+                }
+              });
             }
 
+            if (messages.length > 0) {
+              errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following Duplicate field issues:</p><ul class="list-disc pl-5">';
+              messages.forEach(m => {
+                errorMessage += `<li>${m}</li>`;
+              });
+              errorMessage += '</ul></div>';
+
+              Swal.fire({
+                icon: 'error',
+                title: 'Duplicate Information',
+                html: errorMessage,
+                confirmButtonText: 'OK',
+                customClass: {
+                  popup: 'bg-tileLight dark:bg-[#363636] text-black dark:text-white',
+                  title: 'font-semibold text-lg',
+                  htmlContainer: 'text-left',
+                  confirmButton: 'bg-red-500 dark:bg-red-500 hover:bg-red-600 dark:hover:bg-red-700',
+                },
+              });
+              return;
+            }
           }
         );
       } else if (this.logingRole === 'Collection Centre Head') {
@@ -587,21 +628,46 @@ export class EditOfficerComponent implements OnInit {
           },
           (error: any) => {
             this.isLoading = false;
+            let errorMessage = 'An unexpected error occurred';
+            let messages: string[] = [];
 
-            if (error.status === 409) {
-              this.toastSrv.error('NIC already exists for another collection officer');
-            } else if (error.status === 410) {
-              this.toastSrv.error('Email already exists for another collection officer');
-            } else if (error.status === 411) {
-              this.toastSrv.error('Mobile Number 01 already exists for another collection officer');
-            } else if (error.status === 412) {
-              this.toastSrv.error('Mobile Number 02 already exists for another collection officer');
-            }else if (error.status === 400) {
-              this.toastSrv.error('No file uploaded. Please attach required file(s).');
-            } else if (error.status === 500) {
-              this.toastSrv.error('Internal server error. Please try again later.');
-            } else {
-              this.toastSrv.error('An unexpected error occurred.');
+            if (error.error && Array.isArray(error.error.errors)) {
+              messages = error.error.errors.map((err: string) => {
+                switch (err) {
+                  case 'NIC':
+                    return 'The NIC number is already registered.';
+                  case 'Email':
+                    return 'Email already exists.';
+                  case 'PhoneNumber01':
+                    return 'Mobile Number 01 already exists.';
+                  case 'PhoneNumber02':
+                    return 'Mobile Number 02 already exists.';
+                  default:
+                    return 'Validation error: ' + err;
+                }
+              });
+            }
+
+            if (messages.length > 0) {
+              errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following Duplicate field issues:</p><ul class="list-disc pl-5">';
+              messages.forEach(m => {
+                errorMessage += `<li>${m}</li>`;
+              });
+              errorMessage += '</ul></div>';
+
+              Swal.fire({
+                icon: 'error',
+                title: 'Duplicate Information',
+                html: errorMessage,
+                confirmButtonText: 'OK',
+                customClass: {
+                  popup: 'bg-tileLight dark:bg-[#363636] text-black dark:text-white',
+                  title: 'font-semibold text-lg',
+                  htmlContainer: 'text-left',
+                  confirmButton: 'bg-red-500 dark:bg-red-500 hover:bg-red-600 dark:hover:bg-red-700',
+                },
+              });
+              return;
             }
           }
 
@@ -792,11 +858,196 @@ export class EditOfficerComponent implements OnInit {
     this.personalData.image = ''; // Clear the invalid image URL
   }
 
-  onSubmitForm(form: NgForm) {
+  onSubmitForm1(form: NgForm) {
+
+    console.log('personal data', this.personalData);
     form.form.markAllAsTouched();
     this.jobRoleInputTouched = true;
 
     this.validateLanguages();
+
+
+    const missingFields: string[] = [];
+
+  // Validation for pageOne fields
+  // if (!this.personalData.empType) {
+  //   missingFields.push('Staff Employee Type');
+  // }
+
+  if (!this.personalData.centerId && this.logingRole === 'Collection Centre Head') {
+    missingFields.push('Collection Centre Name is required');
+  }
+
+  if (!this.personalData.jobRole) {
+    missingFields.push('Job Role is required');
+  }
+
+  if (!this.personalData.irmId && this.personalData.jobRole === 'Collection Officer' && this.logingRole === 'Collection Centre Head') {
+    missingFields.push('Collection Centre Manager is required');
+  }
+
+  if (this.languagesRequired) {
+    missingFields.push('Please select at least one preferred language');
+  }
+
+  if (!this.personalData.employeeType) {
+    missingFields.push('Employee Type is required');
+  }
+
+  
+
+  // if (!this.personalData.companyId) {
+  //   missingFields.push('Company Name');
+  // }
+
+  if (!this.personalData.firstNameEnglish) {
+    missingFields.push('First Name (in English) is required');
+  }
+
+  if (!this.personalData.lastNameEnglish ) {
+    missingFields.push('Last Name (in English) is required');
+  }
+
+  if (!this.personalData.firstNameSinhala) {
+    missingFields.push('First Name (in Sinhala) is required');
+  }
+
+  if (!this.personalData.lastNameSinhala) {
+    missingFields.push('Last Name (in Sinhala) is required');
+  }
+
+  if (!this.personalData.firstNameTamil) {
+    missingFields.push('First Name (in Tamil) is required');
+  }
+
+  if (!this.personalData.lastNameTamil) {
+    missingFields.push('Last Name (in Tamil) is required');
+  }
+
+  if (!this.personalData.phoneNumber01) {
+    missingFields.push('Mobile Number - 1 is required');
+  } else if (!/^[0-9]{9}$/.test(this.personalData.phoneNumber01) || this.isPhoneInvalidMap['phone01']) {
+    missingFields.push('Mobile Number - 1 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+  }
+
+  if (this.personalData.phoneNumber02) {
+    if (!/^[0-9]{9}$/.test(this.personalData.phoneNumber02) || this.isPhoneInvalidMap['phone02']) {
+      missingFields.push('Mobile Number - 2 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+    }
+    if (this.personalData.phoneNumber01 === this.personalData.phoneNumber02) {
+      missingFields.push('Mobile Number - 2 - Must be different from Mobile Number - 1');
+    }
+  }
+
+  if (!this.personalData.nic) {
+    missingFields.push('NIC Number is required');
+  } else if (!/^(\d{9}[V]|\d{12})$/.test(this.personalData.nic)) {
+    missingFields.push('NIC Number - Must be 9 digits followed by V or 12 digits');
+  }
+
+  if (!this.personalData.email) {
+      missingFields.push('Email is required');
+    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(this.personalData.email)) {
+      missingFields.push('Email - Must be in a valid format (format: example&#64;domain.com)');
+    }
+
+    if (missingFields.length > 0) {
+      let errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following issues:</p><ul class="list-disc pl-5">';
+      missingFields.forEach((field) => {
+        errorMessage += `<li>${field}</li>`;
+      });
+      errorMessage += '</ul></div>';
+  
+      Swal.fire({
+        icon: 'error',
+        title: 'Missing or Invalid Information',
+        html: errorMessage,
+        confirmButtonText: 'OK',
+        customClass: {
+          popup: 'bg-white dark:bg-[#363636] text-[#534E4E] dark:text-textDark',
+          title: 'font-semibold text-lg',
+          htmlContainer: 'text-left',
+        },
+      });
+      return;
+    }
+  }
+
+  onSubmitForm2(form: NgForm) {
+
+    form.form.markAllAsTouched();
+
+    const missingFields: string[] = [];
+
+    if (!this.personalData.houseNumber) {
+      missingFields.push('House Number is required');
+    }
+  
+    if (!this.personalData.streetName) {
+      missingFields.push('Street Name is required');
+    }
+  
+    if (!this.personalData.city) {
+      missingFields.push('City is required');
+    }
+  
+    if (!this.personalData.district) {
+      missingFields.push('District is required');
+    }
+  
+    if (!this.personalData.province) {
+      missingFields.push('Province is required');
+    }
+  
+    if (!this.personalData.accHolderName) {
+      missingFields.push('Account Holder’s Name is required');
+    }
+  
+    if (!this.personalData.accNumber) {
+      missingFields.push('Account Number is required');
+    }
+  
+    if (!this.personalData.conformAccNumber) {
+      missingFields.push('Confirm Account Number is required');
+    } else if (this.personalData.accNumber !== this.personalData.conformAccNumber) {
+      missingFields.push('Confirm Account Number - Must match Account Number');
+    }
+  
+    if (!this.selectedBankId) {
+      missingFields.push('Bank Name is required');
+    }
+  
+    if (!this.selectedBranchId) {
+      missingFields.push('Branch Name is required');
+    }
+  
+    // Display errors if any
+    if (missingFields.length > 0) {
+      let errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following issues:</p><ul class="list-disc pl-5">';
+      missingFields.forEach((field) => {
+        errorMessage += `<li>${field}</li>`;
+      });
+      errorMessage += '</ul></div>';
+  
+      Swal.fire({
+        icon: 'error',
+        title: 'Missing or Invalid Information',
+        html: errorMessage,
+        confirmButtonText: 'OK',
+        customClass: {
+          popup: 'bg-white dark:bg-[#363636] text-[#534E4E] dark:text-textDark',
+          title: 'font-semibold text-lg',
+          htmlContainer: 'text-left',
+        },
+      });
+      return;
+    }
+
+    this.onSubmit(); 
+  }
+
+  onSubmitForm3(form: NgForm) {
+    form.form.markAllAsTouched();
   }
 
   onLicenseFrontImageSelected(event: any): void {
@@ -1158,6 +1409,19 @@ export class EditOfficerComponent implements OnInit {
       inputElement.value = trimmedValue;
     }
   }
+
+  onTrimInputAccountNumber(event: Event, modelRef: any, fieldName: string): void {
+    const inputElement = event.target as HTMLInputElement;
+  
+    if (inputElement) {
+      // Remove **all spaces** (not just trim)
+      const noSpaceValue = inputElement.value.replace(/\s+/g, '');
+  
+      // Update model and input
+      modelRef[fieldName] = noSpaceValue;
+      inputElement.value = noSpaceValue;
+    }
+  }
   
 
   onFormatInput(event: Event, modelRef: any, fieldName: string): void {
@@ -1238,7 +1502,7 @@ class Personal {
   branchName!: string;
   conformAccNumber!: string;
 
-  jobRole: string = 'Collection Officer'
+  jobRole!: string;
   empId!: string
   employeeType!: string;
 

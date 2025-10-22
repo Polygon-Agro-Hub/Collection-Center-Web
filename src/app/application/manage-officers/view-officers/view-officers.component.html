@@ -32,7 +32,6 @@
                     <select [(ngModel)]="selectRole" class="hidden" (change)="applyRoleFilters()">
                         <option value="Collection Centre Manager">Collection Centre Manager</option>
                         <option value="Collection Officer">Collection Officer</option>
-                        <option value="Customer Officer">Customer Officer</option>
                         
                     </select>
 
@@ -117,7 +116,7 @@
                     *ngIf="logingRole === 'Collection Centre Head'">
                     <app-searchable-dropdown
                         [items]="centerDropdownItems"
-                        placeholder="Centre..."
+                        placeholder="Centre"
                         searchPlaceholder="Search centre..."
                         [(ngModel)]="selectCenters"
                         (selectionChange)="onCenterSelectionChange($event)"
@@ -194,7 +193,9 @@
                         <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.firstNameEnglish}}</td>
                         <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.lastNameEnglish}}</td>
                         <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300"
-                            *ngIf="logingRole ==='Collection Centre Head'">{{item.centerName}}</td>
+                            *ngIf="logingRole === 'Collection Centre Head'">
+                          {{ item.centerName ? item.centerName : '—' }}
+                        </td>
                         <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.jobRole}}</td>
                         <td class="px-3 py-4 text-center">
                             <div class="flex justify-center items-center"

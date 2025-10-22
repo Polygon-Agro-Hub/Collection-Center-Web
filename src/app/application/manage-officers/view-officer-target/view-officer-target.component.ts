@@ -59,7 +59,9 @@ export class ViewOfficerTargetComponent implements OnInit {
 
   ngOnInit(): void {
     this.officerId = this.route.snapshot.params['officerId'];
-    this.centerName = this.route.snapshot.params['centerName'];
+    this.centerName = this.route.snapshot.params['newCenterName']
+
+    console.log('centerName', this.centerName)
     this.fetchSelectedOfficerTarget(this.officerId);
   }
 

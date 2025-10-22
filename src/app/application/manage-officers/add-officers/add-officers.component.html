@@ -7,7 +7,7 @@
 </div>
 
 <div *ngIf="!isLoading" class="mx-auto p-6 bg-white dark:bg-[#363636] rounded-lg shadow-mg">
-    <form #PageOneForm="ngForm" (ngSubmit)="onSubmitForm(PageOneForm)">
+    <form #PageOneForm="ngForm" (ngSubmit)="onSubmitForm1(PageOneForm)">
 
         <div *ngIf="selectedPage === 'pageOne'">
             <h2 class="text-xl mb-6 text-[#292929] dark:text-textDark font-semibold">Add Personal Details</h2>
@@ -19,9 +19,11 @@
 
                         <!-- Display default image if no file is selected -->
                         <div *ngIf="!selectedImage" (click)="triggerFileInput($event)"
-                            class="flex rounded-full border-solid border-2 justify-center items-center w-40 h-40">
-                            <i class="fa-regular fa-user text-6xl"></i>
+                            class="flex rounded-full border-solid border-2 justify-center items-center w-60 h-60 bg-gray-100">
+                            <i class="fa-regular fa-user text-8xl text-gray-400"></i>
                         </div>
+
+
 
                         <!-- Display the selected image if available -->
                         <img *ngIf="selectedImage" class="rounded-full w-40 h-40 object-cover" [src]="selectedImage"
@@ -521,11 +523,20 @@
 
                 </div>
 
-                <div class="flex justify-end m-10">
+                <div class="flex justify-end my-10 ml-10">
                     <button type="button"
                         class="px-6 py-2 bg-[#F6F7F9] border-gray-400 border-[2px] text-[#6B7D8C] rounded-lg mr-2"
                         (click)="onCancel()">Cancel</button>
-                    <button (click)="!PageOneForm.invalid && personalData.phoneNumber02 !== personalData.phoneNumber01  ? nextForm('pageTwo') :  nextForm('pageOne')" type="submit"
+                    <button (click)="
+                    !PageOneForm.invalid 
+                    && personalData.phoneNumber02 !== personalData.phoneNumber01 
+                    && personalData.jobRole 
+                    && !isPhoneInvalidMap['phone01'] 
+                    && ((personalData.phoneNumber02 && !isPhoneInvalidMap['phone02']) || !personalData.phoneNumber02)
+                      ? nextForm('pageTwo') 
+                      : nextForm('pageOne')
+                  " 
+                   type="submit"
                         class="px-6 py-1 bg-[#415CFF] text-white rounded-lg">Next</button>
                 </div>
 
@@ -534,7 +545,7 @@
         </div>
     </form>
 
-    <form #PageTwoForm="ngForm" (ngSubmit)="onSubmitForm(PageTwoForm)">
+    <form #PageTwoForm="ngForm" (ngSubmit)="onSubmitForm2(PageTwoForm)">
 
         <div *ngIf="selectedPage === 'pageTwo'">
 
@@ -578,10 +589,18 @@
                 </div>
 
                 <div>
-                    <label for="country"
-                        class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Country *</label>
-                    <input id="country" name="country" [(ngModel)]="personalData.country" readonly
-                        class="mt-1 block w-full p-2 border border-[#D9D9D9] hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
+                    <label for="district" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
+                        District *
+                    </label>
+                    
+                    <app-searchable-dropdown id="district" name="district" [items]="districtItems"
+                        [placeholder]="'Select a district'" [searchPlaceholder]="'Search districts...'"
+                        [(ngModel)]="personalData.district" #districtInput="ngModel"
+                        (ngModelChange)="onDistrictChange($event)"></app-searchable-dropdown>
+
+                    <div *ngIf="districtInput.touched && !personalData.district" class="text-red-500 text-sm mt-1">
+                        <div>District is required</div>
+                    </div>
                 </div>
 
                 <div>
@@ -597,27 +616,22 @@
                         </div>
                 </div>
 
-                <div>
-                    <label for="district" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
-                        District *
-                    </label>
-                    
-                    <app-searchable-dropdown id="district" name="district" [items]="districtItems"
-                        [placeholder]="'Select a district'" [searchPlaceholder]="'Search districts...'"
-                        [(ngModel)]="personalData.district" #districtInput="ngModel"
-                        (ngModelChange)="onDistrictChange($event)"></app-searchable-dropdown>
 
-                    <div *ngIf="districtInput.touched && !personalData.district" class="text-red-500 text-sm mt-1">
-                        <div>District is required</div>
-                    </div>
+                <div>
+                    <label for="country"
+                        class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Country *</label>
+                    <input id="country" name="country" [(ngModel)]="personalData.country" readonly
+                        class="mt-1 block w-full p-2 border border-[#D9D9D9] hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
                 </div>
+
+                
 
                 
             </div>
 
             <div class="mt-24">
                 <h2 class="text-xl mb-6 text-[#292929] dark:text-textDark font-semibold">Add Bank Details</h2>
-                <div class="pb-6 pl-8">
+                <div class="pb-6">
                     <label for="accHolderName"
                         class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Account
                         Holder’s Name *</label>
@@ -636,11 +650,11 @@
                     </div>
                 </div>
 
-                <div class="pb-6 pl-8">
+                <div class="pb-6">
                     <label for="accNumber" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Account
                         Number *</label>
                     <input type="number" id="accNumber" name="accNumber" [(ngModel)]="personalData.accNumber"
-                    (input)="onTrimInput($event, personalData, 'accNumber')"
+                    (input)="onTrimInputAccountNumber($event, personalData, 'accNumber')"
                         class="mt-1 block w-full p-2 border border-[#D9D9D9] hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                         #accNumberInput="ngModel" required pattern="^[a-zA-Z0-9]+$"/>
                     <div *ngIf="accNumberInput.touched && !personalData.accNumber" class="text-red-500 text-sm mt-1">
@@ -653,13 +667,13 @@
                     </div>
                 </div>
 
-                <div class="pb-6 pl-8">
+                <div class="pb-6">
                     <label for="accNumber" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Confirm
                         Account Number *</label>
                     <input type="number" id="conformAccNumber" name="conformAccNumber" [(ngModel)]="personalData.conformAccNumber"
                         class="mt-1 block w-full p-2 border border-[#D9D9D9] hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                         #conformAccNumberInput="ngModel" required pattern="^[a-zA-Z0-9]+$"
-                        (input)="onTrimInput($event, personalData, 'conformAccNumber')"/>
+                        (input)="onTrimInputAccountNumber($event, personalData, 'conformAccNumber')"/>
                     <div *ngIf="conformAccNumberInput.touched && !personalData.conformAccNumber"
                         class="text-red-500 text-sm mt-1">
                         <div>Confirm Account Number is required</div>
@@ -675,7 +689,7 @@
                     </div>
                 </div>
 
-                <div class="pb-6 pl-8">
+                <div class="pb-6">
                     <label for="bankDropdown" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
                         Bank Name *
                     </label>
@@ -690,7 +704,7 @@
                     </div>
                 </div>
 
-                <div class="pb-6 pl-8">
+                <div class="pb-6">
                     <label for="branchDropdown" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
                         Branch Name *
                     </label>
@@ -707,21 +721,20 @@
                 </div>
             </div>
 
-            <div class="flex justify-end m-10">
+            <div class="flex justify-end my-10 ml-10">
                 <button (click)="nextForm('pageOne')" type="button"
-                    class="px-6 py-2 bg-[#F6F7F9] border-[#95A1AC] border-[2px] text-[#6B7D8C] rounded-lg mr-2">Back</button>
-                <button type="submit" class="px-6 py-1 bg-[#415CFF] text-[#FFFFFF] rounded-lg"
-                    (click)="(!PageTwoForm.invalid && personalData.jobRole !== 'Driver') ? onSubmit() : (!PageTwoForm.invalid && personalData.jobRole === 'Driver') ? nextForm('pageThree') : nextForm('pageTwo')">
-                    <span *ngIf="personalData.jobRole ==='Driver'">Next</span>
-                    <span *ngIf="personalData.jobRole !=='Driver'">Sent to Approve</span>
+                    class="px-6 py-2 bg-[#F6F7F9] border-[#95A1AC] border-[2px] text-[#6B7D8C] rounded-lg mr-2">
+                    Back
                 </button>
-                <!-- <button type="submit" class="px-4 py-2 bg-[#3980C0] text-white rounded-md" (click)="onSubmit()">Sent to
-                        Approve</button> -->
+
+                <button type="submit" class="px-6 py-1 bg-[#415CFF] text-[#FFFFFF] rounded-lg">
+                    Sent to Approve
+                </button>
             </div>
         </div>
     </form>
 
-    <form #PageThreeForm="ngForm" (ngSubmit)="onSubmitForm(PageThreeForm)">
+    <form #PageThreeForm="ngForm" (ngSubmit)="onSubmitForm3(PageThreeForm)">
 
         <div *ngIf="selectedPage === 'pageThree'">
 

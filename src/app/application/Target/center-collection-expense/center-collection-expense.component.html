@@ -17,9 +17,10 @@
 
                 <div class="relative w-56 mr-10">
                     <app-custom-datepicker
-  [selectedDate]="selectedFromDate"
-  (dateChange)="onFromDateChange($event)"
-></app-custom-datepicker>
+                    #fromDatePicker
+                    [(selectedDate)]="selectedFromDate"
+                    (dateChange)="onFromDateChange($event)"
+                    ></app-custom-datepicker>
                     
                 </div>
 
@@ -29,7 +30,8 @@
 
                     <div class="relative w-56 mr-10">
                         <app-custom-datepicker
-      [selectedDate]="selectedToDate"
+                        #toDatePicker
+      [(selectedDate)]="selectedToDate"
       (dateChange)="onToDateChange($event)"
     ></app-custom-datepicker>
                     

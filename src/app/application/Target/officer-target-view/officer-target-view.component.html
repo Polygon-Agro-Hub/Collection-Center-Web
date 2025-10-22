@@ -8,30 +8,26 @@
 
 
 <div class="w-full px-10 py-7 bg-tileLight shadow-lg rounded-lg dark:bg-[#363636]">
+
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">
         <div>
             <label for="jobRole" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
                 Job Role
             </label>
-            <select id="jobRole" name="jobRole" placeholder="select" required [(ngModel)]="OfficerObj.jobRole"
-                class="form-control mt-1 block w-full p-2 text-[#030308] dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500">
-                <option disabled class="p-2 text-[#959595] italic dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]"
-                    value="">
-                    -- Select Job Role --
-                </option>
-                <option selected value="Collection Centre Manager"
-                    class="p-2 text-[#030308] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
-                    Collection Centre Manager
-                </option>
-                <option selected value="Collection Officer"
-                    class="p-2 text-[#030308] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
-                    Collection Officer
-                </option>
-                <option value="Customer Officer"
-                    class="p-2 text-[#030308] dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
-                    Customer Officer
-                </option>
-            </select>
+
+            <app-searchable-dropdown
+              [items]="jobRoleDropdownItems"
+              placeholder="--Select Job Role--"
+              searchPlaceholder="Search Job Roles..."
+              [(ngModel)]="OfficerObj.jobRole"
+              (selectionChange)="onJobRoleSelectionChange($event)"
+              [clearable]="true"
+              [showSelected]="true"
+              [disabled]="false"
+              class="block w-full mb-4"
+            ></app-searchable-dropdown>
+
+            
         </div>
 
 
@@ -43,7 +39,7 @@
                     <p *ngIf="OfficerObj.jobRole === ''">---</p>
                     <p *ngIf="OfficerObj.jobRole === 'Collection Centre Manager'">CCM</p>
                     <p *ngIf="OfficerObj.jobRole === 'Collection Officer'">COO</p>
-                    <p *ngIf="OfficerObj.jobRole === 'Customer Officer'">CUO</p>
+
                 </span>
                 <input type="text" name="officerId" [(ngModel)]="OfficerObj.officerId" placeholder="ex : 00122"
                     class="rounded-none rounded-e-lg bg-gray-50 border border-gray-300 text-gray-900 focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full text-sm pl-4  dark:bg-[#1D1D1F]  dark:placeholder-gray-400 dark:text-textDark dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -54,44 +50,45 @@
     <!-- <hr class="border-b-1 border-[#BDBDBD] my-5" /> -->
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">
-        <div>
+
+        
+
+        <div class="w-full">
             <label for="fromDate" class="block text-sm font-medium text-gray-700 dark:text-textDark">From</label>
-            <input id="fromDate" name="fromDate" type="date" [(ngModel)]="OfficerObj.fromDate" class="block w-full appearance-none text-textLight dark:text-textDark bg-white dark:bg-[#292929] px-3 py-2 rounded-xl focus:outline-none 
-                          border border-gray-300 dark:border-gray-600
-                          [color-scheme:light] dark:[color-scheme:dark]
-                          [&::-webkit-calendar-picker-indicator]:filter 
-                          [&::-webkit-calendar-picker-indicator]:cursor-pointer
-                          [&::-webkit-calendar-picker-indicator]:ml-1
-                          dark:[&::-webkit-calendar-picker-indicator]:invert
-                          [&::-webkit-datetime-edit]:text-gray-800
-                          dark:[&::-webkit-datetime-edit]:text-gray-200
-                          [&::-webkit-datetime-edit-fields-wrapper]:text-gray-800
-                          dark:[&::-webkit-datetime-edit-fields-wrapper]:text-gray-200" />
+
+            <div class="relative w-full">
+                <app-custom-datepicker 
+                    #fromDatePicker
+                    [placeholder]="'--Select Date--'"
+                    [(selectedDate)]="OfficerObj.fromDate"
+                    (dateChange)="checkFromDate($event)">
+                </app-custom-datepicker>
+            </div>
+            
         </div>
 
-        <div>
+        <div class="w-full">
             <label for="toDate" class="block text-sm font-medium text-gray-700 dark:text-textDark">TO</label>
-            <input id="toDate" name="toDate" type="date" [(ngModel)]="OfficerObj.toDate" (change)="checkToDate()" class="block w-full appearance-none text-textLight dark:text-textDark bg-white dark:bg-[#292929] px-3 py-2 rounded-xl focus:outline-none 
-                          border border-gray-300 dark:border-gray-600
-                          [color-scheme:light] dark:[color-scheme:dark]
-                          [&::-webkit-calendar-picker-indicator]:filter 
-                          [&::-webkit-calendar-picker-indicator]:cursor-pointer
-                          [&::-webkit-calendar-picker-indicator]:ml-1
-                          dark:[&::-webkit-calendar-picker-indicator]:invert
-                          [&::-webkit-datetime-edit]:text-gray-800
-                          dark:[&::-webkit-datetime-edit]:text-gray-200
-                          [&::-webkit-datetime-edit-fields-wrapper]:text-gray-800
-                          dark:[&::-webkit-datetime-edit-fields-wrapper]:text-gray-200" />
-        </div>
+
+            <div class="relative w-full">
+                <app-custom-datepicker 
+                    #toDatePicker
+                    [placeholder]="'--Select Date--'" 
+                    [selectedDate]="OfficerObj.toDate" 
+                    (dateChange)="checkToDate($event)">
+                </app-custom-datepicker>
+            </div>
+            
     </div>
 
-    <div class="flex flex-row justify-center items-center gap-12 my-10">
-        <button class="bg-[#415CFF] text-white rounded-lg shadow-md px-6 py-2" (click)="onSubmit()">Genarate</button>
-    </div>
+</div>
+
+<div class="flex flex-row justify-center items-center gap-12 mt-10 ">
+    <button class="bg-[#415CFF] text-white rounded-lg shadow-md px-6 py-2" (click)="onSubmit()">Genarate</button>
 </div>
 
 
-<div *ngIf="!hasData "
+<div *ngIf="!hasData && !isInitialDataSet "
     class="flex flex-col items-center w-full min-h-screen px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg mt-6">
     <p class="text-[#494949] my-6 dark:text-white">
         {{responseTitle}}
@@ -101,7 +98,7 @@
 
 
 
-<div *ngIf="hasData" class="w-full overflow-x-auto px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg mt-8">
+<div *ngIf="isInitialDataSet" class="w-full overflow-x-auto px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg mt-8">
 
     <div class="">
         <p class="font-semibold mb-1 text-lg dark:text-white whitespace-nowrap">
@@ -206,13 +203,13 @@
 
     </div>
 
-    <div *ngIf="!hasData" class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6 ">
+    <div *ngIf="!hasData && isInitialDataSet" class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6 ">
         <p class="text-[#494949] my-6 dark:text-textDark">{{responseTitle}}</p>
         <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
     </div>
 
 
-    <div *ngIf="hasData" class=" mr-5 min-w-max border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+    <div *ngIf="hasData && isInitialDataSet" class=" mr-5 min-w-max border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
         <table class="w-full min-w-max divide-y-2 overflow-hidden">
             <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
                 <tr>

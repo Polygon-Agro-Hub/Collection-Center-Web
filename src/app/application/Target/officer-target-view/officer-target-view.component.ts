@@ -51,28 +51,10 @@ export class OfficerTargetViewComponent {
     this.onSubmit()
   }
 
-  get jobRoleDropdownItems() {
-    return [
-      { value: 'Collection Centre Manager', label: 'Collection Centre Manager', disabled: false },
-      { value: 'Collection Officer', label: 'Collection Officer', disabled: false },
-    ];
-  }
-
-  // 5. Add selection change handler
-  onJobRoleSelectionChange(selectedValue: string) {
-    this.OfficerObj.jobRole = selectedValue || '';
-    // Add any additional logic you need when category changes
-    console.log('Job Role selected:', selectedValue);
-  }
-
   fetchAllOfficers(page: number = this.page, limit: number = this.itemsPerPage, status: string = this.selectStatus, validity: string = this.selectValidity, searchText: string = this.searchText) {
     this.isLoading = true;
-    if (this.OfficerObj.jobRole === 'Collection Centre Manager') {
-      this.OfficerObj.empId = 'CCM' + this.OfficerObj.officerId;
-    } else if (this.OfficerObj.jobRole === 'Collection Officer') {
+    if (this.OfficerObj.jobRole === 'Collection Officer') {
       this.OfficerObj.empId = 'COO' + this.OfficerObj.officerId;
-    } else if (this.OfficerObj.jobRole === 'Customer Officer') {
-      this.OfficerObj.empId = 'CUO' + this.OfficerObj.officerId;
     }
 
     this.TargetSrv.getOfficerAvailabeTarget(this.OfficerObj, page, limit, status, validity, searchText).subscribe(
@@ -119,12 +101,8 @@ export class OfficerTargetViewComponent {
     this.isInitialDataSet = true;
 
 
-    if (this.OfficerObj.jobRole === 'Collection Centre Manager') {
-      this.OfficerObj.empId = 'CCM' + this.OfficerObj.officerId;
-    } else if (this.OfficerObj.jobRole === 'Collection Officer') {
+    if (this.OfficerObj.jobRole === 'Collection Officer') {
       this.OfficerObj.empId = 'COO' + this.OfficerObj.officerId;
-    } else if (this.OfficerObj.jobRole === 'Customer Officer') {
-      this.OfficerObj.empId = 'CUO' + this.OfficerObj.officerId;
     }
 
     this.searchText = '';
@@ -272,7 +250,7 @@ export class OfficerTargetViewComponent {
 }
 
 class Officer {
-  jobRole: string = '';
+  jobRole: string = 'Collection Officer';
   officerId: string = '';
   empId: string = '';
   toDate!: string;

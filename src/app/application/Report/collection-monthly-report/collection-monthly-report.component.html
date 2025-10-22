@@ -9,10 +9,10 @@
     </div>
 
     <div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg">
-        <div class="flex flex-row items-center justify-center">
+        <div class="flex flex-row items-center justify-center w-full">
             <p class="text-xl font-semibold text-[#292929] mx-3 dark:text-white">From :</p>
         
-            <div class="mr-10">
+            <div class="mr-10 w-56">
                 <app-custom-datepicker 
                     #fromDatePicker
                     [selectedDate]="startDate" 
@@ -23,7 +23,7 @@
         
             <p class="text-xl font-semibold text-[#292929] mx-3 dark:text-white">To :</p>
         
-            <div class="mr-6">
+            <div class="mr-6 w-56">
                 <app-custom-datepicker 
                     #toDatePicker
                     [selectedDate]="endDate" 

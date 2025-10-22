@@ -58,7 +58,7 @@ export class CentersDashbordComponent implements OnInit {
       this.expencePrecentage = res.difExpences
       this.isLoading = false;
 
-      if (this.resentCollectionArr.length >= 0) {
+      if (this.resentCollectionArr.length > 0) {
         this.hasData = true;
       } else {
         this.hasData = false;

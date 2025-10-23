@@ -10,25 +10,6 @@
 <div class="w-full px-10 py-7 bg-tileLight shadow-lg rounded-lg dark:bg-[#363636]">
 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">
-        <!-- <div>
-            <label for="jobRole" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
-                Job Role
-            </label>
-
-            <app-searchable-dropdown
-              [items]="jobRoleDropdownItems"
-              placeholder="--Select Job Role--"
-              searchPlaceholder="Search Job Roles..."
-              [(ngModel)]="OfficerObj.jobRole"
-              (selectionChange)="onJobRoleSelectionChange($event)"
-              [clearable]="true"
-              [showSelected]="true"
-              [disabled]="false"
-              class="block w-full mb-4"
-            ></app-searchable-dropdown>
-
-            
-        </div> -->
 
 
         <div>
@@ -121,15 +102,14 @@
                     <select [(ngModel)]="selectStatus" (change)="applyStatusFilters()"
                         class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer">
                         <option value="" selected disabled>Status</option>
-                        <option value="Pending"
-                            class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">
-                            Pending</option>
-                        <option value="Completed"
-                            class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">
-                            Completed</option>
-                        <option value="Exceeded"
-                            class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">
-                            Exceeded</option>
+                        <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                        value="Pending">Pending</option>
+                    <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                        value="Completed">Completed</option>
+                    <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                        value="Exceeded">Exceeded</option>
+                    <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                        value="Extra">Extra</option>
                     </select>
 
                     <!-- Down arrow icon -->
@@ -158,6 +138,9 @@
                         <option value="Valid"
                             class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">
                             Active</option>
+                        <option value="Unassigned"
+                            class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">
+                            Unassigned</option>
 
                     </select>
 
@@ -240,21 +223,47 @@
                     </td>
                     <td class="px-6 py-4 text-black dark:text-gray-300 ">{{item.complete | number: '1.2-2' }}</td>
                     <td class="px-6 py-4 text-black-900 dark:text-gray-300 ">{{item.date}}</td>
-                    <td class="px-6 py-4 text-black-900 dark:text-gray-300">
-                        <span *ngIf="item.target === item.complete"
-                            class="bg-[#B7FFBE] rounded-lg text-[#02BB3D] px-4 py-2">Completed</span>
-                        <span *ngIf="item.target > item.complete"
-                            class="bg-[#F8FFA6] rounded-lg text-[#A8A100] px-6 py-2">Pending</span>
-                        <span *ngIf="item.target < item.complete"
-                            class="bg-[#C8E0FF] rounded-lg text-[#415CFF] px-4 py-2">Exceeded</span>
-                    </td>
-                    <td class="px-6 py-4">
-                        <span *ngIf="item.validity === 'Valid'"
-                            class="bg-[#B7FFBE] rounded-lg text-[#02BB3D] px-3 py-2">Active</span>
-                        <span *ngIf="item.validity === 'Expired'"
-                            class="bg-[#D9D9D9] rounded-lg text-[#8A8A8A] px-3 py-2">Expired</span>
+                    <td class="px-6 py-4 text-gray-[#000000] font-semibold dark:text-gray-300">
+                        <div class="flex justify-center">
+                          <span *ngIf="item.status === 'Pending'"
+                            class="bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-8 py-1 h-full flex items-center">
+                            Pending
+                          </span>
+                          <span *ngIf="item.status === 'Exceeded'"
+                            class="bg-[#C8E0FF] text-[#415CFF] text-center rounded-lg px-6 py-1 h-full flex items-center">
+                            Exceeded
+                          </span>
+                          <span *ngIf="item.status === 'Completed'"
+                            class="bg-[#c0f8ac] text-[#30911a] text-center rounded-lg px-4 py-1 h-full flex items-center">
+                            Completed
+                          </span>
 
-                    </td>
+                          <span *ngIf="item.status === 'Extra'"
+                            class="bg-[#FFE4C9] text-[#CD6700] text-center rounded-lg px-10 py-1 h-full flex items-center">
+                            Extra
+                          </span>
+
+                        
+
+                        </div>
+                      </td>
+                      <td class="px-6 py-4 text-gray-[#000000] font-semibold dark:text-gray-300">
+                        <div class="flex justify-center">
+                          <span *ngIf="item.validity === 'Unassigned'"
+                            class="bg-[#B7F4FF] text-[#008CA2] text-center rounded-lg px-8 py-1 h-full flex items-center">
+                            Unassigned
+                          </span>
+                          <span *ngIf="item.validity === 'Expired'"
+                            class="bg-[#D9D9D9] text-[#8A8A8A] text-center rounded-lg px-7 py-1 h-full flex items-center">
+                            Expired
+                          </span>
+                          <span *ngIf="item.validity === 'Active'"
+                            class="bg-[#c0f8ac] text-[#30911a] text-center rounded-lg px-8 py-1 h-full flex items-center">
+                            Active
+                          </span>                            
+
+                        </div>
+                      </td>
                     <td class="px-6 py-4">
                         <!-- <i class="fa-solid fa-pen-to-square text-xl cursor-pointer"
                             (click)="item.validity === 'Valid' && editOfficerTarget(item.id, OfficerObj.toDate, OfficerObj.fromDate)"

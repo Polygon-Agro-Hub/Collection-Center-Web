@@ -342,7 +342,7 @@ export class TargetService {
       Authorization: `Bearer ${this.token}`
     });
 
-    console.log('page', page, 'limit', limit)
+    console.log('page', page, 'limit', limit, 'status', status, 'validity', validity)
     console.log('data', data);
 
     let url = `${this.apiUrl}/officer-target-check-available?page=${page}&limit=${limit}`;

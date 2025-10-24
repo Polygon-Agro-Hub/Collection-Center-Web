@@ -266,5 +266,6 @@ class Target {
   complete!: number
   date!: string
   validity!: string
+  status!: string
 }
 

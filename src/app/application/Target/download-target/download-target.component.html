@@ -97,30 +97,47 @@
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300 text-center">
                             {{ item.complete != null ? (item.complete | number: '1.2-2') : '-' }}
                         </td>
-                        <td class="px-6 py-4 text-center">
-                            <span *ngIf="item.status === 'Pending'"
-                                class="inline-block bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-4 py-1 w-32">
+                        <td class="px-6 py-4 text-gray-[#000000] font-semibold dark:text-gray-300">
+                            <div class="flex justify-center">
+                              <span *ngIf="item.status === 'Pending'"
+                                class="bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-8 py-1 h-full flex items-center">
                                 Pending
-                            </span>
-                            <span *ngIf="item.status === 'Completed'"
-                                class="inline-block bg-[#B7FFBE] text-[#02BB3D] text-center rounded-lg px-4 py-1 w-32">
-                                Completed
-                            </span>
-                            <span *ngIf="item.status === 'Exceeded'"
-                                class="inline-block bg-[#C8E0FF] text-[#415CFF] text-center rounded-lg px-4 py-1 w-32">
+                              </span>
+                              <span *ngIf="item.status === 'Exceeded'"
+                                class="bg-[#C8E0FF] text-[#415CFF] text-center rounded-lg px-6 py-1 h-full flex items-center">
                                 Exceeded
-                            </span>
-                        </td>
-                        <td class="px-6 py-4 text-center">
-                            <span *ngIf="item.validity === 'Expired'"
-                                class="inline-block bg-[#D9D9D9] text-[#8A8A8A] text-center rounded-lg px-4 py-1 w-24">
+                              </span>
+                              <span *ngIf="item.status === 'Completed'"
+                                class="bg-[#c0f8ac] text-[#30911a] text-center rounded-lg px-4 py-1 h-full flex items-center">
+                                Completed
+                              </span>
+
+                              <span *ngIf="item.status === 'Extra'"
+                                class="bg-[#FFE4C9] text-[#CD6700] text-center rounded-lg px-10 py-1 h-full flex items-center">
+                                Extra
+                              </span>
+
+                            
+
+                            </div>
+                          </td>
+                          <td class="px-6 py-4 text-gray-[#000000] font-semibold dark:text-gray-300">
+                            <div class="flex justify-center">
+                              <span *ngIf="item.validity === 'Unassigned'"
+                                class="bg-[#B7F4FF] text-[#008CA2] text-center rounded-lg px-8 py-1 h-full flex items-center">
+                                Unassigned
+                              </span>
+                              <span *ngIf="item.validity === 'Expired'"
+                                class="bg-[#D9D9D9] text-[#8A8A8A] text-center rounded-lg px-7 py-1 h-full flex items-center">
                                 Expired
-                            </span>
-                            <span *ngIf="item.validity === 'Active'"
-                                class="inline-block bg-[#B7FFBE] text-[#02BB3D] text-center rounded-lg px-4 py-1 w-24">
+                              </span>
+                              <span *ngIf="item.validity === 'Active'"
+                                class="bg-[#c0f8ac] text-[#30911a] text-center rounded-lg px-8 py-1 h-full flex items-center">
                                 Active
-                            </span>
-                        </td>
+                              </span>                            
+
+                            </div>
+                          </td>
                     </tr>
                 </tbody>
             </table>

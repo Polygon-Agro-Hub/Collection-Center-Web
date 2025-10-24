@@ -138,8 +138,8 @@ export class DownloadTargetComponent {
       'Crop Name': item.cropNameEnglish,
       'Variety Name': item.varietyNameEnglish,
       Grade: item.grade,
-      'Target (kg)': item.target,
-      'Completed (kg)': item.complete ?? '-',  // Handle null/undefined
+      'Target (kg)': item.target ? Number(item.target).toFixed(2) : '-',
+      'Completed (kg)': item.complete ? Number(item.complete).toFixed(2) : '-',
       Status: item.status,
       Validity: item.validity,
     }));

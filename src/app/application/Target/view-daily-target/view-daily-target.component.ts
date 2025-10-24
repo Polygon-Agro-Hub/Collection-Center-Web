@@ -17,6 +17,7 @@ export class ViewDailyTargetComponent implements OnInit {
 
 
   targetArr!: DailyTargets[];
+  allTargets!: DailyTargets[];
   assignTargetArr!: AssignDailyTarget[];
   searchText: string = '';
   selectStatus: string = '';
@@ -42,7 +43,7 @@ export class ViewDailyTargetComponent implements OnInit {
   isLoading: boolean = false;
 
   isStatusDropdownOpen = false;
-  statusDropdownOptions = ['Pending', 'Completed'];
+  statusDropdownOptions = ['Pending', 'Completed', 'Exceeded', 'Extra'];
 
   toggleStatusDropdown() {
     this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
@@ -112,7 +113,9 @@ export class ViewDailyTargetComponent implements OnInit {
       (res) => {
         console.log('fetching');
         console.log(this.hasData);
-        this.targetArr = res.items;
+        // this.targetArr = res.items;
+        this.allTargets = res.items;
+        this.targetArr = [...this.allTargets];  
         this.totalItems = res.totalPages
         if (res.items.length > 0) {
           this.hasData = true;
@@ -137,12 +140,15 @@ export class ViewDailyTargetComponent implements OnInit {
   }
 
   filterStatus() {
+
     if (!this.selectStatus) {
-      this.fetchAllTarget();  // Reset and fetch all targets if no filter is selected
+      // this.fetchAllTarget();  // Reset and fetch all targets if no filter is selected
+      this.targetArr = [...this.allTargets];
       return;
     }
 
-    this.targetArr = this.targetArr.filter(item => item.status === this.selectStatus);
+    this.targetArr = this.allTargets.filter(item => item.status === this.selectStatus);
+    
     if (this.targetArr.length > 0) {
       this.hasData = true;
     } else {

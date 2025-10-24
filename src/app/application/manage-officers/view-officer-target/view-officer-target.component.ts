@@ -33,7 +33,7 @@ export class ViewOfficerTargetComponent implements OnInit {
   isDownloading = false;
 
   isStatusDropdownOpen = false;
-  statusDropdownOptions = ['Pending', 'Completed', 'Exceeded'];
+  statusDropdownOptions = ['Pending', 'Completed', 'Exceeded', 'Extra'];
 
   toggleStatusDropdown() {
     this.isStatusDropdownOpen = !this.isStatusDropdownOpen;

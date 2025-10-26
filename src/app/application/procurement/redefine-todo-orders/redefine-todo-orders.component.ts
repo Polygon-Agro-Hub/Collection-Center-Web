@@ -30,8 +30,8 @@ export class RedefineTodoOrdersComponent implements OnInit {
   totalItems: number = 0;
 
   statusFilter: string = '';
-  dateFilter: Date | null = null; // Changed to Date type for p-calendar
-  dateFilter1: Date | null = null; // Changed to Date type for p-calendar
+  dateFilter:string = ''; // Changed to Date type for p-calendar
+  dateFilter1:string = ''; // Changed to Date type for p-calendar
   deliveryDateFilter: string = '';
   searchTerm: string = '';
   hasData: boolean = false;
@@ -59,8 +59,8 @@ export class RedefineTodoOrdersComponent implements OnInit {
 
   fetchOrders(
     ordstatus: string = this.statusFilter,
-    dateFilter: string = this.dateFilter ? this.formatDate(this.dateFilter) : '',
-    dateFilter1: string = this.dateFilter1 ? this.formatDate(this.dateFilter1) : '',
+    dateFilter: string = this.dateFilter,
+    dateFilter1: string = this.dateFilter1,
     searchText: string = this.searchTerm
   ): void {
     this.isLoading = true;
@@ -114,9 +114,15 @@ export class RedefineTodoOrdersComponent implements OnInit {
     return `${year}-${month}-${day}`;
   }
 
-  onSearch(): void {
+  onSearch() {
     this.page = 1;
     this.fetchOrders();
+  }
+
+  offSearch() {
+    this.searchTerm = '';
+    this.fetchOrders();
+
   }
 
   onClearSearch(): void {
@@ -130,22 +136,55 @@ export class RedefineTodoOrdersComponent implements OnInit {
     this.fetchOrders();
   }
 
-  onDateSelect(): void {
-    this.page = 1;
+  onDateChange(newDate: string | Date | null) {
+    console.log('newDate', newDate);
+  
+    let dateString = '';
+  
+    if (newDate instanceof Date) {
+      // Convert Date object to "YYYY-MM-DD" format
+      dateString = newDate.toISOString().split('T')[0];
+    } else if (typeof newDate === 'string') {
+      // Already a string
+      dateString = newDate;
+    }
+  
+    this.dateFilter1 = dateString; // ✅ assign as string
     this.fetchOrders();
   }
 
-  onDateClear(): void {
-    this.dateFilter1 = null;
-    this.page = 1;
+  onDateChange2(newDate: string | Date | null) {
+    console.log('newDate', newDate);
+  
+    let dateString = '';
+  
+    if (newDate instanceof Date) {
+      // Convert Date object to "YYYY-MM-DD" format
+      dateString = newDate.toISOString().split('T')[0];
+    } else if (typeof newDate === 'string') {
+      // Already a string
+      dateString = newDate;
+    }
+  
+    this.dateFilter = dateString; // ✅ assign as string
     this.fetchOrders();
   }
+  // onDateSelect(): void {
+  //   this.page = 1;
+  //   this.fetchOrders();
+  // }
 
-  onDateFilterClear(): void {
-    this.dateFilter = null;
-    this.page = 1;
-    this.fetchOrders();
-  }
+  // onDateClear(): void {
+  //   this.dateFilter1 = null;
+  //   this.page = 1;
+  //   this.fetchOrders();
+  // }
+
+  // onDateFilterClear(): void {
+  //   this.dateFilter = null;
+  //   this.page = 1;
+  //   this.fetchOrders();
+  // }
 
   onPageChange(event: number): void {
     this.page = event;

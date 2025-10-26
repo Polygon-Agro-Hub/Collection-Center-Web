@@ -8,6 +8,7 @@ import { FormsModule } from '@angular/forms';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { DropdownModule } from 'primeng/dropdown';
 import { ProcurementsService } from '../../../services/Procurement-service/procurements.service';
+import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
 
 interface AdditionalItem {
   id: number;
@@ -59,7 +60,7 @@ interface PackageItem {
 @Component({
   selector: 'app-to-do-redefine-premade-orders',
   standalone: true,
-  imports: [CommonModule, FormsModule, LoadingSpinnerComponent, DropdownModule],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent, DropdownModule, SerchableDropdownComponent],
   templateUrl: './to-do-redefine-premade-orders.component.html',
   styleUrl: './to-do-redefine-premade-orders.component.css'
 })
@@ -250,6 +251,32 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
       }
     );
   }
+
+  // Transform marketplace items to dropdown format
+  getMarketplaceDropdownItems() {
+    return this.marketplaceItems.map(item => ({
+      value: item.id.toString(),
+      label: item.displayName,
+      disabled: item.isExcluded || false
+    }));
+  }
+  
+  // Get the string value for the dropdown
+  getProductValue(item: any): string {
+    return item.productId ? item.productId.toString() : '';
+  }
+  
+  // Handle product selection change
+  onProductSelectionChange(selectedValue: string, item: any) {
+    // Convert string back to number if needed
+    item.productId = selectedValue ? parseInt(selectedValue, 10) : null;
+    
+    // Call your existing calculatePrice method
+    this.calculatePrice(item);
+    
+    console.log('Product selected:', selectedValue, 'for item:', item);
+  }
+
 
 
   calculatePrice(item: OrderItem): void {
@@ -721,6 +748,12 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
     this.selectCategoryId = ''; // Clear the dropdown selection
     this.closeAddNewItemPopUp(); // Close the popup
   }
+
+  navigateToProdurement() {
+    this.router.navigate(['/procurement']);
+  }
+
+  
 
 
 }

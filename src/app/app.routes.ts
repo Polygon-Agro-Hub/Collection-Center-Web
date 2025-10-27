@@ -69,6 +69,10 @@ import { CchPriceRequestComponent } from './application/Price-List/cch-price-req
 import { CchCenterPriceListComponent } from './application/Price-List/cch-center-price-list/cch-center-price-list.component';
 import { pendingPricelistUpdateCchGuard } from './guards/pending-pricelist-update-cch.guard';
 import { AssignCitiesComponent } from './application/Distributed-Center/Centres/assign-cities/assign-cities.component';
+import { ProcurementDashboardComponent } from './application/procurement/procurement-dashboard/procurement-dashboard.component';
+import { RedefineOrdersComponent } from './application/procurement/redefine-orders/redefine-orders.component';
+import { ToDoRedefinePremadeOrdersComponent } from './application/procurement/to-do-redefine-premade-orders/to-do-redefine-premade-orders.component';
+import { SentToDispatchPremadeOrdersComponent } from './application/procurement/sent-to-dispatch-premade-orders/sent-to-dispatch-premade-orders.component';
 
 export const routes: Routes = [
     {
@@ -199,6 +203,34 @@ export const routes: Routes = [
                         component: FarmerReportInvoiceComponent
                     },
 
+
+                ]
+            },
+
+            {
+                path: 'procurement',
+                canActivate:[RoleGuardService],
+                data: { roles: ['Collection Centre Head'] },
+                children: [
+
+                    {
+                        path: '',
+                        component: ProcurementDashboardComponent
+                    },
+                    {
+                        path: 'redefine-orders',
+                        component: RedefineOrdersComponent
+                    },
+
+                    {
+                        path: 'todo-redefine-premade-orders',
+                        component: ToDoRedefinePremadeOrdersComponent
+                    },
+
+                    {
+                        path: 'view-dispatched-define-orders',
+                        component: SentToDispatchPremadeOrdersComponent
+                    },
 
                 ]
             },

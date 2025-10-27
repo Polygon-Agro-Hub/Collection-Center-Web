@@ -1,0 +1,43 @@
+<app-loading-spinner *ngIf="isLoading"/>
+
+<div *ngIf="!isLoading">
+
+    <div class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
+        <p onclick="history.back()">Procurement</p>
+        <!-- <p onclick="history.back()">Officer Reports</p> -->
+        <p>Redefine Orders</p>
+        <p *ngIf="isSelectSentToDispatch">Sent To Dispatch</p>
+
+        <!-- Show when isSelectExpenses is true -->
+        <p *ngIf="isSelectToDo">To Do</p>
+    </div>
+
+    <div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg mt-5">
+        <div class="flex flex-row justify-between items-center">
+            <div class="flex flex-row gap-6">
+                <div class="flex flex-row items-center gap-2 border-[2px] rounded-2xl px-4 py-2 cursor-pointer dark:text-textDark dark:bg-[#292929]"
+                    [ngClass]="{'text-[#415CFF] border-[rgb(65,92,255)]': isSelectToDo}" (click)="selectToDo()">
+                    <i *ngIf="isSelectToDo" class="fa-solid fa-check"></i>
+                    <p>To Do</p>
+                </div>
+
+                <div class="flex flex-row items-center gap-2 border-[2px] rounded-2xl px-4 py-2 cursor-pointer dark:text-textDark dark:bg-[#292929]"
+                    [ngClass]="{'text-[#415CFF] border-[#415CFF]': isSelectSentToDispatch}" (click)="selectSentToDispatch()">
+                    <i *ngIf="isSelectSentToDispatch" class="fa-solid fa-check"></i>
+                    <p>Sent To Dispatch</p>
+                </div>
+            </div>
+
+            <!-- <button class="bg-[#415CFF] text-white font-semibold px-4 py-2 rounded-lg" (click)="openAddComplaint()">Add
+                Complaint</button> -->
+
+        </div>
+
+        <hr class="my-8 border-[1px] border-[#7F7F7F]" />
+
+        <app-redefine-todo-orders *ngIf="isSelectToDo" />
+
+        <app-redefine-sent-to-dispatch-orders *ngIf="isSelectSentToDispatch" />
+    </div>
+    
+</div>

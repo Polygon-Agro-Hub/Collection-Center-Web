@@ -65,6 +65,17 @@ export const MENU_ITEMS = [
     permission: ['Collection Centre Manager', 'Collection Centre Head'],
 
   },
+
+  {
+    id: 21,
+    key: 'procurement',
+    path: '/procurement',
+    label: 'procurement',
+    icon: 'fas fa-user-cog',
+    permission: ['Collection Centre Head'],
+
+  },
+
   {
     id: 8,
     key: 'manage-officers',

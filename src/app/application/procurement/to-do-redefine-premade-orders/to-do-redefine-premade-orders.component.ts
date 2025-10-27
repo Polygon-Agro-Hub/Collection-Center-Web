@@ -702,7 +702,7 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
       confirmButtonText: 'Yes, clear it!',
       cancelButtonText: 'Cancel',
       customClass: {
-        popup: 'bg-tileLight dark:bg-tileBlack text-black dark:text-white',
+        popup: 'bg-tileLight dark:bg-[#363636] text-black dark:text-white',
         title: 'font-semibold',
       },
     }).then((result) => {
@@ -721,14 +721,14 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
     Swal.fire({
       title: 'Send to Dispatch',
       text: 'Are you sure you want to send this order to dispatch?',
-      icon: 'question',
+      icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#3980C0',
       cancelButtonColor: '#74788D',
       confirmButtonText: 'Yes, send to dispatch!',
       cancelButtonText: 'Cancel',
       customClass: {
-        popup: 'bg-tileLight dark:bg-tileBlack text-black dark:text-white',
+        popup: 'bg-tileLight dark:bg-[#363636] text-black dark:text-white',
         title: 'font-semibold',
       },
     }).then((result) => {

@@ -753,6 +753,21 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
     this.router.navigate(['/procurement']);
   }
 
+  get categoryDropdownItems() {
+    return this.categories.map(cat => ({
+      value: cat.id.toString(),
+      label: cat.typeName,
+      disabled: false
+    }));
+  }
+
+  // 5. Add selection change handler
+  onCategorySelectionChange(selectedValue: string) {
+    this.selectCategoryId = selectedValue || '';
+    // Add any additional logic you need when category changes
+    console.log('Category selected:', selectedValue);
+  }
+
   
 
 

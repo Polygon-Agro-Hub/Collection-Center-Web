@@ -29,6 +29,7 @@ export class SerchableDropdownComponent {
   @Input() clearable: boolean = true;
   @Input() showSelected: boolean = true;
   @Output() selectionChange = new EventEmitter<any>();
+  @Input() customStyles: string = '';
 
   isOpen: boolean = false;
   searchTerm: string = '';

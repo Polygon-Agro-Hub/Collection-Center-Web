@@ -40,7 +40,7 @@ export class ProcurementDashboardComponent {
 
   navigateToAllRecieved() {
     if (this.isAllRecievedClicked) {
-      this.router.navigate(['procurement/officer-reports']);
+      this.router.navigate(['procurement/view-recieved-orders']);
     }
   }
 

@@ -71,7 +71,7 @@ export const MENU_ITEMS = [
     key: 'procurement',
     path: '/procurement',
     label: 'procurement',
-    icon: 'fas fa-user-cog',
+    icon: 'fa-solid fa-box-open',
     permission: ['Collection Centre Head'],
 
   },

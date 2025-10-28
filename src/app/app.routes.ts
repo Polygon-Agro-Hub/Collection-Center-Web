@@ -73,6 +73,7 @@ import { ProcurementDashboardComponent } from './application/procurement/procure
 import { RedefineOrdersComponent } from './application/procurement/redefine-orders/redefine-orders.component';
 import { ToDoRedefinePremadeOrdersComponent } from './application/procurement/to-do-redefine-premade-orders/to-do-redefine-premade-orders.component';
 import { SentToDispatchPremadeOrdersComponent } from './application/procurement/sent-to-dispatch-premade-orders/sent-to-dispatch-premade-orders.component';
+import { RecievedOrdersComponent } from './application/procurement/recieved-orders/recieved-orders.component';
 
 export const routes: Routes = [
     {
@@ -230,6 +231,11 @@ export const routes: Routes = [
                     {
                         path: 'view-dispatched-define-orders',
                         component: SentToDispatchPremadeOrdersComponent
+                    },
+
+                    {
+                        path: 'view-recieved-orders',
+                        component: RecievedOrdersComponent
                     },
 
                 ]

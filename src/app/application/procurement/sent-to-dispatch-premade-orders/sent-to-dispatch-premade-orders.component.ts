@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { ProcurementsService } from '../../../services/Procurement-service/procurements.service';
@@ -72,7 +72,8 @@ export class SentToDispatchPremadeOrdersComponent implements OnInit {
 
   constructor(
     private procurementService: ProcurementsService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router
   ) { }
 
   goBack() {
@@ -432,6 +433,10 @@ export class SentToDispatchPremadeOrdersComponent implements OnInit {
 
   openExcludedItemsModal() {
     this.showExcludedItemsModal = true;
+  }
+
+  navigateToProdurement() {
+    this.router.navigate(['/procurement']);
   }
 }
 

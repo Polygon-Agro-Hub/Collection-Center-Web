@@ -135,8 +135,9 @@ export class AssignCenterTargetComponent implements OnInit {
       grade: grade,
       varietyId: item.varietyId
     }
-
+    console.log('data', data);
     this.TargetSrv.updateTargetQty(data).subscribe(
+      
       (res) => {
         if (res.status) {
           this.toastSrv.success(res.message)

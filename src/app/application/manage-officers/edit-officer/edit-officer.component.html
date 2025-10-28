@@ -538,6 +538,7 @@
                         <button 
                         (click)="
                           !PageOneForm.invalid 
+                          && !this.languagesRequired
                           && personalData.phoneNumber02 !== personalData.phoneNumber01 
                           && personalData.jobRole 
                           && !isPhoneInvalidMap['phone01'] 

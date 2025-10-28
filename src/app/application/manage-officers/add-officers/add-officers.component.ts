@@ -704,13 +704,7 @@ onClick(targetElement: HTMLElement) {
 
     this.validateLanguages();
 
-
     const missingFields: string[] = [];
-
-  // Validation for pageOne fields
-  // if (!this.personalData.empType) {
-  //   missingFields.push('Staff Employee Type');
-  // }
 
   if (!this.personalData.centerId && this.logingRole === 'Collection Centre Head') {
     missingFields.push('Collection Centre Name is required');
@@ -731,12 +725,6 @@ onClick(targetElement: HTMLElement) {
   if (!this.personalData.employeeType) {
     missingFields.push('Employee Type is required');
   }
-
-  
-
-  // if (!this.personalData.companyId) {
-  //   missingFields.push('Company Name');
-  // }
 
   if (!this.personalData.firstNameEnglish) {
     missingFields.push('First Name (in English) is required');

@@ -10,8 +10,9 @@
 
             <p class="font-normal dark:text-white">Filter By</p>
 
-            <div class="">
+            <div class="w-40">
                 <app-custom-datepicker
+                [showClearButton]="false"
               [selectedDate]="selectDatePickerDate"
               (dateChange)="onDateChange($event)"
             ></app-custom-datepicker>

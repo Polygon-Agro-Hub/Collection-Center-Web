@@ -24,6 +24,7 @@ export class CustomDatepickerComponent {
   @Output() selectedDateChange = new EventEmitter<string | Date | null>();
   @Output() dateChange = new EventEmitter<string | Date | null>();
   @Input() placeholder: string = 'Date';
+  @Input() showClearButton: boolean = true;
   
   showCalendar = false;
   showYearPicker = false;

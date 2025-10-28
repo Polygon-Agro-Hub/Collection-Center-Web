@@ -1,6 +1,6 @@
 <app-loading-spinner *ngIf="isLoading"/>
 
-<div *ngIf="!isLoading" class="w-full px-10 py-7 bg-tileLight shadow-lg rounded-lg mt-6 dark:bg-[#363636]">
+<div *ngIf="!isLoading" class="w-full px-10 py-7 bg-tileLight rounded-lg mt-6 dark:bg-[#363636]">
     <div class="flex flex-row items-center justify-end gap-8 ">
        
         <div class="relative w-52 custom-center-dropdown-container" *ngIf="logingRole ==='Collection Centre Head'">
@@ -99,7 +99,7 @@
             </tbody>
         </table>
     </div>
-    <div *ngIf="hasData" class="flex items-center justify-end my-5 mr-5">
+    <div *ngIf="hasData" class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#1D1D1F] text-right">
         <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
             [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
             [screenReaderCurrentLabel]="'Youre on page'">

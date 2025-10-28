@@ -10,7 +10,7 @@
 
     <!-- Clear button -->
     <button
-      *ngIf="selectedDate"
+    *ngIf="selectedDate && showClearButton"
       type="button"
       (click)="clearDate($event)"
       class="ml-2 text-black dark:text-textDark"

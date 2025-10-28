@@ -348,7 +348,7 @@ const approveButton = (item.status === 'Rejected' || item.status === 'Not Approv
           this.fetchByRole();
         } else {
           this.isLoading = false;
-          this.toastSrv.error(res.message || `Failed to ${status.toLowerCase()} the collection.`);
+          this.toastSrv.error(`Failed to ${status.toLowerCase()} the collection officer.`);
         }
       },
       error: (err) => {

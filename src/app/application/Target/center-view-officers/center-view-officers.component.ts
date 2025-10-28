@@ -37,6 +37,7 @@ export class CenterViewOfficersComponent implements OnInit {
   statusDropdownOptions = ['Approved', 'Not Approved', 'Rejected'];
 
   isDownloading = false;
+  selectedJobRole: string = '';
 
   toggleStatusDropdown() {
     this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
@@ -171,6 +172,8 @@ export class CenterViewOfficersComponent implements OnInit {
 
     let message = '';
 
+    this.selectedJobRole = item.jobRole;
+
 if (item.status === 'Approved') {
   message = `Are you sure you want to reject this ${item.jobRole} ?`;
 } 
@@ -234,48 +237,6 @@ const approveButton = (item.status === 'Rejected' || item.status === 'Not Approv
     });
   }
 
-  // openPopup(item: any) {
-  //   this.isPopupVisible = true;
-
-  //   const tableHtml = `
-  //       <div class="container mx-auto ">
-  //         <h1 class="text-center text-2xl font-bold mb-4">Officer Name: ${item.firstNameEnglish}</h1>
-  //         <div>
-  //           <p class="text-center">Are you sure you want to approve or reject this collection?</p>
-  //         </div>
-  //         <div class="flex justify-center mt-4">
-  //           <button id="rejectButton" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg mr-2">
-  //             Reject
-  //           </button>
-  //           <button id="approveButton" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
-  //             Approve
-  //           </button>
-  //         </div>
-  //       </div>
-  //     `;
-
-  //   const swalInstance = Swal.fire({
-  //     html: tableHtml,
-  //     showConfirmButton: false,
-  //     width: 'auto',
-  //     allowOutsideClick: true, // Prevent closing by clicking outside
-  //     customClass: {
-  //       popup: 'dark:bg-[#363636] dark:text-white rounded-xl shadow-xl',
-  //     },
-  //     didOpen: () => {
-  //       // Approve Button
-  //       document.getElementById('approveButton')?.addEventListener('click', () => {
-  //         this.handleStatusChange(swalInstance, item.id, 'Approved');
-  //       });
-
-  //       // Reject Button
-  //       document.getElementById('rejectButton')?.addEventListener('click', () => {
-  //         this.handleStatusChange(swalInstance, item.id, 'Rejected');
-  //       });
-  //     }
-  //   });
-  // }
-
   private handleStatusChange(swalInstance: any, id: number, status: 'Approved' | 'Rejected') {
     // Show loading state
     swalInstance.update({
@@ -292,15 +253,20 @@ const approveButton = (item.status === 'Rejected' || item.status === 'Not Approv
         swalInstance.close();
         if (res.status) {
           const action = status === 'Approved' ? 'approved' : 'rejected';
-          this.toastSrv.success(`The collection was ${action} successfully.`);
+          this.toastSrv.success(`The ${this.selectedJobRole} was ${action} successfully.`);
           this.getAllOfficers();
         } else {
-          this.toastSrv.error(res.message || `Failed to ${status.toLowerCase()} the collection.`);
+          this.toastSrv.error(res.message || `Failed to ${status.toLowerCase()} the ${this.selectedJobRole}.`);
         }
       },
       error: (err) => {
         swalInstance.close();
-        this.toastSrv.error(`An error occurred while ${status.toLowerCase()}ing. Please try again.`);
+        if (status  === 'Approved' ) {
+          this.toastSrv.error(`An error occurred while Approving. Please try again.`);
+        } else {
+          this.toastSrv.error(`An error occurred while Rejecting. Please try again.`);
+        }
+        
       }
     });
   }

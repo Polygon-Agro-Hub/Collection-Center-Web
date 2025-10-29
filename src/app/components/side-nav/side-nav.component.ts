@@ -130,6 +130,15 @@ export const MENU_ITEMS = [
     permission: ['Distribution Centre Head'],
   },
 
+  {
+    id: 22,
+    key: 'requested-items',
+    path: '/requested-items',
+    label: 'Requested Items',
+    icon: 'fa-solid fa-bullseye',
+    permission: ['Distribution Centre Head', 'Distribution Centre Manager'],
+  },
+
 
   {
     id: 13,
@@ -167,15 +176,6 @@ export const MENU_ITEMS = [
     icon: 'fa-solid fa-arrow-right-arrow-left',
     permission: ['Distribution Centre Manager'],
   },
-
-  // {
-  //   id: 17,
-  //   key: 'reports',
-  //   path: '/reports',
-  //   label: 'Reports',
-  //   icon: 'fa-solid fa-chart-pie',
-  //   permission: ['Distribution Centre Manager'],
-  // },
 
   {
     id: 18,

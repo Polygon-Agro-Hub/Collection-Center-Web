@@ -290,6 +290,39 @@ export class ProcurementsService {
     return this.http.get<any>(url, { headers });
   }
 
+  getAllRequestedItemsForDCH(center: string = '', date: string | Date | null = '', search: string = ''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/get-all-requested-items?page=${1}`;
+
+    if (center) {
+      url += `&center=${center}`;
+    }
+
+    if (date) {
+      url += `&date=${date}`;
+    }
+
+    if (search) {
+      url += `&searchText=${search}`;
+    }
+
+    return this.http.get(url, { headers });
+  }
+
+  getDCHOwnCenters(): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+    return this.http.get(`${this.apiUrl}/get-centers-with-reg-dch-own`, {
+      headers,
+    });
+  }
+
+
 }
 
 

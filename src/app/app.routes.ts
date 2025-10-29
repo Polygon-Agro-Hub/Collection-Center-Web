@@ -74,6 +74,7 @@ import { RedefineOrdersComponent } from './application/procurement/redefine-orde
 import { ToDoRedefinePremadeOrdersComponent } from './application/procurement/to-do-redefine-premade-orders/to-do-redefine-premade-orders.component';
 import { SentToDispatchPremadeOrdersComponent } from './application/procurement/sent-to-dispatch-premade-orders/sent-to-dispatch-premade-orders.component';
 import { RecievedOrdersComponent } from './application/procurement/recieved-orders/recieved-orders.component';
+import { RequestedItemsComponent } from './application/procurement/requested-items/requested-items.component';
 
 export const routes: Routes = [
     {
@@ -338,6 +339,8 @@ export const routes: Routes = [
                     },
                 ]
             },
+
+
             {
                 path: 'cch-complaints',
                 canActivate:[RoleGuardService],
@@ -462,6 +465,22 @@ export const routes: Routes = [
                         path: 'view-officer-target/:officerId/:centerName',
                         component: ViewOfficerTargetComponent
                     },
+                ]
+            },
+
+            {
+                path: 'requested-items',
+                canActivate:[RoleGuardService],
+                data: { roles: ['Distribution Centre Head', 'Distribution Centre Manager'] },
+                children: [
+                    {
+                        path: '',
+                        component: RequestedItemsComponent
+                    },
+                    // {
+                    //     path: 'view-recive-reply/:id',
+                    //     component: CchRecivedComplaintComponent
+                    // }
                 ]
             },
 

@@ -40,10 +40,6 @@ export class SelectReportComponent {
       {
         value: "Collection Reports",
         label: "Collection Reports"
-      },
-      {
-        value: "Sales Reports",
-        label: "Sales Reports"
       }
     ];
   }

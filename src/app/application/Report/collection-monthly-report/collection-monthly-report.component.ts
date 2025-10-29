@@ -331,7 +331,7 @@ this.farmerDataArr.forEach(row => {
     doc.text(timestamp, margin + 5, y);
 
     // Save the PDF
-    const fileName = `Collection_officer_report(${this.officerDataObj.empId}_from_${this.startDate}_to_${this.endDate}).pdf`;
+    const fileName = `${this.officerDataObj.empId}_from_${this.startDate}_to_${this.endDate}.pdf`;
     doc.save(fileName);
 
   }

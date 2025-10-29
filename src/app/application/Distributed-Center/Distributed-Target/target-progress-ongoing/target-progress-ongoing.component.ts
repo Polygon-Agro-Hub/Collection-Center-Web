@@ -95,10 +95,8 @@ export class TargetProgressOngoingComponent implements OnInit {
           else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Unknown') {
             status = 'Completed';
           }
-          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Pending') {
-            status = 'Pending';
-          }
-          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Opened') {
+          else if (item.packageStatus === 'Completed' && 
+                  (item.additionalItemsStatus === 'Pending' || item.additionalItemsStatus === 'Opened')) {
             status = 'Opened';
           }
           else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Completed') {

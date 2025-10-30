@@ -290,7 +290,9 @@ export class ProcurementsService {
     return this.http.get<any>(url, { headers });
   }
 
-  getAllRequestedItemsForDCH(center: string = '', date: string | Date | null = '', search: string = ''): Observable<any> {
+  getAllRequestedItemsForDCH(center: string = '', date: string = '', search: string = ''): Observable<any> {
+    console.log('date', date)
+    
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });

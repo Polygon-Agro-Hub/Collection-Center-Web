@@ -26,7 +26,7 @@ export class RequestedItemsComponent implements OnInit {
   totalItems: number = 0;
   countOfOfficers: number = 0;
 
-  selectedDate: string | Date | null = '';
+  selectedDate: string = '';
 
   isLoading: boolean = true;
   hasData: boolean = true;
@@ -101,9 +101,19 @@ export class RequestedItemsComponent implements OnInit {
   }
 
   onDateChange(newDate: string | Date | null) {
-    this.selectedDate = newDate;
+    let dateString: string = '';
+  
+    if (newDate instanceof Date) {
+      // Convert Date object → 'YYYY-MM-DD'
+      dateString = newDate.toISOString().split('T')[0];
+    } else if (typeof newDate === 'string') {
+      dateString = newDate;
+    }
+  
+    this.selectedDate = dateString;
     this.fetchAllRequestedItemsForDCH();
   }
+  
 
   get centerDropdownItems() {
     return this.centerArr.map(center => ({
@@ -142,7 +152,7 @@ export class RequestedItemsComponent implements OnInit {
 
   }
 
-  fetchAllRequestedItemsForDCH(center: string = this.selectCenters, date: string | null | Date = this.selectedDate, search: string = this.searchText) {
+  fetchAllRequestedItemsForDCH(center: string = this.selectCenters, date: string = this.selectedDate, search: string = this.searchText) {
       this.isLoading = true;
       this.ProcurementsService.getAllRequestedItemsForDCH(center, date, search).subscribe(
           (res) => {
@@ -191,7 +201,7 @@ class RequestedItems {
   qty!: number
   productName!: string
   productId!: number
-  deliveryDate!: Date
+  sheduleDate!: Date
 }
 
 class Center {

@@ -334,6 +334,32 @@ export class ProcurementsService {
     });
   }
 
+  downloadRequestedItemsReportFile(
+    center: string = '', date: string = '', search: string = ''
+  ): Observable<Blob> {
+    console.log('center', center,  'date', date)
+    let url = `${this.apiUrl}/download-Requested-items-report?page=${1}`;
+
+    if (center) {
+      url += `&center=${center}`;
+    }
+
+    if (date) {
+      url += `&date=${date}`;
+    }
+
+    if (search) {
+      url += `&searchText=${search}`;
+    }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      // Optional: 'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
+    });
+
+    return this.http.get(url, { headers, responseType: 'blob' });
+  }
+
 
 }
 

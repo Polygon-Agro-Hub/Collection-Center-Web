@@ -8,6 +8,7 @@ import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loa
 import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
 import { ProcurementsService } from '../../../services/Procurement-service/procurements.service';
 import { CustomDatepickerComponent } from '../../../components/custom-datepicker/custom-datepicker.component';
+import { TokenServiceService } from '../../../services/Token/token-service.service';
 
 @Component({
   selector: 'app-requested-items',
@@ -26,10 +27,14 @@ export class RequestedItemsComponent implements OnInit {
   totalItems: number = 0;
   countOfOfficers: number = 0;
 
+  logingRole: string | null = null;
+
   selectedDate: string = '';
 
   isLoading: boolean = true;
   hasData: boolean = true;
+
+  centerId!: string;
 
   // Define all Sri Lanka provinces
   isProvinceDropdownOpen = false;
@@ -81,14 +86,39 @@ export class RequestedItemsComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private ProcurementsService: ProcurementsService
-
-  ) { }
+    private ProcurementsService: ProcurementsService,
+    private tokenSrv: TokenServiceService
+  ) {
+    this.logingRole = tokenSrv.getUserDetails().role
+    if (this.logingRole === 'Distribution Centre Manager') {
+      this.fetchDistributionCentre();
+    }
+  }
 
   ngOnInit(): void {
       // this.updateFilteredDistricts();
-      this.fetchAllRequestedItemsForDCH();
+      this.selectedDate = new Date().toISOString().split('T')[0];
+      this.callMethodByRole();
       this.getAllCenters();
+  }
+
+  callMethodByRole() {
+    if (this.logingRole === 'Distribtuion Centre Head') {
+      this.fetchAllRequestedItemsForDCH();
+    } else {
+      this.fetchAllRequestedItemsForDCM();
+
+    }
+  }
+
+  fetchDistributionCentre() {
+    this.ProcurementsService.getDistributionCenter().subscribe(
+      (res) => {
+        this.centerId = String(res)
+        
+
+      }
+    )
   }
 
   getAllCenters() {
@@ -101,17 +131,23 @@ export class RequestedItemsComponent implements OnInit {
   }
 
   onDateChange(newDate: string | Date | null) {
-    let dateString: string = '';
+    let dateString: string;
   
-    if (newDate instanceof Date) {
-      // Convert Date object → 'YYYY-MM-DD'
+    if (!newDate) {
+      
+      dateString = new Date().toISOString().split('T')[0];
+    } 
+    else if (newDate instanceof Date) {
+      
       dateString = newDate.toISOString().split('T')[0];
-    } else if (typeof newDate === 'string') {
+    } 
+    else {
+      
       dateString = newDate;
     }
   
     this.selectedDate = dateString;
-    this.fetchAllRequestedItemsForDCH();
+    this.callMethodByRole();
   }
   
 
@@ -130,7 +166,7 @@ export class RequestedItemsComponent implements OnInit {
   }
 
   applyCompanyFilters() {
-    this.fetchAllRequestedItemsForDCH();
+    this.callMethodByRole();
   }
 
 
@@ -171,14 +207,34 @@ export class RequestedItemsComponent implements OnInit {
       );
   }
 
+  fetchAllRequestedItemsForDCM(center: string = this.centerId, date: string = this.selectedDate, search: string = this.searchText) {
+    this.isLoading = true;
+    console.log('calling dcm')
+    this.ProcurementsService.getAllRequestedItemsForDCH(center, date, search).subscribe(
+        (res) => {
+            this.itemsArr = res.groupedProducts;
+            this.totalItems = res.totalItems;
+            this.isLoading = false;
+
+            if (this.itemsArr.length > 0) {
+              this.hasData = true;
+            } else {
+              this.hasData = false;
+            }
+
+            console.log('itemsArr', this.itemsArr)
+        }
+    );
+}
+
   onSearch() {
       this.searchText = this.searchText?.trim() || '';
-      this.fetchAllRequestedItemsForDCH();
+      this.callMethodByRole();
   }
 
   offSearch() {
       this.searchText='';
-      this.fetchAllRequestedItemsForDCH();
+      this.callMethodByRole();
   }
 
   

@@ -291,7 +291,7 @@ export class ProcurementsService {
   }
 
   getAllRequestedItemsForDCH(center: string = '', date: string = '', search: string = ''): Observable<any> {
-    console.log('date', date)
+    console.log('center', center,  'date', date)
     
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
@@ -320,6 +320,16 @@ export class ProcurementsService {
       'Content-Type': 'application/json',
     });
     return this.http.get(`${this.apiUrl}/get-centers-with-reg-dch-own`, {
+      headers,
+    });
+  }
+
+  getDistributionCenter(): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+    return this.http.get(`${this.apiUrl}/get-distribution-center`, {
       headers,
     });
   }

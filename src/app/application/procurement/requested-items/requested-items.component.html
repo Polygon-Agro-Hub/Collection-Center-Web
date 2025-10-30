@@ -18,15 +18,17 @@
 
                 <div class="flex gap-4 flex-shrink-0">
                     <!-- Province Dropdown -->
-                    <app-custom-datepicker
-  [selectedDate]="selectedDate"
-  (dateChange)="onDateChange($event)"
-></app-custom-datepicker>
+                    <div class="w-48">
+                        <app-custom-datepicker
+                          [selectedDate]="selectedDate"
+                          (dateChange)="onDateChange($event)"
+                        ></app-custom-datepicker>
+                    </div>
                 
                     <!-- District Dropdown -->
                     <!-- *ngIf="logingRole === 'Collection Centre Head'" -->
 
-                    <div class="relative w-64 custom-center-dropdown-container">
+                    <div  *ngIf="logingRole === 'Distribution Centre Head'"  class="relative w-52 custom-center-dropdown-container">
                     <app-searchable-dropdown
                         [items]="centerDropdownItems"
                         placeholder="Centre"
@@ -82,8 +84,8 @@
                         <th class="px-6 py-3 text-left font-normal w-32">Product Name</th>
                         <th class="px-6 py-3 text-left font-normal w-48">Qty (kg)</th>
                         <th class="px-6 py-3 text-center font-normal w-28">Delivery Date</th>
-                        <th class="px-6 py-3 text-center font-normal w-28">Centre Code</th>
-                        <th class="px-6 py-3 text-center font-normal w-28">Centre Name</th>
+                        <th *ngIf="logingRole === 'Distribution Centre Head'" class="px-6 py-3 text-center font-normal w-28">Centre Code</th>
+                        <th *ngIf="logingRole === 'Distribution Centre Head'" class="px-6 py-3 text-center font-normal w-28">Centre Name</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
@@ -97,9 +99,11 @@
                         <td class="px-6 py-3 font-medium text-left">
                             {{ item.qty | number:'1.2-2' }}
                           </td>
-                        <td class="px-6 py-3 font-medium text-center">{{ item.sheduleDate | date:'yyyy/MM/dd' }}</td>
-                        <td class="px-6 py-3 font-medium text-center">{{ item.regCode }}</td>
-                        <td class="px-6 py-3 font-medium text-center">{{ item.centerName }}</td>
+                          <td class="px-6 py-3 font-medium text-center">
+                            {{ item.sheduleDate | date:'d MMM, y' }}
+                          </td>
+                        <td *ngIf="logingRole === 'Distribution Centre Head'" class="px-6 py-3 font-medium text-center">{{ item.regCode }}</td>
+                        <td *ngIf="logingRole === 'Distribution Centre Head'" class="px-6 py-3 font-medium text-center">{{ item.centerName }}</td>
                         
                     </tr>
                 </tbody>

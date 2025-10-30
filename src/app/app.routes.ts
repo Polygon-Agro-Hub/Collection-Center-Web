@@ -477,10 +477,7 @@ export const routes: Routes = [
                         path: '',
                         component: RequestedItemsComponent
                     },
-                    // {
-                    //     path: 'view-recive-reply/:id',
-                    //     component: CchRecivedComplaintComponent
-                    // }
+                    
                 ]
             },
 

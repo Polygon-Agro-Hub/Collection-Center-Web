@@ -9,6 +9,8 @@ import { SerchableDropdownComponent } from '../../../components/serchable-dropdo
 import { ProcurementsService } from '../../../services/Procurement-service/procurements.service';
 import { CustomDatepickerComponent } from '../../../components/custom-datepicker/custom-datepicker.component';
 import { TokenServiceService } from '../../../services/Token/token-service.service';
+import { Observable, tap } from 'rxjs';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-requested-items',
@@ -35,54 +37,7 @@ export class RequestedItemsComponent implements OnInit {
   hasData: boolean = true;
 
   centerId!: string;
-
-  // Define all Sri Lanka provinces
-  isProvinceDropdownOpen = false;
-  isDistrictDropdownOpen = false;
-
-  provinces: string[] = [
-      'Western',
-      'Central',
-      'Southern',
-      'Northern',
-      'Eastern',
-      'North Western',
-      'North Central',
-      'Uva',
-      'Sabaragamuwa'
-  ];
-
-  // Define all districts with their provinces
-  allDistricts = [
-      { name: 'Ampara', province: 'Eastern' },
-      { name: 'Anuradhapura', province: 'North Central' },
-      { name: 'Badulla', province: 'Uva' },
-      { name: 'Batticaloa', province: 'Eastern' },
-      { name: 'Colombo', province: 'Western' },
-      { name: 'Galle', province: 'Southern' },
-      { name: 'Gampaha', province: 'Western' },
-      { name: 'Hambantota', province: 'Southern' },
-      { name: 'Jaffna', province: 'Northern' },
-      { name: 'Kalutara', province: 'Western' },
-      { name: 'Kandy', province: 'Central' },
-      { name: 'Kegalle', province: 'Sabaragamuwa' },
-      { name: 'Kilinochchi', province: 'Northern' },
-      { name: 'Kurunegala', province: 'North Western' },
-      { name: 'Mannar', province: 'Northern' },
-      { name: 'Matale', province: 'Central' },
-      { name: 'Matara', province: 'Southern' },
-      { name: 'Monaragala', province: 'Uva' },
-      { name: 'Mullaitivu', province: 'Northern' },
-      { name: 'Nuwara Eliya', province: 'Central' },
-      { name: 'Polonnaruwa', province: 'North Central' },
-      { name: 'Puttalam', province: 'North Western' },
-      { name: 'Rathnapura', province: 'Sabaragamuwa' },
-      { name: 'Trincomalee', province: 'Eastern' },
-      { name: 'Vavuniya', province: 'Northern' },
-  ];
-
-  // Districts filtered by selected province
-  // filteredDistricts: { name: string, province: string }[] = [];
+  isDownloading: boolean = false;
 
   constructor(
     private router: Router,
@@ -90,36 +45,53 @@ export class RequestedItemsComponent implements OnInit {
     private tokenSrv: TokenServiceService
   ) {
     this.logingRole = tokenSrv.getUserDetails().role
-    if (this.logingRole === 'Distribution Centre Manager') {
-      this.fetchDistributionCentre();
-    }
+    
   }
 
   ngOnInit(): void {
-      // this.updateFilteredDistricts();
-      this.selectedDate = new Date().toISOString().split('T')[0];
+    this.selectedDate = new Date().toISOString().split('T')[0];
+
+    console.log('loging role', this.logingRole)
+  
+    if (this.logingRole === 'Distribution Centre Manager') {
+      console.log('manager')
+      this.fetchDistributionCentre().subscribe({
+        next: () => {
+          this.callMethodByRole();
+        },
+        error: (err) => {
+          console.error('Error fetching distribution centre:', err);
+          this.callMethodByRole(); // still continue even if it fails
+        }
+      });
+    } else if (this.logingRole === 'Distribution Centre Head') {
+      console.log('head')
       this.callMethodByRole();
-      this.getAllCenters();
+    }
+  
+    this.getAllCenters();
   }
+  
 
   callMethodByRole() {
-    if (this.logingRole === 'Distribtuion Centre Head') {
-      this.fetchAllRequestedItemsForDCH();
-    } else {
+    if (this.logingRole === 'Distribution Centre Manager') {
       this.fetchAllRequestedItemsForDCM();
+    } else if (this.logingRole === 'Distribution Centre Head') {
+      this.fetchAllRequestedItemsForDCH();
 
     }
   }
 
-  fetchDistributionCentre() {
-    this.ProcurementsService.getDistributionCenter().subscribe(
-      (res) => {
-        this.centerId = String(res)
-        
-
-      }
-    )
+  fetchDistributionCentre(): Observable<any> {
+    console.log('fetching dcm');
+    return this.ProcurementsService.getDistributionCenter().pipe(
+      tap((res) => {
+        this.centerId = String(res);
+        console.log('centerId', this.centerId);
+      })
+    );
   }
+  
 
   getAllCenters() {
     this.ProcurementsService.getDCHOwnCenters().subscribe(
@@ -169,27 +141,9 @@ export class RequestedItemsComponent implements OnInit {
     this.callMethodByRole();
   }
 
-
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent) {
-      const provinceDropdownElement = document.querySelector('.custom-province-dropdown-container');
-      const proinceDropdownClickedInside = provinceDropdownElement?.contains(event.target as Node);
-
-      if (!proinceDropdownClickedInside && this.isProvinceDropdownOpen) {
-          this.isProvinceDropdownOpen = false;
-      }
-
-      const districtDropdownElement = document.querySelector('.custom-district-dropdown-container');
-      const districtDropdownClickedInside = districtDropdownElement?.contains(event.target as Node);
-
-      if (!districtDropdownClickedInside && this.isDistrictDropdownOpen) {
-          this.isDistrictDropdownOpen = false;
-      }
-
-  }
-
   fetchAllRequestedItemsForDCH(center: string = this.selectCenters, date: string = this.selectedDate, search: string = this.searchText) {
-      this.isLoading = true;
+    console.log('calling dch')  
+    this.isLoading = true;
       this.ProcurementsService.getAllRequestedItemsForDCH(center, date, search).subscribe(
           (res) => {
               this.itemsArr = res.groupedProducts;
@@ -237,14 +191,90 @@ export class RequestedItemsComponent implements OnInit {
       this.callMethodByRole();
   }
 
-  
-  navigateToDashboard(id: number) {
-      this.router.navigate([`/centers/center-shashbord/${id}`]);
-  }
 
+  downloadTemplate1() {
+    this.isDownloading = true;
 
-  addCenter() {
-      this.router.navigate([`/centers/add-a-center`]);
+    if (this.logingRole === 'Distribution Centre Manager') {
+      this.ProcurementsService
+      .downloadRequestedItemsReportFile(this.centerId, this.selectedDate, this.searchText)
+      .subscribe({
+        next: (blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          a.download = `Centre Requirement on ${this.selectedDate}.xlsx`;
+          a.click();
+          window.URL.revokeObjectURL(url);
+
+          Swal.fire({
+            icon: "success",
+            title: "Downloaded",
+            text: "Please check your downloads folder",
+            customClass: {
+              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+              title: 'dark:text-white',
+            }
+          });
+          this.isDownloading = false;
+        },
+        error: (error) => {
+          Swal.fire({
+            icon: "error",
+            title: "Download Failed",
+            text: error.message,
+            customClass: {
+              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+              title: 'dark:text-white',
+            }
+          });
+          this.isDownloading = false;
+        }
+      });
+    } else if (this.logingRole === 'Distribution Centre Head') {
+      this.ProcurementsService
+      .downloadRequestedItemsReportFile(this.selectCenters, this.selectedDate, this.searchText)
+      .subscribe({
+        next: (blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          if (!this.selectCenters) {
+            a.download = `All Required Items on ${this.selectedDate}.xlsx`;
+          } else {
+            a.download = `Required Items of [${this.itemsArr[0].regCode}-${this.itemsArr[0].centerName} on ${this.selectedDate}].xlsx`;
+          }
+          
+          a.click();
+          window.URL.revokeObjectURL(url);
+
+          Swal.fire({
+            icon: "success",
+            title: "Downloaded",
+            text: "Please check your downloads folder",
+            customClass: {
+              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+              title: 'dark:text-white',
+            }
+          });
+          this.isDownloading = false;
+        },
+        error: (error) => {
+          Swal.fire({
+            icon: "error",
+            title: "Download Failed",
+            text: error.message,
+            customClass: {
+              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+              title: 'dark:text-white',
+            }
+          });
+          this.isDownloading = false;
+        }
+      });
+    }
+
+    
   }
 
 

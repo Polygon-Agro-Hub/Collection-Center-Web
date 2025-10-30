@@ -71,9 +71,17 @@
         <p class="font-semibold md:text-lg lg:text-lg mb-1 dark:text-white whitespace-nowrap">All
             ({{ itemsArr.length < 10 ? '0' + itemsArr.length : itemsArr.length || '00' }})</p>
 
-        <div class="flex flex-row mt-3 mb-0">
-            <button class="bg-[#415CFF] text-white font-semibold px-4 py-2 rounded-lg" (click)="addCenter()">Download</button>
+        <div *ngIf="hasData" class="flex flex-row mt-3 mb-0">
+            <button
+                class="bg-[#415CFF] text-white shadow-md font-medium rounded-lg py-2 px-5 mr-5 text-lg flex items-center"
+                (click)="downloadTemplate1()">
+                <i class="fa-solid fa-download px-2" *ngIf="!isDownloading"></i>
+                <i class="fa-solid fa-spinner fa-spin px-2" *ngIf="isDownloading"></i>
+                {{ isDownloading ? " Downloading..." : " Download" }}
+            </button>
         </div>
+
+        
 
 
         <div *ngIf="hasData" class=" min-w-max mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
@@ -89,9 +97,9 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
-                    <tr class="hover:bg-[#415CFF] hover:text-white dark:text-gray-300 cursor-pointer"
+                    <tr class=" dark:text-gray-300 "
                         *ngFor="let item of itemsArr let i = index"
-                        (click)="navigateToDashboard(item.centerId)">
+                        >
                         <td class="px-6 py-3 font-medium text-center">
                             {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }}
                         </td>

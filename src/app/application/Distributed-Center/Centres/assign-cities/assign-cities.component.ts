@@ -104,6 +104,8 @@ export class AssignCitiesComponent implements OnInit {
         
         // Filter out duplicate centers by id
         this.centersArr = this.removeDuplicateCenters(res.centers);
+
+        console.log('centers', this.centersArr)
         
         this.isLoading = false;
         this.hasData = true;
@@ -171,11 +173,17 @@ export class AssignCitiesComponent implements OnInit {
 }
 
   initializeAssignments(): void {
+
+    console.log('initialize assignments')
     this.assignments.clear();
+
+    console.log('cities arr', this.citiesArr)
     
     this.citiesArr.forEach(city => {
       this.assignments.set(city.id, -1);
     });
+
+    console.log('centers arr', this.centersArr)
     
     this.centersArr.forEach(center => {
       if (center.ownCityId) {
@@ -220,33 +228,56 @@ export class AssignCitiesComponent implements OnInit {
     
     console.log('Saving assignment:', assignmentToSave);
     
-    this.distributionSrv.AssigCityToDistributedCenter(assignmentToSave).subscribe(
-      (res) => {
-        this.isLoading = false;
-        Swal.fire({
-          title: 'Success',
-          text: 'City assigned to centre successfully!',
-          icon: 'success',
-          customClass: {
-            popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-            title: 'dark:text-white',
-          },
-        });
+    this.isLoading = true;
+
+this.distributionSrv.AssigCityToDistributedCenter(assignmentToSave).subscribe(
+  (res) => {
+    this.isLoading = false;
+
+    // Handle backend failure response
+    if (!res || res.status === false) {
+      Swal.fire({
+        title: 'Error',
+        text: res?.message || 'Failed to assign city to center',
+        icon: 'error',
+        customClass: {
+          popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+          title: 'dark:text-white',
+        },
+      });
+      this.assignments.set(cityId, -1);
+      return;
+    }
+
+    // Success alert
+    Swal.fire({
+      title: 'Success',
+      text: 'City assigned to center successfully!',
+      icon: 'success',
+      customClass: {
+        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+        title: 'dark:text-white',
       },
-      (error) => {
-        this.isLoading = false;
-        Swal.fire({
-          title: 'Error',
-          text: 'Failed to assign city to centre',
-          icon: 'error',
-          customClass: {
-            popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-            title: 'dark:text-white',
-          },
-        });
-        this.assignments.set(cityId, -1);
-      }
-    );
+    });
+  },
+  (error) => {
+    this.isLoading = false;
+    console.error('Error while assigning city:', error);
+
+    Swal.fire({
+      title: 'Error',
+      text: 'Failed to assign city to center',
+      icon: 'error',
+      customClass: {
+        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+        title: 'dark:text-white',
+      },
+    });
+
+    this.assignments.set(cityId, -1);
+  }
+);
+
   }
 
   removeAssignment(cityId: number, centerId: number): void {

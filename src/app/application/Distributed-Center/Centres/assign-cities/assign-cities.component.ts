@@ -27,6 +27,7 @@ export class AssignCitiesComponent implements OnInit {
   provinces: any[] = [];
   citiesArr: Cities[] = [];
   centersArr: Centers[] = [];
+  centersArrWithDups: Centers[] = [];
   
   // Store assignments (cityId -> centerId)
   assignments: Map<number, number> = new Map();
@@ -101,6 +102,8 @@ export class AssignCitiesComponent implements OnInit {
       (res) => {
         console.log(res);
         this.citiesArr = res.cities;
+
+        this.centersArrWithDups = (res.centers);
         
         // Filter out duplicate centers by id
         this.centersArr = this.removeDuplicateCenters(res.centers);
@@ -183,9 +186,9 @@ export class AssignCitiesComponent implements OnInit {
       this.assignments.set(city.id, -1);
     });
 
-    console.log('centers arr', this.centersArr)
+    console.log('centers arr', this.centersArrWithDups)
     
-    this.centersArr.forEach(center => {
+    this.centersArrWithDups.forEach(center => {
       if (center.ownCityId) {
         const cityId = parseInt(center.ownCityId, 10);
         if (!isNaN(cityId) && this.assignments.has(cityId)) {

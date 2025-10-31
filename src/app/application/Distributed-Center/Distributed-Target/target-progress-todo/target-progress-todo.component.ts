@@ -195,6 +195,14 @@ export class TargetProgressTodoComponent implements OnInit {
     return time ? time.replace('Within ', '') : time;
   }
 
+  onKeydown(event: KeyboardEvent) {
+  // Prevent space key
+  if (event.key === ' ') {
+    event.preventDefault();
+    return;
+  }
+}
+
 }
 
 class orders {

@@ -240,6 +240,14 @@ export class TargetProgressOngoingComponent implements OnInit {
       });
   }
 
+  onKeydown(event: KeyboardEvent) {
+  // Prevent space key
+  if (event.key === ' ') {
+    event.preventDefault();
+    return;
+  }
+}
+
 }
 
 class orders {

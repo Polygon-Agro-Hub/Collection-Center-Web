@@ -7,6 +7,6 @@ export const environment = {
   // API_BASE_URL: 'https://collection-center-api.polygonagro.com/agro-api/collection-center-api/api',
 
   // local
-   API_BASE_URL: 'http://localhost:5000/agro-api/collection-center-api/api',
+   API_BASE_URL: 'http://localhost:4000/agro-api/collection-center-api/api',
 
 };

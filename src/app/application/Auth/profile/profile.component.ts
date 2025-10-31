@@ -78,5 +78,5 @@ class Officer {
   branchName!: string;
   companyNameEnglish!: string;
   centerName!: string;
-
+  regCode!: string;
 }

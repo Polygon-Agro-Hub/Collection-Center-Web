@@ -399,13 +399,11 @@ getFlagUrl(code: string): string {
   onCancel() {
     Swal.fire({
       title: 'Are you sure?',
-      text: 'Do you really want to clear this form?',
+      text: 'You may lose the added data after canceling!',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, cancel it!',
-      cancelButtonText: 'No, Stay On Page',
+      confirmButtonText: 'Yes, cancel',
+      cancelButtonText: 'No, Keep Editing',
       customClass: {
         popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
         title: 'dark:text-white',

@@ -31,12 +31,14 @@ export class AddDistributedOfficerComponent implements OnInit {
   driverObj: Drivers = new Drivers()
 
   languages: string[] = ['Sinhala', 'English', 'Tamil'];
-  selectedPage: 'pageOne' | 'pageTwo' | 'pageThree' = 'pageOne';
+  selectedPage: 'pageOne' | 'pageTwo' | 'pageThree' = 'pageTwo';
   lastID!: number
   itemId: number | null = null;
   officerId!: number
 
   selectVehicletype: any = { name: '', capacity: '' };
+
+  isJobRoleOpen = false;
 
 
   selectedFileName!: string
@@ -81,6 +83,10 @@ export class AddDistributedOfficerComponent implements OnInit {
   selectedManager: string = "";
   managerDropdownOpen = false;
   selectedManagerName: string = "";
+
+  jobRoles: string[] = [];
+
+  jobRoleInputTouched = false;
 
 
 
@@ -139,7 +145,45 @@ export class AddDistributedOfficerComponent implements OnInit {
     this.getAllDistributionCenters();
     // this.getLastID('COO');
     // this.EpmloyeIdCreate();
+    this.setJobRoles();
+     console.log('loging role', this.logingRole)
     
+  }
+
+  toggleJobRoleDropdown() {
+    this.isJobRoleOpen = !this.isJobRoleOpen;
+
+    this.jobRoleInputTouched = true;
+
+    console.log('jobRoleInputTouched', this.jobRoleInputTouched)
+  }
+
+  getJobRole(role: string) {
+    this.personalData.jobRole = role;
+    this.isJobRoleOpen = false;
+    this.jobRoleInputTouched = true;
+
+    console.log('jobRole', this.personalData.jobRole)
+
+    console.log('jobRoleInputTouched', this.jobRoleInputTouched)
+  }
+
+  setJobRoles() {
+    if (this.logingRole === 'Distribution Centre Manager') {
+      // Only allow Collection Officer
+      this.jobRoles = ['Distribution Officer'];
+    } 
+    else if (this.logingRole === 'Distribution Centre Head') {
+      // Allow all roles
+      this.jobRoles = [
+        'Distribution Centre Manager',
+        'Distribution Officer'
+      ];
+    } 
+    else {
+      // Default (if needed)
+      this.jobRoles = [];
+    }
   }
 
   @HostListener('document:click', ['$event.target'])
@@ -155,6 +199,14 @@ onClick(targetElement: HTMLElement) {
     this.dropdownOpen2 = false;
   }
 }
+
+@HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.relative')) {
+      this.isJobRoleOpen = false;
+    }
+  }
 
 // onSearchInput(event: Event) {
 //   const input = event.target as HTMLInputElement;
@@ -590,17 +642,17 @@ selectManager(item: Manager) {
   }
 
   if (!this.personalData.phoneNumber01) {
-    missingFields.push('Phone Number - 1 is required');
+    missingFields.push('Mobile Number - 1 is required');
   } else if (!/^[0-9]{9}$/.test(this.personalData.phoneNumber01) || this.isPhoneInvalidMap['phone01']) {
-    missingFields.push('Phone Number - 1 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+    missingFields.push('Mobile Number - 1 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
   }
 
   if (this.personalData.phoneNumber02) {
     if (!/^[0-9]{9}$/.test(this.personalData.phoneNumber02) || this.isPhoneInvalidMap['phone02']) {
-      missingFields.push('Phone Number - 2 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+      missingFields.push('Mobile Number - 2 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
     }
     if (this.personalData.phoneNumber01 === this.personalData.phoneNumber02) {
-      missingFields.push('Phone Number - 2 - Must be different from Phone Number - 1');
+      missingFields.push('Mobile Number - 2 - Must be different from Mobile Number - 1');
     }
   }
 
@@ -890,6 +942,32 @@ capitalizeFirstLetter(field: keyof typeof this.personalData) {
       this.personalData[field].charAt(0).toUpperCase() +
       this.personalData[field].slice(1);
   }
+}
+
+onNicInput(event: any) {
+  // Get value and trim leading/trailing spaces
+  let value: string = event.target.value.trimStart().toUpperCase();
+
+  // Remove all invalid characters except digits and V
+  value = value.replace(/[^0-9V]/g, '');
+
+  // Prevent entering V anywhere except last character of 10-char NIC
+  if (value.includes('V') && value.length !== 10) {
+    value = value.replace(/V/g, '');
+  }
+
+  // Handle 10-char NIC ending with V
+  if (value.length === 10 && value.endsWith('V')) {
+    value = value.slice(0, 10);
+  }
+
+  // Limit 12-digit NIC
+  if (value.length > 12) {
+    value = value.slice(0, 12);
+  }
+
+  // Update the model
+  this.personalData.nic = value;
 }
 
 }

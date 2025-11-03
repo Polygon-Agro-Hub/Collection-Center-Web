@@ -323,7 +323,13 @@ getScheduleClass(item: any): string {
   return '';
 }
 
-
+onKeydown(event: KeyboardEvent) {
+  // Prevent space key
+  if (event.key === ' ') {
+    event.preventDefault();
+    return;
+  }
+}
 
 }
 

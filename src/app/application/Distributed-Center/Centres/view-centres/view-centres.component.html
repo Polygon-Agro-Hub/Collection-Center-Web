@@ -81,9 +81,9 @@
                             <th class="px-6 py-3 text-left font-normal w-10">No</th>
                             <th class="px-6 py-3 text-left font-normal w-32">Reg Code</th>
                             <th class="px-6 py-3 text-left font-normal w-48">Centre Name</th>
-                            <th class="px-6 py-3 text-center font-normal w-28">Province</th>
-                            <th class="px-6 py-3 text-center font-normal w-28">District</th>
-                            <th class="px-6 py-3 text-center font-normal w-28">City</th>
+                            <th class="px-6 py-3 text-left font-normal w-28">Province</th>
+                            <th class="px-6 py-3 text-left font-normal w-28">District</th>
+                            <th class="px-6 py-3 text-left font-normal w-28">City</th>
                             <th class="px-6 py-3 text-center font-normal w-40">Contact Number -1</th>
                             <th class="px-6 py-3 text-center font-normal w-40">Location</th>
                             <th class="px-6 py-3 text-center font-normal w-32">DCM Profiles</th>
@@ -99,9 +99,9 @@
                             </td>
                             <td class="px-6 py-3 font-medium text-left">{{ item.regCode }}</td>
                             <td class="px-6 py-3 font-medium text-left">{{ item.centerName }}</td>
-                            <td class="px-6 py-3 font-medium text-center">{{ item.province }}</td>
-                            <td class="px-6 py-3 font-medium text-center">{{ item.district }}</td>
-                            <td class="px-6 py-3 font-medium text-center">{{ item.city }}</td>
+                            <td class="px-6 py-3 font-medium text-left">{{ item.province }}</td>
+                            <td class="px-6 py-3 font-medium text-left">{{ item.district }}</td>
+                            <td class="px-6 py-3 font-medium text-left">{{ item.city }}</td>
                             <td class="px-6 py-3 font-medium text-center">
                                 <ng-container *ngIf="item.contact01; else noContact">
                                     {{ '+94' + item.contact01 }}

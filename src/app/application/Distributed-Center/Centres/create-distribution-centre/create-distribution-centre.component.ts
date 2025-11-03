@@ -336,22 +336,20 @@ getFlagUrl(code: string): string {
       return;
     }
 
-    this.isLoading = true;
-
-    // // Validate form data
-    // if (
-    //   !this.centerData ||
-    //   !this.centerData.DistributionCenterName ||
-    //   !this.centerData.district ||
-    //   !this.centerData.country ||
-    //   !this.centerData.longitude ||
-    //   !this.centerData.city ||
-    //   !this.centerData.latitude
-    // ) {
-    //   this.isLoading = false;
-    //   this.toastSrv.warning('Please fill all required fields');
-    //   return;
-    // }
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you want to create this distribution centre?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, Create it!',
+      cancelButtonText: 'No, Cancel',
+      customClass: {
+        popup: 'bg-tileLight dark:bg-tileBlack text-black dark:text-white',
+        title: 'font-semibold text-lg',
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+this.isLoading = true;
 
     // Call the service to create a center
     this.DistributionService.createDistributionCenter(this.centerData).subscribe({
@@ -394,6 +392,10 @@ getFlagUrl(code: string): string {
         this.isLoading = false;
       },
     });
+      }
+    })
+
+    
   }
 
   onCancel() {

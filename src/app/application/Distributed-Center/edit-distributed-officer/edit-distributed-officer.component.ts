@@ -88,6 +88,13 @@ branchItems: { value: number; label: string }[] = [];
 
   isPopupVisible: boolean = false;
 
+  isJobRoleOpen = false;
+
+  jobRoles: string[] = [];
+
+  jobRoleInputTouched = false;
+
+
   constructor(
     private ManageOficerSrv: ManageOfficersService,
     private router: Router,
@@ -152,8 +159,44 @@ branchItems: { value: number; label: string }[] = [];
     console.log('editOfficerId', this.editOfficerId)
     this.centerId = this.route.snapshot.params['centerId'];
     this.fetchOffierById(this.editOfficerId);
+
+    this.setJobRoles();
     // this.UpdateEpmloyeIdCreate();
     this.setActiveTabFromRoute()
+  }
+
+  setJobRoles() {
+    if (this.logingRole === 'Distribution Centre Manager') {
+      // Only allow Collection Officer
+      this.jobRoles = ['Distribution Officer'];
+    } 
+    else if (this.logingRole === 'Distribution Centre Head') {
+      // Allow all roles
+      this.jobRoles = [
+        'Distribution Centre Manager',
+        'Distribution Officer'
+      ];
+    } 
+    else {
+      // Default (if needed)
+      this.jobRoles = [];
+    }
+  }
+
+  toggleJobRoleDropdown() {
+    this.isJobRoleOpen = !this.isJobRoleOpen;
+
+    this.jobRoleInputTouched = true;
+
+    console.log('jobRoleInputTouched', this.jobRoleInputTouched)
+  }
+
+  getJobRole(role: string) {
+    this.personalData.jobRole = role;
+    this.isJobRoleOpen = false;
+    this.jobRoleInputTouched = true;
+
+    console.log('jobRoleInputTouched', this.jobRoleInputTouched)
   }
 
   @HostListener('document:click', ['$event.target'])
@@ -167,6 +210,14 @@ branchItems: { value: number; label: string }[] = [];
     }
     if (!insideDropdown2) {
       this.dropdownOpen2 = false;
+    }
+  }
+
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.relative')) {
+      this.isJobRoleOpen = false;
     }
   }
 
@@ -474,7 +525,7 @@ branchItems: { value: number; label: string }[] = [];
     }
 
     if (this.personalData.phoneNumber01 == this.personalData.phoneNumber02) {
-      this.toastSrv.warning('Pleace enter 2 different phone numbers')
+      this.toastSrv.warning('Pleace enter 2 different Mobile numbers')
    }
 
     else if (!this.personalData.accHolderName || !this.personalData.accNumber || !this.personalData.bankName || !this.personalData.branchName || !this.personalData.city || !this.personalData.country || !this.personalData.district || !this.personalData.houseNumber) {
@@ -505,9 +556,9 @@ branchItems: { value: number; label: string }[] = [];
             } else if (error.status === 410) {
               this.toastSrv.error('Email already exists for another Distribution officer');
             } else if (error.status === 411) {
-              this.toastSrv.error('Phone Number 01 already exists for another Distribution officer');
+              this.toastSrv.error('Mobile Number 01 already exists for another Distribution officer');
             } else if (error.status === 412) {
-              this.toastSrv.error('Phone Number 02 already exists for another Distribution officer');
+              this.toastSrv.error('Mobile Number 02 already exists for another Distribution officer');
             } else if (error.status === 400) {
               this.toastSrv.error('No file uploaded. Please attach required file(s).');
             } else if (error.status === 500) {
@@ -544,9 +595,9 @@ branchItems: { value: number; label: string }[] = [];
             } else if (error.status === 410) {
               this.toastSrv.error('Email already exists for another Distribution officer');
             } else if (error.status === 411) {
-              this.toastSrv.error('Phone Number 01 already exists for another Distribution officer');
+              this.toastSrv.error('Mobile Number 01 already exists for another Distribution officer');
             } else if (error.status === 412) {
-              this.toastSrv.error('Phone Number 02 already exists for another Distribution officer');
+              this.toastSrv.error('Mobile Number 02 already exists for another Distribution officer');
             } else if (error.status === 400) {
               this.toastSrv.error('No file uploaded. Please attach required file(s).');
             } else if (error.status === 500) {
@@ -718,30 +769,31 @@ branchItems: { value: number; label: string }[] = [];
     }
   }
   
-  onBankChange(selectedBankId: number | null) {
-    this.selectedBankId = selectedBankId;
-    
-    if (this.selectedBankId) {
-      // Update branches based on selected bank
-      this.updateBranchItems(this.selectedBankId);
+  onBankChange(bankId: number | null) {
+    if (bankId) {
+      this.selectedBankId = bankId;
   
-      // Update company data with bank name
-      const selectedBankItem = this.bankItems.find(bank => bank.value === this.selectedBankId);
-      if (selectedBankItem) {
-        this.personalData.bankName = selectedBankItem.label;
+      // Update branches
+      this.branches = this.allBranches[bankId.toString()] || [];
+      this.branchItems = this.branches.map(br => ({
+        value: br.ID,
+        label: br.name
+      }));
+  
+      // Update personalData
+      const selectedBank = this.banks.find(bank => bank.ID === bankId);
+      if (selectedBank) {
+        this.personalData.bankName = selectedBank.name;
+        this.invalidFields.delete('bankName');
       }
   
-      // Reset branch selection if the current selection doesn't belong to this bank
-      const currentBranch = this.branchItems.find(branch => branch.value === this.selectedBranchId);
-      if (!currentBranch) {
-        this.selectedBranchId = null;
-        this.personalData.branchName = '';
-      }
-    } else {
-      this.updateBranchItems(null);
+      // Reset branch selection
       this.selectedBranchId = null;
-      this.personalData.bankName = '';
       this.personalData.branchName = '';
+    } else {
+      this.branches = [];
+      this.branchItems = [];
+      this.personalData.bankName = '';
     }
   }
   
@@ -795,6 +847,10 @@ branchItems: { value: number; label: string }[] = [];
     missingFields.push('Please select at least one preferred language');
   }
 
+  if (!this.personalData.jobRole) {
+    missingFields.push('Job Role is required');
+  }
+
   if (!this.personalData.employeeType) {
     missingFields.push('Employee Type is required');
   }
@@ -830,17 +886,17 @@ branchItems: { value: number; label: string }[] = [];
   }
 
   if (!this.personalData.phoneNumber01) {
-    missingFields.push('Phone Number - 1 is required');
+    missingFields.push('Mobile Number - 1 is required');
   } else if (!/^[0-9]{9}$/.test(this.personalData.phoneNumber01) || this.isPhoneInvalidMap['phone01']) {
-    missingFields.push('Phone Number - 1 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+    missingFields.push('Mobile Number - 1 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
   }
 
   if (this.personalData.phoneNumber02) {
     if (!/^[0-9]{9}$/.test(this.personalData.phoneNumber02) || this.isPhoneInvalidMap['phone02']) {
-      missingFields.push('Phone Number - 2 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+      missingFields.push('Mobile Number - 2 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
     }
     if (this.personalData.phoneNumber01 === this.personalData.phoneNumber02) {
-      missingFields.push('Phone Number - 2 - Must be different from Phone Number - 1');
+      missingFields.push('Mobile Number - 2 - Must be different from Mobile Number - 1');
     }
   }
 
@@ -1031,6 +1087,47 @@ onTrimInputCapitalize(event: Event, modelRef: any, fieldName: string): void {
   inputElement.value = trimmedValue;
 }
 
+onTrimInputAccountNumber(event: Event, modelRef: any, fieldName: string): void {
+    const inputElement = event.target as HTMLInputElement;
+  
+    if (inputElement) {
+      // Remove **all spaces** (not just trim)
+      const noSpaceValue = inputElement.value.replace(/\s+/g, '');
+  
+      // Update model and input
+      modelRef[fieldName] = noSpaceValue;
+      inputElement.value = noSpaceValue;
+    }
+  }
+  
+
+
+onNicInput(event: any) {
+  // Get value and trim leading/trailing spaces
+  let value: string = event.target.value.trimStart().toUpperCase();
+
+  // Remove all invalid characters except digits and V
+  value = value.replace(/[^0-9V]/g, '');
+
+  // Prevent entering V anywhere except last character of 10-char NIC
+  if (value.includes('V') && value.length !== 10) {
+    value = value.replace(/V/g, '');
+  }
+
+  // Handle 10-char NIC ending with V
+  if (value.length === 10 && value.endsWith('V')) {
+    value = value.slice(0, 10);
+  }
+
+  // Limit 12-digit NIC
+  if (value.length > 12) {
+    value = value.slice(0, 12);
+  }
+
+  // Update the model
+  this.personalData.nic = value;
+}
+
 capitalizeFirstLetter(field: keyof typeof this.personalData) {
   if (this.personalData[field]) {
     // Trim spaces
@@ -1040,6 +1137,25 @@ capitalizeFirstLetter(field: keyof typeof this.personalData) {
     this.personalData[field] =
       this.personalData[field].charAt(0).toUpperCase() +
       this.personalData[field].slice(1);
+  }
+}
+
+
+onFormatInput(event: Event, modelRef: any, fieldName: string): void {
+  const inputElement = event.target as HTMLInputElement;
+
+  if (inputElement && inputElement.value) {
+    // Trim spaces at start & end
+    let value = inputElement.value.trim();
+
+    // Capitalize first letter
+    value = value.charAt(0).toUpperCase() + value.slice(1);
+
+    // Update model
+    modelRef[fieldName] = value;
+
+    // Update input box value
+    inputElement.value = value;
   }
 }
 

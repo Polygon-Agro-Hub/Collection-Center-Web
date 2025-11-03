@@ -420,7 +420,8 @@
                                 [(ngModel)]="personalData.phoneNumber01" #phoneNumber01Input="ngModel"
                                 class="block w-full p-2 border border-gray-300 rounded-r-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                                 placeholder="Enter your mobile number" required pattern="^[0-9]{9}$" minlength="9" (ngModelChange)="validateSriLankanPhone($event, 'phone01')"
-                                maxlength="9"/>
+                                maxlength="9"
+                                (keypress)="($event.charCode >= 48 && $event.charCode <= 57) ? true : $event.preventDefault()"/>
 
                         </div>
 
@@ -649,7 +650,7 @@
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                         #accHolderNameInput="ngModel" required 
                         (keydown)="blockSpecialChars($event)" 
-                        (input)="onTrimInput($event, personalData, 'accHolderName')" pattern="^[a-zA-Z0-9\s.']*$"/>
+                        (input)="onFormatInput($event, personalData, 'accHolderName')" pattern="^[a-zA-Z0-9\s.']*$"/>
                         <div *ngIf="accHolderNameInput.touched && !personalData.accHolderName"
                         class="text-red-500 text-sm mt-1">
                         <div>Account Holder's Name is required</div>

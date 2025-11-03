@@ -19,6 +19,13 @@
     <p>Edit Profile</p>
 </div>
 
+<div *ngIf="naviPath ==='distribution-center'"
+        class="flex gap-5 font-semibold text[#424242] mb-4 mr-5 ml-0 dark:text-[#FFFFFF] dark:bg-blacks cursor-pointer">
+        <p onclick="history.back()">Distribution Centres</p>
+        <p onclick="history.back()">Center Dashboard</p>
+        <p>Edit Profile</p>
+    </div>
+
 <div *ngIf="!isLoading" class="mx-auto p-6 bg-white dark:bg-[#363636] rounded-lg shadow-mg">
     <form #PageOneForm="ngForm" (ngSubmit)="onSubmitFormPage1(PageOneForm)">
         <div *ngIf="selectedPage === 'pageOne'">

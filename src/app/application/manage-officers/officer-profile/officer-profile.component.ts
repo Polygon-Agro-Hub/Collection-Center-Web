@@ -560,6 +560,10 @@ doc.roundedRect(bankBoxX, bankBoxY, bankBoxWidth, bankBoxHeight, 3, 3, "S");
     this.showDisclaimView = !this.showDisclaimView; // Toggle the boolean value
   }
 
+  viewOfficerTargetDistribution(officerId: number, centerName: string, centerId: number, empId: string) {
+    this.router.navigate([`/distribution-officers/view-distribution-officer-target/${officerId}/${centerName}/${centerId}/${empId}`]);
+  }
+
   viewOfficerTarget(officerId: number, centerName: string) {
 
     const newCenterName = centerName ? centerName : 'Disclaimed'
@@ -569,7 +573,7 @@ doc.roundedRect(bankBoxX, bankBoxY, bankBoxWidth, bankBoxHeight, 3, 3, "S");
     if (this.logingRole === 'Collection Centre Head' || this.logingRole === 'Collection Centre Manager') {
       this.router.navigate([`/manage-officers/view-officer-target/${officerId}/${newCenterName}`]);
     } else if (this.logingRole === 'Distribution Centre Head' || this.logingRole === 'Distribution Centre Manager') {
-      this.router.navigate([`/distribution-officers/view-officer-target/${officerId}/${centerName}`]);
+      this.router.navigate([`/distribution-officers/view-distribution-officer-target/${officerId}/${centerName}`]);
     } 
   }
 

@@ -49,7 +49,13 @@ export class ProfileComponent implements OnInit {
   }
 
   navigateToTarget() {
-    this.router.navigate(['/target/view-my-target']);
+    if (this.logingRole === 'Collection Centre Manager') {
+      this.router.navigate(['/target/view-my-target']);
+    } else if (this.logingRole === 'Distribution Centre Manager'){
+      console.log('id', this.officerObj)
+      this.router.navigate(['/distribution-officers/view-my-target-dcm', this.officerObj.id]);
+    }
+    
   }
 }
 

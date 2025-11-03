@@ -528,6 +528,46 @@ export class DistributionServiceService {
     });
   }
 
+  getSelectedDistributionOfficerTargets(officerId: number, centerId: number, searchText: string = '', status: string = ''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+  
+    let url = `${this.apiUrl}/get-selected-distribution-officer-targets?officerId=${officerId}&centerId=${centerId}`;
+  
+    if (searchText) {
+      url += `&searchText=${searchText}`
+  
+    }
+  
+    if (status) {
+      url += `&status=${status}`
+    }
+  
+    return this.http.get<any>(url, { headers });
+  }
+
+  downloadRequestedItemsReportFile(
+    officerId: number, centerId: number, search: string = '', status: string = ''
+  ): Observable<Blob> {
+    let url = `${this.apiUrl}/download-officer-targets?officerId=${officerId}&centerId=${centerId}`;
+
+    if (search) {
+      url += `&search=${search}`;
+    }
+
+    if (status) {
+      url += `&status=${status}`;
+    }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
+
+    return this.http.get(url, { headers, responseType: 'blob' });
+  }
+
+
 }
 
 

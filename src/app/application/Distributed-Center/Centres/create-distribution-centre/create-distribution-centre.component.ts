@@ -538,6 +538,15 @@ this.isLoading = true;
       this.centerData[field] = value as never; // assign back safely
     }
   }
+
+  onDistributionCenterNameKeydown(event: KeyboardEvent): void {
+  const inputElement = event.target as HTMLInputElement;
+  
+  // If space is pressed and cursor is at the beginning, prevent it
+  if (event.key === ' ' && inputElement.selectionStart === 0) {
+    event.preventDefault();
+  }
+}
 }
 
 class CenterData {

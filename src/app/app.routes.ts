@@ -75,6 +75,8 @@ import { ToDoRedefinePremadeOrdersComponent } from './application/procurement/to
 import { SentToDispatchPremadeOrdersComponent } from './application/procurement/sent-to-dispatch-premade-orders/sent-to-dispatch-premade-orders.component';
 import { RecievedOrdersComponent } from './application/procurement/recieved-orders/recieved-orders.component';
 import { RequestedItemsComponent } from './application/procurement/requested-items/requested-items.component';
+import { ViewMyTargetDcmComponent } from './application/Distributed-Center/view-my-target-dcm/view-my-target-dcm.component';
+import { ViewOfficerTargetDistributionComponent } from './application/dch-Target/view-officer-target-distribution/view-officer-target-distribution.component';
 
 export const routes: Routes = [
     {
@@ -465,6 +467,17 @@ export const routes: Routes = [
                         path: 'view-officer-target/:officerId/:centerName',
                         component: ViewOfficerTargetComponent
                     },
+
+                    {
+                        path: 'view-my-target-dcm/:id',
+                        component: ViewMyTargetDcmComponent
+                    },
+
+                    {
+                        path: 'view-distribution-officer-target/:officerId/:centerName/:centerId/:empId',
+                        component: ViewOfficerTargetDistributionComponent
+                    }
+
                 ]
             },
 

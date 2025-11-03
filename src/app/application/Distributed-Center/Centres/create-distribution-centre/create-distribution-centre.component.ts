@@ -267,17 +267,17 @@ getFlagUrl(code: string): string {
     }
 
     if (!this.centerData.phoneNumber01) {
-      missingFields.push('Phone Number - 1 is required');
+      missingFields.push('Mobile Number - 1 is required');
     } else if (!/^[0-9]{9}$/.test(this.centerData.phoneNumber01) || this.isPhoneInvalidMap['phone01']) {
-      missingFields.push('Phone Number - 1 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+      missingFields.push('Mobile Number - 1 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
     }
   
     if (this.centerData.phoneNumber02) {
       if (!/^[0-9]{9}$/.test(this.centerData.phoneNumber02) || this.isPhoneInvalidMap['phone02']) {
-        missingFields.push('Phone Number - 2 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+        missingFields.push('Mobile Number - 2 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
       }
       if (this.centerData.phoneNumber01 === this.centerData.phoneNumber02) {
-        missingFields.push('Phone Number - 2 - Must be different from Phone Number - 1');
+        missingFields.push('Mobile Number - 2 - Must be different from Mobile Number - 1');
       }
     }
 

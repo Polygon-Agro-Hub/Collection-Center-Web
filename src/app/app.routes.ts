@@ -77,6 +77,8 @@ import { RecievedOrdersComponent } from './application/procurement/recieved-orde
 import { RequestedItemsComponent } from './application/procurement/requested-items/requested-items.component';
 import { ViewMyTargetDcmComponent } from './application/Distributed-Center/view-my-target-dcm/view-my-target-dcm.component';
 import { ViewOfficerTargetDistributionComponent } from './application/dch-Target/view-officer-target-distribution/view-officer-target-distribution.component';
+import { DcmDashboardComponent } from './application/Distributed-Center/dcm-dashboard/dcm-dashboard.component';
+
 
 export const routes: Routes = [
     {
@@ -432,7 +434,7 @@ export const routes: Routes = [
                 children: [
                     {
                         path: '',
-                        component: ViewDistributedOfficersComponent,
+                        component: DcmDashboardComponent,
                     },
                     
                     

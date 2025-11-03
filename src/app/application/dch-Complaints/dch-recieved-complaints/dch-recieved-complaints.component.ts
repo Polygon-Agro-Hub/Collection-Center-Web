@@ -149,6 +149,15 @@ export class DchRecievedComplaintsComponent implements OnInit {
     this.router.navigate([`/dch-complaints/view-recieve-complaint/${id}`])
   }
 
+  preventLeadingSpace(event: KeyboardEvent) {
+  const input = event.target as HTMLInputElement;
+  
+  // If space is pressed and cursor is at the beginning or the field is empty
+  if (event.key === ' ' && (input.selectionStart === 0 || this.searchText === '')) {
+    event.preventDefault();
+  }
+}
+
 }
 
 class RecivedComplaint {

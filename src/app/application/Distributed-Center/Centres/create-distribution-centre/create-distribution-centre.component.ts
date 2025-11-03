@@ -174,7 +174,7 @@ getFlagUrl(code: string): string {
         .generateRegCode(province, district, city)
         .subscribe({
           next: (response) => {
-            this.centerData.regCode = response.regCode;
+            this.centerData.regCode = `D-${response.regCode}`;
             this.isLoadingregcode = false;
           },
           error: (error) => {

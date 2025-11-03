@@ -174,7 +174,7 @@ getFlagUrl(code: string): string {
         .generateRegCode(province, district, city)
         .subscribe({
           next: (response) => {
-            this.centerData.regCode = response.regCode;
+            this.centerData.regCode = `D-${response.regCode}`;
             this.isLoadingregcode = false;
           },
           error: (error) => {
@@ -267,17 +267,17 @@ getFlagUrl(code: string): string {
     }
 
     if (!this.centerData.phoneNumber01) {
-      missingFields.push('Phone Number - 1 is required');
+      missingFields.push('Mobile Number - 1 is required');
     } else if (!/^[0-9]{9}$/.test(this.centerData.phoneNumber01) || this.isPhoneInvalidMap['phone01']) {
-      missingFields.push('Phone Number - 1 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+      missingFields.push('Mobile Number - 1 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
     }
   
     if (this.centerData.phoneNumber02) {
       if (!/^[0-9]{9}$/.test(this.centerData.phoneNumber02) || this.isPhoneInvalidMap['phone02']) {
-        missingFields.push('Phone Number - 2 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+        missingFields.push('Mobile Number - 2 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
       }
       if (this.centerData.phoneNumber01 === this.centerData.phoneNumber02) {
-        missingFields.push('Phone Number - 2 - Must be different from Phone Number - 1');
+        missingFields.push('Mobile Number - 2 - Must be different from Mobile Number - 1');
       }
     }
 
@@ -336,22 +336,20 @@ getFlagUrl(code: string): string {
       return;
     }
 
-    this.isLoading = true;
-
-    // // Validate form data
-    // if (
-    //   !this.centerData ||
-    //   !this.centerData.DistributionCenterName ||
-    //   !this.centerData.district ||
-    //   !this.centerData.country ||
-    //   !this.centerData.longitude ||
-    //   !this.centerData.city ||
-    //   !this.centerData.latitude
-    // ) {
-    //   this.isLoading = false;
-    //   this.toastSrv.warning('Please fill all required fields');
-    //   return;
-    // }
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'Do you want to create this distribution centre?',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, Create it!',
+      cancelButtonText: 'No, Cancel',
+      customClass: {
+        popup: 'bg-tileLight dark:bg-tileBlack text-black dark:text-white',
+        title: 'font-semibold text-lg',
+      },
+    }).then((result) => {
+      if (result.isConfirmed) {
+this.isLoading = true;
 
     // Call the service to create a center
     this.DistributionService.createDistributionCenter(this.centerData).subscribe({
@@ -394,18 +392,20 @@ getFlagUrl(code: string): string {
         this.isLoading = false;
       },
     });
+      }
+    })
+
+    
   }
 
   onCancel() {
     Swal.fire({
       title: 'Are you sure?',
-      text: 'Do you really want to clear this form?',
+      text: 'You may lose the added data after canceling!',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, cancel it!',
-      cancelButtonText: 'No, Stay On Page',
+      confirmButtonText: 'Yes, cancel',
+      cancelButtonText: 'No, Keep Editing',
       customClass: {
         popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
         title: 'dark:text-white',
@@ -538,6 +538,15 @@ getFlagUrl(code: string): string {
       this.centerData[field] = value as never; // assign back safely
     }
   }
+
+  onDistributionCenterNameKeydown(event: KeyboardEvent): void {
+  const inputElement = event.target as HTMLInputElement;
+  
+  // If space is pressed and cursor is at the beginning, prevent it
+  if (event.key === ' ' && inputElement.selectionStart === 0) {
+    event.preventDefault();
+  }
+}
 }
 
 class CenterData {

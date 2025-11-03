@@ -185,6 +185,15 @@ export class DchSentComplaintsComponent implements OnInit{
     this.expandedItems[id] = !this.expandedItems[id];
   }
 
+  preventLeadingSpace(event: KeyboardEvent) {
+  const input = event.target as HTMLInputElement;
+  
+  // If space is pressed and cursor is at the beginning or the field is empty
+  if (event.key === ' ' && (input.selectionStart === 0 || this.searchText === '')) {
+    event.preventDefault();
+  }
+}
+
 
 }
 

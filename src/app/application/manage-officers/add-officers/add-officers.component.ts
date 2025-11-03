@@ -33,7 +33,7 @@ export class AddOfficersComponent implements OnInit {
 
 
   languages: string[] = ['Sinhala', 'English', 'Tamil'];
-  selectedPage: 'pageOne' | 'pageTwo' | 'pageThree' = 'pageOne';
+  selectedPage: 'pageOne' | 'pageTwo' | 'pageThree' = 'pageTwo';
   lastID!: number
   itemId: number | null = null;
   officerId!: number
@@ -1350,19 +1350,18 @@ onClick(targetElement: HTMLElement) {
     const inputElement = event.target as HTMLInputElement;
   
     if (inputElement && inputElement.value) {
-      // Trim spaces at start & end
-      let value = inputElement.value.trim();
+      // Remove only leading spaces
+      let value = inputElement.value.replace(/^\s+/, '');
   
-      // Capitalize first letter
+      // Capitalize first letter (if exists)
       value = value.charAt(0).toUpperCase() + value.slice(1);
   
-      // Update model
+      // Update model and input box
       modelRef[fieldName] = value;
-  
-      // Update input box value
       inputElement.value = value;
     }
   }
+  
   
 }
 

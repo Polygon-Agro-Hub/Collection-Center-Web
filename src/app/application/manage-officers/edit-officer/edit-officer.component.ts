@@ -527,7 +527,7 @@ export class EditOfficerComponent implements OnInit {
     }
 
     if (this.personalData.phoneNumber01 == this.personalData.phoneNumber02) {
-      this.toastSrv.warning('Pleace enter 2 different phone numbers')
+      this.toastSrv.warning('Pleace enter 2 different Mobile numbers')
    }
 
     else if (!this.personalData.accHolderName || !this.personalData.accNumber || !this.personalData.bankName || !this.personalData.branchName || !this.personalData.city || !this.personalData.country || !this.personalData.district || !this.personalData.houseNumber) {
@@ -810,30 +810,31 @@ export class EditOfficerComponent implements OnInit {
     }
   }
   
-  onBankChange(selectedBankId: number | null) {
-    this.selectedBankId = selectedBankId;
-    
-    if (this.selectedBankId) {
-      // Update branches based on selected bank
-      this.updateBranchItems(this.selectedBankId);
+  onBankChange(bankId: number | null) {
+    if (bankId) {
+      this.selectedBankId = bankId;
   
-      // Update company data with bank name
-      const selectedBankItem = this.bankItems.find(bank => bank.value === this.selectedBankId);
-      if (selectedBankItem) {
-        this.personalData.bankName = selectedBankItem.label;
+      // Update branches
+      this.branches = this.allBranches[bankId.toString()] || [];
+      this.branchItems = this.branches.map(br => ({
+        value: br.ID,
+        label: br.name
+      }));
+  
+      // Update personalData
+      const selectedBank = this.banks.find(bank => bank.ID === bankId);
+      if (selectedBank) {
+        this.personalData.bankName = selectedBank.name;
+        this.invalidFields.delete('bankName');
       }
   
-      // Reset branch selection if the current selection doesn't belong to this bank
-      const currentBranch = this.branchItems.find(branch => branch.value === this.selectedBranchId);
-      if (!currentBranch) {
-        this.selectedBranchId = null;
-        this.personalData.branchName = '';
-      }
-    } else {
-      this.updateBranchItems(null);
+      // Reset branch selection
       this.selectedBranchId = null;
-      this.personalData.bankName = '';
       this.personalData.branchName = '';
+    } else {
+      this.branches = [];
+      this.branchItems = [];
+      this.personalData.bankName = '';
     }
   }
   

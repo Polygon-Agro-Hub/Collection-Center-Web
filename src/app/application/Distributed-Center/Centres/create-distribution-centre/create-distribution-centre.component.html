@@ -170,17 +170,6 @@
             </p>
         </div>
 
-        <!-- Province -->
-        <div>
-            <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Province *</label>
-
-            <input id="province" name="province" [(ngModel)]="centerData.province" #province="ngModel"
-                        class="mt-1 block w-full p-2 border border-[#D9D9D9] hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                        readonly />
-            <p *ngIf="!centerData.province && province.touched" class="text-red-500 text-sm">
-                Province is required.
-            </p>
-        </div>
         <!-- District -->
         <div>
             <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">District *</label>
@@ -202,6 +191,19 @@
                 District is required.
             </p>
         </div>
+
+        <!-- Province -->
+        <div>
+            <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Province *</label>
+
+            <input id="province" name="province" [(ngModel)]="centerData.province" #province="ngModel"
+                        class="mt-1 block w-full p-2 border border-[#D9D9D9] hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+                        readonly />
+            <p *ngIf="!centerData.province && province.touched" class="text-red-500 text-sm">
+                Province is required.
+            </p>
+        </div>
+        
         <!-- Building Number -->
         <div>
             <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Building Number *</label>

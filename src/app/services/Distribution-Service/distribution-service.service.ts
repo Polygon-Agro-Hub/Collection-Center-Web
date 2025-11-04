@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { catchError, Observable, of } from 'rxjs';
 import { TokenServiceService } from '../Token/token-service.service';
 import { environment } from '../../environments/environment.development';
 
@@ -567,6 +567,21 @@ export class DistributionServiceService {
     return this.http.get(url, { headers, responseType: 'blob' });
   }
 
+  getDispatchChartData(): Observable<any[]> {
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${this.token}`,
+    'Content-Type': 'application/json',
+  });
+  
+  return this.http.get<any[]>(`${this.apiUrl}/get-dispatch-chart`, {
+    headers,
+  }).pipe(
+    catchError(error => {
+      console.error('API Error:', error);
+      return of([]); // Return empty array on error
+    })
+  );
+}
 
 }
 

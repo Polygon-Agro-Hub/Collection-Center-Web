@@ -1168,54 +1168,70 @@ onFormatInput(event: Event, modelRef: any, fieldName: string): void {
     this.router.navigate(['/centers/center-shashbord', this.centerId]); // Change '/reports' to your desired route
   }
 
+
   openPopup(item: Personal) {
-    console.log('personal', item)
-    console.log('officerId', this.editOfficerId)
+    console.log('personal', item);
+    console.log('officerId', this.editOfficerId);
     this.isPopupVisible = true;
-
-    let message = `Are you sure you want to reset password for this ${item.jobRole} ?`;
-
+  
+    const message = `Are you sure you want to reset password for this ${item.jobRole}?`;
+  
     const approveButton = `
-    <button id="approveButton" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
-      Reset Password
-    </button>
-  `;
-
-const tableHtml = `
-  <div class="container mx-auto">
-    <h1 class="text-center text-2xl font-bold mb-4 dark:text-white">Officer Name: ${item.firstNameEnglish}</h1>
-    <div>
-      <p class="text-center dark:text-white">${message}</p>
-    </div>
-    <div class="flex justify-center mt-4">
-      ${approveButton}
-    </div>
-  </div>
-`;
-
-
+      <button id="approveButton" 
+        class="bg-[#415CFF] hover:bg-[#415CFF] text-white px-4 py-2 rounded-lg mx-2">
+        Reset Password
+      </button>
+    `;
+  
+    const cancelButton = `
+      <button id="cancelButton" 
+        class="bg-[#FF0000] hover:bg-[#FF0000] text-white px-4 py-2 rounded-lg mx-2">
+        Cancel
+      </button>
+    `;
+  
+    const tableHtml = `
+      <div class="rounded-xl container mx-auto">
+        <h1 class="text-center text-2xl font-bold mb-4 dark:text-white">
+          Officer Name: ${item.firstNameEnglish}
+        </h1>
+        <div>
+          <p class="text-center dark:text-white">${message}</p>
+        </div>
+        <div class="flex justify-center mt-4">
+          ${approveButton}
+          ${cancelButton}
+        </div>
+      </div>
+    `;
+  
     const swalInstance = Swal.fire({
       html: tableHtml,
       showConfirmButton: false,
       width: 'auto',
       allowOutsideClick: true,
-      background: 'bg-white dark:bg-[#363636]', // Background styles
-      color: 'text-gray-800 dark:text-white',   // Text color styles
+      background: 'bg-white dark:bg-[#363636]',
+      color: 'text-gray-800 dark:text-white',
       customClass: {
         popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-        title: 'dark:text-white'
+        title: 'dark:text-white',
       },
       didOpen: () => {
-        // Approve Button
+        
         document.getElementById('approveButton')?.addEventListener('click', () => {
-          this.handleStatusChange(swalInstance, this.editOfficerId, 'Approved');
+          Swal.close();
+          this.handleStatusChange(swalInstance, this.editOfficerId);
         });
-
-      }
+  
+        document.getElementById('cancelButton')?.addEventListener('click', () => {
+          Swal.close();
+        });
+      },
     });
   }
+  
 
-  private handleStatusChange(swalInstance: any, id: number, status: 'Approved' | 'Rejected') {
+  private handleStatusChange(swalInstance: any, id: number) {
     // Show loading state
     this.isLoading = true;
     swalInstance.update({
@@ -1232,17 +1248,15 @@ const tableHtml = `
       }
     });
 
-    this.DistributedManageOfficerSrv.ChangeStatus(id, status).subscribe({
+    this.DistributedManageOfficerSrv.ResetPassword(id).subscribe({
       next: (res) => {
         swalInstance.close();
         if (res.status) {
           this.isLoading = false;
           swalInstance.close();
-          const action = status === 'Approved' ? 'approved' : 'rejected';
           this.toastSrv.success(`The Distribution Officer Password was reseted successfully.`);
         } else {
           this.isLoading = false;
-          this.toastSrv.error(`Failed to ${status.toLowerCase()} the Distribution Officer.`);
           console.log(`Failed to reset the Distribution Officer's password.`)
         }
       },
@@ -1277,6 +1291,7 @@ class Personal {
   country: string = 'Sri Lanka';
   languages: string = '';
   QRcode!: string;
+  status!: string;
 
   accHolderName!: string;
   accNumber!: string;

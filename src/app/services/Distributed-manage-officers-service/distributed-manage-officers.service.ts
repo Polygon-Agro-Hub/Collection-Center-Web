@@ -193,5 +193,15 @@ export class DistributedManageOfficersService {
     });
   }
 
+  ResetPassword(id: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/manage-officers/reset-password/${id}`;
+    return this.http.get<any>(url, { headers });
+  }
+
+
 
 }

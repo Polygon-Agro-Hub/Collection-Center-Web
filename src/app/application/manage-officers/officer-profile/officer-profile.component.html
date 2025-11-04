@@ -72,7 +72,7 @@
                         <p class="font-semibold" *ngIf="officerObj.jobRole === 'Distribution Centre Manager' 
                             || officerObj.jobRole === 'Distribution Centre Head' 
                             || officerObj.jobRole === 'Distribution Officer'">
-                            {{ officerObj.distributedCenterRegCode }} Centre
+                            {{ officerObj.distributedCenterRegCode ? officerObj.distributedCenterRegCode + ' Centre' : 'Officer has been disclaimed - No Assigned Centre' }}
                         </p>
                         <p class="text-[#627189] dark:text-textDark">{{officerObj.companyNameEnglish}}</p>
                     </div>

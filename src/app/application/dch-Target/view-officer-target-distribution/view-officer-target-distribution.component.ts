@@ -34,7 +34,7 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
 
   date:  string = '';
 
-  hasData: boolean = true;
+  hasData: boolean = false;
 
   isLoading:boolean = true;
 
@@ -64,7 +64,11 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
 
   ngOnInit(): void {
     this.officerId = this.route.snapshot.params['officerId'];
-    this.centerName = this.route.snapshot.params['centerName']
+    const nameParam = this.route.snapshot.params['centerName'];
+    this.centerName =
+    nameParam && nameParam !== 'null' && nameParam.trim() !== ''
+      ? nameParam
+      : null;
     this.centerId = this.route.snapshot.params['centerId'];
     this.empId = this.route.snapshot.params['empId']
     console.log('Selected officerId:', this.officerId);

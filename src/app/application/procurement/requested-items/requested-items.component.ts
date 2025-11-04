@@ -146,7 +146,9 @@ export class RequestedItemsComponent implements OnInit {
     this.isLoading = true;
       this.ProcurementsService.getAllRequestedItemsForDCH(center, date, search).subscribe(
           (res) => {
-              this.itemsArr = res.groupedProducts;
+            this.itemsArr = res.groupedProducts.sort((a: RequestedItems, b: RequestedItems) => 
+              a.productName.localeCompare(b.productName)
+            );
               this.totalItems = res.totalItems;
               this.isLoading = false;
 
@@ -163,23 +165,28 @@ export class RequestedItemsComponent implements OnInit {
 
   fetchAllRequestedItemsForDCM(center: string = this.centerId, date: string = this.selectedDate, search: string = this.searchText) {
     this.isLoading = true;
-    console.log('calling dcm')
+    console.log('calling dcm');
+  
     this.ProcurementsService.getAllRequestedItemsForDCH(center, date, search).subscribe(
-        (res) => {
-            this.itemsArr = res.groupedProducts;
-            this.totalItems = res.totalItems;
-            this.isLoading = false;
-
-            if (this.itemsArr.length > 0) {
-              this.hasData = true;
-            } else {
-              this.hasData = false;
-            }
-
-            console.log('itemsArr', this.itemsArr)
-        }
+      (res) => {
+        // Sort grouped products alphabetically by productName
+        this.itemsArr = res.groupedProducts.sort((a: RequestedItems, b: RequestedItems) => 
+          a.productName.localeCompare(b.productName)
+        );
+  
+        this.totalItems = res.totalItems;
+        this.isLoading = false;
+        this.hasData = this.itemsArr.length > 0;
+  
+        console.log('itemsArr', this.itemsArr);
+      },
+      (error) => {
+        this.isLoading = false;
+        console.error('Error fetching items:', error);
+      }
     );
-}
+  }
+  
 
   onSearch() {
       this.searchText = this.searchText?.trim() || '';
@@ -242,7 +249,7 @@ export class RequestedItemsComponent implements OnInit {
           if (!this.selectCenters) {
             a.download = `All Required Items on ${this.selectedDate}.xlsx`;
           } else {
-            a.download = `Required Items of [${this.itemsArr[0].regCode}-${this.itemsArr[0].centerName} on ${this.selectedDate}].xlsx`;
+            a.download = `Required Items of ${this.itemsArr[0].regCode}-${this.itemsArr[0].centerName} on ${this.selectedDate}.xlsx`;
           }
           
           a.click();

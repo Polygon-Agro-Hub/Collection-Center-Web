@@ -65,7 +65,7 @@ export class OfficerProfileComponent implements OnInit {
 
     // this.fetchProfileImageBase64(this.officerId);
     
-    const contentHeight = 500;
+    const contentHeight = 297;
 
     const doc = new jsPDF({
       unit: 'mm',
@@ -424,133 +424,133 @@ doc.roundedRect(bankBoxX, bankBoxY, bankBoxWidth, bankBoxHeight, 3, 3, "S");
     doc.setFont("Inter", "bold");
     doc.text(getValueOrNA(this.officerObj.branchName), 100, startY + 152);
 
-    if (this.officerObj.jobRole === 'Driver') {
-      doc.setFontSize(16);
-      doc.setFont("Inter", "bold");
-      doc.text("Driver Details", 14, startY + 164);
+    // if (this.officerObj.jobRole === 'Driver') {
+    //   doc.setFontSize(16);
+    //   doc.setFont("Inter", "bold");
+    //   doc.text("Driver Details", 14, startY + 164);
 
-      doc.setFontSize(12);
-      doc.setFont("Inter", "normal");
-      doc.text("Driving License ID", 14, startY + 174);
+    //   doc.setFontSize(12);
+    //   doc.setFont("Inter", "normal");
+    //   doc.text("Driving License ID", 14, startY + 174);
 
-      doc.setFont("Inter", "bold");
-      doc.text(getValueOrNAforInsOrLiscNo(this.officerObj.licNo), 14, startY + 180);
+    //   doc.setFont("Inter", "bold");
+    //   doc.text(getValueOrNAforInsOrLiscNo(this.officerObj.licNo), 14, startY + 180);
 
-      doc.setFontSize(12);
-      doc.setFont("Inter", "normal");
-      doc.text("License's Front Image", 14, startY + 190);
-      doc.addImage(iconBase64, 'PNG', 14, startY + 192, 9, 9);
+    //   doc.setFontSize(12);
+    //   doc.setFont("Inter", "normal");
+    //   doc.text("License's Front Image", 14, startY + 190);
+    //   doc.addImage(iconBase64, 'PNG', 14, startY + 192, 9, 9);
 
-      if (this.officerObj.licFrontImg) {
-        doc.link(14, startY + 192, 9, 9, { url: this.officerObj.licFrontImg });
-      }
+    //   if (this.officerObj.licFrontImg) {
+    //     doc.link(14, startY + 192, 9, 9, { url: this.officerObj.licFrontImg });
+    //   }
 
-      doc.setFontSize(12);
-      doc.setFont("Inter", "normal");
-      doc.text("License's Back Image", 100, startY + 190);
-      doc.addImage(iconBase64, 'PNG', 100, startY + 192, 9, 9);
+    //   doc.setFontSize(12);
+    //   doc.setFont("Inter", "normal");
+    //   doc.text("License's Back Image", 100, startY + 190);
+    //   doc.addImage(iconBase64, 'PNG', 100, startY + 192, 9, 9);
 
-      if (this.officerObj.licBackImg) {
-        doc.link(100, startY + 192, 9, 9, { url: this.officerObj.licBackImg });
-      }
+    //   if (this.officerObj.licBackImg) {
+    //     doc.link(100, startY + 192, 9, 9, { url: this.officerObj.licBackImg });
+    //   }
 
-      doc.setFontSize(16);
-      doc.setFont("Inter", "bold");
-      doc.text("Vehicle Insurance Details", 14, startY + 212);
+    //   doc.setFontSize(16);
+    //   doc.setFont("Inter", "bold");
+    //   doc.text("Vehicle Insurance Details", 14, startY + 212);
 
-      doc.setFontSize(12);
-      doc.setFont("Inter", "normal");
-      doc.text("Vehicle Insurance Number", 14, startY + 222);
+    //   doc.setFontSize(12);
+    //   doc.setFont("Inter", "normal");
+    //   doc.text("Vehicle Insurance Number", 14, startY + 222);
 
-      doc.setFont("Inter", "bold");
-      doc.text(getValueOrNAforInsOrLiscNo(this.officerObj.insNo), 14, startY + 228);
+    //   doc.setFont("Inter", "bold");
+    //   doc.text(getValueOrNAforInsOrLiscNo(this.officerObj.insNo), 14, startY + 228);
 
-      doc.setFontSize(12);
-      doc.setFont("Inter", "normal");
-      doc.text("Insurance's Front Image", 14, startY + 238);
-      doc.addImage(iconBase64, 'PNG', 14, startY + 240, 9, 9);
+    //   doc.setFontSize(12);
+    //   doc.setFont("Inter", "normal");
+    //   doc.text("Insurance's Front Image", 14, startY + 238);
+    //   doc.addImage(iconBase64, 'PNG', 14, startY + 240, 9, 9);
 
-      if (this.officerObj.insFrontImg) {
-        doc.link(14, startY + 240, 9, 9, { url: this.officerObj.insFrontImg });
-      }
+    //   if (this.officerObj.insFrontImg) {
+    //     doc.link(14, startY + 240, 9, 9, { url: this.officerObj.insFrontImg });
+    //   }
 
-      doc.setFontSize(12);
-      doc.setFont("Inter", "normal");
-      doc.text("Insurance's Back Image", 100, startY + 238);
-      doc.addImage(iconBase64, 'PNG', 100, startY + 240, 9, 9);
+    //   doc.setFontSize(12);
+    //   doc.setFont("Inter", "normal");
+    //   doc.text("Insurance's Back Image", 100, startY + 238);
+    //   doc.addImage(iconBase64, 'PNG', 100, startY + 240, 9, 9);
 
-      if (this.officerObj.insBackImg) {
-        doc.link(100, startY + 240, 9, 9, { url: this.officerObj.insBackImg });
-      }
+    //   if (this.officerObj.insBackImg) {
+    //     doc.link(100, startY + 240, 9, 9, { url: this.officerObj.insBackImg });
+    //   }
 
-      doc.setFontSize(16);
-      doc.setFont("Inter", "bold");
-      doc.text("Vehicle Details", 14, startY + 260);
+    //   doc.setFontSize(16);
+    //   doc.setFont("Inter", "bold");
+    //   doc.text("Vehicle Details", 14, startY + 260);
 
-      doc.setFontSize(12);
-      doc.setFont("Inter", "normal");
-      doc.text("Vehicle Registration Number", 14, startY + 270);
+    //   doc.setFontSize(12);
+    //   doc.setFont("Inter", "normal");
+    //   doc.text("Vehicle Registration Number", 14, startY + 270);
 
-      doc.setFont("Inter", "bold");
-      doc.text(getValueOrNA(this.officerObj.vRegNo), 14, startY + 276);
+    //   doc.setFont("Inter", "bold");
+    //   doc.text(getValueOrNA(this.officerObj.vRegNo), 14, startY + 276);
 
-      doc.setFontSize(12);
-      doc.setFont("Inter", "normal");
-      doc.text("Vehicle Type", 14, startY + 286);
+    //   doc.setFontSize(12);
+    //   doc.setFont("Inter", "normal");
+    //   doc.text("Vehicle Type", 14, startY + 286);
 
-      doc.setFont("Inter", "bold");
-      doc.text(getValueOrNA(this.officerObj.vType), 14, startY + 292);
+    //   doc.setFont("Inter", "bold");
+    //   doc.text(getValueOrNA(this.officerObj.vType), 14, startY + 292);
 
-      doc.setFontSize(12);
-      doc.setFont("Inter", "normal");
-      doc.text("Vehicle Capacity", 100, startY + 286);
+    //   doc.setFontSize(12);
+    //   doc.setFont("Inter", "normal");
+    //   doc.text("Vehicle Capacity", 100, startY + 286);
 
-      doc.setFont("Inter", "bold");
-      let value = getValueOrNA(String(this.officerObj.vCapacity));
-      doc.text(value === "N/A" ? value : value + " Kg", 100, startY + 292);
-      // doc.text(getValueOrNA(this.officerObj.vCapacity), 14, startY + 292);
+    //   doc.setFont("Inter", "bold");
+    //   let value = getValueOrNA(String(this.officerObj.vCapacity));
+    //   doc.text(value === "N/A" ? value : value + " Kg", 100, startY + 292);
+    //   // doc.text(getValueOrNA(this.officerObj.vCapacity), 14, startY + 292);
 
-      doc.setFontSize(12);
-      doc.setFont("Inter", "normal");
-      doc.text("Vehicle’s Front Image", 14, startY + 302);
-      doc.addImage(iconBase64, 'PNG', 14, startY + 304, 9, 9);
+    //   doc.setFontSize(12);
+    //   doc.setFont("Inter", "normal");
+    //   doc.text("Vehicle’s Front Image", 14, startY + 302);
+    //   doc.addImage(iconBase64, 'PNG', 14, startY + 304, 9, 9);
 
-      if (this.officerObj.vehFrontImg) {
-        doc.link(14, startY + 304, 9, 9, { url: this.officerObj.vehFrontImg });
-      }
+    //   if (this.officerObj.vehFrontImg) {
+    //     doc.link(14, startY + 304, 9, 9, { url: this.officerObj.vehFrontImg });
+    //   }
 
-      doc.setFontSize(12);
-      doc.setFont("Inter", "normal");
-      doc.text("Vehicle’s Back Image", 100, startY + 302);
-      doc.addImage(iconBase64, 'PNG', 100, startY + 304, 9, 9);
+    //   doc.setFontSize(12);
+    //   doc.setFont("Inter", "normal");
+    //   doc.text("Vehicle’s Back Image", 100, startY + 302);
+    //   doc.addImage(iconBase64, 'PNG', 100, startY + 304, 9, 9);
 
-      if (this.officerObj.vehBackImg) {
-        doc.link(100, startY + 304, 9, 9, { url: this.officerObj.vehBackImg });
-      }
+    //   if (this.officerObj.vehBackImg) {
+    //     doc.link(100, startY + 304, 9, 9, { url: this.officerObj.vehBackImg });
+    //   }
 
-      doc.setFontSize(12);
-      doc.setFont("Inter", "normal");
-      doc.text("Vehicle’s Side Image - 1", 14, startY + 320);
-      doc.addImage(iconBase64, 'PNG', 14, startY + 322, 9, 9);
+    //   doc.setFontSize(12);
+    //   doc.setFont("Inter", "normal");
+    //   doc.text("Vehicle’s Side Image - 1", 14, startY + 320);
+    //   doc.addImage(iconBase64, 'PNG', 14, startY + 322, 9, 9);
 
-      if (this.officerObj.vehSideImgA) {
-        doc.link(14, startY + 322, 9, 9, { url: this.officerObj.vehSideImgA });
-      }
+    //   if (this.officerObj.vehSideImgA) {
+    //     doc.link(14, startY + 322, 9, 9, { url: this.officerObj.vehSideImgA });
+    //   }
 
-      doc.setFontSize(12);
-      doc.setFont("Inter", "normal");
-      doc.text("Vehicle’s Side Image - 2", 100, startY + 320);
-      doc.addImage(iconBase64, 'PNG', 100, startY + 322, 9, 9);
+    //   doc.setFontSize(12);
+    //   doc.setFont("Inter", "normal");
+    //   doc.text("Vehicle’s Side Image - 2", 100, startY + 320);
+    //   doc.addImage(iconBase64, 'PNG', 100, startY + 322, 9, 9);
 
-      if (this.officerObj.vehSideImgB) {
+    //   if (this.officerObj.vehSideImgB) {
 
-        doc.link(100, startY + 322, 9, 9, {
-          url: this.officerObj.vehSideImgB,
-          newWindow: true
-        });
-      }
+    //     doc.link(100, startY + 322, 9, 9, {
+    //       url: this.officerObj.vehSideImgB,
+    //       newWindow: true
+    //     });
+    //   }
 
-    }
+    // }
 
     // Save PDF
     doc.save(`${getValueOrNA(this.officerObj.empIdPrefix)}-${getValueOrNA(this.officerObj.firstNameEnglish)} ${getValueOrNA(this.officerObj.lastNameEnglish)}.pdf`);

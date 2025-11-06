@@ -252,14 +252,16 @@ console.log(currentTime);
 changeStatusAndTime(data: { orderIds: any[]; time: string }) {
   this.isLoading = true;
   console.log('change status');
-  
 
   this.DistributionSrv.setStatusAndTime(data).subscribe({
     next: (res) => {
       this.isLoading = false;
 
       if (res && res.success) {
-        this.toastSrv.success(`${data.orderIds.length} orders have been sent out for delivery!`, 'Success');
+        const orderCount = data.orderIds.length < 10 ? ('0' + data.orderIds.length) : (data.orderIds.length);
+        const orderLabel = orderCount === 1 ? 'order has' : 'orders have';
+       
+        this.toastSrv.success(`${orderCount} ${orderLabel} been released to the next stage.`, 'Success');
         this.isOutForDelivery = false;
       } else {
         this.toastSrv.error('Failed to sent out for delivery!', 'Error');

@@ -119,14 +119,20 @@
   
             <div class="mb-8 text-center dark:text-textDark">
                 <p class="text-lg mb-2">
-                    Are you sure you want to send these<br/> 
-                    <span class="font-semibold">
-                      {{ selectedOrderIds.length < 10 ? ('0' + selectedOrderIds.length) : selectedOrderIds.length }}
-                      {{ selectedOrderIds.length === 1 ? 'order' : 'orders' }}
-                    </span>
-                    out for delivery?
-                  </p>
-            </div>
+                  Are you sure you want to release 
+                  <span class="font-semibold">
+                    
+                    {{ selectedOrderIds.length === 1 ? 'this' : 'these' }}
+                    <span *ngIf="selectedOrderIds.length > 1">{{ selectedOrderIds.length < 10 ? ('0' + selectedOrderIds.length) : selectedOrderIds.length }}</span>
+                    selected
+                    
+                    {{ selectedOrderIds.length === 1 ? 'order' : 'orders' }}
+
+                  </span>
+                  for delivery or pickup?
+                </p>
+              </div>
+              
   
             <!-- Buttons -->
             <div class="flex justify-center gap-6 ">

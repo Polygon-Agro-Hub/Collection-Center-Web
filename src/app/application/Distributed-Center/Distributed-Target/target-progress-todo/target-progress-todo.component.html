@@ -54,13 +54,16 @@
         </div>
 
         <div class="relative w-36">
-            <div
-                class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
-                <input type="date" #toDateInput [(ngModel)]="date" name="date"
-                    (change)="onDateChange()"
-                    class="block w-full appearance-none text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none dark:bg-[#292929] custom-date-input" />
-            </div>
+
+            <app-custom-datepicker
+        [placeholder]="'Delivery Date'"
+  [selectedDate]="date"
+  (dateChange)="onDateChange($event)"
+></app-custom-datepicker>
+
         </div>
+
+        
 
         <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
             <input type="text" placeholder="Search by Order ID.." [(ngModel)]="searchText" (keydown)="onKeydown($event)" (keyup.enter)="onSearch()"
@@ -115,24 +118,13 @@
                     <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.firstNameEnglish}} {{item.lastNameEnglish}}</td>
                     
 
-                      <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5] cursor-default">
+                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5] cursor-default">
 
                         <div class="font-medium">
-                            <span *ngIf="item.combinedStatus ==='Completed'"
-                                class="text-[#415CFF]">
-                                {{ getDisplayDate(item.sheduleDate) }} {{ removeWithin(item.sheduleTime) }}
+                            <span [style.color]="getDateColor(item)">
+                              {{ getDisplayDate(item.sheduleDate) }} {{ removeWithin(item.sheduleTime) }}
                             </span>
-
-                            <span *ngIf="item.combinedStatus ==='Pending'"
-                                class="text-[#FF0000]">
-                                {{ getDisplayDate(item.sheduleDate) }} {{ removeWithin(item.sheduleTime) }}
-                            </span>
-
-                            <span *ngIf="item.combinedStatus ==='Opened'"
-                                class="">
-                                {{ getDisplayDate(item.sheduleDate) }} {{ removeWithin(item.sheduleTime) }}
-                            </span>
-                        </div>
+                          </div>
                     </td>
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5] cursor-default">
 

@@ -7,11 +7,12 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
 import { ComplaintsService } from '../../../../services/Complaints-Service/complaints.service';
 import { ToastAlertService } from '../../../../services/toast-alert/toast-alert.service';
+import { CustomDatepickerComponent } from '../../../../components/custom-datepicker/custom-datepicker.component';
 
 @Component({
   selector: 'app-target-progress-completed',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent, CustomDatepickerComponent],
   templateUrl: './target-progress-completed.component.html',
   styleUrl: './target-progress-completed.component.css'
 })
@@ -68,38 +69,31 @@ export class TargetProgressCompletedComponent implements OnInit{
         this.totalItems = res.items.length;
         this.ordersArr = res.items.map((item: any) => {
           let status = '';
-        
-          if (item.packageStatus === 'Pending' && (item.additionalItemsStatus === 'Unknown' || item.additionalItemsStatus === 'Pending')) {
+          
+          const pkgStatus = item.packageStatus;
+          const addStatus = item.additionalItemsStatus;
+          
+          // Priority 1: If either is Pending, combinedStatus is Pending
+          if (pkgStatus === 'Pending' || addStatus === 'Pending') {
             status = 'Pending';
           }
-          else if (item.packageStatus === 'Pending' && (item.additionalItemsStatus === 'Opened' || item.additionalItemsStatus === 'Completed')) {
+          // Priority 2: If either is Opened (and none are Pending), combinedStatus is Opened
+          else if (pkgStatus === 'Opened' || addStatus === 'Opened') {
             status = 'Opened';
           }
-          else if (item.packageStatus === 'Opened') {
-            status = 'Opened';
-          }
-          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Unknown') {
+          // Priority 3: If both are Completed, combinedStatus is Completed
+          else if (pkgStatus === 'Completed' && addStatus === 'Completed') {
             status = 'Completed';
           }
-          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Pending') {
-            status = 'Pending';
-          }
-          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Opened') {
-            status = 'Opened';
-          }
-          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Completed') {
+          // Priority 4: If one is Completed and other is Unknown, use the non-Unknown status
+          else if (pkgStatus === 'Completed' && addStatus === 'Unknown') {
             status = 'Completed';
           }
-          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Pending') {
-            status = 'Pending';
-          }
-          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Opened') {
-            status = 'Opened';
-          }
-          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Completed') {
+          else if (pkgStatus === 'Unknown' && addStatus === 'Completed') {
             status = 'Completed';
           }
-          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Unknown') {
+          // Default: Both are Unknown
+          else {
             status = 'Unknown';
           }
         
@@ -136,16 +130,20 @@ export class TargetProgressCompletedComponent implements OnInit{
 
   }
 
-  onDateChange() {
-    console.log('called')
+  onDateChange(newDate: string | Date | null) {
+    let formattedDate: string = '';
+  
+    if (newDate instanceof Date) {
+      // Convert Date object to string (YYYY-MM-DD)
+      formattedDate = newDate.toISOString().split('T')[0];
+    } else if (typeof newDate === 'string') {
+      formattedDate = newDate;
+    }
+  
+    this.date = formattedDate;
     this.fetchCompletedAssignOrders();
   }
 
-
-  // onPageChange(event: number) {
-  //   this.page = event;
-  //   this.fetchCompletedAssignOrders(this.page, this.itemsPerPage);
-  // }
 
   getDisplayDate(sheduleDate: string | Date): string {
     const today = new Date();
@@ -292,13 +290,16 @@ getScheduleClass(item: any): string {
   const nowDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const scheduleOnlyDate = new Date(scheduleDate.getFullYear(), scheduleDate.getMonth(), scheduleDate.getDate());
 
+  console.log('sheduleDate', scheduleOnlyDate) 
   // Case 1: Schedule date is before today → RED
   if (scheduleOnlyDate < nowDate) {
-    return 'text-red-500';
+    return '#AC0003';
   }
 
   // Case 2: Schedule date is today → check slot
   if (scheduleOnlyDate.getTime() === nowDate.getTime()) {
+
+    console.log('equeal')
     let upperLimitHour = 0;
 
     if (item.sheduleTime.includes('8-12')) {
@@ -312,15 +313,22 @@ getScheduleClass(item: any): string {
     const upperLimit = new Date(now);
     upperLimit.setHours(upperLimitHour, 0, 0, 0);
 
+    console.log('time', item.sheduleTime)
+    console.log('upper limi', upperLimit)
+
+    console.log('now', now)
+
     if (now <= upperLimit) {
-      return 'text-blue-500';  // slot still valid
+      console.log('valid')
+      return '#415CFF';  // slot still valid
     } else {
-      return 'text-red-500';   // slot expired
+      console.log('invalid')
+      return '#FF0000';   // slot expired
     }
   }
 
   // Case 3: Future date → no color
-  return '';
+  return '#606060';
 }
 
 onKeydown(event: KeyboardEvent) {

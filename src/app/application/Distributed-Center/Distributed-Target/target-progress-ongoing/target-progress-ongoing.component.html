@@ -75,6 +75,7 @@
         </div> -->
 
         <app-custom-datepicker
+        [placeholder]="'Delivery Date'"
   [selectedDate]="selectedDate"
   (dateChange)="onDateChange($event)"
 ></app-custom-datepicker>
@@ -139,21 +140,10 @@
                       <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5] cursor-default">
 
                         <div class="font-medium">
-                            <span *ngIf="item.combinedStatus ==='Completed'"
-                                class="text-[#415CFF]">
-                                {{ getDisplayDate(item.sheduleDate) }} {{ removeWithin(item.sheduleTime) }}
+                            <span [style.color]="getDateColor(item)">
+                              {{ getDisplayDate(item.sheduleDate) }} {{ removeWithin(item.sheduleTime) }}
                             </span>
-
-                            <span *ngIf="item.combinedStatus ==='Pending'"
-                                class="text-[#FF0000]">
-                                {{ getDisplayDate(item.sheduleDate) }} {{ removeWithin(item.sheduleTime) }}
-                            </span>
-
-                            <span *ngIf="item.combinedStatus ==='Opened'"
-                                class="">
-                                {{ getDisplayDate(item.sheduleDate) }} {{ removeWithin(item.sheduleTime) }}
-                            </span>
-                        </div>
+                          </div>
                     </td>
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5] cursor-default">
 

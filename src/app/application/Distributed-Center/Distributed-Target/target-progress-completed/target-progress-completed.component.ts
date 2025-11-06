@@ -331,7 +331,7 @@ getScheduleClass(item: any): string {
 
   // Case 3: Future date → no color
   return '#606060';
-}
+ }
 
 onKeydown(event: KeyboardEvent) {
   // Prevent space key

@@ -118,7 +118,7 @@
             <thead class="text-[#4B5563] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
                 <tr>
                     <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">
-                        <input type="checkbox" 
+                        <input class="cursor-pointer" type="checkbox" 
                                [checked]="allChecked" 
                                (change)="toggleAllOrders($event)">
                     </th>
@@ -132,7 +132,7 @@
             <tbody class="bg-white dark:bg-[#1D1D1F] text-[#000000] dark:border-[#1D1D1F] cursor-default">
                 <tr *ngFor="let item of ordersArr let i = index">
                     <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
-                        <input type="checkbox" 
+                        <input class="cursor-pointer" type="checkbox" 
                                [checked]="isChecked(item.processOrderId)" 
                                (change)="toggleOrder(item.processOrderId, $event)">
                     </td>
@@ -193,8 +193,22 @@
             <label for="jobRole" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
               Select Short Stock Assignee
             </label>
+
+
+            <app-searchable-dropdown
+              [items]="categoryDropdownItems"
+              placeholder="Select Category"
+              searchPlaceholder="Search categories..."
+              [(ngModel)]="selectedOfficer"
+              (selectionChange)="onCategorySelectionChange($event)"
+              [clearable]="true"
+              [showSelected]="true"
+              [disabled]="false"
+              class="block w-full mb-4"
+            ></app-searchable-dropdown>
+
           
-            <select
+            <!-- <select
               id="jobRole"
               name="jobRole"
               required
@@ -203,18 +217,17 @@
               #officerSelect="ngModel"
               class="form-control cursor-pointer block w-full p-2 mt-1 text-[#030308] dark:text-textDark border border-gray-300 rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500"
             >
-              <!-- Default empty option -->
               <option value="">-- Select Officer --</option>
           
               <option *ngFor="let officer of officersArr" [value]="officer.id">
                 {{ officer.empId }} - {{ officer.firstNameEnglish }} {{ officer.lastNameEnglish }}
               </option>
-            </select>
+            </select> -->
           
             <!-- Validation error message -->
-            <div *ngIf="officerSelect.invalid && officerSelect.touched" class="text-red-500 text-sm">
+            <!-- <div *ngIf="officerSelect.invalid && officerSelect.touched" class="text-red-500 text-sm">
               Please select an officer.
-            </div>
+            </div> -->
           </div>
           
         

@@ -48,6 +48,8 @@ export class DcmComplaintsComponent implements OnInit {
 
   closeAddComplaint() {
     this.isAddComplaintOpen = false;
+    this.category = '';
+    this.complaint = '';
   }
 
   openAddComplaint() {

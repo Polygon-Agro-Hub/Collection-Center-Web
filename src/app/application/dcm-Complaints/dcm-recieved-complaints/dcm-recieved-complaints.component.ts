@@ -115,6 +115,7 @@ export class DcmRecievedComplaintsComponent implements OnInit {
   }
 
   onSearch() {
+    this.searchText = this.searchText.trimStart();
     this.fetchAllreciveComplaint();
 
   }
@@ -248,4 +249,5 @@ class Manager {
   manageLastNameSinhala!: string;
   manageLastNameTamil!: string;
   centerName!: string;
+  regCode!: string;
 }

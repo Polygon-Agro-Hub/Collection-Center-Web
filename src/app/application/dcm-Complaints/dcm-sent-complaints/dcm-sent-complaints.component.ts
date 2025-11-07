@@ -153,6 +153,7 @@ export class DcmSentComplaintsComponent implements OnInit {
   }
 
   onSearch() {
+    this.searchText = this.searchText.trimStart();
     this.fetchAllDcmSentComplaint();
 
   }

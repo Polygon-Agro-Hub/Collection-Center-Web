@@ -121,7 +121,7 @@
                     <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">
                         <input type="checkbox" 
                                [checked]="allChecked" 
-                               (change)="toggleAllOrders($event)">
+                               (change)="toggleAllOrders($event)" >
                     </th>
                     <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">No</th>
                     <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">Invoice No</th>
@@ -195,27 +195,22 @@
               Select Short Stock Assignee
             </label>
           
-            <select
-              id="jobRole"
-              name="jobRole"
-              required
-              (change)="onOfficerChange($event)"
-              [(ngModel)]="selectedOfficerId"
-              #officerSelect="ngModel"
-              class="form-control cursor-pointer block w-full p-2 mt-1 text-[#030308] dark:text-textDark border border-gray-300 rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500"
-            >
-              <!-- Default empty option -->
-              <option value="">-- Select Officer --</option>
-          
-              <option *ngFor="let officer of officersArr" [value]="officer.id">
-                {{ officer.empId }} - {{ officer.firstNameEnglish }} {{ officer.lastNameEnglish }}
-              </option>
-            </select>
+            <app-searchable-dropdown
+              [items]="categoryDropdownItems"
+              placeholder="Select Category"
+              searchPlaceholder="Search categories..."
+              [(ngModel)]="selectedOfficer"
+              (selectionChange)="onCategorySelectionChange($event)"
+              [clearable]="true"
+              [showSelected]="true"
+              [disabled]="false"
+              class="block w-full mb-4"
+            ></app-searchable-dropdown>
           
             <!-- Validation error message -->
-            <div *ngIf="officerSelect.invalid && officerSelect.touched" class="text-red-500 text-sm">
+            <!-- <div *ngIf="selectedOfficer && officerSelect.touched" class="text-red-500 text-sm">
               Please select an officer.
-            </div>
+            </div> -->
           </div>
           
         

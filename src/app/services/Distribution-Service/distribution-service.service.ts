@@ -583,6 +583,17 @@ export class DistributionServiceService {
   );
 }
 
+// getDistributionCenterData() {
+
+//   const headers = new HttpHeaders({
+//     Authorization: `Bearer ${this.token}`,
+//   });
+//   return this.http.get(`${this.apiUrl}/get-distribution-center-data`, {
+//     headers,
+//   });
+// }
+
+
 }
 
 

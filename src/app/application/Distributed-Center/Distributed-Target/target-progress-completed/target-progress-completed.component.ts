@@ -269,6 +269,7 @@ changeStatusAndTime(data: { orderIds: any[]; time: string }) {
       }
       this.fetchCompletedAssignOrders()
       this.allChecked = false;
+      this.selectedOrderIds = [];
     },
     error: (err) => {
       this.isLoading = false;

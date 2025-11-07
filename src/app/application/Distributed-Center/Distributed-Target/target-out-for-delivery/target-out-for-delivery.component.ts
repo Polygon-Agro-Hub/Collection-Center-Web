@@ -87,6 +87,7 @@ export class TargetOutForDeliveryComponent implements OnInit {
   }
 
   onSearch() {
+    this.searchText = this.searchText.trimStart();
     this.fetchOutForDeliveryOrders();
   }
 
@@ -149,18 +150,30 @@ export class TargetOutForDeliveryComponent implements OnInit {
 
   downloadTemplate1() {
     this.isDownloading = true;
-
+  
+    const now = new Date();
+  
+    // Format date and time
+    const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+    const timeStr = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true }).replace(' ', ''); 
+  
     this.DistributionSrv
-      .downloadOutForDeliveryTargetProgressReport(this.selectStatus, this.searchText )
+      .downloadOutForDeliveryTargetProgressReport(this.selectStatus, this.searchText)
       .subscribe({
         next: (blob) => {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
-          a.download = `Out_For_Delivery_Report.xlsx`;
+  
+          if (this.selectStatus) {
+            a.download = `[Centre Code] OFD Orders on ${dateStr} filtered by ${this.selectStatus} Generated at ${timeStr}.xlsx`;
+          } else {
+            a.download = `[Centre Code] OFD Orders on ${dateStr} Generated at ${timeStr}.xlsx`;
+          }
+  
           a.click();
           window.URL.revokeObjectURL(url);
-
+  
           Swal.fire({
             icon: "success",
             title: "Downloaded",
@@ -186,6 +199,7 @@ export class TargetOutForDeliveryComponent implements OnInit {
         }
       });
   }
+  
 }
 
 class orders {

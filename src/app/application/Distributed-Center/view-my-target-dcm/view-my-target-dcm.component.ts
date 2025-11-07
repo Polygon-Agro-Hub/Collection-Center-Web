@@ -7,11 +7,12 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { ComplaintsService } from '../../../services/Complaints-Service/complaints.service';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
+import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
 
 @Component({
   selector: 'app-view-my-target-dcm',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent, SerchableDropdownComponent],
   templateUrl: './view-my-target-dcm.component.html',
   styleUrl: './view-my-target-dcm.component.css'
 })
@@ -35,6 +36,10 @@ export class ViewMyTargetDcmComponent implements OnInit {
   isLoading:boolean = true;
 
   selectedOfficerId: number | '' = '';
+
+  selectedOfficer: string = '';
+
+  selectedEmpId!: string;
 
   selectedOrderIds: number[] = []; 
   allChecked: boolean = false;
@@ -317,10 +322,14 @@ changeStatusAndTime(data: { orderIds: any[]; time: string }) {
       this.isLoading = false;
 
       if (res && res.success) {
-        this.toastSrv.success(`${data.orderIds.length} orders have been sent out for delivery!`, 'Success');
+
+        const orderCount = data.orderIds.length < 10 ? ('0' + data.orderIds.length) : (data.orderIds.length);
+        const orderLabel = orderCount === 1 ? 'order' : 'orders';
+
+        this.toastSrv.success(`${orderCount} ${orderLabel} successfully passed to ${this.selectedEmpId}!`, 'Success');
         this.isPassTarget = false;
       } else {
-        this.toastSrv.error('Failed to sent out for delivery!', 'Error');
+        this.toastSrv.error('Failed to pass the target to selected officer!', 'Error');
         this.isPassTarget = false;
       }
       this.fetchSelectedOfficerTargets()
@@ -394,6 +403,30 @@ cancelStatus(event?: MouseEvent) {
   }
   this.selectStatus = '';
   this.fetchSelectedOfficerTargets();
+}
+
+
+get categoryDropdownItems() {
+  return this.officersArr.map(officer => ({
+    value: officer.id.toString(),
+    label: officer.empId + ' - ' + officer.firstNameEnglish + ' ' + officer.lastNameEnglish,
+    disabled: false
+  }));
+}
+
+// 5. Add selection change handler
+onCategorySelectionChange(selectedValue: string) {
+  this.selectedOfficer = selectedValue || '';
+
+  this.selectedOfficerId = Number(this.selectedOfficer);
+
+const passOfficer = this.officersArr.find(
+  officer => officer.id === this.selectedOfficerId
+);
+
+this.selectedEmpId = passOfficer ? passOfficer.empId : '';
+  // Add any additional logic you need when category changes
+  console.log('officer selected:', this.selectedOfficerId);
 }
 
 

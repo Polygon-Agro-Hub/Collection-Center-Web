@@ -134,14 +134,14 @@ export class DistributionServiceService {
     return this.http.post<any>(url, data, { headers });
   }
 
-  getAllRequests(page: number = 1, limit: number = 10, date: string = '', status: string = '', searchText: string = ''): Observable<any> {
+  getAllRequests(date: string = '', status: string = '', searchText: string = ''): Observable<any> {
     console.log('date', date, 'status', status, 'search', searchText)
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
     });
 
-    let url = `${this.apiUrl}/get-all-request?page=${page}&limit=${limit}`
+    let url = `${this.apiUrl}/get-all-request?page=${1}`
 
     if (date) {
       url += `&date=${date}`
@@ -582,6 +582,17 @@ export class DistributionServiceService {
     })
   );
 }
+
+// getDistributionCenterData() {
+
+//   const headers = new HttpHeaders({
+//     Authorization: `Bearer ${this.token}`,
+//   });
+//   return this.http.get(`${this.apiUrl}/get-distribution-center-data`, {
+//     headers,
+//   });
+// }
+
 
 }
 

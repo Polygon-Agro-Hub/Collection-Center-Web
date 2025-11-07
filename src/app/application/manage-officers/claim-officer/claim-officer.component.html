@@ -83,11 +83,11 @@
   <div *ngIf="isOfficerExist && officerObj.claimStatus === 1"
     class="flex flex-col items-center w-full h-screen px-10 py-7 dark:bg-[#363636] bg-tileLight shadow-lg rounded-lg mt-6">
     <p *ngIf="logingRole === 'Distribution Centre Manager'" class="text-[#494949] my-6 dark:text-white">
-      --The user already claimed By {{ officerObj.distributedCenterName }} Centre.--
+      --The user already claimed By {{ officerObj.distributedCenterRegCode }} Centre.--
     </p>
 
     <p *ngIf="logingRole === 'Collection Centre Manager'" class="text-[#494949] my-6 dark:text-white">
-      --The user already claimed By {{ officerObj.centerName }} Centre.--
+      --The user already claimed By {{ officerObj.regCode }} Centre.--
     </p>
     <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
   </div>
@@ -97,7 +97,7 @@
   <div *ngIf="hasData"
     class="flex flex-col items-center w-full h-screen px-10 py-7 bg-tileLight dark:bg-[#363636] mt-6">
     <p class="text-[#494949] my-6 dark:text-white">
-      --No User available by this EMPID--
+      --No User available by this EMP ID--
     </p>
     <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
   </div>

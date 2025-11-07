@@ -47,7 +47,8 @@ export class ClaimOfficerComponent implements OnInit {
     if (!this.inputId) {
       return this.toastSrv.warning('Pleace enter valid employee id!');
     }
-
+    
+    this.inputId = this.inputId?.trim();
     this.isLoading = true;
     let empId;
     if (this.selectJobRole === 'Customer Officer') {
@@ -121,7 +122,9 @@ class OfficerDetails {
   companyNameEnglish!: string
   claimStatus!: number
   centerName!: string
+  regCode!: string
   image!: string
   distributedCenterName!: string
+  distributedCenterRegCode!: string;
 }
 

@@ -25,6 +25,7 @@ export class TargetOutForDeliveryComponent implements OnInit {
   totalItems: number = 0;
   itemsPerPage: number = 10;
   hasData: boolean = true;
+  centerName!: string;
 
   isLoading:boolean = true;
 
@@ -52,6 +53,7 @@ export class TargetOutForDeliveryComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchOutForDeliveryOrders();
+    this.fetchCenterData();
   }
 
   @HostListener('document:click', ['$event'])
@@ -71,6 +73,27 @@ export class TargetOutForDeliveryComponent implements OnInit {
       (res) => {
         console.log('res', res)
         this.ordersArr = res.items
+        console.log('ordersArr', this.ordersArr)
+        this.totalItems = res.items.length | 0;
+        
+        if (res.items.length === 0) {
+          this.hasData = false;
+        } else {
+          this.hasData = true;
+
+        }
+        this.isLoading = false;
+
+      }
+    )
+  }
+
+  fetchCenterData() {
+    this.isLoading = true;
+    this.DistributionSrv.getCenterData().subscribe(
+      (res) => {
+        console.log('res', res)
+        this.centerName = res.centerName
         console.log('ordersArr', this.ordersArr)
         this.totalItems = res.items.length | 0;
         
@@ -152,10 +175,27 @@ export class TargetOutForDeliveryComponent implements OnInit {
     this.isDownloading = true;
   
     const now = new Date();
-  
-    // Format date and time
-    const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
-    const timeStr = now.toLocaleTimeString('en-GB', { hour: '2-digit', minute: '2-digit', hour12: true }).replace(' ', ''); 
+
+    const day = now.getDate();        // 1–31
+    const month = now.getMonth() + 1;
+
+// Example: "10 Nov"
+const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+
+// Example: "10/11" → convert to "10-11" (safe for filenames)
+const fullDateStr = now
+  .toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' })
+  .replace(/\//g, '-');
+
+// Example: "12.41PM"
+const timeStr = now
+  .toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
+  .replace(':', '.')
+  .replace(' ', '');
+
+// Combine → "10-11 12.41PM"
+const finalStr = `${fullDateStr} ${timeStr}`;
+console.log(finalStr);
   
     this.DistributionSrv
       .downloadOutForDeliveryTargetProgressReport(this.selectStatus, this.searchText)
@@ -166,9 +206,9 @@ export class TargetOutForDeliveryComponent implements OnInit {
           a.href = url;
   
           if (this.selectStatus) {
-            a.download = `[Centre Code] OFD Orders on ${dateStr} filtered by ${this.selectStatus} Generated at ${timeStr}.xlsx`;
+            a.download = `${this.centerName} OFD Orders on ${dateStr} filtered by ${this.selectStatus} Generated at ${finalStr}.xlsx`;
           } else {
-            a.download = `[Centre Code] OFD Orders on ${dateStr} Generated at ${timeStr}.xlsx`;
+            a.download = `${this.centerName} OFD Orders on ${dateStr} Generated at $${finalStr}.xlsx`;
           }
   
           a.click();

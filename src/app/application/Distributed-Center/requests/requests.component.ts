@@ -36,6 +36,8 @@ export class RequestsComponent implements OnInit {
   selectedReplacePrice: number | null = null;
   selectedReplaceUnitPrice: number | null = null;
 
+  isPriceValid: boolean = true;
+
   totalItems: number = 0;
   hasData: boolean = true;
 
@@ -171,6 +173,8 @@ export class RequestsComponent implements OnInit {
     this.selectedRequestObj = item
     console.log('selectedRequestObj', this.selectedRequestObj);
 
+    this.productId =  String(this.selectedRequestObj.replaceProductId)
+
     this.isReplacePopUpOpen = true;
   }
 
@@ -251,6 +255,7 @@ export class RequestsComponent implements OnInit {
       this.selectedRequestObj.replaceUnitPrice = selectedProduct.discountedPrice;
       this.selectedRequestObj.replacePrice = selectedProduct.discountedPrice * this.selectedRequestObj.replaceQty;
       this.selectedRequestObj.replaceUnitType = selectedProduct.unitType
+      this.setIsPriceValid();
     }
 
     console.log('prodid', this.selectedRequestObj.replaceProductId)
@@ -259,6 +264,17 @@ export class RequestsComponent implements OnInit {
   onQtyChange() {
     this.selectedRequestObj.replacePrice =
       this.selectedRequestObj.replaceUnitPrice * this.selectedRequestObj.replaceQty;
+    this.setIsPriceValid();
+  }
+
+  setIsPriceValid() {
+    this.isPriceValid = true;
+    console.log('called')
+    if ((this.selectedRequestObj.replacePrice > this.selectedRequestObj.prevDefineProductPrice) && this.selectedRequestObj.status === 'Approved') {
+      this.isPriceValid = false;
+    } else if ((this.selectedRequestObj.replacePrice > this.selectedRequestObj.currentProductPrice) && this.selectedRequestObj.status === 'Not Approved') {
+      this.isPriceValid = false;
+    }
   }
 
   openViewProductReplacementPopup(item: Request) {

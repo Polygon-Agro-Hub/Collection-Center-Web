@@ -169,8 +169,8 @@
         (click)="(!item.isPacked && item.status === 'Not Approved') ? openReplacePopUp(item) : null">
   <i class="fa-solid fa-pen-to-square text-lg"
      [ngClass]="{
-        'text-[#415CFF] hover:text-blue-500': !item.isPacked,
-        'text-[#6B7D8C] hover:text-[#6B7D8C]': item.isPacked || item.status === 'Approved'
+        'text-[#415CFF] hover:text-blue-500': !item.isPacked && item.status === 'Not Approved',
+        'text-[#6B7D8C] hover:text-[#6B7D8C]': item.isPacked || item.status !== 'Not Approved'
      }">
   </i>
 </button>
@@ -305,9 +305,9 @@
       </tbody>
     </table>
 
-    <div *ngIf="isPriceValid === false" class="text-center text-[#FA0000] mb-3">
-            The replacing product has exceeded the amount allocated for this item
-    </div>
+    <div *ngIf="isPriceValid === false" class="text-center italic text-[#FA0000] mb-3">
+      The replacing product has exceeded the amount allocated for this item
+</div>
     
 
     <div class="flex justify-center gap-3">

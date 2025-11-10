@@ -121,7 +121,10 @@
                     <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">
                         <input type="checkbox" 
                                [checked]="allChecked" 
-                               (change)="toggleAllOrders($event)" >
+                               (change)="toggleAllOrders($event)"
+                               [disabled]="
+                               selectableOrders.length === 0
+                             " >
                     </th>
                     <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">No</th>
                     <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">Invoice No</th>
@@ -131,11 +134,18 @@
                 </tr>
             </thead>
             <tbody class="bg-white dark:bg-[#1D1D1F] text-[#000000] dark:border-[#1D1D1F] cursor-default">
-                <tr *ngFor="let item of ordersArr | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index">
+                <tr *ngFor="let item of ordersArr let i = index">
                     <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
-                        <input type="checkbox" 
-                               [checked]="isChecked(item.processOrderId)" 
-                               (change)="toggleOrder(item.processOrderId, $event)">
+                        <input 
+                          type="checkbox" 
+                          [checked]="isChecked(item.processOrderId)" 
+                          (change)="toggleOrder(item.processOrderId, $event)"
+                          [disabled]="
+                            item.combinedStatus === 'Opened' || 
+                            item.combinedStatus === 'Completed' || 
+                            item.isLock === 1
+                          "
+                        >
                     </td>
                     <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
                         {{ (i + 1) < 10 ? ('0' + (i + 1)) : (i + 1) }}
@@ -234,7 +244,7 @@
                 </tr>
             </thead>
             <tbody class="bg-white dark:bg-[#1D1D1F] text-[#000000] dark:border-[#1D1D1F] cursor-default">
-                <tr *ngFor="let item of filteredOrdersArr | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index">
+                <tr *ngFor="let item of filteredOrdersArr let i = index">
                     <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
                         
                     </td>

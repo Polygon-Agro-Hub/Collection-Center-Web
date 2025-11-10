@@ -128,7 +128,7 @@
                 </thead>
                 <tbody class="bg-white dark:bg-[#1D1D1F] text-[#000000] dark:border-[#1D1D1F] cursor-default">
                     <tr *ngFor="let item of requestArr let i = index">
-                        <td class="px-6 py-4  dark:text-gray-300">{{i}}</td>
+                        <td class="px-6 py-4  dark:text-gray-300">{{ (i + 1) < 10 ? ('0' + (i + 1)) : (i + 1) }}</td>
                         <td class="px-6 py-4 dark:text-gray-300">
                             {{ item.status === 'Approved' ? item.prevDefineProduct : item.currentProduct }}
                         </td>
@@ -163,12 +163,14 @@
                                 <i class="fa-solid fa-pen-to-square text-lg"></i>
                             </button> -->
 
+                            <!-- && item.status === 'Not Approved' -->
+
                             <button class="px-2"
-        (click)="!item.isPacked ? openReplacePopUp(item) : null">
+        (click)="(!item.isPacked && item.status === 'Not Approved') ? openReplacePopUp(item) : null">
   <i class="fa-solid fa-pen-to-square text-lg"
      [ngClass]="{
         'text-[#415CFF] hover:text-blue-500': !item.isPacked,
-        'text-[#6B7D8C]': item.isPacked
+        'text-[#6B7D8C] hover:text-[#6B7D8C]': item.isPacked || item.status === 'Approved'
      }">
   </i>
 </button>
@@ -234,7 +236,7 @@
       </p>
     </div>
 
-    <table class="w-full text-sm font-semibold text-gray-700 mb-6">
+    <table class="w-full text-sm font-semibold text-gray-700 mb-2">
       <thead class="text-gray-500 border-b">
         <tr>
           <th class="text-left py-2 w-2/5 dark:text-white">PRODUCT NAME</th>
@@ -290,12 +292,23 @@
           </td>
 
           <!-- Total -->
-          <td class="text-left pl-2 py-2 text-[#415CFF] font-semibold">
-            {{ selectedRequestObj.replacePrice }}
-          </td>
+          <td 
+          class="text-left pl-2 py-2 font-semibold"
+          [ngClass]="{
+            'text-[#415CFF]': isPriceValid !== false,
+            'text-red-500 font-bold': isPriceValid === false
+          }"
+        >
+          {{ selectedRequestObj.replacePrice | number:'1.2-2' }}
+        </td>
         </tr>
       </tbody>
     </table>
+
+    <div *ngIf="isPriceValid === false" class="text-center text-[#FA0000] mb-3">
+            The replacing product has exceeded the amount allocated for this item
+    </div>
+    
 
     <div class="flex justify-center gap-3">
       <button

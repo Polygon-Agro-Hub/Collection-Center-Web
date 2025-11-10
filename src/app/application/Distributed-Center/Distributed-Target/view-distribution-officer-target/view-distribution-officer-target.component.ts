@@ -31,9 +31,7 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
 
   date:  string = '';
 
-  page: number = 1;
   totalItems: number = 0;
-  itemsPerPage: number = 10;
   hasData: boolean = true;
 
   isLoading:boolean = true;
@@ -45,6 +43,7 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
   selectedOfficer: string = '';
 
   selectedOrderIds: number[] = []; 
+  selectableOrders:  orders[] = [];
   allChecked: boolean = false;
   
   filteredOrdersArr!: orders[] 
@@ -149,6 +148,11 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
         this.totalItems = res.total;
   
         this.hasData = this.ordersArr.length > 0;
+
+        this.selectableOrders = this.ordersArr.filter(
+          item => item.combinedStatus === 'Pending' && item.isLock !== 1
+        );
+        
         this.isLoading = false;
       }
     );
@@ -162,7 +166,7 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
         console.log('officer', res)
         this.officersArr = res
         console.log('officersArr', this.officersArr)
-        this.totalOfficers = res.length;
+        this.totalOfficers = res.length | 0;
         this.isLoading = false;
 
       }
@@ -183,12 +187,6 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
 
   onDateChange() {
     console.log('called')
-    this.fetchSelectedOfficerTargets();
-  }
-
-
-  onPageChange(event: number) {
-    this.page = event;
     this.fetchSelectedOfficerTargets();
   }
 
@@ -241,37 +239,40 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
 
 
 toggleOrder(orderId: number, event: Event): void {
-  console.log('togling')
-    const isChecked = (event.target as HTMLInputElement).checked;
-    
-    if (isChecked) {
-        if (!this.selectedOrderIds.includes(orderId)) {
-            this.selectedOrderIds.push(orderId);
-        }
-    } else {
-        this.selectedOrderIds = this.selectedOrderIds.filter(id => id !== orderId);
+  const isChecked = (event.target as HTMLInputElement).checked;
+
+  if (isChecked) {
+    if (!this.selectedOrderIds.includes(orderId)) {
+      this.selectedOrderIds.push(orderId);
     }
-    console.log('selectedOrderIds', this.selectedOrderIds);
+  } else {
+    this.selectedOrderIds = this.selectedOrderIds.filter(id => id !== orderId);
+  }
 
-    
+  // Only consider selectable items (Pending and not locked)
+  
+  this.allChecked = this.selectedOrderIds.length === this.selectableOrders.length;
 
-    this.allChecked = this.selectedOrderIds.length === this.ordersArr.length;
-    console.log('allChecked', this.allChecked)
+  console.log('selectedOrderIds', this.selectedOrderIds);
+  console.log('allChecked', this.allChecked);
 }
 
 
 toggleAllOrders(event: Event): void {
-    const isChecked = (event.target as HTMLInputElement).checked;
-    this.allChecked = isChecked;
-    
-    if (isChecked) {
-      
-        this.selectedOrderIds = this.ordersArr.map(item => item.processOrderId);
-    } else {
-        // Deselect all orders
-        this.selectedOrderIds = [];
-    }
-    console.log('selectedOrderIds', this.selectedOrderIds)
+  const isChecked = (event.target as HTMLInputElement).checked;
+  this.allChecked = isChecked;
+
+  if (isChecked) {
+    // Select only items that are not disabled (Pending and not locked)
+    this.selectedOrderIds = this.ordersArr
+      .filter(item => item.combinedStatus === 'Pending' && item.isLock !== 1)
+      .map(item => item.processOrderId);
+  } else {
+    // Deselect all
+    this.selectedOrderIds = [];
+  }
+
+  console.log('selectedOrderIds', this.selectedOrderIds);
 }
 
 deSelectAll() {
@@ -313,6 +314,7 @@ passTarget() {
 // }
 
 PassTarget() {
+  console.log('passing')
   this.isPass = true;
   this.isPassTarget = false;
   
@@ -383,16 +385,23 @@ passTargetToBackEnd() {
         const selectedOfficer = this.officersArr.find(
           officer => officer.id === this.selectedOfficerId
         );
-      
+
+        const orderCount = this.selectedOrderIds.length < 10 ? ('0' + this.selectedOrderIds.length) : (this.selectedOrderIds.length);
+        const orderLabel = this.selectedOrderIds.length === 1 ? 'order' : 'orders';
+
+        console.log('orderCount', orderCount, 'orderLabel', orderLabel )
+
         // Get the empId if officer exists
         const empId = selectedOfficer ? selectedOfficer.empId : 'Unknown';
+
+        this.toastSrv.success(`${orderCount} ${orderLabel} successfully passed to ${empId}!`, 'Success');
       
         // Use empId in the toast message
-        this.toastSrv.success(
-          `${this.selectedOrderIds.length} orders have been passed to ${empId}!`,
-          'Success'
-        );
-      
+        // this.toastSrv.success(
+        //   `${this.selectedOrderIds.length} orders have been passed to ${empId}!`,
+        //   'Success'
+        // );
+        this.fetchSelectedOfficerTargets()
         this.isPass = false;
         this.isPassTarget = false;
         this.selectedOrderIds = [];
@@ -425,12 +434,15 @@ cancelStatus(event?: MouseEvent) {
 
 
 get categoryDropdownItems() {
-  return this.officersArr.map(officer => ({
-    value: officer.id.toString(),
-    label: officer.empId + ' - ' + officer.firstNameEnglish + ' ' + officer.lastNameEnglish,
-    disabled: false
-  }));
+  return this.officersArr
+    .filter(officer => officer.id !== this.officerId) 
+    .map(officer => ({
+      value: officer.id.toString(),
+      label: `${officer.empId} - ${officer.firstNameEnglish} ${officer.lastNameEnglish}`,
+      disabled: false
+    }));
 }
+
 
 // 5. Add selection change handler
 onCategorySelectionChange(selectedValue: string) {
@@ -508,6 +520,7 @@ class orders {
   distributedTargetId!: number
   combinedStatus!: string
   completeTime!: Date
+  isLock!: number
 }
 
 class Officer {

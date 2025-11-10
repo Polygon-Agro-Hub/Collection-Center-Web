@@ -176,17 +176,12 @@ export class TargetOutForDeliveryComponent implements OnInit {
   
     const now = new Date();
 
-    const day = now.getDate();        // 1–31
-    const month = now.getMonth() + 1;
-
 // Example: "10 Nov"
 const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
 
 // Example: "10/11" → convert to "10-11" (safe for filenames)
-const fullDateStr = now
-  .toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' })
-  .replace(/\//g, '-');
-
+const fullDateStr = `${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+console.log(fullDateStr); // e.g. "11-10"
 // Example: "12.41PM"
 const timeStr = now
   .toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
@@ -208,7 +203,7 @@ console.log(finalStr);
           if (this.selectStatus) {
             a.download = `${this.centerName} OFD Orders on ${dateStr} filtered by ${this.selectStatus} Generated at ${finalStr}.xlsx`;
           } else {
-            a.download = `${this.centerName} OFD Orders on ${dateStr} Generated at $${finalStr}.xlsx`;
+            a.download = `${this.centerName} OFD Orders on ${dateStr} Generated at ${finalStr}.xlsx`;
           }
   
           a.click();

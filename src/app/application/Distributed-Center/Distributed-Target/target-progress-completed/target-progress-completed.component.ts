@@ -259,7 +259,7 @@ changeStatusAndTime(data: { orderIds: any[]; time: string }) {
 
       if (res && res.success) {
         const orderCount = data.orderIds.length < 10 ? ('0' + data.orderIds.length) : (data.orderIds.length);
-        const orderLabel = orderCount === 1 ? 'order has' : 'orders have';
+        const orderLabel = data.orderIds.length === 1 ? 'order has' : 'orders have';
        
         this.toastSrv.success(`${orderCount} ${orderLabel} been released to the next stage.`, 'Success');
         this.isOutForDelivery = false;
@@ -289,22 +289,17 @@ cancelOutForDelivery() {
 getScheduleClass(item: any): string {
   const now = new Date();
   const scheduleDate = new Date(item.sheduleDate);
-
   const nowDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
   const scheduleOnlyDate = new Date(scheduleDate.getFullYear(), scheduleDate.getMonth(), scheduleDate.getDate());
 
-  console.log('sheduleDate', scheduleOnlyDate) 
   // Case 1: Schedule date is before today → RED
   if (scheduleOnlyDate < nowDate) {
-    return '#AC0003';
+    return 'schedule-past'; // CSS class name
   }
-
+  
   // Case 2: Schedule date is today → check slot
   if (scheduleOnlyDate.getTime() === nowDate.getTime()) {
-
-    console.log('equeal')
     let upperLimitHour = 0;
-
     if (item.sheduleTime.includes('8-12')) {
       upperLimitHour = 12;
     } else if (item.sheduleTime.includes('12-4')) {
@@ -312,27 +307,20 @@ getScheduleClass(item: any): string {
     } else if (item.sheduleTime.includes('4-8')) {
       upperLimitHour = 20;
     }
-
     const upperLimit = new Date(now);
     upperLimit.setHours(upperLimitHour, 0, 0, 0);
 
-    console.log('time', item.sheduleTime)
-    console.log('upper limi', upperLimit)
-
-    console.log('now', now)
-
     if (now <= upperLimit) {
-      console.log('valid')
-      return '#415CFF';  // slot still valid
+      console.log('active')
+      return 'schedule-active'; // CSS class name
     } else {
-      console.log('invalid')
-      return '#FF0000';   // slot expired
+      return 'schedule-expired'; // CSS class name
     }
   }
-
+  
   // Case 3: Future date → no color
-  return '#606060';
- }
+  return 'schedule-future'; // CSS class name
+}
 
 onKeydown(event: KeyboardEvent) {
   // Prevent space key

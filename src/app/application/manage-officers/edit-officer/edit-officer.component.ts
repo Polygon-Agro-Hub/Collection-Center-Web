@@ -198,19 +198,19 @@ export class EditOfficerComponent implements OnInit {
     this.setActiveTabFromRoute()
   }
 
-  @HostListener('document:click', ['$event.target'])
-  onClick(targetElement: HTMLElement) {
-    const insideDropdown1 = targetElement.closest('.dropdown-wrapper-1');
-    const insideDropdown2 = targetElement.closest('.dropdown-wrapper-2');
+  // @HostListener('document:click', ['$event.target'])
+  // onClick(targetElement: HTMLElement) {
+  //   const insideDropdown1 = targetElement.closest('.dropdown-wrapper-1');
+  //   const insideDropdown2 = targetElement.closest('.dropdown-wrapper-2');
   
-    // Close dropdowns only if click is outside their wrapper
-    if (!insideDropdown1) {
-      this.dropdownOpen = false;
-    }
-    if (!insideDropdown2) {
-      this.dropdownOpen2 = false;
-    }
-  }
+  //   // Close dropdowns only if click is outside their wrapper
+  //   if (!insideDropdown1) {
+  //     this.dropdownOpen = false;
+  //   }
+  //   if (!insideDropdown2) {
+  //     this.dropdownOpen2 = false;
+  //   }
+  // }
 
   setJobRoles() {
     if (this.logingRole === 'Collection Centre Manager') {

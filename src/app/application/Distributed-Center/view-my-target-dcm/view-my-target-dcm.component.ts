@@ -21,6 +21,8 @@ export class ViewMyTargetDcmComponent implements OnInit {
   searchText: string = '';
   selectStatus: string = '';
 
+  selectableOrders:  orders[] = [];
+
   officersArr!: Officer[];
 
   totalOfficers: number = 0;
@@ -133,8 +135,11 @@ export class ViewMyTargetDcmComponent implements OnInit {
             combinedStatus: status
           };
         });
-        
-  
+
+        this.selectableOrders = this.ordersArr.filter(
+          item => item.combinedStatus === 'Pending' && item.isLock !== 1
+        );
+
         console.log('ordersarr', this.ordersArr);
   
         this.hasData = this.ordersArr.length > 0;
@@ -223,37 +228,40 @@ export class ViewMyTargetDcmComponent implements OnInit {
 
 
 toggleOrder(orderId: number, event: Event): void {
-  console.log('togling')
-    const isChecked = (event.target as HTMLInputElement).checked;
-    
-    if (isChecked) {
-        if (!this.selectedOrderIds.includes(orderId)) {
-            this.selectedOrderIds.push(orderId);
-        }
-    } else {
-        this.selectedOrderIds = this.selectedOrderIds.filter(id => id !== orderId);
+  const isChecked = (event.target as HTMLInputElement).checked;
+
+  if (isChecked) {
+    if (!this.selectedOrderIds.includes(orderId)) {
+      this.selectedOrderIds.push(orderId);
     }
-    console.log('selectedOrderIds', this.selectedOrderIds);
+  } else {
+    this.selectedOrderIds = this.selectedOrderIds.filter(id => id !== orderId);
+  }
 
-    
+  // Only consider selectable items (Pending and not locked)
+  
+  this.allChecked = this.selectedOrderIds.length === this.selectableOrders.length;
 
-    this.allChecked = this.selectedOrderIds.length === this.ordersArr.length;
-    console.log('allChecked', this.allChecked)
+  console.log('selectedOrderIds', this.selectedOrderIds);
+  console.log('allChecked', this.allChecked);
 }
 
 
 toggleAllOrders(event: Event): void {
-    const isChecked = (event.target as HTMLInputElement).checked;
-    this.allChecked = isChecked;
-    
-    if (isChecked) {
-      
-        this.selectedOrderIds = this.ordersArr.map(item => item.processOrderId);
-    } else {
-        // Deselect all orders
-        this.selectedOrderIds = [];
-    }
-    console.log('selectedOrderIds', this.selectedOrderIds)
+  const isChecked = (event.target as HTMLInputElement).checked;
+  this.allChecked = isChecked;
+
+  if (isChecked) {
+    // Select only items that are not disabled (Pending and not locked)
+    this.selectedOrderIds = this.ordersArr
+      .filter(item => item.combinedStatus === 'Pending' && item.isLock !== 1)
+      .map(item => item.processOrderId);
+  } else {
+    // Deselect all
+    this.selectedOrderIds = [];
+  }
+
+  console.log('selectedOrderIds', this.selectedOrderIds);
 }
 
 deSelectAll() {
@@ -497,6 +505,7 @@ class orders {
   distributedTargetId!: number
   combinedStatus!: string
   completeTime!: Date
+  isLock!: number
 }
 
 class Officer {

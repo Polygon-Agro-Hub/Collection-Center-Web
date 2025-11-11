@@ -292,7 +292,7 @@ export class DistributionServiceService {
     return this.http.get<any>(url, { headers });
   }
 
-  getSelectedOfficerTargets(officerId: number, searchText: string = '', status: string = ''): Observable<any> {
+  getSelectedOfficerTargets(officerId: number, searchText: string = '', status: string = '', completingStatus: string = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
@@ -307,6 +307,10 @@ export class DistributionServiceService {
   
     if (status) {
       url += `&status=${status}`
+    }
+
+    if (completingStatus) {
+      url += `&completingStatus=${completingStatus}`
     }
   
     return this.http.get<any>(url, { headers });

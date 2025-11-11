@@ -234,6 +234,91 @@ console.log(finalStr);
         }
       });
   }
+
+  getStatus(item: orders): string {
+    console.log('Setting status');
+  
+    // Convert both into Date objects
+    const scheduleDate = new Date(item.sheduleDate);
+    const outDlvrDateLocal = item.outDlvrDateLocal ? new Date(item.outDlvrDateLocal) : null;
+  
+    // Create the schedule deadline
+    const deadline = new Date(scheduleDate);
+  
+    if (item.sheduleTime) {
+      const timeSlot = item.sheduleTime.trim();
+  
+      if (timeSlot === 'Within 8-12 PM') {
+        deadline.setHours(12, 0, 0, 0); // 12:00 PM
+      } else if (timeSlot === 'Within 12-4 PM') {
+        deadline.setHours(16, 0, 0, 0); // 4:00 PM
+      } else if (timeSlot === 'Within 4-8 PM') {
+        deadline.setHours(20, 0, 0, 0); // 8:00 PM
+      }
+    }
+  
+    // Current time in SL
+    const now = new Date(
+      new Date().toLocaleString('en-US', { timeZone: 'Asia/Colombo' })
+    );
+  
+    console.log(
+      'Now (SL):',
+      now.toLocaleString('en-GB', { timeZone: 'Asia/Colombo', hour12: false })
+    );
+    console.log(
+      'Deadline (SL):',
+      deadline.toLocaleString('en-GB', { timeZone: 'Asia/Colombo', hour12: false })
+    );
+  
+
+    // --- Case 1: Not completed yet ---
+    if (outDlvrDateLocal) {
+      console.log('deldate', outDlvrDateLocal.getTime())
+      if (outDlvrDateLocal.getTime() > deadline.getTime()) {
+        // this.isLateAndNotCompleted = true;
+        return 'Late';
+      } else if (outDlvrDateLocal.getTime() <= deadline.getTime()){
+        return 'On Time';
+      }
+    }
+  
+    return 'Unknown';
+  }
+
+  getTimeValidity(item: orders): string {
+    const scheduleDate = new Date(item.sheduleDate);
+  
+    // Get current date in Asia/Colombo
+    const now = new Date(
+      new Date().toLocaleString('en-US', { timeZone: 'Asia/Colombo' })
+    );
+  
+    // Compare only the date part (ignore time)
+    const scheduleDateOnly = new Date(
+      scheduleDate.getFullYear(),
+      scheduleDate.getMonth(),
+      scheduleDate.getDate()
+    );
+  
+    const currentDateOnly = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate()
+    );
+  
+    if (scheduleDateOnly.getTime() === currentDateOnly.getTime()) {
+      console.log('Equal')
+      return 'Equal';
+    } else if (scheduleDateOnly.getTime() < currentDateOnly.getTime()) {
+      console.log('Passed')
+      return 'Passed';
+    } else {
+      console.log('nPassed')
+      return 'Not Passed';
+    }
+  }
+  
   
 }
 

@@ -20,6 +20,8 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
   ordersArr!: orders[];
   searchText: string = '';
   selectStatus: string = '';
+  selectCompletingStatus: string = '';
+  isLateAndNotCompleted!: boolean;
 
   officersArr!: Officer[];
 
@@ -63,6 +65,20 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
     this.filterStatus();
   }
 
+  isCompletingStatusDropdownOpen = false;
+  completingStatusDropdownOptions = ['On Time', 'Late', 'Not Completed'];
+
+  toggleCompletingStatusDropdown() {
+    this.isCompletingStatusDropdownOpen = !this.isCompletingStatusDropdownOpen;
+  }
+
+  selectCompletingStatusOption(option: string) {
+    this.selectCompletingStatus = option;
+    this.isCompletingStatusDropdownOpen = false;
+    this.filterCompletingStatus();
+  }
+
+
   constructor(
     private router: Router,
     private ComplainSrv: ComplaintsService,
@@ -95,45 +111,39 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
   fetchSelectedOfficerTargets(
     officerId: number = this.officerId, 
     search: string = this.searchText, 
-    status: string = this.selectStatus
+    status: string = this.selectStatus,
+    completingStatus: string = this.selectCompletingStatus
   ) {
     this.isLoading = true;
-    this.DistributionSrv.getSelectedOfficerTargets(officerId, search, status).subscribe(
+    this.DistributionSrv.getSelectedOfficerTargets(officerId, search, status, completingStatus).subscribe(
       (res) => {
         this.ordersArr = res.items.map((item: any) => {
           let status = '';
-        
-          if (item.packageStatus === 'Pending' && (item.additionalItemsStatus === 'Unknown' || item.additionalItemsStatus === 'Pending')) {
+          
+          const pkgStatus = item.packageStatus;
+          const addStatus = item.additionalItemsStatus;
+          
+          // Priority 1: If either is Pending, combinedStatus is Pending
+          if (pkgStatus === 'Pending' || addStatus === 'Pending') {
             status = 'Pending';
           }
-          else if (item.packageStatus === 'Pending' && (item.additionalItemsStatus === 'Opened' || item.additionalItemsStatus === 'Completed')) {
+          // Priority 2: If either is Opened (and none are Pending), combinedStatus is Opened
+          else if (pkgStatus === 'Opened' || addStatus === 'Opened') {
             status = 'Opened';
           }
-          else if (item.packageStatus === 'Opened') {
-            status = 'Opened';
-          }
-          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Unknown') {
+          // Priority 3: If both are Completed, combinedStatus is Completed
+          else if (pkgStatus === 'Completed' && addStatus === 'Completed') {
             status = 'Completed';
           }
-          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Pending') {
-            status = 'Pending';
-          }
-          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Opened') {
-            status = 'Opened';
-          }
-          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Completed') {
+          // Priority 4: If one is Completed and other is Unknown, use the non-Unknown status
+          else if (pkgStatus === 'Completed' && addStatus === 'Unknown') {
             status = 'Completed';
           }
-          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Pending') {
-            status = 'Pending';
-          }
-          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Opened') {
-            status = 'Opened';
-          }
-          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Completed') {
+          else if (pkgStatus === 'Unknown' && addStatus === 'Completed') {
             status = 'Completed';
           }
-          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Unknown') {
+          // Default: Both are Unknown
+          else {
             status = 'Unknown';
           }
         
@@ -432,6 +442,18 @@ cancelStatus(event?: MouseEvent) {
   this.fetchSelectedOfficerTargets();
 }
 
+filterCompletingStatus() {
+  this.fetchSelectedOfficerTargets();
+}
+
+cancelCompletingStatus(event?: MouseEvent) {
+  if (event) {
+    event.stopPropagation(); // Prevent triggering the dropdown toggle
+  }
+  this.selectCompletingStatus = '';
+  this.fetchSelectedOfficerTargets();
+}
+
 
 get categoryDropdownItems() {
   return this.officersArr
@@ -464,16 +486,14 @@ goBack() {
 }
 
 getStatus(item: orders): string {
-  if (!item.completeTime) {
-    return 'Not Completed';
-  }
+  console.log('Setting status');
 
   // Convert both into Date objects
-  const completeTime = new Date(item.completeTime);
   const scheduleDate = new Date(item.sheduleDate);
+  const completeTime = item.completeTime ? new Date(item.completeTime) : null;
 
-  // Clone scheduleDate for deadline
-  let deadline = new Date(scheduleDate);
+  // Create the schedule deadline
+  const deadline = new Date(scheduleDate);
 
   if (item.sheduleTime) {
     const timeSlot = item.sheduleTime.trim();
@@ -487,19 +507,35 @@ getStatus(item: orders): string {
     }
   }
 
-  // --- Debug with Sri Lanka local time ---
+  // Current time in SL
+  const now = new Date(
+    new Date().toLocaleString('en-US', { timeZone: 'Asia/Colombo' })
+  );
+
   console.log(
-    'Complete (SL):',
-    completeTime.toLocaleString('en-GB', { timeZone: 'Asia/Colombo', hour12: false })
+    'Now (SL):',
+    now.toLocaleString('en-GB', { timeZone: 'Asia/Colombo', hour12: false })
   );
   console.log(
     'Deadline (SL):',
     deadline.toLocaleString('en-GB', { timeZone: 'Asia/Colombo', hour12: false })
   );
 
-  // ✅ Compare using timestamps (still works for SL)
+  // --- Case 1: Not completed yet ---
+  if (!completeTime) {
+    if (now.getTime() > deadline.getTime()) {
+      this.isLateAndNotCompleted = true;
+      return 'Not Completed';
+    } else {
+      this.isLateAndNotCompleted = false;
+      return 'Not Completed';
+    }
+  }
+
+  // --- Case 2: Completed: Check on-time or late ---
   return completeTime.getTime() <= deadline.getTime() ? 'On Time' : 'Late';
 }
+
 
 }
 
@@ -521,6 +557,7 @@ class orders {
   combinedStatus!: string
   completeTime!: Date
   isLock!: number
+  isComplete!: number
 }
 
 class Officer {

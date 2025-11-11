@@ -41,9 +41,14 @@ export class ClaimOfficerComponent implements OnInit {
 
   ngOnInit(): void {
     this.selectJobRole = ''
+    if (this.logingRole === 'Distribution Centre Manager') {
+      this.selectJobRole = 'Distribution Officer';
+    }
   }
 
   fetchOfficer() {
+
+    console.log('seelectedJbRole', this.selectJobRole)
     if (!this.inputId) {
       return this.toastSrv.warning('Pleace enter valid employee id!');
     }

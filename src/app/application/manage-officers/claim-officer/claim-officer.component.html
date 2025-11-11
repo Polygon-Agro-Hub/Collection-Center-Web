@@ -13,7 +13,7 @@
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-8 my-10 px-10">
-    <div>
+    <div *ngIf="logingRole === 'Collection Centre Manager'" >
       <label for="jobRole" class="block  font-medium text-gray-700 dark:text-textDark">
         Select Job Role
       </label>
@@ -22,17 +22,27 @@
         <option disabled selected value="" class="p-2 text-[#534E4E] bg-gray-200 dark:text-textDark  dark:bg-[#1D1D1F]">
           --Select Job Role--
         </option>
-        <option *ngIf="logingRole === 'Collection Centre Manager'" value="Collection Officer" class="p-2 text-[#534E4E] bg-gray-200 dark:text-textDark dark:bg-[#1D1D1F]">
+        <option value="Collection Officer" class="p-2 text-[#534E4E] bg-gray-200 dark:text-textDark dark:bg-[#1D1D1F]">
           Collection Officer
         </option>
-        <option *ngIf="logingRole === 'Collection Centre Manager'" value="Customer Officer" class="p-2 text-[#534E4E] bg-gray-200 dark:text-textDark dark:bg-[#1D1D1F]">
+        <option value="Customer Officer" class="p-2 text-[#534E4E] bg-gray-200 dark:text-textDark dark:bg-[#1D1D1F]">
           Customer Officer
         </option>
 
-        <option *ngIf="logingRole === 'Distribution Centre Manager'" value="Distribution Officer" class="p-2 text-[#534E4E] bg-gray-200 dark:text-textDark dark:bg-[#1D1D1F]">
+        <option value="Distribution Officer" class="p-2 text-[#534E4E] bg-gray-200 dark:text-textDark dark:bg-[#1D1D1F]">
           Distribution Officer
         </option>
       </select>
+    </div>
+
+    <div *ngIf="logingRole === 'Distribution Centre Manager'">
+      <label for="jobRole" class="block  font-medium text-gray-700 dark:text-textDark">
+        Job Role
+      </label>
+
+      <input type="text" [(ngModel)]="selectJobRole" name="jobRole" id="jobRole" readonly
+      class="form-control mt-1 block w-full p-2  border border-gray-300 dark:border-gray-600 rounded-md text-[#534E4E] bg-gray-200 dark:text-textDark  dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500">
+
     </div>
 
     <div>

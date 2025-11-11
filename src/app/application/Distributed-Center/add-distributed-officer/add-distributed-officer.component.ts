@@ -31,7 +31,7 @@ export class AddDistributedOfficerComponent implements OnInit {
   driverObj: Drivers = new Drivers()
 
   languages: string[] = ['Sinhala', 'English', 'Tamil'];
-  selectedPage: 'pageOne' | 'pageTwo' | 'pageThree' = 'pageTwo';
+  selectedPage: 'pageOne' | 'pageTwo' | 'pageThree' = 'pageOne';
   lastID!: number
   itemId: number | null = null;
   officerId!: number
@@ -186,19 +186,19 @@ export class AddDistributedOfficerComponent implements OnInit {
     }
   }
 
-  @HostListener('document:click', ['$event.target'])
-onClick(targetElement: HTMLElement) {
-  const insideDropdown1 = targetElement.closest('.dropdown-wrapper-1');
-  const insideDropdown2 = targetElement.closest('.dropdown-wrapper-2');
+//   @HostListener('document:click', ['$event.target'])
+// onClick(targetElement: HTMLElement) {
+//   const insideDropdown1 = targetElement.closest('.dropdown-wrapper-1');
+//   const insideDropdown2 = targetElement.closest('.dropdown-wrapper-2');
 
-  // Close dropdowns only if click is outside their wrapper
-  if (!insideDropdown1) {
-    this.dropdownOpen = false;
-  }
-  if (!insideDropdown2) {
-    this.dropdownOpen2 = false;
-  }
-}
+//   // Close dropdowns only if click is outside their wrapper
+//   if (!insideDropdown1) {
+//     this.dropdownOpen = false;
+//   }
+//   if (!insideDropdown2) {
+//     this.dropdownOpen2 = false;
+//   }
+// }
 
 @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent) {
@@ -438,7 +438,47 @@ selectManager(item: Manager) {
           },
           (error: any) => {
             this.isLoading = false;
-            this.toastSrv.error('There was an error creating the collective officer')
+            let errorMessage = 'An unexpected error occurred';
+            let messages: string[] = [];
+
+            if (error.error && Array.isArray(error.error.errors)) {
+              messages = error.error.errors.map((err: string) => {
+                switch (err) {
+                  case 'NIC':
+                    return 'The NIC number is already registered.';
+                  case 'Email':
+                    return 'Email already exists.';
+                  case 'PhoneNumber01':
+                    return 'Mobile Number 1 already exists.';
+                  case 'PhoneNumber02':
+                    return 'Mobile Number 2 already exists.';
+                  default:
+                    return 'Validation error: ' + err;
+                }
+              });
+            }
+
+            if (messages.length > 0) {
+              errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following Duplicate field issues:</p><ul class="list-disc pl-5">';
+              messages.forEach(m => {
+                errorMessage += `<li>${m}</li>`;
+              });
+              errorMessage += '</ul></div>';
+
+              Swal.fire({
+                icon: 'error',
+                title: 'Duplicate Information',
+                html: errorMessage,
+                confirmButtonText: 'OK',
+                customClass: {
+                  popup: 'bg-tileLight dark:bg-[#363636] text-black dark:text-white',
+                  title: 'font-semibold text-lg',
+                  htmlContainer: 'text-left',
+                  confirmButton: 'bg-red-500 dark:bg-red-500 hover:bg-red-600 dark:hover:bg-red-700',
+                },
+              });
+              return;
+            }
           }
         );
       } else if (this.logingRole === 'Distribution Centre Head') {
@@ -462,7 +502,47 @@ selectManager(item: Manager) {
           },
           (error: any) => {
             this.isLoading = false;
-            this.toastSrv.error('There was an error creating the Distribution officer')
+            let errorMessage = 'An unexpected error occurred';
+            let messages: string[] = [];
+
+            if (error.error && Array.isArray(error.error.errors)) {
+              messages = error.error.errors.map((err: string) => {
+                switch (err) {
+                  case 'NIC':
+                    return 'The NIC number is already registered.';
+                  case 'Email':
+                    return 'Email already exists.';
+                  case 'PhoneNumber01':
+                    return 'Mobile Number 1 already exists.';
+                  case 'PhoneNumber02':
+                    return 'Mobile Number 2 already exists.';
+                  default:
+                    return 'Validation error: ' + err;
+                }
+              });
+            }
+
+            if (messages.length > 0) {
+              errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following Duplicate field issues:</p><ul class="list-disc pl-5">';
+              messages.forEach(m => {
+                errorMessage += `<li>${m}</li>`;
+              });
+              errorMessage += '</ul></div>';
+
+              Swal.fire({
+                icon: 'error',
+                title: 'Duplicate Information',
+                html: errorMessage,
+                confirmButtonText: 'OK',
+                customClass: {
+                  popup: 'bg-tileLight dark:bg-[#363636] text-black dark:text-white',
+                  title: 'font-semibold text-lg',
+                  htmlContainer: 'text-left',
+                  confirmButton: 'bg-red-500 dark:bg-red-500 hover:bg-red-600 dark:hover:bg-red-700',
+                },
+              });
+              return;
+            }
           }
         );
       } else {

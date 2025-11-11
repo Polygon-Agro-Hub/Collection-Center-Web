@@ -1,0 +1,15 @@
+.schedule-past {
+    color: #AC0003;
+  }
+  
+  .schedule-active {
+    color: #415CFF;
+  }
+  
+  .schedule-expired {
+    color: #FF0000;
+  }
+  
+  .schedule-future {
+    color: #606060;
+  }

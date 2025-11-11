@@ -158,6 +158,7 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
   }
 
   onSearch() {
+    this.searchText = this.searchText?.trim() || '';
     this.fetchSelectedOfficerTargets();
 
   }

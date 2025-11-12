@@ -7,11 +7,12 @@ import Swal from 'sweetalert2';
 import { DcmRecievedComplaintsComponent } from '../dcm-recieved-complaints/dcm-recieved-complaints.component';
 import { DistributionComplaintsService } from '../../../services/distribution-complaints-service/distribution-complaints.service';
 import { DcmSentComplaintsComponent } from "../dcm-sent-complaints/dcm-sent-complaints.component";
+import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
 
 @Component({
   selector: 'app-dcm-complaints',
   standalone: true,
-  imports: [CommonModule, FormsModule, DcmRecievedComplaintsComponent, DcmSentComplaintsComponent],
+  imports: [CommonModule, FormsModule, DcmRecievedComplaintsComponent, SerchableDropdownComponent, DcmSentComplaintsComponent],
   templateUrl: './dcm-complaints.component.html',
   styleUrl: './dcm-complaints.component.css'
 })
@@ -54,6 +55,21 @@ export class DcmComplaintsComponent implements OnInit {
 
   openAddComplaint() {
     this.isAddComplaintOpen = true;
+  }
+
+  get categoryDropdownItems() {
+    return this.categoryArr.map(cat => ({
+      value: cat.id.toString(),
+      label: cat.categoryEnglish,
+      disabled: false
+    }));
+  }
+
+  // 5. Add selection change handler
+  onCategorySelectionChange(selectedValue: string) {
+    this.category = selectedValue || '';
+    // Add any additional logic you need when category changes
+    console.log('Category selected:', selectedValue);
   }
 
   onSubmit() {

@@ -258,7 +258,7 @@ export class SideNavComponent {
   private setActiveTabFromRoute(): void {
     const currentPath = this.router.url.split('?')[0];
 
-    if (currentPath === '/profile') {
+    if (currentPath.startsWith('/profile')) {
       this.isSelectTab = '';
       return;
     }

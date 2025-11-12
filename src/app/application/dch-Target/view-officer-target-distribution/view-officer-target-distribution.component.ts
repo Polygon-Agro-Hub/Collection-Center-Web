@@ -72,7 +72,7 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
     this.centerId = this.route.snapshot.params['centerId'];
     this.empId = this.route.snapshot.params['empId']
     console.log('Selected officerId:', this.officerId);
-    this.fetchOfficers();
+    // this.fetchOfficers();
     this.fetchSelectedOfficerTargets();
     
   }

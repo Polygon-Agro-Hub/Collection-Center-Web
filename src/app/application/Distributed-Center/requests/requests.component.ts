@@ -144,6 +144,7 @@ export class RequestsComponent implements OnInit {
   }
 
   onSearch() {
+    this.searchText = this.searchText?.trim() || '';
     this.fetchAllRequests(this.date, this.selectStatus, this.searchText);
   }
 
@@ -266,6 +267,25 @@ export class RequestsComponent implements OnInit {
       this.selectedRequestObj.replaceUnitPrice * this.selectedRequestObj.replaceQty;
     this.setIsPriceValid();
   }
+
+  allowOnlyNumbers(event: KeyboardEvent) {
+    const charCode = event.which ? event.which : event.keyCode;
+  
+    // Allow: digits (0–9) and dot (.)
+    if (
+      (charCode < 48 || charCode > 57) && // not a digit
+      charCode !== 46 // not a dot
+    ) {
+      event.preventDefault();
+    }
+  
+    // Prevent multiple dots
+    const input = event.target as HTMLInputElement;
+    if (charCode === 46 && input.value.includes('.')) {
+      event.preventDefault();
+    }
+  }
+  
 
   setIsPriceValid() {
     this.isPriceValid = true;

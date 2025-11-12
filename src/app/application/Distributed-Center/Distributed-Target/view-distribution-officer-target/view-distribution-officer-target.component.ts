@@ -385,6 +385,10 @@ cancell() {
 }
 
 passTargetToBackEnd() {
+  if (!this.selectedOfficerId) {
+    this.toastSrv.error('Please select a short stock assignee to pass the target!', 'Error');
+    return; 
+  }
   console.log('orderIds', this.selectedOrderIds, 'distargetid', this.filteredOrdersArr[0].distributedTargetId, 'officer', this.selectedOfficerId, 'officerID', this.officerId )
   this.DistributionSrv.passTarget(this.selectedOrderIds, this.filteredOrdersArr[0].distributedTargetId, this.selectedOfficerId, this.officerId).subscribe(
     (res) => {

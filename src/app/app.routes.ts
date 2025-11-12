@@ -100,8 +100,21 @@ export const routes: Routes = [
                 path: 'profile',
                 canActivate:[RoleGuardService],
                 data: { roles: ['Collection Centre Manager', 'Collection Centre Head', 'Distribution Centre Manager', 'Distribution Centre Head'] },
-                component: ProfileComponent,
+                children: [
+                    {
+                        path: '',
+                        component: ProfileComponent
+                    },
+                    
+                    {
+                        path: 'view-my-target-dcm/:id',
+                        component: ViewMyTargetDcmComponent
+                    },
+
+                ]
             },
+
+            
             {
                 path: 'dashbord',
                 canActivate:[RoleGuardService],
@@ -470,10 +483,7 @@ export const routes: Routes = [
                         component: ViewOfficerTargetComponent
                     },
 
-                    {
-                        path: 'view-my-target-dcm/:id',
-                        component: ViewMyTargetDcmComponent
-                    },
+                    
 
                     {
                         path: 'view-distribution-officer-target/:officerId/:centerName/:centerId/:empId',

@@ -337,5 +337,6 @@ class orders {
   lastNameEnglish!: string
   outDlvrDateLocal!: Date
   deliveryPeriod!: string
+  scheduleDateStatus!: string
 }
 

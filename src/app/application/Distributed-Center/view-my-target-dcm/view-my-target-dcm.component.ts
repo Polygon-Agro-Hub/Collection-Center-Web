@@ -20,8 +20,10 @@ export class ViewMyTargetDcmComponent implements OnInit {
   ordersArr!: orders[];
   searchText: string = '';
   selectStatus: string = '';
+  selectCompletingStatus: string = '';
 
   selectableOrders:  orders[] = [];
+  isLateAndNotCompleted!: boolean;
 
   officersArr!: Officer[];
 
@@ -63,6 +65,21 @@ export class ViewMyTargetDcmComponent implements OnInit {
     this.filterStatus();
   }
 
+  isCompletingStatusDropdownOpen = false;
+  completingStatusDropdownOptions = ['On Time', 'Late', 'Not Completed'];
+
+  toggleCompletingStatusDropdown() {
+    this.isCompletingStatusDropdownOpen = !this.isCompletingStatusDropdownOpen;
+  }
+
+  selectCompletingStatusOption(option: string) {
+    this.selectCompletingStatus = option;
+    this.isCompletingStatusDropdownOpen = false;
+    this.filterCompletingStatus();
+  }
+
+  
+
   constructor(
     private router: Router,
     private ComplainSrv: ComplaintsService,
@@ -95,10 +112,11 @@ export class ViewMyTargetDcmComponent implements OnInit {
   fetchSelectedOfficerTargets(
     officerId: number = this.officerId, 
     search: string = this.searchText, 
-    status: string = this.selectStatus
+    status: string = this.selectStatus,
+    completingStatus: string = this.selectCompletingStatus
   ) {
     this.isLoading = true;
-    this.DistributionSrv.getSelectedOfficerTargets(officerId, search, status).subscribe(
+    this.DistributionSrv.getSelectedOfficerTargets(officerId, search, status, completingStatus).subscribe(
       (res) => {
         this.ordersArr = res.items.map((item: any) => {
           let status = '';
@@ -163,7 +181,20 @@ export class ViewMyTargetDcmComponent implements OnInit {
     )
   }
 
+  filterCompletingStatus() {
+    this.fetchSelectedOfficerTargets();
+  }
+  
+  cancelCompletingStatus(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
+    this.selectCompletingStatus = '';
+    this.fetchSelectedOfficerTargets();
+  }
+
   onSearch() {
+    this.searchText = this.searchText.trimStart();
     this.fetchSelectedOfficerTargets();
 
   }
@@ -363,6 +394,10 @@ cancell() {
 }
 
 passTargetToBackEnd() {
+  if (!this.selectedOfficerId) {
+    this.toastSrv.error('Please select a short stock assignee to pass the target!', 'Error');
+    return; 
+  }
   console.log('orderIds', this.selectedOrderIds, 'distargetid', this.filteredOrdersArr[0].distributedTargetId, 'officer', this.selectedOfficerId, 'officerID', this.officerId )
   this.DistributionSrv.passTarget(this.selectedOrderIds, this.filteredOrdersArr[0].distributedTargetId, this.selectedOfficerId, this.officerId).subscribe(
     (res) => {
@@ -373,16 +408,17 @@ passTargetToBackEnd() {
         const selectedOfficer = this.officersArr.find(
           officer => officer.id === this.selectedOfficerId
         );
-      
+
+        const orderCount = this.selectedOrderIds.length < 10 ? ('0' + this.selectedOrderIds.length) : (this.selectedOrderIds.length);
+        const orderLabel = this.selectedOrderIds.length === 1 ? 'order' : 'orders';
+
+        console.log('orderCount', orderCount, 'orderLabel', orderLabel )
+
         // Get the empId if officer exists
         const empId = selectedOfficer ? selectedOfficer.empId : 'Unknown';
-      
-        // Use empId in the toast message
-        this.toastSrv.success(
-          `${this.selectedOrderIds.length} orders have been passed to ${empId}!`,
-          'Success'
-        );
-      
+
+        this.toastSrv.success(`${orderCount} ${orderLabel} successfully passed to ${empId}!`, 'Success');
+        this.fetchSelectedOfficerTargets()
         this.isPass = false;
         this.isPassTarget = false;
         this.selectedOrderIds = [];
@@ -415,12 +451,15 @@ cancelStatus(event?: MouseEvent) {
 
 
 get categoryDropdownItems() {
-  return this.officersArr.map(officer => ({
-    value: officer.id.toString(),
-    label: officer.empId + ' - ' + officer.firstNameEnglish + ' ' + officer.lastNameEnglish,
-    disabled: false
-  }));
+  return this.officersArr
+    .filter(officer => officer.id !== this.officerId) 
+    .map(officer => ({
+      value: officer.id.toString(),
+      label: `${officer.empId} - ${officer.firstNameEnglish} ${officer.lastNameEnglish}`,
+      disabled: false
+    }));
 }
+
 
 // 5. Add selection change handler
 onCategorySelectionChange(selectedValue: string) {
@@ -445,20 +484,22 @@ onOfficerChange(event: Event) {
 }
 
 goBack() {
-  this.location.back();
+  window.location.reload();
+}
+
+navigateToProfile() {
+  this.router.navigate(['profile'])
 }
 
 getStatus(item: orders): string {
-  if (!item.completeTime) {
-    return 'Not Completed';
-  }
+  console.log('Setting status');
 
   // Convert both into Date objects
-  const completeTime = new Date(item.completeTime);
   const scheduleDate = new Date(item.sheduleDate);
+  const completeTime = item.completeTime ? new Date(item.completeTime) : null;
 
-  // Clone scheduleDate for deadline
-  let deadline = new Date(scheduleDate);
+  // Create the schedule deadline
+  const deadline = new Date(scheduleDate);
 
   if (item.sheduleTime) {
     const timeSlot = item.sheduleTime.trim();
@@ -472,17 +513,32 @@ getStatus(item: orders): string {
     }
   }
 
-  // --- Debug with Sri Lanka local time ---
+  // Current time in SL
+  const now = new Date(
+    new Date().toLocaleString('en-US', { timeZone: 'Asia/Colombo' })
+  );
+
   console.log(
-    'Complete (SL):',
-    completeTime.toLocaleString('en-GB', { timeZone: 'Asia/Colombo', hour12: false })
+    'Now (SL):',
+    now.toLocaleString('en-GB', { timeZone: 'Asia/Colombo', hour12: false })
   );
   console.log(
     'Deadline (SL):',
     deadline.toLocaleString('en-GB', { timeZone: 'Asia/Colombo', hour12: false })
   );
 
-  // ✅ Compare using timestamps (still works for SL)
+  // --- Case 1: Not completed yet ---
+  if (!completeTime) {
+    if (now.getTime() > deadline.getTime()) {
+      this.isLateAndNotCompleted = true;
+      return 'Not Completed';
+    } else {
+      this.isLateAndNotCompleted = false;
+      return 'Not Completed';
+    }
+  }
+
+  // --- Case 2: Completed: Check on-time or late ---
   return completeTime.getTime() <= deadline.getTime() ? 'On Time' : 'Late';
 }
 

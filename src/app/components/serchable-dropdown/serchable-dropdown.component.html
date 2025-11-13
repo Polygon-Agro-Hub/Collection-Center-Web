@@ -41,6 +41,7 @@
             [placeholder]="searchPlaceholder"
             [value]="searchTerm"
             (input)="onSearchInput($event)"
+            [ngClass]="searchInputClass"
             class="w-full px-3 py-2 pr-10 border text-lg dark:bg-[#292929] dark:text-textDark border-gray-300 dark:border-[#828282] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             autofocus
           />

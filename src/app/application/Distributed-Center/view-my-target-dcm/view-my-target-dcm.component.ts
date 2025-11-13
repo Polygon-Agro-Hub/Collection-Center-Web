@@ -155,7 +155,7 @@ export class ViewMyTargetDcmComponent implements OnInit {
         });
 
         this.selectableOrders = this.ordersArr.filter(
-          item => item.combinedStatus === 'Pending' && item.isLock !== 1
+          item => item.combinedStatus === 'Pending' && item.lockStatus !== 1
         );
 
         console.log('ordersarr', this.ordersArr);
@@ -285,7 +285,7 @@ toggleAllOrders(event: Event): void {
   if (isChecked) {
     // Select only items that are not disabled (Pending and not locked)
     this.selectedOrderIds = this.ordersArr
-      .filter(item => item.combinedStatus === 'Pending' && item.isLock !== 1)
+      .filter(item => item.combinedStatus === 'Pending' && item.lockStatus !== 1)
       .map(item => item.processOrderId);
   } else {
     // Deselect all
@@ -561,7 +561,7 @@ class orders {
   distributedTargetId!: number
   combinedStatus!: string
   completeTime!: Date
-  isLock!: number
+  lockStatus!: number
 }
 
 class Officer {

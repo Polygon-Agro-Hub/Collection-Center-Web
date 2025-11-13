@@ -85,4 +85,7 @@ class Officer {
   companyNameEnglish!: string;
   centerName!: string;
   regCode!: string;
+  distributionRegCode!: string;
+  distributionCentreName!: string;
+
 }

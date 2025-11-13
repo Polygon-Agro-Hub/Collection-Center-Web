@@ -30,12 +30,14 @@
               }}
               - <span class="text-[#030308] dark:text-textDark">{{ officerObj.empId }}</span>
             </p>
-            <p class="font-semibold text-[#030308] dark:text-white">
-              {{ officerObj.regCode }}
+            <p *ngIf="logingRole === 'Collection Centre Manager'" class="font-semibold text-[#030308] dark:text-white">
+              {{ officerObj.regCode }} Centre
             </p>
-            <p class="font-semibold text-[#030308] dark:text-white">
-              {{ officerObj.centerName }}
+
+            <p *ngIf="logingRole === 'Distribution Centre Manager'" class="font-semibold text-[#030308] dark:text-white">
+              {{ officerObj.distributionRegCode }} Centre
             </p>
+
             <p class="text-[#627189] dark:text-textDark">{{ officerObj.companyNameEnglish }}</p>
           </div>
         </div>

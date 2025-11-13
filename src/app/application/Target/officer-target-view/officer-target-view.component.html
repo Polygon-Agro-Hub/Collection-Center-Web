@@ -272,13 +272,20 @@
                              'text-[#415CFF]': item.validity === 'Valid' && item.target > item.complete
                            }">
                         </i> -->
-                        <i class="fa-solid fa-pen-to-square text-xl cursor-pointer"
-                            (click)=" editOfficerTarget(item.id, OfficerObj.toDate, OfficerObj.fromDate)"
-                            [ngClass]="{
-                             'text-gray-400': item.validity === 'Expired' || (item.validity === 'Valid' && (item.target === item.complete || item.target < item.complete)),
-                             'text-[#415CFF]': item.validity === 'Valid' && item.target > item.complete
-                           }">
-                        </i>
+                        <button
+  [disabled]="!(item.validity === 'Active' && item.status === 'Pending')"
+  (click)="editOfficerTarget(item.id, OfficerObj.toDate, OfficerObj.fromDate)"
+  class="cursor-pointer"
+>
+  <i
+    class="fa-solid fa-pen-to-square text-xl"
+    [ngClass]="{
+      'text-[#415CFF] cursor-pointer': item.validity === 'Active' && item.status === 'Pending',
+      'text-gray-400 cursor-not-allowed': !(item.validity === 'Active' && item.status === 'Pending')
+    }"
+  ></i>
+</button>
+
                         
                     </td>
 

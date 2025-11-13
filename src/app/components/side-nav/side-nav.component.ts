@@ -135,7 +135,7 @@ export const MENU_ITEMS = [
     key: 'requested-items',
     path: '/requested-items',
     label: 'Required Items',
-    icon: 'fa-solid fa-bullseye',
+    icon: 'fa-solid fa-cubes',
     permission: ['Distribution Centre Head', 'Distribution Centre Manager'],
   },
 

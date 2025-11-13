@@ -128,17 +128,14 @@ export class CreateDistributionCentreComponent implements OnInit {
   // }
 
   @HostListener('document:click', ['$event.target'])
-onClick(targetElement: HTMLElement) {
-  const insideDropdown1 = targetElement.closest('.dropdown-wrapper-1');
-  const insideDropdown2 = targetElement.closest('.dropdown-wrapper-2');
+onClick(target: EventTarget | null) {
+  if (!(target instanceof HTMLElement)) return; // exit if not an element
 
-  // Close dropdowns only if click is outside their wrapper
-  if (!insideDropdown1) {
-    this.dropdownOpen = false;
-  }
-  if (!insideDropdown2) {
-    this.dropdownOpen2 = false;
-  }
+  const insideDropdown1 = target.closest('.dropdown-wrapper-1');
+  const insideDropdown2 = target.closest('.dropdown-wrapper-2');
+
+  if (!insideDropdown1) this.dropdownOpen = false;
+  if (!insideDropdown2) this.dropdownOpen2 = false;
 }
 
 selectCountry1(country: Country) {

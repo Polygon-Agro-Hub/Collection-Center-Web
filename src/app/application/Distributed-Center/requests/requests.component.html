@@ -314,13 +314,23 @@
     <div class="flex justify-center gap-3">
       <button
         (click)="onReject()"
-        class="w-28 bg-[#FC0004] text-white px-6 py-2 rounded-lg shadow-lg font-medium hover:bg-[#FC0004]"
+        class="w-28 px-6 py-2 rounded-lg shadow-lg font-medium"
+        [ngClass]="{
+          'text-[#FFFFFF] bg-[#FC0004] hover:bg-[#FC0004]': isPriceValid !== false,
+          'text-[#6B7D8C] bg-[#F6F7F9] hover:bg-[#F6F7F9]': isPriceValid === false
+        }"
+        [disabled]="isPriceValid === false"
       >
         Reject
       </button>
       <button
         (click)="onApprove()"
-        class="w-28 bg-[#415CFF] text-white px-6 py-2 shadow-lg rounded-lg font-medium hover:bg-[#415CFF]"
+        class="w-28  px-6 py-2 shadow-lg rounded-lg font-medium "
+        [ngClass]="{
+          'text-[#FFFFFF] bg-[#415CFF] hover:bg-[#415CFF]': isPriceValid !== false,
+          'text-[#6B7D8C] bg-[#F6F7F9] hover:bg-[#F6F7F9]': isPriceValid === false
+        }"
+        [disabled]="isPriceValid === false"
       >
         Approve
       </button>

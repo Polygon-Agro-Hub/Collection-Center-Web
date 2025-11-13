@@ -464,6 +464,7 @@ export class PriceRequestComponent implements OnInit {
     this.isAddRequestOpen = false;
     this.priceRequestObject.cropGroupId = null;
     this.priceRequestObject.cropVarietyId = null;
+    this.cropVarietyArr = [];
     this.priceRequestObject.grade = '';
     this.priceRequestObject.requstPrice = null;
     this.priceRequestObject.currentPrice = null;

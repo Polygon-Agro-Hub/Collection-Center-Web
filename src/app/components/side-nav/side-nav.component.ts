@@ -12,7 +12,7 @@ export const MENU_ITEMS = [
     id: 1,
     key: 'dashboard',
     path: '/dashbord',
-    label: 'Dashbord',
+    label: 'Dashboard',
     icon: 'fas fa-th-large',
     permission: ['Collection Centre Manager'],
   },
@@ -67,6 +67,15 @@ export const MENU_ITEMS = [
   },
 
   {
+    id: 6,
+    key: 'cch-price-request',
+    path: '/cch-price-request',
+    label: 'Price Requests',
+    icon: 'fas fa-hand-holding-usd',
+    permission: ['Collection Centre Head'],
+  },
+
+  {
     id: 21,
     key: 'procurement',
     path: '/procurement',
@@ -102,14 +111,7 @@ export const MENU_ITEMS = [
     permission: ['Collection Centre Head'],
   },
 
-  {
-    id: 6,
-    key: 'cch-price-request',
-    path: '/cch-price-request',
-    label: 'Price Requests',
-    icon: 'fas fa-hand-holding-usd',
-    permission: ['Collection Centre Head'],
-  },
+  
 
   // ----------------------------------------- Distribution Centre part ------------------------------------------
 

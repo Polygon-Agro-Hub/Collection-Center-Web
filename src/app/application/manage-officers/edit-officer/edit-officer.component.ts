@@ -51,6 +51,8 @@ export class EditOfficerComponent implements OnInit {
   ExistirmId!: number;
   isLoading: boolean = true;
 
+  isPopupVisible: boolean = false;
+
   banks: Bank[] = [];
   branches: Branch[] = [];
   selectedBankId: number | null = null;
@@ -1470,6 +1472,106 @@ export class EditOfficerComponent implements OnInit {
     this.personalData.nic = value;
   }
 
+
+  openPopup(item: Personal) {
+    console.log('personal', item);
+    console.log('officerId', this.editOfficerId);
+    this.isPopupVisible = true;
+  
+    const message = `Are you sure you want to reset password for this ${item.jobRole}?`;
+  
+    const approveButton = `
+      <button id="approveButton" 
+        class="bg-[#415CFF] hover:bg-[#415CFF] text-white px-4 py-2 rounded-lg mx-2">
+        Reset Password
+      </button>
+    `;
+  
+    const cancelButton = `
+      <button id="cancelButton" 
+        class="bg-[#FF0000] hover:bg-[#FF0000] text-white px-4 py-2 rounded-lg mx-2">
+        Cancel
+      </button>
+    `;
+  
+    const tableHtml = `
+      <div class="rounded-xl container mx-auto">
+        <h1 class="text-center text-2xl font-bold mb-4 dark:text-white">
+          Officer Name: ${item.firstNameEnglish}
+        </h1>
+        <div>
+          <p class="text-center dark:text-white">${message}</p>
+        </div>
+        <div class="flex justify-center mt-4">
+          ${approveButton}
+          ${cancelButton}
+        </div>
+      </div>
+    `;
+  
+    const swalInstance = Swal.fire({
+      html: tableHtml,
+      showConfirmButton: false,
+      width: 'auto',
+      allowOutsideClick: true,
+      background: 'bg-white dark:bg-[#363636]',
+      color: 'text-gray-800 dark:text-white',
+      customClass: {
+        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+        title: 'dark:text-white',
+      },
+      didOpen: () => {
+        
+        document.getElementById('approveButton')?.addEventListener('click', () => {
+          Swal.close();
+          this.handleStatusChange(swalInstance, this.editOfficerId);
+        });
+  
+        document.getElementById('cancelButton')?.addEventListener('click', () => {
+          Swal.close();
+        });
+      },
+    });
+  }
+  
+
+  private handleStatusChange(swalInstance: any, id: number) {
+    // Show loading state
+    this.isLoading = true;
+    swalInstance.update({
+      showConfirmButton: false,
+      allowEscapeKey: false,
+      allowOutsideClick: false,
+      customClass: {
+        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+        title: 'dark:text-white',
+      },
+
+      didOpen: () => {
+        Swal.showLoading();
+      }
+    });
+
+    this.ManageOficerSrv.ResetPassword(id).subscribe({
+      next: (res) => {
+        swalInstance.close();
+        if (res.status) {
+          this.isLoading = false;
+          swalInstance.close();
+          this.toastSrv.success(`The Collection Officer Password was reseted successfully.`);
+        } else {
+          this.isLoading = false;
+          console.log(`Failed to reset the Collection Officer's password.`)
+        }
+      },
+      error: (err) => {
+        swalInstance.close();
+        this.isLoading = false;
+        this.toastSrv.error(`An error occurred while reseting password. Please try again.`);
+      }
+    });
+  }
+
 }
 
 
@@ -1496,6 +1598,7 @@ class Personal {
   country: string = 'Sri Lanka';
   languages: string = '';
   QRcode!: string;
+  status!: string;
 
   accHolderName!: string;
   accNumber!: string;
@@ -1516,6 +1619,7 @@ class Personal {
   centerId: number | string = '';
   irmId: number | string | null = '';
   previousJobRole!: string;
+  
 
 }
 

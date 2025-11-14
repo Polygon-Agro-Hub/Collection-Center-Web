@@ -312,16 +312,14 @@ export class ManageOfficersService {
     });
   }
 
-  // getDCHOwnCenters(): Observable<any> {
-  //   const headers = new HttpHeaders({
-  //     Authorization: `Bearer ${this.token}`,
-  //     'Content-Type': 'application/json',
-  //   });
-  //   return this.http.get(`${this.apiUrl}/manage-officers/get-centers-dch-own`, {
-  //     headers,
-  //   });
-  // }
-  
+  ResetPassword(id: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/manage-officers/reset-password/${id}`;
+    return this.http.get<any>(url, { headers });
+  }
 }
 
 

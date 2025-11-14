@@ -68,7 +68,7 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
   get officerDropdownItems() {
     return this.officerArr.map(officer => ({
       value: officer.id.toString(),
-      label: officer.firstNameEnglish + ' ' + officer.lastNameEnglish,
+      label: officer.firstNameEnglish + ' ' + officer.lastNameEnglish + ' - ' + officer.empId,
       disabled: false
     }));
   }
@@ -228,6 +228,7 @@ class TargetDetalis {
 
 class Officers {
   id!: number;
+  empId!: string;
   firstNameEnglish!: string;
   lastNameEnglish!: string;
 }

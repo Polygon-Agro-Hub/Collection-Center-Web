@@ -6,11 +6,12 @@ import { DistributionServiceService } from '../../../../services/Distribution-Se
 import { NgxPaginationModule } from 'ngx-pagination';
 import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
 import { ComplaintsService } from '../../../../services/Complaints-Service/complaints.service';
+import { CustomDatepickerComponent } from '../../../../components/custom-datepicker/custom-datepicker.component';
 
 @Component({
   selector: 'app-officer-targets',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent, CustomDatepickerComponent],
   templateUrl: './officer-targets.component.html',
   styleUrl: './officer-targets.component.css'
 })
@@ -20,6 +21,7 @@ export class OfficerTargetsComponent implements OnInit {
 
   hasData: boolean = true;
   totalItems!: number;
+  selectedDate!: string;
 
   isLoading:boolean = true;
 
@@ -32,12 +34,14 @@ export class OfficerTargetsComponent implements OnInit {
 
 
   ngOnInit(): void {
+    const today = new Date();
+    this.selectedDate = today.toISOString().split('T')[0];
     this.fetchofficerTargets();
   }
 
-  fetchofficerTargets() {
+  fetchofficerTargets(date: string = this.selectedDate) {
     this.isLoading = true;
-    this.DistributionSrv.getofficerTargets().subscribe(
+    this.DistributionSrv.getofficerTargets(date).subscribe(
       (res) => {
         console.log('res', res)
         this.officersArr = res.officers
@@ -56,8 +60,28 @@ export class OfficerTargetsComponent implements OnInit {
     )
   }
 
-  viewSelectedOfficerTarget(officerId: number) {
-    this.router.navigate(['/officer-targets/view-officer-target', officerId])
+  viewSelectedOfficerTarget(officerId: number, date: string) {
+    this.router.navigate(['/officer-targets/view-officer-target', officerId, date])
+  }
+
+  onDateChange(newDate: string | Date | null) {
+    let dateString: string;
+  
+    if (!newDate) {
+      
+      dateString = new Date().toISOString().split('T')[0];
+    } 
+    else if (newDate instanceof Date) {
+      
+      dateString = newDate.toISOString().split('T')[0];
+    } 
+    else {
+      
+      dateString = newDate;
+    }
+  
+    this.selectedDate = dateString;
+    this.fetchofficerTargets();
   }
 
   

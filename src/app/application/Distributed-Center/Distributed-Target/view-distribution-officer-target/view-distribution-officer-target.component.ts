@@ -35,6 +35,7 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
 
   totalItems: number = 0;
   hasData: boolean = true;
+  selectedDate!: string;
 
   isLoading:boolean = true;
 
@@ -91,6 +92,7 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
 
   ngOnInit(): void {
     this.officerId = Number(this.route.snapshot.paramMap.get('officerId'));
+    this.selectedDate = String(this.route.snapshot.paramMap.get('date'));
     console.log('Selected officerId:', this.officerId);
     this.fetchOfficers();
     this.fetchSelectedOfficerTargets();
@@ -112,10 +114,11 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
     officerId: number = this.officerId, 
     search: string = this.searchText, 
     status: string = this.selectStatus,
-    completingStatus: string = this.selectCompletingStatus
+    completingStatus: string = this.selectCompletingStatus,
+    date: string = this.selectedDate
   ) {
     this.isLoading = true;
-    this.DistributionSrv.getSelectedOfficerTargets(officerId, search, status, completingStatus).subscribe(
+    this.DistributionSrv.getSelectedOfficerTargets(officerId, search, status, completingStatus, date).subscribe(
       (res) => {
         this.ordersArr = res.items.map((item: any) => {
           let status = '';

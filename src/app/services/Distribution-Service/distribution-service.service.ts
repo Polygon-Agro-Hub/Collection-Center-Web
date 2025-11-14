@@ -280,19 +280,19 @@ export class DistributionServiceService {
     return this.http.post<any>(url, { data }, { headers });
   }
 
-  getofficerTargets(): Observable<any> {
+  getofficerTargets(date: string = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
 
 
-    let url = `${this.apiUrl}/get-officer-targets`;
+    let url = `${this.apiUrl}/get-officer-targets/${date}`;
     
 
     return this.http.get<any>(url, { headers });
   }
 
-  getSelectedOfficerTargets(officerId: number, searchText: string = '', status: string = '', completingStatus: string = ''): Observable<any> {
+  getSelectedOfficerTargets(officerId: number, searchText: string = '', status: string = '', completingStatus: string = '', date: string = ""): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
@@ -311,6 +311,10 @@ export class DistributionServiceService {
 
     if (completingStatus) {
       url += `&completingStatus=${completingStatus}`
+    }
+
+    if (date) {
+      url += `&date=${date}`
     }
   
     return this.http.get<any>(url, { headers });

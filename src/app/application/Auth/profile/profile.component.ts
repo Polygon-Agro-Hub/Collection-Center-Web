@@ -50,7 +50,7 @@ export class ProfileComponent implements OnInit {
 
   navigateToTarget() {
     if (this.logingRole === 'Collection Centre Manager') {
-      this.router.navigate(['/target/view-my-target']);
+      this.router.navigate(['/profile/view-my-target']);
     } else if (this.logingRole === 'Distribution Centre Manager'){
       console.log('id', this.officerObj)
       this.router.navigate(['/profile/view-my-target-dcm', this.officerObj.id]);

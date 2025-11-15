@@ -105,6 +105,11 @@ export const routes: Routes = [
                         path: '',
                         component: ProfileComponent
                     },
+
+                    {
+                        path: 'view-my-target',
+                        component: ViewMyTargetComponent
+                    },
                     
                     {
                         path: 'view-my-target-dcm/:id',
@@ -275,10 +280,7 @@ export const routes: Routes = [
                         path: 'assing-target/:varietyId/:companyCenterId',
                         component: AssignOfficerTargetComponent
                     },
-                    {
-                        path: 'view-my-target',
-                        component: ViewMyTargetComponent
-                    },
+                    
                     {
                         path: 'edit-my-target/:id',
                         component: EditMyTargetComponent

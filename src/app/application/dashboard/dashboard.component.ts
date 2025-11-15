@@ -22,7 +22,7 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   chart: any;
   activeButton: string = 'week';
 
-  isLoading: boolean = true;
+  isLoading: boolean = false;
 
 
   constructor(

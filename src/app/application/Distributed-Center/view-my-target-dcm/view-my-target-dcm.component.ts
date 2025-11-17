@@ -8,11 +8,12 @@ import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loa
 import { ComplaintsService } from '../../../services/Complaints-Service/complaints.service';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
+import { CustomDatepickerComponent } from "../../../components/custom-datepicker/custom-datepicker.component";
 
 @Component({
   selector: 'app-view-my-target-dcm',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent, SerchableDropdownComponent],
+  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent, SerchableDropdownComponent, CustomDatepickerComponent],
   templateUrl: './view-my-target-dcm.component.html',
   styleUrl: './view-my-target-dcm.component.css'
 })
@@ -21,6 +22,8 @@ export class ViewMyTargetDcmComponent implements OnInit {
   searchText: string = '';
   selectStatus: string = '';
   selectCompletingStatus: string = '';
+
+  selectedDate!: string;
 
   selectableOrders:  orders[] = [];
   isLateAndNotCompleted!: boolean;
@@ -94,6 +97,9 @@ export class ViewMyTargetDcmComponent implements OnInit {
     this.officerId = Number(this.route.snapshot.paramMap.get('id'));
     console.log('Selected officerId:', this.officerId);
     this.fetchOfficers();
+
+    const today = new Date();
+    this.selectedDate = today.toISOString().split('T')[0];
     this.fetchSelectedOfficerTargets();
     
   }
@@ -113,10 +119,11 @@ export class ViewMyTargetDcmComponent implements OnInit {
     officerId: number = this.officerId, 
     search: string = this.searchText, 
     status: string = this.selectStatus,
-    completingStatus: string = this.selectCompletingStatus
+    completingStatus: string = this.selectCompletingStatus,
+    date: string = this.selectedDate
   ) {
     this.isLoading = true;
-    this.DistributionSrv.getSelectedOfficerTargets(officerId, search, status, completingStatus).subscribe(
+    this.DistributionSrv.getSelectedOfficerTargets(officerId, search, status, completingStatus, date).subscribe(
       (res) => {
         this.ordersArr = res.items.map((item: any) => {
           let status = '';
@@ -205,10 +212,26 @@ export class ViewMyTargetDcmComponent implements OnInit {
 
   }
 
-  onDateChange() {
-    console.log('called')
+  onDateChange(newDate: string | Date | null) {
+    let dateString: string;
+  
+    if (!newDate) {
+      
+      dateString = new Date().toISOString().split('T')[0];
+    } 
+    else if (newDate instanceof Date) {
+      
+      dateString = newDate.toISOString().split('T')[0];
+    } 
+    else {
+      
+      dateString = newDate;
+    }
+  
+    this.selectedDate = dateString;
     this.fetchSelectedOfficerTargets();
   }
+  
 
   getDisplayDate(scheduleDate: string | Date): string {
     const today = new Date();

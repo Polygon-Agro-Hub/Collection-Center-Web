@@ -66,6 +66,7 @@ export class SentToDispatchPremadeOrdersComponent implements OnInit {
   orderId!: number;
   isWithinLimit = true;
   isLoading: boolean = false;
+  additionalItemsCount!: number;
 
   showAdditionalItemsModal = false;
   showExcludedItemsModal = false;
@@ -200,6 +201,7 @@ export class SentToDispatchPremadeOrdersComponent implements OnInit {
       next: (response) => {
         // console.log('Full API Response:', response); 
         this.additionalItems = response.additionalItems
+        this.additionalItemsCount = response.additionalItems.length || 0;
         console.log("additional Items", this.additionalItems);
 
 

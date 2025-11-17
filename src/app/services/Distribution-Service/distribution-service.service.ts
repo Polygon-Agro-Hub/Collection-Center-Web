@@ -320,34 +320,6 @@ export class DistributionServiceService {
     return this.http.get<any>(url, { headers });
   }
 
-  // getSelectedOfficerTargetsByOfficerId(officerId: number, searchText: string = '', status: string = '', completingStatus: string = '', date: string = ""): Observable<any> {
-  //   const headers = new HttpHeaders({
-  //     Authorization: `Bearer ${this.token}`
-  //   });
-  
-  //   console.log('get-selected-officer-targets')
-  //   let url = `${this.apiUrl}/get-selected-officer-targets-by-officer-id?officerId=${officerId}`;
-  
-  //   if (searchText) {
-  //     url += `&searchText=${searchText}`
-  
-  //   }
-  
-  //   if (status) {
-  //     url += `&status=${status}`
-  //   }
-
-  //   if (completingStatus) {
-  //     url += `&completingStatus=${completingStatus}`
-  //   }
-
-  //   if (date) {
-  //     url += `&date=${date}`
-  //   }
-  
-  //   return this.http.get<any>(url, { headers });
-  // }
-
   getOfficers(): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
@@ -418,7 +390,7 @@ export class DistributionServiceService {
       Authorization: `Bearer ${this.token}`
     });
 
-    console.log('selectDate', selectDate)
+    console.log('selectDate', selectDate, 'status', status)
   
   
     let url = `${this.apiUrl}/get-center-target-out-for-delivery?centerId=${centerId}`;
@@ -564,10 +536,12 @@ export class DistributionServiceService {
     });
   }
 
-  getSelectedDistributionOfficerTargets(officerId: number, centerId: number, searchText: string = '', status: string = ''): Observable<any> {
+  getSelectedDistributionOfficerTargets(officerId: number, centerId: number, searchText: string = '', status: string = '', date: string = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
+
+    console.log('date', date)
   
     let url = `${this.apiUrl}/get-selected-distribution-officer-targets?officerId=${officerId}&centerId=${centerId}`;
   
@@ -579,12 +553,16 @@ export class DistributionServiceService {
     if (status) {
       url += `&status=${status}`
     }
+
+    if (date) {
+      url += `&date=${date}`
+    }
   
     return this.http.get<any>(url, { headers });
   }
 
   downloadRequestedItemsReportFile(
-    officerId: number, centerId: number, search: string = '', status: string = ''
+    officerId: number, centerId: number, search: string = '', status: string = '', date: string = ''
   ): Observable<Blob> {
     let url = `${this.apiUrl}/download-officer-targets?officerId=${officerId}&centerId=${centerId}`;
 
@@ -594,6 +572,10 @@ export class DistributionServiceService {
 
     if (status) {
       url += `&status=${status}`;
+    }
+
+    if (date) {
+      url += `&date=${date}`;
     }
 
     const headers = new HttpHeaders({

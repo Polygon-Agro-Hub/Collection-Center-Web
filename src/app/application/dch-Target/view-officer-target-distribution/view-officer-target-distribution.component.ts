@@ -8,11 +8,12 @@ import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loa
 import { ComplaintsService } from '../../../services/Complaints-Service/complaints.service';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import Swal from 'sweetalert2';
+import { CustomDatepickerComponent } from '../../../components/custom-datepicker/custom-datepicker.component';
 
 @Component({
   selector: 'app-view-officer-target-distribution',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent, CustomDatepickerComponent],
   templateUrl: './view-officer-target-distribution.component.html',
   styleUrl: './view-officer-target-distribution.component.css'
 })
@@ -20,6 +21,7 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
   ordersArr!: orders[];
   searchText: string = '';
   selectStatus: string = '';
+  selectedDate!: string;
 
   isDownloading: boolean = false;
 
@@ -73,6 +75,9 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
     this.empId = this.route.snapshot.params['empId']
     console.log('Selected officerId:', this.officerId);
     // this.fetchOfficers();
+
+    const today = new Date();
+    this.selectedDate = today.toISOString().split('T')[0];
     this.fetchSelectedOfficerTargets();
     
   }
@@ -92,10 +97,11 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
     officerId: number = this.officerId, 
     centerId: number = this.centerId,
     search: string = this.searchText, 
-    status: string = this.selectStatus
+    status: string = this.selectStatus,
+    date: string = this.selectedDate
   ) {
     this.isLoading = true;
-    this.DistributionSrv.getSelectedDistributionOfficerTargets(officerId, centerId, search, status).subscribe(
+    this.DistributionSrv.getSelectedDistributionOfficerTargets(officerId, centerId, search, status, date).subscribe(
       (res) => {
         this.ordersArr = res.items.map((item: any) => {
           let status = '';
@@ -141,6 +147,26 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
       }
     );
   }
+
+  onDateChange(newDate: string | Date | null) {
+    let dateString: string;
+  
+    if (!newDate) {
+      
+      dateString = new Date().toISOString().split('T')[0];
+    } 
+    else if (newDate instanceof Date) {
+      
+      dateString = newDate.toISOString().split('T')[0];
+    } 
+    else {
+      
+      dateString = newDate;
+    }
+  
+    this.selectedDate = dateString;
+    this.fetchSelectedOfficerTargets();
+  }
   
 
   fetchOfficers() {
@@ -167,11 +193,6 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
     this.searchText = '';
     this.fetchSelectedOfficerTargets();
 
-  }
-
-  onDateChange() {
-    console.log('called')
-    this.fetchSelectedOfficerTargets();
   }
 
   getDisplayDate(scheduleDate: string | Date): string {
@@ -278,13 +299,17 @@ getStatus(item: orders): string {
 downloadTemplate1() {
   this.isDownloading = true;
     this.DistributionSrv
-    .downloadRequestedItemsReportFile(this.officerId, this.centerId, this.searchText, this.selectStatus)
+    .downloadRequestedItemsReportFile(this.officerId, this.centerId, this.searchText, this.selectStatus, this.selectedDate)
     .subscribe({
       next: (blob) => {
         const url = window.URL.createObjectURL(blob);
         const a = document.createElement("a");
         a.href = url;
-        a.download = `${this.empId}_Current_active_officer_targets.xlsx`;
+        if(this.selectStatus) {
+          a.download = `${this.empId}_Current_active_officer_targets_filtered_by_${this.selectStatus}_on_${this.selectedDate}.xlsx`;
+        } else {
+          a.download = `${this.empId}_Current_active_officer_targets_on_${this.selectedDate}.xlsx`;
+        }
         a.click();
         window.URL.revokeObjectURL(url);
 

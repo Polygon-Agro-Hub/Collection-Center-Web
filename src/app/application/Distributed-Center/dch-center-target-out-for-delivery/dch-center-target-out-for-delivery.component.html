@@ -150,11 +150,18 @@
                     <td class="px-6 py-4 text-sm text-center ">
 
                         <div class="flex font-medium items-center justify-center h-full">
-                            <span *ngIf="item.deliveryPeriod ==='On Time'" class="text-[#415CFF] px-3 py-1">
+                            <span *ngIf="item.deliveryPeriod ==='On Time'"
+                                class="text-[#415CFF] px-3 py-1">
                                 On Time
                             </span>
 
-                            <span *ngIf="item.deliveryPeriod ==='Late'" class="text-[#FF0000] px-3 py-1">
+                            <span *ngIf="item.deliveryPeriod ==='Late'"
+                                class="text-[#FF0000] px-3 py-1">
+                                Late
+                            </span>
+
+                            <span *ngIf="item.deliveryPeriod ==='Later'"
+                                class="text-[#AC0003] px-3 py-1">
                                 Late
                             </span>
 

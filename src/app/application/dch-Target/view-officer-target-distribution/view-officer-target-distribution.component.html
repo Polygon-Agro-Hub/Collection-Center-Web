@@ -39,6 +39,14 @@
 
         <p class="text-lg dark:text-white">Filter By</p>
 
+        <div class="w-36">
+            <app-custom-datepicker
+        [placeholder]="'Scheduled Date'"
+  [selectedDate]="selectedDate"
+  (dateChange)="onDateChange($event)"
+></app-custom-datepicker>
+        </div>
+
         <div class="relative w-40 custom-status-dropdown-container">
             <!-- Hidden native select -->
             <select [(ngModel)]="selectStatus" class="hidden" (change)="filterStatus()">
@@ -138,7 +146,7 @@
     'text-[#FF0000]': getDisplayDate(item.sheduleDate) !== 'Today'
   }"
 >
-  {{ getDisplayDate(item.sheduleDate) }} {{ removeWithin(item.sheduleTime) }}
+  {{ removeWithin(item.sheduleTime) }}
 </td>
 
                     <!-- <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.packagePackStatus}}</td> -->

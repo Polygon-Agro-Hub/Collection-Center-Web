@@ -116,6 +116,7 @@ export class RedefineTodoOrdersComponent implements OnInit {
 
   onSearch() {
     this.page = 1;
+    this.searchTerm = this.searchTerm?.trim() || '';
     this.fetchOrders();
   }
 

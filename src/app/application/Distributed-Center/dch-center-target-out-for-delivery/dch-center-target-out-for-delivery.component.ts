@@ -88,7 +88,7 @@ export class DchCenterTargetOutForDeliveryComponent implements OnInit{
   }
 
   fetchCenterTargetOutForDelivery(centerId: number = this.centerId!, search: string = this.searchText, status: string = this.selectStatus, selectDate: string | Date | null = this.date) {
-    console.log('selectDate', selectDate)
+    console.log('selectDate', selectDate, 'status', status)
     this.isLoading = true;
     this.DistributionSrv.getCenterTargetForDelivery(centerId, search, status, selectDate).subscribe(
       (res) => {

@@ -22,7 +22,8 @@ import { ProcurementsService } from '../../../services/Procurement-service/procu
     LoadingSpinnerComponent,
     NgxPaginationModule,
     FormsModule,
-  ],
+    CustomDatepickerComponent
+],
   templateUrl: './redefine-sent-to-dispatch-orders.component.html',
   styleUrl: './redefine-sent-to-dispatch-orders.component.css'
 })
@@ -33,8 +34,10 @@ export class RedefineSentToDispatchOrdersComponent implements OnInit {
   itemsPerPage: number = 10;
   totalItems: number = 0;
 
+  dateFilter:string = '';
+
   statusFilter: string = '';
-  dateFilter: Date | null = null; // Changed to Date type
+  // dateFilter: Date | null = null; // Changed to Date type
   deliveryDateFilter: string = '';
   searchTerm: string = '';
   hasData: boolean = false;
@@ -61,7 +64,7 @@ export class RedefineSentToDispatchOrdersComponent implements OnInit {
     this.fetchOrders();
   }
 
-  fetchOrders(dateFilter: string = this.dateFilter ? this.formatDate(this.dateFilter) : '',
+  fetchOrders(dateFilter: string = this.dateFilter ? this.dateFilter : '',
     searchTerm: string = this.searchTerm): void {
     this.isLoading = true;
 
@@ -97,36 +100,43 @@ export class RedefineSentToDispatchOrdersComponent implements OnInit {
   }
 
   // Helper method to format Date to YYYY-MM-DD string
-  private formatDate(date: Date): string {
-    const year = date.getFullYear();
-    const month = (date.getMonth() + 1).toString().padStart(2, '0');
-    const day = date.getDate().toString().padStart(2, '0');
-    return `${year}-${month}-${day}`;
+  // private formatDate(date: Date): string {
+  //   const year = date.getFullYear();
+  //   const month = (date.getMonth() + 1).toString().padStart(2, '0');
+  //   const day = date.getDate().toString().padStart(2, '0');
+  //   return `${year}-${month}-${day}`;
+  // }
+
+  onDateChange(newDate: string | Date | null) {
+    console.log('newDate', newDate);
+  
+    let dateString = '';
+  
+    if (newDate instanceof Date) {
+      // Convert Date object to "YYYY-MM-DD" format
+      dateString = newDate.toISOString().split('T')[0];
+    } else if (typeof newDate === 'string') {
+      // Already a string
+      dateString = newDate;
+    }
+  
+    this.dateFilter = dateString; // ✅ assign as string
+    this.fetchOrders();
   }
 
   onSearch(): void {
     this.page = 1;
+    this.searchTerm = this.searchTerm?.trim() || '';
     this.fetchOrders();
   }
 
-  onClearSearch(): void {
+  offSearch(): void {
     this.searchTerm = '';
     this.page = 1;
     this.fetchOrders();
   }
 
   onFilterChange(): void {
-    this.page = 1;
-    this.fetchOrders();
-  }
-
-  onDateSelect(): void {
-    this.page = 1;
-    this.fetchOrders();
-  }
-
-  onDateClear(): void {
-    this.dateFilter = null;
     this.page = 1;
     this.fetchOrders();
   }

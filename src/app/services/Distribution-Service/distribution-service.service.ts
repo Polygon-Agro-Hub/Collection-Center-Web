@@ -390,7 +390,7 @@ export class DistributionServiceService {
       Authorization: `Bearer ${this.token}`
     });
 
-    console.log('selectDate', selectDate)
+    console.log('selectDate', selectDate, 'status', status)
   
   
     let url = `${this.apiUrl}/get-center-target-out-for-delivery?centerId=${centerId}`;
@@ -540,6 +540,8 @@ export class DistributionServiceService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
+
+    console.log('date', date)
   
     let url = `${this.apiUrl}/get-selected-distribution-officer-targets?officerId=${officerId}&centerId=${centerId}`;
   

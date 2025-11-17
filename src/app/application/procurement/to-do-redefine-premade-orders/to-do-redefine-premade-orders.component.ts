@@ -509,7 +509,7 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
           title: 'Success!',
           text: 'Order has been successfully dispatched',
           icon: 'success',
-          confirmButtonColor: '#3980C0',
+          confirmButtonColor: '#415CFF',
           customClass: {
             popup: 'bg-tileLight dark:bg-tileBlack text-black dark:text-white',
             title: 'font-semibold',
@@ -723,7 +723,7 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
       text: 'Are you sure you want to send this order to dispatch?',
       icon: 'warning',
       showCancelButton: true,
-      confirmButtonColor: '#3980C0',
+      confirmButtonColor: '#415CFF',
       cancelButtonColor: '#74788D',
       confirmButtonText: 'Yes, send to dispatch!',
       cancelButtonText: 'Cancel',

@@ -1,4 +1,4 @@
-<app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+<app-loading-spinner *ngIf="loading"></app-loading-spinner>
 
 <div class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
   <p (click)="navigateToProdurement()" >Procurement</p>
@@ -59,12 +59,16 @@
     </div>
 
     <div class="flex space-x-2 ">
-      <button class="px-4 py-2 bg-[#74788D] text-white rounded text-sm" (click)="confirmClear()">
-        Clear
+      <button class="px-4 py-2 bg-[#74788D] text-[#D3D3D3] rounded-lg text-sm" (click)="confirmClear()">
+        Cancel
       </button>
-      <button class="px-4 py-2 bg-[#415CFF] text-white rounded text-sm" [disabled]="!isWithinLimit"
-        [class.opacity-50]="!isWithinLimit" [class.cursor-not-allowed]="!isWithinLimit" (click)="confirmComplete()">
-        Send to Dispatch
+      <button class="px-4 py-2 e rounded-lg text-sm" [disabled]="!isWithinLimit" 
+        [class.opacity-50]="!isWithinLimit" [class.cursor-not-allowed]="!isWithinLimit" (click)="confirmComplete()"
+        [ngClass]="{
+          'bg-[#415CFF] text-white': isWithinLimit,
+          'bg-[#F6F7F9] text-[#6B7D8C] border border-[#6B7D8C]': !isWithinLimit
+        }">
+        Dispatch
       </button>
     </div>
   </div>
@@ -169,9 +173,9 @@
       <div class="shrink-0 px-6 pt-4 pb-2">
         <div
           class="flex justify-between items-center text-sm font-medium text-[#8492A3] dark:text-gray-400 uppercase tracking-wide border-b border-gray-100 dark:border-gray-700 pb-2">
-          <div class="w-12 text-center">NO ({{ additionalItemsCount }})</div>
-          <div class="flex-1 pl-4">Item</div>
-          <div class="w-16 text-center">Qty</div>
+          <div class="w-12 text-center whitespace-nowrap">NO ({{ additionalItemsCount < 10 ? '0' + additionalItemsCount : additionalItemsCount}})</div>
+          <div class="flex-1 pl-4">Item Name</div>
+          <div class="w-16 text-center">Quantity</div>
           <div class="w-16 text-center">Unit</div>
         </div>
       </div>
@@ -182,7 +186,7 @@
           <div *ngFor="let item of additionalItems; let i = index"
             class="flex justify-between items-center py-2 border-b border-gray-50 dark:border-gray-700">
             <div class="w-12 text-center text-sm text-[#212121] dark:text-gray-100">
-              {{ i + 1 }}
+              {{ additionalItems.length < 10 ? '0' + (i + 1) : i + 1 }}
             </div>
             <div class="flex-1 text-sm text-[#212121] dark:text-gray-100 truncate pl-4">
               {{ item.displayName }}

@@ -17,6 +17,43 @@
           </h2>
         </div>
 
+        <div class="flex flex-row items-center justify-end gap-5 ">
+        
+          <i class="fa-solid fa-list text-2xl dark:text-white"></i>
+  
+          <p class="text-lg dark:text-white">Filter By</p>
+
+
+        <div class="w-44">
+          <app-custom-datepicker
+          [placeholder]="'Dispatched Date'"
+          [selectedDate]="dateFilter"
+          (dateChange)="onDateChange($event)"
+        ></app-custom-datepicker>
+        </div>
+
+        <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+          <input type="text" placeholder=" Search by Invoice No.." [(ngModel)]="searchTerm" (keyup.enter)="onSearch()"
+          (keyup.esc)="offSearch()"
+              class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
+          <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
+              (click)="onSearch()">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                      d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
+              </svg>
+          </button>
+          <button *ngIf="searchTerm" type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none" (click)="offSearch()">
+              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                  stroke="currentColor">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+              </svg>
+          </button>
+        </div>
+
+      </div>
+
        
       </div>
       <div class=" min-w-max mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
@@ -41,19 +78,17 @@
               <th
                 class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-left"
               >
-                Total Price of <br />
-                Products (Rs.)
+                Total Price of Products (Rs.)
               </th>
               <th
-                class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-left"
+                class="px-2 py-3 font-normal text-[#4B5563] dark:text-textDark text-left"
               >
                 Sent By
               </th>
               <th
                 class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-center"
               >
-                Sent To <br />
-                Dispatch
+                Sent To Dispatch
               </th>
 
             </tr>
@@ -90,7 +125,7 @@
               <td class="px-4 py-3 text-left text-[#000000] dark:text-textDark">
                 {{ order.total | number : "1.2-2" }}
               </td>
-              <td class="px-4 py-3 text-left text-[#000000] dark:text-textDark">
+              <td class="px-2 py-3 text-left text-[#000000] dark:text-textDark">
                 {{ order.userName === null ? '--': order.userName }}
               </td>
               <td
@@ -102,14 +137,14 @@
 
               
             </tr>
-            <tr *ngIf="orders.length === 0 && !isLoading">
+            <!-- <tr *ngIf="orders.length === 0 && !isLoading">
               <td
                 colspan="8"
                 class="px-4 py-6 text-center text-textLight dark:text-textDark"
               >
                 No orders found
               </td>
-            </tr>
+            </tr> -->
           </tbody>
         </table>
         

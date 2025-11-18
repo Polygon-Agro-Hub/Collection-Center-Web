@@ -17,22 +17,15 @@
       <label for="jobRole" class="block  font-medium text-gray-700 dark:text-textDark">
         Select Job Role
       </label>
-      <select id="jobRole" [(ngModel)]="selectJobRole" name="selectJobRole" placeholder="select"
-        class="form-control mt-1 block w-full p-2  border border-gray-300 dark:border-gray-600 rounded-md text-[#534E4E] bg-gray-200 dark:text-textDark  dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500">
-        <option disabled selected value="" class="p-2 text-[#534E4E] bg-gray-200 dark:text-textDark  dark:bg-[#1D1D1F]">
-          --Select Job Role--
-        </option>
-        <option value="Collection Officer" class="p-2 text-[#534E4E] bg-gray-200 dark:text-textDark dark:bg-[#1D1D1F]">
-          Collection Officer
-        </option>
-        <option value="Customer Officer" class="p-2 text-[#534E4E] bg-gray-200 dark:text-textDark dark:bg-[#1D1D1F]">
-          Customer Officer
-        </option>
 
-        <option value="Distribution Officer" class="p-2 text-[#534E4E] bg-gray-200 dark:text-textDark dark:bg-[#1D1D1F]">
-          Distribution Officer
-        </option>
-      </select>
+      <input 
+        id="jobRole"
+        [(ngModel)]="selectJobRole"
+        name="selectJobRole"
+        readonly
+        class="form-control mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 
+               rounded-md text-[#534E4E] bg-gray-200 dark:text-textDark dark:bg-[#1D1D1F]"
+      >
     </div>
 
     <div *ngIf="logingRole === 'Distribution Centre Manager'">

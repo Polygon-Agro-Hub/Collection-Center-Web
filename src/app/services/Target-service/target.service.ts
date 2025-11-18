@@ -29,7 +29,7 @@ export class TargetService {
       Authorization: `Bearer ${this.token}`
     });
 
-    console.log(limit);
+    console.log(limit, 'searchText', searchText);
 
     let url = `${this.apiUrl}/get-daily-target`;
 

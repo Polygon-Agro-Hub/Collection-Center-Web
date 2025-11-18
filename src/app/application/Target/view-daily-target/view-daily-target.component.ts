@@ -134,6 +134,7 @@ export class ViewDailyTargetComponent implements OnInit {
   onSearch() {
     this.fetchAllTarget();
   }
+  
   offSearch() {
     this.searchText = '';
     this.fetchAllTarget()

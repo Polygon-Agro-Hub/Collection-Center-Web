@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -31,7 +31,8 @@ export class EditOfficerTargetComponent {
     private router: Router,
     private ManageOficerSrv: ManageOfficersService,
     private toastSrv: ToastAlertService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private location: Location
   ) { }
 
   ngOnInit(): void {
@@ -105,6 +106,7 @@ export class EditOfficerTargetComponent {
     this.searchTerm = '';
     this.fetchTargetDetalis();
     this.toastSrv.warning("Cancel this process")
+    this.location.back();
   }
 }
 

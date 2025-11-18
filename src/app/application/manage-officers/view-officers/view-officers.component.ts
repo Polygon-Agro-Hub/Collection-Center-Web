@@ -396,6 +396,7 @@ const approveButton = (item.status === 'Rejected' || item.status === 'Not Approv
   }
 
   onSearch() {
+    this.page = 1;
     this.searchText = this.searchText.trimStart(); // removes leading spaces only
     this.fetchByRole();
   }

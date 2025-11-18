@@ -1,7 +1,7 @@
 
 <app-loading-spinner *ngIf="isLoading"/>
 
-<div *ngIf="!isLoading">
+<div [class.opacity-50]="isLoading">
     <div class="my-5 mt-0 dark:bg-blacks">
         <h2 class="text-lg font-semibold mb-3 mr-5 ml-0 dark:text-[#FFFFFF]">Dashboard</h2>
         <div class="flex space-x-4">
@@ -58,7 +58,7 @@
 
                     <div
                         class=" bg-[#FFFFFF] dark:bg-[#363638] p-5 rounded-lg text-center text-[#888888] dark:text-[#FFFFFF]">
-                        <canvas id="MyChart" class="w-full"></canvas>
+                        <canvas #myChartCanvas id="MyChart" class="w-full"></canvas>
                     </div>
                 </div>
             </div>

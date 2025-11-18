@@ -1,4 +1,4 @@
-import { Component, OnInit, AfterViewInit } from '@angular/core';
+import { Component, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import { DashboardService } from '../../services/Dashbord-service/dashbord.service';
 import { CommonModule, DatePipe } from '@angular/common';
 import { Chart } from 'chart.js/auto';
@@ -14,6 +14,7 @@ import { LoadingSpinnerComponent } from '../../components/loading-spinner/loadin
   providers: [DatePipe],
 })
 export class DashboardComponent implements OnInit, AfterViewInit {
+  @ViewChild('myChartCanvas') myChartCanvas!: any;
 
   COOCount: number = 0;
   CUOCount: number = 0;
@@ -35,8 +36,10 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.fetchChart('week')
   }
 
-  ngAfterViewInit(): void {
-    this.fetchChart('week');
+  ngAfterViewInit() {
+    setTimeout(() => {
+      this.fetchChart('week');  // safe: canvas is ready
+    }, 0);
   }
 
   fetchOfficerCounts(): void {
@@ -65,9 +68,13 @@ export class DashboardComponent implements OnInit, AfterViewInit {
 
   fetchChart(filter: string) {
     this.activeButton = filter;
+    this.isLoading = true;
+    console.log('stargting')
 
     this.dashboardService.getChartData(filter).subscribe(
       (response: any) => {
+
+        this.isLoading = false;
 
         this.totals = response;
 
@@ -76,7 +83,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         const data = this.totals.map(item => item.totCount);
 
 
-        const canvas = document.getElementById('MyChart') as HTMLCanvasElement;
+        const canvas = this.myChartCanvas.nativeElement;
+
 
         if (canvas) {
 
@@ -143,6 +151,8 @@ export class DashboardComponent implements OnInit, AfterViewInit {
         console.error('Error fetching chart data:', error);
       }
     );
+
+    // this.isLoading = false;
   }
 
 

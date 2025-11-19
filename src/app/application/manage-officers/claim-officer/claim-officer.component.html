@@ -65,7 +65,12 @@
   <div *ngIf="isOfficerExist && officerObj.claimStatus === 0"
     class="flex flex-row justify-between items-center border-[#F1F7FA] border-[3px] rounded-lg shadowmd p-8 mx-[10%]">
     <div class="flex flex-row items-center">
-      <img class="w-28 h-28 rounded-full " [src]="officerObj.image" />
+      <img *ngIf="officerObj.image" class="w-28 h-28 rounded-full " [src]="officerObj.image" />
+
+      <div *ngIf="!officerObj.image" 
+          class="flex rounded-full border-solid border-2 justify-center items-center w-32 h-32">
+          <i class="fa-regular fa-user text-6xl dark:text-white"></i>
+      </div>
 
       <div class="ml-6">
         <p class="text-lg font-semibold dark:text-white">

@@ -24,7 +24,7 @@
         <!-- Filter By button (only visible when no filter is applied) -->
         <button
           *ngIf="!filterApplied && !showFilterPopup"
-          class="bg-[#818AA1] dark:bg-[#818AA1] text-white font-medium py-1 px-5 rounded-md text-lg flex items-center"
+          class="bg-[#818AA1] dark:bg-[#818AA1] text-white font-medium py-1 px-3 rounded-lg shadow-lg text-lg flex items-center"
           (click)="toggleFilterPopup()"
         >
           <i class="fa fa-filter px-2 text-sm" aria-hidden="true"></i>
@@ -34,7 +34,7 @@
         <!-- Applied filter display -->
         <div
           *ngIf="filterApplied"
-          class=" text-white font-medium py-2 px-5 bg-[#818AA1] dark:bg-[#818AA1] rounded-md text-lg flex items-center ml-4"
+          class=" text-white font-medium py-2 px-3 bg-[#818AA1] dark:bg-[#818AA1] rounded-lg shadow-lg text-lg flex items-center ml-4"
         >
           <i class="fa fa-filter text-sm px-2 " aria-hidden="true"></i>
           {{ getDisplayFilterType() }} : {{ date }}
@@ -60,11 +60,29 @@
           *ngIf="showFilterPopup"
           class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-30 backdrop-blur-sm"
         >
-          <div class="p-8 dark:bg-[#363636] bg-white rounded-lg shadow-lg w-[30rem] max-w-full">
-            <label class="block mb-3 font-semibold text-gray-700 dark:text-gray-300">
+          <div class="p-8 dark:bg-[#363636] bg-white rounded-xl shadow-lg w-[30rem] max-w-full">
+
+            <div class="text-[#000000] dark:text-textDark text-center font-semibold text-lg mb-8">
+              Select Filter
+            </div>
+            <!-- <label class="block mb-3 font-semibold text-gray-700 dark:text-gray-300">
               Filter By
-            </label>
-            <select
+            </label> -->
+
+            <div class="mb-6">
+              <app-searchable-dropdown
+              [items]="categoryDropdownItems"
+              placeholder="--Filter By--"
+              searchPlaceholder="Search filters..."
+              [(ngModel)]="filterType"
+              (selectionChange)="onCategorySelectionChange($event)"
+              [clearable]="true"
+              [showSelected]="true"
+              [disabled]="false"
+              class="block w-full mb-4"
+            ></app-searchable-dropdown>
+            </div>
+            <!-- <select
               [(ngModel)]="selectedFilterType"
               class="w-full p-3 mb-5 border rounded bg-white dark:bg-[#292929] dark:text-white border-gray-300 dark:border-gray-600"
             >
@@ -72,30 +90,32 @@
               <option *ngFor="let filter of filterTypes" [ngValue]="filter">
                 {{ filter.display }}
               </option>
-            </select>
+            </select> -->
 
-            <label class="block mb-2 font-semibold text-gray-700 dark:text-gray-300">
+            <!-- <label class="block mb-2 font-semibold text-gray-700 dark:text-gray-300">
               Select Date
-            </label>
+            </label> -->
 
-            <app-custom-datepicker
+            <div class="mb-8">
+              <app-custom-datepicker
             [placeholder]="'--Select Date--'"
   [selectedDate]="displayDate"
   (dateChange)="onDateChange($event)"
 ></app-custom-datepicker>
+            </div>
 
 
             <div class="flex justify-center space-x-4 mt-6">
               <button
                 (click)="cancelFilter()"
-                class="py-2 px-5 rounded-lg bg-gray-300 dark:bg-gray-600 text-gray-700 dark:text-gray-300 hover:bg-gray-400 dark:hover:bg-gray-500"
+                class="py-2 px-5 rounded-lg bg-[#74788D] dark:bg-[#74788D] text-[#D3D3D3] dark:text-gray-300 hover:bg-[#74788D] dark:hover:bg-[#74788D]"
               >
                 Cancel
               </button>
               <button
                 (click)="applyFilter()"
                 [disabled]="!selectedFilterType || !dateTemp"
-                class="py-2 px-5 rounded-lg bg-[#415CFF] text-white hover:bg-[#415CFF] disabled:opacity-50 disabled:cursor-not-allowed"
+                class="py-2 px-5 rounded-lg bg-[#415CFF] text-[#FFFFFF] hover:bg-[#415CFF] disabled:opacity-50 disabled:cursor-not-allowed"
               >
                 Filter
               </button>

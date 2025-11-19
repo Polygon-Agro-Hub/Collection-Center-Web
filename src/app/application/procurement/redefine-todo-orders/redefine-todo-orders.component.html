@@ -117,7 +117,7 @@
   class="hover:bg-[#415CFF] text-textLight dark:text-textDark hover:text-[#FFFFFF]  cursor-pointer"
 >
   <td class="px-4 py-3 text-left  ">
-    {{ (page - 1) * itemsPerPage + i + 1 }}
+    {{ (page - 1) * itemsPerPage + i + 1 < 10 ? '0' + ((page - 1) * itemsPerPage + i + 1) : ((page - 1) * itemsPerPage + i + 1) }}  
   </td>
   <td
     class="px-4 py-3 text-center  "

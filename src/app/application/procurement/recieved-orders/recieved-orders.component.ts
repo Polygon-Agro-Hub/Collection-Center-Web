@@ -13,6 +13,7 @@ import * as XLSX from 'xlsx';
 import { TokenServiceService } from '../../../services/Token/token-service.service';
 import { ProcurementsService } from '../../../services/Procurement-service/procurements.service';
 import { CustomDatepickerComponent } from '../../../components/custom-datepicker/custom-datepicker.component';
+import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
 
 interface PurchaseReport {
   id: number;
@@ -42,7 +43,8 @@ interface FilterType {
     LoadingSpinnerComponent,
     DatePipe,
     CalendarModule,
-    CustomDatepickerComponent
+    CustomDatepickerComponent,
+    SerchableDropdownComponent
   ],
   templateUrl: './recieved-orders.component.html',
   styleUrl: './recieved-orders.component.css'
@@ -155,6 +157,26 @@ export class RecievedOrdersComponent {
     this.router.navigate(['/procurement']);
   }
 
+  get categoryDropdownItems() {
+    return this.filterTypes.map(filter => ({
+      value: filter.value,
+      label: filter.display,
+      disabled: false
+    }));
+  }
+
+  // 5. Add selection change handler
+  onCategorySelectionChange(selectedValue: string) {
+    this.filterType = selectedValue || '';
+  
+    // Find the matching filter type object
+    this.selectedFilterType = this.filterTypes.find(
+      filter => filter.value === selectedValue
+    ) || null;
+  
+    console.log('Category selected:', selectedValue, this.selectedFilterType);
+  }
+
   // Popup filter methods
   toggleFilterPopup() {
     this.showFilterPopup = !this.showFilterPopup;
@@ -189,6 +211,9 @@ export class RecievedOrdersComponent {
   cancelFilter() {
     this.showFilterPopup = false;
     this.dateTemp = null;
+    this.displayDate = '';
+    this.filterType = '';
+    this.selectedFilterType = null;
   }
 
   getDisplayFilterType(): string {

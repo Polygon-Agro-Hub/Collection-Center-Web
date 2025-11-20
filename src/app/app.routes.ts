@@ -78,6 +78,8 @@ import { RequestedItemsComponent } from './application/procurement/requested-ite
 import { ViewMyTargetDcmComponent } from './application/Distributed-Center/view-my-target-dcm/view-my-target-dcm.component';
 import { ViewOfficerTargetDistributionComponent } from './application/dch-Target/view-officer-target-distribution/view-officer-target-distribution.component';
 import { DcmDashboardComponent } from './application/Distributed-Center/dcm-dashboard/dcm-dashboard.component';
+import { EditDistributionCenterComponent } from './application/Distributed-Center/Centres/edit-distribution-center/edit-distribution-center.component';
+import { ViewDistributionCenterComponent } from './application/Distributed-Center/Centres/view-distribution-center/view-distribution-center.component';
 
 
 export const routes: Routes = [
@@ -421,6 +423,15 @@ export const routes: Routes = [
                     {
                         path: 'create-distribution-centre',
                         component: CreateDistributionCentreComponent,
+                    },
+
+                    {
+                        path: 'view-distribution-centre/:centerId',
+                        component: ViewDistributionCenterComponent,
+                    },
+                    {
+                        path: 'edit-distribution-centre/:centerId',
+                        component: EditDistributionCenterComponent,
                     },
                     {
                         path: 'center-dashboard/:id/:centerName/:regCode',

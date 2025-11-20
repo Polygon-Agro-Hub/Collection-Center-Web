@@ -9,6 +9,7 @@ import { ComplaintsService } from '../../../services/Complaints-Service/complain
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
 import { CustomDatepickerComponent } from "../../../components/custom-datepicker/custom-datepicker.component";
+import { Observable, switchMap, tap } from 'rxjs';
 
 @Component({
   selector: 'app-view-my-target-dcm',
@@ -95,14 +96,25 @@ export class ViewMyTargetDcmComponent implements OnInit {
 
   ngOnInit(): void {
     this.officerId = Number(this.route.snapshot.paramMap.get('id'));
-    console.log('Selected officerId:', this.officerId);
-    this.fetchOfficers();
-
     const today = new Date();
     this.selectedDate = today.toISOString().split('T')[0];
-    this.fetchSelectedOfficerTargets();
-    
+  
+    this.isLoading = true;
+  
+    this.fetchSelectedOfficerTargets().pipe(
+      switchMap(() => this.DistributionSrv.getOfficers())
+    ).subscribe({
+      next: (officers) => {
+        this.officersArr = officers;
+        this.totalOfficers = officers.length;
+        this.isLoading = false;
+      },
+      error: () => {
+        this.isLoading = false;
+      }
+    });
   }
+  
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
@@ -121,72 +133,58 @@ export class ViewMyTargetDcmComponent implements OnInit {
     status: string = this.selectStatus,
     completingStatus: string = this.selectCompletingStatus,
     date: string = this.selectedDate
-  ) {
-    this.isLoading = true;
-    this.DistributionSrv.getSelectedOfficerTargets(officerId, search, status, completingStatus, date).subscribe(
-      (res) => {
-        this.ordersArr = res.items.map((item: any) => {
-          let status = '';
-          
-          const pkgStatus = item.packageStatus;
-          const addStatus = item.additionalItemsStatus;
-          
-          // Priority 1: If either is Pending, combinedStatus is Pending
-          if (pkgStatus === 'Pending' || addStatus === 'Pending') {
-            status = 'Pending';
-          }
-          // Priority 2: If either is Opened (and none are Pending), combinedStatus is Opened
-          else if (pkgStatus === 'Opened' || addStatus === 'Opened') {
-            status = 'Opened';
-          }
-          // Priority 3: If both are Completed, combinedStatus is Completed
-          else if (pkgStatus === 'Completed' && addStatus === 'Completed') {
-            status = 'Completed';
-          }
-          // Priority 4: If one is Completed and other is Unknown, use the non-Unknown status
-          else if (pkgStatus === 'Completed' && addStatus === 'Unknown') {
-            status = 'Completed';
-          }
-          else if (pkgStatus === 'Unknown' && addStatus === 'Completed') {
-            status = 'Completed';
-          }
-          // Default: Both are Unknown
-          else {
-            status = 'Unknown';
-          }
-        
-          return {
-            ...item,
-            combinedStatus: status
-          };
-        });
-
-        this.selectableOrders = this.ordersArr.filter(
-          item => item.combinedStatus === 'Pending' && item.lockStatus !== 1
-        );
-
-        console.log('ordersarr', this.ordersArr);
+  ): Observable<any> {
+    
+    return this.DistributionSrv.getSelectedOfficerTargets(officerId, search, status, completingStatus, date)
+      .pipe(
+        tap(res => {
+          this.ordersArr = res.items.map((item: any) => {
+            let status = '';
+            const pkgStatus = item.packageStatus;
+            const addStatus = item.additionalItemsStatus;
   
-        this.hasData = this.ordersArr.length > 0;
-        this.isLoading = false;
-      }
-    );
+            if (pkgStatus === 'Pending' || addStatus === 'Pending') {
+              status = 'Pending';
+            } else if (pkgStatus === 'Opened' || addStatus === 'Opened') {
+              status = 'Opened';
+            } else if (pkgStatus === 'Completed' && addStatus === 'Completed') {
+              status = 'Completed';
+            } else if (
+              (pkgStatus === 'Completed' && addStatus === 'Unknown') ||
+              (pkgStatus === 'Unknown' && addStatus === 'Completed')
+            ) {
+              status = 'Completed';
+            } else {
+              status = 'Unknown';
+            }
+  
+            return { ...item, combinedStatus: status };
+          });
+  
+          this.selectableOrders = this.ordersArr.filter(
+            item => item.combinedStatus === 'Pending' && item.lockStatus !== 1
+          );
+  
+          this.hasData = this.ordersArr.length > 0;
+        })
+      );
   }
   
+  
 
-  fetchOfficers() {
-    this.isLoading = true;
-    this.DistributionSrv.getOfficers().subscribe(
-      (res) => {
-        console.log('officer', res)
-        this.officersArr = res
-        console.log('officersArr', this.officersArr)
-        this.totalOfficers = res.length;
-        this.isLoading = false;
+  // fetchOfficers() {
+  //   this.isLoading = true;
+  //   this.DistributionSrv.getOfficers().subscribe(
+  //     (res) => {
+  //       console.log('officer', res)
+  //       this.officersArr = res
+  //       console.log('officersArr', this.officersArr)
+  //       this.totalOfficers = res.length;
+  //       this.isLoading = false;
 
-      }
-    )
-  }
+  //     }
+  //   )
+  // }
 
   filterCompletingStatus() {
     this.fetchSelectedOfficerTargets();

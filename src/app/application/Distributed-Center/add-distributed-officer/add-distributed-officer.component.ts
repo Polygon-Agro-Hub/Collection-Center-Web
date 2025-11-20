@@ -691,7 +691,9 @@ selectManager(item: Manager) {
     missingFields.push('Employee Type is required');
   }
 
-  
+  if (!this.personalData.jobRole) {
+    missingFields.push('Job Role is required');
+  }
 
   // if (!this.personalData.companyId) {
   //   missingFields.push('Company Name');

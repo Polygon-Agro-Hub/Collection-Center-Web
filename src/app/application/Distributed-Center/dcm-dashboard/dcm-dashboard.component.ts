@@ -80,9 +80,11 @@ export class DcmDashboardComponent implements OnInit {
   
   // Map the API data to our chart data array
   if (apiData && apiData.length > 0) {
+
+    console.log('we have api ata')
     apiData.forEach(item => {
-      const hour = item.hour; // This should be 0-23 from the API
-      const orderCount = item.totalOrders || 0;
+      const hour = item.hourSlot; // This should be 0-23 from the API
+      const orderCount = item.orderCount;
       
       console.log(`Processing hour ${hour}: ${orderCount} orders`);
       
@@ -91,9 +93,10 @@ export class DcmDashboardComponent implements OnInit {
         this.chartData[hour] = orderCount;
       }
     });
+    console.log('Final chart data:', this.chartData);
   }
   
-  console.log('Final chart data:', this.chartData);
+  
 }
 
   createChart(): void {

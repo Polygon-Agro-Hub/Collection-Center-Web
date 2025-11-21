@@ -144,7 +144,9 @@
                         {{item.firstNameEnglish}} {{item.lastNameEnglish}}</td>
                     <td class="px-6 py-4 text-sm text-left font-medium text-gray-900 dark:text-[#C5C5C5]">{{
                         getDisplayDate(item.sheduleDate) }} {{ removeWithin(item.sheduleTime) }}</td>
-                    {{ item.outDlvrDate | date:'hh:mm a':'UTC' }}
+                    <td class="px-6 py-4 text-sm text-left font-medium text-gray-900 dark:text-[#C5C5C5]">
+                        {{ item.outDlvrDate | date:'hh:mm a':'UTC' }}
+                      </td>
                     <td class="px-6 py-4 text-sm text-center ">
 
                         <div class="flex font-medium items-center justify-center h-full">

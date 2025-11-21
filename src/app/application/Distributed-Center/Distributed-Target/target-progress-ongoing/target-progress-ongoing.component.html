@@ -1,7 +1,7 @@
 <app-loading-spinner *ngIf="isLoading" />
 
 
-<div *ngIf="!isLoading">
+<div *ngIf="!isLoading" class="w-full overflow-x-auto">
 
     <button
                 class="bg-[#415CFF] text-white shadow-md font-medium rounded-lg py-2 px-5 mr-5 text-lg flex items-center"
@@ -80,7 +80,8 @@
   (dateChange)="onDateChange($event)"
 ></app-custom-datepicker>
           
-       <div class="flex items-center rounded-full px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+       <div class="flex items-center rounded-full px-4 py-2 w-96 sm:w-64 md:w-80 bg-[#F1F1F1] dark:bg-[#292929]">
+            
     <input 
         type="text" 
         placeholder="Search by Order ID.." 
@@ -115,7 +116,7 @@
 
 
     <div *ngIf="hasData"
-        class="overflow-x-auto mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+        class="overflow-hidden min-w-max mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
         <table class="w-full divide-y-2 overflow-hidden">
             <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
                 <tr>

@@ -297,7 +297,7 @@ export class DistributionServiceService {
       Authorization: `Bearer ${this.token}`
     });
   
-    console.log('get-selected-officer-targets')
+    console.log('get-selected-officer-targets', searchText)
     let url = `${this.apiUrl}/get-selected-officer-targets?officerId=${officerId}`;
   
     if (searchText) {

@@ -100,19 +100,21 @@ export class ViewMyTargetDcmComponent implements OnInit {
     this.selectedDate = today.toISOString().split('T')[0];
   
     this.isLoading = true;
+
+    this.fetchSelectedOfficerTargets();
   
-    this.fetchSelectedOfficerTargets().pipe(
-      switchMap(() => this.DistributionSrv.getOfficers())
-    ).subscribe({
-      next: (officers) => {
-        this.officersArr = officers;
-        this.totalOfficers = officers.length;
-        this.isLoading = false;
-      },
-      error: () => {
-        this.isLoading = false;
-      }
-    });
+    // this.fetchSelectedOfficerTargets().pipe(
+    //   switchMap(() => this.DistributionSrv.getOfficers())
+    // ).subscribe({
+    //   next: (officers) => {
+    //     this.officersArr = officers;
+    //     this.totalOfficers = officers.length;
+    //     this.isLoading = false;
+    //   },
+    //   error: () => {
+    //     this.isLoading = false;
+    //   }
+    // });
   }
   
 
@@ -133,58 +135,59 @@ export class ViewMyTargetDcmComponent implements OnInit {
     status: string = this.selectStatus,
     completingStatus: string = this.selectCompletingStatus,
     date: string = this.selectedDate
-  ): Observable<any> {
-    
-    return this.DistributionSrv.getSelectedOfficerTargets(officerId, search, status, completingStatus, date)
-      .pipe(
-        tap(res => {
-          this.ordersArr = res.items.map((item: any) => {
-            let status = '';
-            const pkgStatus = item.packageStatus;
-            const addStatus = item.additionalItemsStatus;
-  
-            if (pkgStatus === 'Pending' || addStatus === 'Pending') {
-              status = 'Pending';
-            } else if (pkgStatus === 'Opened' || addStatus === 'Opened') {
-              status = 'Opened';
-            } else if (pkgStatus === 'Completed' && addStatus === 'Completed') {
-              status = 'Completed';
-            } else if (
-              (pkgStatus === 'Completed' && addStatus === 'Unknown') ||
-              (pkgStatus === 'Unknown' && addStatus === 'Completed')
-            ) {
-              status = 'Completed';
-            } else {
-              status = 'Unknown';
-            }
-  
-            return { ...item, combinedStatus: status };
-          });
-  
-          this.selectableOrders = this.ordersArr.filter(
-            item => item.combinedStatus === 'Pending' && item.lockStatus !== 1
-          );
-  
-          this.hasData = this.ordersArr.length > 0;
-        })
-      );
+  ) {
+    this.isLoading = true;
+    this.DistributionSrv.getSelectedOfficerTargets(officerId, search, status, completingStatus, date).subscribe(
+      (res) => {
+        this.ordersArr = res.items.map((item: any) => {
+          let status = '';
+          const pkgStatus = item.packageStatus;
+          const addStatus = item.additionalItemsStatus;
+
+          if (pkgStatus === 'Pending' || addStatus === 'Pending') {
+            status = 'Pending';
+          } else if (pkgStatus === 'Opened' || addStatus === 'Opened') {
+            status = 'Opened';
+          } else if (pkgStatus === 'Completed' && addStatus === 'Completed') {
+            status = 'Completed';
+          } else if (
+            (pkgStatus === 'Completed' && addStatus === 'Unknown') ||
+            (pkgStatus === 'Unknown' && addStatus === 'Completed')
+          ) {
+            status = 'Completed';
+          } else {
+            status = 'Unknown';
+          }
+
+          return { ...item, combinedStatus: status };
+        });
+
+        this.selectableOrders = this.ordersArr.filter(
+          item => item.combinedStatus === 'Pending' && item.lockStatus !== 1
+        );
+
+        this.hasData = this.ordersArr.length > 0;
+        this.isLoading = false;
+      }
+    )
+     
   }
   
   
 
-  // fetchOfficers() {
-  //   this.isLoading = true;
-  //   this.DistributionSrv.getOfficers().subscribe(
-  //     (res) => {
-  //       console.log('officer', res)
-  //       this.officersArr = res
-  //       console.log('officersArr', this.officersArr)
-  //       this.totalOfficers = res.length;
-  //       this.isLoading = false;
+  fetchOfficers() {
+    this.isLoading = true;
+    this.DistributionSrv.getOfficers().subscribe(
+      (res) => {
+        console.log('officer', res)
+        this.officersArr = res
+        console.log('officersArr', this.officersArr)
+        this.totalOfficers = res.length;
+        this.isLoading = false;
 
-  //     }
-  //   )
-  // }
+      }
+    )
+  }
 
   filterCompletingStatus() {
     this.fetchSelectedOfficerTargets();
@@ -199,6 +202,7 @@ export class ViewMyTargetDcmComponent implements OnInit {
   }
 
   onSearch() {
+    console.log('called', this.searchText)
     this.searchText = this.searchText.trimStart();
     this.fetchSelectedOfficerTargets();
 
@@ -323,6 +327,7 @@ deSelectAll() {
 
 passTarget() {
   this.isPassTarget = true;
+  this.fetchOfficers()
 }
 
 // PassTarget() {
@@ -513,7 +518,7 @@ navigateToProfile() {
 }
 
 getStatus(item: orders): string {
-  console.log('Setting status');
+  // console.log('Setting status');
 
   // Convert both into Date objects
   const scheduleDate = new Date(item.sheduleDate);
@@ -539,14 +544,14 @@ getStatus(item: orders): string {
     new Date().toLocaleString('en-US', { timeZone: 'Asia/Colombo' })
   );
 
-  console.log(
-    'Now (SL):',
-    now.toLocaleString('en-GB', { timeZone: 'Asia/Colombo', hour12: false })
-  );
-  console.log(
-    'Deadline (SL):',
-    deadline.toLocaleString('en-GB', { timeZone: 'Asia/Colombo', hour12: false })
-  );
+  // console.log(
+  //   'Now (SL):',
+  //   now.toLocaleString('en-GB', { timeZone: 'Asia/Colombo', hour12: false })
+  // );
+  // console.log(
+  //   'Deadline (SL):',
+  //   deadline.toLocaleString('en-GB', { timeZone: 'Asia/Colombo', hour12: false })
+  // );
 
   // --- Case 1: Not completed yet ---
   if (!completeTime) {

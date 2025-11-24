@@ -105,32 +105,29 @@ export class ViewCenterOfficersComponent implements OnInit {
   // }
 
 
+  // @HostListener('document:click', ['$event'])
+  // onDocumentClick(event: MouseEvent) {
+  //   const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
+  //   const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
 
+  //   const roleDropdownElement = document.querySelector('.custom-role-dropdown-container');
+  //   const roleDropdownClickedInside = roleDropdownElement?.contains(event.target as Node);
 
+  //   // const centerDropdownElement = document.querySelector('.custom-center-dropdown-container');
+  //   // const centerDropdownClickedInside = centerDropdownElement?.contains(event.target as Node);
 
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent) {
-    const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
-    const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
+  //   if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
+  //     this.isStatusDropdownOpen = false;
+  //   }
 
-    const roleDropdownElement = document.querySelector('.custom-role-dropdown-container');
-    const roleDropdownClickedInside = roleDropdownElement?.contains(event.target as Node);
+  //   if (!roleDropdownClickedInside && this.isRoleDropdownOpen) {
+  //     this.isRoleDropdownOpen = false;
+  //   }
 
-    // const centerDropdownElement = document.querySelector('.custom-center-dropdown-container');
-    // const centerDropdownClickedInside = centerDropdownElement?.contains(event.target as Node);
-
-    if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
-      this.isStatusDropdownOpen = false;
-    }
-
-    if (!roleDropdownClickedInside && this.isRoleDropdownOpen) {
-      this.isRoleDropdownOpen = false;
-    }
-
-    // if (!centerDropdownClickedInside && this.isCenterDropdownOpen) {
-    //   this.isCenterDropdownOpen = false;
-    // }
-  }
+  //   // if (!centerDropdownClickedInside && this.isCenterDropdownOpen) {
+  //   //   this.isCenterDropdownOpen = false;
+  //   // }
+  // }
 
   navigate(path: string) {
     this.router.navigate([`${path}`])

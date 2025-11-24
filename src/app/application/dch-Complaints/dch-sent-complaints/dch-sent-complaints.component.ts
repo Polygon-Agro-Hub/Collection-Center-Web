@@ -73,23 +73,23 @@ export class DchSentComplaintsComponent implements OnInit{
     this.fetchAllreciveComplaint();
   }
 
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent) {
-    const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
-    const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
+  // @HostListener('document:click', ['$event'])
+  // onDocumentClick(event: MouseEvent) {
+  //   const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
+  //   const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
 
-    if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
-      this.isStatusDropdownOpen = false;
-    }
+  //   if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
+  //     this.isStatusDropdownOpen = false;
+  //   }
 
-    const employeeDropdownElement = document.querySelector('.custom-employee-dropdown-container');
-    const employeeDropdownClickedInside = employeeDropdownElement?.contains(event.target as Node);
+  //   const employeeDropdownElement = document.querySelector('.custom-employee-dropdown-container');
+  //   const employeeDropdownClickedInside = employeeDropdownElement?.contains(event.target as Node);
 
-    if (!employeeDropdownClickedInside && this.isEmployeeDropdownOpen) {
-      this.isEmployeeDropdownOpen = false;
-    }
+  //   if (!employeeDropdownClickedInside && this.isEmployeeDropdownOpen) {
+  //     this.isEmployeeDropdownOpen = false;
+  //   }
 
-  }
+  // }
 
   fetchAllreciveComplaint(page: number = 1, limit: number = this.itemsPerPage, status: string = this.selectStatus, emptype: string = this.selectEmployee, search: string = this.searchText) {
     this.isLoading = true;

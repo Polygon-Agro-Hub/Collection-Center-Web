@@ -93,23 +93,23 @@ export class ViewCentresComponent implements OnInit {
         this.fetchAllDistributionCenterDetails();
     }
 
-    @HostListener('document:click', ['$event'])
-    onDocumentClick(event: MouseEvent) {
-        const provinceDropdownElement = document.querySelector('.custom-province-dropdown-container');
-        const proinceDropdownClickedInside = provinceDropdownElement?.contains(event.target as Node);
+    // @HostListener('document:click', ['$event'])
+    // onDocumentClick(event: MouseEvent) {
+    //     const provinceDropdownElement = document.querySelector('.custom-province-dropdown-container');
+    //     const proinceDropdownClickedInside = provinceDropdownElement?.contains(event.target as Node);
 
-        if (!proinceDropdownClickedInside && this.isProvinceDropdownOpen) {
-            this.isProvinceDropdownOpen = false;
-        }
+    //     if (!proinceDropdownClickedInside && this.isProvinceDropdownOpen) {
+    //         this.isProvinceDropdownOpen = false;
+    //     }
 
-        const districtDropdownElement = document.querySelector('.custom-district-dropdown-container');
-        const districtDropdownClickedInside = districtDropdownElement?.contains(event.target as Node);
+    //     const districtDropdownElement = document.querySelector('.custom-district-dropdown-container');
+    //     const districtDropdownClickedInside = districtDropdownElement?.contains(event.target as Node);
 
-        if (!districtDropdownClickedInside && this.isDistrictDropdownOpen) {
-            this.isDistrictDropdownOpen = false;
-        }
+    //     if (!districtDropdownClickedInside && this.isDistrictDropdownOpen) {
+    //         this.isDistrictDropdownOpen = false;
+    //     }
 
-    }
+    // }
 
     fetchAllDistributionCenterDetails(province: string = this.selectProvince, district: string = this.selectDistrict, search: string = this.searchText) {
       this.isLoading = true;

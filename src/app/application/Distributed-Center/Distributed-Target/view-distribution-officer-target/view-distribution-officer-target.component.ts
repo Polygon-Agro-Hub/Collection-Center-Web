@@ -94,21 +94,20 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
     this.officerId = Number(this.route.snapshot.paramMap.get('officerId'));
     this.selectedDate = String(this.route.snapshot.paramMap.get('date'));
     console.log('Selected officerId:', this.officerId);
-    this.fetchOfficers();
     this.fetchSelectedOfficerTargets();
     
   }
 
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent) {
-    const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
-    const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
+  // @HostListener('document:click', ['$event'])
+  // onDocumentClick(event: MouseEvent) {
+  //   const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
+  //   const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
 
-    if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
-      this.isStatusDropdownOpen = false;
-    }
+  //   if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
+  //     this.isStatusDropdownOpen = false;
+  //   }
 
-  }
+  // }
 
   fetchSelectedOfficerTargets(
     officerId: number = this.officerId, 
@@ -294,6 +293,7 @@ deSelectAll() {
 }
 
 passTarget() {
+  
   this.isPassTarget = true;
 }
 
@@ -327,6 +327,7 @@ passTarget() {
 // }
 
 PassTarget() {
+  this.fetchOfficers();
   console.log('passing')
   this.isPass = true;
   this.isPassTarget = false;

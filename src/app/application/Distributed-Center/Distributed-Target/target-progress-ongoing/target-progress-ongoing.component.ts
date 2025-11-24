@@ -131,22 +131,19 @@ export class TargetProgressOngoingComponent implements OnInit {
     this.DistributionSrv.getCenterData().subscribe(
       (res) => {
         console.log('res', res)
-        this.centerName = res.centerName
-        console.log('ordersArr', this.ordersArr)
-        this.totalItems = res.items.length | 0;
-        
-        if (res.items.length === 0) {
-          this.hasData = false;
-        } else {
-          this.hasData = true;
-
-        }
+        this.centerName = res?.centerName ?? '';
+  
+        const items = res?.items ?? []; // safe fallback
+  
+        this.totalItems = items.length;
+  
+        this.hasData = items.length > 0;
+  
         this.isLoading = false;
-
       }
-    )
+    );
   }
-
+  
   onSearch() {
     this.fetchAllAssignOrders();
 

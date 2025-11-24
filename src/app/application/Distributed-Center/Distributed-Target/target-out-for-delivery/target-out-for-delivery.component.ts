@@ -53,7 +53,6 @@ export class TargetOutForDeliveryComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchOutForDeliveryOrders();
-    this.fetchCenterData();
   }
 
   // @HostListener('document:click', ['$event'])
@@ -90,24 +89,31 @@ export class TargetOutForDeliveryComponent implements OnInit {
 
   fetchCenterData() {
     this.isLoading = true;
+  
     this.DistributionSrv.getCenterData().subscribe(
       (res) => {
-        console.log('res', res)
-        this.centerName = res.centerName
-        console.log('ordersArr', this.ordersArr)
-        this.totalItems = res.items.length | 0;
-        
-        if (res.items.length === 0) {
-          this.hasData = false;
-        } else {
-          this.hasData = true;
-
-        }
+        console.log('res', res);
+  
+        this.centerName = res?.centerName ?? '';
+  
+        const items = res?.items ?? [];  // safe fallback
+  
+        console.log('items', items);
+  
+        this.totalItems = items.length;
+        this.hasData = items.length > 0;
+  
         this.isLoading = false;
-
+      },
+      (err) => {
+        console.error(err);
+        this.totalItems = 0;
+        this.hasData = false;
+        this.isLoading = false;
       }
-    )
+    );
   }
+  
 
   onSearch() {
     this.searchText = this.searchText.trimStart();
@@ -172,6 +178,7 @@ export class TargetOutForDeliveryComponent implements OnInit {
   }
 
   downloadTemplate1() {
+    this.fetchCenterData();
     this.isDownloading = true;
   
     const now = new Date();

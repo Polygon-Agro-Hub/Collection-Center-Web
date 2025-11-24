@@ -69,7 +69,7 @@ export class ViewDchCenterTargetComponent implements OnInit{
     const today = new Date();
     this.date = today.toISOString().split('T')[0];
     this.fetchCenterTarget();
-    this.fetchOfficers();
+    // this.fetchOfficers();
   }
 
   // @HostListener('document:click', ['$event'])

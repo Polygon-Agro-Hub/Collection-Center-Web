@@ -179,10 +179,9 @@ export class EditOfficerComponent implements OnInit {
   districtItems = this.districts.map(d => ({ value: d.name, label: d.name }));
 
   VehicleTypes = [
-    { name: 'Lorry', capacity: 2 },
-    { name: 'Dimo Batta', capacity: 3.5 },
-    { name: 'Van', capacity: 2.5 },
-    { name: 'Cab', capacity: 0.5 },
+    { name: 'Mahindra Bollero', capacity: 272},
+    { name: 'Dimo Batta', capacity: 750 },
+    { name: 'Three Wheeler', capacity: 100 },
   ]
 
 
@@ -977,6 +976,7 @@ export class EditOfficerComponent implements OnInit {
   }
 
   onSubmitForm2(form: NgForm) {
+    console.log('page2')
 
     form.form.markAllAsTouched();
 
@@ -1045,12 +1045,92 @@ export class EditOfficerComponent implements OnInit {
       });
       return;
     }
-
-    this.onSubmit(); 
+ 
   }
 
   onSubmitForm3(form: NgForm) {
+    console.log('page3')
     form.form.markAllAsTouched();
+
+    const missingFields: string[] = [];
+
+    if (!this.driverObj.licNo) {
+      missingFields.push('License Number is Required');
+    }
+
+    if (!this.licenseFrontImageFileName && !this.driverObj.licFrontImg ) {
+      missingFields.push("License's Front Image is required");
+    }
+  
+    if (!this.licenseBackImageFileName && !this.driverObj.licBackImg ) {
+      missingFields.push("License's Back Image is required");
+    }
+
+    if (!this.driverObj.insNo) {
+      missingFields.push('Insurance Number is required');
+    }
+
+    if (!this.driverObj.insExpDate) {
+      missingFields.push('Insurance Expire Date is required');
+    }
+  
+    if (!this.insurenceFrontImageFileName && !this.driverObj.insFrontImg) {
+      missingFields.push("Insurance's Front Image is required");
+    }
+  
+    if (!this.insurenceBackImageFileName && !this.driverObj.insBackImg) {
+      missingFields.push("Insurance's Back Image is required");
+    }
+
+    if (!this.driverObj.vRegNo) {
+      missingFields.push('Vehicle Registration Number is required');
+    }
+  
+    if (!this.driverObj.vType) {
+      missingFields.push('Vehicle Type is required');
+    }
+
+    if (!this.driverObj.vCapacity) {
+      missingFields.push('Vehicle Capacity is required');
+    }
+
+    if (!this.vehicleFrontImageFileName && !this.driverObj.vehFrontImg) {
+      missingFields.push("Vehicle's Front Image is required");
+    }
+
+    if (!this.vehicleBackImageFileName && !this.driverObj.vehBackImg) {
+      missingFields.push("Vehicle's Back Image Image is required");
+    }
+  
+    if (!this.vehicleSideAImageFileName && !this.driverObj.vehSideImgA) {
+      missingFields.push("Vehicle's Side Image - 1 is required");
+    }
+
+    if (!this.vehicleSideBImageFileName && !this.driverObj.vehSideImgB) {
+      missingFields.push("Vehicle's Side Image - 2 is required");
+    }
+  
+    // Display errors if any
+    if (missingFields.length > 0) {
+      let errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following issues:</p><ul class="list-disc pl-5">';
+      missingFields.forEach((field) => {
+        errorMessage += `<li>${field}</li>`;
+      });
+      errorMessage += '</ul></div>';
+  
+      Swal.fire({
+        icon: 'error',
+        title: 'Missing or Invalid Information',
+        html: errorMessage,
+        confirmButtonText: 'OK',
+        customClass: {
+          popup: 'bg-white dark:bg-[#363636] text-[#534E4E] dark:text-textDark',
+          title: 'font-semibold text-lg',
+          htmlContainer: 'text-left',
+        },
+      });
+      return;
+    }
   }
 
   onLicenseFrontImageSelected(event: any): void {

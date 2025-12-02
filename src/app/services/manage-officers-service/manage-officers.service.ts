@@ -268,6 +268,8 @@ export class ManageOfficersService {
     formData.append('officerData', JSON.stringify(person));
     formData.append('file', selectedImage);
 
+    console.log('formData', formData)
+
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
     });

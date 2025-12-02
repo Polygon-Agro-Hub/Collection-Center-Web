@@ -853,6 +853,13 @@
                     <input id="insExpDate" name="insExpDate" type="date" [(ngModel)]="driverObj.insExpDate"
                     class="form-control mt-1 block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                         #insExpDateInput="ngModel" required />
+
+                        <!-- <app-custom-datepicker
+                          [placeholder]="'Scheduled Date'"
+                          [selectedDate]="selectedDate"
+                          (dateChange)="onDateChange($event)"
+                        ></app-custom-datepicker> -->
+
                     <div *ngIf="insExpDateInput.touched && !driverObj.insExpDate" class="text-red-500 text-sm mt-1">
                         <div>Insurance Expire Date is required</div>
                     </div>

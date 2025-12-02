@@ -252,7 +252,8 @@ const ccRoles = [
 const dcRoles = [
   'Distribution Centre Manager',
   'Distribution Centre Head',
-  'Distribution Officer'
+  'Distribution Officer',
+  'Driver'
 ];
 
 if (ccRoles.includes(this.officerObj.jobRole)) {
@@ -498,6 +499,13 @@ doc.roundedRect(bankBoxX, bankBoxY, bankBoxWidth, bankBoxHeight, 3, 3, "S");
 
       doc.setFont("Inter", "bold");
       doc.text(getValueOrNAforInsOrLiscNo(this.officerObj.insNo), 14, startY + 228);
+
+      doc.setFontSize(12);
+      doc.setFont("Inter", "normal");
+      doc.text("Vehicle Expire Date", 100, startY + 222);
+
+      doc.setFont("Inter", "bold");
+      doc.text(this.officerObj.insExpDate.split("T")[0], 100, startY + 228);
 
       doc.setFontSize(12);
       doc.setFont("Inter", "normal");

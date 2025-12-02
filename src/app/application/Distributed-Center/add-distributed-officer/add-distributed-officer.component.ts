@@ -12,11 +12,12 @@ import { Location } from '@angular/common';
 import { DistributedManageOfficersService } from '../../../services/Distributed-manage-officers-service/distributed-manage-officers.service';
 import { Country, COUNTRIES } from '../../../../assets/country-data';
 import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
+import { CustomDatepickerComponent } from '../../../components/custom-datepicker/custom-datepicker.component';
 
 @Component({
   selector: 'app-add-distributed-officer',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, LoadingSpinnerComponent, SerchableDropdownComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, LoadingSpinnerComponent, SerchableDropdownComponent, CustomDatepickerComponent],
   templateUrl: './add-distributed-officer.component.html',
   styleUrl: './add-distributed-officer.component.css'
 })
@@ -1520,6 +1521,26 @@ vehicleChange() {
   this.driverObj.vType = this.selectVehicletype.name
   this.driverObj.vCapacity = this.selectVehicletype.capacity
 }
+
+onDateChange(newDate: string | Date | null) {
+  let dateString: string;
+
+  if (!newDate) {
+    
+    dateString = new Date().toISOString().split('T')[0];
+  } 
+  else if (newDate instanceof Date) {
+    
+    dateString = newDate.toISOString().split('T')[0];
+  } 
+  else {
+    
+    dateString = newDate;
+  }
+
+  this.driverObj.insExpDate = dateString;
+}
+
 
 }
 

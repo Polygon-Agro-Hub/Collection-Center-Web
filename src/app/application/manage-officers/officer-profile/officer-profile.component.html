@@ -38,10 +38,6 @@
                         <img class="w-28 h-28 rounded-full object-cover" [src]="officerObj.image" />
                     </div>
 
-                    <!-- <div *ngIf="!officerObj.image"> 
-                        <i class="fa-regular fa-circle-user text-7xl"></i>
-                    </div> -->
-
                     <div *ngIf="!officerObj.image" 
                             class="flex rounded-full border-solid border-2 justify-center items-center w-32 h-32">
                             <i class="fa-regular fa-user text-6xl dark:text-white"></i>
@@ -71,7 +67,8 @@
 
                         <p class="font-semibold" *ngIf="officerObj.jobRole === 'Distribution Centre Manager' 
                             || officerObj.jobRole === 'Distribution Centre Head' 
-                            || officerObj.jobRole === 'Distribution Officer'">
+                            || officerObj.jobRole === 'Distribution Officer'
+                            || officerObj.jobRole === 'Driver'">
                             {{ officerObj.distributedCenterRegCode ? officerObj.distributedCenterRegCode + ' Centre' : 'Officer has been disclaimed - No Assigned Centre' }}
                         </p>
                         <p class="text-[#627189] dark:text-textDark">{{officerObj.companyNameEnglish}}</p>
@@ -253,7 +250,11 @@
                     </div>
 
                     <div>
-                    </div>
+                        <p class="text-[#627189] dark:text-textDark">Insurance Expire Date</p>
+                        <p class="font-semibold dark:text-white text-black">
+                          {{ officerObj.insExpDate | date:'yyyy-MM-dd' }}
+                        </p>
+                      </div>
 
                     <div>
                         <p class="text-[#627189] dark:text-textDark">Insurance's Front Image</p>

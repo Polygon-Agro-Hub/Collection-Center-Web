@@ -599,7 +599,7 @@ branchItems: { value: number; label: string }[] = [];
             this.isLoading = false;
             if (res && res.message) {
               // Success response from backend
-              this.toastSrv.success('Distribution Officer Profile Updated Successfull');
+              this.toastSrv.success(`${this.personalData.jobRole} Profile Updated Successfull`);
               this.router.navigate(['/distribution-officers']);
             } else {
               // Handle unexpected format
@@ -676,7 +676,7 @@ branchItems: { value: number; label: string }[] = [];
 
             if (res && res.message) {
               // Success response from backend
-              this.toastSrv.success('Distribution Officer Profile Updated Successfully');
+              this.toastSrv.success(`${this.personalData.jobRole} Profile Updated Successfully`);
               this.router.navigate(['/distribution-officers']);
             } else {
               // Handle unexpected format

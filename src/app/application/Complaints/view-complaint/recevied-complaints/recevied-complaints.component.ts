@@ -72,8 +72,6 @@ export class ReceviedComplaintsComponent implements OnInit {
       (res) => {
         this.complainArr = res.items
         this.totalItems = res.total;
-        console.log(this.complainArr)
-
         if (res.items.length === 0) {
           this.hasData = false;
         } else {
@@ -90,10 +88,8 @@ export class ReceviedComplaintsComponent implements OnInit {
     this.isLoading = true;
     this.ComplainSrv.getComplainById(id).subscribe(
       (res) => {
-        console.log('res', res)
         this.replyObj = res.data;
         this.templateData = res.template;
-        console.log('templateData', this.templateData)
         this.isLoading = false;
       }
     )

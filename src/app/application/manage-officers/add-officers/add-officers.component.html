@@ -150,6 +150,8 @@
                       </div>
 
                     <div *ngIf="logingRole === 'Collection Centre Manager'"></div>
+                    
+
 
                    
 
@@ -221,8 +223,12 @@
                         </div>
                     </div>
 
-    
+                    <!-- <div *ngIf="logingRole === 'Collection Centre Head'"></div> -->
 
+                </div>
+
+
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                     <div>
                         <label for="languages" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
                             Staff employee type *
@@ -519,9 +525,9 @@
                             <p>Please enter a valid email in the format: example&#64;domain.com</p>
                         </div>
                     </div>
-
-
                 </div>
+
+                
 
                 <div class="flex justify-end my-10 ml-10">
                     <button type="button"
@@ -728,8 +734,26 @@
                     Back
                 </button>
 
-                <button type="submit" class="px-6 py-1 bg-[#415CFF] text-[#FFFFFF] rounded-lg">
-                    Sent to Approve
+                <button *ngIf="personalData.jobRole !== 'Driver'"
+                type="submit" class="px-6 py-1 bg-[#415CFF] text-[#FFFFFF] rounded-lg"
+                  (click)="
+                    !PageTwoForm.invalid 
+                      ? onSubmit()
+                      : nextForm('pageTwo')
+                  " 
+                >
+                Sent to Approve
+                </button>
+
+
+                <button *ngIf="personalData.jobRole === 'Driver'"
+                 type="submit" class="px-6 py-1 bg-[#415CFF] text-[#FFFFFF] rounded-lg"
+                 (click)="
+                    !PageTwoForm.invalid && selectedBankId && selectedBranchId && (personalData.accNumber === personalData.conformAccNumber)
+                      ? nextForm('pageThree')
+                      : nextForm('pageTwo')
+                  ">
+                    Next
                 </button>
             </div>
         </div>
@@ -743,7 +767,8 @@
             <div>
                 <label for="licNo" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Driving
                     License ID</label>
-                <input id="licNo" name="licNo" [(ngModel)]="driverObj.licNo"
+                <input id="licNo" type="number" name="licNo" [(ngModel)]="driverObj.licNo"
+                
                     class="form-licNo mt-1 block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                     #licNoInput="ngModel" required />
                 <div *ngIf="licNoInput.touched && !driverObj.licNo" class="text-red-500 text-sm mt-1">
@@ -812,7 +837,8 @@
                 <div>
                     <label for="insNo" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Insurance
                         Number</label>
-                    <input id="insNo" name="insNo" [(ngModel)]="driverObj.insNo"
+                    <input id="insNo" type="number" name="insNo" [(ngModel)]="driverObj.insNo"
+        
                         class="form-control mt-1 block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                         #insNoInput="ngModel" required />
                     <div *ngIf="insNoInput.touched && !driverObj.insNo" class="text-red-500 text-sm mt-1">
@@ -888,7 +914,8 @@
             <div>
                 <label for="vRegNo" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Vehicle
                     Registration Number</label>
-                <input id="vRegNo" name="vRegNo" [(ngModel)]="driverObj.vRegNo" #vRegNoInput="ngModel" required
+                <input id="vRegNo" type="number" name="vRegNo" [(ngModel)]="driverObj.vRegNo" #vRegNoInput="ngModel" required
+                
                     class="form-control mt-1 block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                     required />
                 <div *ngIf="vRegNoInput.touched && !driverObj.vRegNo" class="text-red-500 text-sm mt-1">

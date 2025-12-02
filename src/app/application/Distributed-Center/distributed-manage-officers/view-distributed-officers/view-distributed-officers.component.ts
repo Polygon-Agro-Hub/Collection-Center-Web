@@ -69,7 +69,7 @@ export class ViewDistributedOfficersComponent implements OnInit {
   }
 
   isRoleDropdownOpen = false;
-  roleDropdownOptions = ['Distribution Centre Manager', 'Distribution Officer'];
+  roleDropdownOptions = ['Distribution Centre Manager', 'Distribution Officer', 'Driver'];
 
   toggleRoleDropdown() {
     this.isRoleDropdownOpen = !this.isRoleDropdownOpen;

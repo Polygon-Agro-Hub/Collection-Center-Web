@@ -42,7 +42,6 @@ export class DchViewRecieveComplaintComponent {
 
   ngOnInit(): void {
     this.compalinId = this.route.snapshot.params['id'];
-    console.log('compalinId', this.compalinId)
     this.fetchComplainById(this.compalinId);
 
   }
@@ -51,14 +50,11 @@ export class DchViewRecieveComplaintComponent {
     this.isLoading = true;
     this.DistributionComplaintsSrv.dchGetComplainById(id).subscribe(
       (res) => {
-        console.log('res', res)
         this.compalintObj = res.data
         this.officerName = this.compalintObj.firstNameEnglish + " " + this.compalintObj.lastNameEnglish
-        console.log(this.compalintObj);
         this.phone1 = this.compalintObj.phoneNumber01 === null ? '-' : this.compalintObj.phoneCode01 + " - " + this.compalintObj.phoneNumber01;
         this.phone2 = this.compalintObj.phoneNumber02 === null ? '-' : this.compalintObj.phoneCode02 + " - " + this.compalintObj.phoneNumber02;
         this.replyObj.reply = res.data.reply;
-        console.log(this.replyObj.reply);
         this.templateData = res.template
 
 

@@ -73,9 +73,6 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
       : null;
     this.centerId = this.route.snapshot.params['centerId'];
     this.empId = this.route.snapshot.params['empId']
-    console.log('Selected officerId:', this.officerId);
-    // this.fetchOfficers();
-
     const today = new Date();
     this.selectedDate = today.toISOString().split('T')[0];
     this.fetchSelectedOfficerTargets();
@@ -138,10 +135,6 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
             combinedStatus: status
           };
         });
-        
-  
-        console.log('ordersarr', this.ordersArr);
-  
         this.hasData = this.ordersArr.length > 0;
         this.isLoading = false;
       }
@@ -173,9 +166,7 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
     this.isLoading = true;
     this.DistributionSrv.getOfficers().subscribe(
       (res) => {
-        console.log('officer', res)
         this.officersArr = res
-        console.log('officersArr', this.officersArr)
         this.totalOfficers = res.length;
         this.isLoading = false;
 
@@ -281,16 +272,6 @@ getStatus(item: orders): string {
       deadline.setHours(20, 0, 0, 0); // 8:00 PM
     }
   }
-
-  // --- Debug with Sri Lanka local time ---
-  console.log(
-    'Complete (SL):',
-    completeTime.toLocaleString('en-GB', { timeZone: 'Asia/Colombo', hour12: false })
-  );
-  console.log(
-    'Deadline (SL):',
-    deadline.toLocaleString('en-GB', { timeZone: 'Asia/Colombo', hour12: false })
-  );
 
   // ✅ Compare using timestamps (still works for SL)
   return completeTime.getTime() <= deadline.getTime() ? 'On Time' : 'Late';

@@ -92,17 +92,14 @@ export class DchRecievedComplaintsComponent implements OnInit {
     this.isLoading = true;
     this.DistributionComplainSrv.dchGetComplainById(id).subscribe(
       (res) => {
-        console.log('res', res)
         this.replyObj = res.data;
         this.templateData = res.template
-        console.log('replyObj', this.replyObj)
         this.isLoading = false;
       }
     )
   }
 
   viewReply(id: number) {
-    console.log('fetching')
     this.isReplyView = true;
     this.fetchGetReply(id);
   }

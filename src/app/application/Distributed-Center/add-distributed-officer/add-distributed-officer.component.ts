@@ -136,7 +136,6 @@ export class AddDistributedOfficerComponent implements OnInit {
 
   ) {
     this.logingRole = tokenSrv.getUserDetails().role
-    console.log('this.logingRole', this.logingRole)
     const defaultCountry = this.countries.find(c => c.code === 'lk') || null;
     this.selectedCountry1 = defaultCountry;
     this.selectedCountry2 = defaultCountry;
@@ -183,10 +182,7 @@ export class AddDistributedOfficerComponent implements OnInit {
     this.loadBanks()
     this.loadBranches()
     this.getAllDistributionCenters();
-    // this.getLastID('COO');
-    // this.EpmloyeIdCreate();
     this.setJobRoles();
-     console.log('loging role', this.logingRole)
     
   }
 
@@ -194,20 +190,13 @@ export class AddDistributedOfficerComponent implements OnInit {
 
   toggleJobRoleDropdown() {
     this.isJobRoleOpen = !this.isJobRoleOpen;
-
     this.jobRoleInputTouched = true;
-
-    console.log('jobRoleInputTouched', this.jobRoleInputTouched)
   }
 
   getJobRole(role: string) {
     this.personalData.jobRole = role;
     this.isJobRoleOpen = false;
     this.jobRoleInputTouched = true;
-
-    console.log('jobRole', this.personalData.jobRole)
-
-    console.log('jobRoleInputTouched', this.jobRoleInputTouched)
   }
 
   setJobRoles() {
@@ -251,27 +240,12 @@ export class AddDistributedOfficerComponent implements OnInit {
     }
   }
 
-// onSearchInput(event: Event) {
-//   const input = event.target as HTMLInputElement;
-//   const searchValue = input.value.toLowerCase().trim();
-
-//   // filter from original list
-//   this.filteredCenterArr = this.centerArr.filter(center =>
-//     center.centerName.toLowerCase().includes(searchValue)
-//   );
-// }
-
 onSearchInput(event: Event) {
   const input = event.target as HTMLInputElement;
   const value = input.value.toLowerCase();
-  console.log('value', value);
-
   this.filteredCenterArr = this.centerArr.filter(c =>
     (c.centerName || '').toLowerCase().includes(value)
   );
-
-  console.log('filtered centers', this.filteredCenterArr);
-
 }
 
 
@@ -285,8 +259,6 @@ toggleManagerDropdown() {
 }
 
 selectCenter(item: Center) {
-  console.log('center selected');
-
   this.personalData.centerId = item.id;
   this.selectedCenterName = item.centerName;
   this.centreDropdownOpen = false; // close dropdown
@@ -304,23 +276,16 @@ selectCenter(item: Center) {
 onManagerSearchInput(event: Event) {
   const input = event.target as HTMLInputElement;
   const value = input.value.toLowerCase().trim(); // remove leading/trailing spaces
-  console.log('search value', value);
-
   this.filteredManagerArr = this.managerArr.filter(m => {
     const fullName = `${m.firstNameEnglish} ${m.lastNameEnglish}`.toLowerCase();
     return fullName.includes(value);
   });
-
-  console.log('filtered managers', this.filteredManagerArr);
 }
 
 
 selectManager(item: Manager) {
-  console.log('Manager selected');
-
   this.personalData.irmId = item.id;
   this.selectedManager = item.firstNameEnglish + ' ' + item.lastNameEnglish;
-  console.log('selectedManager', this.selectedManager )
   this.managerDropdownOpen = false; // close dropdown
 
   // Reset search input and filtered array
@@ -329,10 +294,6 @@ selectManager(item: Manager) {
   if (searchInput) {
     searchInput.value = '';
   }
-
-  console.log('id', this.personalData.irmId)
-
-  // this.changeCenter();
 }
 
 
@@ -340,14 +301,12 @@ selectManager(item: Manager) {
   selectCountry1(country: Country) {
     this.selectedCountry1 = country;
     this.personalData.phoneNumber01Code = country.dialCode; // update ngModel
-    console.log('sdsf', this.personalData.phoneNumber01Code)
     this.dropdownOpen = false;
   }
 
   selectCountry2(country: Country) {
     this.selectedCountry2 = country;
     this.personalData.phoneNumber02Code = country.dialCode; // update ngModel
-    console.log('sdsf', this.personalData.phoneNumber02Code)
     this.dropdownOpen2 = false;
   }
   
@@ -381,12 +340,10 @@ selectManager(item: Manager) {
 
   validateLanguages() {
     this.languagesRequired = !this.personalData.languages || this.personalData.languages.trim() === '';
-    console.log('language', this.languagesRequired)
   }
 
 
   nextForm(page: 'pageOne' | 'pageTwo' | 'pageThree') {
-    console.log('personalData', this.personalData)
     this.selectedPage = page;
   }
 
@@ -422,24 +379,6 @@ selectManager(item: Manager) {
     }
   }
 
-  // updateProvince(event: Event): void {
-  //   const target = event.target as HTMLSelectElement;
-  //   const selectedDistrict = target.value;
-
-  //   const selected = this.districts.find(district => district.name === selectedDistrict);
-
-  //   if (this.itemId === null) {
-
-  //     if (selected) {
-  //       this.personalData.province = selected.province;
-  //     } else {
-  //       this.personalData.province = '';
-  //     }
-
-  //   }
-
-  // }
-
   onDistrictChange(districtName: string | null) {
     if (this.itemId !== null) return; // keep your original guard
 
@@ -448,8 +387,6 @@ selectManager(item: Manager) {
   }
 
   onSubmit() {
-    console.log('this.personalData', this.personalData)
-    // this.personalData.image = this.selectedFile;
     if (this.personalData.accNumber !== this.personalData.conformAccNumber) {
       return;
     }
@@ -464,8 +401,6 @@ selectManager(item: Manager) {
 
     } else {
       if (this.logingRole === 'Distribution Centre Manager') {
-        console.log('Distribution Centre Manager')
-
         if (this.personalData.jobRole === 'Driver') {
           if (!this.licenseFrontImageFileName || !this.licenseBackImageFileName || !this.insurenceFrontImageFileName || !this.insurenceBackImageFileName || !this.vehicleFrontImageFileName || !this.vehicleBackImageFileName || !this.vehicleSideAImageFileName || !this.vehicleSideBImageFileName) {
             this.isLoading = false;
@@ -543,8 +478,6 @@ selectManager(item: Manager) {
           }
         );
       } else if (this.logingRole === 'Distribution Centre Head') {
-        console.log('Distribution Centre Head')
-
         if (this.personalData.jobRole === 'Driver') {
           if (!this.licenseFrontImageFileName || !this.licenseBackImageFileName || !this.insurenceFrontImageFileName || !this.insurenceBackImageFileName || !this.vehicleFrontImageFileName || !this.vehicleBackImageFileName || !this.vehicleSideAImageFileName || !this.vehicleSideBImageFileName) {
             this.isLoading = false;
@@ -668,7 +601,6 @@ selectManager(item: Manager) {
       (res) => {
         this.centerArr = res
         this.filteredCenterArr = [...this.centerArr];
-        console.log('centerArr', this.centerArr)
         this.isLoading = false;
 
       }
@@ -689,7 +621,6 @@ selectManager(item: Manager) {
       (res) => {
         this.managerArr = res
         this.filteredManagerArr = [...this.managerArr];
-        console.log('managerArr', this.managerArr)
         this.isLoading = false;
       }
     )
@@ -742,17 +673,11 @@ selectManager(item: Manager) {
   }
 
   onSubmitFormPage1(form: NgForm) {
-    console.log('personal data')
     form.form.markAllAsTouched();
 
     this.validateLanguages();
 
     const missingFields: string[] = [];
-
-  // Validation for pageOne fields
-  // if (!this.personalData.empType) {
-  //   missingFields.push('Staff Employee Type');
-  // }
 
   if (!this.personalData.centerId && this.logingRole === 'Distribution Centre Head') {
     missingFields.push('Distribution Centre Name is required');

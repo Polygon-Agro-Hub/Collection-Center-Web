@@ -98,7 +98,6 @@ export class DcmSentComplaintsComponent implements OnInit {
     this.DistributionComplaintsSrv.dcmGetAllSentComplains(page, limit, status, emptype, search).subscribe(
       (res) => {
         this.complainArr = res.items
-        console.log(this.complainArr);
         this.totalItems = res.total;
         this.officerId = res.userId
 

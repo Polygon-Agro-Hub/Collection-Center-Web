@@ -68,8 +68,6 @@ export class DcmComplaintsComponent implements OnInit {
   // 5. Add selection change handler
   onCategorySelectionChange(selectedValue: string) {
     this.category = selectedValue || '';
-    // Add any additional logic you need when category changes
-    console.log('Category selected:', selectedValue);
   }
 
   onSubmit() {

@@ -313,7 +313,7 @@
                         </div>
                     </div>
 
-                    <div>
+                    <div *ngIf="personalData.jobRole !=='Driver'">
                         <label for="firstNameSinhala"
                             class="block text-sm font-medium text-[#534E4E] dark:text-textDark">First
                             Name (in Sinhala) *</label>
@@ -327,7 +327,7 @@
                         </div>
                     </div>
 
-                    <div>
+                    <div *ngIf="personalData.jobRole !=='Driver'">
                         <label for="lastNameSinhala"
                             class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Last
                             Name (in Sinhala) *</label>
@@ -341,7 +341,7 @@
                         </div>
                     </div>
 
-                    <div>
+                    <div *ngIf="personalData.jobRole !=='Driver'">
                         <label for="firstNameTamil"
                             class="block text-sm font-medium text-[#534E4E] dark:text-textDark">First
                             Name (in Tamil) *</label>
@@ -355,7 +355,7 @@
                         </div>
                     </div>
 
-                    <div>
+                    <div *ngIf="personalData.jobRole !=='Driver'">
                         <label for="lastNameTamil"
                             class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Last
                             Name (in Tamil) *</label>

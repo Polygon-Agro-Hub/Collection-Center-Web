@@ -202,6 +202,12 @@ export class AddDistributedOfficerComponent implements OnInit {
 
   getJobRole(role: string) {
     this.personalData.jobRole = role;
+    if (this.personalData.jobRole === 'Driver') {
+      this.personalData.firstNameSinhala = '';
+      this.personalData.lastNameSinhala = ''
+      this.personalData.firstNameTamil = ''
+      this.personalData.lastNameTamil = ''
+    }
     this.isJobRoleOpen = false;
     this.jobRoleInputTouched = true;
 
@@ -742,7 +748,7 @@ selectManager(item: Manager) {
   }
 
   onSubmitFormPage1(form: NgForm) {
-    console.log('personal data')
+    console.log('personal data', this.personalData)
     form.form.markAllAsTouched();
 
     this.validateLanguages();
@@ -778,7 +784,7 @@ selectManager(item: Manager) {
   //   missingFields.push('Company Name');
   // }
 
-  if (!this.personalData.firstNameEnglish) {
+  if (!this.personalData.firstNameEnglish ) {
     missingFields.push('First Name (in English) is required');
   }
 
@@ -786,19 +792,19 @@ selectManager(item: Manager) {
     missingFields.push('Last Name (in English) is required');
   }
 
-  if (!this.personalData.firstNameSinhala) {
+  if (!this.personalData.firstNameSinhala && this.personalData.jobRole !=='Driver') {
     missingFields.push('First Name (in Sinhala) is required');
   }
 
-  if (!this.personalData.lastNameSinhala) {
+  if (!this.personalData.lastNameSinhala && this.personalData.jobRole !=='Driver') {
     missingFields.push('Last Name (in Sinhala) is required');
   }
 
-  if (!this.personalData.firstNameTamil) {
+  if (!this.personalData.firstNameTamil && this.personalData.jobRole !=='Driver') {
     missingFields.push('First Name (in Tamil) is required');
   }
 
-  if (!this.personalData.lastNameTamil) {
+  if (!this.personalData.lastNameTamil && this.personalData.jobRole !=='Driver') {
     missingFields.push('Last Name (in Tamil) is required');
   }
 

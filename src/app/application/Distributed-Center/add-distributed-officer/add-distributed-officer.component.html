@@ -853,18 +853,26 @@
                           (dateChange)="onDateChange($event)"
                         ></app-custom-datepicker> -->
 
-                <div class="">
-                    <label for="insExpDate"
-                        class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Insurance
-                        Expire Date</label>
-                    <input id="insExpDate" name="insExpDate" type="date" [(ngModel)]="driverObj.insExpDate"
-                    class="form-control mt-1 block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                        #insExpDateInput="ngModel" required />
-                        
-                    <div *ngIf="insExpDateInput.touched && !driverObj.insExpDate" class="text-red-500 text-sm mt-1">
-                        <div>Insurance Expire Date is required</div>
-                    </div>
-                </div>
+               <div>
+                   <label
+                        class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
+                        Insurance Expire Date
+                   </label>
+                 
+                   <app-custom-datepicker
+                        name="insExpDate"
+                        [(selectedDate)]="driverObj.insExpDate"
+                        placeholder="mm/dd/yyyy"
+                        (dateChange)="onInsuranceDateChange($event)"
+                        (pickerOpened)="onDatePickerClicked()"
+                   ></app-custom-datepicker>
+                 
+                   <div
+                        *ngIf="insExpDateTouched && !driverObj.insExpDate"
+                        class="text-red-500 text-sm mt-1">
+                        Insurance Expire Date is required
+                   </div>
+                 </div>
 
                 <div>
                     <label for="insurenceFrontImageUpload"

@@ -3,7 +3,7 @@
 <div *ngIf="!isLoading"
     class="flex flex-row items-center gap-6 font-semibold text-[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
     <p onclick="history.back()">Manage Officers</p>
-    <p>Add Officer</p>
+    <p>Add New Officer</p>
 </div>
 
 <div *ngIf="!isLoading" class="mx-auto p-6 bg-white dark:bg-[#363636] rounded-lg shadow-mg">
@@ -846,6 +846,13 @@
                     </div>
                 </div>
 
+
+                <!-- <app-custom-datepicker
+                          [placeholder]="'Scheduled Date'"
+                          [selectedDate]="selectedDate"
+                          (dateChange)="onDateChange($event)"
+                        ></app-custom-datepicker> -->
+
                 <div class="">
                     <label for="insExpDate"
                         class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Insurance
@@ -853,13 +860,7 @@
                     <input id="insExpDate" name="insExpDate" type="date" [(ngModel)]="driverObj.insExpDate"
                     class="form-control mt-1 block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                         #insExpDateInput="ngModel" required />
-
-                        <!-- <app-custom-datepicker
-                          [placeholder]="'Scheduled Date'"
-                          [selectedDate]="selectedDate"
-                          (dateChange)="onDateChange($event)"
-                        ></app-custom-datepicker> -->
-
+                        
                     <div *ngIf="insExpDateInput.touched && !driverObj.insExpDate" class="text-red-500 text-sm mt-1">
                         <div>Insurance Expire Date is required</div>
                     </div>

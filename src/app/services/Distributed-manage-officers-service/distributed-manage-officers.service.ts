@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, from, switchMap } from 'rxjs';
 import { TokenServiceService } from '../Token/token-service.service';
 import { environment } from '../../environments/environment.development';
 
@@ -193,30 +193,63 @@ export class DistributedManageOfficersService {
     });
   }
 
-  updateDistributionOfficer(person: any, id: number, image: any, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
-    const formData = new FormData();
-
-    if (person.jobRole === 'Driver') {
-      formData.append('driverData', JSON.stringify(driver));
-      formData.append('licFront', licFront);
-      formData.append('licBack', licBack);
-      formData.append('insFront', insFront);
-      formData.append('insBack', insBack);
-      formData.append('vehiFront', vehiFront);
-      formData.append('vehiBack', vehiBack);
-      formData.append('vehiSideA', vehiSideA);
-      formData.append('vehiSideB', vehiSideB);
-    }
-
-    formData.append('officerData', JSON.stringify(person));
-    formData.append('file', image);
-
+  private fileToBase64(file: File): Promise<string> {
+    return new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result as string);
+      reader.onerror = error => reject(error);
+    });
+  }
+  
+  updateDistributionOfficer(
+    person: any,
+    id: number,
+    image: any,
+    driver: any,
+    licFront: any,
+    licBack: any,
+    insFront: any,
+    insBack: any,
+    vehiFront: any,
+    vehiBack: any,
+    vehiSideA: any,
+    vehiSideB: any
+  ): Observable<any> {
+  
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
     });
-    return this.http.put(`${this.apiUrl}/manage-officers/update-officer/${id}`, formData, {
-      headers,
-    });
+  
+    return from((async () => {
+      const formData = new FormData();
+  
+      if (person.jobRole === 'Driver') {
+        formData.append('driverData', JSON.stringify(driver));
+  
+        if (licFront) formData.append('licFront', await this.fileToBase64(licFront));
+        if (licBack) formData.append('licBack', await this.fileToBase64(licBack));
+        if (insFront) formData.append('insFront', await this.fileToBase64(insFront));
+        if (insBack) formData.append('insBack', await this.fileToBase64(insBack));
+        if (vehiFront) formData.append('vehiFront', await this.fileToBase64(vehiFront));
+        if (vehiBack) formData.append('vehiBack', await this.fileToBase64(vehiBack));
+        if (vehiSideA) formData.append('vehiSideA', await this.fileToBase64(vehiSideA));
+        if (vehiSideB) formData.append('vehiSideB', await this.fileToBase64(vehiSideB));
+      }
+  
+      formData.append('officerData', JSON.stringify(person));
+      formData.append('file', image);
+  
+      return formData;
+    })()).pipe(
+      switchMap(formData =>
+        this.http.put(
+          `${this.apiUrl}/manage-officers/update-officer/${id}`,
+          formData,
+          { headers }
+        )
+      )
+    );
   }
 
   updateDistributionOfficerDIO(person: any, id: number, image: any, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {

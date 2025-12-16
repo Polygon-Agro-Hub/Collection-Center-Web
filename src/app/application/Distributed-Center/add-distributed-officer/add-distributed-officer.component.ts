@@ -32,7 +32,7 @@ export class AddDistributedOfficerComponent implements OnInit {
   driverObj: Drivers = new Drivers()
 
   languages: string[] = ['Sinhala', 'English', 'Tamil'];
-  selectedPage: 'pageOne' | 'pageTwo' | 'pageThree' = 'pageOne';
+  selectedPage: 'pageOne' | 'pageTwo' | 'pageThree' = 'pageThree';
   lastID!: number
   itemId: number | null = null;
   officerId!: number
@@ -40,6 +40,8 @@ export class AddDistributedOfficerComponent implements OnInit {
   selectVehicletype: any = { name: '', capacity: '' };
 
   isJobRoleOpen = false;
+
+  insExpDateTouched = false;
 
 
   selectedFileName!: string
@@ -190,7 +192,30 @@ export class AddDistributedOfficerComponent implements OnInit {
     
   }
 
+  onDatePickerClicked() {
+    console.log('Date picker clicked/opened');
+    this.insExpDateTouched = true;
+  }
+
+  onInsuranceDateChange(newDate: string | Date | null) {
+    let dateString: string;
   
+    if (!newDate) {
+      
+      dateString = new Date().toISOString().split('T')[0];
+    } 
+    else if (newDate instanceof Date) {
+      
+      dateString = newDate.toISOString().split('T')[0];
+    } 
+    else {
+      
+      dateString = newDate;
+    }
+  
+    this.driverObj.insExpDate = dateString;
+
+  }
 
   toggleJobRoleDropdown() {
     this.isJobRoleOpen = !this.isJobRoleOpen;

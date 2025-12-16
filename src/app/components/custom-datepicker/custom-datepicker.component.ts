@@ -25,6 +25,7 @@ export class CustomDatepickerComponent {
   @Output() dateChange = new EventEmitter<string | Date | null>();
   @Input() placeholder: string = 'Date';
   @Input() showClearButton: boolean = true;
+  @Output() pickerOpened = new EventEmitter<void>();
   
   showCalendar = false;
   showYearPicker = false;
@@ -50,6 +51,10 @@ export class CustomDatepickerComponent {
   toggleCalendar() {
     this.showCalendar = !this.showCalendar;
     this.showYearPicker = false;
+
+    if (this.showCalendar) {
+      this.pickerOpened.emit(); // 👈 track click/open
+    }
     
     // Reset to current date or selected date when opening
     if (this.showCalendar) {

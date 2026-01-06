@@ -180,6 +180,15 @@ export const MENU_ITEMS = [
   },
 
   {
+    id: 23,
+    key: 'dispatched',
+    path: '/dispatched',
+    label: 'Dispatched',
+    icon: 'fa-solid fa-arrow-right-arrow-left',
+    permission: ['Distribution Centre Manager'],
+  },
+
+  {
     id: 18,
     key: 'distribution-officers',
     path: '/distribution-officers',

@@ -80,6 +80,7 @@ import { ViewOfficerTargetDistributionComponent } from './application/dch-Target
 import { DcmDashboardComponent } from './application/Distributed-Center/dcm-dashboard/dcm-dashboard.component';
 import { ViewDistributionCenterComponent } from './application/Distributed-Center/Centres/view-distribution-center/view-distribution-center.component';
 import { EditDistributionCenterComponent } from './application/Distributed-Center/Centres/edit-distribution-center/edit-distribution-center.component';
+import { DispatchedDashboardComponent } from './application/Dispatched/dispatched-dashboard/dispatched-dashboard.component';
 
 
 
@@ -576,6 +577,19 @@ export const routes: Routes = [
                     {
                         path: '',
                         component: RequestsComponent,
+                    },
+                    
+                ]
+            },
+
+            {
+                path: 'dispatched',
+                canActivate:[RoleGuardService],
+                data: { roles: ['Distribution Centre Manager'] },
+                children: [
+                    {
+                        path: '',
+                        component: DispatchedDashboardComponent,
                     },
                     
                 ]

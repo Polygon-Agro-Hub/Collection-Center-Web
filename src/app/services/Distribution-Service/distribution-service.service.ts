@@ -634,6 +634,38 @@ editCenter(centerData: any): Observable<any> {
   });
 }
 
+
+getTodaysDeliveries(activeTab: string = '', status: string = '', searchText: string = '', date: string | Date | null = '' ): Observable<any> {
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${this.token}`,
+    'Content-Type': 'application/json',
+  });
+
+  let url = `${this.apiUrl}/get-todays-deliveries?activeTab=${activeTab}`;
+
+    if (status) {
+      url += `&status=${status}`;
+    }
+
+    if (searchText) {
+      url += `&searchText=${searchText}`;
+    }
+
+    if (date) {
+      url += `&date=${date}`;
+    }
+
+    return this.http.get(url, { headers });
+
+}
+
+getTodayDeliveryTracking(id: number): Observable<any> {
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${this.token}`,
+    'Content-Type': 'application/json',
+  });
+  return this.http.get<any>(`${this.apiUrl}/get-today-delivery-tracking/${id}`, { headers });
+}
 }
 
 

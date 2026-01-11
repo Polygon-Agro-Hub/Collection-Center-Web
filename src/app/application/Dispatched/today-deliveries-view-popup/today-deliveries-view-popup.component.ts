@@ -100,6 +100,7 @@ export class TodayDeliveriesViewPopupComponent implements OnInit, OnChanges
         next: (response) => {
           this.trackingDetails = response;
           this.steps = this.buildSteps();
+          console.log('steps', this.steps)
           this.loading = false;
         },
         error: (err) => {
@@ -123,7 +124,7 @@ export class TodayDeliveriesViewPopupComponent implements OnInit, OnChanges
 
     steps.push({
       type: 'out',
-      payload: { outDlvrDate: c.outDlvrDate, regCode: c.regCode || '', centerName: c.centerName || '', empI: c.empId = ''  }
+      payload: { outDlvrDate: c.outDlvrDate, regCode: c.regCode || '', centerName: c.centerName || '', empId: c.empId  }
     });
 
     if (!d) return steps;

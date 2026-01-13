@@ -8,14 +8,15 @@
 <div
   class="fixed-width-container overflow-x-auto scrollbar-thin scrollbar-thumb-scrollBarColor scrollbar-track-transparent scrollbar-thumb-rounded-full"
 >
+
   <div
-    class="pt-5 pb-5 min-w-[1200px] bg-white dark:bg-tileBlack shadow-lg rounded-lg"
+    class="pt-5 pb-5 min-w-[1200px] bg-white dark:bg-[#363636] shadow-lg rounded-lg"
   >
     <div class="flex space-x-4 pb-5 pr-12 pl-12 border-b border-gray-300">
       <button
         (click)="selectTab('all')"
         [ngClass]="{
-          'border border-[#415CFF] text-[#415CFF]': activeTab === 'all',
+          'border-2 border-[#415CFF] text-[#415CFF]': activeTab === 'all',
           'border border-gray-300 text-textLight dark:text-textDark':
             activeTab !== 'all'
         }"
@@ -28,7 +29,7 @@
       <button
         (click)="selectTab('Ready to Pickup')"
         [ngClass]="{
-          'border border-[#415CFF] text-[#415CFF]': activeTab === 'Ready to Pickup',
+          'border-2 border-[#415CFF] text-[#415CFF]': activeTab === 'Ready to Pickup',
           'border border-gray-300 text-textLight dark:text-textDark':
             activeTab !== 'Ready to Pickup'
         }"
@@ -41,7 +42,7 @@
       <!-- <button
         (click)="selectTab('on-the-way')"
         [ngClass]="{
-          'border border-[#415CFF] text-[#415CFF]': activeTab === 'on-the-way',
+          'border-2 border-[#415CFF] text-[#415CFF]': activeTab === 'on-the-way',
           'border border-gray-300 text-textLight dark:text-textDark':
             activeTab !== 'on-the-way'
         }"
@@ -53,7 +54,7 @@
       <button
         (click)="selectTab('out-for-delivery')"
         [ngClass]="{
-          'border border-[#415CFF] text-[#415CFF]':
+          'border-2 border-[#415CFF] text-[#415CFF]':
             activeTab === 'out-for-delivery',
           'border border-gray-300 text-textLight dark:text-textDark':
             activeTab !== 'out-for-delivery'
@@ -66,7 +67,7 @@
       <button
         (click)="selectTab('on-the-way')"
         [ngClass]="{
-          'border border-[#415CFF] text-[#415CFF]': activeTab === 'on-the-way',
+          'border-2 border-[#415CFF] text-[#415CFF]': activeTab === 'on-the-way',
           'border border-gray-300 text-textLight dark:text-textDark':
             activeTab !== 'on-the-way'
         }"
@@ -78,7 +79,7 @@
       <button
         (click)="selectTab('hold')"
         [ngClass]="{
-          'border border-[#415CFF] text-[#415CFF]': activeTab === 'hold',
+          'border-2 border-[#415CFF] text-[#415CFF]': activeTab === 'hold',
           'border border-gray-300 text-textLight dark:text-textDark':
             activeTab !== 'hold'
         }"
@@ -90,7 +91,7 @@
       <button
         (click)="selectTab('return')"
         [ngClass]="{
-          'border border-[#415CFF] text-[#415CFF]': activeTab === 'return',
+          'border-2 border-[#415CFF] text-[#415CFF]': activeTab === 'return',
           'border border-gray-300 text-textLight dark:text-textDark':
             activeTab !== 'return'
         }"
@@ -103,7 +104,7 @@
       <button
         (click)="selectTab('delivered')"
         [ngClass]="{
-          'border border-[#415CFF] text-[#415CFF]': activeTab === 'delivered',
+          'border-2 border-[#415CFF] text-[#415CFF]': activeTab === 'delivered',
           'border border-gray-300 text-textLight dark:text-textDark':
             activeTab !== 'delivered'
         }"
@@ -116,7 +117,7 @@
       <button
         (click)="selectTab('Return Received')"
         [ngClass]="{
-          'border border-[#415CFF] text-[#415CFF]': activeTab === 'Return Received',
+          'border-2 border-[#415CFF] text-[#415CFF]': activeTab === 'Return Received',
           'border border-gray-300 text-textLight dark:text-textDark':
             activeTab !== 'Return Received'
         }"
@@ -132,23 +133,23 @@
   </div>
 </div>
 
-<div class="pt-5 px-12 pb-5 w-full bg-tileLight dark:bg-tileBlack">
+<div class="pt-5 px-12 pb-5 w-full bg-tileLight dark:bg-[#363636]">
 <div class="flex justify-between items-center mb-8">
     <div class="flex items-center">
-      <h2 class="text-2xl font-normal text-textLight dark:text-textDark">
-        <!-- All ({{ getOrderCount() }}) -->
+      <h2 class="text-lg font-semibold text-textLight dark:text-textDark">
+All ({{ allDeliveries.length < 10 ? ('0' + allDeliveries.length) : allDeliveries.length }})
       </h2>
     </div>
     <div class="flex items-center mr-5 gap-x-5">
-      <i class="mr-6 w-6 h-6 fill-current text-textLight dark:text-textDark">
+      <i *ngIf="activeTab === 'all' || activeTab === 'Ready to Pickup' || activeTab === 'out-for-delivery' || activeTab === 'Return Received'" class="mr-6 w-6 h-6 fill-current text-textLight dark:text-textDark">
         <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
           <path
             d="M0 416c0 17.7 14.3 32 32 32l54.7 0c12.3 28.3 40.5 48 73.3 48s61-19.7 73.3-48L480 448c17.7 0 32-14.3 32-32s-14.3-32-32-32l-246.7 0c-12.3-28.3-40.5-48-73.3-48s-61 19.7-73.3 48L32 384c-17.7 0-32 14.3-32 32zm128 0a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zM320 256a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm32-80c-32.8 0-61 19.7-73.3 48L32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l246.7 0c12.3 28.3 40.5 48 73.3 48s61-19.7 73.3-48l54.7 0c17.7 0 32-14.3 32-32s14.3-32-32-32l-54.7 0c-12.3-28.3-40.5-48-73.3-48zM192 128a32 32 0 1 1 0-64 32 32 0 1 1 0 64zm73.3-64C253 35.7 224.8 16 192 16s-61 19.7-73.3 48L32 64C14.3 64 0 78.3 0 96s14.3 32 32 32l86.7 0c12.3 28.3 40.5 48 73.3 48s61-19.7 73.3-48L480 128c17.7 0 32-14.3 32-32s14.3-32-32-32L265.3 64z" />
         </svg>
       </i>
-      <p class="text-textLight dark:text-textDark mr-6">Filter By</p>
+      <p *ngIf="activeTab === 'all' || activeTab === 'Ready to Pickup' || activeTab === 'out-for-delivery' || activeTab === 'Return Received'" class="text-textLight dark:text-textDark mr-6">Filter By</p>
 
-      <div class="w-60">
+      <div class="w-44" *ngIf="activeTab === 'all'">
         <app-searchable-dropdown
               [items]="statusOptionsArr"
               placeholder="Status"
@@ -162,7 +163,7 @@
         ></app-searchable-dropdown>
       </div>
 
-      <div *ngIf="activeTab === 'all' || activeTab === 'Ready to Pickup' || activeTab === 'out-for-delivery'" class="w-48">
+      <div *ngIf="activeTab === 'all' || activeTab === 'Ready to Pickup' || activeTab === 'out-for-delivery' || activeTab === 'Return Received'" class="w-44">
         <app-custom-datepicker
         [placeholder]="placeholderDate"
       [selectedDate]="selectedDate"
@@ -176,16 +177,41 @@
           [options]="statusOptions" [(ngModel)]="selectedStatus" (onChange)="onStatusChange()" [checkmark]="true"
           optionLabel="label" optionValue="value" placeholder="Status"></p-dropdown>
       </div> -->
-      <div class="flex items-center rounded-full px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#272F45]">
+
+      <div
+                    class="flex items-center md:w-96 lg:w-72 text-[#95A1AC] rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+                    <input type="text" [placeholder]="searchPlaceHolder" [(ngModel)]="searchText" (keyup.enter)="onSearchChange()"
+                        (keyup.esc)="onSearchChange()"
+                        class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
+                    <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
+                        (click)="onSearchChange()">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
+                        </svg>
+                    </button>
+                    <button *ngIf="this.searchText" type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none"
+                        (click)="clearSearch()">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                            stroke="currentColor">
+                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                d="M6 18L18 6M6 6l12 12" />
+                        </svg>
+                    </button>
+                </div>
+
+      <!-- <div class="flex items-center rounded-full px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#272F45]">
         <input type="text" placeholder="Search by Order ID"
-          class="bg-transparent outline-none w-full text-textLight dark:text-textDark" [(ngModel)]="searchText"
+          class="bg-transparent outline-none w-full text-textLight dark:text-textDark" [(ngModel)]="searchText" (keyup.enter)="onSearchChange()"
+          (keyup.esc)="onSearchChange()"
           (input)="onSearchChange()" />
         <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none" (click)="clearSearch()">
           <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
           </svg>
         </button>
-      </div>
+      </div> -->
     </div>
   </div>
 
@@ -194,9 +220,9 @@
     <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
   </div>
 
-  <div *ngIf="hasData" class="w-full">
-    <table class="min-w-full divide-y divide-gray-200 table-auto">
-      <thead>
+  <div *ngIf="hasData" class="overflow-hidden min-w-max mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+    <table class="w-full divide-y-2 overflow-hidden">
+      <thead class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
         <tr>
           <th class="px-4 py-3 font-normal text-textLight dark:text-textDark text-center">
             No
@@ -216,11 +242,11 @@
           <!-- <th  class="px-4 py-3 font-normal text-textLight dark:text-textDark text-left">
             Centre
           </th> -->
-          <th *ngIf="activeTab !== 'all'" class="px-4 py-3 font-normal text-textLight dark:text-textDark text-left">
+          <th *ngIf="activeTab !== 'all' && activeTab !== 'delivered' && activeTab !== 'Return Received'" class="px-4 py-3 font-normal text-textLight dark:text-textDark text-left">
             Customer Phone
           </th>
 
-          <th *ngIf="activeTab !== 'all'" class="px-4 py-3 font-normal text-textLight dark:text-textDark text-left">
+          <th *ngIf="activeTab !== 'all' && activeTab !== 'delivered' && activeTab !== 'Return Received'" class="px-4 py-3 font-normal text-textLight dark:text-textDark text-left">
             Receiver Phone-1
           </th>
 
@@ -246,7 +272,7 @@
           </th>
         </tr>
       </thead>
-      <tbody>
+      <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
         <tr *ngFor="let delivery of allDeliveries; let i = index"
           class="border-b border-gray-200 dark:border-gray-700">
           <td class="px-4 py-3 text-center text-textLight dark:text-textDark">
@@ -268,12 +294,12 @@
             {{delivery.total}}
           </td>
 
-          <td *ngIf="activeTab !== 'all'" class="px-4 py-3 text-left text-textLight dark:text-textDark">
-            {{ delivery.customerPhone }}
+          <td *ngIf="activeTab !== 'all' && activeTab !== 'delivered' && activeTab !== 'Return Received'" class="px-4 py-3 text-left text-textLight dark:text-textDark">
+            {{ delivery.customerPhone || '--' }}
           </td>
 
-          <td *ngIf="activeTab !== 'all'" class="px-4 py-3 text-left text-textLight dark:text-textDark">
-            {{ delivery.phoneCode1 }} {{delivery.phone1}}
+          <td *ngIf="activeTab !== 'all' && activeTab !== 'delivered' && activeTab !== 'Return Received'" class="px-4 py-3 text-left text-textLight dark:text-textDark">
+            {{ delivery?.phone1 ? (delivery.phoneCode1 + ' ' + delivery.phone1) : '--' }}
           </td>
 
           <td *ngIf="activeTab !== 'all'" class="px-4 py-3 text-center">
@@ -373,7 +399,7 @@
         <span class="text-sm text-gray-600 dark:text-gray-400 w-44 flex-shrink-0">Customer Name</span>
         <span class="text-sm text-gray-600 dark:text-gray-400 mx-3">:</span>
         <span class="text-sm text-textLight dark:text-textDark font-medium flex-1">
-            {{deliveryObj.customerTitle}} {{ deliveryObj.customerName }}
+            {{deliveryObj.title}} {{ deliveryObj.customerName }}
         </span>
       </div>
 
@@ -424,7 +450,7 @@
         <span class="text-sm text-gray-600 dark:text-gray-400 w-44 flex-shrink-0">Receiver’s Name</span>
         <span class="text-sm text-gray-600 dark:text-gray-400 mx-3">:</span>
         <span class="text-sm text-textLight dark:text-textDark font-medium flex-1 whitespace-nowrap">
-          {{ deliveryObj.fullName }}
+          {{deliveryObj.recieverTitle}} {{ deliveryObj.fullName }}
         </span>
       </div>
 
@@ -441,7 +467,7 @@
         <span class="text-sm text-gray-600 dark:text-gray-400 w-44 flex-shrink-0 whitespace-nowrap">Receiver’s Phone Number - 2</span>
         <span class="text-sm text-gray-600 dark:text-gray-400 mx-3">:</span>
         <span class="text-sm text-textLight dark:text-textDark font-medium flex-1">
-            {{ deliveryObj.phoneCode2 }} {{ deliveryObj.phone2 }}
+          {{ deliveryObj.phone2 ? (deliveryObj.phoneCode2 + ' ' + deliveryObj.phone2) : '--' }}
         </span>
       </div>
 
@@ -450,8 +476,8 @@
     <!-- Modal Footer -->
     <div class="px-6 py-4 flex justify-center">
       <button (click)="closeInfoPopup()"
-        class="px-12 py-2 bg-[#6B7280] hover:bg-[#4B5563] text-white rounded-lg transition font-medium text-sm">
-        Close
+        class="px-12 py-2 text-[#6B7D8C] bg-[#F6F7F9] border border-[#95A1AC] rounded-lg transition font-medium text-sm">
+        Cancel
       </button>
     </div>
   </div>

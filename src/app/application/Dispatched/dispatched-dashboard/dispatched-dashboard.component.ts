@@ -56,6 +56,8 @@ export class DispatchedDashboardComponent implements OnInit {
 
   hasData: boolean = false;
 
+  searchPlaceHolder: string = "Search By Order ID...";
+
   statusOptions = [
     { label: 'All', value: null },
     { label: 'Out for Delivery', value: 'Out For Delivery' },
@@ -131,22 +133,35 @@ export class DispatchedDashboardComponent implements OnInit {
     
       case 'all':
         this.placeholderDate = 'Date'
+        this.searchPlaceHolder = 'Search By Order ID..'
         break;
   
       case 'Ready to Pickup':
         this.placeholderDate = 'Time Slot'
+        this.searchPlaceHolder = 'Search by Order ID, Phone Numbers..'
         break;
       
       case 'Picked Up':
         this.placeholderDate = 'Picked Up Date'
+        this.searchPlaceHolder = 'Search by Order ID, Any Phone..'
         break;
     
       case 'out-for-delivery':
         this.placeholderDate = 'Out Date'
+        this.searchPlaceHolder = 'Search by Order ID, Any Phone..'
+        break;
+
+      case 'Return Received':
+        this.placeholderDate = 'Recieved Date'
+        this.searchPlaceHolder = 'Search by Order ID..'
+        break;
+
+      case 'delivered':
+        this.searchPlaceHolder = 'Search by Order ID..'
         break;
 
       default:
-        // optional fallback
+        this.searchPlaceHolder = 'Search by Order ID, Any Phone..'
         break;
     }
 
@@ -424,7 +439,6 @@ class Delivery {
   total!: number;
   customerName!: string;
   customerPhone!: string;
-  customerTitle!: string;
   orderApp!: string;
   sheduleDate!: Date;
   fullName!: string;
@@ -433,5 +447,7 @@ class Delivery {
   isPaid!: number;
   paymentMethod!: string;
   receivedTime!: string;
+  title!: string;
+  recieverTitle!: string;
 }
 

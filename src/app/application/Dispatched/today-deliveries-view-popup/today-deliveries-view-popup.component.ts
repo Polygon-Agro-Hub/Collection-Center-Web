@@ -34,6 +34,7 @@ interface CenterDetails {
   regCode: string;
   centerId: number;
   empId: string;
+  deliveredTime: Date;
 }
 
 interface TrackingDetails {
@@ -44,6 +45,7 @@ interface TrackingDetails {
 interface TimelineStep {
   type:
     | 'out'
+    | 'pickedup'
     | 'collected'
     | 'started'
     | 'hold'
@@ -127,6 +129,15 @@ export class TodayDeliveriesViewPopupComponent implements OnInit, OnChanges
       payload: { outDlvrDate: c.outDlvrDate, regCode: c.regCode || '', centerName: c.centerName || '', empId: c.empId  }
     });
 
+    if (c.deliveredTime && c.centerId !== null) {
+      steps.push({
+        type: 'pickedup',
+        payload: { deliveredTime: c.deliveredTime }
+      });
+
+      console.log('steps', steps)
+    }
+
     if (!d) return steps;
 
     if (d.collectTime) {
@@ -147,10 +158,6 @@ export class TodayDeliveriesViewPopupComponent implements OnInit, OnChanges
       if (hold?.restartedTime) {
         steps.push({ type: 'restart', payload: { restartedTime: hold.restartedTime } });
       }
-    }
-
-    if (d.returnTime) {
-      steps.push({ type: 'return', payload: { returnTime: d.returnTime, returnReson: (d.returnReson || ''), returnNote: (d.returnNote || null) } });
     }
 
     if (d.returnTime) {

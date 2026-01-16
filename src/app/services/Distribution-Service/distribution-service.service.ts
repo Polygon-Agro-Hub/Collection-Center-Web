@@ -636,6 +636,7 @@ editCenter(centerData: any): Observable<any> {
 
 
 getTodaysDeliveries(activeTab: string = '', status: string = '', searchText: string = '', date: string | Date | null = '' ): Observable<any> {
+  console.log('date', date)
   const headers = new HttpHeaders({
     Authorization: `Bearer ${this.token}`,
     'Content-Type': 'application/json',

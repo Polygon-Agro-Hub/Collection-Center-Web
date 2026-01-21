@@ -118,6 +118,7 @@ export class DispatchedDashboardComponent implements OnInit {
   }
 
   onSearchChange(): void {
+    this.searchText = this.searchText.trimStart();
     this.fetchDeliveries();
   }
 

@@ -184,7 +184,7 @@ export const MENU_ITEMS = [
     key: 'dispatched',
     path: '/dispatched',
     label: 'Dispatched',
-    icon: 'fa-solid fa-arrow-right-arrow-left',
+    icon: 'fa-solid fa-truck-fast',
     permission: ['Distribution Centre Manager'],
   },
 

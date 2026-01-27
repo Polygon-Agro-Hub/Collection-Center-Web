@@ -146,8 +146,8 @@ export const MENU_ITEMS = [
     id: 13,
     key: 'target-progress',
     path: '/target-progress',
-    label: 'Target Progress',
-    icon: 'fa-solid fa-bullseye',
+    label: 'Packing',
+    icon: 'fa-solid fa-bag-shopping',
     permission: ['Distribution Centre Manager'],
   },
 

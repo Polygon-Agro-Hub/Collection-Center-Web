@@ -4,7 +4,7 @@ import { DistributionServiceService } from '../../../services/Distribution-Servi
 
 interface HoldDetail {
   holdId: number;
-  holdTime: string;
+  holdTime: Date;
   holdReason: string;
   restartedTime: string | null;
 }

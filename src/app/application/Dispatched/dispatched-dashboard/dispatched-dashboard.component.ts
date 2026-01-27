@@ -2,12 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { CommonModule } from '@angular/common';
 import { DropdownModule } from 'primeng/dropdown';
-// import { AllTodaysDeleveriesComponent } from '../all-todays-deleveries/all-todays-deleveries.component';
-// import { OutForDeliveryTodaysDeleveriesComponent } from '../out-for-delivery-todays-deleveries/out-for-delivery-todays-deleveries.component';
-// import { OnTheWayTodaysDeleveriesComponent } from '../on-the-way-todays-deleveries/on-the-way-todays-deleveries.component';
-// import { HoldTodaysDeleveriesComponent } from '../hold-todays-deleveries/hold-todays-deleveries.component';
-// import { ReturnTodaysDeleveriesComponent } from '../return-todays-deleveries/return-todays-deleveries.component';
-// import { DeliveredTodaysDeleveriesComponent } from '../delivered-todays-deleveries/delivered-todays-deleveries.component';
 import { FormsModule } from '@angular/forms';
 import { DistributionServiceService } from '../../../services/Distribution-Service/distribution-service.service';
 import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
@@ -59,7 +53,6 @@ export class DispatchedDashboardComponent implements OnInit {
   searchPlaceHolder: string = "Search By Order ID...";
 
   statusOptions = [
-    { label: 'All', value: null },
     { label: 'Out for Delivery', value: 'Out For Delivery' },
     { label: 'Collected', value: 'Collected' },
     { label: 'On the way', value: 'On the way' },
@@ -73,6 +66,7 @@ export class DispatchedDashboardComponent implements OnInit {
   ];
 
   selectedStatus: any = null;
+  selectedTimeSlot: string = '';
   searchText: string = '';
 
   showInfoModal: boolean = false;
@@ -87,18 +81,76 @@ export class DispatchedDashboardComponent implements OnInit {
     window.history.back();
   }
 
+  isTimeSlotDropdownOpen = false;
+
+  toggleTimeSlotDropdown() {
+    this.isTimeSlotDropdownOpen = !this.isTimeSlotDropdownOpen;
+  }
+
+  selectTimeSlotOption(option: string) {
+    this.selectedTimeSlot = option;
+    this.isTimeSlotDropdownOpen = false;
+    this.filterTimeSlot();
+  }
+
+  timeSlotOptionsArr = [
+   
+    { label: '8AM - 2PM', value: '8AM - 2PM' },
+    { label: '2PM - 8PM', value: '2PM - 8PM' },
+    
+  ];
+
+  filterTimeSlot() {
+    this.fetchDeliveries()
+  }
+
+  cancelTimeSlot(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
+    this.selectedTimeSlot = '';
+    this.isTimeSlotDropdownOpen = false;
+    this.fetchDeliveries();
+  }
+
+
+  isStatusDropdownOpen = false;
+
+  toggleStatusDropdown() {
+    this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
+  }
+
+  selectStatusOption(option: string) {
+    this.selectedStatus = option;
+    this.isStatusDropdownOpen = false;
+    this.filterStatus();
+  }
+
   statusOptionsArr = [
-    { label: 'All', value: null },
-    { label: 'Return Received', value: 'Return Received' },
+   
     { label: 'Ready to Pickup', value: 'Ready to Pickup' },
     { label: 'Picked up', value: 'Picked up' },
     { label: 'Out for Delivery', value: 'Out For Delivery' },
     { label: 'Collected', value: 'Collected' },
     { label: 'On the way', value: 'On the way' },
-    { label: 'Return', value: 'Return' },
     { label: 'Hold', value: 'Hold' },
+    { label: 'Return', value: 'Return' },
     { label: 'Delivered', value: 'Delivered' },
+    { label: 'Return Received', value: 'Return Received' },
   ];
+
+  filterStatus() {
+    this.fetchDeliveries()
+  }
+
+  cancelStatus(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
+    this.selectedStatus = '';
+    this.isStatusDropdownOpen = false;
+    this.fetchDeliveries();
+  }
 
 
   get statusDropdownItems() {
@@ -169,9 +221,9 @@ export class DispatchedDashboardComponent implements OnInit {
     this.fetchDeliveries(this.activeTab, this.selectedStatus = '', this.searchText = '', this.selectedDate = '');
   }
 
-  fetchDeliveries(activeTab: string = this.activeTab, status: string = this.selectedStatus, searchText: string = this.searchText, date: string | Date | null = this.selectedDate): void {
+  fetchDeliveries(activeTab: string = this.activeTab, status: string = this.selectedStatus, searchText: string = this.searchText, date: string | Date | null = this.selectedDate, timeSlot: string = this.selectedTimeSlot): void {
     this.isLoading = true;
-    this.DistributionSrv.getTodaysDeliveries(activeTab, status, searchText, date).subscribe({
+    this.DistributionSrv.getTodaysDeliveries(activeTab, status, searchText, date, timeSlot).subscribe({
       next: (response) => {
         if (response.status && response.data) {
           this.allDeliveries = response.data;
@@ -402,7 +454,7 @@ export class DispatchedDashboardComponent implements OnInit {
   
     if (!newDate) {
       
-      dateString = new Date().toISOString().split('T')[0];
+      dateString = '';
     } 
     else if (newDate instanceof Date) {
       
@@ -450,5 +502,6 @@ class Delivery {
   receivedTime!: string;
   title!: string;
   recieverTitle!: string;
+  completeTime!: Date;
 }
 

@@ -22,14 +22,14 @@
 
         <div class="grid grid-cols-4 gap-6 mb-6">
             <div class="flex flex-row items-center gap-5 col-span-2">
-                <p class="font-medium text-gray-600 dark:text-gray-300">Category</p>
+                <p class="font-medium text-gray-600 dark:text-gray-300 mr-16">Category</p>
                 <input type="text"
                     class="w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-200 border rounded-lg px-3 py-2"
                     [value]="compalintObj.complainCategory" disabled />
             </div>
 
             <div class="flex flex-row items-start gap-5 col-span-4">
-                <p class="font-medium text-gray-600 dark:text-gray-300">Complain</p>
+                <p class="font-medium text-gray-600 dark:text-gray-300 mr-14">Complaint</p>
                 <textarea
                     class="w-full bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-200 border rounded-lg px-3 py-2"
                     rows="6" [value]="compalintObj.complain" disabled>
@@ -37,27 +37,27 @@
             </div>
 
             <div class="flex flex-row items-center gap-5 col-span-2">
-                <p class="font-medium text-gray-600 dark:text-gray-300">Complainant</p>
+                <p class="font-medium text-gray-600 dark:text-gray-300 mr-10">Complainant</p>
                 <input type="text"
                     class="w-1/2 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-200 border rounded-lg px-3 py-2"
                     [value]="officerName" disabled />
             </div>
 
             <div class="flex flex-row items-center gap-16 col-span-2">
-                <p class="font-medium text-gray-600 dark:text-gray-300">EMP ID</p>
+                <p class="font-medium text-gray-600 dark:text-gray-300 mr-10">EMP ID</p>
                 <input type="text"
                     class="w-1/2 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-200 border rounded-lg px-3 py-2"
                     [value]="compalintObj.empId" disabled />
             </div>
 
             <div class="flex flex-row items-center gap-5 col-span-2">
-                <p class="font-medium text-gray-600 dark:text-gray-300">Phone No - 1</p>
+                <p class="font-medium text-gray-600 dark:text-gray-300">Mobile Number 01</p>
                 <input type="text"
                     class="w-1/2 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-200 border rounded-lg px-3 py-2"
                     [value]="phone1" disabled />
             </div>
             <div class="flex flex-row items-center gap-5 col-span-2">
-                <p class="font-medium text-gray-600 dark:text-gray-300">Phone No - 2</p>
+                <p class="font-medium text-gray-600 dark:text-gray-300">Mobile Number 02</p>
                 <input type="text"
                     class="w-1/2 bg-gray-100 dark:bg-gray-700 text-gray-900 dark:text-gray-200 border rounded-lg px-3 py-2"
                     [value]="phone2" disabled />
@@ -80,35 +80,45 @@
 
 
     <div *ngIf="isReplyView" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-        <div class="bg-white dark:bg-[#272F45] shadow-lg rounded-lg p-6 w-1/2">
+        <div class="bg-white dark:bg-[#363638] shadow-lg rounded-lg p-6 w-1/2">
             <div class="flex flex-col items-center justify-center gap-5">
                 <div class="bg-[#F6F6F6] rounded-full shadow-md p-5">
                     <i class="fa-regular fa-envelope text-4xl"></i>
                 </div>
 
-                <div class="flex flex-col gap-y-2 w-full border-[1px] border-[#D9D9D9] py-4 px-5 rounded-lg dark:text-white">
-                    <p>
-                        {{compalintObj.language === 'Sinhala' ? 'හිතවත් ': compalintObj.language === 'Tamil' ? 'அன்புள்ள ' : 'Dear '}}
-                        <span class="font-semibold">{{compalintObj.firstNameEnglish}} {{compalintObj.lastNameEnglish}},</span>
-                    </p>
-
-                    <div class="border-none outline-none bg-[#F6F6F6] dark:bg-[#363636] rounded-lg w-full h-28 p-1">
-                        <textarea class="bg-[#F6F6F6] dark:bg-[#363636] resize-none w-full h-full border-none outline-none " cols="6" [(ngModel)]="replyObj.reply" name="reply" placeholder="[ Add message here... ]"></textarea>
+                <div class="flex flex-col w-full border-[1px] border-[#D9D9D9] py-4 px-5 rounded-lg dark:text-white">
+                    <div class="gap-y-2">
+                        <p class="mb-2">
+                            {{compalintObj.language === 'Sinhala' ? 'හිතවත් ': compalintObj.language === 'Tamil' ? 'அன்புள்ள ' : 'Dear '}}
+                            <span class="font-semibold">{{compalintObj.firstNameEnglish}} {{compalintObj.lastNameEnglish}},</span>
+                        </p>
+    
+                        <div class="border-none outline-none bg-[#F6F6F6] dark:bg-[#363636] rounded-lg w-full h-28 p-1">
+                            <textarea rows="5" class="bg-[#F6F6F6] dark:bg-[#363636] resize-none w-full h-full border-none outline-none " cols="6" [(ngModel)]="replyObj.reply" name="reply" placeholder="[ Add message here... ]"></textarea>
+                        </div>
+    
+                        <p class="mb-2 mt-2">
+                            {{
+                                compalintObj.language === 'Sinhala' ? 'ඔබට තවත් ගැටළු හෝ ප්‍රශ්න තිබේ නම්, කරුණාකර අප හා සම්බන්ධ වන්න. ඔබේ ඉවසීම සහ අවබෝධය වෙනුවෙන් ස්තූතියි. '
+                                : compalintObj.language === 'Tamil' ? 'உங்களுக்கு மேலும் ஏதேனும் சிக்கல்கள் அல்லது கேள்விகள் இருந்தால், தயவுசெய்து எங்களைத் தொடர்பு கொள்ளவும். உங்கள் பொறுமைக்கும் புரிதலுக்கும் நன்றி. ' 
+                                : 'If you have any further concerns or questions, feel free to reach out.Thank you for your patience and understanding. '
+                            }}
+    
+                        </p>
                     </div>
-
                     <p>
                         {{
-                            compalintObj.language === 'Sinhala' ? 'ඔබට තවත් ගැටළු හෝ ප්‍රශ්න තිබේ නම්, කරුණාකර අප හා සම්බන්ධ වන්න. ඔබේ ඉවසීම සහ අවබෝධය වෙනුවෙන් ස්තූතියි. '
-                            : compalintObj.language === 'Tamil' ? 'உங்களுக்கு மேலும் ஏதேனும் சிக்கல்கள் அல்லது கேள்விகள் இருந்தால், தயவுசெய்து எங்களைத் தொடர்பு கொள்ளவும். உங்கள் பொறுமைக்கும் புரிதலுக்கும் நன்றி. ' 
-                            : 'If you have any further concerns or questions, feel free to reach out.Thank you for your patience and understanding. '
+                            compalintObj.language === 'Sinhala' ? 'මෙයට,'
+                            : compalintObj.language === 'Tamil' ? 'இதற்கு,'
+                            : 'Sincerely,'
                         }}
-
                     </p>
+
                     <p>
                         {{
-                            compalintObj.language === 'Sinhala' ? 'මෙයට' + ' ' + templateData.EngName + ','
-                            : compalintObj.language === 'Tamil' ? 'இதற்கு' + ' ' + templateData.TamName + ','
-                            : 'Sincerely' + ' ' + templateData.EngName + ','
+                            compalintObj.language === 'Sinhala' ? templateData.EngName
+                            : compalintObj.language === 'Tamil' ? templateData.TamName
+                            : templateData.EngName
                         }}
                     </p>
 
@@ -124,9 +134,6 @@
                     </p>
                 </div>
 
-                <!-- <div class="border-[1px] border-[#D9D9D9] rounded-lg w-full h-60 p-1">
-                    <textarea class="w-full h-full" cols="6" [(ngModel)]="replyObj.reply" name="reply"></textarea>
-                </div> -->
 
                 <div class="flex flex-row justify-center items-center gap-8">
                     <button class="text-xl text-[#6B7D8C] border-[2px] font-semibold rounded-lg shadow-lg px-6 py-2"

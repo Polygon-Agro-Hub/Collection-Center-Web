@@ -7,12 +7,13 @@ import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loa
 import { DchRecievedComplaintsComponent } from "../dch-recieved-complaints/dch-recieved-complaints.component";
 import { DchSentComplaintsComponent } from "../dch-sent-complaints/dch-sent-complaints.component";
 import { DistributionComplaintsService } from '../../../services/distribution-complaints-service/distribution-complaints.service';
+import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
 
 
 @Component({
   selector: 'app-dch-complaints',
   standalone: true,
-  imports: [CommonModule, FormsModule, LoadingSpinnerComponent, DchRecievedComplaintsComponent, DchSentComplaintsComponent],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent, DchRecievedComplaintsComponent, SerchableDropdownComponent, DchSentComplaintsComponent],
   templateUrl: './dch-complaints.component.html',
   styleUrl: './dch-complaints.component.css'
 })
@@ -37,6 +38,21 @@ export class DchComplaintsComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchAllCategory();
+  }
+
+  get categoryDropdownItems() {
+    return this.categoryArr.map(cat => ({
+      value: cat.id.toString(),
+      label: cat.categoryEnglish,
+      disabled: false
+    }));
+  }
+
+  // 5. Add selection change handler
+  onCategorySelectionChange(selectedValue: string) {
+    this.category = selectedValue || '';
+    // Add any additional logic you need when category changes
+    console.log('Category selected:', selectedValue);
   }
 
   onSubmit() {
@@ -86,6 +102,8 @@ export class DchComplaintsComponent implements OnInit {
   }
 
   closeAddComplaint() {
+    this.category = ''
+    this.complaint = ''
     this.isAddComplaintOpen = false;
   }
 

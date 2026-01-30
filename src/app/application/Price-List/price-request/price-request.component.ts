@@ -179,6 +179,10 @@ export class PriceRequestComponent implements OnInit {
   onCropGroupSelectionChange(selectedValue: number) {
     this.priceRequestObject.cropGroupId = selectedValue || null;
     console.log('crop selected:', this.priceRequestObject.cropGroupId);
+    this.priceRequestObject.cropVarietyId = null;
+    this.priceRequestObject.grade = '';
+    this.priceRequestObject.requstPrice = null;
+    this.priceRequestObject.currentPrice = null;
     this.fetchCropVariety(this.priceRequestObject.cropGroupId!);
   }
 
@@ -193,6 +197,9 @@ export class PriceRequestComponent implements OnInit {
   onCropVarietySelectionChange(selectedValue: number) {
     this.priceRequestObject.cropVarietyId = selectedValue || null;
     console.log('crop selected:', this.priceRequestObject.cropVarietyId);
+    this.priceRequestObject.grade = '';
+    this.priceRequestObject.requstPrice = null;
+    this.priceRequestObject.currentPrice = null;
   }
 
   get gradeDropDownItems() {
@@ -206,6 +213,8 @@ export class PriceRequestComponent implements OnInit {
   onGradeSelectionChange(selectedValue: string) {
     this.priceRequestObject.grade = selectedValue || 'null';
     console.log('crop selected:', this.priceRequestObject.cropVarietyId);
+    this.priceRequestObject.requstPrice = null;
+    this.priceRequestObject.currentPrice = null;
     this.fetchCurrentPrice(this.priceRequestObject.cropGroupId!, this.priceRequestObject.cropVarietyId!, this.priceRequestObject.grade!);
   }
 
@@ -453,6 +462,12 @@ export class PriceRequestComponent implements OnInit {
 
   closeAddRequest() {
     this.isAddRequestOpen = false;
+    this.priceRequestObject.cropGroupId = null;
+    this.priceRequestObject.cropVarietyId = null;
+    this.cropVarietyArr = [];
+    this.priceRequestObject.grade = '';
+    this.priceRequestObject.requstPrice = null;
+    this.priceRequestObject.currentPrice = null;
   }
 
   submitRequest() {
@@ -475,6 +490,11 @@ export class PriceRequestComponent implements OnInit {
           });
           this.isAddRequestOpen = false;
           this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade, this.selectStatus, this.searchText);
+          this.priceRequestObject.cropGroupId = null;
+          this.priceRequestObject.cropVarietyId = null;
+          this.priceRequestObject.grade = '';
+          this.priceRequestObject.requstPrice = null;
+          this.priceRequestObject.currentPrice = null;
         } else {
           this.isLoading = false;
           Swal.fire({
@@ -488,6 +508,11 @@ export class PriceRequestComponent implements OnInit {
               title: 'dark:text-white',
             },
           });
+          this.priceRequestObject.cropGroupId = null;
+          this.priceRequestObject.cropVarietyId = null;
+          this.priceRequestObject.grade = '';
+          this.priceRequestObject.requstPrice = null;
+          this.priceRequestObject.currentPrice = null;
         }
       }
     )

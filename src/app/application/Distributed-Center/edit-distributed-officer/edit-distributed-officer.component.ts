@@ -88,6 +88,49 @@ branchItems: { value: number; label: string }[] = [];
 
   isPopupVisible: boolean = false;
 
+  isJobRoleOpen = false;
+
+  jobRoles: string[] = [];
+
+  jobRoleInputTouched = false;
+
+  selectVehicletype: any = { name: '', capacity: '' };
+
+  licenseFrontImageFileName!: string;
+  licenseFrontImagePreview: string | ArrayBuffer | null = null;
+  licenseFrontImageFile: File | null = null;
+
+  licenseBackImageFileName!: string;
+  licenseBackImagePreview: string | ArrayBuffer | null = null;
+  licenseBackImageFile: File | null = null;
+
+  insurenceFrontImageFileName!: string;
+  insurenceFrontImagePreview: string | ArrayBuffer | null = null;
+  insurenceFrontImageFile: File | null = null;
+
+  insurenceBackImageFileName!: string;
+  insurenceBackImagePreview: string | ArrayBuffer | null = null;
+  insurenceBackImageFile: File | null = null;
+
+  vehicleFrontImageFileName!: string;
+  vehicleFrontImagePreview: string | ArrayBuffer | null = null;
+  vehicleFrontImageFile: File | null = null;
+
+  vehicleBackImageFileName!: string;
+  vehicleBackImagePreview: string | ArrayBuffer | null = null;
+  vehicleBackImageFile: File | null = null;
+
+  vehicleSideAImageFileName!: string;
+  vehicleSideAImagePreview: string | ArrayBuffer | null = null;
+  vehicleSideAImageFile: File | null = null;
+
+  vehicleSideBImageFileName!: string;
+  vehicleSideBImagePreview: string | ArrayBuffer | null = null;
+  vehicleSideBImageFile: File | null = null;
+
+  isAppireImgValidation: boolean = false;
+
+
   constructor(
     private ManageOficerSrv: ManageOfficersService,
     private router: Router,
@@ -137,10 +180,9 @@ branchItems: { value: number; label: string }[] = [];
   districtItems = this.districts.map(d => ({ value: d.name, label: d.name }));
 
   VehicleTypes = [
-    { name: 'Lorry', capacity: 2 },
-    { name: 'Dimo Batta', capacity: 3.5 },
-    { name: 'Van', capacity: 2.5 },
-    { name: 'Cab', capacity: 0.5 },
+    { name: 'Mahindra Bollero', capacity: 272},
+    { name: 'Dimo Batta', capacity: 750 },
+    { name: 'Three Wheeler', capacity: 100 },
   ]
 
   ngOnInit(): void {
@@ -152,21 +194,72 @@ branchItems: { value: number; label: string }[] = [];
     console.log('editOfficerId', this.editOfficerId)
     this.centerId = this.route.snapshot.params['centerId'];
     this.fetchOffierById(this.editOfficerId);
+
+    this.setJobRoles();
     // this.UpdateEpmloyeIdCreate();
     this.setActiveTabFromRoute()
   }
 
-  @HostListener('document:click', ['$event.target'])
-  onClick(targetElement: HTMLElement) {
-    const insideDropdown1 = targetElement.closest('.dropdown-wrapper-1');
-    const insideDropdown2 = targetElement.closest('.dropdown-wrapper-2');
-  
-    // Close dropdowns only if click is outside their wrapper
-    if (!insideDropdown1) {
-      this.dropdownOpen = false;
+  setJobRoles() {
+    if (this.logingRole === 'Distribution Centre Manager') {
+      // Only allow Collection Officer
+      this.jobRoles = ['Distribution Officer', 'Driver'];
+    } 
+    else if (this.logingRole === 'Distribution Centre Head') {
+      // Allow all roles
+      this.jobRoles = [
+        'Distribution Centre Manager',
+        'Distribution Officer',
+        'Driver'
+      ];
+    } 
+    else {
+      // Default (if needed)
+      this.jobRoles = [];
     }
-    if (!insideDropdown2) {
-      this.dropdownOpen2 = false;
+  }
+
+  toggleJobRoleDropdown() {
+    this.isJobRoleOpen = !this.isJobRoleOpen;
+
+    this.jobRoleInputTouched = true;
+
+    console.log('jobRoleInputTouched', this.jobRoleInputTouched)
+  }
+
+  getJobRole(role: string) {
+    this.personalData.jobRole = role;
+    if (this.personalData.jobRole === 'Driver') {
+      this.personalData.firstNameSinhala = '';
+      this.personalData.lastNameSinhala = ''
+      this.personalData.firstNameTamil = ''
+      this.personalData.lastNameTamil = ''
+    }
+    this.isJobRoleOpen = false;
+    this.jobRoleInputTouched = true;
+
+    console.log('jobRoleInputTouched', this.jobRoleInputTouched)
+  }
+
+  // @HostListener('document:click', ['$event.target'])
+  // onClick(targetElement: HTMLElement) {
+  //   const insideDropdown1 = targetElement.closest('.dropdown-wrapper-1');
+  //   const insideDropdown2 = targetElement.closest('.dropdown-wrapper-2');
+  
+  //   // Close dropdowns only if click is outside their wrapper
+  //   if (!insideDropdown1) {
+  //     this.dropdownOpen = false;
+  //   }
+  //   if (!insideDropdown2) {
+  //     this.dropdownOpen2 = false;
+  //   }
+  // }
+
+  @HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.relative')) {
+      this.isJobRoleOpen = false;
     }
   }
 
@@ -294,6 +387,14 @@ branchItems: { value: number; label: string }[] = [];
         this.personalData.previousImage = this.personalData.image;
   
         console.log('personaldarta', this.personalData)
+
+        this.driverObj = res.officerData.driver;
+        this.driverObj.insExpDate = this.formatDateForInput(this.driverObj.insExpDate);
+        this.selectVehicletype = this.VehicleTypes.find(
+          (v) => v.name === this.driverObj.vType && v.capacity === this.driverObj.vCapacity
+        );
+
+        console.log('driverObj', this.driverObj)
   
         // Initialize languages as a comma-separated string if it's not already in that format
         if (Array.isArray(this.personalData.languages)) {
@@ -343,45 +444,6 @@ branchItems: { value: number; label: string }[] = [];
   
     this.isPhoneInvalidMap[key] = false;
   }
-
-  // fetchOffierById(id: number) {
-  //   this.isLoading = true;
-  //   this.ManageOficerSrv.getOfficerById(id).subscribe(
-  //     (res: any) => {
-
-  //       this.personalData = res.officerData.collectionOfficer;
-  //       this.personalData.conformAccNumber = this.personalData.accNumber
-  //       console.log(this.personalData);
-  //       this.ExistirmId = res.officerData.irmId;
-
-  //       this.getUpdateLastID(res.officerData.collectionOfficer.jobRole);
-  //       this.driverObj = res.officerData.driver;
-  //       this.driverObj.insExpDate = this.formatDateForInput(this.driverObj.insExpDate);
-  //       this.selectVehicletype = this.VehicleTypes.find(
-  //         (v) => v.name === this.driverObj.vType && v.capacity === this.driverObj.vCapacity
-  //       );
-  //       this.personalData.previousQR = this.personalData.QRcode;
-  //       this.personalData.previousImage = this.personalData.image;
-
-
-  //       // Initialize languages as a comma-separated string if it's not already in that format
-  //       if (Array.isArray(this.personalData.languages)) {
-  //         this.personalData.languages = this.personalData.languages.join(',');
-  //       } else if (!this.personalData.languages) {
-  //         this.personalData.languages = '';
-  //       }
-
-  //       this.selectJobRole = res.officerData.collectionOfficer.jobRole;
-  //       this.getAllManagers();
-
-
-  //       this.UpdateEpmloyeIdCreate();
-  //       this.matchExistingBankToDropdown();
-  //       this.isLoading = false;
-
-  //     }
-  //   );
-  // }
 
   formatDateForInput(date: string | Date): string {
     const d = new Date(date);
@@ -496,34 +558,12 @@ branchItems: { value: number; label: string }[] = [];
     }
   }
 
-  // updateProvince(event: Event): void {
-  //   const target = event.target as HTMLSelectElement;
-  //   const selectedDistrict = target.value;
-
-  //   const selected = this.districts.find(district => district.name === selectedDistrict);
-
-  //   if (this.itemId === null) {
-
-  //     if (selected) {
-  //       this.personalData.province = selected.province;
-  //     } else {
-  //       this.personalData.province = '';
-  //     }
-
-  //   }
-
-  // }
-
   onDistrictChange(districtName: string | null) {
     if (this.itemId !== null) return; // keep your original guard
 
     const selected = this.districts.find(d => d.name === districtName || '');
     this.personalData.province = selected ? selected.province : '';
   }
-
-  // onSubmit() {
-  //     console.log('personaldata', this.personalData)
-  // }
 
   onSubmit() {
     console.log('personaldata', this.personalData)
@@ -535,7 +575,7 @@ branchItems: { value: number; label: string }[] = [];
     }
 
     if (this.personalData.phoneNumber01 == this.personalData.phoneNumber02) {
-      this.toastSrv.warning('Pleace enter 2 different phone numbers')
+      this.toastSrv.warning('Pleace enter 2 different Mobile numbers')
    }
 
     else if (!this.personalData.accHolderName || !this.personalData.accNumber || !this.personalData.bankName || !this.personalData.branchName || !this.personalData.city || !this.personalData.country || !this.personalData.district || !this.personalData.houseNumber) {
@@ -545,13 +585,27 @@ branchItems: { value: number; label: string }[] = [];
       this.isLoading = true;
 
       if (this.logingRole === 'Distribution Centre Manager') {
-        this.DistributedManageOfficerSrv.updateDistributionOfficerDIO(this.personalData, this.editOfficerId, this.selectedImage).subscribe(
+
+        if (this.personalData.jobRole === 'Driver') {
+          
+
+          this.driverObj.licFrontName = this.licenseFrontImageFileName
+          this.driverObj.licBackName = this.licenseBackImageFileName
+          this.driverObj.insFrontName = this.insurenceFrontImageFileName
+          this.driverObj.insBackName = this.insurenceBackImageFileName
+          this.driverObj.vFrontName = this.vehicleFrontImageFileName
+          this.driverObj.vBackName = this.vehicleBackImageFileName
+          this.driverObj.vSideAName = this.vehicleSideAImageFileName
+          this.driverObj.vSideBName = this.vehicleSideBImageFileName
+        }
+
+        this.DistributedManageOfficerSrv.updateDistributionOfficerDIO(this.personalData, this.editOfficerId, this.selectedImage, this.driverObj, this.licenseFrontImagePreview, this.licenseBackImagePreview, this.insurenceFrontImagePreview, this.insurenceBackImagePreview, this.vehicleFrontImagePreview, this.vehicleBackImagePreview, this.vehicleSideAImagePreview, this.vehicleSideBImagePreview).subscribe(
           (res: any) => {
             this.officerId = res.officerId;
             this.isLoading = false;
             if (res && res.message) {
               // Success response from backend
-              this.toastSrv.success('Distribution Officer Profile Updated Successfull');
+              this.toastSrv.success(`${this.personalData.jobRole} Profile Updated Successfull`);
               this.router.navigate(['/distribution-officers']);
             } else {
               // Handle unexpected format
@@ -561,22 +615,47 @@ branchItems: { value: number; label: string }[] = [];
           },
           (error: any) => {
             this.isLoading = false;
-            if (error.status === 409) {
-              this.toastSrv.error('NIC already exists for another Distribution officer');
-            } else if (error.status === 410) {
-              this.toastSrv.error('Email already exists for another Distribution officer');
-            } else if (error.status === 411) {
-              this.toastSrv.error('Phone Number 01 already exists for another Distribution officer');
-            } else if (error.status === 412) {
-              this.toastSrv.error('Phone Number 02 already exists for another Distribution officer');
-            } else if (error.status === 400) {
-              this.toastSrv.error('No file uploaded. Please attach required file(s).');
-            } else if (error.status === 500) {
-              this.toastSrv.error('Internal server error. Please try again later.');
-            } else {
-              this.toastSrv.error('An unexpected error occurred.');
+            let errorMessage = 'An unexpected error occurred';
+            let messages: string[] = [];
+
+            if (error.error && Array.isArray(error.error.errors)) {
+              messages = error.error.errors.map((err: string) => {
+                switch (err) {
+                  case 'NIC':
+                    return 'The NIC number is already registered.';
+                  case 'Email':
+                    return 'Email already exists.';
+                  case 'PhoneNumber01':
+                    return 'Mobile Number 1 already exists.';
+                  case 'PhoneNumber02':
+                    return 'Mobile Number 2 already exists.';
+                  default:
+                    return 'Validation error: ' + err;
+                }
+              });
             }
 
+            if (messages.length > 0) {
+              errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following Duplicate field issues:</p><ul class="list-disc pl-5">';
+              messages.forEach(m => {
+                errorMessage += `<li>${m}</li>`;
+              });
+              errorMessage += '</ul></div>';
+
+              Swal.fire({
+                icon: 'error',
+                title: 'Duplicate Information',
+                html: errorMessage,
+                confirmButtonText: 'OK',
+                customClass: {
+                  popup: 'bg-tileLight dark:bg-[#363636] text-black dark:text-white',
+                  title: 'font-semibold text-lg',
+                  htmlContainer: 'text-left',
+                  confirmButton: 'bg-red-500 dark:bg-red-500 hover:bg-red-600 dark:hover:bg-red-700',
+                },
+              });
+              return;
+            }
           }
         );
       } else if (this.logingRole === 'Distribution Centre Head') {
@@ -584,13 +663,26 @@ branchItems: { value: number; label: string }[] = [];
           this.personalData.irmId = null;
         }
 
-        this.DistributedManageOfficerSrv.updateDistributionOfficer(this.personalData, this.editOfficerId, this.selectedImage).subscribe(
+        if (this.personalData.jobRole === 'Driver') {
+          
+
+          this.driverObj.licFrontName = this.licenseFrontImageFileName
+          this.driverObj.licBackName = this.licenseBackImageFileName
+          this.driverObj.insFrontName = this.insurenceFrontImageFileName
+          this.driverObj.insBackName = this.insurenceBackImageFileName
+          this.driverObj.vFrontName = this.vehicleFrontImageFileName
+          this.driverObj.vBackName = this.vehicleBackImageFileName
+          this.driverObj.vSideAName = this.vehicleSideAImageFileName
+          this.driverObj.vSideBName = this.vehicleSideBImageFileName
+        }
+
+        this.DistributedManageOfficerSrv.updateDistributionOfficer(this.personalData, this.editOfficerId, this.selectedImage, this.driverObj, this.licenseFrontImagePreview, this.licenseBackImagePreview, this.insurenceFrontImagePreview, this.insurenceBackImagePreview, this.vehicleFrontImagePreview, this.vehicleBackImagePreview, this.vehicleSideAImagePreview, this.vehicleSideBImagePreview).subscribe(
           (res: any) => {
             this.isLoading = false;
 
             if (res && res.message) {
               // Success response from backend
-              this.toastSrv.success('Distribution Officer Profile Updated Successfully');
+              this.toastSrv.success(`${this.personalData.jobRole} Profile Updated Successfully`);
               this.router.navigate(['/distribution-officers']);
             } else {
               // Handle unexpected format
@@ -599,21 +691,46 @@ branchItems: { value: number; label: string }[] = [];
           },
           (error: any) => {
             this.isLoading = false;
+            let errorMessage = 'An unexpected error occurred';
+            let messages: string[] = [];
 
-            if (error.status === 409) {
-              this.toastSrv.error('NIC already exists for another Distribution officer');
-            } else if (error.status === 410) {
-              this.toastSrv.error('Email already exists for another Distribution officer');
-            } else if (error.status === 411) {
-              this.toastSrv.error('Phone Number 01 already exists for another Distribution officer');
-            } else if (error.status === 412) {
-              this.toastSrv.error('Phone Number 02 already exists for another Distribution officer');
-            } else if (error.status === 400) {
-              this.toastSrv.error('No file uploaded. Please attach required file(s).');
-            } else if (error.status === 500) {
-              this.toastSrv.error('Internal server error. Please try again later.');
-            } else {
-              this.toastSrv.error('An unexpected error occurred.');
+            if (error.error && Array.isArray(error.error.errors)) {
+              messages = error.error.errors.map((err: string) => {
+                switch (err) {
+                  case 'NIC':
+                    return 'The NIC number is already registered.';
+                  case 'Email':
+                    return 'Email already exists.';
+                  case 'PhoneNumber01':
+                    return 'Mobile Number 01 already exists.';
+                  case 'PhoneNumber02':
+                    return 'Mobile Number 02 already exists.';
+                  default:
+                    return 'Validation error: ' + err;
+                }
+              });
+            }
+
+            if (messages.length > 0) {
+              errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following Duplicate field issues:</p><ul class="list-disc pl-5">';
+              messages.forEach(m => {
+                errorMessage += `<li>${m}</li>`;
+              });
+              errorMessage += '</ul></div>';
+
+              Swal.fire({
+                icon: 'error',
+                title: 'Duplicate Information',
+                html: errorMessage,
+                confirmButtonText: 'OK',
+                customClass: {
+                  popup: 'bg-tileLight dark:bg-[#363636] text-black dark:text-white',
+                  title: 'font-semibold text-lg',
+                  htmlContainer: 'text-left',
+                  confirmButton: 'bg-red-500 dark:bg-red-500 hover:bg-red-600 dark:hover:bg-red-700',
+                },
+              });
+              return;
             }
           }
 
@@ -779,30 +896,31 @@ branchItems: { value: number; label: string }[] = [];
     }
   }
   
-  onBankChange(selectedBankId: number | null) {
-    this.selectedBankId = selectedBankId;
-    
-    if (this.selectedBankId) {
-      // Update branches based on selected bank
-      this.updateBranchItems(this.selectedBankId);
+  onBankChange(bankId: number | null) {
+    if (bankId) {
+      this.selectedBankId = bankId;
   
-      // Update company data with bank name
-      const selectedBankItem = this.bankItems.find(bank => bank.value === this.selectedBankId);
-      if (selectedBankItem) {
-        this.personalData.bankName = selectedBankItem.label;
+      // Update branches
+      this.branches = this.allBranches[bankId.toString()] || [];
+      this.branchItems = this.branches.map(br => ({
+        value: br.ID,
+        label: br.name
+      }));
+  
+      // Update personalData
+      const selectedBank = this.banks.find(bank => bank.ID === bankId);
+      if (selectedBank) {
+        this.personalData.bankName = selectedBank.name;
+        this.invalidFields.delete('bankName');
       }
   
-      // Reset branch selection if the current selection doesn't belong to this bank
-      const currentBranch = this.branchItems.find(branch => branch.value === this.selectedBranchId);
-      if (!currentBranch) {
-        this.selectedBranchId = null;
-        this.personalData.branchName = '';
-      }
-    } else {
-      this.updateBranchItems(null);
+      // Reset branch selection
       this.selectedBranchId = null;
-      this.personalData.bankName = '';
       this.personalData.branchName = '';
+    } else {
+      this.branches = [];
+      this.branchItems = [];
+      this.personalData.bankName = '';
     }
   }
   
@@ -856,6 +974,10 @@ branchItems: { value: number; label: string }[] = [];
     missingFields.push('Please select at least one preferred language');
   }
 
+  if (!this.personalData.jobRole) {
+    missingFields.push('Job Role is required');
+  }
+
   if (!this.personalData.employeeType) {
     missingFields.push('Employee Type is required');
   }
@@ -874,34 +996,34 @@ branchItems: { value: number; label: string }[] = [];
     missingFields.push('Last Name (in English) is required');
   }
 
-  if (!this.personalData.firstNameSinhala) {
+  if (!this.personalData.firstNameSinhala && this.personalData.jobRole !=='Driver') {
     missingFields.push('First Name (in Sinhala) is required');
   }
 
-  if (!this.personalData.lastNameSinhala) {
+  if (!this.personalData.lastNameSinhala && this.personalData.jobRole !=='Driver') {
     missingFields.push('Last Name (in Sinhala) is required');
   }
 
-  if (!this.personalData.firstNameTamil) {
+  if (!this.personalData.firstNameTamil && this.personalData.jobRole !=='Driver') {
     missingFields.push('First Name (in Tamil) is required');
   }
 
-  if (!this.personalData.lastNameTamil) {
+  if (!this.personalData.lastNameTamil && this.personalData.jobRole !=='Driver') {
     missingFields.push('Last Name (in Tamil) is required');
   }
 
   if (!this.personalData.phoneNumber01) {
-    missingFields.push('Phone Number - 1 is required');
+    missingFields.push('Mobile Number - 1 is required');
   } else if (!/^[0-9]{9}$/.test(this.personalData.phoneNumber01) || this.isPhoneInvalidMap['phone01']) {
-    missingFields.push('Phone Number - 1 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+    missingFields.push('Mobile Number - 1 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
   }
 
   if (this.personalData.phoneNumber02) {
     if (!/^[0-9]{9}$/.test(this.personalData.phoneNumber02) || this.isPhoneInvalidMap['phone02']) {
-      missingFields.push('Phone Number - 2 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+      missingFields.push('Mobile Number - 2 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
     }
     if (this.personalData.phoneNumber01 === this.personalData.phoneNumber02) {
-      missingFields.push('Phone Number - 2 - Must be different from Phone Number - 1');
+      missingFields.push('Mobile Number - 2 - Must be different from Mobile Number - 1');
     }
   }
 
@@ -1010,13 +1132,92 @@ branchItems: { value: number; label: string }[] = [];
       return;
     }
 
-    this.onSubmit();  
   }
 
   onSubmitFormPage3(form: NgForm) {
+    console.log('page3')
     form.form.markAllAsTouched();
-  }
 
+    const missingFields: string[] = [];
+
+    if (!this.driverObj.licNo) {
+      missingFields.push('License Number is Required');
+    }
+
+    if (!this.licenseFrontImageFileName && !this.driverObj.licFrontImg ) {
+      missingFields.push("License's Front Image is required");
+    }
+  
+    if (!this.licenseBackImageFileName && !this.driverObj.licBackImg ) {
+      missingFields.push("License's Back Image is required");
+    }
+
+    if (!this.driverObj.insNo) {
+      missingFields.push('Insurance Number is required');
+    }
+
+    if (!this.driverObj.insExpDate) {
+      missingFields.push('Insurance Expire Date is required');
+    }
+  
+    if (!this.insurenceFrontImageFileName && !this.driverObj.insFrontImg) {
+      missingFields.push("Insurance's Front Image is required");
+    }
+  
+    if (!this.insurenceBackImageFileName && !this.driverObj.insBackImg) {
+      missingFields.push("Insurance's Back Image is required");
+    }
+
+    if (!this.driverObj.vRegNo) {
+      missingFields.push('Vehicle Registration Number is required');
+    }
+  
+    if (!this.driverObj.vType) {
+      missingFields.push('Vehicle Type is required');
+    }
+
+    if (!this.driverObj.vCapacity) {
+      missingFields.push('Vehicle Capacity is required');
+    }
+
+    if (!this.vehicleFrontImageFileName && !this.driverObj.vehFrontImg) {
+      missingFields.push("Vehicle's Front Image is required");
+    }
+
+    if (!this.vehicleBackImageFileName && !this.driverObj.vehBackImg) {
+      missingFields.push("Vehicle's Back Image Image is required");
+    }
+  
+    if (!this.vehicleSideAImageFileName && !this.driverObj.vehSideImgA) {
+      missingFields.push("Vehicle's Side Image - 1 is required");
+    }
+
+    if (!this.vehicleSideBImageFileName && !this.driverObj.vehSideImgB) {
+      missingFields.push("Vehicle's Side Image - 2 is required");
+    }
+  
+    // Display errors if any
+    if (missingFields.length > 0) {
+      let errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following issues:</p><ul class="list-disc pl-5">';
+      missingFields.forEach((field) => {
+        errorMessage += `<li>${field}</li>`;
+      });
+      errorMessage += '</ul></div>';
+  
+      Swal.fire({
+        icon: 'error',
+        title: 'Missing or Invalid Information',
+        html: errorMessage,
+        confirmButtonText: 'OK',
+        customClass: {
+          popup: 'bg-white dark:bg-[#363636] text-[#534E4E] dark:text-textDark',
+          title: 'font-semibold text-lg',
+          htmlContainer: 'text-left',
+        },
+      });
+      return;
+    }
+  }
 
 
   allowOnlyNumbers(event: KeyboardEvent): boolean {
@@ -1092,6 +1293,47 @@ onTrimInputCapitalize(event: Event, modelRef: any, fieldName: string): void {
   inputElement.value = trimmedValue;
 }
 
+onTrimInputAccountNumber(event: Event, modelRef: any, fieldName: string): void {
+    const inputElement = event.target as HTMLInputElement;
+  
+    if (inputElement) {
+      // Remove **all spaces** (not just trim)
+      const noSpaceValue = inputElement.value.replace(/\s+/g, '');
+  
+      // Update model and input
+      modelRef[fieldName] = noSpaceValue;
+      inputElement.value = noSpaceValue;
+    }
+  }
+  
+
+
+onNicInput(event: any) {
+  // Get value and trim leading/trailing spaces
+  let value: string = event.target.value.trimStart().toUpperCase();
+
+  // Remove all invalid characters except digits and V
+  value = value.replace(/[^0-9V]/g, '');
+
+  // Prevent entering V anywhere except last character of 10-char NIC
+  if (value.includes('V') && value.length !== 10) {
+    value = value.replace(/V/g, '');
+  }
+
+  // Handle 10-char NIC ending with V
+  if (value.length === 10 && value.endsWith('V')) {
+    value = value.slice(0, 10);
+  }
+
+  // Limit 12-digit NIC
+  if (value.length > 12) {
+    value = value.slice(0, 12);
+  }
+
+  // Update the model
+  this.personalData.nic = value;
+}
+
 capitalizeFirstLetter(field: keyof typeof this.personalData) {
   if (this.personalData[field]) {
     // Trim spaces
@@ -1105,6 +1347,25 @@ capitalizeFirstLetter(field: keyof typeof this.personalData) {
 }
 
 
+onFormatInput(event: Event, modelRef: any, fieldName: string): void {
+  const inputElement = event.target as HTMLInputElement;
+
+  if (inputElement && inputElement.value) {
+    // Trim spaces at start & end
+    let value = inputElement.value.trim();
+
+    // Capitalize first letter
+    value = value.charAt(0).toUpperCase() + value.slice(1);
+
+    // Update model
+    modelRef[fieldName] = value;
+
+    // Update input box value
+    inputElement.value = value;
+  }
+}
+
+
   navigateToCenters() {
     this.router.navigate(['/centers']); // Change '/reports' to your desired route
   }
@@ -1113,54 +1374,70 @@ capitalizeFirstLetter(field: keyof typeof this.personalData) {
     this.router.navigate(['/centers/center-shashbord', this.centerId]); // Change '/reports' to your desired route
   }
 
+
   openPopup(item: Personal) {
-    console.log('personal', item)
-    console.log('officerId', this.editOfficerId)
+    console.log('personal', item);
+    console.log('officerId', this.editOfficerId);
     this.isPopupVisible = true;
-
-    let message = `Are you sure you want to reset password for this ${item.jobRole} ?`;
-
+  
+    const message = `Are you sure you want to reset password for this ${item.jobRole}?`;
+  
     const approveButton = `
-    <button id="approveButton" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
-      Reset Password
-    </button>
-  `;
-
-const tableHtml = `
-  <div class="container mx-auto">
-    <h1 class="text-center text-2xl font-bold mb-4 dark:text-white">Officer Name: ${item.firstNameEnglish}</h1>
-    <div>
-      <p class="text-center dark:text-white">${message}</p>
-    </div>
-    <div class="flex justify-center mt-4">
-      ${approveButton}
-    </div>
-  </div>
-`;
-
-
+      <button id="approveButton" 
+        class="bg-[#415CFF] hover:bg-[#415CFF] text-white px-4 py-2 rounded-lg mx-2">
+        Reset Password
+      </button>
+    `;
+  
+    const cancelButton = `
+      <button id="cancelButton" 
+        class="bg-[#FF0000] hover:bg-[#FF0000] text-white px-4 py-2 rounded-lg mx-2">
+        Cancel
+      </button>
+    `;
+  
+    const tableHtml = `
+      <div class="rounded-xl container mx-auto">
+        <h1 class="text-center text-2xl font-bold mb-4 dark:text-white">
+          Officer Name: ${item.firstNameEnglish}
+        </h1>
+        <div>
+          <p class="text-center dark:text-white">${message}</p>
+        </div>
+        <div class="flex justify-center mt-4">
+          ${approveButton}
+          ${cancelButton}
+        </div>
+      </div>
+    `;
+  
     const swalInstance = Swal.fire({
       html: tableHtml,
       showConfirmButton: false,
       width: 'auto',
       allowOutsideClick: true,
-      background: 'bg-white dark:bg-[#363636]', // Background styles
-      color: 'text-gray-800 dark:text-white',   // Text color styles
+      background: 'bg-white dark:bg-[#363636]',
+      color: 'text-gray-800 dark:text-white',
       customClass: {
         popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-        title: 'dark:text-white'
+        title: 'dark:text-white',
       },
       didOpen: () => {
-        // Approve Button
+        
         document.getElementById('approveButton')?.addEventListener('click', () => {
-          this.handleStatusChange(swalInstance, this.editOfficerId, 'Approved');
+          Swal.close();
+          this.handleStatusChange(swalInstance, this.editOfficerId);
         });
-
-      }
+  
+        document.getElementById('cancelButton')?.addEventListener('click', () => {
+          Swal.close();
+        });
+      },
     });
   }
+  
 
-  private handleStatusChange(swalInstance: any, id: number, status: 'Approved' | 'Rejected') {
+  private handleStatusChange(swalInstance: any, id: number) {
     // Show loading state
     this.isLoading = true;
     swalInstance.update({
@@ -1177,17 +1454,15 @@ const tableHtml = `
       }
     });
 
-    this.DistributedManageOfficerSrv.ChangeStatus(id, status).subscribe({
+    this.DistributedManageOfficerSrv.ResetPassword(id).subscribe({
       next: (res) => {
         swalInstance.close();
         if (res.status) {
           this.isLoading = false;
           swalInstance.close();
-          const action = status === 'Approved' ? 'approved' : 'rejected';
           this.toastSrv.success(`The Distribution Officer Password was reseted successfully.`);
         } else {
           this.isLoading = false;
-          this.toastSrv.error(`Failed to ${status.toLowerCase()} the Distribution Officer.`);
           console.log(`Failed to reset the Distribution Officer's password.`)
         }
       },
@@ -1198,6 +1473,319 @@ const tableHtml = `
       }
     });
   }
+
+  // Replace onFileSelected with this more specific version
+onLicenseFrontImageSelected(event: any): void {
+  const file: File = event.target.files[0];
+  if (file) {
+    // Validate file size (5MB max)
+    if (file.size > 5000000) {
+      this.toastSrv.error('License image size should not exceed 5MB');
+      return;
+    }
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    if (!allowedTypes.includes(file.type)) {
+      this.toastSrv.error('License image must be JPEG, JPG or PNG format');
+      return;
+    }
+
+    this.licenseFrontImageFile = file;
+    this.licenseFrontImageFileName = file.name;
+
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.licenseFrontImagePreview = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+// Clear license image
+clearLicenseFrontImage(): void {
+  this.licenseFrontImageFile = null;
+  this.licenseFrontImageFileName = '';
+  this.licenseFrontImagePreview = null;
+  const fileInput = document.getElementById('licenseFrontImageUpload') as HTMLInputElement;
+  if (fileInput) fileInput.value = '';
+}
+
+triggerFileInputForDriver(event: Event, inputId: string): void {
+  event.preventDefault();
+  const fileInput = document.getElementById(inputId);
+  fileInput?.click();
+}
+
+onLicenseBackImageSelected(event: any): void {
+  const file: File = event.target.files[0];
+  if (file) {
+    // Validate file size (5MB max)
+    if (file.size > 5000000) {
+      this.toastSrv.error('License image size should not exceed 5MB');
+      return;
+    }
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    if (!allowedTypes.includes(file.type)) {
+      this.toastSrv.error('License image must be JPEG, JPG or PNG format');
+      return;
+    }
+
+    this.licenseBackImageFile = file;
+    this.licenseBackImageFileName = file.name;
+
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.licenseBackImagePreview = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+// Clear license image
+clearLicenseBackImage(): void {
+  this.licenseBackImageFile = null;
+  this.licenseBackImageFileName = '';
+  this.licenseBackImagePreview = null;
+  const fileInput = document.getElementById('licenseBackImageUpload') as HTMLInputElement;
+  if (fileInput) fileInput.value = '';
+}
+
+onInsurenceFrontImageSelected(event: any): void {
+  const file: File = event.target.files[0];
+  if (file) {
+    // Validate file size (5MB max)
+    if (file.size > 5000000) {
+      this.toastSrv.error('Insurence image size should not exceed 5MB');
+      return;
+    }
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    if (!allowedTypes.includes(file.type)) {
+      this.toastSrv.error('Insurence image must be JPEG, JPG or PNG format');
+      return;
+    }
+
+    this.insurenceFrontImageFile = file;
+    this.insurenceFrontImageFileName = file.name;
+
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.insurenceFrontImagePreview = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+// Clear license image
+clearInsurenceFrontImage(): void {
+  this.insurenceFrontImageFile = null;
+  this.insurenceFrontImageFileName = '';
+  this.insurenceFrontImagePreview = null;
+  const fileInput = document.getElementById('insurenceFrontImageUpload') as HTMLInputElement;
+  if (fileInput) fileInput.value = '';
+}
+
+
+onInsurenceBackImageSelected(event: any): void {
+  const file: File = event.target.files[0];
+  if (file) {
+    // Validate file size (5MB max)
+    if (file.size > 5000000) {
+      this.toastSrv.error('Insurence image size should not exceed 5MB');
+      return;
+    }
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    if (!allowedTypes.includes(file.type)) {
+      this.toastSrv.error('Insurence image must be JPEG, JPG or PNG format');
+      return;
+    }
+
+    this.insurenceBackImageFile = file;
+    this.insurenceBackImageFileName = file.name;
+
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.insurenceBackImagePreview = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+// Clear license image
+clearInsurenceBackImage(): void {
+  this.insurenceBackImageFile = null;
+  this.insurenceBackImageFileName = '';
+  this.insurenceBackImagePreview = null;
+  const fileInput = document.getElementById('insuranceBackImageUpload') as HTMLInputElement;
+  if (fileInput) fileInput.value = '';
+}
+
+
+onVehicleFrontImageSelected(event: any): void {
+  const file: File = event.target.files[0];
+  if (file) {
+    // Validate file size (5MB max)
+    if (file.size > 5000000) {
+      this.toastSrv.error('License image size should not exceed 5MB');
+      return;
+    }
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    if (!allowedTypes.includes(file.type)) {
+      this.toastSrv.error('License image must be JPEG, JPG or PNG format');
+      return;
+    }
+
+    this.vehicleFrontImageFile = file;
+    this.vehicleFrontImageFileName = file.name;
+
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.vehicleFrontImagePreview = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+// Clear license image
+clearVehicleFrontImage(): void {
+  this.vehicleFrontImageFile = null;
+  this.vehicleFrontImageFileName = '';
+  this.vehicleFrontImagePreview = null;
+  const fileInput = document.getElementById('vehicleFrontImageUpload') as HTMLInputElement;
+  if (fileInput) fileInput.value = '';
+}
+
+
+onVehicleBackImageSelected(event: any): void {
+  const file: File = event.target.files[0];
+  if (file) {
+    // Validate file size (5MB max)
+    if (file.size > 5000000) {
+      this.toastSrv.error('Vehicle Back image size should not exceed 5MB');
+      return;
+    }
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    if (!allowedTypes.includes(file.type)) {
+      this.toastSrv.error('Vehicle Back image must be JPEG, JPG or PNG format');
+      return;
+    }
+
+    this.vehicleBackImageFile = file;
+    this.vehicleBackImageFileName = file.name;
+
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.vehicleBackImagePreview = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+// Clear license image
+clearVehicleBackImage(): void {
+  this.vehicleBackImageFile = null;
+  this.vehicleBackImageFileName = '';
+  this.vehicleBackImagePreview = null;
+  const fileInput = document.getElementById('vehicleBackImageUpload') as HTMLInputElement;
+  if (fileInput) fileInput.value = '';
+}
+
+onVehicleSideAImageSelected(event: any): void {
+  const file: File = event.target.files[0];
+  if (file) {
+    // Validate file size (5MB max)
+    if (file.size > 5000000) {
+      this.toastSrv.error('Vehicle Back image size should not exceed 5MB');
+      return;
+    }
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    if (!allowedTypes.includes(file.type)) {
+      this.toastSrv.error('Vehicle Back image must be JPEG, JPG or PNG format');
+      return;
+    }
+
+    this.vehicleSideAImageFile = file;
+    this.vehicleSideAImageFileName = file.name;
+
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.vehicleSideAImagePreview = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+// Clear license image
+clearVehicleSideAImage(): void {
+  this.vehicleSideAImageFile = null;
+  this.vehicleSideAImageFileName = '';
+  this.vehicleSideAImagePreview = null;
+  const fileInput = document.getElementById('vehicleSideAImageUpload') as HTMLInputElement;
+  if (fileInput) fileInput.value = '';
+}
+
+
+
+onVehicleSideBImageSelected(event: any): void {
+  const file: File = event.target.files[0];
+  if (file) {
+    // Validate file size (5MB max)
+    if (file.size > 5000000) {
+      this.toastSrv.error('Vehicle Back image size should not exceed 5MB');
+      return;
+    }
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    if (!allowedTypes.includes(file.type)) {
+      this.toastSrv.error('Vehicle Back image must be JPEG, JPG or PNG format');
+      return;
+    }
+
+    this.vehicleSideBImageFile = file;
+    this.vehicleSideBImageFileName = file.name;
+
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.vehicleSideBImagePreview = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+// Clear license image
+clearVehicleSideBImage(): void {
+  this.vehicleSideBImageFile = null;
+  this.vehicleSideBImageFileName = '';
+  this.vehicleSideBImagePreview = null;
+  const fileInput = document.getElementById('vehicleSideBImageUpload') as HTMLInputElement;
+  if (fileInput) fileInput.value = '';
+}
+
+vehicleChange() {
+  this.driverObj.vType = this.selectVehicletype.name
+  this.driverObj.vCapacity = this.selectVehicletype.capacity
+}
 
 }
 
@@ -1222,6 +1810,7 @@ class Personal {
   country: string = 'Sri Lanka';
   languages: string = '';
   QRcode!: string;
+  status!: string;
 
   accHolderName!: string;
   accNumber!: string;

@@ -7,11 +7,12 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
 import { ComplaintsService } from '../../../../services/Complaints-Service/complaints.service';
 import { ToastAlertService } from '../../../../services/toast-alert/toast-alert.service';
+import { SerchableDropdownComponent } from '../../../../components/serchable-dropdown/serchable-dropdown.component';
 
 @Component({
   selector: 'app-view-distribution-officer-target',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent, SerchableDropdownComponent],
   templateUrl: './view-distribution-officer-target.component.html',
   styleUrl: './view-distribution-officer-target.component.css'
 })
@@ -19,6 +20,8 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
   ordersArr!: orders[];
   searchText: string = '';
   selectStatus: string = '';
+  selectCompletingStatus: string = '';
+  isLateAndNotCompleted!: boolean;
 
   officersArr!: Officer[];
 
@@ -30,16 +33,20 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
 
   date:  string = '';
 
-  page: number = 1;
   totalItems: number = 0;
-  itemsPerPage: number = 10;
   hasData: boolean = true;
+  selectedDate!: string;
 
   isLoading:boolean = true;
 
   selectedOfficerId: number | '' = '';
 
+  selectedEmpId!: string;
+
+  selectedOfficer: string = '';
+
   selectedOrderIds: number[] = []; 
+  selectableOrders:  orders[] = [];
   allChecked: boolean = false;
   
   filteredOrdersArr!: orders[] 
@@ -59,6 +66,20 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
     this.filterStatus();
   }
 
+  isCompletingStatusDropdownOpen = false;
+  completingStatusDropdownOptions = ['On Time', 'Late', 'Not Completed'];
+
+  toggleCompletingStatusDropdown() {
+    this.isCompletingStatusDropdownOpen = !this.isCompletingStatusDropdownOpen;
+  }
+
+  selectCompletingStatusOption(option: string) {
+    this.selectCompletingStatus = option;
+    this.isCompletingStatusDropdownOpen = false;
+    this.filterCompletingStatus();
+  }
+
+
   constructor(
     private router: Router,
     private ComplainSrv: ComplaintsService,
@@ -71,65 +92,60 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
 
   ngOnInit(): void {
     this.officerId = Number(this.route.snapshot.paramMap.get('officerId'));
+    this.selectedDate = String(this.route.snapshot.paramMap.get('date'));
     console.log('Selected officerId:', this.officerId);
-    this.fetchOfficers();
     this.fetchSelectedOfficerTargets();
     
   }
 
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent) {
-    const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
-    const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
+  // @HostListener('document:click', ['$event'])
+  // onDocumentClick(event: MouseEvent) {
+  //   const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
+  //   const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
 
-    if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
-      this.isStatusDropdownOpen = false;
-    }
+  //   if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
+  //     this.isStatusDropdownOpen = false;
+  //   }
 
-  }
+  // }
 
   fetchSelectedOfficerTargets(
     officerId: number = this.officerId, 
     search: string = this.searchText, 
-    status: string = this.selectStatus
+    status: string = this.selectStatus,
+    completingStatus: string = this.selectCompletingStatus,
+    date: string = this.selectedDate
   ) {
     this.isLoading = true;
-    this.DistributionSrv.getSelectedOfficerTargets(officerId, search, status).subscribe(
+    this.DistributionSrv.getSelectedOfficerTargets(officerId, search, status, completingStatus, date).subscribe(
       (res) => {
         this.ordersArr = res.items.map((item: any) => {
           let status = '';
-        
-          if (item.packageStatus === 'Pending' && (item.additionalItemsStatus === 'Unknown' || item.additionalItemsStatus === 'Pending')) {
+          
+          const pkgStatus = item.packageStatus;
+          const addStatus = item.additionalItemsStatus;
+          
+          // Priority 1: If either is Pending, combinedStatus is Pending
+          if (pkgStatus === 'Pending' || addStatus === 'Pending') {
             status = 'Pending';
           }
-          else if (item.packageStatus === 'Pending' && (item.additionalItemsStatus === 'Opened' || item.additionalItemsStatus === 'Completed')) {
+          // Priority 2: If either is Opened (and none are Pending), combinedStatus is Opened
+          else if (pkgStatus === 'Opened' || addStatus === 'Opened') {
             status = 'Opened';
           }
-          else if (item.packageStatus === 'Opened') {
-            status = 'Opened';
-          }
-          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Unknown') {
+          // Priority 3: If both are Completed, combinedStatus is Completed
+          else if (pkgStatus === 'Completed' && addStatus === 'Completed') {
             status = 'Completed';
           }
-          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Pending') {
-            status = 'Pending';
-          }
-          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Opened') {
-            status = 'Opened';
-          }
-          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Completed') {
+          // Priority 4: If one is Completed and other is Unknown, use the non-Unknown status
+          else if (pkgStatus === 'Completed' && addStatus === 'Unknown') {
             status = 'Completed';
           }
-          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Pending') {
-            status = 'Pending';
-          }
-          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Opened') {
-            status = 'Opened';
-          }
-          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Completed') {
+          else if (pkgStatus === 'Unknown' && addStatus === 'Completed') {
             status = 'Completed';
           }
-          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Unknown') {
+          // Default: Both are Unknown
+          else {
             status = 'Unknown';
           }
         
@@ -144,6 +160,11 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
         this.totalItems = res.total;
   
         this.hasData = this.ordersArr.length > 0;
+
+        this.selectableOrders = this.ordersArr.filter(
+          item => item.combinedStatus === 'Pending' && item.lockStatus !== 1
+        );
+        
         this.isLoading = false;
       }
     );
@@ -157,7 +178,7 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
         console.log('officer', res)
         this.officersArr = res
         console.log('officersArr', this.officersArr)
-        this.totalOfficers = res.length;
+        this.totalOfficers = res.length | 0;
         this.isLoading = false;
 
       }
@@ -165,6 +186,7 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
   }
 
   onSearch() {
+    this.searchText = this.searchText.trimStart();
     this.fetchSelectedOfficerTargets();
 
   }
@@ -177,12 +199,6 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
 
   onDateChange() {
     console.log('called')
-    this.fetchSelectedOfficerTargets();
-  }
-
-
-  onPageChange(event: number) {
-    this.page = event;
     this.fetchSelectedOfficerTargets();
   }
 
@@ -235,37 +251,40 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
 
 
 toggleOrder(orderId: number, event: Event): void {
-  console.log('togling')
-    const isChecked = (event.target as HTMLInputElement).checked;
-    
-    if (isChecked) {
-        if (!this.selectedOrderIds.includes(orderId)) {
-            this.selectedOrderIds.push(orderId);
-        }
-    } else {
-        this.selectedOrderIds = this.selectedOrderIds.filter(id => id !== orderId);
+  const isChecked = (event.target as HTMLInputElement).checked;
+
+  if (isChecked) {
+    if (!this.selectedOrderIds.includes(orderId)) {
+      this.selectedOrderIds.push(orderId);
     }
-    console.log('selectedOrderIds', this.selectedOrderIds);
+  } else {
+    this.selectedOrderIds = this.selectedOrderIds.filter(id => id !== orderId);
+  }
 
-    
+  // Only consider selectable items (Pending and not locked)
+  
+  this.allChecked = this.selectedOrderIds.length === this.selectableOrders.length;
 
-    this.allChecked = this.selectedOrderIds.length === this.ordersArr.length;
-    console.log('allChecked', this.allChecked)
+  console.log('selectedOrderIds', this.selectedOrderIds);
+  console.log('allChecked', this.allChecked);
 }
 
 
 toggleAllOrders(event: Event): void {
-    const isChecked = (event.target as HTMLInputElement).checked;
-    this.allChecked = isChecked;
-    
-    if (isChecked) {
-      
-        this.selectedOrderIds = this.ordersArr.map(item => item.processOrderId);
-    } else {
-        // Deselect all orders
-        this.selectedOrderIds = [];
-    }
-    console.log('selectedOrderIds', this.selectedOrderIds)
+  const isChecked = (event.target as HTMLInputElement).checked;
+  this.allChecked = isChecked;
+
+  if (isChecked) {
+    // Select only items that are not disabled (Pending and not locked)
+    this.selectedOrderIds = this.ordersArr
+      .filter(item => item.combinedStatus === 'Pending' && item.lockStatus !== 1)
+      .map(item => item.processOrderId);
+  } else {
+    // Deselect all
+    this.selectedOrderIds = [];
+  }
+
+  console.log('selectedOrderIds', this.selectedOrderIds);
 }
 
 deSelectAll() {
@@ -274,6 +293,7 @@ deSelectAll() {
 }
 
 passTarget() {
+  
   this.isPassTarget = true;
 }
 
@@ -307,6 +327,8 @@ passTarget() {
 // }
 
 PassTarget() {
+  this.fetchOfficers();
+  console.log('passing')
   this.isPass = true;
   this.isPassTarget = false;
   
@@ -334,10 +356,14 @@ changeStatusAndTime(data: { orderIds: any[]; time: string }) {
       this.isLoading = false;
 
       if (res && res.success) {
-        this.toastSrv.success(`${data.orderIds.length} orders have been sent out for delivery!`, 'Success');
+
+        const orderCount = data.orderIds.length < 10 ? ('0' + data.orderIds.length) : (data.orderIds.length);
+        const orderLabel = orderCount === 1 ? 'order' : 'orders';
+
+        this.toastSrv.success(`${orderCount} ${orderLabel} successfully passed to ${this.selectedEmpId}!`, 'Success');
         this.isPassTarget = false;
       } else {
-        this.toastSrv.error('Failed to sent out for delivery!', 'Error');
+        this.toastSrv.error('Failed to pass the target to selected officer!', 'Error');
         this.isPassTarget = false;
       }
       this.fetchSelectedOfficerTargets()
@@ -363,6 +389,10 @@ cancell() {
 }
 
 passTargetToBackEnd() {
+  if (!this.selectedOfficerId) {
+    this.toastSrv.error('Please select a short stock assignee to pass the target!', 'Error');
+    return; 
+  }
   console.log('orderIds', this.selectedOrderIds, 'distargetid', this.filteredOrdersArr[0].distributedTargetId, 'officer', this.selectedOfficerId, 'officerID', this.officerId )
   this.DistributionSrv.passTarget(this.selectedOrderIds, this.filteredOrdersArr[0].distributedTargetId, this.selectedOfficerId, this.officerId).subscribe(
     (res) => {
@@ -373,16 +403,23 @@ passTargetToBackEnd() {
         const selectedOfficer = this.officersArr.find(
           officer => officer.id === this.selectedOfficerId
         );
-      
+
+        const orderCount = this.selectedOrderIds.length < 10 ? ('0' + this.selectedOrderIds.length) : (this.selectedOrderIds.length);
+        const orderLabel = this.selectedOrderIds.length === 1 ? 'order' : 'orders';
+
+        console.log('orderCount', orderCount, 'orderLabel', orderLabel )
+
         // Get the empId if officer exists
         const empId = selectedOfficer ? selectedOfficer.empId : 'Unknown';
+
+        this.toastSrv.success(`${orderCount} ${orderLabel} successfully passed to ${empId}!`, 'Success');
       
         // Use empId in the toast message
-        this.toastSrv.success(
-          `${this.selectedOrderIds.length} orders have been passed to ${empId}!`,
-          'Success'
-        );
-      
+        // this.toastSrv.success(
+        //   `${this.selectedOrderIds.length} orders have been passed to ${empId}!`,
+        //   'Success'
+        // );
+        this.fetchSelectedOfficerTargets()
         this.isPass = false;
         this.isPassTarget = false;
         this.selectedOrderIds = [];
@@ -413,11 +450,43 @@ cancelStatus(event?: MouseEvent) {
   this.fetchSelectedOfficerTargets();
 }
 
+filterCompletingStatus() {
+  this.fetchSelectedOfficerTargets();
+}
 
-onOfficerChange(event: Event) {
-  const selectElement = event.target as HTMLSelectElement;
-  this.selectedOfficerId = selectElement.value ? Number(selectElement.value) : '';
-  console.log('Selected Officer ID:', this.selectedOfficerId);
+cancelCompletingStatus(event?: MouseEvent) {
+  if (event) {
+    event.stopPropagation(); // Prevent triggering the dropdown toggle
+  }
+  this.selectCompletingStatus = '';
+  this.fetchSelectedOfficerTargets();
+}
+
+
+get categoryDropdownItems() {
+  return this.officersArr
+    .filter(officer => officer.id !== this.officerId) 
+    .map(officer => ({
+      value: officer.id.toString(),
+      label: `${officer.empId} - ${officer.firstNameEnglish} ${officer.lastNameEnglish}`,
+      disabled: false
+    }));
+}
+
+
+// 5. Add selection change handler
+onCategorySelectionChange(selectedValue: string) {
+  this.selectedOfficer = selectedValue || '';
+
+  this.selectedOfficerId = Number(this.selectedOfficer);
+
+const passOfficer = this.officersArr.find(
+  officer => officer.id === this.selectedOfficerId
+);
+
+this.selectedEmpId = passOfficer ? passOfficer.empId : '';
+  // Add any additional logic you need when category changes
+  console.log('officer selected:', this.selectedOfficerId);
 }
 
 goBack() {
@@ -425,16 +494,14 @@ goBack() {
 }
 
 getStatus(item: orders): string {
-  if (!item.completeTime) {
-    return 'Not Completed';
-  }
+  console.log('Setting status');
 
   // Convert both into Date objects
-  const completeTime = new Date(item.completeTime);
   const scheduleDate = new Date(item.sheduleDate);
+  const completeTime = item.completeTime ? new Date(item.completeTime) : null;
 
-  // Clone scheduleDate for deadline
-  let deadline = new Date(scheduleDate);
+  // Create the schedule deadline
+  const deadline = new Date(scheduleDate);
 
   if (item.sheduleTime) {
     const timeSlot = item.sheduleTime.trim();
@@ -448,19 +515,35 @@ getStatus(item: orders): string {
     }
   }
 
-  // --- Debug with Sri Lanka local time ---
+  // Current time in SL
+  const now = new Date(
+    new Date().toLocaleString('en-US', { timeZone: 'Asia/Colombo' })
+  );
+
   console.log(
-    'Complete (SL):',
-    completeTime.toLocaleString('en-GB', { timeZone: 'Asia/Colombo', hour12: false })
+    'Now (SL):',
+    now.toLocaleString('en-GB', { timeZone: 'Asia/Colombo', hour12: false })
   );
   console.log(
     'Deadline (SL):',
     deadline.toLocaleString('en-GB', { timeZone: 'Asia/Colombo', hour12: false })
   );
 
-  // ✅ Compare using timestamps (still works for SL)
+  // --- Case 1: Not completed yet ---
+  if (!completeTime) {
+    if (now.getTime() > deadline.getTime()) {
+      this.isLateAndNotCompleted = true;
+      return 'Not Completed';
+    } else {
+      this.isLateAndNotCompleted = false;
+      return 'Not Completed';
+    }
+  }
+
+  // --- Case 2: Completed: Check on-time or late ---
   return completeTime.getTime() <= deadline.getTime() ? 'On Time' : 'Late';
 }
+
 
 }
 
@@ -481,6 +564,8 @@ class orders {
   distributedTargetId!: number
   combinedStatus!: string
   completeTime!: Date
+  lockStatus!: number
+  isComplete!: number
 }
 
 class Officer {

@@ -13,26 +13,29 @@
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-8 my-10 px-10">
-    <div>
+    <div *ngIf="logingRole === 'Collection Centre Manager'" >
       <label for="jobRole" class="block  font-medium text-gray-700 dark:text-textDark">
         Select Job Role
       </label>
-      <select id="jobRole" [(ngModel)]="selectJobRole" name="selectJobRole" placeholder="select"
-        class="form-control mt-1 block w-full p-2  border border-gray-300 dark:border-gray-600 rounded-md text-[#534E4E] bg-gray-200 dark:text-textDark  dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500">
-        <option disabled selected value="" class="p-2 text-[#534E4E] bg-gray-200 dark:text-textDark  dark:bg-[#1D1D1F]">
-          --Select Job Role--
-        </option>
-        <option *ngIf="logingRole === 'Collection Centre Manager'" value="Collection Officer" class="p-2 text-[#534E4E] bg-gray-200 dark:text-textDark dark:bg-[#1D1D1F]">
-          Collection Officer
-        </option>
-        <option *ngIf="logingRole === 'Collection Centre Manager'" value="Customer Officer" class="p-2 text-[#534E4E] bg-gray-200 dark:text-textDark dark:bg-[#1D1D1F]">
-          Customer Officer
-        </option>
 
-        <option *ngIf="logingRole === 'Distribution Centre Manager'" value="Distribution Officer" class="p-2 text-[#534E4E] bg-gray-200 dark:text-textDark dark:bg-[#1D1D1F]">
-          Distribution Officer
-        </option>
-      </select>
+      <input 
+        id="jobRole"
+        [(ngModel)]="selectJobRole"
+        name="selectJobRole"
+        readonly
+        class="form-control mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 
+               rounded-md text-[#534E4E] bg-gray-200 dark:text-textDark dark:bg-[#1D1D1F]"
+      >
+    </div>
+
+    <div *ngIf="logingRole === 'Distribution Centre Manager'">
+      <label for="jobRole" class="block  font-medium text-gray-700 dark:text-textDark">
+        Job Role
+      </label>
+
+      <input type="text" [(ngModel)]="selectJobRole" name="jobRole" id="jobRole" readonly
+      class="form-control mt-1 block w-full p-2  border border-gray-300 dark:border-gray-600 rounded-md text-[#534E4E] bg-gray-200 dark:text-textDark  dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500">
+
     </div>
 
     <div>
@@ -62,7 +65,12 @@
   <div *ngIf="isOfficerExist && officerObj.claimStatus === 0"
     class="flex flex-row justify-between items-center border-[#F1F7FA] border-[3px] rounded-lg shadowmd p-8 mx-[10%]">
     <div class="flex flex-row items-center">
-      <img class="w-28 h-28 rounded-full " [src]="officerObj.image" />
+      <img *ngIf="officerObj.image" class="w-28 h-28 rounded-full " [src]="officerObj.image" />
+
+      <div *ngIf="!officerObj.image" 
+          class="flex rounded-full border-solid border-2 justify-center items-center w-32 h-32">
+          <i class="fa-regular fa-user text-6xl dark:text-white"></i>
+      </div>
 
       <div class="ml-6">
         <p class="text-lg font-semibold dark:text-white">
@@ -83,11 +91,11 @@
   <div *ngIf="isOfficerExist && officerObj.claimStatus === 1"
     class="flex flex-col items-center w-full h-screen px-10 py-7 dark:bg-[#363636] bg-tileLight shadow-lg rounded-lg mt-6">
     <p *ngIf="logingRole === 'Distribution Centre Manager'" class="text-[#494949] my-6 dark:text-white">
-      --The user already claimed By {{ officerObj.distributedCenterName }} Centre.--
+      --The user already claimed By {{ officerObj.distributedCenterRegCode }} Centre.--
     </p>
 
     <p *ngIf="logingRole === 'Collection Centre Manager'" class="text-[#494949] my-6 dark:text-white">
-      --The user already claimed By {{ officerObj.centerName }} Centre.--
+      --The user already claimed By {{ officerObj.regCode }} Centre.--
     </p>
     <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
   </div>
@@ -97,7 +105,7 @@
   <div *ngIf="hasData"
     class="flex flex-col items-center w-full h-screen px-10 py-7 bg-tileLight dark:bg-[#363636] mt-6">
     <p class="text-[#494949] my-6 dark:text-white">
-      --No User available by this EMPID--
+      --No User available by this EMP ID--
     </p>
     <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
   </div>

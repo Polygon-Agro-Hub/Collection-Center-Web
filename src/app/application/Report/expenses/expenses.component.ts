@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild  } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ReportServiceService } from '../../../services/Report-service/report-service.service';
@@ -21,6 +21,8 @@ import { CustomDatepickerComponent } from '../../../components/custom-datepicker
   providers: [DatePipe]
 })
 export class ExpensesComponent implements OnInit {
+  @ViewChild('fromDatePicker') fromDatePicker!: CustomDatepickerComponent;
+  @ViewChild('toDatePicker') toDatePicker!: CustomDatepickerComponent;
 
   farmerPaymentsArr!: FarmerPayments[];
   centerArr: Center[] = [];
@@ -37,8 +39,8 @@ export class ExpensesComponent implements OnInit {
 
   logingRole: string | null = null;
 
-  fromDate: string = '';
-  toDate: string = '';
+  fromDate: string | Date | null = null;
+  toDate: string | Date | null = null;
   maxDate: string = new Date().toISOString().split('T')[0];
 
   dateValidationMassage: string = '';
@@ -190,22 +192,35 @@ export class ExpensesComponent implements OnInit {
     
     // Validate against max date (today)
     if (selectedDate && selectedDate > this.maxDate) {
+      this.fromDate = null; // Set to null instead of empty string
+
+      if (this.fromDatePicker) {
+        this.fromDatePicker.selectedDate = null;
+      }
+      console.log('this.fromDate', this.fromDate)
       this.toastSrv.warning("From date cannot be in the future.");
       return;
     }
     
     this.fromDate = selectedDate;
     this.validateFromDate();
-  }
+}
   
   onToDateChange(date: string | Date | null) {
     const selectedDate = date as string || '';
     
     // Validate against max date (today)
     if (selectedDate && selectedDate > this.maxDate) {
+
+      this.toDate = null;
+      if (this.toDatePicker) {
+        this.toDatePicker.selectedDate = null;
+      }
+
       this.toastSrv.warning("To date cannot be in the future.");
       return;
     }
+    
     
     this.toDate = selectedDate;
     this.validateToDate();
@@ -218,7 +233,10 @@ export class ExpensesComponent implements OnInit {
     // Always clear toDate if fromDate is not properly set
     if (!from || isNaN(from.getTime())) {
       if (this.toDate) {
-        this.toDate = '';
+        this.toDate = null;
+        if (this.toDatePicker) {
+          this.toDatePicker.selectedDate = null;
+        }
         console.log(this.toDate);
       }
       this.toastSrv.warning("Please select the 'From' date first.");
@@ -228,33 +246,39 @@ export class ExpensesComponent implements OnInit {
     // If toDate is set, check if it's valid against fromDate
     if (to && !isNaN(to.getTime())) {
       if (to <= from) {
-        this.toDate = '';
+        this.toDate = null;
+        if (this.toDatePicker) {
+          this.toDatePicker.selectedDate = null;
+        }
         this.toastSrv.warning("The 'To' date cannot be earlier than or same as the 'From' date.");
       }
     }
   }
   
   validateFromDate() {
-    // Case 1: User hasn't selected toDate yet
     if (!this.toDate) {
       return;
     }
   
-    // Case 2: Check if current toDate is still valid with new fromDate
     if (this.toDate) {
-      const from = new Date(this.fromDate);
+      const from = new Date(this.fromDate!);
       const to = new Date(this.toDate);
   
       if (to <= from) {
-        this.toDate = ''; // Reset toDate
+        this.toDate = null; // Set to null instead of empty string
+        if (this.toDatePicker) {
+          this.toDatePicker.selectedDate = null;
+        }
         this.toastSrv.warning("The 'To' date has been cleared because it was earlier than or same as the new 'From' date.");
       }
     }
-  }
+}
   
   goBtn() {
     if (!this.fromDate || !this.toDate) {
       this.toastSrv.warning("Please select a date range to view the data");
+      this.hasData = false;
+      this.isDateFilterSet = false;
       return;
     }
   

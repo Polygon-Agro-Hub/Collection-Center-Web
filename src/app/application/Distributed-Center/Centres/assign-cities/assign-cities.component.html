@@ -1,11 +1,7 @@
 <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
-<button onclick="history.back()" class=" text-textLight dark:text-textDark">
-    <i class="fa-solid fa-arrow-left"></i>
-    Back
-</button>
-<div class="h-[20px]"></div>
-
-
+<div class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
+    <p onclick="history.back()">Distribution Centres</p>
+</div>
 <div class="mx-auto p-6 bg-white dark:bg-[#363636] rounded-lg shadow-mg gap-y-2">
     <h2 class="font-semibold dark:text-white">Assign Cities to Centre</h2>
     <div class="flex flex-row justify-between items-center gap-x-10 mt-4 px-10">

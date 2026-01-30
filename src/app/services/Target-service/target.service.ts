@@ -29,7 +29,7 @@ export class TargetService {
       Authorization: `Bearer ${this.token}`
     });
 
-    console.log(limit);
+    console.log(limit, 'searchText', searchText);
 
     let url = `${this.apiUrl}/get-daily-target`;
 
@@ -305,7 +305,7 @@ export class TargetService {
     return this.http.post<any>(url, data, { headers });
   }
 
-  getSavedCenterCrops(id: number, date: string, searchText: string = ''): Observable<any> {
+  getSavedCenterCrops(id: number, date: string = '', searchText: string = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
@@ -342,7 +342,7 @@ export class TargetService {
       Authorization: `Bearer ${this.token}`
     });
 
-    console.log('page', page, 'limit', limit)
+    console.log('page', page, 'limit', limit, 'status', status, 'validity', validity)
     console.log('data', data);
 
     let url = `${this.apiUrl}/officer-target-check-available?page=${page}&limit=${limit}`;
@@ -508,6 +508,8 @@ export class TargetService {
 
     return this.http.get(url, { headers, responseType: 'blob' });
   }
+
+  
 
 }
 

@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { Observable, from, switchMap } from 'rxjs';
 import { TokenServiceService } from '../Token/token-service.service';
 import { environment } from '../../environments/environment.development';
 
@@ -130,10 +130,23 @@ export class DistributedManageOfficersService {
     });
   }
 
-  createDistributionOfficer(person: any, selectedImage: any): Observable<any> {
+  createDistributionOfficer(person: any, selectedImage: any, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
     console.log('person', person)
     console.log('selectedImage', selectedImage)
     const formData = new FormData();
+
+    if (person.jobRole === 'Driver') {
+      formData.append('driverData', JSON.stringify(driver));
+      formData.append('licFront', licFront);
+      formData.append('licBack', licBack);
+      formData.append('insFront', insFront);
+      formData.append('insBack', insBack);
+      formData.append('vehiFront', vehiFront);
+      formData.append('vehiBack', vehiBack);
+      formData.append('vehiSideA', vehiSideA);
+      formData.append('vehiSideB', vehiSideB);
+    }
+    
     formData.append('officerData', JSON.stringify(person));
     formData.append('file', selectedImage);
     const headers = new HttpHeaders({
@@ -144,10 +157,23 @@ export class DistributedManageOfficersService {
     });
   }
 
-  createDistributionOfficerDIO(person: any, selectedImage: any): Observable<any> {
+  createDistributionOfficerDIO(person: any, selectedImage: any, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
     console.log('person', person)
     console.log('selectedImage', selectedImage)
     const formData = new FormData();
+
+    if (person.jobRole === 'Driver') {
+      formData.append('driverData', JSON.stringify(driver));
+      formData.append('licFront', licFront);
+      formData.append('licBack', licBack);
+      formData.append('insFront', insFront);
+      formData.append('insBack', insBack);
+      formData.append('vehiFront', vehiFront);
+      formData.append('vehiBack', vehiBack);
+      formData.append('vehiSideA', vehiSideA);
+      formData.append('vehiSideB', vehiSideB);
+    }
+    
     formData.append('officerData', JSON.stringify(person));
     formData.append('file', selectedImage);
     const headers = new HttpHeaders({
@@ -167,8 +193,21 @@ export class DistributedManageOfficersService {
     });
   }
 
-  updateDistributionOfficer(person: any, id: number, image: any): Observable<any> {
+  updateDistributionOfficer(person: any, id: number, image: any, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
     const formData = new FormData();
+
+    if (person.jobRole === 'Driver') {
+      formData.append('driverData', JSON.stringify(driver));
+      formData.append('licFront', licFront);
+      formData.append('licBack', licBack);
+      formData.append('insFront', insFront);
+      formData.append('insBack', insBack);
+      formData.append('vehiFront', vehiFront);
+      formData.append('vehiBack', vehiBack);
+      formData.append('vehiSideA', vehiSideA);
+      formData.append('vehiSideB', vehiSideB);
+    }
+
     formData.append('officerData', JSON.stringify(person));
     formData.append('file', image);
 
@@ -180,8 +219,21 @@ export class DistributedManageOfficersService {
     });
   }
 
-  updateDistributionOfficerDIO(person: any, id: number, image: any): Observable<any> {
+  updateDistributionOfficerDIO(person: any, id: number, image: any, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
     const formData = new FormData();
+
+    if (person.jobRole === 'Driver') {
+      formData.append('driverData', JSON.stringify(driver));
+      formData.append('licFront', licFront);
+      formData.append('licBack', licBack);
+      formData.append('insFront', insFront);
+      formData.append('insBack', insBack);
+      formData.append('vehiFront', vehiFront);
+      formData.append('vehiBack', vehiBack);
+      formData.append('vehiSideA', vehiSideA);
+      formData.append('vehiSideB', vehiSideB);
+    }
+    
     formData.append('officerData', JSON.stringify(person));
     formData.append('file', image);
 
@@ -192,6 +244,16 @@ export class DistributedManageOfficersService {
       headers,
     });
   }
+
+  ResetPassword(id: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/manage-officers/reset-password/${id}`;
+    return this.http.get<any>(url, { headers });
+  }
+
 
 
 }

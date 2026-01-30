@@ -5,7 +5,8 @@
 <div *ngIf="!isLoading" >
     <div class="flex gap-3 mb-4 mr-5 ml-0">
         <p (click)="goBack()" class="font-semibold text[#424242]  dark:text-[#FFFFFF] dark:bg-blacks cursor-pointer">Officer Targets</p>
-        <p class="font-semibold text[#424242]  dark:text-[#FFFFFF] dark:bg-blacks cursor-pointer">View Officer Targets</p>
+        <p (click)="goBack()" class="font-semibold text[#424242]  dark:text-[#FFFFFF] dark:bg-blacks cursor-pointer">View Officer Targets</p>
+        <p *ngIf="isPass" class="font-semibold text[#424242]  dark:text-[#FFFFFF] dark:bg-blacks cursor-pointer">Edit Officer Targets</p>
     </div>
 
     <div *ngIf="!isPass" class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg overflow-x-auto">
@@ -67,6 +68,53 @@
             </div>
         </div>
 
+        <div class="relative w-40 custom-completion-status-dropdown-container">
+            <!-- Hidden native select -->
+            <select [(ngModel)]="selectCompletingStatus" class="hidden" (change)="filterCompletingStatus()">
+                <option value="" selected disabled>Completing Status</option>
+                <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300" value="Pending">
+                    On Time</option>
+                <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300" value="Completed">
+                    Late</option>
+                <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300" value="Opened">
+                    Not Completed</option>
+            </select>
+
+            <!-- Custom dropdown trigger -->
+            <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
+                (click)="toggleCompletingStatusDropdown()">
+                <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
+                    <span>{{ selectCompletingStatus || 'Completing Status' }}</span>
+                    <div class="flex items-center">
+                        <!-- X icon (shown ONLY when option is selected) -->
+                        <i *ngIf="selectCompletingStatus" (click)="cancelCompletingStatus($event)"
+                            class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
+
+                        <!-- Arrow icon (shown when EITHER: dropdown is open OR no selection exists) -->
+                        <i *ngIf="isCompletingStatusDropdownOpen || !selectCompletingStatus"
+                            class="fa-solid text-lg text-[#828282] transition-transform duration-200"
+                            [class.fa-angle-down]="!isCompletingStatusDropdownOpen"
+                            [class.fa-angle-up]="isCompletingStatusDropdownOpen"></i>
+                    </div>
+                </div>
+            </div>
+
+            
+
+            <!-- Custom dropdown options -->
+            <div *ngIf="isCompletingStatusDropdownOpen"
+                class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
+                <div class="py-1">
+                    <div *ngFor="let option of completingStatusDropdownOptions" (click)="selectCompletingStatusOption(option)"
+                        class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
+                        <span class="flex-grow">{{ option }}</span>
+                        <i class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
         <!-- <div class="relative w-36">
             <div
                 class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
@@ -118,9 +166,12 @@
             <thead class="text-[#4B5563] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
                 <tr>
                     <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">
-                        <input type="checkbox" 
+                        <input type="checkbox" class="cursor-pointer" 
                                [checked]="allChecked" 
-                               (change)="toggleAllOrders($event)">
+                               (change)="toggleAllOrders($event)"
+                               [disabled]="
+                               selectableOrders.length === 0
+                             " >
                     </th>
                     <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">No</th>
                     <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">Invoice No</th>
@@ -130,17 +181,24 @@
                 </tr>
             </thead>
             <tbody class="bg-white dark:bg-[#1D1D1F] text-[#000000] dark:border-[#1D1D1F] cursor-default">
-                <tr *ngFor="let item of ordersArr | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index">
+                <tr *ngFor="let item of ordersArr let i = index">
                     <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
-                        <input type="checkbox" 
-                               [checked]="isChecked(item.processOrderId)" 
-                               (change)="toggleOrder(item.processOrderId, $event)">
+                        <input 
+                          type="checkbox" class="cursor-pointer"
+                          [checked]="isChecked(item.processOrderId)" 
+                          (change)="toggleOrder(item.processOrderId, $event)"
+                          [disabled]="
+                            item.combinedStatus === 'Opened' || 
+                            item.combinedStatus === 'Completed' || 
+                            item.lockStatus === 1
+                          "
+                        >
                     </td>
                     <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
                         {{ (i + 1) < 10 ? ('0' + (i + 1)) : (i + 1) }}
                     </td>
                     <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.invNo}}</td>
-                    <td class="px-6 py-4 text-sm text-center font-medium text-gray-900 dark:text-[#C5C5C5]">{{ getDisplayDate(item.sheduleDate) }} {{ removeWithin(item.sheduleTime) }}</td>
+                    <td class="px-6 py-4 text-sm text-center font-medium text-gray-900 dark:text-[#C5C5C5]">{{ removeWithin(item.sheduleTime) }}</td>
                     <!-- <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.packagePackStatus}}</td> -->
                     <td class="px-6 py-4 text-sm text-left text-gray-900 dark:text-[#C5C5C5] cursor-default">
 
@@ -165,7 +223,8 @@
                         <span 
                           [ngClass]="{
                             'text-red-500': getStatus(item) === 'Late',
-                            'text-blue-500': getStatus(item) === 'On Time'
+                            'text-blue-500': getStatus(item) === 'On Time',
+                            'text-[#AC0003]': (getStatus(item) === 'Not Completed' && isLateAndNotCompleted )
                           }">
                           {{ getStatus(item) }}
                         </span>
@@ -194,27 +253,22 @@
               Select Short Stock Assignee
             </label>
           
-            <select
-              id="jobRole"
-              name="jobRole"
-              required
-              (change)="onOfficerChange($event)"
-              [(ngModel)]="selectedOfficerId"
-              #officerSelect="ngModel"
-              class="form-control cursor-pointer block w-full p-2 mt-1 text-[#030308] dark:text-textDark border border-gray-300 rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500"
-            >
-              <!-- Default empty option -->
-              <option value="">-- Select Officer --</option>
-          
-              <option *ngFor="let officer of officersArr" [value]="officer.id">
-                {{ officer.empId }} - {{ officer.firstNameEnglish }} {{ officer.lastNameEnglish }}
-              </option>
-            </select>
+            <app-searchable-dropdown
+              [items]="categoryDropdownItems"
+              placeholder="Select Category"
+              searchPlaceholder="Search categories..."
+              [(ngModel)]="selectedOfficer"
+              (selectionChange)="onCategorySelectionChange($event)"
+              [clearable]="true"
+              [showSelected]="true"
+              [disabled]="false"
+              class="block w-full mb-4"
+            ></app-searchable-dropdown>
           
             <!-- Validation error message -->
-            <div *ngIf="officerSelect.invalid && officerSelect.touched" class="text-red-500 text-sm">
+            <!-- <div *ngIf="selectedOfficer && officerSelect.touched" class="text-red-500 text-sm">
               Please select an officer.
-            </div>
+            </div> -->
           </div>
           
         
@@ -238,7 +292,7 @@
                 </tr>
             </thead>
             <tbody class="bg-white dark:bg-[#1D1D1F] text-[#000000] dark:border-[#1D1D1F] cursor-default">
-                <tr *ngFor="let item of filteredOrdersArr | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index">
+                <tr *ngFor="let item of filteredOrdersArr let i = index">
                     <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
                         
                     </td>
@@ -246,7 +300,7 @@
                         {{ (i + 1) < 10 ? ('0' + (i + 1)) : (i + 1) }}
                     </td>
                     <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.invNo}}</td>
-                    <td class="px-6 py-4 text-sm text-left font-medium text-gray-900 dark:text-[#C5C5C5]">{{ getDisplayDate(item.sheduleDate) }} {{ removeWithin(item.sheduleTime) }}</td>
+                    <td class="px-6 py-4 text-sm text-left font-medium text-gray-900 dark:text-[#C5C5C5]">{{ removeWithin(item.sheduleTime) }}</td>
                     <!-- <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.packagePackStatus}}</td> -->
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-[#C5C5C5] cursor-default">
 
@@ -271,7 +325,8 @@
                         <span 
                           [ngClass]="{
                             'text-red-500': getStatus(item) === 'Late',
-                            'text-blue-500': getStatus(item) === 'On Time'
+                            'text-blue-500': getStatus(item) === 'On Time',
+                            'text-[#AC0003]': (getStatus(item) === 'Not Completed' && isLateAndNotCompleted )
                           }">
                           {{ getStatus(item) }}
                         </span>
@@ -294,7 +349,12 @@
 
 <div class="flex mt-6 flex-row gap-2 justify-center" >
     <button (click)="cancell()" class="border border-[#95A1AC] font-medium rounded-lg shadow-lg bg-[#F6F7F9] text-[#6B7D8C] px-3 py-1" >Cancel</button>
-    <button (click)="passTargetToBackEnd()" [disabled]="!selectedOfficerId" class="border border-[#415CFF] font-medium rounded-lg shadow-lg bg-[#415CFF] text-[#FFFFFF] px-6 py-1" >Pass</button>
+    <button (click)="passTargetToBackEnd()" class="border border-[#415CFF] font-medium rounded-lg shadow-lg bg-[#415CFF] text-[#FFFFFF] px-6 py-1" 
+    [ngClass]="{
+        'bg-[#F6F7F9] border-[#95A1AC] text-[#6B7D8C]': !selectedOfficerId,
+        'bg-[#415CFF] border-[#415CFF] text-[#FFFFFF]': selectedOfficerId
+      }"
+      >Pass</button>
 </div>
 
     

@@ -22,6 +22,8 @@ export class TargetProgressOngoingComponent implements OnInit {
   searchText: string = '';
   selectStatus: string = '';
 
+  centerName!: string;
+
   selectedDate: string | Date | null = null;
 
   // page: number = 1;
@@ -61,59 +63,52 @@ export class TargetProgressOngoingComponent implements OnInit {
     const today = new Date();
     this.selectedDate = today.toISOString().split('T')[0];
     this.fetchAllAssignOrders();
+    this.fetchCenterData();
   }
 
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent) {
-    const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
-    const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
+  // @HostListener('document:click', ['$event'])
+  // onDocumentClick(event: MouseEvent) {
+  //   const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
+  //   const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
 
-    if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
-      this.isStatusDropdownOpen = false;
-    }
+  //   if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
+  //     this.isStatusDropdownOpen = false;
+  //   }
 
-  }
+  // }
 
   fetchAllAssignOrders(status: string = this.selectStatus, search: string = this.searchText, selectDate: string | Date | null = this.selectedDate) {
     this.isLoading = true;
     this.DistributionSrv.getAllAssignOrders(status, search, selectDate).subscribe(
       (res) => {
-
         this.totalItems = res.items.length;
         this.ordersArr = res.items.map((item: any) => {
           let status = '';
-        
-          if (item.packageStatus === 'Pending' && (item.additionalItemsStatus === 'Unknown' || item.additionalItemsStatus === 'Pending')) {
+          
+          const pkgStatus = item.packageStatus;
+          const addStatus = item.additionalItemsStatus;
+          
+          // Priority 1: If either is Pending, combinedStatus is Pending
+          if (pkgStatus === 'Pending' || addStatus === 'Pending') {
             status = 'Pending';
           }
-          else if (item.packageStatus === 'Pending' && (item.additionalItemsStatus === 'Opened' || item.additionalItemsStatus === 'Completed')) {
+          // Priority 2: If either is Opened (and none are Pending), combinedStatus is Opened
+          else if (pkgStatus === 'Opened' || addStatus === 'Opened') {
             status = 'Opened';
           }
-          else if (item.packageStatus === 'Opened') {
-            status = 'Opened';
-          }
-          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Unknown') {
+          // Priority 3: If both are Completed, combinedStatus is Completed
+          else if (pkgStatus === 'Completed' && addStatus === 'Completed') {
             status = 'Completed';
           }
-          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Pending') {
-            status = 'Pending';
-          }
-          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Opened') {
-            status = 'Opened';
-          }
-          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Completed') {
+          // Priority 4: If one is Completed and other is Unknown, use the non-Unknown status
+          else if (pkgStatus === 'Completed' && addStatus === 'Unknown') {
             status = 'Completed';
           }
-          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Pending') {
-            status = 'Pending';
-          }
-          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Opened') {
-            status = 'Opened';
-          }
-          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Completed') {
+          else if (pkgStatus === 'Unknown' && addStatus === 'Completed') {
             status = 'Completed';
           }
-          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Unknown') {
+          // Default: Both are Unknown
+          else {
             status = 'Unknown';
           }
         
@@ -122,23 +117,33 @@ export class TargetProgressOngoingComponent implements OnInit {
             combinedStatus: status
           };
         });
-
-        console.log('trders', this.ordersArr)
-
         
+        console.log('orders', this.ordersArr);
         
-        if (res.items.length === 0) {
-          this.hasData = false;
-        } else {
-          this.hasData = true;
-
-        }
+        this.hasData = res.items.length > 0;
         this.isLoading = false;
-
       }
-    )
+    );
   }
 
+  fetchCenterData() {
+    this.isLoading = true;
+    this.DistributionSrv.getCenterData().subscribe(
+      (res) => {
+        console.log('res', res)
+        this.centerName = res?.centerName ?? '';
+  
+        const items = res?.items ?? []; // safe fallback
+  
+        this.totalItems = items.length;
+  
+        this.hasData = items.length > 0;
+  
+        this.isLoading = false;
+      }
+    );
+  }
+  
   onSearch() {
     this.fetchAllAssignOrders();
 
@@ -162,8 +167,28 @@ export class TargetProgressOngoingComponent implements OnInit {
     this.fetchAllAssignOrders();
   }
 
+  // onDateChange(newDate: string | Date | null) {
+  //   this.selectedDate = newDate;
+  //   this.fetchAllAssignOrders();
+  // }
+
   onDateChange(newDate: string | Date | null) {
-    this.selectedDate = newDate;
+    let dateString: string;
+  
+    if (!newDate) {
+      
+      dateString = new Date().toISOString().split('T')[0];
+    } 
+    else if (newDate instanceof Date) {
+      
+      dateString = newDate.toISOString().split('T')[0];
+    } 
+    else {
+      
+      dateString = newDate;
+    }
+  
+    this.selectedDate = dateString;
     this.fetchAllAssignOrders();
   }
 
@@ -198,12 +223,63 @@ export class TargetProgressOngoingComponent implements OnInit {
     }
   }
 
+  getDateColor(item: any): string {
+    const today = new Date();
+    const schedule = new Date(item.sheduleDate);
+  
+    // Normalize both to midnight
+    today.setHours(0, 0, 0, 0);
+    schedule.setHours(0, 0, 0, 0);
+  
+    const diffDays = Math.floor((schedule.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+  
+    if (item.combinedStatus === 'Pending' || item.combinedStatus === 'Opened') {
+      if (diffDays > 0) {
+        // Future date
+        return '#606060';
+      } else if (diffDays < 0) {
+        // Past date
+        return '#AC0003';
+      } else {
+        // Today
+        return '#FF0000';
+      }
+    }
+  
+    // Default color for Completed or other statuses
+    return '#415CFF';
+  }
+  
   removeWithin(time: string): string {
     return time ? time.replace('Within ', '') : time;
   }
 
   downloadTemplate1() {
     this.isDownloading = true;
+
+// Example: selectedDate = "2025-11-10" or "11/10/2025"
+const selectedDateStr = String(this.selectedDate); 
+
+// Convert safely to Date
+const selectedDateObj = new Date(selectedDateStr);
+
+// Example: "10 Nov"
+const dateStr = selectedDateObj.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+
+// Example: "11-10" (MM-DD format)
+const fullDateStr = `${String(selectedDateObj.getMonth() + 1).padStart(2, '0')}-${String(selectedDateObj.getDate()).padStart(2, '0')}`;
+console.log(fullDateStr); // e.g. "11-10"
+
+const now = new Date();
+
+const timeStr = now
+  .toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
+  .replace(':', '.')
+  .replace(' ', '');
+
+const finalStr = `${fullDateStr} ${timeStr}`;
+console.log(finalStr);
+
 
     this.DistributionSrv
       .downloadAllTargetProgressReport(this.selectStatus, this.selectedDate, this.searchText )
@@ -212,7 +288,11 @@ export class TargetProgressOngoingComponent implements OnInit {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
-          a.download = `Target_Progress_For_${this.selectedDate}.xlsx`;
+          if (this.selectStatus) {
+            a.download = `${this.centerName} All Orders on ${dateStr} filtered by ${this.selectStatus} Generated at ${finalStr}.xlsx`;
+          } else {
+            a.download = `${this.centerName} All Orders on ${dateStr}  Generated at ${finalStr}.xlsx`;
+          }
           a.click();
           window.URL.revokeObjectURL(url);
 
@@ -241,6 +321,14 @@ export class TargetProgressOngoingComponent implements OnInit {
         }
       });
   }
+
+  onKeydown(event: KeyboardEvent) {
+  // Prevent space key
+  if (event.key === ' ') {
+    event.preventDefault();
+    return;
+  }
+}
 
 }
 

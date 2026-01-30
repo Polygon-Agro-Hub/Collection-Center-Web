@@ -74,6 +74,12 @@ export class AddOfficersComponent implements OnInit {
   dropdownOpen = false;
   dropdownOpen2 = false;
 
+  isJobRoleOpen = false;
+
+  jobRoles: string[] = [];
+
+  jobRoleInputTouched = false;
+
 
   // Driver Images
   licenseFrontImageFileName!: string;
@@ -167,10 +173,9 @@ export class AddOfficersComponent implements OnInit {
   districtItems = this.districts.map(d => ({ value: d.name, label: d.name }));
 
   VehicleTypes = [
-    { name: 'Lorry', capacity: 2 },
-    { name: 'Dimo Batta', capacity: 3.5 },
-    { name: 'Van', capacity: 2.5 },
-    { name: 'Cab', capacity: 0.5 },
+    { name: 'Mahindra Bollero', capacity: 272},
+    { name: 'Dimo Batta', capacity: 750 },
+    { name: 'Three Wheeler', capacity: 100 },
   ]
 
 
@@ -179,9 +184,49 @@ export class AddOfficersComponent implements OnInit {
     this.loadBanks()
     this.loadBranches()
     this.getAllCenters();
+
+    this.setJobRoles();
+
+    console.log('loging role', this.logingRole)
     
     // this.getLastID('COO');
     // this.EpmloyeIdCreate();
+  }
+
+  setJobRoles() {
+    if (this.logingRole === 'Collection Centre Manager') {
+      // Only allow Collection Officer
+      this.jobRoles = ['Collection Officer'];
+    } 
+    else if (this.logingRole === 'Collection Centre Head') {
+      // Allow all roles
+      this.jobRoles = [
+        'Collection Centre Manager',
+        'Collection Officer',
+        // 'Driver'
+      ];
+    } 
+    else {
+      // Default (if needed)
+      this.jobRoles = [];
+    }
+  }
+
+
+  toggleJobRoleDropdown() {
+    this.isJobRoleOpen = !this.isJobRoleOpen;
+
+    this.jobRoleInputTouched = true;
+
+    console.log('jobRoleInputTouched', this.jobRoleInputTouched)
+  }
+
+  getJobRole(role: string) {
+    this.personalData.jobRole = role;
+    this.isJobRoleOpen = false;
+    this.jobRoleInputTouched = true;
+
+    console.log('jobRoleInputTouched', this.jobRoleInputTouched)
   }
 
   toggleDropdown() {
@@ -255,19 +300,27 @@ export class AddOfficersComponent implements OnInit {
     // this.changeCenter();
   }
 
-  @HostListener('document:click', ['$event.target'])
-onClick(targetElement: HTMLElement) {
-  const insideDropdown1 = targetElement.closest('.dropdown-wrapper-1');
-  const insideDropdown2 = targetElement.closest('.dropdown-wrapper-2');
+//   @HostListener('document:click', ['$event.target'])
+// onClick(targetElement: HTMLElement) {
+//   const insideDropdown1 = targetElement.closest('.dropdown-wrapper-1');
+//   const insideDropdown2 = targetElement.closest('.dropdown-wrapper-2');
 
-  // Close dropdowns only if click is outside their wrapper
-  if (!insideDropdown1) {
-    this.dropdownOpen = false;
+//   // Close dropdowns only if click is outside their wrapper
+//   if (!insideDropdown1) {
+//     this.dropdownOpen = false;
+//   }
+//   if (!insideDropdown2) {
+//     this.dropdownOpen2 = false;
+//   }
+// }
+
+@HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.relative')) {
+      this.isJobRoleOpen = false;
+    }
   }
-  if (!insideDropdown2) {
-    this.dropdownOpen2 = false;
-  }
-}
 
 
   onCheckboxChange(lang: string, event: any) {
@@ -435,7 +488,47 @@ onClick(targetElement: HTMLElement) {
           },
           (error: any) => {
             this.isLoading = false;
-            this.toastSrv.error('There was an error creating the collective officer')
+            let errorMessage = 'An unexpected error occurred';
+            let messages: string[] = [];
+
+            if (error.error && Array.isArray(error.error.errors)) {
+              messages = error.error.errors.map((err: string) => {
+                switch (err) {
+                  case 'NIC':
+                    return 'The NIC number is already registered.';
+                  case 'Email':
+                    return 'Email already exists.';
+                  case 'PhoneNumber01':
+                    return 'Mobile Number 1 already exists.';
+                  case 'PhoneNumber02':
+                    return 'Mobile Number 2 already exists.';
+                  default:
+                    return 'Validation error: ' + err;
+                }
+              });
+            }
+
+            if (messages.length > 0) {
+              errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following Duplicate field issues:</p><ul class="list-disc pl-5">';
+              messages.forEach(m => {
+                errorMessage += `<li>${m}</li>`;
+              });
+              errorMessage += '</ul></div>';
+
+              Swal.fire({
+                icon: 'error',
+                title: 'Duplicate Information',
+                html: errorMessage,
+                confirmButtonText: 'OK',
+                customClass: {
+                  popup: 'bg-tileLight dark:bg-[#363636] text-black dark:text-white',
+                  title: 'font-semibold text-lg',
+                  htmlContainer: 'text-left',
+                  confirmButton: 'bg-red-500 dark:bg-red-500 hover:bg-red-600 dark:hover:bg-red-700',
+                },
+              });
+              return;
+            }
           }
         );
       } else if (this.logingRole === 'Collection Centre Head') {
@@ -462,7 +555,7 @@ onClick(targetElement: HTMLElement) {
             if (res.status) {
               this.officerId = res.officerId;
               this.isLoading = false;
-              this.toastSrv.success('Collective Officer Created Successfully')
+              this.toastSrv.success(`${this.personalData.jobRole} Created Successfully`)
               this.router.navigate(['/manage-officers'])
             } else {
               this.isLoading = false;
@@ -474,7 +567,47 @@ onClick(targetElement: HTMLElement) {
           },
           (error: any) => {
             this.isLoading = false;
-            this.toastSrv.error('There was an error creating the collective officer')
+            let errorMessage = 'An unexpected error occurred';
+            let messages: string[] = [];
+
+            if (error.error && Array.isArray(error.error.errors)) {
+              messages = error.error.errors.map((err: string) => {
+                switch (err) {
+                  case 'NIC':
+                    return 'The NIC number is already registered.';
+                  case 'Email':
+                    return 'Email already exists.';
+                  case 'PhoneNumber01':
+                    return 'Mobile Number 1 already exists.';
+                  case 'PhoneNumber02':
+                    return 'Mobile Number 2 already exists.';
+                  default:
+                    return 'Validation error: ' + err;
+                }
+              });
+            }
+
+            if (messages.length > 0) {
+              errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following Duplicate field issues:</p><ul class="list-disc pl-5">';
+              messages.forEach(m => {
+                errorMessage += `<li>${m}</li>`;
+              });
+              errorMessage += '</ul></div>';
+
+              Swal.fire({
+                icon: 'error',
+                title: 'Duplicate Information',
+                html: errorMessage,
+                confirmButtonText: 'OK',
+                customClass: {
+                  popup: 'bg-tileLight dark:bg-[#363636] text-black dark:text-white',
+                  title: 'font-semibold text-lg',
+                  htmlContainer: 'text-left',
+                  confirmButton: 'bg-red-500 dark:bg-red-500 hover:bg-red-600 dark:hover:bg-red-700',
+                },
+              });
+              return;
+            }
           }
         );
       } else {
@@ -563,13 +696,265 @@ onClick(targetElement: HTMLElement) {
     );
   }
 
-  onSubmitForm(form: NgForm) {
+  onSubmitForm1(form: NgForm) {
 
     console.log('personal data', this.personalData);
     form.form.markAllAsTouched();
+    this.jobRoleInputTouched = true;
 
     this.validateLanguages();
+
+    const missingFields: string[] = [];
+
+  if (!this.personalData.centerId && this.logingRole === 'Collection Centre Head') {
+    missingFields.push('Collection Centre Name is required');
   }
+
+  if (!this.personalData.jobRole) {
+    missingFields.push('Job Role is required');
+  }
+
+  if (!this.personalData.irmId && this.personalData.jobRole === 'Collection Officer' && this.logingRole === 'Collection Centre Head') {
+    missingFields.push('Collection Centre Manager is required');
+  }
+
+  if (this.languagesRequired) {
+    missingFields.push('Please select at least one preferred language');
+  }
+
+  if (!this.personalData.employeeType) {
+    missingFields.push('Employee Type is required');
+  }
+
+  if (!this.personalData.firstNameEnglish) {
+    missingFields.push('First Name (in English) is required');
+  }
+
+  if (!this.personalData.lastNameEnglish ) {
+    missingFields.push('Last Name (in English) is required');
+  }
+
+  if (!this.personalData.firstNameSinhala) {
+    missingFields.push('First Name (in Sinhala) is required');
+  }
+
+  if (!this.personalData.lastNameSinhala) {
+    missingFields.push('Last Name (in Sinhala) is required');
+  }
+
+  if (!this.personalData.firstNameTamil) {
+    missingFields.push('First Name (in Tamil) is required');
+  }
+
+  if (!this.personalData.lastNameTamil) {
+    missingFields.push('Last Name (in Tamil) is required');
+  }
+
+  if (!this.personalData.phoneNumber01) {
+    missingFields.push('Mobile Number - 1 is required');
+  } else if (!/^[0-9]{9}$/.test(this.personalData.phoneNumber01) || this.isPhoneInvalidMap['phone01']) {
+    missingFields.push('Mobile Number - 1 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+  }
+
+  if (this.personalData.phoneNumber02) {
+    if (!/^[0-9]{9}$/.test(this.personalData.phoneNumber02) || this.isPhoneInvalidMap['phone02']) {
+      missingFields.push('Mobile Number - 2 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+    }
+    if (this.personalData.phoneNumber01 === this.personalData.phoneNumber02) {
+      missingFields.push('Mobile Number - 2 - Must be different from Mobile Number - 1');
+    }
+  }
+
+  if (!this.personalData.nic) {
+    missingFields.push('NIC Number is required');
+  } else if (!/^(\d{9}[V]|\d{12})$/.test(this.personalData.nic)) {
+    missingFields.push('NIC Number - Must be 9 digits followed by V or 12 digits');
+  }
+
+  if (!this.personalData.email) {
+      missingFields.push('Email is required');
+    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(this.personalData.email)) {
+      missingFields.push('Email - Must be in a valid format (format: example&#64;domain.com)');
+    }
+
+    if (missingFields.length > 0) {
+      let errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following issues:</p><ul class="list-disc pl-5">';
+      missingFields.forEach((field) => {
+        errorMessage += `<li>${field}</li>`;
+      });
+      errorMessage += '</ul></div>';
+  
+      Swal.fire({
+        icon: 'error',
+        title: 'Missing or Invalid Information',
+        html: errorMessage,
+        confirmButtonText: 'OK',
+        customClass: {
+          popup: 'bg-white dark:bg-[#363636] text-[#534E4E] dark:text-textDark',
+          title: 'font-semibold text-lg',
+          htmlContainer: 'text-left',
+        },
+      });
+      return;
+    }
+  }
+
+  onSubmitForm2(form: NgForm) {
+
+    form.form.markAllAsTouched();
+
+    const missingFields: string[] = [];
+
+    if (!this.personalData.houseNumber) {
+      missingFields.push('House Number is required');
+    }
+  
+    if (!this.personalData.streetName) {
+      missingFields.push('Street Name is required');
+    }
+  
+    if (!this.personalData.city) {
+      missingFields.push('City is required');
+    }
+  
+    if (!this.personalData.district) {
+      missingFields.push('District is required');
+    }
+  
+    if (!this.personalData.province) {
+      missingFields.push('Province is required');
+    }
+  
+    if (!this.personalData.accHolderName) {
+      missingFields.push('Account Holder’s Name is required');
+    }
+  
+    if (!this.personalData.accNumber) {
+      missingFields.push('Account Number is required');
+    }
+  
+    if (!this.personalData.conformAccNumber) {
+      missingFields.push('Confirm Account Number is required');
+    } else if (this.personalData.accNumber !== this.personalData.conformAccNumber) {
+      missingFields.push('Confirm Account Number - Must match Account Number');
+    }
+  
+    if (!this.selectedBankId) {
+      missingFields.push('Bank Name is required');
+    }
+  
+    if (!this.selectedBranchId) {
+      missingFields.push('Branch Name is required');
+    }
+  
+    // Display errors if any
+    if (missingFields.length > 0) {
+      let errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following issues:</p><ul class="list-disc pl-5">';
+      missingFields.forEach((field) => {
+        errorMessage += `<li>${field}</li>`;
+      });
+      errorMessage += '</ul></div>';
+  
+      Swal.fire({
+        icon: 'error',
+        title: 'Missing or Invalid Information',
+        html: errorMessage,
+        confirmButtonText: 'OK',
+        customClass: {
+          popup: 'bg-white dark:bg-[#363636] text-[#534E4E] dark:text-textDark',
+          title: 'font-semibold text-lg',
+          htmlContainer: 'text-left',
+        },
+      });
+      return;
+    }
+
+  }
+
+  onSubmitForm3(form: NgForm) {
+    form.form.markAllAsTouched();
+
+    const missingFields: string[] = [];
+
+    if (!this.driverObj.licNo) {
+      missingFields.push('License Number is Required');
+    }
+  
+    if (!this.licenseFrontImageFileName) {
+      missingFields.push("License's Front Image is required");
+    }
+  
+    if (!this.licenseBackImageFileName) {
+      missingFields.push("License's Back Image is required");
+    }
+
+    if (!this.driverObj.insNo) {
+      missingFields.push('Insurance Number is required');
+    }
+
+    if (!this.driverObj.insExpDate) {
+      missingFields.push('Insurance Expire Date is required');
+    }
+  
+    if (!this.insurenceFrontImageFileName) {
+      missingFields.push("Insurance's Front Image is required");
+    }
+  
+    if (!this.insurenceBackImageFileName) {
+      missingFields.push("Insurance's Back Image is required");
+    }
+
+    if (!this.driverObj.vRegNo) {
+      missingFields.push('Vehicle Registration Number is required');
+    }
+  
+    if (!this.driverObj.vType) {
+      missingFields.push('Vehicle Type is required');
+    }
+
+    if (!this.driverObj.vCapacity) {
+      missingFields.push('Vehicle Capacity is required');
+    }
+
+    if (!this.vehicleFrontImageFileName) {
+      missingFields.push("Vehicle's Front Image is required");
+    }
+
+    if (!this.vehicleBackImageFileName) {
+      missingFields.push("Vehicle's Back Image Image is required");
+    }
+  
+    if (!this.vehicleSideAImageFileName) {
+      missingFields.push("Vehicle's Side Image - 1 is required");
+    }
+
+    if (!this.vehicleSideBImageFileName) {
+      missingFields.push("Vehicle's Side Image - 2 is required");
+    }
+  
+    // Display errors if any
+    if (missingFields.length > 0) {
+      let errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following issues:</p><ul class="list-disc pl-5">';
+      missingFields.forEach((field) => {
+        errorMessage += `<li>${field}</li>`;
+      });
+      errorMessage += '</ul></div>';
+  
+      Swal.fire({
+        icon: 'error',
+        title: 'Missing or Invalid Information',
+        html: errorMessage,
+        confirmButtonText: 'OK',
+        customClass: {
+          popup: 'bg-white dark:bg-[#363636] text-[#534E4E] dark:text-textDark',
+          title: 'font-semibold text-lg',
+          htmlContainer: 'text-left',
+        },
+      });
+      return;
+    }
+  }
+
 
 
   loadBanks() {
@@ -999,23 +1384,63 @@ onClick(targetElement: HTMLElement) {
     }
   }
 
+  onTrimInputAccountNumber(event: Event, modelRef: any, fieldName: string): void {
+    const inputElement = event.target as HTMLInputElement;
+  
+    if (inputElement) {
+      // Remove **all spaces** (not just trim)
+      const noSpaceValue = inputElement.value.replace(/\s+/g, '');
+  
+      // Update model and input
+      modelRef[fieldName] = noSpaceValue;
+      inputElement.value = noSpaceValue;
+    }
+  }
+
+
+  onNicInput(event: any) {
+    // Get value and trim leading/trailing spaces
+    let value: string = event.target.value.trimStart().toUpperCase();
+  
+    // Remove all invalid characters except digits and V
+    value = value.replace(/[^0-9V]/g, '');
+  
+    // Prevent entering V anywhere except last character of 10-char NIC
+    if (value.includes('V') && value.length !== 10) {
+      value = value.replace(/V/g, '');
+    }
+  
+    // Handle 10-char NIC ending with V
+    if (value.length === 10 && value.endsWith('V')) {
+      value = value.slice(0, 10);
+    }
+  
+    // Limit 12-digit NIC
+    if (value.length > 12) {
+      value = value.slice(0, 12);
+    }
+  
+    // Update the model
+    this.personalData.nic = value;
+  }
+  
+
   onFormatInput(event: Event, modelRef: any, fieldName: string): void {
     const inputElement = event.target as HTMLInputElement;
   
     if (inputElement && inputElement.value) {
-      // Trim spaces at start & end
-      let value = inputElement.value.trim();
+      // Remove only leading spaces
+      let value = inputElement.value.replace(/^\s+/, '');
   
-      // Capitalize first letter
+      // Capitalize first letter (if exists)
       value = value.charAt(0).toUpperCase() + value.slice(1);
   
-      // Update model
+      // Update model and input box
       modelRef[fieldName] = value;
-  
-      // Update input box value
       inputElement.value = value;
     }
   }
+  
   
 }
 
@@ -1049,7 +1474,7 @@ class Personal {
   branchName!: string;
   conformAccNumber!: string;
 
-  jobRole: string = 'Collection Officer'
+  jobRole!: string;
   empId!: string
   employeeType!: string;
 

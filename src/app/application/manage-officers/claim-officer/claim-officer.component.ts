@@ -40,14 +40,22 @@ export class ClaimOfficerComponent implements OnInit {
    }
 
   ngOnInit(): void {
-    this.selectJobRole = ''
+    
+    if (this.logingRole === 'Distribution Centre Manager') {
+      this.selectJobRole = 'Distribution Officer';
+    } else if (this.logingRole === 'Collection Centre Manager') {
+       this.selectJobRole = 'Collection Officer'
+    }
   }
 
   fetchOfficer() {
+
+    console.log('seelectedJbRole', this.selectJobRole)
     if (!this.inputId) {
       return this.toastSrv.warning('Pleace enter valid employee id!');
     }
-
+    
+    this.inputId = this.inputId?.trim();
     this.isLoading = true;
     let empId;
     if (this.selectJobRole === 'Customer Officer') {
@@ -121,7 +129,9 @@ class OfficerDetails {
   companyNameEnglish!: string
   claimStatus!: number
   centerName!: string
+  regCode!: string
   image!: string
   distributedCenterName!: string
+  distributedCenterRegCode!: string;
 }
 

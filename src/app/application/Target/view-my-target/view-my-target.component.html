@@ -1,8 +1,8 @@
 <app-loading-spinner *ngIf="isLoading" />
 
 <div *ngIf="!isLoading">
-    <div class="flex flex-row ">
-        <p class="font-semibold text-[#424242] mb-4 mr-5 ml-0 dark:text-[#FFFFFF] dark:bg-[#0F0F0F] text-l">Profile</p>
+    <div class="flex flex-row cursor-pointer">
+        <p (click)="goBack()" class="font-semibold text-[#424242] mb-4 mr-5 ml-0 dark:text-[#FFFFFF] dark:bg-[#0F0F0F] text-l">Profile</p>
         <p class="font-semibold text-[#424242] mb-4 mr-5 ml-0 dark:text-[#FFFFFF] dark:bg-[#0F0F0F] text-l">View My
             Target
         </p>
@@ -34,6 +34,8 @@
                                 value="Completed">Completed</option>
                             <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
                                 value="Exceeded">Exceeded</option>
+                            <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                                value="Extra">Extra</option>
 
                         </select>
                         <button *ngIf="!selectStatus">
@@ -120,6 +122,10 @@
                             <span *ngIf="item.status === 'Exceeded'"
                                 class="bg-[#C8E0FF] text-[#415CFF] text-center rounded-lg px-5 py-1 ">
                                 Exceeded
+                            </span>
+                            <span *ngIf="item.status === 'Extra'"
+                                class="bg-[#FFE4C9] text-[#CD6700] text-center rounded-lg px-5 py-1 ">
+                                Extra
                             </span>
                         </td>
                         <!-- <td class="px-6 py-4 text-gray-900 dark:text-gray-300">

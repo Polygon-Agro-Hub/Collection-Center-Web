@@ -185,6 +185,24 @@ export class CchSendComplaintComponent implements OnInit {
     this.expandedItems[id] = !this.expandedItems[id];
   }
 
+  autoResize(textarea: HTMLTextAreaElement) {
+    const lineHeight = 24; // adjust if your text line spacing is different
+    const maxRows = 5;
+    const maxHeight = lineHeight * maxRows;
+  
+    textarea.style.height = 'auto';
+    const newHeight = textarea.scrollHeight;
+  
+    // If content exceeds 5 rows → cap height and allow scrolling
+    if (newHeight > maxHeight) {
+      textarea.style.height = maxHeight + 'px';
+      textarea.style.overflowY = 'scroll';
+    } else {
+      textarea.style.height = newHeight + 'px';
+      textarea.style.overflowY = 'hidden';
+    }
+  }
+
 
 }
 

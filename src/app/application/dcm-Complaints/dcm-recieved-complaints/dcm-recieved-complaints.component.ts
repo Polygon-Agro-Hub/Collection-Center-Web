@@ -57,16 +57,16 @@ export class DcmRecievedComplaintsComponent implements OnInit {
     this.fetchAllreciveComplaint();
   }
 
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent) {
-    const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
-    const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
+  // @HostListener('document:click', ['$event'])
+  // onDocumentClick(event: MouseEvent) {
+  //   const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
+  //   const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
 
-    if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
-      this.isStatusDropdownOpen = false;
-    }
+  //   if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
+  //     this.isStatusDropdownOpen = false;
+  //   }
 
-  }
+  // }
 
   fetchAllreciveComplaint(page: number = 1, limit: number = this.itemsPerPage, status: string = this.selectStatus, search: string = this.searchText) {
     this.isLoading = true;
@@ -115,6 +115,7 @@ export class DcmRecievedComplaintsComponent implements OnInit {
   }
 
   onSearch() {
+    this.searchText = this.searchText.trimStart();
     this.fetchAllreciveComplaint();
 
   }
@@ -248,4 +249,5 @@ class Manager {
   manageLastNameSinhala!: string;
   manageLastNameTamil!: string;
   centerName!: string;
+  regCode!: string;
 }

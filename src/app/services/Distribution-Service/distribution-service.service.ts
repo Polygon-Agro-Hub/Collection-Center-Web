@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { catchError, Observable, of } from 'rxjs';
 import { TokenServiceService } from '../Token/token-service.service';
 import { environment } from '../../environments/environment.development';
 
@@ -134,14 +134,14 @@ export class DistributionServiceService {
     return this.http.post<any>(url, data, { headers });
   }
 
-  getAllRequests(page: number = 1, limit: number = 10, date: string = '', status: string = '', searchText: string = ''): Observable<any> {
+  getAllRequests(date: string = '', status: string = '', searchText: string = ''): Observable<any> {
     console.log('date', date, 'status', status, 'search', searchText)
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
     });
 
-    let url = `${this.apiUrl}/get-all-request?page=${page}&limit=${limit}`
+    let url = `${this.apiUrl}/get-all-request?page=${1}`
 
     if (date) {
       url += `&date=${date}`
@@ -280,24 +280,24 @@ export class DistributionServiceService {
     return this.http.post<any>(url, { data }, { headers });
   }
 
-  getofficerTargets(): Observable<any> {
+  getofficerTargets(date: string = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
 
 
-    let url = `${this.apiUrl}/get-officer-targets`;
+    let url = `${this.apiUrl}/get-officer-targets/${date}`;
     
 
     return this.http.get<any>(url, { headers });
   }
 
-  getSelectedOfficerTargets(officerId: number, searchText: string = '', status: string = ''): Observable<any> {
+  getSelectedOfficerTargets(officerId: number, searchText: string = '', status: string = '', completingStatus: string = '', date: string = ""): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
   
-    console.log('get-selected-officer-targets')
+    console.log('get-selected-officer-targets', searchText)
     let url = `${this.apiUrl}/get-selected-officer-targets?officerId=${officerId}`;
   
     if (searchText) {
@@ -307,6 +307,14 @@ export class DistributionServiceService {
   
     if (status) {
       url += `&status=${status}`
+    }
+
+    if (completingStatus) {
+      url += `&completingStatus=${completingStatus}`
+    }
+
+    if (date) {
+      url += `&date=${date}`
     }
   
     return this.http.get<any>(url, { headers });
@@ -382,7 +390,7 @@ export class DistributionServiceService {
       Authorization: `Bearer ${this.token}`
     });
 
-    console.log('selectDate', selectDate)
+    console.log('selectDate', selectDate, 'status', status)
   
   
     let url = `${this.apiUrl}/get-center-target-out-for-delivery?centerId=${centerId}`;
@@ -528,6 +536,141 @@ export class DistributionServiceService {
     });
   }
 
+  getSelectedDistributionOfficerTargets(officerId: number, centerId: number, searchText: string = '', status: string = '', date: string = ''): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    console.log('date', date)
+  
+    let url = `${this.apiUrl}/get-selected-distribution-officer-targets?officerId=${officerId}&centerId=${centerId}`;
+  
+    if (searchText) {
+      url += `&searchText=${searchText}`
+  
+    }
+  
+    if (status) {
+      url += `&status=${status}`
+    }
+
+    if (date) {
+      url += `&date=${date}`
+    }
+  
+    return this.http.get<any>(url, { headers });
+  }
+
+  downloadRequestedItemsReportFile(
+    officerId: number, centerId: number, search: string = '', status: string = '', date: string = ''
+  ): Observable<Blob> {
+    let url = `${this.apiUrl}/download-officer-targets?officerId=${officerId}&centerId=${centerId}`;
+
+    if (search) {
+      url += `&search=${search}`;
+    }
+
+    if (status) {
+      url += `&status=${status}`;
+    }
+
+    if (date) {
+      url += `&date=${date}`;
+    }
+
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+    });
+
+    return this.http.get(url, { headers, responseType: 'blob' });
+  }
+
+  getDispatchChartData(): Observable<any[]> {
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${this.token}`,
+    'Content-Type': 'application/json',
+  });
+  
+  return this.http.get<any[]>(`${this.apiUrl}/get-dispatch-chart`, {
+    headers,
+  }).pipe(
+    catchError(error => {
+      console.error('API Error:', error);
+      return of([]); // Return empty array on error
+    })
+  );
+}
+
+getCenterData(): Observable<any> {
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${this.token}`
+  });
+
+
+  let url = `${this.apiUrl}/get-center-data`;
+  return this.http.get<any>(url, { headers });
+}
+
+getCentreDataById(centreId: number): Observable<any> {
+  console.log('fetchinh')
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${this.token}`
+  });
+
+  let url = `${this.apiUrl}/get-center-data-by-id/${centreId}`;
+
+  return this.http.get<any>(url, { headers });
+}
+
+editCenter(centerData: any): Observable<any> {
+  const formData = new FormData();
+  formData.append('centerData', JSON.stringify(centerData));
+
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${this.token}`,
+  });
+  return this.http.post(`${this.apiUrl}/edit-center`, formData, {
+    headers,
+  });
+}
+
+
+getTodaysDeliveries(activeTab: string = '', status: string = '', searchText: string = '', date: string | Date | null = '', timeSlot: string = '' ): Observable<any> {
+  console.log('date', date)
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${this.token}`,
+    'Content-Type': 'application/json',
+  });
+
+  let url = `${this.apiUrl}/get-todays-deliveries?activeTab=${activeTab}`;
+
+    if (status) {
+      url += `&status=${status}`;
+    }
+
+    if (searchText) {
+      url += `&searchText=${searchText}`;
+    }
+
+    if (date) {
+      url += `&date=${date}`;
+    }
+
+    if (timeSlot) {
+      url += `&timeSlot=${timeSlot}`;
+    }
+
+    return this.http.get(url, { headers });
+
+}
+
+getTodayDeliveryTracking(id: number | null): Observable<any> {
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${this.token}`,
+    'Content-Type': 'application/json',
+  });
+  return this.http.get<any>(`${this.apiUrl}/get-today-delivery-tracking/${id}`, { headers });
+}
 }
 
 

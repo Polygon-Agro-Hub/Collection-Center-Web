@@ -16,7 +16,9 @@
             <p class="font-semibold text-lg mb-1 dark:text-white">Current Active Target</p>
             <p *ngIf="hasData" class="font-semibold text-lg mb-1 dark:text-white">EMP ID :
                 {{selectedOfficerDataArr[0].empId}}</p>
-            <p class="font-semibold text-base mb-1 dark:text-white text-[#545454]">Centre : {{centerName}}</p>
+                <p class="font-semibold text-base mb-1 dark:text-white text-[#545454]">
+                    Centre : {{ centerName ? centerName : 'N/A' }}
+                  </p>
         </div>
         <div class="flex flex-row items-center gap-8 ">
             <i class="fa-solid fa-list text-2xl dark:text-white"></i>
@@ -33,6 +35,8 @@
                         value="Completed">Completed</option>
                     <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
                         value="Exceeded">Exceeded</option>
+                    <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                        value="Extra">Extra</option>
                 </select>
 
                 <!-- Custom dropdown trigger -->
@@ -69,7 +73,7 @@
             </div>
 
 
-            <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#4B5563]">
+            <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
                 <input type="text" placeholder="Search by Crop / Variety name.." [(ngModel)]="searchText"
                     (keyup.enter)="onSearch()" (keyup.esc)="offSearch()"
                     class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
@@ -131,23 +135,33 @@
                     <td class="px-3 py-4 text-black font-semibold dark:text-gray-300 text-left">{{item.target}}</td>
                     <td class="px-3 py-4 text-black font-semibold dark:text-gray-300 text-left">{{item.remaining}}</td>
                     <td class="px-3 py-4 text-black font-semibold dark:text-gray-300 text-left">{{item.complete}}</td>
-                    <td class="px-3 py-4 text-black font-semibold dark:text-gray-300 text-center ">
-                        <span *ngIf="item.status === 'Pending'"
-                            class="bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-3 py-1 ">
+                    <td class="px-6 py-4 text-gray-[#000000] font-semibold dark:text-gray-300">
+                        <div class="flex justify-center">
+                          <span *ngIf="item.status === 'Pending'"
+                            class="bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-8 py-1 h-full flex items-center">
                             Pending
-                        </span>
-                        <span *ngIf="item.status === 'Completed'"
-                            class="bg-[#B7FFBE] text-[#02BB3D] text-center rounded-lg px-3 py-1 ">
-                            Completed
-                        </span>
-                        <span *ngIf="item.status === 'Exceeded'"
-                            class="bg-[#C8E0FF] text-[#415CFF] text-center rounded-lg px-3 py-1 ">
+                          </span>
+                          <span *ngIf="item.status === 'Exceeded'"
+                            class="bg-[#C8E0FF] text-[#415CFF] text-center rounded-lg px-6 py-1 h-full flex items-center">
                             Exceeded
-                        </span>
-                    </td>
-                    <td class="px-3 py-4 text-gray-900 dark:text-gray-300">
-                        <p class="text-[#646464] text-sm">{{ item.toDate | date: 'yyyy/MM/dd' }}</p>
-                        <p class="text-[#646464] text-sm">{{ item.toDate | date: 'hh:mm a' }}</p>
+                          </span>
+                          <span *ngIf="item.status === 'Completed'"
+                            class="bg-[#c0f8ac] text-[#30911a] text-center rounded-lg px-4 py-1 h-full flex items-center">
+                            Completed
+                          </span>
+
+                          <span *ngIf="item.status === 'Extra'"
+                            class="bg-[#FFE4C9] text-[#CD6700] text-center rounded-lg px-10 py-1 h-full flex items-center">
+                            Extra
+                          </span>
+
+                        
+
+                        </div>
+                      </td>
+                    <td class="px-3 py-4 text-gray-900 dark:text-textDark">
+                        <p class="text-[#646464] dark:text-textDark text-sm">{{ item.toDate | date: 'yyyy/MM/dd' }}</p>
+                        <p class="text-[#646464] dark:text-textDark text-sm">{{ item.toDate | date: 'hh:mm a' }}</p>
                     </td>
                     <td class="px-3 py-4 text-gray-900 dark:text-gray-300"
                         *ngIf="logingRole === 'Collection Centre Manager'">
@@ -166,7 +180,7 @@
 
     </div>
 
-    <div class="flex items-center justify-center text-center mt-6">
+    <div *ngIf="hasData" class="flex items-center justify-center text-center mt-6">
         <button
                 class="bg-[#415CFF] text-white text-center shadow-md font-medium rounded-lg py-2 px-5 mr-5 text-lg flex items-center"
                 (click)="downloadTemplate1()">

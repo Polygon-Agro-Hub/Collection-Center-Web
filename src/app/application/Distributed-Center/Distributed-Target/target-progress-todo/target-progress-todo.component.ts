@@ -6,11 +6,12 @@ import { DistributionServiceService } from '../../../../services/Distribution-Se
 import { NgxPaginationModule } from 'ngx-pagination';
 import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
 import { ComplaintsService } from '../../../../services/Complaints-Service/complaints.service';
+import { CustomDatepickerComponent } from '../../../../components/custom-datepicker/custom-datepicker.component';
 
 @Component({
   selector: 'app-target-progress-todo',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent, CustomDatepickerComponent],
   templateUrl: './target-progress-todo.component.html',
   styleUrl: './target-progress-todo.component.css'
 })
@@ -55,16 +56,16 @@ export class TargetProgressTodoComponent implements OnInit {
     this.fetchToDoAssignOrders();
   }
 
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent) {
-    const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
-    const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
+  // @HostListener('document:click', ['$event'])
+  // onDocumentClick(event: MouseEvent) {
+  //   const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
+  //   const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
 
-    if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
-      this.isStatusDropdownOpen = false;
-    }
+  //   if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
+  //     this.isStatusDropdownOpen = false;
+  //   }
 
-  }
+  // }
 
   fetchToDoAssignOrders(status: string = this.selectStatus, search: string = this.searchText, selectDate: string = this.date) {
     this.isLoading = true;
@@ -74,38 +75,31 @@ export class TargetProgressTodoComponent implements OnInit {
         this.totalItems = res.items.length;
         this.ordersArr = res.items.map((item: any) => {
           let status = '';
-        
-          if (item.packageStatus === 'Pending' && (item.additionalItemsStatus === 'Unknown' || item.additionalItemsStatus === 'Pending')) {
+          
+          const pkgStatus = item.packageStatus;
+          const addStatus = item.additionalItemsStatus;
+          
+          // Priority 1: If either is Pending, combinedStatus is Pending
+          if (pkgStatus === 'Pending' || addStatus === 'Pending') {
             status = 'Pending';
           }
-          else if (item.packageStatus === 'Pending' && (item.additionalItemsStatus === 'Opened' || item.additionalItemsStatus === 'Completed')) {
+          // Priority 2: If either is Opened (and none are Pending), combinedStatus is Opened
+          else if (pkgStatus === 'Opened' || addStatus === 'Opened') {
             status = 'Opened';
           }
-          else if (item.packageStatus === 'Opened') {
-            status = 'Opened';
-          }
-          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Unknown') {
+          // Priority 3: If both are Completed, combinedStatus is Completed
+          else if (pkgStatus === 'Completed' && addStatus === 'Completed') {
             status = 'Completed';
           }
-          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Pending') {
-            status = 'Pending';
-          }
-          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Opened') {
-            status = 'Opened';
-          }
-          else if (item.packageStatus === 'Completed' && item.additionalItemsStatus === 'Completed') {
+          // Priority 4: If one is Completed and other is Unknown, use the non-Unknown status
+          else if (pkgStatus === 'Completed' && addStatus === 'Unknown') {
             status = 'Completed';
           }
-          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Pending') {
-            status = 'Pending';
-          }
-          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Opened') {
-            status = 'Opened';
-          }
-          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Completed') {
+          else if (pkgStatus === 'Unknown' && addStatus === 'Completed') {
             status = 'Completed';
           }
-          else if (item.packageStatus === 'Unknown' && item.additionalItemsStatus === 'Unknown') {
+          // Default: Both are Unknown
+          else {
             status = 'Unknown';
           }
         
@@ -154,10 +148,20 @@ export class TargetProgressTodoComponent implements OnInit {
     this.fetchToDoAssignOrders();
   }
 
-  onDateChange() {
-    console.log('called')
+  onDateChange(newDate: string | Date | null) {
+    let formattedDate: string = '';
+  
+    if (newDate instanceof Date) {
+      // Convert Date object to string (YYYY-MM-DD)
+      formattedDate = newDate.toISOString().split('T')[0];
+    } else if (typeof newDate === 'string') {
+      formattedDate = newDate;
+    }
+  
+    this.date = formattedDate;
     this.fetchToDoAssignOrders();
   }
+  
 
 
   // onPageChange(event: number) {
@@ -167,6 +171,33 @@ export class TargetProgressTodoComponent implements OnInit {
 
   navigateViewReply(id:number){
     this.router.navigate([`/cch-complaints/view-recive-reply/${id}`])
+  }
+
+  getDateColor(item: any): string {
+    const today = new Date();
+    const schedule = new Date(item.sheduleDate);
+  
+    // Normalize both to midnight
+    today.setHours(0, 0, 0, 0);
+    schedule.setHours(0, 0, 0, 0);
+  
+    const diffDays = Math.floor((schedule.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+  
+    if (item.combinedStatus === 'Pending' || item.combinedStatus === 'Opened') {
+      if (diffDays > 0) {
+        // Future date
+        return '#606060';
+      } else if (diffDays < 0) {
+        // Past date
+        return '#AC0003';
+      } else {
+        // Today
+        return '#FF0000';
+      }
+    }
+  
+    // Default color for Completed or other statuses
+    return '#415CFF';
   }
 
   getDisplayDate(sheduleDate: string | Date): string {
@@ -194,6 +225,14 @@ export class TargetProgressTodoComponent implements OnInit {
   removeWithin(time: string): string {
     return time ? time.replace('Within ', '') : time;
   }
+
+  onKeydown(event: KeyboardEvent) {
+  // Prevent space key
+  if (event.key === ' ') {
+    event.preventDefault();
+    return;
+  }
+}
 
 }
 

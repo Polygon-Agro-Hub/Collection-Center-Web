@@ -2,7 +2,7 @@
 
 <app-loading-spinner *ngIf="isLoading" />
 
-<div *ngIf="!isLoading" >
+<div *ngIf="!isLoading" class="w-full overflow-x-auto">
 
 
     <div class="text-lg font-semibold dark:text-white whitespace-nowrap">{{regCode}} {{centerName}}</div>
@@ -67,6 +67,7 @@
 
         <div class="relative w-36 mr-12">
             <app-custom-datepicker
+            [placeholder]="'Delivery Date'"
   [selectedDate]="date"
   (dateChange)="onDateChange($event)"
 ></app-custom-datepicker>
@@ -81,10 +82,10 @@
         
 
         <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
-            <input type="text" placeholder="Search by Order ID.." [(ngModel)]="searchText"
+            <input type="text" placeholder="Search by Order ID.." [(ngModel)]="searchText" (keyup.enter)="onSearch()" (keyup.esc)="offSearch()"
                 class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
             <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
-                (click)="onSearch()">
+                (click)="onSearch()" >
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                     stroke="currentColor">
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
@@ -109,7 +110,7 @@
 
 
     <div *ngIf="hasData"
-        class="min-w-max mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+        class="min-w-max overflow-hidden mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
         <table class="w-full min-w-max divide-y-2 overflow-hidden">
             <thead class="text-[#4B5563] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
                 <tr>
@@ -125,7 +126,7 @@
                 </tr>
             </thead>
             <tbody class="bg-white dark:bg-[#1D1D1F] text-[#000000] dark:border-[#1D1D1F] cursor-default">
-                <tr *ngFor="let item of ordersArr | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index">
+                <tr *ngFor="let item of ordersArr let i = index">
                     <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
                      
                     </td>

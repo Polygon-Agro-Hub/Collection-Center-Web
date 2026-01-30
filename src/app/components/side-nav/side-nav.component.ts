@@ -12,7 +12,7 @@ export const MENU_ITEMS = [
     id: 1,
     key: 'dashboard',
     path: '/dashbord',
-    label: 'Dashbord',
+    label: 'Dashboard',
     icon: 'fas fa-th-large',
     permission: ['Collection Centre Manager'],
   },
@@ -65,6 +65,26 @@ export const MENU_ITEMS = [
     permission: ['Collection Centre Manager', 'Collection Centre Head'],
 
   },
+
+  {
+    id: 6,
+    key: 'cch-price-request',
+    path: '/cch-price-request',
+    label: 'Price Requests',
+    icon: 'fas fa-hand-holding-usd',
+    permission: ['Collection Centre Head'],
+  },
+
+  {
+    id: 21,
+    key: 'procurement',
+    path: '/procurement',
+    label: 'procurement',
+    icon: 'fa-solid fa-box-open',
+    permission: ['Collection Centre Head'],
+
+  },
+
   {
     id: 8,
     key: 'manage-officers',
@@ -91,14 +111,7 @@ export const MENU_ITEMS = [
     permission: ['Collection Centre Head'],
   },
 
-  {
-    id: 6,
-    key: 'cch-price-request',
-    path: '/cch-price-request',
-    label: 'Price Requests',
-    icon: 'fas fa-hand-holding-usd',
-    permission: ['Collection Centre Head'],
-  },
+  
 
   // ----------------------------------------- Distribution Centre part ------------------------------------------
 
@@ -119,13 +132,22 @@ export const MENU_ITEMS = [
     permission: ['Distribution Centre Head'],
   },
 
+  {
+    id: 22,
+    key: 'requested-items',
+    path: '/requested-items',
+    label: 'Required Items',
+    icon: 'fa-solid fa-cubes',
+    permission: ['Distribution Centre Head', 'Distribution Centre Manager'],
+  },
+
 
   {
     id: 13,
     key: 'target-progress',
     path: '/target-progress',
-    label: 'Target Progress',
-    icon: 'fa-solid fa-bullseye',
+    label: 'Packing',
+    icon: 'fa-solid fa-bag-shopping',
     permission: ['Distribution Centre Manager'],
   },
 
@@ -157,14 +179,14 @@ export const MENU_ITEMS = [
     permission: ['Distribution Centre Manager'],
   },
 
-  // {
-  //   id: 17,
-  //   key: 'reports',
-  //   path: '/reports',
-  //   label: 'Reports',
-  //   icon: 'fa-solid fa-chart-pie',
-  //   permission: ['Distribution Centre Manager'],
-  // },
+  {
+    id: 23,
+    key: 'dispatched',
+    path: '/dispatched',
+    label: 'Dispatched',
+    icon: 'fa-solid fa-truck-fast',
+    permission: ['Distribution Centre Manager'],
+  },
 
   {
     id: 18,
@@ -247,7 +269,7 @@ export class SideNavComponent {
   private setActiveTabFromRoute(): void {
     const currentPath = this.router.url.split('?')[0];
 
-    if (currentPath === '/profile') {
+    if (currentPath.startsWith('/profile')) {
       this.isSelectTab = '';
       return;
     }

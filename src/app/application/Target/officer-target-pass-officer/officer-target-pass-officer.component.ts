@@ -6,11 +6,12 @@ import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import Swal from 'sweetalert2';
+import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
 
 @Component({
   selector: 'app-officer-target-pass-officer',
   standalone: true,
-  imports: [CommonModule, FormsModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent, SerchableDropdownComponent],
   templateUrl: './officer-target-pass-officer.component.html',
   styleUrl: './officer-target-pass-officer.component.css'
 })
@@ -26,7 +27,9 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
   passAmount: number = 0.00;
   amount: number = 0.00;
   searchTerm: string = '';
-  selectedOfficerId!: number | null;
+  selectedOfficerId!: number | string | null;
+
+  officer1: string = '';
 
   isLoading: boolean = true;
 
@@ -62,6 +65,30 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
     );
   }
 
+  get officerDropdownItems() {
+    return this.officerArr.map(officer => ({
+      value: officer.id.toString(),
+      label: officer.firstNameEnglish + ' ' + officer.lastNameEnglish + ' - ' + officer.empId,
+      disabled: false
+    }));
+  }
+
+  // 5. Add selection change handler
+  onOfficerSelectionChange(selectedValue: string) {
+    this.selectedOfficerId = selectedValue || '';
+    // Add any additional logic you need when category changes
+    console.log('Category selected:', selectedValue);
+
+    console.log('officer', this.selectedOfficerId)
+  }
+
+  // onOfficerSelectionChange(selectedValue: string) {
+  //   this.selectedOfficerId = selectedValue ? Number(selectedValue) : null;
+  
+  //   console.log('Officer selected:', this.selectedOfficerId);
+  //   console.log('officer', this.officer1);
+  // }
+
   filterOfficer() {
     if (!this.officerArr) return;
     const search = this.searchTerm.toLowerCase();
@@ -88,6 +115,8 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
       this.toastSrv.warning('Pleace fill all feild!')
       return;
     }
+
+    this.selectedOfficerId = Number(this.selectedOfficerId);
 
     if (this.passAmount > this.amount) {
       this.isLoading = false;
@@ -199,6 +228,7 @@ class TargetDetalis {
 
 class Officers {
   id!: number;
+  empId!: string;
   firstNameEnglish!: string;
   lastNameEnglish!: string;
 }

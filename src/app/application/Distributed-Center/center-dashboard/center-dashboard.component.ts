@@ -7,7 +7,7 @@ import { ComplaintsService } from '../../../services/Complaints-Service/complain
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { ViewCenterOfficersComponent } from "../view-center-officers/view-center-officers.component";
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { ViewDchCenterTargetComponent } from '../view-dch-center-target/view-dch-center-target.component';
 import { DchCenterTargetOutForDeliveryComponent } from "../dch-center-target-out-for-delivery/dch-center-target-out-for-delivery.component";
 
@@ -37,7 +37,8 @@ export class CenterDashboardComponent implements OnInit {
   constructor(
     private complaintsService: ComplaintsService,
     private toastSrv: ToastAlertService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private router: Router,
   ) { }
 
   ngOnInit(): void {
@@ -60,6 +61,14 @@ export class CenterDashboardComponent implements OnInit {
     this.isSelectProgress = false;
     this.isSelectViewOfficers = false;
     this.isSelectViewOutForDelivery = true;
+  }
+
+  editCentre() {
+    this.router.navigate(['/distribution-center/edit-distribution-centre', this.centerId]);
+  }
+
+  viewCentre() {
+    this.router.navigate(['/distribution-center/view-distribution-centre', this.centerId]);
   }
 
 }

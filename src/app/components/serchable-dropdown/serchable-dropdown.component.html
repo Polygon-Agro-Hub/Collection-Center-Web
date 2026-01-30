@@ -1,8 +1,8 @@
 <div class="dropdown-wrapper-1 relative w-full" [class.opacity-50]="disabled">
-  <!-- Dropdown trigger -->
   <div
-    class="flex items-center justify-between w-full h-11 px-3 py-2 border-[1.8px] border-[#828282] dark:text-white  rounded-xl bg-white dark:bg-[#292929] cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+    class="flex items-center justify-between w-full h-11 px-3 py-2 border-[1.8px] border-[#828282] dark:text-white rounded-xl bg-white dark:bg-[#292929] cursor-pointer focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
     [class.cursor-not-allowed]="disabled"
+    [ngClass]="customStyles"
     (click)="toggleDropdown()"
   >
     <span class="text-gray-700 dark:text-textDark truncate">
@@ -41,6 +41,7 @@
             [placeholder]="searchPlaceholder"
             [value]="searchTerm"
             (input)="onSearchInput($event)"
+            [ngClass]="searchInputClass"
             class="w-full px-3 py-2 pr-10 border text-lg dark:bg-[#292929] dark:text-textDark border-gray-300 dark:border-[#828282] rounded-md focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
             autofocus
           />

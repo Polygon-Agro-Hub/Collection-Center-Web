@@ -36,7 +36,7 @@ export class ViewCenterTargetComponent implements OnInit {
   isLoading: boolean = false;
 
   isStatusDropdownOpen = false;
-  statusDropdownOptions = ['Pending', 'Completed', 'Exceeded'];
+  statusDropdownOptions = ['Pending', 'Completed', 'Exceeded', 'Extra'];
 
   toggleStatusDropdown() {
     this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
@@ -247,4 +247,5 @@ class DailyTargets {
   status!: string;
   date!: Date;
   regCode!: string;
+  validity!: string;
 }

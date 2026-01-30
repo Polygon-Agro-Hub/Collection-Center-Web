@@ -9,11 +9,12 @@
     </div>
 
     <div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg">
-        <div class="flex flex-row items-center justify-center">
+        <div class="flex flex-row items-center justify-center w-full">
             <p class="text-xl font-semibold text-[#292929] mx-3 dark:text-white">From :</p>
         
-            <div class="mr-10">
+            <div class="mr-10 w-56">
                 <app-custom-datepicker 
+                    #fromDatePicker
                     [selectedDate]="startDate" 
                     (dateChange)="onStartDateChange($event)"
                     placeholder="Start Date">
@@ -22,8 +23,9 @@
         
             <p class="text-xl font-semibold text-[#292929] mx-3 dark:text-white">To :</p>
         
-            <div class="mr-6">
+            <div class="mr-6 w-56">
                 <app-custom-datepicker 
+                    #toDatePicker
                     [selectedDate]="endDate" 
                     (dateChange)="onEndDateChange($event)"
                     placeholder="End Date">
@@ -31,13 +33,13 @@
             </div>
         
             <button (click)="filterDate()"
-                class="bg-[#415CFF] text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-lg ml-5 dark:text-textDark">Go</button>
+                class="bg-[#415CFF] text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-lg ml-5 dark:text-white">Go</button>
         </div>
 
 
         <div *ngIf="hasData" class="flex justify-center items-center mt-10">
             <button (click)="downloadReport()"
-                class="bg-[#415CFF] dark:text-white dark:bg-[#292929] text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-lg ml-5">Download
+                class="bg-[#415CFF] dark:text-white dark:bg-[#415CFF] text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-lg ml-5">Download
                 Report</button>
         </div>
     </div>
@@ -162,25 +164,20 @@
                             Total Collections</th>
                     </tr>
                 </thead>
-                <tbody class="border-[#828282] dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
-                    <tr *ngFor="let item of farmerDataArr" class="bg-white dark:bg-[#1D1D1F]">
-                        <td
-                            class="text-center text-[#000000] border border-[#828282] dark:border-[#1D1D1F] dark:text-gray-300 px-4 py-2">
-                            {{
-                            item.ReportDate
-                            |
-                            date: 'yyyy-MM-dd' }}</td>
-                        <td
-                            class="text-center text-[#000000] border border-[#828282] dark:border-[#1D1D1F] dark:text-gray-300 px-4 py-2">
-                            {{item.TotalQty}} kg
-                        </td>
-                        <td
-                            class="text-center text-[#000000] border border-[#828282] dark:border-[#1D1D1F] dark:text-gray-300 px-4 py-2">
-                            {{item.TotalFarmers}}
-                        </td>
+                <tbody class="divide-y divide-[#828282] dark:divide-gray-700 dark:bg-[#1D1D1F]">
+                    <tr *ngFor="let item of farmerDataArr"
+                        class="divide-x divide-[#828282] dark:divide-gray-700 bg-white dark:bg-[#1D1D1F]">
+                      <td class="text-center text-[#000000] dark:text-gray-300 px-4 py-2">
+                        {{ item.ReportDate | date: 'yyyy-MM-dd' }}
+                      </td>
+                      <td class="text-center text-[#000000] dark:text-gray-300 px-4 py-2">
+                        {{ item.TotalQty }} kg
+                      </td>
+                      <td class="text-center text-[#000000] dark:text-gray-300 px-4 py-2">
+                        {{ item.TotalFarmers }}
+                      </td>
                     </tr>
-
-                </tbody>
+                  </tbody>
             </table>
             <p class="text-[#3F3E3E] dark:text-textDark text-sm mt-4">
                 This report is generated on {{ currentDate | date: 'yyyy/MM/dd \'at\' hh:mm a' }}

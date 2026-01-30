@@ -37,10 +37,7 @@ export class ProfileComponent implements OnInit {
   fetchLoggedInUser() {
     this.AuthSrv.getLoggedInUser().subscribe((res: any) => {
       this.officerObj = res.officerData.collectionOfficer;
-      console.log('this.officerObj', this.officerObj)
       this.isLoading = false;
-      // this.phone1 = this.officerObj.phoneNumber01 === null ? '-' : this.officerObj.phoneCode01 + '-' + this.officerObj.phoneNumber01
-      // this.phone2 = this.officerObj.phoneNumber02 === null ? '-' : this.officerObj.phoneCode02 + '-' + this.officerObj.phoneNumber02;
     });
   }
 
@@ -49,7 +46,13 @@ export class ProfileComponent implements OnInit {
   }
 
   navigateToTarget() {
-    this.router.navigate(['/target/view-my-target']);
+    if (this.logingRole === 'Collection Centre Manager') {
+      this.router.navigate(['/profile/view-my-target']);
+    } else if (this.logingRole === 'Distribution Centre Manager'){
+      console.log('id', this.officerObj)
+      this.router.navigate(['/profile/view-my-target-dcm', this.officerObj.id]);
+    }
+    
   }
 }
 
@@ -78,5 +81,8 @@ class Officer {
   branchName!: string;
   companyNameEnglish!: string;
   centerName!: string;
+  regCode!: string;
+  distributionRegCode!: string;
+  distributionCentreName!: string;
 
 }

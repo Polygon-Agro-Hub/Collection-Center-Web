@@ -1,0 +1,23 @@
+/* Add to your dropdown component CSS */
+:host ::ng-deep .border-red-500 {
+    border-color: #ef4444 !important;
+  }
+  
+  :host ::ng-deep .text-red-600 {
+    color: #dc2626 !important;
+  }
+  
+  :host ::ng-deep .bg-red-50 {
+    background-color: #fef2f2 !important;
+  }
+  
+  /* Dark mode support */
+  @media (prefers-color-scheme: dark) {
+    :host ::ng-deep .dark .text-red-600 {
+      color: #fca5a5 !important;
+    }
+    
+    :host ::ng-deep .dark .bg-red-50 {
+      background-color: #7f1d1d !important;
+    }
+  }

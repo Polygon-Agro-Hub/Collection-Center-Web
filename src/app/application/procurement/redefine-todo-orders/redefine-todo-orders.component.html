@@ -1,0 +1,186 @@
+<app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+<div *ngIf="!isLoading" class="w-full  overflow-x-auto">
+        <!-- <div
+          class="pt-5 px-12 pb-5 min-w-[1550px] bg-tileLight dark:bg-[#363636] shadow-lg h-screen rounded-lg"
+        > -->
+          <div class="flex justify-between items-center mb-8">
+            <div class="flex items-center">
+              <h2 class="text-2xl font-normal text-textLight dark:text-textDark">
+                All Orders ({{
+                  totalItems === 0
+                    ? "0"
+                    : totalItems < 10
+                    ? "0" + totalItems
+                    : totalItems
+                }})
+              </h2>
+            </div>
+    
+            <div class="flex items-center flex-wrap gap-4">
+
+            <div class="w-56">
+              <app-custom-datepicker
+              [placeholder]="'Ordered Date'"
+              [selectedDate]="dateFilter1"
+              (dateChange)="onDateChange($event)"
+            ></app-custom-datepicker>
+            </div>
+
+            <div class="w-56">
+            <app-custom-datepicker
+            [placeholder]="'Delivery Date'"
+              [selectedDate]="dateFilter"
+              (dateChange)="onDateChange2($event)"
+            ></app-custom-datepicker>
+          </div>
+
+            <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+              <input type="text" placeholder=" Search by Invoice No.." [(ngModel)]="searchTerm" (keyup.enter)="onSearch()"
+              (keyup.esc)="offSearch()"
+                  class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
+              <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
+                  (click)="onSearch()">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                      stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                          d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
+                  </svg>
+              </button>
+              <button *ngIf="searchTerm" type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none" (click)="offSearch()">
+                  <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                      stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+                  </svg>
+              </button>
+            </div>
+    
+             
+
+            </div>
+          </div>
+          <div *ngIf="hasData" class=" min-w-max mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+            <table  class="w-full min-w-max divide-y-2">
+              <thead class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
+                <tr>
+                  <th
+                    class="px-4 py-3 font-normal text-textLight dark:text-textDark text-left"
+                  >
+                    No
+                  </th>
+                  <th
+                    class="px-4 py-3 font-normal text-textLight dark:text-textDark text-center"
+                  >
+                    Invoice No
+                  </th>
+                  <th
+                    class="px-4 py-3 font-normal text-textLight dark:text-textDark text-left"
+                  >
+                    Application
+                  </th>
+                  <th
+                    class="px-4 py-3 font-normal text-textLight dark:text-textDark text-left"
+                  >
+                    Total Price of <br />
+                    Products(.Rs)
+                  </th>
+                  <th
+                    class="px-4 py-3 font-normal text-textLight dark:text-textDark text-left"
+                  >
+                    Ordered Date
+                  </th>
+                  <th
+                    class="px-4 py-3 font-normal text-textLight dark:text-textDark text-left"
+                  >
+                    Scheduled <br />
+                    Delivery Date
+                  </th>
+                  <th
+                    class="px-4 py-3 font-normal text-textLight dark:text-textDark text-center"
+                  >
+                    Status
+                  </th>
+                  
+                </tr>
+              </thead>
+              <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
+                <tr (click)="viewPremadePackages(order.processOrderId)"
+  *ngFor="
+    let order of orders
+      | paginate
+        : {
+            itemsPerPage: itemsPerPage,
+            currentPage: page,
+            totalItems: totalItems
+          };
+    let i = index
+  "
+  class="hover:bg-[#415CFF] text-textLight dark:text-textDark hover:text-[#FFFFFF]  cursor-pointer"
+>
+  <td class="px-4 py-3 text-left  ">
+    {{ (page - 1) * itemsPerPage + i + 1 < 10 ? '0' + ((page - 1) * itemsPerPage + i + 1) : ((page - 1) * itemsPerPage + i + 1) }}  
+  </td>
+  <td
+    class="px-4 py-3 text-center  "
+  >
+    {{ order.invNo || "N/A" }}
+  </td>
+  <td class="px-4 py-3 text-left  ">
+    {{
+      order.orderApp === "Dash"
+        ? "SalesDash"
+        : order.orderApp === "Marketplace"
+        ? "GoviMart"
+        : order.orderApp
+    }}
+  </td>
+  <td class="px-4 py-3 text-left  ">
+    {{ order.total | number : "1.2-2" }}
+  </td>
+  <td class="px-4 py-3 text-left  ">
+    {{ order.createdAt | date : "mediumDate" }}
+  </td>
+  <td class="px-4 py-3 text-left  ">
+    {{ order.sheduleDate | date : "mediumDate" }}
+  </td>
+  <td class="px-4 py-3 text-center">
+    <span
+      class="inline-block bg-[#FFB9B7] text-[#D16D6A] font-medium rounded-md px-4 py-2 text-xs text-center w-32"
+    >
+      Pending
+    </span>
+  </td>
+  
+</tr>
+          
+              </tbody>
+            </table>
+            
+    
+            
+          </div>
+
+          <div *ngIf="hasData"  class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#1D1D1F] text-right">
+            <pagination-controls
+              (pageChange)="onPageChange($event)"
+              [responsive]="true"
+              [previousLabel]="'Previous'"
+              [nextLabel]="'Next'"
+              [screenReaderPaginationLabel]="'Pagination'"
+              [screenReaderPageLabel]="'page'"
+              [screenReaderCurrentLabel]="'Youre on page'"
+            >
+            </pagination-controls>
+          </div>
+
+          <div
+              *ngIf="!hasData"
+              class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6"
+            >
+              <p class="text-[#494949] my-6 dark:text-textDark">
+                --No Data Available--
+              </p>
+              <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
+            </div>
+        <!-- </div> -->
+
+</div>

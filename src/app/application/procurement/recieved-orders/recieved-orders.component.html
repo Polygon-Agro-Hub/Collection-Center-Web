@@ -1,0 +1,272 @@
+<app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+
+<div class="flex gap-0 cursor-pointer">
+    <p class="font-semibold text[#424242] mb-4 mr-5 ml-0 dark:text-[#FFFFFF] dark:bg-blacks" onclick="history.back()">Procurement</p>
+    <p class="font-semibold text[#424242] mb-4 mr-5 ml-0 dark:text-[#FFFFFF] dark:bg-blacks">All Recieved orders</p> 
+</div>
+
+<div
+  class="fixed-width-container overflow-x-auto scrollbar-thin scrollbar-thumb-scrollBarColor scrollbar-track-transparent scrollbar-thumb-rounded-full"
+>
+  <div
+    class="pt-5 pr-12 pl-12 pb-5 min-w-[1200px] bg-white dark:bg-[#363636] shadow-lg rounded-lg relative"
+  >
+    <div class="flex justify-end items-center mb-8 relative">
+      <div class="flex items-center relative">
+        <i class="mr-6 w-6 h-6 fill-current text-gray-500">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+            <path
+              d="M0 416c0 17.7 14.3 32 32 32l54.7 0c12.3 28.3 40.5 48 73.3 48s61-19.7 73.3-48L480 448c17.7 0 32-14.3 32-32s-14.3-32-32-32l-246.7 0c-12.3-28.3-40.5-48-73.3-48s-61 19.7-73.3 48L32 384c-17.7 0-32 14.3-32 32zm128 0a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zM320 256a32 32 0 1 1 64 0 32 32 0 1 1 -64 0zm32-80c-32.8 0-61 19.7-73.3 48L32 224c-17.7 0-32 14.3-32 32s14.3 32 32 32l246.7 0c12.3 28.3 40.5 48 73.3 48s61-19.7 73.3-48l54.7 0c17.7 0 32-14.3 32-32s-14.3-32-32-32l-54.7 0c-12.3-28.3-40.5-48-73.3-48zM192 128a32 32 0 1 1 0-64 32 32 0 1 1 0 64zm73.3-64C253 35.7 224.8 16 192 16s-61 19.7-73.3 48L32 64C14.3 64 0 78.3 0 96s14.3 32 32 32l86.7 0c12.3 28.3 40.5 48 73.3 48s61-19.7 73.3-48L480 128c17.7 0 32-14.3 32-32s-14.3-32-32-32L265.3 64z"
+            />
+          </svg>
+        </i>
+
+        <!-- Filter By button (only visible when no filter is applied) -->
+        <button
+          *ngIf="!filterApplied && !showFilterPopup"
+          class="bg-[#818AA1] dark:bg-[#818AA1] text-white font-medium py-1 px-3 rounded-lg shadow-lg text-lg flex items-center"
+          (click)="toggleFilterPopup()"
+        >
+          <i class="fa fa-filter px-2 text-sm" aria-hidden="true"></i>
+          Filter By
+        </button>
+
+        <!-- Applied filter display -->
+        <div
+          *ngIf="filterApplied"
+          class=" text-white font-medium py-2 px-3 bg-[#818AA1] dark:bg-[#818AA1] rounded-lg shadow-lg text-lg flex items-center ml-4"
+        >
+          <i class="fa fa-filter text-sm px-2 " aria-hidden="true"></i>
+          {{ getDisplayFilterType() }} : {{ date }}
+          <button
+            (click)="clearFilter()"
+            type="button"
+            class="text-white-500 hover:text-gray-700 focus:outline-none ml-2"
+          >
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              class="h-5 w-5"
+              fill="none"
+              viewBox="0 0 24 24"
+              stroke="currentColor"
+            >
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+        <!-- Filter Popup Overlay -->
+        <div
+          *ngIf="showFilterPopup"
+          class="fixed inset-0 flex items-center justify-center z-50 bg-black bg-opacity-30 backdrop-blur-sm"
+        >
+          <div class="p-8 dark:bg-[#363636] bg-white rounded-xl shadow-lg w-[30rem] max-w-full">
+
+            <div class="text-[#000000] dark:text-textDark text-center font-semibold text-lg mb-8">
+              Select Filter
+            </div>
+            <!-- <label class="block mb-3 font-semibold text-gray-700 dark:text-gray-300">
+              Filter By
+            </label> -->
+
+            <div class="mb-6">
+              <app-searchable-dropdown
+              [items]="categoryDropdownItems"
+              placeholder="--Filter By--"
+              searchPlaceholder="Search filters..."
+              [(ngModel)]="filterType"
+              (selectionChange)="onCategorySelectionChange($event)"
+              [clearable]="true"
+              [showSelected]="true"
+              [disabled]="false"
+              class="block w-full mb-4"
+            ></app-searchable-dropdown>
+            </div>
+            <!-- <select
+              [(ngModel)]="selectedFilterType"
+              class="w-full p-3 mb-5 border rounded bg-white dark:bg-[#292929] dark:text-white border-gray-300 dark:border-gray-600"
+            >
+              <option [ngValue]="null">--Filter By--</option>
+              <option *ngFor="let filter of filterTypes" [ngValue]="filter">
+                {{ filter.display }}
+              </option>
+            </select> -->
+
+            <!-- <label class="block mb-2 font-semibold text-gray-700 dark:text-gray-300">
+              Select Date
+            </label> -->
+
+            <div class="mb-8">
+              <app-custom-datepicker
+            [placeholder]="'--Select Date--'"
+  [selectedDate]="displayDate"
+  (dateChange)="onDateChange($event)"
+></app-custom-datepicker>
+            </div>
+
+
+            <div class="flex justify-center space-x-4 mt-6">
+              <button
+                (click)="cancelFilter()"
+                class="py-2 px-5 rounded-lg bg-[#74788D] dark:bg-[#74788D] text-[#D3D3D3] dark:text-gray-300 hover:bg-[#74788D] dark:hover:bg-[#74788D]"
+              >
+                Cancel
+              </button>
+              <button
+                (click)="applyFilter()"
+                [disabled]="!selectedFilterType || !dateTemp"
+                class="py-2 px-5 rounded-lg bg-[#415CFF] text-[#FFFFFF] hover:bg-[#415CFF] disabled:opacity-50 disabled:cursor-not-allowed"
+              >
+                Filter
+              </button>
+            </div>
+          </div>
+        </div>
+
+        <div class="w-5"></div>
+
+        <!-- Search Box -->
+        <div class="flex items-center rounded-full bg-gray-100 dark:bg-[#292929] px-4 py-2 w-96 group relative">
+  
+          <input 
+            type="text" 
+            placeholder="Search by Crop & Variety..." 
+            class="bg-transparent outline-none w-full text-gray-600 dark:text-gray-300" 
+            [(ngModel)]="search" 
+            (keydown.enter)="applysearch()" 
+          />
+        
+        
+          <button 
+            type="button" 
+            class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
+            (click)="applysearch()"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
+            </svg>
+          </button>
+        
+          <button 
+            (click)="clearSearch()" 
+            type="button" 
+            class="text-gray-500 hover:text-gray-700 focus:outline-none"
+            *ngIf="search"
+          >
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+        
+      </div>
+    </div>
+
+    <div class="flex justify-between items-center mb-2">
+      <h4 class="text-2xl font-normal text-[#292929] dark:text-textDark">
+        All ({{totalItems === 0 ? '0' : totalItems < 10 ? '0' + totalItems : totalItems}})
+      </h4>
+
+      <button *ngIf="purchaseReport.length !== 0"
+        class="bg-[#415CFF] text-white font-medium py-2 px-5 rounded-lg text-lg flex mb-5 mr-5 items-center"
+        (click)="downloadTemplate1()"
+      >
+        <i class="fa-solid fa-download px-2" *ngIf="!isDownloading"></i>
+        <i class="fa-solid fa-spinner fa-spin px-2" *ngIf="isDownloading"></i>
+        {{ isDownloading ? " Downloading..." : " Download" }}
+      </button>
+    </div>
+
+    <div *ngIf="purchaseReport.length > 0" class="min-w-max mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+      <table class="w-full min-w-max divide-y-2 border-[1px] border-gray-300 rounded-lg overflow-hidden" >
+        <thead class=" text-[#4B5563] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
+            <tr>
+            <th class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-left">
+              No
+            </th>
+            <th class="px-4 py-3 font-normal text[#4B5563] dark:text-textDark text-start">
+              Crop
+            </th>
+            <th class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-start">
+              Variety
+            </th>
+            <th class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-center">
+              Quantity (kg)
+            </th>
+            <th class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-center">
+              Ordered On
+            </th>
+            <th class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-center">
+              Scheduled Date
+            </th>
+            <th class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-center">
+              To Collection Centre
+            </th>
+            <th class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-center">
+              To Dispatch Centre
+            </th>
+          </tr>
+        </thead>
+        <tbody class="bg-white  dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
+          <tr
+          *ngFor="
+              let item of purchaseReport
+                | paginate
+                  : {
+                      itemsPerPage: itemsPerPage,
+                      currentPage: page,
+                      totalItems: totalItems
+                    }
+                    let i = index
+            ">
+            <td class="px-4 py-3 text-[#000000] dark:text-textDark text-left">
+              {{ ((page - 1) * itemsPerPage + i + 1) < 10 ? '0' + ((page - 1) * itemsPerPage + i + 1) : ((page - 1) * itemsPerPage + i + 1) }} 
+            </td>
+            <td class="px-4 py-3 text-[#000000] dark:text-textDark  text-start">
+              {{ item.cropNameEnglish }}
+            </td>
+            <td class="px-4 py-3 text-[#000000]  dark:text-textDark text-start">
+              {{ item.varietyNameEnglish}}
+            </td>
+            <td class="px-4 py-3 text-[#000000]  dark:text-textDark text-center">
+              {{ item.quantity }}
+            </td>
+            <td class="px-4 py-3 text-[#000000]  dark:text-textDark text-center">
+              {{ item.createdAt | date: 'd MMM, y' }}
+            </td>
+            <td class="px-4 py-3 text-[#000000] dark:text-textDark text-center">
+              {{ item.sheduleDate | date: 'd MMM, y' }}
+            </td>
+            <td class="px-4 py-3 text-[#000000] dark:text-textDark text-center">
+              {{ item.toCollectionCentre | date: 'd MMM, y' }}
+            </td>
+            <td class="px-4 py-3 text-[#000000] dark:text-textDark text-center">
+              {{ item.toDispatchCenter | date: 'd MMM, y' }}
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      
+   <!-- No Data Message -->
+  
+      
+    </div>
+
+    <div *ngIf="purchaseReport.length > 0" class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#1D1D1F] text-right">
+        <pagination-controls 
+          (pageChange)="onPageChange($event)" 
+          [responsive]="true" 
+          [previousLabel]="'Previous'"
+          [nextLabel]="'Next'" 
+          [screenReaderPaginationLabel]="'Pagination'" 
+          [screenReaderPageLabel]="'page'"
+          [screenReaderCurrentLabel]="'Youre on page'">
+        </pagination-controls>
+      </div>
+
+      <div *ngIf="purchaseReport.length === 0" class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6 ">
+        <p class="text-[#494949] my-6 dark:text-textDark">--No Data Available--</p>
+        <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
+      </div>
+  </div>
+</div>

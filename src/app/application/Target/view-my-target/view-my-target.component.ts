@@ -1,4 +1,4 @@
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule, DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -29,7 +29,8 @@ export class ViewMyTargetComponent implements OnInit {
   constructor(
     private router: Router,
     private TargetSrv: TargetService,
-    private datePipe: DatePipe
+    private datePipe: DatePipe,
+    private location: Location
   ) { }
 
   ngOnInit(): void {
@@ -50,6 +51,10 @@ export class ViewMyTargetComponent implements OnInit {
         this.isLoading = false;
       }
     )
+  }
+
+  goBack() {
+    this.location.back();
   }
 
   downloadTemplate1() {

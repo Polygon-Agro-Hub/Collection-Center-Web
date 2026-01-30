@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReportServiceService } from '../../../services/Report-service/report-service.service';
@@ -20,6 +20,10 @@ import { CustomDatepickerComponent } from '../../../components/custom-datepicker
 
 })
 export class CollectionMonthlyReportComponent implements OnInit {
+
+  @ViewChild('fromDatePicker') fromDatePicker!: CustomDatepickerComponent;
+  @ViewChild('toDatePicker') toDatePicker!: CustomDatepickerComponent;
+
   officerDataObj: OfficerDetails = new OfficerDetails();
   farmerDataArr!: FarmerDetails[]
   officerId!: number;
@@ -98,6 +102,9 @@ export class CollectionMonthlyReportComponent implements OnInit {
         confirmButtonText: 'OK'
       });
     }
+
+    this.hasData = false;
+
   }
   
 
@@ -263,7 +270,7 @@ export class CollectionMonthlyReportComponent implements OnInit {
 
     // Fourth row - Weight and Farmer
     leftY = addField('Weight', String(this.officerDataObj.TotalQty) + ' kg', margin + 5, y, halfWidth);
-    rightY = addField('Farmer', String(this.officerDataObj.TotalFarmers), margin + halfWidth + 10, y, halfWidth);
+    rightY = addField('Collections', String(this.officerDataObj.TotalFarmers), margin + halfWidth + 10, y, halfWidth);
     y = Math.max(leftY, rightY) + 15;
 
     // Table
@@ -286,7 +293,7 @@ doc.setFont('helvetica', 'bold');
 doc.setFontSize(10);
 doc.text('Date', startX + colWidths[0] / 2, y + 6, { align: 'center' });
 doc.text('Total Weight', startX + colWidths[0] + colWidths[1] / 2, y + 6, { align: 'center' });
-doc.text('Total Farmers', startX + colWidths[0] + colWidths[1] + colWidths[2] / 2, y + 6, { align: 'center' });
+doc.text('Total Collections', startX + colWidths[0] + colWidths[1] + colWidths[2] / 2, y + 6, { align: 'center' });
 
 y += 10;
 
@@ -324,7 +331,7 @@ this.farmerDataArr.forEach(row => {
     doc.text(timestamp, margin + 5, y);
 
     // Save the PDF
-    const fileName = `collection_officer_report(${this.officerDataObj.empId}_from_${this.startDate}_to_${this.endDate}).pdf`;
+    const fileName = `${this.officerDataObj.empId}_from_${this.startDate}_to_${this.endDate}.pdf`;
     doc.save(fileName);
 
   }

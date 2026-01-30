@@ -1,6 +1,6 @@
 <app-loading-spinner *ngIf="isLoading" />
 
-<div *ngIf="!isLoading">
+<div *ngIf="!isLoading" class="w-full overflow-x-auto">
 
     <button
                 class="bg-[#415CFF] text-white shadow-md font-medium rounded-lg py-2 px-5 mr-5 text-lg flex items-center"
@@ -91,7 +91,7 @@
 
 
     <div *ngIf="hasData"
-        class="overflow-x-auto mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+        class="overflow-hidden min-w-max mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
         <table class="w-full divide-y-2 overflow-hidden">
             <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
                 <tr>
@@ -101,7 +101,7 @@
                     <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">Delivery Time Slot</th>
                     <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">Out Time</th>
                     <th class="px-6 py-3 text-center text-sm font-medium text-[#4B5563] dark:text-white">Status</th>
-
+                    
                 </tr>
             </thead>
             <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
@@ -113,7 +113,12 @@
                           </td>
                         <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.invNo}}</td>
                     <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.firstNameEnglish}} {{item.lastNameEnglish}}</td>
-                    <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{ getDisplayDate(item.sheduleDate) }} {{ removeWithin(item.sheduleTime) }}</td>
+                    <td class="px-6 py-4 text-sm font-medium"
+                    [ngClass]="{
+                        'text-[#606060] dark:text-[#606060]': (item.deliveryPeriod === 'On Time' && item.scheduleDateStatus === 'Not Passed' ),
+                        'text-[#000000] dark:text-[#C5C5C5]': (item.deliveryPeriod === 'On Time' && item.scheduleDateStatus !== 'Not Passed' || item.deliveryPeriod === 'Late' || item.deliveryPeriod === 'Later')
+                    }"
+                    >{{ getDisplayDate(item.sheduleDate) }} {{ removeWithin(item.sheduleTime) }}</td>
 
                       <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
                         {{ item.outDlvrDateLocal | date: 'hh.mm a' : 'UTC' }}
@@ -136,14 +141,23 @@
                                 Late
                             </span>
 
+                            <span *ngIf="item.deliveryPeriod ==='Later'"
+                                class="text-[#AC0003] px-3 py-1">
+                                Late
+                            </span>
+
                         </div>
                     </td>
+
+
+
 
                 </tr>
             </tbody>
         </table>
 
     </div>
+
     <!-- <div *ngIf="hasData" class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#262f45] text-right">
         <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
             [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"

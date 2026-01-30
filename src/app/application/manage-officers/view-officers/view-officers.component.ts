@@ -51,7 +51,7 @@ export class ViewOfficersComponent implements OnInit {
   }
 
   isRoleDropdownOpen = false;
-  roleDropdownOptions = ['Collection Centre Manager', 'Collection Officer', 'Customer Officer'];
+  roleDropdownOptions = ['Collection Centre Manager', 'Collection Officer'];
 
   toggleRoleDropdown() {
     this.isRoleDropdownOpen = !this.isRoleDropdownOpen;
@@ -348,7 +348,7 @@ const approveButton = (item.status === 'Rejected' || item.status === 'Not Approv
           this.fetchByRole();
         } else {
           this.isLoading = false;
-          this.toastSrv.error(res.message || `Failed to ${status.toLowerCase()} the collection.`);
+          this.toastSrv.error(`Failed to ${status.toLowerCase()} the collection officer.`);
         }
       },
       error: (err) => {
@@ -396,6 +396,7 @@ const approveButton = (item.status === 'Rejected' || item.status === 'Not Approv
   }
 
   onSearch() {
+    this.page = 1;
     this.searchText = this.searchText.trimStart(); // removes leading spaces only
     this.fetchByRole();
   }

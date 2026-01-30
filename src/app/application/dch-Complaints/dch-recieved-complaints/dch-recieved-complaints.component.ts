@@ -58,16 +58,16 @@ export class DchRecievedComplaintsComponent implements OnInit {
     this.fetchAllreciveComplaint();
   }
 
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent) {
-    const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
-    const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
+  // @HostListener('document:click', ['$event'])
+  // onDocumentClick(event: MouseEvent) {
+  //   const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
+  //   const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
 
-    if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
-      this.isStatusDropdownOpen = false;
-    }
+  //   if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
+  //     this.isStatusDropdownOpen = false;
+  //   }
 
-  }
+  // }
 
   fetchAllreciveComplaint(page: number = 1, limit: number = this.itemsPerPage, status: string = this.selectStatus, search: string = this.searchText) {
     this.isLoading = true;
@@ -112,6 +112,7 @@ export class DchRecievedComplaintsComponent implements OnInit {
   }
 
   onSearch() {
+    this.searchText = this.searchText.trimStart();
     this.fetchAllreciveComplaint();
 
   }
@@ -148,6 +149,15 @@ export class DchRecievedComplaintsComponent implements OnInit {
   navigateViewReply(id:number){
     this.router.navigate([`/dch-complaints/view-recieve-complaint/${id}`])
   }
+
+  preventLeadingSpace(event: KeyboardEvent) {
+  const input = event.target as HTMLInputElement;
+  
+  // If space is pressed and cursor is at the beginning or the field is empty
+  if (event.key === ' ' && (input.selectionStart === 0 || this.searchText === '')) {
+    event.preventDefault();
+  }
+}
 
 }
 

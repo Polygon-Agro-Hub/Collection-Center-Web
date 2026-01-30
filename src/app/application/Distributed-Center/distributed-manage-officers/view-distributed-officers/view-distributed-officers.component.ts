@@ -47,9 +47,11 @@ export class ViewDistributedOfficersComponent implements OnInit {
 
 
   ngOnInit(): void {
+    console.log('1st sdsdddddddddddddddddddddddddddddddddddddddddddddddddddddd')
     this.getAllcompany();
     this.getAllCenters();
     this.fetchByRole();
+    console.log('2nd sdddsdsdddddddddddddddddddddddddddddddddddddddddddddddddd')
 
   }
 
@@ -67,7 +69,7 @@ export class ViewDistributedOfficersComponent implements OnInit {
   }
 
   isRoleDropdownOpen = false;
-  roleDropdownOptions = ['Distribution Centre Manager', 'Distribution Officer'];
+  roleDropdownOptions = ['Distribution Centre Manager', 'Distribution Officer', 'Driver'];
 
   toggleRoleDropdown() {
     this.isRoleDropdownOpen = !this.isRoleDropdownOpen;
@@ -96,29 +98,29 @@ export class ViewDistributedOfficersComponent implements OnInit {
 
 
 
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent) {
-    const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
-    const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
+  // @HostListener('document:click', ['$event'])
+  // onDocumentClick(event: MouseEvent) {
+  //   const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
+  //   const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
 
-    const roleDropdownElement = document.querySelector('.custom-role-dropdown-container');
-    const roleDropdownClickedInside = roleDropdownElement?.contains(event.target as Node);
+  //   const roleDropdownElement = document.querySelector('.custom-role-dropdown-container');
+  //   const roleDropdownClickedInside = roleDropdownElement?.contains(event.target as Node);
 
-    const centerDropdownElement = document.querySelector('.custom-center-dropdown-container');
-    const centerDropdownClickedInside = centerDropdownElement?.contains(event.target as Node);
+  //   const centerDropdownElement = document.querySelector('.custom-center-dropdown-container');
+  //   const centerDropdownClickedInside = centerDropdownElement?.contains(event.target as Node);
 
-    if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
-      this.isStatusDropdownOpen = false;
-    }
+  //   if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
+  //     this.isStatusDropdownOpen = false;
+  //   }
 
-    if (!roleDropdownClickedInside && this.isRoleDropdownOpen) {
-      this.isRoleDropdownOpen = false;
-    }
+  //   if (!roleDropdownClickedInside && this.isRoleDropdownOpen) {
+  //     this.isRoleDropdownOpen = false;
+  //   }
 
-    if (!centerDropdownClickedInside && this.isCenterDropdownOpen) {
-      this.isCenterDropdownOpen = false;
-    }
-  }
+  //   if (!centerDropdownClickedInside && this.isCenterDropdownOpen) {
+  //     this.isCenterDropdownOpen = false;
+  //   }
+  // }
 
   navigate(path: string) {
     this.router.navigate([`${path}`])

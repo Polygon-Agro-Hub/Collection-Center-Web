@@ -26,6 +26,8 @@ export class CentersDashbordComponent implements OnInit {
 
   regCode!: string;
 
+  hasData: boolean = false;
+
 
   isLoading: boolean = true;
 
@@ -56,6 +58,12 @@ export class CentersDashbordComponent implements OnInit {
       this.expencePrecentage = res.difExpences
       this.isLoading = false;
 
+      if (this.resentCollectionArr.length > 0) {
+        this.hasData = true;
+      } else {
+        this.hasData = false;
+    }
+
     });
   }
 
@@ -72,6 +80,7 @@ export class CentersDashbordComponent implements OnInit {
   }
 
   navigateAddTarget() {
+    console.log('navigating')
     this.router.navigate([`/centers/add-target/${this.centerId}/${this.centerNameObj.centerName}/${this.centerNameObj.regCode}`]);
   }
 

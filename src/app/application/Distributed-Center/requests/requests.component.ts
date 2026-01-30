@@ -10,11 +10,13 @@ import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loa
 import { DistributionServiceService } from '../../../services/Distribution-Service/distribution-service.service';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { producerIncrementEpoch } from '@angular/core/primitives/signals';
+import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
+import { CustomDatepickerComponent } from '../../../components/custom-datepicker/custom-datepicker.component';
 
 @Component({
   selector: 'app-requests',
   standalone: true,
-  imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, CustomDatepickerComponent, LoadingSpinnerComponent, SerchableDropdownComponent],
   templateUrl: './requests.component.html',
   styleUrl: './requests.component.css'
 })
@@ -34,12 +36,14 @@ export class RequestsComponent implements OnInit {
   selectedReplacePrice: number | null = null;
   selectedReplaceUnitPrice: number | null = null;
 
-  page: number = 1;
+  isPriceValid: boolean = true;
+
   totalItems: number = 0;
-  itemsPerPage: number = 10;
   hasData: boolean = true;
 
   searchText: string = '';
+
+  productId: string = '';
 
   selectStatus: string = '';
   today!: string;
@@ -84,20 +88,20 @@ export class RequestsComponent implements OnInit {
     
   }
 
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent) {
-    const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
-    const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
+  // @HostListener('document:click', ['$event'])
+  // onDocumentClick(event: MouseEvent) {
+  //   const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
+  //   const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
 
-    if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
-      this.isStatusDropdownOpen = false;
-    }
+  //   if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
+  //     this.isStatusDropdownOpen = false;
+  //   }
 
-  }
+  // }
 
-  fetchAllRequests(page: number = 1, limit: number = this.itemsPerPage, date: string = this.date, status: string = '', search: string = this.searchText) {
+  fetchAllRequests(date: string = this.date, status: string = '', search: string = this.searchText) {
     this.isLoading = true;
-    this.distributionSrv.getAllRequests(page, limit, date, status, search).subscribe(
+    this.distributionSrv.getAllRequests(date, status, search).subscribe(
       (res) => {
         console.log('res', res)
         this.requestArr = res.items;
@@ -120,35 +124,33 @@ export class RequestsComponent implements OnInit {
     )
   }
 
-  // fetchAllProducts() {
-  //   this.isLoading = true;
-  //   this.distributionSrv.getAllProducts().subscribe(
-  //     (res) => {
-  //       console.log('res', res)
-  //       this.productsArr = res;
-  //       console.log('productsArr', this.productsArr)
-  //       this.isLoading = false;
-  //     }
-  //   )
-  // }
 
-  onPageChange(event: number) {
-    this.page = event;
-    this.fetchAllRequests(this.page, this.itemsPerPage);
+  closePopup() {
+    this.isReplacePopUpOpen = false;
   }
 
-  onDateChange() {
-    console.log('called')
-    this.fetchAllRequests(this.page, this.itemsPerPage, this.date, this.selectStatus, this.searchText);
+  onDateChange(newDate: string | Date | null) {
+    let formattedDate: string = '';
+  
+    if (newDate instanceof Date) {
+      // Convert Date object to string (YYYY-MM-DD)
+      formattedDate = newDate.toISOString().split('T')[0];
+    } else if (typeof newDate === 'string') {
+      formattedDate = newDate;
+    }
+  
+    this.date = formattedDate;
+    this.fetchAllRequests(this.date, this.selectStatus, this.searchText);
   }
 
   onSearch() {
-    this.fetchAllRequests(this.page, this.itemsPerPage, this.date, this.selectStatus, this.searchText);
+    this.searchText = this.searchText?.trim() || '';
+    this.fetchAllRequests(this.date, this.selectStatus, this.searchText);
   }
 
   offSearch() {
     this.searchText = '';
-    this.fetchAllRequests(this.page, this.itemsPerPage, this.date, this.selectStatus, this.searchText);
+    this.fetchAllRequests(this.date, this.selectStatus, this.searchText);
   }
 
   cancelStatus(event?: MouseEvent) {
@@ -157,11 +159,11 @@ export class RequestsComponent implements OnInit {
     }
     this.selectStatus = '';
     this.isStatusDropdownOpen = false;
-    this.fetchAllRequests(this.page, this.itemsPerPage, this.date, this.selectStatus, this.searchText);
+    this.fetchAllRequests(this.date, this.selectStatus, this.searchText);
   }
 
   filterStatus() {
-    this.fetchAllRequests(this.page, this.itemsPerPage, this.date, this.selectStatus, this.searchText);
+    this.fetchAllRequests(this.date, this.selectStatus, this.searchText);
   }
 
   navigate(path: string) {
@@ -171,11 +173,8 @@ export class RequestsComponent implements OnInit {
   openReplacePopUp(item: Request) {
     this.selectedRequestObj = item
     console.log('selectedRequestObj', this.selectedRequestObj);
-    // this.selectedReplaceProductId = this.selectedRequestObj.replaceProductId
-    // this.selectedReplaceProduct = this.selectedRequestObj.replaceProduct
-    // this.selectedReplaceQty = this.selectedRequestObj.replaceQty
-    // this.selectedReplacePrice = this.selectedRequestObj.replacePrice
-    // this.selectedReplaceUnitPrice = this.selectedRequestObj.replaceUnitPrice
+
+    this.productId =  String(this.selectedRequestObj.replaceProductId)
 
     this.isReplacePopUpOpen = true;
   }
@@ -235,10 +234,18 @@ export class RequestsComponent implements OnInit {
     });
   }
 
-  onProductChange(productId: string | null) {
-    if (!productId) return;
+  get categoryDropdownItems() {
+    return this.productsArr.map(product => ({
+      value: product.id.toString(),
+      label: product.displayName,
+      disabled: false
+    }));
+  }
 
-    const numericId = Number(productId); // convert string to number
+  onProductChange(selectedValue: string) {
+    this.productId = selectedValue || '';
+
+    const numericId = Number(this.productId); // convert string to number
     const selectedProduct = this.productsArr.find(p => p.id === numericId);
 
     console.log('Selected Product:', selectedProduct);
@@ -249,12 +256,45 @@ export class RequestsComponent implements OnInit {
       this.selectedRequestObj.replaceUnitPrice = selectedProduct.discountedPrice;
       this.selectedRequestObj.replacePrice = selectedProduct.discountedPrice * this.selectedRequestObj.replaceQty;
       this.selectedRequestObj.replaceUnitType = selectedProduct.unitType
+      this.setIsPriceValid();
     }
+
+    console.log('prodid', this.selectedRequestObj.replaceProductId)
   }
 
   onQtyChange() {
     this.selectedRequestObj.replacePrice =
       this.selectedRequestObj.replaceUnitPrice * this.selectedRequestObj.replaceQty;
+    this.setIsPriceValid();
+  }
+
+  allowOnlyNumbers(event: KeyboardEvent) {
+    const charCode = event.which ? event.which : event.keyCode;
+  
+    // Allow: digits (0–9) and dot (.)
+    if (
+      (charCode < 48 || charCode > 57) && // not a digit
+      charCode !== 46 // not a dot
+    ) {
+      event.preventDefault();
+    }
+  
+    // Prevent multiple dots
+    const input = event.target as HTMLInputElement;
+    if (charCode === 46 && input.value.includes('.')) {
+      event.preventDefault();
+    }
+  }
+  
+
+  setIsPriceValid() {
+    this.isPriceValid = true;
+    console.log('called')
+    if ((this.selectedRequestObj.replacePrice > this.selectedRequestObj.prevDefineProductPrice) && this.selectedRequestObj.status === 'Approved') {
+      this.isPriceValid = false;
+    } else if ((this.selectedRequestObj.replacePrice > this.selectedRequestObj.currentProductPrice) && this.selectedRequestObj.status === 'Not Approved') {
+      this.isPriceValid = false;
+    }
   }
 
   openViewProductReplacementPopup(item: Request) {
@@ -341,29 +381,4 @@ class ProductReplacement {
 
 }
 
-// SELECT 
-//     po.invNo,
-//     po.id AS processOrderId,
-//     o.id AS orderId,
-//     mpp.id AS packageId,
-//     op.id AS orderpkgId,
-//     dfp.id AS definePkgId,
-//     dfpi.id AS dfpItemId
-// FROM 
-//     market_place.processorders po
-// JOIN 
-//     market_place.orders o ON po.orderId = o.id
-// LEFT JOIN 
-//     market_place.orderpackage op ON po.id = op.orderId
-// LEFT JOIN 
-//     market_place.marketplacepackages mpp ON op.packageId = mpp.id
-// LEFT JOIN 
-//     market_place.definepackage dfp ON dfp.packageId = mpp.id
-// LEFT JOIN 
-//     market_place.definepackageitems dfpi ON dfpi.definePackageId = dfp.id 
-// JOIN 
-//     market_place.producttypes pt ON pt.id = dfpi.productType
-// JOIN 
-//     market_place.marketplaceitems mpi ON mpi.id = dfpi.productId
-// WHERE 
-//     po.id = 261
+

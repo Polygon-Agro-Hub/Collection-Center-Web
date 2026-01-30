@@ -12,11 +12,12 @@ import { Location } from '@angular/common';
 import { DistributedManageOfficersService } from '../../../services/Distributed-manage-officers-service/distributed-manage-officers.service';
 import { Country, COUNTRIES } from '../../../../assets/country-data';
 import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
+import { CustomDatepickerComponent } from '../../../components/custom-datepicker/custom-datepicker.component';
 
 @Component({
   selector: 'app-add-distributed-officer',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, LoadingSpinnerComponent, SerchableDropdownComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, LoadingSpinnerComponent, SerchableDropdownComponent, CustomDatepickerComponent],
   templateUrl: './add-distributed-officer.component.html',
   styleUrl: './add-distributed-officer.component.css'
 })
@@ -37,6 +38,10 @@ export class AddDistributedOfficerComponent implements OnInit {
   officerId!: number
 
   selectVehicletype: any = { name: '', capacity: '' };
+
+  isJobRoleOpen = false;
+
+  insExpDateTouched = false;
 
 
   selectedFileName!: string
@@ -82,7 +87,44 @@ export class AddDistributedOfficerComponent implements OnInit {
   managerDropdownOpen = false;
   selectedManagerName: string = "";
 
+  jobRoles: string[] = [];
 
+  jobRoleInputTouched = false;
+
+  // Driver Images
+  licenseFrontImageFileName!: string;
+  licenseFrontImagePreview: string | ArrayBuffer | null = null;
+  licenseFrontImageFile: File | null = null;
+
+  licenseBackImageFileName!: string;
+  licenseBackImagePreview: string | ArrayBuffer | null = null;
+  licenseBackImageFile: File | null = null;
+
+  insurenceFrontImageFileName!: string;
+  insurenceFrontImagePreview: string | ArrayBuffer | null = null;
+  insurenceFrontImageFile: File | null = null;
+
+  insurenceBackImageFileName!: string;
+  insurenceBackImagePreview: string | ArrayBuffer | null = null;
+  insurenceBackImageFile: File | null = null;
+
+  vehicleFrontImageFileName!: string;
+  vehicleFrontImagePreview: string | ArrayBuffer | null = null;
+  vehicleFrontImageFile: File | null = null;
+
+  vehicleBackImageFileName!: string;
+  vehicleBackImagePreview: string | ArrayBuffer | null = null;
+  vehicleBackImageFile: File | null = null;
+
+  vehicleSideAImageFileName!: string;
+  vehicleSideAImagePreview: string | ArrayBuffer | null = null;
+  vehicleSideAImageFile: File | null = null;
+
+  vehicleSideBImageFileName!: string;
+  vehicleSideBImagePreview: string | ArrayBuffer | null = null;
+  vehicleSideBImageFile: File | null = null;
+
+  isAppireImgValidation: boolean = false;
 
   constructor(
     private ManageOficerSrv: ManageOfficersService,
@@ -133,28 +175,112 @@ export class AddDistributedOfficerComponent implements OnInit {
 
   districtItems = this.districts.map(d => ({ value: d.name, label: d.name }));
 
+  VehicleTypes = [
+    { name: 'Mahindra Bollero', capacity: 272},
+    { name: 'Dimo Batta', capacity: 750 },
+    { name: 'Three Wheeler', capacity: 100 },
+  ]
+
   ngOnInit(): void {
     this.loadBanks()
     this.loadBranches()
     this.getAllDistributionCenters();
     // this.getLastID('COO');
     // this.EpmloyeIdCreate();
+    this.setJobRoles();
+     console.log('loging role', this.logingRole)
     
   }
 
-  @HostListener('document:click', ['$event.target'])
-onClick(targetElement: HTMLElement) {
-  const insideDropdown1 = targetElement.closest('.dropdown-wrapper-1');
-  const insideDropdown2 = targetElement.closest('.dropdown-wrapper-2');
+  onDatePickerClicked() {
+    console.log('Date picker clicked/opened');
+    this.insExpDateTouched = true;
+  }
 
-  // Close dropdowns only if click is outside their wrapper
-  if (!insideDropdown1) {
-    this.dropdownOpen = false;
+  onInsuranceDateChange(newDate: string | Date | null) {
+    let dateString: string;
+  
+    if (!newDate) {
+      
+      dateString = new Date().toISOString().split('T')[0];
+    } 
+    else if (newDate instanceof Date) {
+      
+      dateString = newDate.toISOString().split('T')[0];
+    } 
+    else {
+      
+      dateString = newDate;
+    }
+  
+    this.driverObj.insExpDate = dateString;
+
   }
-  if (!insideDropdown2) {
-    this.dropdownOpen2 = false;
+
+  toggleJobRoleDropdown() {
+    this.isJobRoleOpen = !this.isJobRoleOpen;
+
+    this.jobRoleInputTouched = true;
+
+    console.log('jobRoleInputTouched', this.jobRoleInputTouched)
   }
-}
+
+  getJobRole(role: string) {
+    this.personalData.jobRole = role;
+    if (this.personalData.jobRole === 'Driver') {
+      this.personalData.firstNameSinhala = '';
+      this.personalData.lastNameSinhala = ''
+      this.personalData.firstNameTamil = ''
+      this.personalData.lastNameTamil = ''
+    }
+    this.isJobRoleOpen = false;
+    this.jobRoleInputTouched = true;
+
+    console.log('jobRole', this.personalData.jobRole)
+
+    console.log('jobRoleInputTouched', this.jobRoleInputTouched)
+  }
+
+  setJobRoles() {
+    if (this.logingRole === 'Distribution Centre Manager') {
+      // Only allow Collection Officer
+      this.jobRoles = ['Distribution Officer', 'Driver'];
+    } 
+    else if (this.logingRole === 'Distribution Centre Head') {
+      // Allow all roles
+      this.jobRoles = [
+        'Distribution Centre Manager',
+        'Distribution Officer',
+        'Driver'
+      ];
+    } 
+    else {
+      // Default (if needed)
+      this.jobRoles = [];
+    }
+  }
+
+//   @HostListener('document:click', ['$event.target'])
+// onClick(targetElement: HTMLElement) {
+//   const insideDropdown1 = targetElement.closest('.dropdown-wrapper-1');
+//   const insideDropdown2 = targetElement.closest('.dropdown-wrapper-2');
+
+//   // Close dropdowns only if click is outside their wrapper
+//   if (!insideDropdown1) {
+//     this.dropdownOpen = false;
+//   }
+//   if (!insideDropdown2) {
+//     this.dropdownOpen2 = false;
+//   }
+// }
+
+@HostListener('document:click', ['$event'])
+  onClickOutside(event: MouseEvent) {
+    const target = event.target as HTMLElement;
+    if (!target.closest('.relative')) {
+      this.isJobRoleOpen = false;
+    }
+  }
 
 // onSearchInput(event: Event) {
 //   const input = event.target as HTMLInputElement;
@@ -370,12 +496,30 @@ selectManager(item: Manager) {
     } else {
       if (this.logingRole === 'Distribution Centre Manager') {
         console.log('Distribution Centre Manager')
-        this.DistributedManageOfficerSrv.createDistributionOfficerDIO(this.personalData, this.selectedImage).subscribe(
+
+        if (this.personalData.jobRole === 'Driver') {
+          if (!this.licenseFrontImageFileName || !this.licenseBackImageFileName || !this.insurenceFrontImageFileName || !this.insurenceBackImageFileName || !this.vehicleFrontImageFileName || !this.vehicleBackImageFileName || !this.vehicleSideAImageFileName || !this.vehicleSideBImageFileName) {
+            this.isLoading = false;
+            this.toastSrv.warning('Pleace fill all required vehicle image upload fields')
+            return;
+          }
+
+          this.driverObj.licFrontName = this.licenseFrontImageFileName
+          this.driverObj.licBackName = this.licenseBackImageFileName
+          this.driverObj.insFrontName = this.insurenceFrontImageFileName
+          this.driverObj.insBackName = this.insurenceBackImageFileName
+          this.driverObj.vFrontName = this.vehicleFrontImageFileName
+          this.driverObj.vBackName = this.vehicleBackImageFileName
+          this.driverObj.vSideAName = this.vehicleSideAImageFileName
+          this.driverObj.vSideBName = this.vehicleSideBImageFileName
+        }
+
+        this.DistributedManageOfficerSrv.createDistributionOfficerDIO(this.personalData, this.selectedImage, this.driverObj, this.licenseFrontImagePreview, this.licenseBackImagePreview, this.insurenceFrontImagePreview, this.insurenceBackImagePreview, this.vehicleFrontImagePreview, this.vehicleBackImagePreview, this.vehicleSideAImagePreview, this.vehicleSideBImagePreview).subscribe(
           (res: any) => {
             if (res.status) {
               this.officerId = res.officerId;
               this.isLoading = false;
-              this.toastSrv.success('Ditribution Officer Created Successfully')
+              this.toastSrv.success(`${this.personalData.jobRole} Created Successfully`)
               this.router.navigate(['/distribution-officers'])
             } else {
               this.isLoading = false;
@@ -386,19 +530,76 @@ selectManager(item: Manager) {
           },
           (error: any) => {
             this.isLoading = false;
-            this.toastSrv.error('There was an error creating the collective officer')
+            let errorMessage = 'An unexpected error occurred';
+            let messages: string[] = [];
+
+            if (error.error && Array.isArray(error.error.errors)) {
+              messages = error.error.errors.map((err: string) => {
+                switch (err) {
+                  case 'NIC':
+                    return 'The NIC number is already registered.';
+                  case 'Email':
+                    return 'Email already exists.';
+                  case 'PhoneNumber01':
+                    return 'Mobile Number 1 already exists.';
+                  case 'PhoneNumber02':
+                    return 'Mobile Number 2 already exists.';
+                  default:
+                    return 'Validation error: ' + err;
+                }
+              });
+            }
+
+            if (messages.length > 0) {
+              errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following Duplicate field issues:</p><ul class="list-disc pl-5">';
+              messages.forEach(m => {
+                errorMessage += `<li>${m}</li>`;
+              });
+              errorMessage += '</ul></div>';
+
+              Swal.fire({
+                icon: 'error',
+                title: 'Duplicate Information',
+                html: errorMessage,
+                confirmButtonText: 'OK',
+                customClass: {
+                  popup: 'bg-tileLight dark:bg-[#363636] text-black dark:text-white',
+                  title: 'font-semibold text-lg',
+                  htmlContainer: 'text-left',
+                  confirmButton: 'bg-red-500 dark:bg-red-500 hover:bg-red-600 dark:hover:bg-red-700',
+                },
+              });
+              return;
+            }
           }
         );
       } else if (this.logingRole === 'Distribution Centre Head') {
         console.log('Distribution Centre Head')
 
+        if (this.personalData.jobRole === 'Driver') {
+          if (!this.licenseFrontImageFileName || !this.licenseBackImageFileName || !this.insurenceFrontImageFileName || !this.insurenceBackImageFileName || !this.vehicleFrontImageFileName || !this.vehicleBackImageFileName || !this.vehicleSideAImageFileName || !this.vehicleSideBImageFileName) {
+            this.isLoading = false;
+            this.toastSrv.warning('Pleace fill all required vehicle image upload fields')
+            return;
+          }
+
+          this.driverObj.licFrontName = this.licenseFrontImageFileName
+          this.driverObj.licBackName = this.licenseBackImageFileName
+          this.driverObj.insFrontName = this.insurenceFrontImageFileName
+          this.driverObj.insBackName = this.insurenceBackImageFileName
+          this.driverObj.vFrontName = this.vehicleFrontImageFileName
+          this.driverObj.vBackName = this.vehicleBackImageFileName
+          this.driverObj.vSideAName = this.vehicleSideAImageFileName
+          this.driverObj.vSideBName = this.vehicleSideBImageFileName
+        }
+
        
-        this.DistributedManageOfficerSrv.createDistributionOfficer(this.personalData, this.selectedImage).subscribe(
+        this.DistributedManageOfficerSrv.createDistributionOfficer(this.personalData, this.selectedImage, this.driverObj, this.licenseFrontImagePreview, this.licenseBackImagePreview, this.insurenceFrontImagePreview, this.insurenceBackImagePreview, this.vehicleFrontImagePreview, this.vehicleBackImagePreview, this.vehicleSideAImagePreview, this.vehicleSideBImagePreview).subscribe(
           (res: any) => {
             if (res.status) {
               this.officerId = res.officerId;
               this.isLoading = false;
-              this.toastSrv.success('Distribution Officer Created Successfully')
+              this.toastSrv.success(`${this.personalData.jobRole} Created Successfully`)
               this.router.navigate(['/distribution-officers'])
             } else {
               this.isLoading = false;
@@ -410,7 +611,47 @@ selectManager(item: Manager) {
           },
           (error: any) => {
             this.isLoading = false;
-            this.toastSrv.error('There was an error creating the Distribution officer')
+            let errorMessage = 'An unexpected error occurred';
+            let messages: string[] = [];
+
+            if (error.error && Array.isArray(error.error.errors)) {
+              messages = error.error.errors.map((err: string) => {
+                switch (err) {
+                  case 'NIC':
+                    return 'The NIC number is already registered.';
+                  case 'Email':
+                    return 'Email already exists.';
+                  case 'PhoneNumber01':
+                    return 'Mobile Number 1 already exists.';
+                  case 'PhoneNumber02':
+                    return 'Mobile Number 2 already exists.';
+                  default:
+                    return 'Validation error: ' + err;
+                }
+              });
+            }
+
+            if (messages.length > 0) {
+              errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following Duplicate field issues:</p><ul class="list-disc pl-5">';
+              messages.forEach(m => {
+                errorMessage += `<li>${m}</li>`;
+              });
+              errorMessage += '</ul></div>';
+
+              Swal.fire({
+                icon: 'error',
+                title: 'Duplicate Information',
+                html: errorMessage,
+                confirmButtonText: 'OK',
+                customClass: {
+                  popup: 'bg-tileLight dark:bg-[#363636] text-black dark:text-white',
+                  title: 'font-semibold text-lg',
+                  htmlContainer: 'text-left',
+                  confirmButton: 'bg-red-500 dark:bg-red-500 hover:bg-red-600 dark:hover:bg-red-700',
+                },
+              });
+              return;
+            }
           }
         );
       } else {
@@ -532,6 +773,7 @@ selectManager(item: Manager) {
   }
 
   onSubmitFormPage1(form: NgForm) {
+    console.log('personal data', this.personalData)
     form.form.markAllAsTouched();
 
     this.validateLanguages();
@@ -559,13 +801,15 @@ selectManager(item: Manager) {
     missingFields.push('Employee Type is required');
   }
 
-  
+  if (!this.personalData.jobRole) {
+    missingFields.push('Job Role is required');
+  }
 
   // if (!this.personalData.companyId) {
   //   missingFields.push('Company Name');
   // }
 
-  if (!this.personalData.firstNameEnglish) {
+  if (!this.personalData.firstNameEnglish ) {
     missingFields.push('First Name (in English) is required');
   }
 
@@ -573,34 +817,34 @@ selectManager(item: Manager) {
     missingFields.push('Last Name (in English) is required');
   }
 
-  if (!this.personalData.firstNameSinhala) {
+  if (!this.personalData.firstNameSinhala && this.personalData.jobRole !=='Driver') {
     missingFields.push('First Name (in Sinhala) is required');
   }
 
-  if (!this.personalData.lastNameSinhala) {
+  if (!this.personalData.lastNameSinhala && this.personalData.jobRole !=='Driver') {
     missingFields.push('Last Name (in Sinhala) is required');
   }
 
-  if (!this.personalData.firstNameTamil) {
+  if (!this.personalData.firstNameTamil && this.personalData.jobRole !=='Driver') {
     missingFields.push('First Name (in Tamil) is required');
   }
 
-  if (!this.personalData.lastNameTamil) {
+  if (!this.personalData.lastNameTamil && this.personalData.jobRole !=='Driver') {
     missingFields.push('Last Name (in Tamil) is required');
   }
 
   if (!this.personalData.phoneNumber01) {
-    missingFields.push('Phone Number - 1 is required');
+    missingFields.push('Mobile Number - 1 is required');
   } else if (!/^[0-9]{9}$/.test(this.personalData.phoneNumber01) || this.isPhoneInvalidMap['phone01']) {
-    missingFields.push('Phone Number - 1 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+    missingFields.push('Mobile Number - 1 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
   }
 
   if (this.personalData.phoneNumber02) {
     if (!/^[0-9]{9}$/.test(this.personalData.phoneNumber02) || this.isPhoneInvalidMap['phone02']) {
-      missingFields.push('Phone Number - 2 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+      missingFields.push('Mobile Number - 2 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
     }
     if (this.personalData.phoneNumber01 === this.personalData.phoneNumber02) {
-      missingFields.push('Phone Number - 2 - Must be different from Phone Number - 1');
+      missingFields.push('Mobile Number - 2 - Must be different from Mobile Number - 1');
     }
   }
 
@@ -707,13 +951,91 @@ selectManager(item: Manager) {
         },
       });
       return;
-    }
-
-    this.onSubmit();  
+    } 
   }
 
   onSubmitFormPage3(form: NgForm) {
     form.form.markAllAsTouched();
+
+    const missingFields: string[] = [];
+
+    if (!this.driverObj.licNo) {
+      missingFields.push('License Number is Required');
+    }
+  
+    if (!this.licenseFrontImageFileName) {
+      missingFields.push("License's Front Image is required");
+    }
+  
+    if (!this.licenseBackImageFileName) {
+      missingFields.push("License's Back Image is required");
+    }
+
+    if (!this.driverObj.insNo) {
+      missingFields.push('Insurance Number is required');
+    }
+
+    if (!this.driverObj.insExpDate) {
+      missingFields.push('Insurance Expire Date is required');
+    }
+  
+    if (!this.insurenceFrontImageFileName) {
+      missingFields.push("Insurance's Front Image is required");
+    }
+  
+    if (!this.insurenceBackImageFileName) {
+      missingFields.push("Insurance's Back Image is required");
+    }
+
+    if (!this.driverObj.vRegNo) {
+      missingFields.push('Vehicle Registration Number is required');
+    }
+  
+    if (!this.driverObj.vType) {
+      missingFields.push('Vehicle Type is required');
+    }
+
+    if (!this.driverObj.vCapacity) {
+      missingFields.push('Vehicle Capacity is required');
+    }
+
+    if (!this.vehicleFrontImageFileName) {
+      missingFields.push("Vehicle's Front Image is required");
+    }
+
+    if (!this.vehicleBackImageFileName) {
+      missingFields.push("Vehicle's Back Image Image is required");
+    }
+  
+    if (!this.vehicleSideAImageFileName) {
+      missingFields.push("Vehicle's Side Image - 1 is required");
+    }
+
+    if (!this.vehicleSideBImageFileName) {
+      missingFields.push("Vehicle's Side Image - 2 is required");
+    }
+  
+    // Display errors if any
+    if (missingFields.length > 0) {
+      let errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following issues:</p><ul class="list-disc pl-5">';
+      missingFields.forEach((field) => {
+        errorMessage += `<li>${field}</li>`;
+      });
+      errorMessage += '</ul></div>';
+  
+      Swal.fire({
+        icon: 'error',
+        title: 'Missing or Invalid Information',
+        html: errorMessage,
+        confirmButtonText: 'OK',
+        customClass: {
+          popup: 'bg-white dark:bg-[#363636] text-[#534E4E] dark:text-textDark',
+          title: 'font-semibold text-lg',
+          htmlContainer: 'text-left',
+        },
+      });
+      return;
+    }
   }
 
 
@@ -891,6 +1213,365 @@ capitalizeFirstLetter(field: keyof typeof this.personalData) {
       this.personalData[field].slice(1);
   }
 }
+
+onNicInput(event: any) {
+  // Get value and trim leading/trailing spaces
+  let value: string = event.target.value.trimStart().toUpperCase();
+
+  // Remove all invalid characters except digits and V
+  value = value.replace(/[^0-9V]/g, '');
+
+  // Prevent entering V anywhere except last character of 10-char NIC
+  if (value.includes('V') && value.length !== 10) {
+    value = value.replace(/V/g, '');
+  }
+
+  // Handle 10-char NIC ending with V
+  if (value.length === 10 && value.endsWith('V')) {
+    value = value.slice(0, 10);
+  }
+
+  // Limit 12-digit NIC
+  if (value.length > 12) {
+    value = value.slice(0, 12);
+  }
+
+  // Update the model
+  this.personalData.nic = value;
+}
+
+// Replace onFileSelected with this more specific version
+onLicenseFrontImageSelected(event: any): void {
+  const file: File = event.target.files[0];
+  if (file) {
+    // Validate file size (5MB max)
+    if (file.size > 5000000) {
+      this.toastSrv.error('License image size should not exceed 5MB');
+      return;
+    }
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    if (!allowedTypes.includes(file.type)) {
+      this.toastSrv.error('License image must be JPEG, JPG or PNG format');
+      return;
+    }
+
+    this.licenseFrontImageFile = file;
+    this.licenseFrontImageFileName = file.name;
+
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.licenseFrontImagePreview = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+// Clear license image
+clearLicenseFrontImage(): void {
+  this.licenseFrontImageFile = null;
+  this.licenseFrontImageFileName = '';
+  this.licenseFrontImagePreview = null;
+  const fileInput = document.getElementById('licenseFrontImageUpload') as HTMLInputElement;
+  if (fileInput) fileInput.value = '';
+}
+
+triggerFileInputForDriver(event: Event, inputId: string): void {
+  event.preventDefault();
+  const fileInput = document.getElementById(inputId);
+  fileInput?.click();
+}
+
+onLicenseBackImageSelected(event: any): void {
+  const file: File = event.target.files[0];
+  if (file) {
+    // Validate file size (5MB max)
+    if (file.size > 5000000) {
+      this.toastSrv.error('License image size should not exceed 5MB');
+      return;
+    }
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    if (!allowedTypes.includes(file.type)) {
+      this.toastSrv.error('License image must be JPEG, JPG or PNG format');
+      return;
+    }
+
+    this.licenseBackImageFile = file;
+    this.licenseBackImageFileName = file.name;
+
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.licenseBackImagePreview = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+// Clear license image
+clearLicenseBackImage(): void {
+  this.licenseBackImageFile = null;
+  this.licenseBackImageFileName = '';
+  this.licenseBackImagePreview = null;
+  const fileInput = document.getElementById('licenseBackImageUpload') as HTMLInputElement;
+  if (fileInput) fileInput.value = '';
+}
+
+onInsurenceFrontImageSelected(event: any): void {
+  const file: File = event.target.files[0];
+  if (file) {
+    // Validate file size (5MB max)
+    if (file.size > 5000000) {
+      this.toastSrv.error('Insurence image size should not exceed 5MB');
+      return;
+    }
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    if (!allowedTypes.includes(file.type)) {
+      this.toastSrv.error('Insurence image must be JPEG, JPG or PNG format');
+      return;
+    }
+
+    this.insurenceFrontImageFile = file;
+    this.insurenceFrontImageFileName = file.name;
+
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.insurenceFrontImagePreview = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+// Clear license image
+clearInsurenceFrontImage(): void {
+  this.insurenceFrontImageFile = null;
+  this.insurenceFrontImageFileName = '';
+  this.insurenceFrontImagePreview = null;
+  const fileInput = document.getElementById('insurenceFrontImageUpload') as HTMLInputElement;
+  if (fileInput) fileInput.value = '';
+}
+
+
+onInsurenceBackImageSelected(event: any): void {
+  const file: File = event.target.files[0];
+  if (file) {
+    // Validate file size (5MB max)
+    if (file.size > 5000000) {
+      this.toastSrv.error('Insurence image size should not exceed 5MB');
+      return;
+    }
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    if (!allowedTypes.includes(file.type)) {
+      this.toastSrv.error('Insurence image must be JPEG, JPG or PNG format');
+      return;
+    }
+
+    this.insurenceBackImageFile = file;
+    this.insurenceBackImageFileName = file.name;
+
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.insurenceBackImagePreview = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+// Clear license image
+clearInsurenceBackImage(): void {
+  this.insurenceBackImageFile = null;
+  this.insurenceBackImageFileName = '';
+  this.insurenceBackImagePreview = null;
+  const fileInput = document.getElementById('insuranceBackImageUpload') as HTMLInputElement;
+  if (fileInput) fileInput.value = '';
+}
+
+
+onVehicleFrontImageSelected(event: any): void {
+  const file: File = event.target.files[0];
+  if (file) {
+    // Validate file size (5MB max)
+    if (file.size > 5000000) {
+      this.toastSrv.error('License image size should not exceed 5MB');
+      return;
+    }
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    if (!allowedTypes.includes(file.type)) {
+      this.toastSrv.error('License image must be JPEG, JPG or PNG format');
+      return;
+    }
+
+    this.vehicleFrontImageFile = file;
+    this.vehicleFrontImageFileName = file.name;
+
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.vehicleFrontImagePreview = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+// Clear license image
+clearVehicleFrontImage(): void {
+  this.vehicleFrontImageFile = null;
+  this.vehicleFrontImageFileName = '';
+  this.vehicleFrontImagePreview = null;
+  const fileInput = document.getElementById('vehicleFrontImageUpload') as HTMLInputElement;
+  if (fileInput) fileInput.value = '';
+}
+
+
+onVehicleBackImageSelected(event: any): void {
+  const file: File = event.target.files[0];
+  if (file) {
+    // Validate file size (5MB max)
+    if (file.size > 5000000) {
+      this.toastSrv.error('Vehicle Back image size should not exceed 5MB');
+      return;
+    }
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    if (!allowedTypes.includes(file.type)) {
+      this.toastSrv.error('Vehicle Back image must be JPEG, JPG or PNG format');
+      return;
+    }
+
+    this.vehicleBackImageFile = file;
+    this.vehicleBackImageFileName = file.name;
+
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.vehicleBackImagePreview = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+// Clear license image
+clearVehicleBackImage(): void {
+  this.vehicleBackImageFile = null;
+  this.vehicleBackImageFileName = '';
+  this.vehicleBackImagePreview = null;
+  const fileInput = document.getElementById('vehicleBackImageUpload') as HTMLInputElement;
+  if (fileInput) fileInput.value = '';
+}
+
+onVehicleSideAImageSelected(event: any): void {
+  const file: File = event.target.files[0];
+  if (file) {
+    // Validate file size (5MB max)
+    if (file.size > 5000000) {
+      this.toastSrv.error('Vehicle Back image size should not exceed 5MB');
+      return;
+    }
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    if (!allowedTypes.includes(file.type)) {
+      this.toastSrv.error('Vehicle Back image must be JPEG, JPG or PNG format');
+      return;
+    }
+
+    this.vehicleSideAImageFile = file;
+    this.vehicleSideAImageFileName = file.name;
+
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.vehicleSideAImagePreview = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+// Clear license image
+clearVehicleSideAImage(): void {
+  this.vehicleSideAImageFile = null;
+  this.vehicleSideAImageFileName = '';
+  this.vehicleSideAImagePreview = null;
+  const fileInput = document.getElementById('vehicleSideAImageUpload') as HTMLInputElement;
+  if (fileInput) fileInput.value = '';
+}
+
+
+
+onVehicleSideBImageSelected(event: any): void {
+  const file: File = event.target.files[0];
+  if (file) {
+    // Validate file size (5MB max)
+    if (file.size > 5000000) {
+      this.toastSrv.error('Vehicle Back image size should not exceed 5MB');
+      return;
+    }
+
+    // Validate file type
+    const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
+    if (!allowedTypes.includes(file.type)) {
+      this.toastSrv.error('Vehicle Back image must be JPEG, JPG or PNG format');
+      return;
+    }
+
+    this.vehicleSideBImageFile = file;
+    this.vehicleSideBImageFileName = file.name;
+
+    // Create preview
+    const reader = new FileReader();
+    reader.onload = (e: any) => {
+      this.vehicleSideBImagePreview = e.target.result;
+    };
+    reader.readAsDataURL(file);
+  }
+}
+
+// Clear license image
+clearVehicleSideBImage(): void {
+  this.vehicleSideBImageFile = null;
+  this.vehicleSideBImageFileName = '';
+  this.vehicleSideBImagePreview = null;
+  const fileInput = document.getElementById('vehicleSideBImageUpload') as HTMLInputElement;
+  if (fileInput) fileInput.value = '';
+}
+
+vehicleChange() {
+  this.driverObj.vType = this.selectVehicletype.name
+  this.driverObj.vCapacity = this.selectVehicletype.capacity
+}
+
+onDateChange(newDate: string | Date | null) {
+  let dateString: string;
+
+  if (!newDate) {
+    
+    dateString = new Date().toISOString().split('T')[0];
+  } 
+  else if (newDate instanceof Date) {
+    
+    dateString = newDate.toISOString().split('T')[0];
+  } 
+  else {
+    
+    dateString = newDate;
+  }
+
+  this.driverObj.insExpDate = dateString;
+}
+
 
 }
 

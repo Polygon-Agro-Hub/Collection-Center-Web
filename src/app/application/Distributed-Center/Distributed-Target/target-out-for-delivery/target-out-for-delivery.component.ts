@@ -25,6 +25,7 @@ export class TargetOutForDeliveryComponent implements OnInit {
   totalItems: number = 0;
   itemsPerPage: number = 10;
   hasData: boolean = true;
+  centerName!: string;
 
   isLoading:boolean = true;
 
@@ -54,16 +55,16 @@ export class TargetOutForDeliveryComponent implements OnInit {
     this.fetchOutForDeliveryOrders();
   }
 
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent) {
-    const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
-    const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
+  // @HostListener('document:click', ['$event'])
+  // onDocumentClick(event: MouseEvent) {
+  //   const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
+  //   const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
 
-    if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
-      this.isStatusDropdownOpen = false;
-    }
+  //   if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
+  //     this.isStatusDropdownOpen = false;
+  //   }
 
-  }
+  // }
 
   fetchOutForDeliveryOrders(status: string = this.selectStatus, search: string = this.searchText) {
     this.isLoading = true;
@@ -86,7 +87,36 @@ export class TargetOutForDeliveryComponent implements OnInit {
     )
   }
 
+  fetchCenterData() {
+    this.isLoading = true;
+  
+    this.DistributionSrv.getCenterData().subscribe(
+      (res) => {
+        console.log('res', res);
+  
+        this.centerName = res?.centerName ?? '';
+  
+        const items = res?.items ?? [];  // safe fallback
+  
+        console.log('items', items);
+  
+        this.totalItems = items.length;
+        this.hasData = items.length > 0;
+  
+        this.isLoading = false;
+      },
+      (err) => {
+        console.error(err);
+        this.totalItems = 0;
+        this.hasData = false;
+        this.isLoading = false;
+      }
+    );
+  }
+  
+
   onSearch() {
+    this.searchText = this.searchText.trimStart();
     this.fetchOutForDeliveryOrders();
   }
 
@@ -148,19 +178,44 @@ export class TargetOutForDeliveryComponent implements OnInit {
   }
 
   downloadTemplate1() {
+    this.fetchCenterData();
     this.isDownloading = true;
+  
+    const now = new Date();
 
+// Example: "10 Nov"
+const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+
+// Example: "10/11" → convert to "10-11" (safe for filenames)
+const fullDateStr = `${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
+console.log(fullDateStr); // e.g. "11-10"
+// Example: "12.41PM"
+const timeStr = now
+  .toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
+  .replace(':', '.')
+  .replace(' ', '');
+
+// Combine → "10-11 12.41PM"
+const finalStr = `${fullDateStr} ${timeStr}`;
+console.log(finalStr);
+  
     this.DistributionSrv
-      .downloadOutForDeliveryTargetProgressReport(this.selectStatus, this.searchText )
+      .downloadOutForDeliveryTargetProgressReport(this.selectStatus, this.searchText)
       .subscribe({
         next: (blob) => {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
-          a.download = `Out_For_Delivery_Report.xlsx`;
+  
+          if (this.selectStatus) {
+            a.download = `${this.centerName} OFD Orders on ${dateStr} filtered by ${this.selectStatus} Generated at ${finalStr}.xlsx`;
+          } else {
+            a.download = `${this.centerName} OFD Orders on ${dateStr} Generated at ${finalStr}.xlsx`;
+          }
+  
           a.click();
           window.URL.revokeObjectURL(url);
-
+  
           Swal.fire({
             icon: "success",
             title: "Downloaded",
@@ -186,6 +241,92 @@ export class TargetOutForDeliveryComponent implements OnInit {
         }
       });
   }
+
+  getStatus(item: orders): string {
+    console.log('Setting status');
+  
+    // Convert both into Date objects
+    const scheduleDate = new Date(item.sheduleDate);
+    const outDlvrDateLocal = item.outDlvrDateLocal ? new Date(item.outDlvrDateLocal) : null;
+  
+    // Create the schedule deadline
+    const deadline = new Date(scheduleDate);
+  
+    if (item.sheduleTime) {
+      const timeSlot = item.sheduleTime.trim();
+  
+      if (timeSlot === 'Within 8-12 PM') {
+        deadline.setHours(12, 0, 0, 0); // 12:00 PM
+      } else if (timeSlot === 'Within 12-4 PM') {
+        deadline.setHours(16, 0, 0, 0); // 4:00 PM
+      } else if (timeSlot === 'Within 4-8 PM') {
+        deadline.setHours(20, 0, 0, 0); // 8:00 PM
+      }
+    }
+  
+    // Current time in SL
+    const now = new Date(
+      new Date().toLocaleString('en-US', { timeZone: 'Asia/Colombo' })
+    );
+  
+    console.log(
+      'Now (SL):',
+      now.toLocaleString('en-GB', { timeZone: 'Asia/Colombo', hour12: false })
+    );
+    console.log(
+      'Deadline (SL):',
+      deadline.toLocaleString('en-GB', { timeZone: 'Asia/Colombo', hour12: false })
+    );
+  
+
+    // --- Case 1: Not completed yet ---
+    if (outDlvrDateLocal) {
+      console.log('deldate', outDlvrDateLocal.getTime())
+      if (outDlvrDateLocal.getTime() > deadline.getTime()) {
+        // this.isLateAndNotCompleted = true;
+        return 'Late';
+      } else if (outDlvrDateLocal.getTime() <= deadline.getTime()){
+        return 'On Time';
+      }
+    }
+  
+    return 'Unknown';
+  }
+
+  getTimeValidity(item: orders): string {
+    const scheduleDate = new Date(item.sheduleDate);
+  
+    // Get current date in Asia/Colombo
+    const now = new Date(
+      new Date().toLocaleString('en-US', { timeZone: 'Asia/Colombo' })
+    );
+  
+    // Compare only the date part (ignore time)
+    const scheduleDateOnly = new Date(
+      scheduleDate.getFullYear(),
+      scheduleDate.getMonth(),
+      scheduleDate.getDate()
+    );
+  
+    const currentDateOnly = new Date(
+      now.getFullYear(),
+      now.getMonth(),
+      now.getDate()
+    );
+  
+    if (scheduleDateOnly.getTime() === currentDateOnly.getTime()) {
+      console.log('Equal')
+      return 'Equal';
+    } else if (scheduleDateOnly.getTime() < currentDateOnly.getTime()) {
+      console.log('Passed')
+      return 'Passed';
+    } else {
+      console.log('nPassed')
+      return 'Not Passed';
+    }
+  }
+  
+  
 }
 
 class orders {
@@ -203,5 +344,6 @@ class orders {
   lastNameEnglish!: string
   outDlvrDateLocal!: Date
   deliveryPeriod!: string
+  scheduleDateStatus!: string
 }
 

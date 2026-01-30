@@ -21,14 +21,27 @@
         <p>Officer Profile</p>
     </div>
 
+    <div *ngIf="naviPath ==='distribution-center'"
+        class="flex gap-5 font-semibold text[#424242] mb-4 mr-5 ml-0 dark:text-[#FFFFFF] dark:bg-blacks cursor-pointer">
+        <p onclick="history.back()">Distribution Centres</p>
+        <p onclick="history.back()">Center Dashboard</p>
+        <p>Officer Profile</p>
+    </div>
+
     <div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] dark:text-white shadow-lg rounded-lg">
         <div class="flex flex-col gap-7 px-2 py-2" id="reportcontainer">
             <div
                 class="flex flex-row justify-between items-center border-[#F1F7FA] border-[3px] rounded-lg shadowmd p-6">
                 <div class="flex flex-row items-center">
-                    <!-- <img class="w-28 h-28 rounded-full"
-                    src="https://images.pexels.com/photos/845457/pexels-photo-845457.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" /> -->
-                    <img class="w-28 h-28 rounded-full object-cover" [src]="officerObj.image" />
+                    
+                    <div *ngIf="officerObj.image"> 
+                        <img class="w-28 h-28 rounded-full object-cover" [src]="officerObj.image" />
+                    </div>
+
+                    <div *ngIf="!officerObj.image" 
+                            class="flex rounded-full border-solid border-2 justify-center items-center w-32 h-32">
+                            <i class="fa-regular fa-user text-6xl dark:text-white"></i>
+                        </div>
 
                     <div class="ml-6">
                         <p class="text-lg font-semibold">{{officerObj.firstNameEnglish}} {{officerObj.lastNameEnglish}}
@@ -49,13 +62,14 @@
                             || officerObj.jobRole === 'Collection Centre Head' 
                             || officerObj.jobRole === 'Collection Officer' 
                             || officerObj.jobRole === 'Customer Officer'">
-                            {{ officerObj.regCode }} Centre
+                            {{ officerObj.regCode ? officerObj.regCode + ' Centre' : 'Officer has been disclaimed - No Assigned Centre' }}
                         </p>
 
                         <p class="font-semibold" *ngIf="officerObj.jobRole === 'Distribution Centre Manager' 
                             || officerObj.jobRole === 'Distribution Centre Head' 
-                            || officerObj.jobRole === 'Distribution Officer'">
-                            {{ officerObj.distributedCenterRegCode }} Centre
+                            || officerObj.jobRole === 'Distribution Officer'
+                            || officerObj.jobRole === 'Driver'">
+                            {{ officerObj.distributedCenterRegCode ? officerObj.distributedCenterRegCode + ' Centre' : 'Officer has been disclaimed - No Assigned Centre' }}
                         </p>
                         <p class="text-[#627189] dark:text-textDark">{{officerObj.companyNameEnglish}}</p>
                     </div>
@@ -69,6 +83,8 @@
                     </span>
                     <button *ngIf="(logingRole === 'Collection Centre Manager' || logingRole === 'Collection Centre Head')" class="bg-blue-600 text-white font-semibold rounded-lg shadow-md px-5 py-2"
                         (click)="viewOfficerTarget(officerId, officerObj.centerName)">View Target</button>
+                    <button *ngIf="(logingRole === 'Distribution Centre Manager' || logingRole === 'Distribution Centre Head')" class="bg-blue-600 text-white font-semibold rounded-lg shadow-md px-5 py-2"
+                        (click)="viewOfficerTargetDistribution(officerId, officerObj.distributedCenterName, officerObj.distributedCenterId, officerObj.empIdPrefix)">View Target</button>
                 </div>
 
             </div>
@@ -207,14 +223,14 @@
                     <div>
                         <p class="text-[#627189] dark:text-textDark">License's Front Image</p>
                         <a [href]="officerObj.licFrontImg" target="_blank">
-                            <i class="fa-solid fa-images text-3xl text-black"></i>
+                            <i class="fa-solid fa-image text-3xl text-black"></i>
                         </a>
                     </div>
 
                     <div>
                         <p class="text-[#627189] dark:text-textDark">License's Back Image</p>
                         <a [href]="officerObj.licBackImg" target="_blank">
-                            <i class="fa-solid fa-images text-3xl text-black"></i>
+                            <i class="fa-solid fa-image text-3xl text-black"></i>
                         </a>
                     </div>
 
@@ -234,19 +250,23 @@
                     </div>
 
                     <div>
-                    </div>
+                        <p class="text-[#627189] dark:text-textDark">Insurance Expire Date</p>
+                        <p class="font-semibold dark:text-white text-black">
+                          {{ officerObj.insExpDate | date:'yyyy-MM-dd' }}
+                        </p>
+                      </div>
 
                     <div>
                         <p class="text-[#627189] dark:text-textDark">Insurance's Front Image</p>
                         <a [href]="officerObj.insFrontImg" target="_blank">
-                            <i class="fa-solid fa-images text-3xl text-black"></i>
+                            <i class="fa-solid fa-image text-3xl text-black"></i>
                         </a>
                     </div>
 
                     <div>
                         <p class="text-[#627189] dark:text-textDark">Insurance's Back Image</p>
                         <a [href]="officerObj.insBackImg" target="_blank">
-                            <i class="fa-solid fa-images text-3xl text-black"></i>
+                            <i class="fa-solid fa-image text-3xl text-black"></i>
                         </a>
                     </div>
 
@@ -280,28 +300,28 @@
                     <div>
                         <p class="text-[#627189] dark:text-textDark">Vehicle’s Front Image</p>
                         <a [href]="officerObj.vehFrontImg" target="_blank">
-                            <i class="fa-solid fa-images text-3xl text-black"></i>
+                            <i class="fa-solid fa-image text-3xl text-black"></i>
                         </a>
                     </div>
 
                     <div>
                         <p class="text-[#627189] dark:text-textDark">Vehicle’s Back Image</p>
                         <a [href]="officerObj.vehBackImg" target="_blank">
-                            <i class="fa-solid fa-images text-3xl text-black"></i>
+                            <i class="fa-solid fa-image text-3xl text-black"></i>
                         </a>
                     </div>
 
                     <div>
                         <p class="text-[#627189] dark:text-textDark">Vehicle’s Side Image - 1</p>
                         <a [href]="officerObj.vehSideImgA" target="_blank">
-                            <i class="fa-solid fa-images text-3xl text-black"></i>
+                            <i class="fa-solid fa-image text-3xl text-black"></i>
                         </a>
                     </div>
 
                     <div>
                         <p class="text-[#627189] dark:text-textDark">Vehicle’s Side Image - 2</p>
                         <a [href]="officerObj.vehSideImgB" target="_blank">
-                            <i class="fa-solid fa-images text-3xl text-black"></i>
+                            <i class="fa-solid fa-image text-3xl text-black"></i>
                         </a>
                     </div>
 
@@ -331,7 +351,8 @@
                         "{{officerObj.firstNameEnglish}} {{officerObj.lastNameEnglish}}"" (EMP ID -
                         "{{officerObj.empIdPrefix}}")
                         <span class="font-normal">from centre</span> <br>
-                        "{{officerObj.distributedCenterName}}"?
+                        <span *ngIf="officerObj.jobRole ==='Collection Officer'">"{{officerObj.regCode}}"?</span>
+                        <span *ngIf="officerObj.jobRole ==='Distribution Officer'">"{{officerObj.distributedCenterRegCode}}"?</span>
                     </p>
 
                     <p class="text-red-500 mb-6 italic">

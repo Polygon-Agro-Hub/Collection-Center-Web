@@ -76,19 +76,19 @@ export class DchCenterTargetOutForDeliveryComponent implements OnInit{
     this.fetchCenterTargetOutForDelivery();
   }
 
-  @HostListener('document:click', ['$event'])
-  onDocumentClick(event: MouseEvent) {
-    const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
-    const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
+  // @HostListener('document:click', ['$event'])
+  // onDocumentClick(event: MouseEvent) {
+  //   const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
+  //   const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
 
-    if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
-      this.isStatusDropdownOpen = false;
-    }
+  //   if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
+  //     this.isStatusDropdownOpen = false;
+  //   }
 
-  }
+  // }
 
   fetchCenterTargetOutForDelivery(centerId: number = this.centerId!, search: string = this.searchText, status: string = this.selectStatus, selectDate: string | Date | null = this.date) {
-    console.log('selectDate', selectDate)
+    console.log('selectDate', selectDate, 'status', status)
     this.isLoading = true;
     this.DistributionSrv.getCenterTargetForDelivery(centerId, search, status, selectDate).subscribe(
       (res) => {
@@ -178,6 +178,29 @@ export class DchCenterTargetOutForDeliveryComponent implements OnInit{
   downloadTemplate1() {
     this.isDownloading = true;
 
+    // Example: selectedDate = "2025-11-10" or "11/10/2025"
+const selectedDateStr = String(this.date); 
+
+// Convert safely to Date
+const selectedDateObj = new Date(selectedDateStr);
+
+// Example: "10 Nov"
+const dateStr = selectedDateObj.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+
+// Example: "11-10" (MM-DD format)
+const fullDateStr = `${String(selectedDateObj.getMonth() + 1).padStart(2, '0')}-${String(selectedDateObj.getDate()).padStart(2, '0')}`;
+console.log(fullDateStr); // e.g. "11-10"
+
+const now = new Date();
+
+const timeStr = now
+  .toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
+  .replace(':', '.')
+  .replace(' ', '');
+
+const finalStr = `${fullDateStr} ${timeStr}`;
+console.log(finalStr);
+
     this.DistributionSrv
       .downloadDCHOutForDeliveryTargetProgressReport(this.selectStatus, this.date, this.searchText, this.centerId! )
       .subscribe({
@@ -185,7 +208,11 @@ export class DchCenterTargetOutForDeliveryComponent implements OnInit{
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
-          a.download = `DCH-Out_For_Delivery_Report${this.date}.xlsx`;
+          if (this.selectStatus) {
+            a.download = `OFD Orders on ${dateStr} filtered by ${this.selectStatus} Generated at ${finalStr}.xlsx`;
+          } else {
+            a.download = `OFD Orders on ${dateStr}  Generated at ${finalStr}.xlsx`;
+          }
           a.click();
           window.URL.revokeObjectURL(url);
 

@@ -12,11 +12,10 @@
     (click)="navigate('/profile')"
   ></i> -->
 
-  <i *ngIf="!userImage"
+  <i *ngIf="!userImage || userImage === ''"
     class="fa-solid fa-user text-lg sm:text-xl dark:text-textDark cursor-pointer"
     (click)="navigate('/profile')"
   ></i>
-
   <!-- <i
     class="fa-solid fa-user text-lg sm:text-xl mx-4 sm:mx-6 md:mx-8 lg:mx-10"
     (click)="navigate('/profile')"

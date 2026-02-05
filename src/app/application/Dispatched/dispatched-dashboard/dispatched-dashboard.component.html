@@ -151,7 +151,7 @@
       </div>
       <div class="flex w-full flex-row items-center justify-end gap-x-5 mr-5">
 
-        <i class="fa-solid fa-list text-2xl dark:text-white ml-5"></i>
+        <i *ngIf="activeTab === 'all' || activeTab === 'Ready to Pickup' || activeTab === 'out-for-delivery' || activeTab === 'Return Received' || activeTab === 'Picked Up'" class="fa-solid fa-list text-2xl dark:text-white ml-5"></i>
         <p *ngIf="activeTab === 'all' || activeTab === 'Ready to Pickup' || activeTab === 'out-for-delivery' || activeTab === 'Return Received' || activeTab === 'Picked Up'" class="text-textLight dark:text-textDark whitespace-nowrap">Filter By</p>
   
         <div *ngIf="activeTab === 'all'" class="relative w-44  custom-status-dropdown-container">
@@ -202,7 +202,7 @@
         ></app-custom-datepicker>
         </div>
 
-        <div *ngIf="activeTab === 'Ready to Pickup'" class="relative w-44  custom-status-dropdown-container">
+        <div *ngIf="activeTab === 'Ready to Pickup'" class="relative w-36  custom-status-dropdown-container">
           <select [(ngModel)]="selectedStatus" class="hidden" (change)="filterTimeSlot()">
               <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300" value="Assigned">
                   8AM - 2PM</option>
@@ -478,7 +478,13 @@
         <span class="text-sm text-gray-600 dark:text-gray-400 w-44 flex-shrink-0">Platform</span>
         <span class="text-sm text-gray-600 dark:text-gray-400 mx-3">:</span>
         <span class="text-sm text-textLight dark:text-textDark font-medium flex-1">
-          {{ deliveryObj.orderApp === 'Marketplace' ? 'GoVi Mart' : deliveryObj.orderApp  }}
+          {{
+            deliveryObj.orderApp === 'Marketplace'
+              ? 'GoVi Mart'
+              : deliveryObj.orderApp === 'Dash'
+                ? 'SalesDash'
+                : deliveryObj.orderApp
+          }}
         </span>
       </div>
 

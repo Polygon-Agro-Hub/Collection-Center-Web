@@ -93,7 +93,7 @@
 
 
                 <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
-                    <input type="text" placeholder="Search by Variety Name" [(ngModel)]="searchText"
+                    <input type="text" placeholder="Search by Crop / Variety Name" [(ngModel)]="searchText"
                         (keyup.enter)="onSearch()" (keyup.esc)="offSearch()" (input)="checkLeadingSpace()"
                         class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
                     <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
@@ -130,7 +130,7 @@
                         <th class="px-6 py-3 text-left font-medium">Variety Name</th>
                         <th class="px-6 py-3 text-center font-medium">Grade</th>
                         <th class="px-6 py-3 text-left font-medium">Target (kg)</th>
-                        <th class="px-6 py-3 text-center font-medium">Completed (kg)</th>
+                        <th class="px-6 py-3 text-left font-medium">Completed (kg)</th>
                         <th class="px-6 py-3 text-center font-medium">Status</th>
                     </tr>
                 </thead>
@@ -146,7 +146,7 @@
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
                             {{ item.target === 0.00 ? 'Not Set' : item.target | number: '1.2-2' }}
                         </td>
-                        <td class="px-6 py-4 text-center text-gray-900 dark:text-gray-300">
+                        <td class="px-6 py-4 text-left text-gray-900 dark:text-gray-300">
                             {{ item.complete === 0.00 ? 'Empty' : item.complete | number: '1.2-2' }}
                         </td>
 
@@ -244,7 +244,7 @@
 
 
                 <div class="flex items-center rounded-full px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
-                    <input type="text" placeholder="Search by Variety Name" [(ngModel)]="assignSearch" (input)="checkLeadingSpaceAssignSearch()"
+                    <input type="text" placeholder="Search by Crop / Variety Name" [(ngModel)]="assignSearch" (input)="checkLeadingSpaceAssignSearch()"
                         (keyup.enter)="assignOnSearch()" (keyup.esc)="assignOffSearch()"
                         class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
                     <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
@@ -291,8 +291,8 @@
                         <th class="px-6 py-3 text-left font-medium">Target (A)</th>
                         <th class="px-6 py-3 text-left font-medium">Target (B)</th>
                         <th class="px-6 py-3 text-left font-medium">Target (C)</th>
-                        <th class="px-6 py-3 text-left font-medium">Ends At</th>
-                        <th class="px-6 py-3 text-left font-medium">Assign</th>
+                        <!-- <th class="px-6 py-3 text-left font-medium">Ends At</th> -->
+                        <th class="px-6 py-3 text-center font-medium">Assign</th>
                         <th class="px-6 py-3 text-left font-medium"></th>
                     </tr>
                 </thead>
@@ -308,11 +308,11 @@
                         <td class="px-6 py-4 text-black dark:text-gray-300 ">{{item.qtyA | number: '1.2-2'}}</td>
                         <td class="px-6 py-4 text-black dark:text-gray-300 ">{{item.qtyB | number: '1.2-2'}}</td>
                         <td class="px-6 py-4 text-black dark:text-gray-300 ">{{item.qtyC | number: '1.2-2'}}</td>
-                        <td class="px-6 py-4 text-black dark:text-gray-300 text-lg">
+                        <!-- <td class="px-6 py-4 text-black dark:text-gray-300 text-lg">
                             <p class="text-[#646464] text-sm">{{ formatDate(item.toDate )}}</p>
-                            <!-- <p class="text-[#646464] text-sm">{{ formatTime(item.toTime) }}</p> -->
-                        </td>
-                        <td class="px-6 py-4 text-black-900 dark:text-gray-300 ">
+                            
+                        </td> -->
+                        <td class="px-6 py-4 text-center text-black-900 dark:text-gray-300 ">
                             <span
                                 *ngIf="item.isAssign === 0 && (item.assignStatusA === 0 && item.assignStatusB === 0 && item.assignStatusC === 0)">
                                 <i class="fa-solid fa-users-gear text-blue-600 text-xl cursor-pointer"

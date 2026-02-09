@@ -95,7 +95,7 @@ export class ViewComplaintsComponent implements OnInit {
           this.category = '';
           this.complaint = '';
           this.isLoading = false;
-          this.selectSent();
+          this.selectRecevied();
 
         } else {
           this.isLoading = false;

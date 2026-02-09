@@ -717,7 +717,8 @@ export class EditOfficerComponent implements OnInit {
   }
 
   getAllManagers() {
-    this.ManageOficerSrv.getCenterManagers(this.personalData.centerId).subscribe(
+    console.log('id', this.personalData.cofId)
+    this.ManageOficerSrv.getCenterManagersForEdit(this.personalData.centerId, Number(this.personalData.cofId)).subscribe(
       (res) => {
 
         this.managerArr = res
@@ -1658,6 +1659,7 @@ export class EditOfficerComponent implements OnInit {
 
 
 class Personal {
+  cofId!: number;
   firstNameEnglish!: string;
   firstNameSinhala!: string;
   firstNameTamil!: string;

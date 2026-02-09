@@ -52,7 +52,7 @@
         </div>
 
 
-        <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+        <div class="flex mr-5 items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
             <input type="text" placeholder="Search by Ref No, EMP ID" [(ngModel)]="searchText"
                 class="bg-transparent outline-none w-full text-textLight dark:text-textDark" (keyup.enter)="onSearch()"
                 (keyup.esc)="offSearch()" />
@@ -161,12 +161,12 @@
         <div class="bg-white dark:bg-[#363636] shadow-lg rounded-lg p-6 w-2/5">
             <div class="flex flex-col items-center gap-4">
                 <!-- Envelope Icon -->
-                <div class="bg-[#F6F6F6] rounded-full shadow-md p-4 flex items-center justify-center">
-                    <i class="fa-regular fa-envelope text-3xl text-gray-700"></i>
+                <div class="bg-[#F6F6F6] rounded-full shadow-md px-3 py-2 flex items-center justify-center">
+                    <i class="fa-regular fa-envelope text-xl text-gray-700"></i>
                 </div>
 
                 <!-- Title -->
-                <p class="text-2xl font-semibold text-gray-900 dark:text-white">Your Response</p>
+                <p class="text-lg font-semibold text-gray-900 dark:text-white">Your Response</p>
 
                 <!-- Message Container -->
                 <div class="flex flex-col w-full border-[1px] border-[#D9D9D9] dark:text-white py-4 px-5 rounded-lg">

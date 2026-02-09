@@ -248,6 +248,17 @@ export class ManageOfficersService {
     });
   }
 
+  getCenterManagersForEdit(id: number | string, officerId: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.get(`${this.apiUrl}/manage-officers/get-center-managers-for-edit/${id}/${officerId}`, {
+      headers,
+    });
+  }
+
   CCHcreateCollectiveOfficer(person: any, selectedImage: any, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
     const formData = new FormData();
 

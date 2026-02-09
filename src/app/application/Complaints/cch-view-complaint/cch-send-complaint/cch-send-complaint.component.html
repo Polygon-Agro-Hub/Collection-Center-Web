@@ -7,14 +7,14 @@
         <p class="text-lg">Filter By</p>
 
 
-        <div class="relative w-40 custom-employee-dropdown-container">
+        <div class="relative w-44 custom-employee-dropdown-container">
             <!-- Hidden native select -->
             <select [(ngModel)]="selectStatus" class="hidden" (change)="filterEmployee()">
                 <option value="" selected disabled>Status</option>
                 <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300" value="Own">
                     Own Complaints</option>
                 <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300" value="Other">
-                    Other Complaints</option>
+                    Other Employees</option>
             </select>
 
             <!-- Custom dropdown trigger -->
@@ -38,11 +38,15 @@
 
             <!-- Custom dropdown options -->
             <div *ngIf="isEmployeeDropdownOpen"
-                class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
-                <div class="py-1">
-                    <div *ngFor="let option of employeeDropdownOptions" (click)="selectEmployeeOption(option)"
-                        class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
-                        <span class="flex-grow">{{ option }}</span>
+                class="absolute overflow-hidden z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
+                <div class="">
+                    <div *ngFor="let option of employeeDropdownOptions; let i = index" (click)="selectEmployeeOption(option.value)"
+                        class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center"
+                        [ngClass]="{
+                            'rounded-t-xl': i === 0,
+                            'rounded-b-xl': i === employeeDropdownOptions.length - 1
+                          }">
+                        <span class="flex-grow">{{ option.label }}</span>
                         <i class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
                     </div>
                 </div>
@@ -80,10 +84,14 @@
 
             <!-- Custom dropdown options -->
             <div *ngIf="isStatusDropdownOpen"
-                class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
-                <div class="py-1">
-                    <div *ngFor="let option of statusDropdownOptions" (click)="selectStatusOption(option)"
-                        class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
+                class="absolute z-10 overflow-hidden w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
+                <div class="">
+                    <div *ngFor="let option of statusDropdownOptions; let i = index" (click)="selectStatusOption(option)"
+                        class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center"
+                        [ngClass]="{
+                            'rounded-t-xl': i === 0,
+                            'rounded-b-xl': i === statusDropdownOptions.length - 1
+                          }">
                         <span class="flex-grow">{{ option }}</span>
                         <i class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
                     </div>
@@ -176,9 +184,10 @@
                         </div>
                       </td>
                       
-                    <td class="px-6 py-4 cursor-pointer">
-                        <i class="fa-solid fa-reply text-[#415CFF] text-lg cursor-pointer"
-                            [ngClass]="{'text-gray-200 cursor-not-allowed': item.reply === null}"
+                    <td class="px-6 py-4">
+                        <i class="fa-solid fa-reply text-[#415CFF] text-lg"
+                            [ngClass]="{'text-gray-200 cursor-not-allowed': item.reply === null,
+                            'text-[#415CFF] cursor-pointer': item.reply !== null}"
                             (click)="item.reply !== null && viewReply(item.id)">
                         </i>
                     </td>
@@ -205,11 +214,11 @@
     <div *ngIf="isReplyView" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
         <div class="bg-white dark:bg-[#363636] shadow-lg rounded-lg p-6 w-2/5">
             <div class="flex flex-col items-center justify-center gap-5">
-                <div class="bg-[#F6F6F6] rounded-full shadow-md p-5">
-                    <i class="fa-regular fa-envelope text-4xl"></i>
+                <div class="bg-[#F6F6F6] rounded-full shadow-md py-2 px-3">
+                    <i class="fa-regular fa-envelope text-xl"></i>
                 </div>
 
-                <p class="text-3xl font-bold dark:text-white">Reply from Polygon Agro</p>
+                <p class="text-lg font-bold dark:text-white">Reply from Polygon Agro</p>
 
                 <div class="flex flex-col  w-full border-[1px] border-[#D9D9D9] dark:text-white py-4 px-5 rounded-lg">
                     <div class="flex flex-col gap-y-2">
@@ -249,7 +258,7 @@
                     </p>
                 </div>
                 <button
-                    class="bg-[#F6F7F9]  text-[#6B7D8C] text-lg  border-2 border-gray-400 rounded-lg px-6 py-2 font-medium shadow-md hover:bg-gray-100"
+                    class="bg-[#F6F7F9]  text-[#6B7D8C] border-2 border-gray-400 rounded-lg px-6 py-2 font-medium shadow-md hover:bg-gray-100"
                     (click)="cancelViewReply()">
                     Close
                 </button>

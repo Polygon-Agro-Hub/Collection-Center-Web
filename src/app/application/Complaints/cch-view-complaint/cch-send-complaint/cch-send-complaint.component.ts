@@ -50,7 +50,10 @@ export class CchSendComplaintComponent implements OnInit {
   }
 
   isEmployeeDropdownOpen = false;
-  employeeDropdownOptions = ['Own', 'Other'];
+  employeeDropdownOptions = [
+    { value: 'Own', label: 'Own Complaints' },
+    { value: 'Other', label: 'Other Employees' }
+];
 
   toggleEmployeeDropdown() {
     this.isEmployeeDropdownOpen = !this.isEmployeeDropdownOpen;

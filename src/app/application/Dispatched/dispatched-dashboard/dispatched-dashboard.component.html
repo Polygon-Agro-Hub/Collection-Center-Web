@@ -9,7 +9,7 @@
     
     <!-- Tabs Section - Fixed width, separate scroll -->
     <div class="pt-5 pb-5 dark:bg-[#363636] rounded-lg mr-4">
-      <div class="flex w-full space-x-4 pb-5 pr-12 border-b border-gray-300 overflow-x-auto mr-4">
+      <div class="flex w-full space-x-4 pb-5 border-b border-gray-300 overflow-x-auto mr-4">
         <button
           (click)="selectTab('all')"
           [ngClass]="{
@@ -154,7 +154,7 @@
         <i *ngIf="activeTab === 'all' || activeTab === 'Ready to Pickup' || activeTab === 'out-for-delivery' || activeTab === 'Return Received' || activeTab === 'Picked Up'" class="fa-solid fa-list text-2xl dark:text-white ml-5"></i>
         <p *ngIf="activeTab === 'all' || activeTab === 'Ready to Pickup' || activeTab === 'out-for-delivery' || activeTab === 'Return Received' || activeTab === 'Picked Up'" class="text-textLight dark:text-textDark whitespace-nowrap">Filter By</p>
   
-        <div *ngIf="activeTab === 'all'" class="relative w-44  custom-status-dropdown-container">
+        <div *ngIf="activeTab === 'all'" class="relative w-48  custom-status-dropdown-container">
           <select [(ngModel)]="selectedStatus" class="hidden" (change)="filterStatus()">
               <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300" value="Assigned">
                   Assigned</option>
@@ -179,15 +179,24 @@
           </div>
 
           <div *ngIf="isStatusDropdownOpen"
-              class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
-              <div class="py-1">
-                  <div *ngFor="let option of statusOptionsArr" (click)="selectStatusOption(option.value)"
-                      class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
-                      <span class="flex-grow">{{ option.label }}</span>
-                      <i class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
-                  </div>
+            class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]
+                   max-h-[160px] overflow-y-auto">
+                  
+            <div class="py-1">
+              <div *ngFor="let option of statusOptionsArr"
+                (click)="selectStatusOption(option.value)"
+                class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center"
+                [ngClass]="{
+                  'bg-gray-300 dark:bg-gray-600': selectedStatus === option.value,
+                  'hover:bg-gray-300 dark:hover:bg-gray-600': selectedStatus !== option.value
+                }">
+            
+                <span class="flex-grow">{{ option.label }}</span>
+                <i class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
               </div>
+            </div>
           </div>
+
         </div>
   
         <div *ngIf="activeTab === 'all' || activeTab === 'out-for-delivery' || activeTab === 'Return Received' || activeTab === 'Picked Up'" class="w-36"

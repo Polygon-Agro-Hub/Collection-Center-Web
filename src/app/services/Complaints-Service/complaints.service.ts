@@ -43,6 +43,15 @@ export class ComplaintsService {
     return this.http.get<any>(url, { headers });
   }
 
+  getCchComplainById(id: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/get-cch-recived-complaints-by-id/${id}`;
+    return this.http.get<any>(url, { headers });
+  }
+
 
   forwordComplain(id: number): Observable<any> {
     const headers = new HttpHeaders({

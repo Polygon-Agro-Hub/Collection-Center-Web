@@ -39,14 +39,20 @@
 
             <!-- Custom dropdown options -->
             <div *ngIf="isStatusDropdownOpen"
-                class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
-                <div class="py-1">
-                    <div *ngFor="let option of statusDropdownOptions" (click)="selectStatusOption(option)"
-                        class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
-                        <span class="flex-grow">{{ option }}</span>
-                        <i class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
-                    </div>
-                </div>
+              class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282] overflow-hidden">
+
+              <div *ngFor="let option of statusDropdownOptions; let i = index"
+                (click)="selectStatusOption(option)"
+                class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center"
+                [ngClass]="{
+                  'rounded-t-xl': i === 0,
+                  'rounded-b-xl': i === statusDropdownOptions.length - 1
+                }">
+
+                <span class="flex-grow">{{ option }}</span>
+                <i class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
+              </div>
+          
             </div>
         </div>
 
@@ -138,8 +144,9 @@
 
                     <td class="px-6 py-4 space-x-4">
                         <div class="flex items-center justify-center">
-                            <i class="fa-solid fa-reply text-[#415CFF] text-lg cursor-pointer"
-                                [ngClass]="{'text-gray-200 cursor-not-allowed': item.reply === null}"
+                            <i class="fa-solid fa-reply text-[#415CFF] text-lg "
+                                [ngClass]="{'text-gray-200 cursor-not-allowed': item.reply === null,
+                            'text-[#415CFF] cursor-pointer': item.reply !== null}"
                                 (click)="item.reply !== null && viewReply(item.id)">
                             </i>
                         </div>

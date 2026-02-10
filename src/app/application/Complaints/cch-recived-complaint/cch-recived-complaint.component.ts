@@ -47,7 +47,7 @@ export class CchRecivedComplaintComponent {
 
   fetchComplainById(id: number) {
     this.isLoading = true;
-    this.ComplainSrv.getComplainById(id).subscribe(
+    this.ComplainSrv.getCchComplainById(id).subscribe(
       (res) => {
         this.compalintObj = res.data
         this.officerName = this.compalintObj.firstNameEnglish + " " + this.compalintObj.lastNameEnglish

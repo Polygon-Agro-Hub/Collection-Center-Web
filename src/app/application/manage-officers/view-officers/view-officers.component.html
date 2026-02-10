@@ -56,16 +56,21 @@
 
                     <!-- Custom dropdown options -->
                     <div *ngIf="isRoleDropdownOpen"
-                        class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
-                        <div class="py-1">
-                            <div *ngFor="let option of roleDropdownOptions" (click)="selectRoleOption(option)"
-                                class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
+                        class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282] overflow-hidden">
+                        <div class="">
+                            <div *ngFor="let option of roleDropdownOptions; let i = index" (click)="selectRoleOption(option)"
+                                class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center"
+                                [ngClass]="{
+                                    'rounded-t-xl': i === 0,
+                                    'rounded-b-xl': i === roleDropdownOptions.length - 1
+                                  }">
                                 <span class="flex-grow">{{ option }}</span>
                                 <i
                                     class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
                             </div>
                         </div>
                     </div>
+
                 </div>
 
 
@@ -100,10 +105,14 @@
 
                     <!-- Custom dropdown options -->
                     <div *ngIf="isStatusDropdownOpen"
-                        class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
-                        <div class="py-1">
-                            <div *ngFor="let option of statusDropdownOptions" (click)="selectStatusOption(option)"
-                                class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
+                        class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282] overflow-hidden">
+                        <div class="">
+                            <div *ngFor="let option of statusDropdownOptions; let i = index" (click)="selectStatusOption(option)"
+                                class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center"
+                                [ngClass]="{
+                                    'rounded-t-xl': i === 0,
+                                    'rounded-b-xl': i === statusDropdownOptions.length - 1
+                                  }">
                                 <span class="flex-grow">{{ option }}</span>
                                 <i
                                     class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
@@ -129,9 +138,11 @@
 
                 <div
                     class="flex items-center md:w-96 lg:w-72 text-[#95A1AC] text-lg rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
-                    <input type="text" placeholder="Search by EMP ID & NI..." [(ngModel)]="searchText" (keyup.enter)="onSearch()"
+                    
+                    <input type="text" placeholder="Search..." [(ngModel)]="searchText" (keyup.enter)="onSearch()"
                         (keyup.esc)="offSearch()"
-                        class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
+                        class="bg-transparent outline-none w-full text-textLight dark:text-textDark"
+                        title="Search by Emp ID, NIC" />
                     <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                         (click)="onSearch()">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"

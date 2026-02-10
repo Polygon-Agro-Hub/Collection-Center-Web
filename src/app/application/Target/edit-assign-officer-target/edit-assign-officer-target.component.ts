@@ -148,24 +148,34 @@ export class EditAssignOfficerTargetComponent {
 
     if (grade === 'A' && this.totTargetA > this.targetVerity.qtyA) {
       this.toastSrv.warning(`Total Grade A target cannot exceed ${this.targetVerity.qtyA}!`);
-      this.officerArr[index].targetA = Math.max(0, remainingA);
+      setTimeout(() => {
+        this.officerArr[index].targetA = Math.max(0, remainingA);
+        this.cdRef.detectChanges();
+      }, 0);
     }
 
     if (grade === 'B' && this.totTargetB > this.targetVerity.qtyB) {
       this.toastSrv.warning(`Total Grade B target cannot exceed ${this.targetVerity.qtyB}!`);
-      this.officerArr[index].targetB = Math.max(0, remainingB);
+      setTimeout(() => {
+        this.officerArr[index].targetB = Math.max(0, remainingB);
+        this.cdRef.detectChanges();
+      }, 0);
     }
 
     if (grade === 'C' && this.totTargetC > this.targetVerity.qtyC) {
       this.toastSrv.warning(`Total Grade C target cannot exceed ${this.targetVerity.qtyC}!`);
-      this.officerArr[index].targetC = Math.max(0, remainingC);
+      setTimeout(() => {
+        this.officerArr[index].targetC = Math.max(0, remainingC);
+        this.cdRef.detectChanges();
+      }, 0);
     }
 
-    this.totTargetA = this.officerArr.reduce((sum, officer) => sum + (officer.targetA || 0), 0);
-    this.totTargetB = this.officerArr.reduce((sum, officer) => sum + (officer.targetB || 0), 0);
-    this.totTargetC = this.officerArr.reduce((sum, officer) => sum + (officer.targetC || 0), 0);
+    setTimeout(() => {
+      this.totTargetA = this.officerArr.reduce((sum, officer) => sum + (officer.targetA || 0), 0);
+      this.totTargetB = this.officerArr.reduce((sum, officer) => sum + (officer.targetB || 0), 0);
+      this.totTargetC = this.officerArr.reduce((sum, officer) => sum + (officer.targetC || 0), 0);
+    }, 10);
 
-    this.cdRef.detectChanges();
   }
 
   checkTotals() {

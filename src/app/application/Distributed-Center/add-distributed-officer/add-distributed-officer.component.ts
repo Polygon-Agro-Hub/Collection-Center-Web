@@ -856,7 +856,7 @@ selectManager(item: Manager) {
 
   if (!this.personalData.email) {
       missingFields.push('Email is required');
-    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(this.personalData.email)) {
+    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.com$/.test(this.personalData.email)) {
       missingFields.push('Email - Must be in a valid format (format: example&#64;domain.com)');
     }
 

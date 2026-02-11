@@ -4,7 +4,7 @@ import { DistributionServiceService } from '../../../services/Distribution-Servi
 
 interface HoldDetail {
   holdId: number;
-  holdTime: Date;
+  holdTime: string;
   holdReason: string;
   restartedTime: string | null;
 }
@@ -153,7 +153,7 @@ export class TodayDeliveriesViewPopupComponent implements OnInit, OnChanges
     const holds = Array.isArray(d.holdDetails) ? d.holdDetails : [];
     for (const hold of holds) {
       if (hold?.holdTime) {
-        steps.push({ type: 'hold', payload: { holdTime: hold.holdTime, holdReason: hold.holdReason } });
+        steps.push({ type: 'hold', payload: { holdTime: this.formatUTCStringToLocal(hold.holdTime), holdReason: hold.holdReason } });
       }
       if (hold?.restartedTime) {
         steps.push({ type: 'restart', payload: { restartedTime: hold.restartedTime } });
@@ -178,6 +178,27 @@ export class TodayDeliveriesViewPopupComponent implements OnInit, OnChanges
   close(): void {
     this.closePopup.emit();
   }
+
+  formatUTCStringToLocal(dateStr: string): string {
+    // Convert "2026-02-10 09:51:50" -> "2026-02-10T09:51:50Z" (UTC)
+    const utcString = dateStr.replace(" ", "T") + "Z";
+    const date = new Date(utcString);
+  
+    const time = date.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true
+    });
+  
+    const fullDate = date.toLocaleDateString("en-US", {
+      month: "long",
+      day: "2-digit",
+      year: "numeric"
+    });
+  
+    return `${time} on ${fullDate}`;
+  }
+  
 
   formatDateTime(dateString: string | null): string {
     if (!dateString) return 'N/A';

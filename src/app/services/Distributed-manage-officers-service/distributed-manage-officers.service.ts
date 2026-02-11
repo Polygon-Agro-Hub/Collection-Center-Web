@@ -120,6 +120,18 @@ export class DistributedManageOfficersService {
     });
   }
 
+  getDistributionCenterManagersEdit(id: number | string, officerId: number): Observable<any> {
+    console.log('id', id)
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.get(`${this.apiUrl}/manage-officers/get-distribution-center-managers-edit/${id}/${officerId}`, {
+      headers,
+    });
+  }
+
   getForCreateId(role: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,

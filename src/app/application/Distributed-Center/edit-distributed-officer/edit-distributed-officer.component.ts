@@ -793,7 +793,7 @@ branchItems: { value: number; label: string }[] = [];
   }
 
   getAllManagers() {
-    this.DistributedManageOfficerSrv.getDistributionCenterManagers(this.personalData.centerId).subscribe(
+    this.DistributedManageOfficerSrv.getDistributionCenterManagersEdit(this.personalData.centerId, this.personalData.cofId).subscribe(
       (res) => {
         // this.personalData.jobRole = ''
         this.managerArr = res
@@ -1035,7 +1035,7 @@ branchItems: { value: number; label: string }[] = [];
 
   if (!this.personalData.email) {
       missingFields.push('Email is required');
-    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(this.personalData.email)) {
+    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.com$/.test(this.personalData.email)) {
       missingFields.push('Email - Must be in a valid format (format: example&#64;domain.com)');
     }
 
@@ -1334,17 +1334,17 @@ onNicInput(event: any) {
   this.personalData.nic = value;
 }
 
-capitalizeFirstLetter(field: keyof typeof this.personalData) {
-  if (this.personalData[field]) {
-    // Trim spaces
-    this.personalData[field] = this.personalData[field].trim();
+// capitalizeFirstLetter(field: keyof typeof this.personalData) {
+//   if (this.personalData[field]) {
+//     // Trim spaces
+//     this.personalData[field] = this.personalData[field].trim();
 
-    // Capitalize first letter
-    this.personalData[field] =
-      this.personalData[field].charAt(0).toUpperCase() +
-      this.personalData[field].slice(1);
-  }
-}
+//     // Capitalize first letter
+//     this.personalData[field] =
+//       this.personalData[field].charAt(0).toUpperCase() +
+//       this.personalData[field].slice(1);
+//   }
+// }
 
 
 onFormatInput(event: Event, modelRef: any, fieldName: string): void {
@@ -1790,6 +1790,7 @@ vehicleChange() {
 }
 
 class Personal {
+  cofId!: number;
   firstNameEnglish!: string;
   firstNameSinhala!: string;
   firstNameTamil!: string;

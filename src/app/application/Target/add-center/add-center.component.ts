@@ -209,6 +209,22 @@ getFlagUrl(code: string): string {
     }
   }
 
+  onFormatInput(event: Event, modelRef: any, fieldName: string): void {
+    const inputElement = event.target as HTMLInputElement;
+  
+    if (inputElement && inputElement.value) {
+      // Remove only leading spaces
+      let value = inputElement.value.replace(/^\s+/, '');
+  
+      // Capitalize first letter (if exists)
+      value = value.charAt(0).toUpperCase() + value.slice(1);
+  
+      // Update model and input box
+      modelRef[fieldName] = value;
+      inputElement.value = value;
+    }
+  }
+
   onSubmit(form: NgForm) {
     Object.values(this.centerForm.controls).forEach(control => {
       control.markAsTouched();

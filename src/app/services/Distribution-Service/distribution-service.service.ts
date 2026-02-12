@@ -649,7 +649,7 @@ getTodaysDeliveries(activeTab: string = '', status: string = '', searchText: str
     }
 
     if (searchText) {
-      url += `&searchText=${searchText}`;
+      url += `&searchText=${encodeURIComponent(searchText)}`;
     }
 
     if (date) {

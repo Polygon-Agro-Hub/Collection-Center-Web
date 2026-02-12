@@ -26,7 +26,9 @@ export class
   selectGrade: string = '';
   searchText: string = '';
 
-  isLoading:boolean = true;
+  isMarketPricerExists: boolean = true;
+
+  isLoading: boolean = true;
 
   isGradeDropdownOpen = false;
   gradeDropdownOptions = ['A', 'B', 'C'];
@@ -48,10 +50,42 @@ export class
   ) { }
 
   ngOnInit(): void {
-    this.centerId = this.route.snapshot.params['id'];
-    this.fetchAllPriceList(this.centerId);
-
+    this.centerId = +this.route.snapshot.params['id'];
+  
+    this.isLoading = true;
+  
+    this.TargetSrv.getAllPriceList(
+      this.centerId,
+      1,
+      this.itemsPerPage,
+      this.selectGrade,
+      this.searchText
+    ).subscribe({
+      next: (res) => {
+        this.priceListArr = res.items || [];
+        this.totalItems = res.total || 0;
+  
+        this.hasData = this.priceListArr.length > 0;
+  
+        // ✅ runs once after API finishes
+        this.isMarketPricerExists = this.priceListArr.length > 0;
+  
+        console.log('this.isMarketPricerExists', this.isMarketPricerExists);
+        console.log('this.daata', this.hasData);
+  
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.log(err);
+        this.priceListArr = [];
+        this.totalItems = 0;
+        this.hasData = false;
+        this.isMarketPricerExists = false;
+        this.isLoading = false;
+      }
+    });
   }
+  
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {

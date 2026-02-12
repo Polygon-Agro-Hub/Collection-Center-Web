@@ -183,6 +183,8 @@ export class PriceListService {
       'Content-Type': 'application/json',
     });
 
+    console.log('pahe', page)
+
     let url = `${this.apiUrl}/view-all-price-cch?userId=${userId}&page=${page}&limit=${limit}`
 
     if (grade) {

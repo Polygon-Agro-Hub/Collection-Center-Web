@@ -68,6 +68,7 @@ export class CchCenterPriceListComponent implements OnInit {
     
     this.requestId = Number(this.route.snapshot.paramMap.get('requestId'));
     this.userId = Number(this.route.snapshot.paramMap.get('officerId'));
+    console.log('userId', this.userId)
     this.fetchAllPriceList();
 
     this.today = this.datePipe.transform(new Date(), 'yyyy/MM/dd') || '';
@@ -123,7 +124,7 @@ export class CchCenterPriceListComponent implements OnInit {
   onPageChange(event: number) {
     this.editingIndex = null;
     this.page = event;
-    this.fetchAllPriceList(this.page, this.itemsPerPage);
+    this.fetchAllPriceList(this.userId, this.page, this.itemsPerPage, this.selectGrade, this.searchText);
   }
 
   filterGrade() {

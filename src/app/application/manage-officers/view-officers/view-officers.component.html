@@ -27,7 +27,7 @@
 
                  -->
 
-                <div class="relative w-52 md:w-52 lg:w-44 ml-5 custom-role-dropdown-container">
+                <div class="relative ml-28 w-52 md:w-52 lg:w-44 custom-role-dropdown-container">
                     <!-- Hidden native select -->
                     <select [(ngModel)]="selectRole" class="hidden" (change)="applyRoleFilters()">
                         <option value="Collection Centre Manager">Collection Centre Manager</option>
@@ -137,7 +137,7 @@
                 </div>
 
                 <div
-                    class="flex items-center md:w-96 lg:w-72 text-[#95A1AC] rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+                    class="flex items-center mr-5 md:w-96 lg:w-72 text-[#95A1AC] rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
                     
                     <input type="text" placeholder="Search..." [(ngModel)]="searchText" (keyup.enter)="onSearch()"
                         (keyup.esc)="offSearch()"

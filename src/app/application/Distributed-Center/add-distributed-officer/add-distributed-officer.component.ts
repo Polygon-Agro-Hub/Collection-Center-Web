@@ -431,8 +431,8 @@ selectManager(item: Manager) {
   onFileSelected(event: any): void {
     const file: File = event.target.files[0];
     if (file) {
-      if (file.size > 5000000) {
-        this.toastSrv.error('File size should not exceed 5MB')
+      if (file.size > 3000000) {
+        this.toastSrv.error('File size should not exceed 3MB')
         return;
       }
 

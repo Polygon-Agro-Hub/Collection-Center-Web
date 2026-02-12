@@ -24,7 +24,7 @@
             </div>
             <div class="flex flex-row items-center gap-5 ">
 
-                <div class="ml-12 relative w-44 custom-role-dropdown-container">
+                <div class="ml-1 relative w-44 custom-role-dropdown-container">
                     <!-- Hidden native select -->
                     <select [(ngModel)]="selectRole" class="hidden" (change)="applyRoleFilters()">
                         <option value="Distribution Centre Manager">Distribution Centre Manager</option>
@@ -238,20 +238,30 @@
                         <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.jobRole}}</td>
                         <td class="px-3 py-4 text-center">
                             <div class="flex justify-center items-center"
-                                [style.cursor]="logingRole === 'Distribution Centre Head' ? 'pointer' : 'default'"
+                                [ngClass]="{
+                                  'cursor-pointer': logingRole === 'Distribution Centre Head',
+                                  'cursor-default': logingRole !== 'Distribution Centre Head'
+                                }"
                                 (click)="logingRole === 'Distribution Centre Head' && openPopup(item)">
-                                <span *ngIf="item.status === 'Approved'"
-                                    class="inline-block px-6 py-1 bg-[#C8E0FF] text-[#415CFF] text-sm font-medium rounded-md shadow-md">
-                                    Approved
-                                </span>
-                                <span *ngIf="item.status === 'Not Approved'"
-                                    class="inline-block px-3 py-1 bg-[#F8FFA6] text-[#A8A100] text-sm font-medium rounded-md shadow-md">
-                                    Not Approved
-                                </span>
-                                <span *ngIf="item.status === 'Rejected'"
-                                    class="inline-block px-8 py-1 bg-[#FFB9B7] text-[#D16D6A]  text-sm font-medium rounded-md shadow-md">
-                                    Rejected
-                                </span>
+                          
+                              <span *ngIf="item.status === 'Approved'"
+                                class="inline-block px-6 py-1 bg-[#C8E0FF] text-[#415CFF] text-sm font-medium rounded-md"
+                                [ngClass]="{ 'shadow-md': logingRole === 'Distribution Centre Head' }">
+                                Approved
+                              </span>
+                          
+                              <span *ngIf="item.status === 'Not Approved'"
+                                class="inline-block px-3 py-1 bg-[#F8FFA6] text-[#A8A100] text-sm font-medium rounded-md"
+                                [ngClass]="{ 'shadow-md': logingRole === 'Distribution Centre Head' }">
+                                Not Approved
+                              </span>
+                          
+                              <span *ngIf="item.status === 'Rejected'"
+                                class="inline-block px-8 py-1 bg-[#FFB9B7] text-[#D16D6A] text-sm font-medium rounded-md"
+                                [ngClass]="{ 'shadow-md': logingRole === 'Distribution Centre Head' }">
+                                Rejected
+                              </span>
+                          
                             </div>
                         </td>
 

@@ -14,6 +14,7 @@
       <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Collection Centre Name</label>
       <input
         (input)="capitalizeFirstLetter('centerName')"
+        (input)="onFormatInput($event, centerData, 'centerName')"
         type="text"
         class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F] "
         [(ngModel)]="centerData.centerName"

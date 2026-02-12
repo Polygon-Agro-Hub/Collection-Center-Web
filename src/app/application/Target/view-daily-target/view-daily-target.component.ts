@@ -76,6 +76,9 @@ export class ViewDailyTargetComponent implements OnInit {
 
   ngOnInit(): void {
 
+    
+
+
 
     const date = new Date();
     const year = date.getFullYear();
@@ -85,6 +88,7 @@ export class ViewDailyTargetComponent implements OnInit {
 
     this.fetchAllTarget();
     this.AssignAllDailyTarget()
+    
   }
 
   @HostListener('document:click', ['$event'])
@@ -182,6 +186,8 @@ export class ViewDailyTargetComponent implements OnInit {
   selectAssign() {
     this.isSelectPrograss = false;
     this.isSelectAssign = true;
+    this.selectAssignStatus = 'Updated';
+    this.filterAssignStatus();
   }
 
   AssignAllDailyTarget(page: number = 1, limit: number = this.itemsPerPage, search: string = this.assignSearch) {
@@ -230,6 +236,7 @@ export class ViewDailyTargetComponent implements OnInit {
   }
 
   filterAssignStatus() {
+    this.isLoading = true;
     this.TargetSrv.AssignAllDailyTarget(1, 10, this.assignSearch).subscribe(
       (res) => {
         this.assignTargetArr = res || []; // fallback if response is null or undefined
@@ -256,6 +263,8 @@ export class ViewDailyTargetComponent implements OnInit {
           );
         }
 
+        this.isLoading = false;
+
         // Set hasAssignData explicitly
         this.assignHasData = this.assignTargetArr.length > 0 ? true : false;
 
@@ -264,6 +273,7 @@ export class ViewDailyTargetComponent implements OnInit {
         this.assignPage = 1;
       },
       (err) => {
+        this.isLoading = false;
         console.error('Failed to load data', err);
         this.assignTargetArr = [];
         this.assignHasData = false;

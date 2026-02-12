@@ -11,11 +11,8 @@
                 <p class="font-semibold text-lg mb-1 dark:text-white">Price Update Requests on {{today}}</p>
             </div>
             <div class="flex flex-row items-center gap-8 ">
-                <i class="fa-solid fa-list text-2xl dark:text-white ml-8"></i>
 
-                <p class="text-lg dark:text-white">Filter By</p>
-
-                <div class="relative w-36 custom-grade-dropdown-container">
+                <div class="relative w-36 ml-5 custom-grade-dropdown-container">
                     <!-- Hidden native select -->
                     <select [(ngModel)]="selectGrade" class="hidden" (change)="filterGrade()">
                         <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"

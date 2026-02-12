@@ -138,7 +138,7 @@
                     <th class="px-6 py-3 text-left text-sm font-medium">Description</th>
                     <th class="px-6 py-3 text-center text-sm font-medium">Submitted At</th>
                     <th class="px-6 py-3 text-center text-sm font-medium">Status</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium">Action</th>
+                    <th class="px-6 py-3 text-center text-sm font-medium">Action</th>
                 </tr>
             </thead>
             <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
@@ -184,8 +184,8 @@
                         </div>
                       </td>
                       
-                    <td class="px-6 py-4">
-                        <i class="fa-solid fa-reply text-[#415CFF] text-lg"
+                    <td class="px-6 py-4 text-center">
+                        <i class="fa-solid fa-file-circle-check text-[#415CFF] text-lg"
                             [ngClass]="{'text-gray-200 cursor-not-allowed': item.reply === null,
                             'text-[#415CFF] cursor-pointer': item.reply !== null}"
                             (click)="item.reply !== null && viewReply(item.id)">

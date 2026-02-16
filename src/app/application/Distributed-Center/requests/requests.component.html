@@ -142,17 +142,17 @@
                         <td class="px-6 py-4 text-left dark:text-gray-300">{{item.replaceQty}}</td>
                         <td class="px-6 py-4 text-left dark:text-gray-300">{{item.replacePrice}}</td>
 
-                        <td class="px-6 py-4  dark:text-gray-300 flex justify-center items-center cursor-pointer">
+                        <td class="px-6 py-4  dark:text-gray-300 flex justify-center items-center ">
                             <span *ngIf="item.status === 'Not Approved'"
-                                class="bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-6 py-1 ">
+                                class="w-40 bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-6 py-1 ">
                                 Not Approved
                             </span>
                             <span *ngIf="item.status === 'Approved'"
-                                class="bg-[#C8E0FF] text-[#415CFF] text-center rounded-lg px-4 py-1 ">
+                                class="w-40 bg-[#C8E0FF] text-[#415CFF] text-center rounded-lg px-4 py-1 ">
                                 Approved
                             </span>
                             <span *ngIf="item.status === 'Rejected'"
-                                class="bg-[#FFB9B7] text-[#D16D6A] text-center rounded-lg px-5 py-1 ">
+                                class="w-40 bg-[#FFB9B7] text-[#D16D6A] text-center rounded-lg px-5 py-1 ">
                                 Rejected
                             </span>
                         </td>
@@ -170,7 +170,7 @@
   <i class="fa-solid fa-pen-to-square text-lg"
      [ngClass]="{
         'text-[#415CFF] hover:text-blue-500': !item.isPacked && item.status === 'Not Approved',
-        'text-[#6B7D8C] hover:text-[#6B7D8C]': item.isPacked || item.status !== 'Not Approved'
+        'text-[#6B7D8C] hover:text-[#6B7D8C] cursor-default': item.isPacked || item.status !== 'Not Approved'
      }">
   </i>
 </button>
@@ -217,22 +217,22 @@
   (click)="closePopup()"
 >
   <div
-    class="bg-white dark:bg-[#363636] dark:text-white rounded-xl text-center w-1/3 shadow-xl p-6 relative"
+    class="bg-white dark:bg-[#363636] dark:text-white rounded-xl text-center w-2/5 h-auto shadow-xl p-6 relative"
     (click)="$event.stopPropagation()" 
   >
     <h2 class="text-center text-xl font-semibold mb-4">Replace Product</h2>
 
     <div class="border-2 border-dashed border-red-400 rounded-md text-center py-3 px-4 mb-6 w-3/5 mx-auto">
-      <p class="text-sm text-gray-600 dark:text-textDark">Selected product</p>
-      <p class="text-base font-semibold dark:text-white">
+      <p class="text-sm text-gray-600 dark:text-textDark whitespace-nowrap">Selected product</p>
+      <p class="text-base font-semibold dark:text-white whitespace-nowrap">
         {{ selectedRequestObj.currentProduct }} -
         {{ selectedRequestObj.currentProductQty }}kg -
         Rs.{{ selectedRequestObj.currentProductPrice }}
       </p>
-      <p class="mt-2 text-gray-600 text-sm dark:text-textDark">
+      <p class="mt-2 text-gray-600 text-sm dark:text-textDark whitespace-nowrap">
         Relevant Product Type :
         <br />
-        <span class="font-medium text-black dark:text-white">{{ selectedRequestObj.currentProductTypeName }}</span>
+        <span class="font-medium text-black dark:text-white whitespace-nowrap">{{ selectedRequestObj.currentProductTypeName }}</span>
       </p>
     </div>
 
@@ -240,9 +240,9 @@
       <thead class="text-gray-500 border-b">
         <tr>
           <th class="text-left py-2 w-2/5 dark:text-white">PRODUCT NAME</th>
-          <th class="text-center py-2 w-1/5 dark:text-white">QUANTITY (KG)</th>
+          <th class="text-center py-2 w-1/5 dark:text-white whitespace-nowrap">QUANTITY (KG)</th>
           <th class="text-left pl-4 pr-1 py-2 w-1/5 whitespace-nowrap dark:text-white">UNIT PRICE (RS.)</th>
-          <th class="text-left pl-2 py-2 w-1/5 dark:text-white">TOTAL (RS.)</th>
+          <th class="text-left pl-2 py-2 w-1/5 dark:text-white whitespace-nowrap">TOTAL (RS.)</th>
         </tr>
       </thead>
       <tbody>
@@ -254,37 +254,29 @@
 
             <app-searchable-dropdown
             [items]="categoryDropdownItems"
-            searchInputClass="!text-base placeholder:text-base"
+            searchInputClass="!text-sm placeholder:text-sm"
             placeholder="Select Product"
-            searchPlaceholder="Search products..."
+            searchPlaceholder="Search..."
             [(ngModel)]="productId"
             (selectionChange)="onProductChange($event)"
             [clearable]="true"
             [showSelected]="true"
             [disabled]="false"
             class="block w-full mb-4 "
+            dropdownMenuClass="!max-h-44"
           ></app-searchable-dropdown>
-            <!-- <select
-              class="border rounded px-2 py-1"
-              [(ngModel)]="selectedRequestObj.replaceProductId"
-              (ngModelChange)="onProductChange($event)"
-            >
-              <option [value]="null">Select a product</option>
-              <option *ngFor="let product of productsArr" [value]="product.id">
-                {{ product.displayName }}
-              </option>
-            </select> -->
+
           </td>
 
           <!-- Quantity -->
-          <td class="text-center py-2">
+          <td class="text-center">
             <input
               type="number"
               min="1"
               [(ngModel)]="selectedRequestObj.replaceQty"
               (input)="onQtyChange()"
               (keypress)="allowOnlyNumbers($event)"
-              class="w-16 text-center border rounded px-1 py-0.5"
+              class="w-20 h-11 text-center border border-[#666666] rounded-lg px-4 py-2"
             />
           </td>
 
@@ -354,14 +346,14 @@
             <table class="w-full min-w-max divide-y-2 overflow-hidden">
                 <thead class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
                     <tr>
-                        <th class="px-4 py-2 text-left text-sm font-medium text-[#8492A3] dark:text-white">STEPS</th>
-                        <th class="px-4 py-2 text-left text-sm font-medium text-[#8492A3] dark:text-white">PRODUCT NAME
+                        <th class="px-4 py-2 text-left text-sm font-bold text-[#8492A3] dark:text-white">STEPS</th>
+                        <th class="px-4 py-2 text-left text-sm font-bold text-[#8492A3] dark:text-white">PRODUCT NAME
                         </th>
-                        <th class="px-4 py-2 text-left text-sm font-medium text-[#8492A3] dark:text-white">QUANTITY (KG)
+                        <th class="px-4 py-2 text-left text-sm font-bold text-[#8492A3] dark:text-white">QUANTITY (KG)
                         </th>
-                        <th class="px-4 py-2 text-left text-sm font-medium text-[#8492A3] dark:text-white">UNIT PRICE
+                        <th class="px-4 py-2 text-left text-sm font-bold text-[#8492A3] dark:text-white">UNIT PRICE
                             (RS.)</th>
-                        <th class="px-4 py-2 text-left text-sm font-medium text-[#8492A3] dark:text-white">TOTAL PRICE
+                        <th class="px-4 py-2 text-left text-sm font-bold text-[#8492A3] dark:text-white">TOTAL PRICE
                             (RS.)</th>
                     </tr>
                 </thead>

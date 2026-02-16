@@ -414,7 +414,16 @@ export class AddOfficersComponent implements OnInit {
 
   nextForm(page: 'pageOne' | 'pageTwo' | 'pageThree') {
     this.selectedPage = page;
+    this.scrollToTop();
   }
+
+  scrollToTop(): void {
+    window.scrollTo({
+      top: 0,
+      behavior: 'smooth' // This makes the scroll smooth
+    });
+  }
+
 
   triggerFileInput(event: Event): void {
     event.preventDefault();

@@ -32,7 +32,7 @@
 
   <!-- Dropdown menu -->
   @if (isOpen && !disabled) {
-    <div class="absolute z-50 w-full mt-1 bg-white border dark:bg-[#292929] dark:text-textDark border-gray-200 dark:border-[#828282] rounded-xl shadow-lg max-h-60 overflow-auto">
+    <div class="absolute z-50 w-full mt-1 bg-white border dark:bg-[#292929] dark:text-textDark border-gray-200 dark:border-[#828282] rounded-xl shadow-lg max-h-60 overflow-auto {{ dropdownMenuClass }}">
       <!-- Search input -->
       <div class="sticky top-0 bg-white dark:bg-[#292929] dark:text-textDark p-2 border-b border-gray-200 dark:border-[#828282]">
         <div class="relative w-full">

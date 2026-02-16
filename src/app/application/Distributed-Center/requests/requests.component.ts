@@ -110,9 +110,6 @@ export class RequestsComponent implements OnInit {
         console.log(res)
         console.log(res.items)
 
-        this.productsArr = res.products;
-        console.log('productsArr', this.productsArr)
-
         if (res.items.length === 0) {
           this.hasData = false;
         } else {
@@ -175,6 +172,23 @@ export class RequestsComponent implements OnInit {
     console.log('selectedRequestObj', this.selectedRequestObj);
 
     this.productId =  String(this.selectedRequestObj.replaceProductId)
+
+    this.distributionSrv.getProductsForUser(this.selectedRequestObj.rrId).subscribe(
+      (res) => {
+
+        console.log(res)
+        this.productsArr = res.products;
+        console.log('productsArr', this.productsArr)
+
+        if (res.items.length === 0) {
+          this.hasData = false;
+        } else {
+          this.hasData = true;
+
+        }
+        this.isLoading = false;
+      }
+    )
 
     this.isReplacePopUpOpen = true;
   }

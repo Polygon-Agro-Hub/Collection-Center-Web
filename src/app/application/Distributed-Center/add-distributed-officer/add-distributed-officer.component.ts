@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, HostListener  } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef, ViewChild, AfterViewInit  } from '@angular/core';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { ManageOfficersService } from '../../../services/manage-officers-service/manage-officers.service';
@@ -23,6 +23,7 @@ import { CustomDatepickerComponent } from '../../../components/custom-datepicker
 })
 export class AddDistributedOfficerComponent implements OnInit {
   oday: string = new Date().toISOString().split('T')[0];
+  @ViewChild('scrollTarget') scrollTarget!: ElementRef;
 
   personalData: Personal = new Personal();
   collectionCenterData: CollectionCenter[] = []
@@ -419,7 +420,17 @@ selectManager(item: Manager) {
   nextForm(page: 'pageOne' | 'pageTwo' | 'pageThree') {
     console.log('personalData', this.personalData)
     this.selectedPage = page;
+    setTimeout(() => {
+      this.scrollToTop();
+    }, 0);
   }
+
+  scrollToTop() {
+    if (this.scrollTarget) {
+      this.scrollTarget.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+  }
+
 
   triggerFileInput(event: Event): void {
     event.preventDefault();
@@ -444,6 +455,8 @@ selectManager(item: Manager) {
 
       this.selectedFile = file;
       this.selectedFileName = file.name;
+      console.log("selectedFile", this.selectedFile);
+      console.log("selectedFile instanceof File", this.selectedFile instanceof File);
 
       const reader = new FileReader();
       reader.onload = (e: any) => {
@@ -514,7 +527,7 @@ selectManager(item: Manager) {
           this.driverObj.vSideBName = this.vehicleSideBImageFileName
         }
 
-        this.DistributedManageOfficerSrv.createDistributionOfficerDIO(this.personalData, this.selectedImage, this.driverObj, this.licenseFrontImagePreview, this.licenseBackImagePreview, this.insurenceFrontImagePreview, this.insurenceBackImagePreview, this.vehicleFrontImagePreview, this.vehicleBackImagePreview, this.vehicleSideAImagePreview, this.vehicleSideBImagePreview).subscribe(
+        this.DistributedManageOfficerSrv.createDistributionOfficerDIO(this.personalData, this.selectedFile, this.driverObj, this.licenseFrontImagePreview, this.licenseBackImagePreview, this.insurenceFrontImagePreview, this.insurenceBackImagePreview, this.vehicleFrontImagePreview, this.vehicleBackImagePreview, this.vehicleSideAImagePreview, this.vehicleSideBImagePreview).subscribe(
           (res: any) => {
             if (res.status) {
               this.officerId = res.officerId;
@@ -594,7 +607,7 @@ selectManager(item: Manager) {
         }
 
        
-        this.DistributedManageOfficerSrv.createDistributionOfficer(this.personalData, this.selectedImage, this.driverObj, this.licenseFrontImagePreview, this.licenseBackImagePreview, this.insurenceFrontImagePreview, this.insurenceBackImagePreview, this.vehicleFrontImagePreview, this.vehicleBackImagePreview, this.vehicleSideAImagePreview, this.vehicleSideBImagePreview).subscribe(
+        this.DistributedManageOfficerSrv.createDistributionOfficer(this.personalData, this.selectedFile, this.driverObj, this.licenseFrontImagePreview, this.licenseBackImagePreview, this.insurenceFrontImagePreview, this.insurenceBackImagePreview, this.vehicleFrontImagePreview, this.vehicleBackImagePreview, this.vehicleSideAImagePreview, this.vehicleSideBImagePreview).subscribe(
           (res: any) => {
             if (res.status) {
               this.officerId = res.officerId;

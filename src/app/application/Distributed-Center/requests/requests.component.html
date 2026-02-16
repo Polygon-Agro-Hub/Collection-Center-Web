@@ -263,17 +263,9 @@
             [showSelected]="true"
             [disabled]="false"
             class="block w-full mb-4 "
+            dropdownMenuClass="!max-h-44"
           ></app-searchable-dropdown>
-            <!-- <select
-              class="border rounded px-2 py-1"
-              [(ngModel)]="selectedRequestObj.replaceProductId"
-              (ngModelChange)="onProductChange($event)"
-            >
-              <option [value]="null">Select a product</option>
-              <option *ngFor="let product of productsArr" [value]="product.id">
-                {{ product.displayName }}
-              </option>
-            </select> -->
+
           </td>
 
           <!-- Quantity -->

@@ -160,6 +160,20 @@ export class DistributionServiceService {
     });
   }
 
+  getProductsForUser(rrId: number): Observable<any> {
+    console.log('rrId', rrId)
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    let url = `${this.apiUrl}/get-products-for-user/${rrId}`
+
+    return this.http.get(url, {
+      headers,
+    });
+  }
+
   approveRequest(requestObj: any): Observable<any> {
     console.log()
     const headers = new HttpHeaders({

@@ -142,9 +142,9 @@ export class DistributedManageOfficersService {
     });
   }
 
-  createDistributionOfficer(person: any, selectedImage: any, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
+  createDistributionOfficer(person: any, selectedFile: File | null, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
     console.log('person', person)
-    console.log('selectedImage', selectedImage)
+    console.log('file', selectedFile)
     const formData = new FormData();
 
     if (person.jobRole === 'Driver') {
@@ -160,7 +160,9 @@ export class DistributedManageOfficersService {
     }
     
     formData.append('officerData', JSON.stringify(person));
-    formData.append('file', selectedImage);
+    if (selectedFile) {
+      formData.append('file', selectedFile); 
+    }
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
     });
@@ -169,9 +171,9 @@ export class DistributedManageOfficersService {
     });
   }
 
-  createDistributionOfficerDIO(person: any, selectedImage: any, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
+  createDistributionOfficerDIO(person: any, selectedFile: File | null, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
     console.log('person', person)
-    console.log('selectedImage', selectedImage)
+    console.log('selectedFile', selectedFile)
     const formData = new FormData();
 
     if (person.jobRole === 'Driver') {
@@ -187,7 +189,9 @@ export class DistributedManageOfficersService {
     }
     
     formData.append('officerData', JSON.stringify(person));
-    formData.append('file', selectedImage);
+    if (selectedFile) {
+      formData.append('file', selectedFile); 
+    }
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
     });

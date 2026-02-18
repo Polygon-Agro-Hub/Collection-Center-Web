@@ -685,6 +685,14 @@ getTodayDeliveryTracking(id: number | null): Observable<any> {
   });
   return this.http.get<any>(`${this.apiUrl}/get-today-delivery-tracking/${id}`, { headers });
 }
+
+getRecivedCashDashbord(): Observable<any> {
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${this.token}`,
+    'Content-Type': 'application/json',
+  });
+  return this.http.get<any>(`${this.apiUrl}/get-recived-cash-dashbord`, { headers });
+}
 }
 
 

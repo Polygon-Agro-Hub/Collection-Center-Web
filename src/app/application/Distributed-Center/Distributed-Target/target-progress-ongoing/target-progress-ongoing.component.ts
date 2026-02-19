@@ -145,6 +145,7 @@ export class TargetProgressOngoingComponent implements OnInit {
   }
   
   onSearch() {
+    this.searchText = this.searchText?.trim() || '';
     this.fetchAllAssignOrders();
 
   }

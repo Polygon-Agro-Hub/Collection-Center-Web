@@ -87,9 +87,7 @@ export class CashActivityDashboardComponent implements OnInit {
     const name = this.centerObj.centerName;
     const regCode = this.centerObj.centerRegCode;
 
-    this.router.navigate([`/distribution-hub/action/view-polygon-centers/view-pikup-chash-revenue/${id}`], {
-      queryParams: { name, regCode }
-    });
+    this.router.navigate([`/cash-activity/view-pikup-chash-revenue`]);
   }
 
 
@@ -99,9 +97,7 @@ export class CashActivityDashboardComponent implements OnInit {
     const name = this.centerObj.centerName;
     const regCode = this.centerObj.centerRegCode;
 
-    this.router.navigate([`/distribution-hub/action/view-polygon-centers/view-delivery-revenue/${id}`], {
-      queryParams: { name, regCode }
-    });
+    this.router.navigate([`/cash-activity/view-delivery-revenue`]);
   }
 
   fetchData() {

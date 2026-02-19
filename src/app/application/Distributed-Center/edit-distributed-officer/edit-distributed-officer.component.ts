@@ -12,11 +12,12 @@ import { Location } from '@angular/common';
 import { DistributedManageOfficersService } from '../../../services/Distributed-manage-officers-service/distributed-manage-officers.service';
 import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
 import { Country, COUNTRIES } from '../../../../assets/country-data';
+import { CustomDatepickerComponent } from '../../../components/custom-datepicker/custom-datepicker.component';
 
 @Component({
   selector: 'app-edit-distributed-officer',
   standalone: true,
-  imports: [CommonModule, FormsModule, ReactiveFormsModule, LoadingSpinnerComponent, SerchableDropdownComponent],
+  imports: [CommonModule, FormsModule, ReactiveFormsModule, CustomDatepickerComponent, LoadingSpinnerComponent, SerchableDropdownComponent],
   templateUrl: './edit-distributed-officer.component.html',
   styleUrl: './edit-distributed-officer.component.css'
 })
@@ -130,6 +131,7 @@ branchItems: { value: number; label: string }[] = [];
 
   isAppireImgValidation: boolean = false;
 
+  insExpDateTouched = false;
 
   constructor(
     private ManageOficerSrv: ManageOfficersService,
@@ -395,6 +397,10 @@ branchItems: { value: number; label: string }[] = [];
         );
 
         console.log('driverObj', this.driverObj)
+
+        this.driverObj.confirmLicNo =  res.officerData.driver.licNo || '';
+        this.driverObj.confirmInsNo =  res.officerData.driver.insNo || '';
+        this.driverObj.confirmVRegNo =  res.officerData.driver.vRegNo || '';
   
         // Initialize languages as a comma-separated string if it's not already in that format
         if (Array.isArray(this.personalData.languages)) {
@@ -1137,11 +1143,39 @@ branchItems: { value: number; label: string }[] = [];
   onSubmitFormPage3(form: NgForm) {
     console.log('page3')
     form.form.markAllAsTouched();
+    this.onDatePickerClicked();
 
     const missingFields: string[] = [];
 
     if (!this.driverObj.licNo) {
-      missingFields.push('License Number is Required');
+      missingFields.push('Driving License ID number is Required');
+    } else if (!/^([A-Z]\d{7}|\d{10,12})$/.test(this.driverObj.licNo)) {
+      missingFields.push('Please enter a valid License ID number (1 capital letter + 7 digits or 10–12 digits).');
+    }
+
+    if (!this.driverObj.confirmLicNo) {
+      missingFields.push('Confirm Driving License ID number is Required');
+    } else if (this.driverObj.licNo !== this.driverObj.confirmLicNo) {
+      missingFields.push('Confirm Driving License ID number should match the Driving License ID number.');
+    }
+
+    if (!this.driverObj.insNo) {
+      missingFields.push('Insurance Number is Required');
+    }
+    if (!this.driverObj.confirmInsNo) {
+      missingFields.push('Confirm Insurance Number is Required');
+    } else if (this.driverObj.insNo !== this.driverObj.confirmInsNo) {
+      missingFields.push('Confirm Insurance Number should match the Insurance Number.');
+    }
+
+    if (!this.driverObj.vRegNo) {
+      missingFields.push('Vehicle Registration Number is Required');
+    }
+
+    if (!this.driverObj.confirmVRegNo) {
+      missingFields.push(' Confirm Vehicle Registration Number is Required');
+    } else if (this.driverObj.vRegNo !== this.driverObj.confirmVRegNo) {
+      missingFields.push('Confirm Vehicle Registration Number should match the Vehicle Registration Number.');
     }
 
     if (!this.licenseFrontImageFileName && !this.driverObj.licFrontImg ) {
@@ -1150,10 +1184,6 @@ branchItems: { value: number; label: string }[] = [];
   
     if (!this.licenseBackImageFileName && !this.driverObj.licBackImg ) {
       missingFields.push("License's Back Image is required");
-    }
-
-    if (!this.driverObj.insNo) {
-      missingFields.push('Insurance Number is required');
     }
 
     if (!this.driverObj.insExpDate) {
@@ -1166,10 +1196,6 @@ branchItems: { value: number; label: string }[] = [];
   
     if (!this.insurenceBackImageFileName && !this.driverObj.insBackImg) {
       missingFields.push("Insurance's Back Image is required");
-    }
-
-    if (!this.driverObj.vRegNo) {
-      missingFields.push('Vehicle Registration Number is required');
     }
   
     if (!this.driverObj.vType) {
@@ -1787,6 +1813,56 @@ vehicleChange() {
   this.driverObj.vCapacity = this.selectVehicletype.capacity
 }
 
+preventSpecialCharacters(event: KeyboardEvent) {
+  const allowedPattern = /^[a-zA-Z0-9]$/;
+  const inputChar = event.key;
+
+  if (!allowedPattern.test(inputChar)) {
+    event.preventDefault();
+  }
+}
+
+preventSpecialCharactersPaste(event: ClipboardEvent) {
+  const pastedText = event.clipboardData?.getData('text') || '';
+  const allowedPattern = /^[a-zA-Z0-9]+$/;
+
+  if (!allowedPattern.test(pastedText)) {
+    event.preventDefault();
+  }
+}
+
+onInsuranceDateChange(newDate: string | Date | null) {
+  let dateString: string;
+
+  console.log('newDate', newDate)
+
+  if (!newDate) {
+    
+    dateString = '';
+    console.log('dateString1', dateString)
+  } 
+  else if (newDate instanceof Date) {
+    
+    dateString = newDate.toISOString().split('T')[0];
+    console.log('dateString2', dateString)
+  } 
+  else {
+    
+    dateString = newDate;
+    console.log('dateString3', dateString)
+  }
+
+  this.driverObj.insExpDate = dateString;
+
+  console.log('date', this.driverObj.insExpDate)
+
+}
+
+onDatePickerClicked() {
+  console.log('Date picker clicked/opened');
+  this.insExpDateTouched = true;
+}
+
 }
 
 class Personal {
@@ -1878,6 +1954,10 @@ class Drivers {
   vType!: string;
   vCapacity!: number;
   vRegNo!: string;
+
+  confirmLicNo!: string;
+  confirmInsNo!: string;
+  confirmVRegNo!: string;
 
   licFrontName!: string;
   licBackName!: string;

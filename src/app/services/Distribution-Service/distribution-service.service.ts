@@ -685,6 +685,68 @@ getTodayDeliveryTracking(id: number | null): Observable<any> {
   });
   return this.http.get<any>(`${this.apiUrl}/get-today-delivery-tracking/${id}`, { headers });
 }
+
+getRecivedCashDashbord(): Observable<any> {
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${this.token}`,
+    'Content-Type': 'application/json',
+  });
+  return this.http.get<any>(`${this.apiUrl}/get-recived-cash-dashbord`, { headers });
+}
+
+getPickupCashRevenue(
+  searchText: string = '', selectDate: string | Date | null = '', status: string =''
+): Observable<any> {
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${this.token}`,
+    'Content-Type': 'application/json',
+  });
+
+  let url = `${this.apiUrl}/get-pikup-cash-revenue?page=${1}`;
+  if (searchText) {
+    url += `&searchText=${encodeURIComponent(searchText)}`;
+  }
+
+  if (selectDate) {
+    url += `&selectDate=${selectDate}`;
+  }
+
+  if (status) {
+    url += `&status=${status}`;
+  }
+
+  return this.http.get<any>(
+    url, { headers }
+  );
+}
+
+getDriverCashRevenue(
+  searchText: string = '', selectDate: string | Date | null = '', status: string =''
+): Observable<any> {
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${this.token}`,
+    'Content-Type': 'application/json',
+  });
+
+  let url = `${this.apiUrl}/get-driver-cash-revenue?page=${1}`;
+  if (searchText) {
+    url += `&searchText=${encodeURIComponent(searchText)}`;
+  }
+
+  if (selectDate) {
+    url += `&selectDate=${selectDate}`;
+  }
+
+  if (status) {
+    url += `&status=${status}`;
+  }
+
+  return this.http.get<any>(
+    url, { headers }
+  );
+}
+
+
 }
 
 

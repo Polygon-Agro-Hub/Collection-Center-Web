@@ -33,7 +33,7 @@ export class AddDistributedOfficerComponent implements OnInit {
   driverObj: Drivers = new Drivers()
 
   languages: string[] = ['Sinhala', 'English', 'Tamil'];
-  selectedPage: 'pageOne' | 'pageTwo' | 'pageThree' = 'pageOne';
+  selectedPage: 'pageOne' | 'pageTwo' | 'pageThree' = 'pageThree';
   lastID!: number
   itemId: number | null = null;
   officerId!: number
@@ -203,7 +203,7 @@ export class AddDistributedOfficerComponent implements OnInit {
   
     if (!newDate) {
       
-      dateString = new Date().toISOString().split('T')[0];
+      dateString = '';
     } 
     else if (newDate instanceof Date) {
       
@@ -969,11 +969,39 @@ selectManager(item: Manager) {
 
   onSubmitFormPage3(form: NgForm) {
     form.form.markAllAsTouched();
+    this.onDatePickerClicked();
 
     const missingFields: string[] = [];
 
     if (!this.driverObj.licNo) {
-      missingFields.push('License Number is Required');
+      missingFields.push('Driving License ID number is Required');
+    } else if (!/^([A-Z]\d{7}|\d{10,12})$/.test(this.driverObj.licNo)) {
+      missingFields.push('Please enter a valid License ID number (1 capital letter + 7 digits or 10–12 digits).');
+    }
+
+    if (!this.driverObj.confirmLicNo) {
+      missingFields.push('Confirm Driving License ID number is Required');
+    } else if (this.driverObj.licNo !== this.driverObj.confirmLicNo) {
+      missingFields.push('Confirm Driving License ID number should match the Driving License ID number.');
+    }
+
+    if (!this.driverObj.insNo) {
+      missingFields.push('Insurance Number is Required');
+    }
+    if (!this.driverObj.confirmInsNo) {
+      missingFields.push('Confirm Insurance Number is Required');
+    } else if (this.driverObj.insNo !== this.driverObj.confirmInsNo) {
+      missingFields.push('Confirm Insurance Number should match the Insurance Number.');
+    }
+
+    if (!this.driverObj.vRegNo) {
+      missingFields.push('Vehicle Registration Number is Required');
+    }
+
+    if (!this.driverObj.confirmVRegNo) {
+      missingFields.push(' Confirm Vehicle Registration Number is Required');
+    } else if (this.driverObj.vRegNo !== this.driverObj.confirmVRegNo) {
+      missingFields.push('Confirm Vehicle Registration Number should match the Vehicle Registration Number.');
     }
   
     if (!this.licenseFrontImageFileName) {
@@ -982,10 +1010,6 @@ selectManager(item: Manager) {
   
     if (!this.licenseBackImageFileName) {
       missingFields.push("License's Back Image is required");
-    }
-
-    if (!this.driverObj.insNo) {
-      missingFields.push('Insurance Number is required');
     }
 
     if (!this.driverObj.insExpDate) {
@@ -998,10 +1022,6 @@ selectManager(item: Manager) {
   
     if (!this.insurenceBackImageFileName) {
       missingFields.push("Insurance's Back Image is required");
-    }
-
-    if (!this.driverObj.vRegNo) {
-      missingFields.push('Vehicle Registration Number is required');
     }
   
     if (!this.driverObj.vType) {
@@ -1585,6 +1605,24 @@ onDateChange(newDate: string | Date | null) {
   this.driverObj.insExpDate = dateString;
 }
 
+preventSpecialcharacters(event: KeyboardEvent) {
+  const allowedPattern = /^[a-zA-Z0-9]$/;
+  const inputChar = event.key;
+
+  if (!allowedPattern.test(inputChar)) {
+    event.preventDefault();
+  }
+}
+
+preventSpecialCharactersPaste(event: ClipboardEvent) {
+  const pastedText = event.clipboardData?.getData('text') || '';
+  const allowedPattern = /^[a-zA-Z0-9]+$/;
+
+  if (!allowedPattern.test(pastedText)) {
+    event.preventDefault();
+  }
+}
+
 
 }
 
@@ -1669,6 +1707,9 @@ class Drivers {
   vType!: string;
   vCapacity!: string;
   vRegNo!: string;
+  confirmLicNo!: string;
+  confirmInsNo!: string;
+  confirmVRegNo!: string;
 
   licFrontName!: string;
   licBackName!: string;

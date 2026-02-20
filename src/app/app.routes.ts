@@ -81,6 +81,9 @@ import { DcmDashboardComponent } from './application/Distributed-Center/dcm-dash
 import { ViewDistributionCenterComponent } from './application/Distributed-Center/Centres/view-distribution-center/view-distribution-center.component';
 import { EditDistributionCenterComponent } from './application/Distributed-Center/Centres/edit-distribution-center/edit-distribution-center.component';
 import { DispatchedDashboardComponent } from './application/Dispatched/dispatched-dashboard/dispatched-dashboard.component';
+import { CashActivityDashboardComponent } from './application/Cash-activity/cash-activity-dashboard/cash-activity-dashboard.component';
+import { ViewPickupCashRevenueComponent } from './application/Cash-activity/view-pickup-cash-revenue/view-pickup-cash-revenue.component';
+import { ViewDeliveryRevenueComponent } from './application/Cash-activity/view-delivery-revenue/view-delivery-revenue.component';
 
 
 
@@ -611,6 +614,29 @@ export const routes: Routes = [
                     }
                 ]
             },
+
+            {
+                path: 'cash-activity',
+                canActivate:[RoleGuardService],
+                data: { roles: ['Distribution Centre Manager'] },
+                children: [
+                    {
+                        path: '',
+                        component: CashActivityDashboardComponent,
+                    },
+
+                    {
+                        path: 'view-pikup-chash-revenue',
+                        component: ViewPickupCashRevenueComponent,
+                    },
+
+                    {
+                        path: 'view-delivery-revenue',
+                        component: ViewDeliveryRevenueComponent,
+                    },
+                ]
+            },
+
 
             {
                 path: 'dch-complaints',

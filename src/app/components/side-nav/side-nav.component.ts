@@ -215,6 +215,15 @@ export const MENU_ITEMS = [
     permission: ['Distribution Centre Manager'],
   },
 
+  {
+    id: 11,
+    key: 'cash-activity',
+    path: '/cash-activity',
+    label: 'Cash-Activity',
+    icon: 'fas fa-th-large',
+    permission: ['Distribution Centre Manager'],
+  },
+
 ];
 
 @Component({

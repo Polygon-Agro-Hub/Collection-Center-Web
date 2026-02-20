@@ -810,18 +810,49 @@
         <div *ngIf="selectedPage === 'pageThree'">
 
             <h2 class="text-xl mb-6 text-textLight dark:text-textDark font-bold">Driving Details</h2>
-            <div>
-                <label for="licNo" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Driving
-                    License ID</label>
-                <input id="licNo" type="number" name="licNo" [(ngModel)]="driverObj.licNo"
-                    class="form-licNo mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                    #licNoInput="ngModel" required />
-                <div *ngIf="licNoInput.touched && !driverObj.licNo" class="text-red-500 text-sm mt-1">
-                    <div>Driving License ID is required</div>
-                </div>
-            </div>
+            
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-11 my-5">
+
+                <div>
+                    <label for="licNo" class="block text-sm font-medium text-gray-700 dark:text-textDark">
+                      Driving License ID *
+                    </label>
+                    <input id="licNo" #licNoInput="ngModel" type="text" name="licNo" [(ngModel)]="driverObj.licNo" pattern="^([A-Z]\d{7}|\d{10,12})$"
+                      (keypress)="preventSpecialCharacters($event)" (paste)="preventSpecialCharactersPaste($event)"
+                      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
+            
+                    <div>
+                      <span class="text-red-600 text-sm" *ngIf="licNoInput.touched && licNoInput.errors?.['pattern'] && driverObj.licNo">
+                        Please enter a valid License ID number (1 capital letter + 7 digits or 10–12 digits).
+                      </span>
+            
+                      <span class="text-red-600 text-sm" *ngIf="licNoInput.touched && !driverObj.licNo">
+                        Driving License ID number is Required.
+                      </span>
+                    </div>
+                  </div>
+            
+                  <div>
+                    <label for="confirmLicNo" class="block text-sm font-medium text-gray-700 dark:text-textDark">
+                      Confirm Driving License ID *
+                    </label>
+                    <input id="confirmLicNo" #confirmLicNoInput="ngModel" type="text" name="confirmLicNo" [(ngModel)]="driverObj.confirmLicNo"
+                      (keypress)="preventSpecialCharacters($event)" (paste)="preventSpecialCharactersPaste($event)"
+                      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
+            
+                      <div>
+                        <span class="text-red-600 text-sm" *ngIf="confirmLicNoInput.touched && (driverObj.licNo !== driverObj.confirmLicNo) && driverObj.confirmLicNo">
+                          Confirm Driving License ID number should match the Driving License ID number.
+                        </span>
+              
+                        <span class="text-red-600 text-sm" *ngIf="confirmLicNoInput.touched && !driverObj.confirmLicNo">
+                          Confirm Driving License ID number is Required.
+                        </span>
+                      </div>
+                    
+                  </div>
+                  
                 <div>
                     <div class="flex flex-row items-center gap-4">
                         <label for="licenseFrontImageUpload"
@@ -887,27 +918,39 @@
             <h2 class="text-xl mt-16 mb-6 text-textLight dark:text-textDark font-bold">Vehicle Insurance Details</h2>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-11 my-5">
                 <div>
-                    <label for="insNo" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Insurance
-                        Number</label>
-                    <input id="insNo" type="number" name="insNo" [(ngModel)]="driverObj.insNo"
-                        class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                        #insNoInput="ngModel" required />
-                    <!-- <div *ngIf="insNoInput.touched && !driverObj.insNo" class="text-red-500 text-sm mt-1">
-                        <div>Insurance Number is required</div>
-                    </div> -->
-                </div>
-
-                <div>
-                    <label for="insExpDate"
-                        class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Insurance
-                        Expire Date</label>
-                    <input id="insExpDate" name="insExpDate" type="date" [(ngModel)]="driverObj.insExpDate"
-                        class="cursor-pointer form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                        #insExpDateInput="ngModel" required />
-                    <div *ngIf="insExpDateInput.touched && !driverObj.insExpDate" class="text-red-500 text-sm mt-1">
-                        <div>Insurance Expire Date is required</div>
-                    </div>
-                </div>
+                    <label for="insNo" class="block text-sm font-medium text-gray-700 dark:text-textDark">
+                      Insurance Number *
+                    </label>
+                    <input id="insNo" type="text" #insurenceNoInput="ngModel" name="insNo" [(ngModel)]="driverObj.insNo" 
+                      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
+                      <div>
+                        <!-- <span class="text-red-600 text-sm" *ngIf="licNoInput.touched && licNoInput.errors?.['pattern'] && driverObj.licNo">
+                          Please enter a valid License ID number (1 letter + 7 digits or 10–12 digits).
+                        </span> -->
+              
+                        <span class="text-red-600 text-sm" *ngIf="insurenceNoInput.touched && !driverObj.insNo">
+                          Insurance Number Required.
+                        </span>
+                      </div>
+                  </div>
+            
+                  <div>
+                    <label for="insNo" class="block text-sm font-medium text-gray-700 dark:text-textDark">
+                      Confirm Insurance Number *
+                    </label>
+                    <input id="insNo" type="text" #confirmInsurenceNoInput="ngModel" name="insNo" [(ngModel)]="driverObj.confirmInsNo" 
+                      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
+            
+                      <div>
+                        <span class="text-red-600 text-sm" *ngIf="confirmInsurenceNoInput.touched && (driverObj.insNo !== driverObj.confirmInsNo) && driverObj.confirmInsNo">
+                          Confirm Insurance Number should match the Insurance Number.
+                        </span>
+              
+                        <span class="text-red-600 text-sm" *ngIf="confirmInsurenceNoInput.touched && !driverObj.confirmInsNo">
+                          Confirm Insurance Number is Required.
+                        </span>
+                      </div>
+                  </div>
 
                 <div>
                     <div class="flex flex-row items-center gap-4">
@@ -969,21 +1012,68 @@
                         <div>Insurance’s Back Image is required</div>
                     </div> -->
                 </div>
+
+                <div>
+                    <label for="insExpDate"
+                        class="block text-sm mb-1 font-medium text-[#534E4E] dark:text-textDark">Insurance
+                        Expire Date</label>
+                    <app-custom-datepicker
+                        name="insExpDate"
+                        [(selectedDate)]="driverObj.insExpDate"
+                        placeholder="mm/dd/yyyy"
+                        (dateChange)="onInsuranceDateChange($event)"
+                        (pickerOpened)="onDatePickerClicked()"
+                   ></app-custom-datepicker>
+                   
+                    <div
+                        *ngIf="insExpDateTouched && !driverObj.insExpDate"
+                        class="text-red-500 text-sm mt-1">
+                        Insurance Expire Date is required
+                   </div>
+
+                </div>
             </div>
 
 
             <h2 class="text-xl mt-16 mb-6 text-textLight dark:text-textDark font-bold">Vehicle Details</h2>
-            <div>
-                <label for="vRegNo" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Vehicle
-                    Registration Number</label>
-                <input id="vRegNo" type="number" name="vRegNo" [(ngModel)]="driverObj.vRegNo" #vRegNoInput="ngModel" required
-                    class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                    required />
-                <div *ngIf="vRegNoInput.touched && !driverObj.vRegNo" class="text-red-500 text-sm mt-1">
-                    <div>Vehicle Registration Number is required</div>
-                </div>
-            </div>
+
             <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-11 my-5">
+
+                <div class="mt-2">
+                    <label for="vRegNo" class="block text-sm font-medium text-gray-700 dark:text-textDark">
+                      Vehicle Registration Number *
+                    </label>
+                    <input id="vRegNo" type="text" #vRegNoInput="ngModel" name="vRegNo" [(ngModel)]="driverObj.vRegNo"
+                      (keypress)="preventSpecialCharacters($event)" (paste)="preventSpecialCharactersPaste($event)"
+                      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
+                      
+                      <div>
+                        
+                        <span class="text-red-600 text-sm" *ngIf="vRegNoInput.touched && !driverObj.vRegNo">
+                          Vehicle Registration Number is Required.
+                        </span>
+                      </div>
+                  </div>
+              
+                  <div class="mt-2">
+                    <label for="confirmVRegNo" class="block text-sm font-medium text-gray-700 dark:text-textDark">
+                      Confirm Vehicle Registration Number *
+                    </label>
+                    <input id="confirmVRegNo" type="text" #confirmVRegNoInput="ngModel" name="confirmVRegNo" [(ngModel)]="driverObj.confirmVRegNo"
+                      (keypress)="preventSpecialCharacters($event)" (paste)="preventSpecialCharactersPaste($event)"
+                      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
+                      
+                      <div>
+                        <span class="text-red-600 text-sm" *ngIf="confirmVRegNoInput.touched && (driverObj.vRegNo !== driverObj.confirmVRegNo) && driverObj.confirmVRegNo">
+                          Confirm Vehicle Registration Number should match the Vehicle Registration Number.
+                        </span>
+              
+                        <span class="text-red-600 text-sm" *ngIf="confirmVRegNoInput.touched && !driverObj.confirmVRegNo">
+                          Confirm Vehicle Registration Number is Required.
+                        </span>
+                      </div>
+                  </div>
+
                 <div>
                     <label for="selectVehicletype"
                         class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Vehicle Type</label>
@@ -1146,7 +1236,7 @@
                 <button (click)="nextForm('pageTwo')" type="button"
                     class="px-6 py-2 bg-[#F6F7F9] border-gray-400 border-[2px] text-[#6B7D8C] rounded-lg mr-2">Back</button>
                 <button type="submit" class="px-6 py-1 bg-[#415CFF] text-white rounded-lg"
-                    (click)="!PageThreeForm.invalid ? onSubmit() : nextForm('pageThree')">Sent to
+                    (click)="!PageThreeForm.invalid && (driverObj.licNo === driverObj.confirmLicNo) && (driverObj.insNo === driverObj.confirmInsNo) && (driverObj.vRegNo === driverObj.confirmVRegNo) ? onSubmit() : nextForm('pageThree')">Sent to
                     Approve</button>
                 <!-- <button type="submit" class="px-4 py-2 bg-[#3980C0] text-white rounded-md" (click)="onSubmit()">Sent to
                         Approve</button> -->

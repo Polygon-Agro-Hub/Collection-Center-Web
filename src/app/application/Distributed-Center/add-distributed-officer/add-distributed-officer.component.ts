@@ -298,9 +298,12 @@ onSearchInput(event: Event) {
   const value = input.value.toLowerCase();
   console.log('value', value);
 
-  this.filteredCenterArr = this.centerArr.filter(c =>
-    (c.centerName || '').toLowerCase().includes(value)
-  );
+  this.filteredCenterArr = this.centerArr.filter(c => {
+  const combined1 = `${c.regCode}-${c.centerName}`.toLowerCase();
+  const combined2 = `${c.regCode} - ${c.centerName}`.toLowerCase();
+  return combined1.includes(value) || combined2.includes(value);
+  }
+);
 
   console.log('filtered centers', this.filteredCenterArr);
 
@@ -339,9 +342,11 @@ onManagerSearchInput(event: Event) {
   console.log('search value', value);
 
   this.filteredManagerArr = this.managerArr.filter(m => {
-    const fullName = `${m.firstNameEnglish} ${m.lastNameEnglish}`.toLowerCase();
-    return fullName.includes(value);
-  });
+    const fullName = `${m.empId}-${m.firstNameEnglish} ${m.lastNameEnglish}`.toLowerCase();
+    const fullName2 = `${m.empId} - ${m.firstNameEnglish} ${m.lastNameEnglish}`.toLowerCase();
+    return fullName.includes(value) || fullName2.includes(value);
+  }
+);
 
   console.log('filtered managers', this.filteredManagerArr);
 }
@@ -751,15 +756,15 @@ selectManager(item: Manager) {
     const isValidPrefix = this.allowedPrefixes.includes(prefix);
     const isValidLength = input.length === 9;
   
-    if (firstDigit !== '7') {
-      this.isPhoneInvalidMap[key] = true;
-      return;
-    }
+    // if (firstDigit !== '7') {
+    //   this.isPhoneInvalidMap[key] = true;
+    //   return;
+    // }
   
-    if (!isValidPrefix && input.length >= 2) {
-      this.isPhoneInvalidMap[key] = true;
-      return;
-    }
+    // if (!isValidPrefix && input.length >= 2) {
+    //   this.isPhoneInvalidMap[key] = true;
+    //   return;
+    // }
   
     if (input.length === 9 && isValidPrefix) {
       this.isPhoneInvalidMap[key] = false;
@@ -1623,6 +1628,63 @@ preventSpecialCharactersPaste(event: ClipboardEvent) {
   }
 }
 
+blockInvalidKeypressForPhone(event: KeyboardEvent) {
+
+  const input = event.target as HTMLInputElement;
+
+  // Allow control keys
+  if (['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete'].includes(event.key)) {
+    return;
+  }
+
+  // Only allow digits
+  if (!/^[0-9]$/.test(event.key)) {
+    event.preventDefault();
+    return;
+  }
+
+  // If first digit and not 7 → force 7
+  if (input.value.length === 0 && event.key !== '7') {
+    event.preventDefault();
+
+    input.value = '7';                 // visually set
+    input.dispatchEvent(new Event('input')); // update ngModel
+  }
+}
+
+blockInvalidPasteForPhone(event: ClipboardEvent) {
+
+  const pastedData = event.clipboardData?.getData('text') || '';
+
+  // Must match 7XXXXXXXX
+  if (!/^7[0-9]{0,8}$/.test(pastedData)) {
+    event.preventDefault();
+  }
+}
+
+onPhoneInput(event: Event) {
+  const input = event.target as HTMLInputElement;
+
+  // Remove non-digits (extra safety)
+  let value = input.value.replace(/\D/g, '');
+
+  // If empty → do nothing
+  if (value.length === 0) {
+    input.value = '';
+    return;
+  }
+
+  // If first digit is not 7 → force it
+  if (value[0] !== '7') {
+    value = '7' + value.substring(1);
+  }
+
+  input.value = value;
+
+  // Trigger ngModel update
+  input.dispatchEvent(new Event('input'));
+}
+
 
 }
 
@@ -1680,12 +1742,14 @@ class ManagerDetails {
 class Center {
   id!: number
   centerName!: string
+  regCode!: string;
 }
 
 class Manager {
   id!: number;
   firstNameEnglish!: string;
   lastNameEnglish!: string;
+  empId!: string;
 }
 
 

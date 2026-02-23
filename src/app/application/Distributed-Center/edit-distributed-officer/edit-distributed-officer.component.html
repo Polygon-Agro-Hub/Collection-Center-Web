@@ -26,7 +26,7 @@
         <p>Edit Officer</p>
     </div>
 
-<div *ngIf="!isLoading" class="mx-auto p-6 bg-white dark:bg-[#363636] rounded-lg shadow-mg">
+<div #scrollTarget *ngIf="!isLoading" class="mx-auto p-6 bg-white dark:bg-[#363636] rounded-lg shadow-mg">
     <form #PageOneForm="ngForm" (ngSubmit)="onSubmitFormPage1(PageOneForm)">
         <div *ngIf="selectedPage === 'pageOne'">
             <h2 class="text-xl mb-6 text-[#292929] dark:text-textDark">Edit Personal Details</h2>
@@ -120,7 +120,7 @@
                           <div *ngFor="let item of filteredCenterArr"
                                class="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-textDark cursor-pointer"
                                (click)="selectCenter(item)">
-                            {{ item.centerName }}
+                               {{item.regCode}} - {{ item.centerName }}
                           </div>
                         </div>
                       </div>
@@ -221,7 +221,7 @@
                           <div *ngFor="let item of filteredManagerArr"
                                class="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-textDark cursor-pointer"
                                (click)="selectManager(item)">
-                            {{ item.firstNameEnglish }} {{item.lastNameEnglish}}
+                               {{item.empId}} - {{ item.firstNameEnglish }} {{item.lastNameEnglish}}
                           </div>
                         </div>
                       </div>
@@ -430,6 +430,9 @@
                                 [(ngModel)]="personalData.phoneNumber01" #phoneNumber01Input="ngModel"
                                 class="block w-full p-2 border border-gray-300 rounded-r-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                                 placeholder="Enter your mobile number" required pattern="^[0-9]{9}$" minlength="9" (ngModelChange)="validateSriLankanPhone($event, 'phone01')"
+                                (keypress)="blockInvalidKeypressForPhone($event)"
+                                (input)="onPhoneInput($event)"
+                                (paste)="blockInvalidPasteForPhone($event)"
                                 maxlength="9" (keypress)="($event.charCode >= 48 && $event.charCode <= 57) ? true : $event.preventDefault()"/>
 
                         </div>
@@ -444,9 +447,7 @@
                                 Mobile Number must be exactly 9 digits.
                             </div>
 
-                            <div *ngIf="isPhoneInvalidMap['phone01'] && personalData.phoneNumber01" class="text-red-500 text-sm mt-1">
-                                Please enter a valid mobile number (format: +947XXXXXXXX)
-                              </div>
+                        
                         </div>
                     </div>
 
@@ -485,6 +486,9 @@
                             [(ngModel)]="personalData.phoneNumber02" #phoneNumber02Input="ngModel"
                             class="block w-full p-2 border border-gray-300 rounded-r-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                             placeholder="Enter your mobile number" pattern="^[0-9]{9}$" minlength="9" maxlength="9" (ngModelChange)="validateSriLankanPhone($event, 'phone02')"
+                            (keypress)="blockInvalidKeypressForPhone($event)"
+                            (input)="onPhoneInput($event)"
+                            (paste)="blockInvalidPasteForPhone($event)"
                             (keypress)="($event.charCode >= 48 && $event.charCode <= 57) ? true : $event.preventDefault()"/>
                         </div>
                       
@@ -498,9 +502,6 @@
                             Mobile Number must be exactly 9 digits.
                         </div>
 
-                        <div *ngIf="isPhoneInvalidMap['phone02'] && personalData.phoneNumber02" class="text-red-500 text-sm mt-1">
-                            Please enter a valid mobile number (format: +947XXXXXXXX)
-                          </div>
                       </div>
                       
 

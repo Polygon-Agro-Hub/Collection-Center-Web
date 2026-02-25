@@ -100,20 +100,20 @@
                         <td class="px-6 py-4 text-gray-[#000000] font-semibold dark:text-gray-300">
                             <div class="flex justify-center">
                               <span *ngIf="item.status === 'Pending'"
-                                class="bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-8 py-1 h-full flex items-center">
+                                class="bg-[#F8FFA6] text-[#A8A100] min-w-32 text-center rounded-lg py-1 h-full ">
                                 Pending
                               </span>
                               <span *ngIf="item.status === 'Exceeded'"
-                                class="bg-[#C8E0FF] text-[#415CFF] text-center rounded-lg px-6 py-1 h-full flex items-center">
+                                class="bg-[#C8E0FF] text-[#415CFF] min-w-32 text-center rounded-lg py-1 h-full ">
                                 Exceeded
                               </span>
                               <span *ngIf="item.status === 'Completed'"
-                                class="bg-[#c0f8ac] text-[#30911a] text-center rounded-lg px-4 py-1 h-full flex items-center">
+                                class="bg-[#c0f8ac] text-[#30911a] min-w-32 text-center rounded-lg py-1 h-full ">
                                 Completed
                               </span>
 
                               <span *ngIf="item.status === 'Extra'"
-                                class="bg-[#FFE4C9] text-[#CD6700] text-center rounded-lg px-10 py-1 h-full flex items-center">
+                                class="bg-[#FFE4C9] text-[#CD6700] min-w-32 text-center rounded-lg py-1 h-full ">
                                 Extra
                               </span>
 
@@ -124,15 +124,15 @@
                           <td class="px-6 py-4 text-gray-[#000000] font-semibold dark:text-gray-300">
                             <div class="flex justify-center">
                               <span *ngIf="item.validity === 'Unassigned'"
-                                class="bg-[#B7F4FF] text-[#008CA2] text-center rounded-lg px-8 py-1 h-full flex items-center">
+                                class="bg-[#B7F4FF] text-[#008CA2] min-w-32 text-center rounded-lg py-1 h-full ">
                                 Unassigned
                               </span>
                               <span *ngIf="item.validity === 'Expired'"
-                                class="bg-[#D9D9D9] text-[#8A8A8A] text-center rounded-lg px-7 py-1 h-full flex items-center">
+                                class="bg-[#D9D9D9] text-[#8A8A8A] min-w-32 text-center rounded-lg py-1 h-full ">
                                 Expired
                               </span>
                               <span *ngIf="item.validity === 'Active'"
-                                class="bg-[#c0f8ac] text-[#30911a] text-center rounded-lg px-8 py-1 h-full flex items-center">
+                                class="bg-[#c0f8ac] text-[#30911a] min-w-32 text-center rounded-lg py-1 h-full ">
                                 Active
                               </span>                            
 

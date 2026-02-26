@@ -32,6 +32,7 @@ export class SerchableDropdownComponent {
   @Input() customStyles: string = '';
   @Input() searchInputClass: string = '';
   @Input() dropdownMenuClass: string = '';
+  @Input() dropdownTriggerClass: string | string[] | { [klass: string]: boolean } = '';
 
   isOpen: boolean = false;
   searchTerm: string = '';

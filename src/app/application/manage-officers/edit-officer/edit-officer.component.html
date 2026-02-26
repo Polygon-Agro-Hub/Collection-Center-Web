@@ -738,7 +738,8 @@
                       name="bankDropdown"
                       #selectedBank="ngModel"
                       (selectionChange)="onBankChange($event)"
-                      [clearable]="true">
+                      [clearable]="true"
+                      [dropdownTriggerClass]="'bg-tileLight dark:bg-[#1D1D1F] border border-gray-300'">
                     </app-searchable-dropdown>
 
                     <div *ngIf="!selectedBankId && selectedBank.touched" class="text-red-500 text-sm mt-1">

@@ -162,13 +162,17 @@ export class ViewPickupCashRevenueComponent implements OnInit, OnDestroy {
   // }
 
   private calculateSummary(): void {
-  this.totalAmount = this.revenueData.reduce(
-    (sum, item) => {
-      const price = Number(item.handOverPrice);
-      return sum + (!isNaN(price) ? price : 0);
-    },
-    0,
-  );
+    this.totalAmount = this.revenueData.reduce(
+      (sum, item) => {
+        if (item.status === 'Picked up') {
+          const price = Number(item.handOverPrice);
+          return sum + (!isNaN(price) ? price : 0);
+        }
+        return sum;
+      },
+      0
+    );
+
   this.totalOrders = this.revenueData.length;
 }
   private resetSummary(): void {

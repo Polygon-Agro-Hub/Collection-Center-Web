@@ -146,12 +146,15 @@ export class ViewDeliveryRevenueComponent implements OnInit, OnDestroy {
   private calculateSummary(): void {
     this.totalAmount = this.revenueData.reduce(
       (sum, item) => {
-        // Safely convert handOverPrice to number
-        const price = Number(item.handOverPrice);
-        // Return sum + price if price is valid number, otherwise just sum
-        return sum + (isNaN(price) ? 0 : price);
+        // Only process items with status "Delivered"
+        if (item.status === "Delivered") {
+          const price = Number(item.handOverPrice);
+          return sum + (isNaN(price) ? 0 : price);
+        }
+  
+        return sum;
       },
-      0,
+      0
     );
     this.totalOrders = this.revenueData.length;
   }

@@ -116,7 +116,7 @@
     </div>
 
     <div *ngIf="!hasData" class="flex flex-col items-center w-full h-screen mt-6">
-        <p class="text-[#494949] my-6 dark:text-white">--No Pickup orders for the day --</p>
+        <p class="text-[#494949] my-6 dark:text-white">-- No Home Delivery orders for the day --</p>
         <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
     </div>
 
@@ -209,7 +209,7 @@
               </td>
 
               <td class="px-4 py-3 text-left text-black dark:text-textDark">
-                {{ getOfficerEmpId(item) || "----" }}
+                {{ item.handOverOfficerEmpId || "----" }}
               </td>
             </tr>
           </tbody>

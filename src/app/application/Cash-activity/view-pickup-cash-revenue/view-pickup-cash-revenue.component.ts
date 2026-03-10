@@ -154,13 +154,6 @@ export class ViewPickupCashRevenueComponent implements OnInit, OnDestroy {
     this.loadRevenueData();
   }
 
-  // You can remove the applyFilters method if it's not used elsewhere
-  // applyFilters(): void {
-  //   // Apply client-side filtering if needed
-  //   // Or reload from server (currently reloading from server)
-  //   this.loadRevenueData();
-  // }
-
   private calculateSummary(): void {
     this.totalAmount = this.revenueData.reduce(
       (sum, item) => {
@@ -178,13 +171,6 @@ export class ViewPickupCashRevenueComponent implements OnInit, OnDestroy {
   private resetSummary(): void {
     this.totalAmount = 0;
     this.totalOrders = 0;
-  }
-
-  private formatDateForAPI(date: Date): string {
-    const year = date.getFullYear();
-    const month = ('0' + (date.getMonth() + 1)).slice(-2);
-    const day = ('0' + date.getDate()).slice(-2);
-    return `${year}-${month}-${day}`;
   }
 
   // Helper method to format currency

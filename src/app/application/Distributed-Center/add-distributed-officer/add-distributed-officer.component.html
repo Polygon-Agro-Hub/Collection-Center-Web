@@ -558,7 +558,7 @@
                         Plot Number *</label>
                     <input id="houseNumber" name="houseNumber" [(ngModel)]="personalData.houseNumber"
                         class="mt-1 block w-full p-2 border border-[#D9D9D9] hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                        #houseNumberInput="ngModel" required (input)="onFormatInput($event, personalData, 'houseNumber')" />
+                        #houseNumberInput="ngModel" required (input)="onFormatInput2($event, personalData, 'houseNumber')" />
                     <div *ngIf="houseNumberInput.touched && !personalData.houseNumber"
                         class="text-red-500 text-sm mt-1">
                         <div>House / Plot Number is required</div>
@@ -570,7 +570,7 @@
                         Name *</label>
                     <input id="streetName" name="streetName" [(ngModel)]="personalData.streetName"
                         class="mt-1 block w-full p-2 border border-[#D9D9D9] hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                        #streetNameInput="ngModel" required (input)="onFormatInput($event, personalData, 'streetName')" />
+                        #streetNameInput="ngModel" required (input)="onFormatInput2($event, personalData, 'streetName')" />
                     <div *ngIf="streetNameInput.touched && !personalData.streetName" class="text-red-500 text-sm mt-1">
                         <div>Street Name is required</div>
                     </div>
@@ -580,7 +580,7 @@
                     <label for="city" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">City *</label>
                     <input id="city" name="city" [(ngModel)]="personalData.city"
                         class="mt-1 block w-full p-2 border border-[#D9D9D9] hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                        #cityInput="ngModel" required (input)="onFormatInput($event, personalData, 'city')" />
+                        #cityInput="ngModel" required (input)="onFormatInput2($event, personalData, 'city')" />
                     <div *ngIf="cityInput.touched && !personalData.city" class="text-red-500 text-sm mt-1">
                         <div>City is required</div>
                     </div>

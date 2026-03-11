@@ -435,8 +435,8 @@ export class AddOfficersComponent implements OnInit {
   onFileSelected(event: any): void {
     const file: File = event.target.files[0];
     if (file) {
-      if (file.size > 5000000) {
-        this.toastSrv.error('File size should not exceed 5MB')
+      if (file.size > 3000000) {
+        this.toastSrv.error('File size should not exceed 3MB')
         return;
       }
 
@@ -481,7 +481,7 @@ export class AddOfficersComponent implements OnInit {
 
     } else {
       if (this.logingRole === 'Collection Centre Manager') {
-        this.ManageOficerSrv.createCollectiveOfficer(this.personalData, this.selectedImage).subscribe(
+        this.ManageOficerSrv.createCollectiveOfficer(this.personalData, this.selectedFile).subscribe(
           (res: any) => {
             if (res.status) {
               this.officerId = res.officerId;
@@ -559,7 +559,7 @@ export class AddOfficersComponent implements OnInit {
           this.driverObj.vSideBName = this.vehicleSideBImageFileName
         }
 
-        this.ManageOficerSrv.CCHcreateCollectiveOfficer(this.personalData, this.selectedImage, this.driverObj, this.licenseFrontImagePreview, this.licenseBackImagePreview, this.insurenceFrontImagePreview, this.insurenceBackImagePreview, this.vehicleFrontImagePreview, this.vehicleBackImagePreview, this.vehicleSideAImagePreview, this.vehicleSideBImagePreview).subscribe(
+        this.ManageOficerSrv.CCHcreateCollectiveOfficer(this.personalData, this.selectedFile, this.driverObj, this.licenseFrontImagePreview, this.licenseBackImagePreview, this.insurenceFrontImagePreview, this.insurenceBackImagePreview, this.vehicleFrontImagePreview, this.vehicleBackImagePreview, this.vehicleSideAImagePreview, this.vehicleSideBImagePreview).subscribe(
           (res: any) => {
             if (res.status) {
               this.officerId = res.officerId;
@@ -1434,7 +1434,7 @@ export class AddOfficersComponent implements OnInit {
   }
   
 
-  onFormatInput(event: Event, modelRef: any, fieldName: string): void {
+  onFormatInput(event: Event, modelRef: any, fieldName: string): void {  // no spaces at all
     const inputElement = event.target as HTMLInputElement;
   
     if (inputElement && inputElement.value) {
@@ -1446,6 +1446,25 @@ export class AddOfficersComponent implements OnInit {
   
       // Update model and input box
       modelRef[fieldName] = value;
+      inputElement.value = value;
+    }
+  }
+
+
+  onFormatInput2(event: Event, modelRef: any, fieldName: string): void {  //trim spaces only from start
+    const inputElement = event.target as HTMLInputElement;
+  
+    if (inputElement && inputElement.value) {
+      // Trim spaces only at the start
+      let value = inputElement.value.trimStart();
+  
+      // Capitalize first letter
+      value = value.charAt(0).toUpperCase() + value.slice(1);
+  
+      // Update model
+      modelRef[fieldName] = value;
+  
+      // Update input box value
       inputElement.value = value;
     }
   }

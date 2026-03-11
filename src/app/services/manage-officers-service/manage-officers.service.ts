@@ -35,10 +35,12 @@ export class ManageOfficersService {
     });
   }
 
-  createCollectiveOfficer(person: any, selectedImage: any): Observable<any> {
+  createCollectiveOfficer(person: any, selectedFile: File | null): Observable<any> {
     const formData = new FormData();
     formData.append('officerData', JSON.stringify(person));
-    formData.append('file', selectedImage);
+    if (selectedFile) {
+      formData.append('file', selectedFile); 
+    }
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
     });
@@ -122,10 +124,12 @@ export class ManageOfficersService {
     });
   }
 
-  updateCollectiveOfficer(person: any, id: number, image: any): Observable<any> {
+  updateCollectiveOfficer(person: any, id: number, selectedFile: File | null): Observable<any> {
     const formData = new FormData();
     formData.append('officerData', JSON.stringify(person));
-    formData.append('file', image);
+    if (selectedFile) {
+      formData.append('file', selectedFile); 
+    }
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
@@ -259,7 +263,7 @@ export class ManageOfficersService {
     });
   }
 
-  CCHcreateCollectiveOfficer(person: any, selectedImage: any, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
+  CCHcreateCollectiveOfficer(person: any, selectedFile: File | null, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
     const formData = new FormData();
 
     console.log('person', person)
@@ -277,7 +281,9 @@ export class ManageOfficersService {
     }
 
     formData.append('officerData', JSON.stringify(person));
-    formData.append('file', selectedImage);
+    if (selectedFile) {
+      formData.append('file', selectedFile); 
+    }
 
     console.log('formData', formData)
 
@@ -289,7 +295,7 @@ export class ManageOfficersService {
     });
   }
 
-  CCHupdateCollectiveOfficer(person: any, id: number, image: any, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
+  CCHupdateCollectiveOfficer(person: any, id: number, selectedFile: File | null, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
     const formData = new FormData();
 
     console.log('person for edit' , person)
@@ -306,7 +312,9 @@ export class ManageOfficersService {
     }
 
     formData.append('officerData', JSON.stringify(person));
-    formData.append('file', image);
+    if (selectedFile) {
+      formData.append('file', selectedFile); 
+    }
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,

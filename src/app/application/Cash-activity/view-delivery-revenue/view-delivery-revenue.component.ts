@@ -147,7 +147,7 @@ export class ViewDeliveryRevenueComponent implements OnInit, OnDestroy {
     this.totalAmount = this.revenueData.reduce(
       (sum, item) => {
         // Only process items with status "Delivered"
-        if (item.status === "Delivered") {
+        if (item.status === "Delivered" && item.isHandOver === 1) {
           const price = Number(item.handOverPrice);
           return sum + (isNaN(price) ? 0 : price);
         }
@@ -266,25 +266,13 @@ export class ViewDeliveryRevenueComponent implements OnInit, OnDestroy {
     }
   }
 
-  getPriceClass(status: string): string {
-    switch (status) {      
-      case 'Delivered':
-        return 'text-[#000000] dark:text-textDark';
-      case 'Collected':
-        return 'text-[#FF0000] dark:text-[#FF0000]';
-      case 'On the way':
-        return 'text-[#FF0000] dark:text-[#FF0000]';
-      case 'Hold':
-        return 'text-[#FF0000] dark:text-[#FF0000]';
-      case 'Return':
-        return 'text-[#A50000] dark:text-[#A50000]';
-      case 'Return Received':
-        return 'text-[#A50000] drak:text-[#A50000]';
-      case 'Out For Delivery':
-        return 'text-[#FF0000] dark:text-[#FF0000]';
-  
-      default:
-        return 'text-[#000000] dark:text-textDark';
+  getPriceClass(status: string, isHandOver: number): string {
+    if (isHandOver === 1 && status === 'Delivered') {
+      return 'text-[#000000] dark:text-textDark';
+    } else if (status === 'Return' || status === 'Return Received') {
+      return 'text-[#A50000] dark:text-[#A50000]';
+    } else {
+      return 'text-[#FF0000] dark:text-[#FF0000]';
     }
   }
 
@@ -328,4 +316,5 @@ interface RevenueItem {
   returnRecivedTime: Date
   completeTime: Date
   outDlvrDate: Date
+  isHandOver: number;
 }

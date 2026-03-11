@@ -209,7 +209,7 @@ export class DistributedManageOfficersService {
     });
   }
 
-  updateDistributionOfficer(person: any, id: number, image: any, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
+  updateDistributionOfficer(person: any, id: number, selectedFile: File | null, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
     const formData = new FormData();
 
     if (person.jobRole === 'Driver') {
@@ -225,8 +225,9 @@ export class DistributedManageOfficersService {
     }
 
     formData.append('officerData', JSON.stringify(person));
-    formData.append('file', image);
-
+    if (selectedFile) {
+      formData.append('file', selectedFile); 
+    }
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
     });
@@ -235,7 +236,7 @@ export class DistributedManageOfficersService {
     });
   }
 
-  updateDistributionOfficerDIO(person: any, id: number, image: any, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
+  updateDistributionOfficerDIO(person: any, id: number, selectedFile: File | null, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
     const formData = new FormData();
 
     if (person.jobRole === 'Driver') {
@@ -251,7 +252,9 @@ export class DistributedManageOfficersService {
     }
     
     formData.append('officerData', JSON.stringify(person));
-    formData.append('file', image);
+    if (selectedFile) {
+      formData.append('file', selectedFile); 
+    }
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,

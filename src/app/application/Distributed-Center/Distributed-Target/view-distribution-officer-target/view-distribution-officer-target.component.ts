@@ -22,37 +22,23 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
   selectStatus: string = '';
   selectCompletingStatus: string = '';
   isLateAndNotCompleted!: boolean;
-
   officersArr!: Officer[];
-
   totalOfficers: number = 0;
-
   isPass: boolean = false;
-
   officerId!: number;
-
   date:  string = '';
-
   totalItems: number = 0;
   hasData: boolean = true;
   selectedDate!: string;
-
   isLoading:boolean = true;
-
   selectedOfficerId: number | '' = '';
-
   selectedEmpId!: string;
-
   selectedOfficer: string = '';
-
   selectedOrderIds: number[] = []; 
   selectableOrders:  orders[] = [];
   allChecked: boolean = false;
-  
   filteredOrdersArr!: orders[] 
-
   isPassTarget = false;
-
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Pending', 'Completed', 'Opened'];
 
@@ -79,7 +65,6 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
     this.filterCompletingStatus();
   }
 
-
   constructor(
     private router: Router,
     private ComplainSrv: ComplaintsService,
@@ -93,21 +78,9 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
   ngOnInit(): void {
     this.officerId = Number(this.route.snapshot.paramMap.get('officerId'));
     this.selectedDate = String(this.route.snapshot.paramMap.get('date'));
-    console.log('Selected officerId:', this.officerId);
     this.fetchSelectedOfficerTargets();
     
   }
-
-  // @HostListener('document:click', ['$event'])
-  // onDocumentClick(event: MouseEvent) {
-  //   const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
-  //   const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
-
-  //   if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
-  //     this.isStatusDropdownOpen = false;
-  //   }
-
-  // }
 
   fetchSelectedOfficerTargets(
     officerId: number = this.officerId, 
@@ -154,13 +127,9 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
             combinedStatus: status
           };
         });
-        
-  
-        console.log('ordersarr', this.ordersArr);
-        this.totalItems = res.total;
-  
-        this.hasData = this.ordersArr.length > 0;
 
+        this.totalItems = res.total;
+        this.hasData = this.ordersArr.length > 0;
         this.selectableOrders = this.ordersArr.filter(
           item => item.combinedStatus === 'Pending' && item.lockStatus !== 1
         );
@@ -175,9 +144,7 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
     this.isLoading = true;
     this.DistributionSrv.getOfficers().subscribe(
       (res) => {
-        console.log('officer', res)
         this.officersArr = res
-        console.log('officersArr', this.officersArr)
         this.totalOfficers = res.length | 0;
         this.isLoading = false;
 
@@ -198,7 +165,6 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
   }
 
   onDateChange() {
-    console.log('called')
     this.fetchSelectedOfficerTargets();
   }
 
@@ -260,13 +226,9 @@ toggleOrder(orderId: number, event: Event): void {
   } else {
     this.selectedOrderIds = this.selectedOrderIds.filter(id => id !== orderId);
   }
-
   // Only consider selectable items (Pending and not locked)
-  
   this.allChecked = this.selectedOrderIds.length === this.selectableOrders.length;
 
-  console.log('selectedOrderIds', this.selectedOrderIds);
-  console.log('allChecked', this.allChecked);
 }
 
 
@@ -283,8 +245,6 @@ toggleAllOrders(event: Event): void {
     // Deselect all
     this.selectedOrderIds = [];
   }
-
-  console.log('selectedOrderIds', this.selectedOrderIds);
 }
 
 deSelectAll() {
@@ -293,42 +253,11 @@ deSelectAll() {
 }
 
 passTarget() {
-  
   this.isPassTarget = true;
 }
 
-// PassTarget() {
-
-//   const now = new Date();
-
-// const year = now.getFullYear();
-// const month = String(now.getMonth() + 1).padStart(2, '0');  // Months are 0-based
-// const day = String(now.getDate()).padStart(2, '0');
-
-// const hours = String(now.getHours()).padStart(2, '0');
-// const minutes = String(now.getMinutes()).padStart(2, '0');
-// const seconds = String(now.getSeconds()).padStart(2, '0');
-
-// const currentTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-
-// console.log(currentTime);
-
-//   if (this.allChecked) {
-//     console.log('allcehcke');
-//   } else {
-//     console.log('count', this.selectedOrderIds.length);
-//   }
-//   console.log('currentTime', currentTime)
-
-//   this.changeStatusAndTime({
-//     orderIds: this.selectedOrderIds,
-//     time: currentTime
-//   });
-// }
-
 PassTarget() {
   this.fetchOfficers();
-  console.log('passing')
   this.isPass = true;
   this.isPassTarget = false;
   
@@ -336,30 +265,20 @@ PassTarget() {
   const filteredOrders = this.ordersArr.filter(order =>
     this.selectedOrderIds.includes(order.processOrderId)
   );
-
-  console.log('selected po', this.selectedOrderIds);
-  console.log('filtered orders', filteredOrders);
-
   // If you want to store it in another property
   this.filteredOrdersArr = filteredOrders;
-  console.log('filteredOrdersArr', this.filteredOrdersArr)
 }
 
 
 changeStatusAndTime(data: { orderIds: any[]; time: string }) {
   this.isLoading = true;
-  console.log('change status');
-  
-
   this.DistributionSrv.setStatusAndTime(data).subscribe({
     next: (res) => {
       this.isLoading = false;
 
       if (res && res.success) {
-
         const orderCount = data.orderIds.length < 10 ? ('0' + data.orderIds.length) : (data.orderIds.length);
         const orderLabel = orderCount === 1 ? 'order' : 'orders';
-
         this.toastSrv.success(`${orderCount} ${orderLabel} successfully passed to ${this.selectedEmpId}!`, 'Success');
         this.isPassTarget = false;
       } else {
@@ -393,10 +312,8 @@ passTargetToBackEnd() {
     this.toastSrv.error('Please select a short stock assignee to pass the target!', 'Error');
     return; 
   }
-  console.log('orderIds', this.selectedOrderIds, 'distargetid', this.filteredOrdersArr[0].distributedTargetId, 'officer', this.selectedOfficerId, 'officerID', this.officerId )
   this.DistributionSrv.passTarget(this.selectedOrderIds, this.filteredOrdersArr[0].distributedTargetId, this.selectedOfficerId, this.officerId).subscribe(
     (res) => {
-      console.log('respass', res)
       this.isLoading = false;
       if (res && res.status) {
         // Find the officer object with the selected ID
@@ -406,25 +323,14 @@ passTargetToBackEnd() {
 
         const orderCount = this.selectedOrderIds.length < 10 ? ('0' + this.selectedOrderIds.length) : (this.selectedOrderIds.length);
         const orderLabel = this.selectedOrderIds.length === 1 ? 'order' : 'orders';
-
-        console.log('orderCount', orderCount, 'orderLabel', orderLabel )
-
         // Get the empId if officer exists
         const empId = selectedOfficer ? selectedOfficer.empId : 'Unknown';
-
         this.toastSrv.success(`${orderCount} ${orderLabel} successfully passed to ${empId}!`, 'Success');
-      
-        // Use empId in the toast message
-        // this.toastSrv.success(
-        //   `${this.selectedOrderIds.length} orders have been passed to ${empId}!`,
-        //   'Success'
-        // );
         this.fetchSelectedOfficerTargets()
         this.isPass = false;
         this.isPassTarget = false;
         this.selectedOrderIds = [];
       }
-       
       else {
         this.toastSrv.error('Failed to sent out for delivery!', 'Error');
         this.isPass = false;
@@ -477,16 +383,12 @@ get categoryDropdownItems() {
 // 5. Add selection change handler
 onCategorySelectionChange(selectedValue: string) {
   this.selectedOfficer = selectedValue || '';
-
   this.selectedOfficerId = Number(this.selectedOfficer);
-
 const passOfficer = this.officersArr.find(
   officer => officer.id === this.selectedOfficerId
 );
 
 this.selectedEmpId = passOfficer ? passOfficer.empId : '';
-  // Add any additional logic you need when category changes
-  console.log('officer selected:', this.selectedOfficerId);
 }
 
 goBack() {
@@ -494,8 +396,6 @@ goBack() {
 }
 
 getStatus(item: orders): string {
-  console.log('Setting status');
-
   // Convert both into Date objects
   const scheduleDate = new Date(item.sheduleDate);
   const completeTime = item.completeTime ? new Date(item.completeTime) : null;
@@ -518,15 +418,6 @@ getStatus(item: orders): string {
   // Current time in SL
   const now = new Date(
     new Date().toLocaleString('en-US', { timeZone: 'Asia/Colombo' })
-  );
-
-  console.log(
-    'Now (SL):',
-    now.toLocaleString('en-GB', { timeZone: 'Asia/Colombo', hour12: false })
-  );
-  console.log(
-    'Deadline (SL):',
-    deadline.toLocaleString('en-GB', { timeZone: 'Asia/Colombo', hour12: false })
   );
 
   // --- Case 1: Not completed yet ---

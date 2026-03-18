@@ -141,9 +141,6 @@
 
                     <div *ngIf="logingRole === 'Distribution Centre Manager'"></div>
 
-
-
-
                     <div
                         *ngIf="(logingRole === 'Distribution Centre Head' && (personalData.jobRole === 'Distribution Officer')) 
                         || (logingRole === 'Distribution Centre Head' && (personalData.jobRole === 'Driver'))">
@@ -250,9 +247,6 @@
 
                     </div>
 
-
-
-
                     <div>
                         <label for="languages" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
                             Preferred Languages *
@@ -282,8 +276,6 @@
                             Please select at least one preferred language.
                         </p>
                     </div>
-
-
 
                     <div>
                         <label for="firstNameEnglish"
@@ -428,15 +420,7 @@
                             Mobile Number - 2
                         </label>
                         <div class="mt-1 flex">
-                            <!-- <select id="phoneNumber02Code" name="phoneNumber02Code"
-                                [(ngModel)]="personalData.phoneNumber02Code"
-                                class="block p-2 border border-gray-300 hover:bg-gray-200 rounded-l-md bg-gray-50 mr-5 text-[#534E4E] dark:text-textDark dark:bg-[#1D1D1F]">
-                                <option value="+94">+94 (LK)</option>
-                                <option value="+1">+1 (US)</option>
-                                <option value="+44">+44 (UK)</option>
-                                <option value="+91">+91 (India)</option>
-                            </select> -->
-
+                        
                             <div class="dropdown-wrapper-2 relative inline-block w-36 mr-2">
                                 <!-- Selected item -->
                                 <div class="flex items-center justify-between p-2 border border-gray-300 rounded-md bg-gray-50 dark:bg-[#1D1D1F] text-[#534E4E] dark:text-textDark cursor-pointer"
@@ -519,7 +503,6 @@
                         </div>
                     </div>
 
-
                 </div>
 
                 <div class="flex justify-end my-10 ml-10">
@@ -528,21 +511,19 @@
                         (click)="onCancel()">Cancel</button>
 
                         
-                    <button (click)="
-                    !PageOneForm.invalid 
-                    && !this.languagesRequired
-                    && personalData.phoneNumber02 !== personalData.phoneNumber01 
-                    && personalData.jobRole 
-                    && !isPhoneInvalidMap['phone01'] 
-                    && ((personalData.phoneNumber02 && !isPhoneInvalidMap['phone02']) || !personalData.phoneNumber02)
-                      ? nextForm('pageTwo') 
-                      : nextForm('pageOne')
-                  " 
-                   type="submit"
+                          <button (click)="
+                          !PageOneForm.invalid 
+                          && !this.languagesRequired
+                          && personalData.phoneNumber02 !== personalData.phoneNumber01 
+                          && personalData.jobRole 
+                          && !isPhoneInvalidMap['phone01'] 
+                          && ((personalData.phoneNumber02 && !isPhoneInvalidMap['phone02']) || !personalData.phoneNumber02)
+                            ? nextForm('pageTwo') 
+                            : nextForm('pageOne')
+                        " 
+                        type="submit"
                         class="px-6 py-1 bg-[#415CFF] text-white rounded-lg">Next</button>
                 </div>
-
-
             </div>
         </div>
     </form>
@@ -747,13 +728,7 @@
                   ">
                     Next
                 </button>
-
-                <!-- <button type="submit" class="px-6 py-1 bg-[#415CFF] text-[#FFFFFF] rounded-lg">
-                    Sent to Approve
-                </button> -->
             </div>
-            <!--  -->
-
         </div>
     </form>
 
@@ -967,17 +942,6 @@
 
 
             <h2 class="text-xl mt-16 mb-6 text-textLight dark:text-textDark font-semibold">Vehicle Details</h2>
-            <!-- <div>
-                <label for="vRegNo" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Vehicle
-                    Registration Number</label>
-                <input id="vRegNo" type="number" name="vRegNo" [(ngModel)]="driverObj.vRegNo" #vRegNoInput="ngModel" required
-                
-                    class="form-control mt-1 block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                    required />
-                <div *ngIf="vRegNoInput.touched && !driverObj.vRegNo" class="text-red-500 text-sm mt-1">
-                    <div>Vehicle Registration Number is required</div>
-                </div>
-            </div> -->
             <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-11 my-5">
 
                 <div class="mt-2">
@@ -1042,10 +1006,6 @@
                     <input id="capacity" placeholder="------------" [value]="selectVehicletype?.capacity"
                         class="form-control mt-1 block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                         readonly />
-                    <!-- <div *ngIf="firstNameEnglishInput.touched && !personalData.firstNameEnglish"
-                        class="text-red-500 text-sm mt-1">
-                        <div>First Name (in English) is required</div>
-                    </div> -->
                 </div>
 
                 <div>
@@ -1145,18 +1105,13 @@
                 </div>
             </div>
 
-
-
             <div class="flex justify-end my-10 ml-10">
                 <button (click)="nextForm('pageTwo')" type="button"
                     class="px-6 py-2 bg-[#F6F7F9] border-gray-400 border-[2px] text-[#6B7D8C] rounded-lg mr-2">Back</button>
                 <button type="submit" class="px-6 py-1 bg-[#415CFF] text-white rounded-lg"
                     (click)="!PageThreeForm.invalid && (driverObj.licNo === driverObj.confirmLicNo) && (driverObj.insNo === driverObj.confirmInsNo) && (driverObj.vRegNo === driverObj.confirmVRegNo) ? onSubmit() : nextForm('pageThree')">Sent to
                     Approve</button>
-   
             </div>
         </div>
     </form>
-
-
 </div>

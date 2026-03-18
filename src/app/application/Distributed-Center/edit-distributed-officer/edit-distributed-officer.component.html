@@ -130,8 +130,6 @@
                     </div>
                 </div>
 
-                
-
                 <div class="relative" (clickOutside)="isJobRoleOpen = false">
                     <label for="jobRole" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">
                       Job Role *
@@ -233,16 +231,7 @@
                 </div>
               </div>
 
-
                 <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-8 mb-4">
-
-                    
-
-                    
-
-                    <!-- <div
-                        *ngIf="(logingRole === 'Distribution Centre Head' || logingRole === 'Distribution Centre Manager') && (personalData.jobRole === 'Distribution Officer')">
-                    </div> -->
 
                     <div>
                         <label for="languages" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">
@@ -446,11 +435,8 @@
                                 class="text-red-500 text-sm mt-1">
                                 Mobile Number must be exactly 9 digits.
                             </div>
-
-                        
                         </div>
                     </div>
-
 
                     <div>
                         <label for="phoNumTwo" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">
@@ -501,10 +487,8 @@
                             class="text-red-500 text-sm mt-1">
                             Mobile Number must be exactly 9 digits.
                         </div>
-
                       </div>
                       
-
                     <div>
                         <label for="nic" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">NIC
                             Number *</label>
@@ -537,9 +521,6 @@
                             <p>Please enter a valid email in the format: example&#64;domain.com</p>
                         </div>
                     </div>
-
-
-
                 </div>
 
                 <div class="flex justify-end my-10 ml-10">
@@ -665,11 +646,11 @@
                         <div>Account Holder's Name is required</div>
                     </div>
                     <div
-  *ngIf="accHolderNameInput.touched && personalData.accHolderName && accHolderNameInput.invalid"
-  class="text-red-500 text-sm mt-1"
->
-  Please do not enter any special characters(eg., !, $, etc).
-</div>
+                      *ngIf="accHolderNameInput.touched && personalData.accHolderName && accHolderNameInput.invalid"
+                      class="text-red-500 text-sm mt-1"
+                    >
+                      Please do not enter any special characters(eg., !, $, etc).
+                    </div>
                 </div>
 
                 <div class="pb-6">
@@ -684,11 +665,11 @@
                         <div>Account Number is required</div>
                     </div>
                     <div
-  *ngIf="accNumberInput.touched && personalData.accNumber && accNumberInput.errors?.['pattern']"
-  class="text-red-500 text-sm mt-1"
->
-  <div>Account Number cannot contain special characters</div>
-</div>
+                      *ngIf="accNumberInput.touched && personalData.accNumber && accNumberInput.errors?.['pattern']"
+                      class="text-red-500 text-sm mt-1"
+                    >
+                      <div>Account Number cannot contain special characters</div>
+                    </div>
                 </div>
 
                 <div class="pb-6">
@@ -707,30 +688,12 @@
                         <div>Confirm Account Number should be the same as Account Number.</div>
                     </div>
                     <div
-  *ngIf="confirmAccNumberInput.touched && personalData.conformAccNumber && confirmAccNumberInput.errors?.['pattern']"
-  class="text-red-500 text-sm mt-1"
->
-  <div>Account Number cannot contain special characters</div>
-</div>
+                      *ngIf="confirmAccNumberInput.touched && personalData.conformAccNumber && confirmAccNumberInput.errors?.['pattern']"
+                      class="text-red-500 text-sm mt-1"
+                    >
+                      <div>Account Number cannot contain special characters</div>
+                    </div>
                 </div>
-
-                <!-- <div class="pb-6">
-                    <label for="accNumber" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Confirm
-                        Account Number</label>
-                    <input type="number" id="accNumber" name="accNumber" [(ngModel)]="personalData.conformAccNumber"
-                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                        #conformAccNumberInput="ngModel" required />
-                    <div *ngIf="conformAccNumberInput.touched && !personalData.conformAccNumber"
-                        class="text-red-500 text-sm mt-1">
-                        <div>Account Number is required</div>
-                    </div>
-                    <div *ngIf="personalData.conformAccNumber && personalData.accNumber !== personalData.conformAccNumber"
-                        class="text-red-500 text-sm mt-1">
-                        <div>Confirm Account Number should be the same as Account Number.</div>
-                    </div>
-                </div> -->
-
-                
 
                 <div class="pb-6">
                     <label for="bankDropdown" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">
@@ -774,7 +737,6 @@
                   </div>
             </div>
 
-
             <div class="flex justify-end my-10 ml-10">
                 <button (click)="nextForm('pageOne')" type="button"
                     class="px-8 py-2 bg-[#F6F7F9] border-gray-400 border-[2px] text-[#6B7D8C] rounded-lg mr-2">Back</button>
@@ -804,7 +766,6 @@
             </div>
         </div>
     </form>
-
 
     <form #PageThreeForm="ngForm" (ngSubmit)="onSubmitFormPage3(PageThreeForm)">
 
@@ -881,7 +842,6 @@
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
-
                 </div>
 
                 <div>
@@ -910,9 +870,6 @@
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
-                    <!-- <div *ngIf="!licenseBackImageFileName" class="text-red-500 text-sm mt-1">
-                        <div>License Back Image is required</div>
-                    </div> -->
                 </div>
             </div>
 
@@ -925,10 +882,6 @@
                     <input id="insNo" type="text" #insurenceNoInput="ngModel" name="insNo" [(ngModel)]="driverObj.insNo" 
                       class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
                       <div>
-                        <!-- <span class="text-red-600 text-sm" *ngIf="licNoInput.touched && licNoInput.errors?.['pattern'] && driverObj.licNo">
-                          Please enter a valid License ID number (1 letter + 7 digits or 10–12 digits).
-                        </span> -->
-              
                         <span class="text-red-600 text-sm" *ngIf="insurenceNoInput.touched && !driverObj.insNo">
                           Insurance Number Required.
                         </span>
@@ -978,9 +931,6 @@
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
-                    <!-- <div *ngIf="!insurenceFrontImageFileName" class="text-red-500 text-sm mt-1">
-                        <div>Insurance’s Front Image is required</div>
-                    </div> -->
                 </div>
 
                 <div>
@@ -995,8 +945,6 @@
 
                     <input id="insuranceBackImageUpload" type="file" accept="image/*"
                         (change)="onInsurenceBackImageSelected($event)" class="hidden">
-
-
                     <div (click)="triggerFileInputForDriver($event, 'insuranceBackImageUpload')"
                         class="flex flex-row items-center justify-center bg-[#D2DADD] rounded-lg shadow-md gap-x-3 form-control mt-1 w-full p-2 border border-gray-300 cursor-pointer">
                         <i class="fa-solid fa-upload text-[#534E4E] text-lg"></i>
@@ -1009,9 +957,6 @@
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
-                    <!-- <div *ngIf="!insurenceBackImageFileName" class="text-red-500 text-sm mt-1">
-                        <div>Insurance’s Back Image is required</div>
-                    </div> -->
                 </div>
 
                 <div>
@@ -1031,7 +976,6 @@
                         class="text-red-500 text-sm mt-1">
                         Insurance Expire Date is required
                    </div>
-
                 </div>
             </div>
 
@@ -1039,7 +983,6 @@
             <h2 class="text-xl mt-16 mb-6 text-textLight dark:text-textDark font-bold">Vehicle Details</h2>
 
             <div class="grid grid-cols-1 md:grid-cols-2 gap-y-4 gap-x-11 my-5">
-
                 <div class="mt-2">
                     <label for="vRegNo" class="block text-sm font-medium text-gray-700 dark:text-textDark">
                       Vehicle Registration Number *
@@ -1049,7 +992,6 @@
                       class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
                       
                       <div>
-                        
                         <span class="text-red-600 text-sm" *ngIf="vRegNoInput.touched && !driverObj.vRegNo">
                           Vehicle Registration Number is Required.
                         </span>
@@ -1063,12 +1005,10 @@
                     <input id="confirmVRegNo" type="text" #confirmVRegNoInput="ngModel" name="confirmVRegNo" [(ngModel)]="driverObj.confirmVRegNo"
                       (keypress)="preventSpecialCharacters($event)" (paste)="preventSpecialCharactersPaste($event)"
                       class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
-                      
                       <div>
                         <span class="text-red-600 text-sm" *ngIf="confirmVRegNoInput.touched && (driverObj.vRegNo !== driverObj.confirmVRegNo) && driverObj.confirmVRegNo">
                           Confirm Vehicle Registration Number should match the Vehicle Registration Number.
                         </span>
-              
                         <span class="text-red-600 text-sm" *ngIf="confirmVRegNoInput.touched && !driverObj.confirmVRegNo">
                           Confirm Vehicle Registration Number is Required.
                         </span>
@@ -1102,10 +1042,7 @@
                     <input id="capacity" placeholder="------------" [value]="selectVehicletype?.capacity"
                         class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                         readonly />
-                    <!-- <div *ngIf="firstNameEnglishInput.touched && !personalData.firstNameEnglish"
-                        class="text-red-500 text-sm mt-1">
-                        <div>First Name (in English) is required</div>
-                    </div> -->
+
                 </div>
 
                 <div>
@@ -1133,9 +1070,6 @@
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
-                    <!-- <div *ngIf="!vehicleFrontImageFileName" class="text-red-500 text-sm mt-1">
-                        <div>Vehicle’s Front Image is required</div>
-                    </div> -->
                 </div>
 
                 <div>

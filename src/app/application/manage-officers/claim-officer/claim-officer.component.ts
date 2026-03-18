@@ -22,13 +22,9 @@ export class ClaimOfficerComponent implements OnInit {
   inputId: string = '';
   isOfficerExist: boolean = false;
   hasData!: boolean
-
   isLoading:boolean = false;
-
   showClaimView = false;
-
   logingRole: string | null = null;
-
 
   constructor(
     private ManageOficerSrv: ManageOfficersService,
@@ -49,8 +45,6 @@ export class ClaimOfficerComponent implements OnInit {
   }
 
   fetchOfficer() {
-
-    console.log('seelectedJbRole', this.selectJobRole)
     if (!this.inputId) {
       return this.toastSrv.warning('Pleace enter valid employee id!');
     }
@@ -77,7 +71,6 @@ export class ClaimOfficerComponent implements OnInit {
           this.isOfficerExist = false;
           this.hasData = true
           this.isLoading = false;
-
         }
       }
     )
@@ -86,8 +79,6 @@ export class ClaimOfficerComponent implements OnInit {
   toggleClaimView() {
     this.showClaimView = !this.showClaimView; // Toggle the boolean value
   }
-
-  
 
   cancelClaim() {
     this.showClaimView = false;
@@ -115,9 +106,6 @@ export class ClaimOfficerComponent implements OnInit {
     );
   }
   
-  
-  
-
 }
 
 class OfficerDetails {

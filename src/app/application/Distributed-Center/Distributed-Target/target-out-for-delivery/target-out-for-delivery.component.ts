@@ -55,34 +55,18 @@ export class TargetOutForDeliveryComponent implements OnInit {
     this.fetchOutForDeliveryOrders();
   }
 
-  // @HostListener('document:click', ['$event'])
-  // onDocumentClick(event: MouseEvent) {
-  //   const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
-  //   const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
-
-  //   if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
-  //     this.isStatusDropdownOpen = false;
-  //   }
-
-  // }
-
   fetchOutForDeliveryOrders(status: string = this.selectStatus, search: string = this.searchText) {
     this.isLoading = true;
     this.DistributionSrv.getOutForDeliveryOrders(status, search).subscribe(
       (res) => {
-        console.log('res', res)
         this.ordersArr = res.items
-        console.log('ordersArr', this.ordersArr)
         this.totalItems = res.items.length | 0;
-        
         if (res.items.length === 0) {
           this.hasData = false;
         } else {
           this.hasData = true;
-
         }
         this.isLoading = false;
-
       }
     )
   }
@@ -92,17 +76,10 @@ export class TargetOutForDeliveryComponent implements OnInit {
   
     this.DistributionSrv.getCenterData().subscribe(
       (res) => {
-        console.log('res', res);
-  
         this.centerName = res?.centerName ?? '';
-  
         const items = res?.items ?? [];  // safe fallback
-  
-        console.log('items', items);
-  
         this.totalItems = items.length;
         this.hasData = items.length > 0;
-  
         this.isLoading = false;
       },
       (err) => {
@@ -139,15 +116,8 @@ export class TargetOutForDeliveryComponent implements OnInit {
   }
 
   onDateChange() {
-    console.log('called')
     this.fetchOutForDeliveryOrders();
   }
-
-
-  // onPageChange(event: number) {
-  //   this.page = event;
-  //   this.fetchOutForDeliveryOrders(this.page, this.itemsPerPage);
-  // }
 
   getDisplayDate(sheduleDate: string | Date): string {
     const today = new Date();
@@ -188,7 +158,6 @@ const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short'
 
 // Example: "10/11" → convert to "10-11" (safe for filenames)
 const fullDateStr = `${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-console.log(fullDateStr); // e.g. "11-10"
 // Example: "12.41PM"
 const timeStr = now
   .toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
@@ -197,8 +166,6 @@ const timeStr = now
 
 // Combine → "10-11 12.41PM"
 const finalStr = `${fullDateStr} ${timeStr}`;
-console.log(finalStr);
-  
     this.DistributionSrv
       .downloadOutForDeliveryTargetProgressReport(this.selectStatus, this.searchText)
       .subscribe({
@@ -243,8 +210,6 @@ console.log(finalStr);
   }
 
   getStatus(item: orders): string {
-    console.log('Setting status');
-  
     // Convert both into Date objects
     const scheduleDate = new Date(item.sheduleDate);
     const outDlvrDateLocal = item.outDlvrDateLocal ? new Date(item.outDlvrDateLocal) : null;
@@ -268,20 +233,9 @@ console.log(finalStr);
     const now = new Date(
       new Date().toLocaleString('en-US', { timeZone: 'Asia/Colombo' })
     );
-  
-    console.log(
-      'Now (SL):',
-      now.toLocaleString('en-GB', { timeZone: 'Asia/Colombo', hour12: false })
-    );
-    console.log(
-      'Deadline (SL):',
-      deadline.toLocaleString('en-GB', { timeZone: 'Asia/Colombo', hour12: false })
-    );
-  
 
     // --- Case 1: Not completed yet ---
     if (outDlvrDateLocal) {
-      console.log('deldate', outDlvrDateLocal.getTime())
       if (outDlvrDateLocal.getTime() > deadline.getTime()) {
         // this.isLateAndNotCompleted = true;
         return 'Late';
@@ -315,17 +269,13 @@ console.log(finalStr);
     );
   
     if (scheduleDateOnly.getTime() === currentDateOnly.getTime()) {
-      console.log('Equal')
       return 'Equal';
     } else if (scheduleDateOnly.getTime() < currentDateOnly.getTime()) {
-      console.log('Passed')
       return 'Passed';
     } else {
-      console.log('nPassed')
       return 'Not Passed';
     }
   }
-  
   
 }
 

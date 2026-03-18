@@ -65,17 +65,13 @@ export class AssignDistributionTargetComponent implements OnInit {
       this.noOfOfficers = officers.length;
 
       this.DistributionSrv.getDistributionOrders().subscribe((orders) => {
-        console.log('orders', orders)
         this.ordersArr = orders;
         if (orders.length === 0) {
-          console.log('fasle')
           this.hasData = false
         }
         this.isLoading = false;
-
         this.totalOrders = this.ordersArr.length;
         this.assignedOrdersArr = this.assignOrdersToOfficers();
-        console.log('assignedOrdersArr', this.assignedOrdersArr)
         this.validateTotalCount();
       });
     });
@@ -106,10 +102,7 @@ export class AssignDistributionTargetComponent implements OnInit {
 
   validateTotalCount(): void {
     this.totalAssignedOrders = this.assignedOrdersArr.reduce((sum, item) => sum + Number(item.count || 0), 0);
-    console.log('assignedOrdersArr', this.assignedOrdersArr)
-    console.log('totalAssignedOrders', this.totalAssignedOrders)
     this.isCountValid = this.totalAssignedOrders === this.totalOrders;
-
     // NEW: Check if any value has changed
     this.checkIfDataChanged();
   }
@@ -119,30 +112,19 @@ export class AssignDistributionTargetComponent implements OnInit {
     this.hasDataChanged = this.assignedOrdersArr.some(
       item => item.count !== item.originalCount
     );
-    console.log('hasDataChanged', this.hasDataChanged);
   }
 
   allowOnlyNumbers(event: KeyboardEvent): void {
     const charCode = event.key;
-
     if (['Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'Tab'].includes(charCode)) {
       return;
     }
-
     if (!/^[0-9]$/.test(charCode)) {
       event.preventDefault();
     }
   }
 
   onCancel() {
-    // NEW: Optional - warn user if they have unsaved changes
-    // if (this.hasDataChanged) {
-    //   const confirmCancel = confirm('You have unsaved changes. Are you sure you want to cancel?');
-    //   if (!confirmCancel) {
-    //     return;
-    //   }
-    // }
-
     this.toastSrv.warning('Distribution Centre Targets Assign Cancelled')
     this.router.navigate([`/assign-targets`]);
   }
@@ -150,20 +132,12 @@ export class AssignDistributionTargetComponent implements OnInit {
   onSubmit() {
     this.isLeaveWithOutSaving = false;
     this.isLoading = true;
-    console.log('Submitting...', this.totalOrders);
-    console.log('assignedOrdersArr', this.assignedOrdersArr);
-    console.log('ordersArr', this.ordersArr);
-
     const assignmentPayload = this.assignedOrdersArr.map((officer) => ({
       officerId: officer.officerId,
       count: officer.count,
     }));
 
     const orderIdList = this.ordersArr.map((order) => order.processOrderId);
-
-    console.log('assignmentPayload', assignmentPayload);
-    console.log('orderIdList', orderIdList);
-
     this.DistributionSrv.assignOrdersToCenterOfficers(assignmentPayload, orderIdList).subscribe(
       (res) => {
         if (res.status) {
@@ -195,19 +169,14 @@ export class AssignDistributionTargetComponent implements OnInit {
   leaveWithoutSaving() {
     this.hasDataChanged = false;
     this.fetchData();
-    console.log('leave')
     this.isLeaveWithOutSaving = false;
     this.router.navigate([`/assign-targets`]).then(() => {
         this.isExitAssignTarget = false;
       });
-    // this.router.navigate(['/assign-targets']).then(() => {
-    //   this.isExitAssignTarget = false;
-    // });
   }
   
   stayOnPage() {
     this.isExitAssignTarget = false;
-
   }
 }
 

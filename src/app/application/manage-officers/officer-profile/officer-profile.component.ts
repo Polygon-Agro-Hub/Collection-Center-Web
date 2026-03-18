@@ -2,13 +2,11 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ManageOfficersService } from '../../../services/manage-officers-service/manage-officers.service';
 import jsPDF from 'jspdf';
-import html2canvas from 'html2canvas';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { TokenServiceService } from '../../../services/Token/token-service.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
-
 
 @Component({
   selector: 'app-officer-profile',
@@ -24,13 +22,9 @@ export class OfficerProfileComponent implements OnInit {
   logingRole: string | null = null;
   naviPath!: string
   imagebase64: string | null = null;
-
   contentHeight!: number;
-
   isLoading: boolean = true;
-
   centerId!: number;
-
 
   constructor(
     private ManageOficerSrv: ManageOfficersService,
@@ -41,7 +35,6 @@ export class OfficerProfileComponent implements OnInit {
 
   ) {
     this.logingRole = tokenSrv.getUserDetails().role
-
   }
 
   ngOnInit(): void {
@@ -55,17 +48,12 @@ export class OfficerProfileComponent implements OnInit {
   fetchOfficer(id: number) {
     this.isLoading = true;
     this.ManageOficerSrv.getOfficerById(id).subscribe((res: any) => {
-      console.log('res', res);
       this.officerObj = res.officerData.collectionOfficer;
-      
-      console.log('officer', this.officerObj);
       this.isLoading = false;
     });
   }
 
   async generatePDF() {
-
-    // this.fetchProfileImageBase64(this.officerId);
 
     if (this.officerObj.jobRole === 'Driver') {
       this.contentHeight = 397
@@ -125,8 +113,6 @@ export class OfficerProfileComponent implements OnInit {
       }
     });
   }
-
-  
 
   const hasImage = !!this.officerObj.image;
 
@@ -239,39 +225,38 @@ export class OfficerProfileComponent implements OnInit {
     doc.text(getValueOrNA(empCodeText), startX + textWidth, 22);
 
 
-// Generate center text
-let centerText = 'Officer has been disclaimed - No Assigned Centre';
+    // Generate center text
+    let centerText = 'Officer has been disclaimed - No Assigned Centre';
 
-const ccRoles = [
-  'Collection Centre Manager',
-  'Collection Centre Head',
-  'Collection Officer',
-  'Customer Officer'
-];
+    const ccRoles = [
+      'Collection Centre Manager',
+      'Collection Centre Head',
+      'Collection Officer',
+      'Customer Officer'
+    ];
 
-const dcRoles = [
-  'Distribution Centre Manager',
-  'Distribution Centre Head',
-  'Distribution Officer',
-  'Driver'
-];
+    const dcRoles = [
+      'Distribution Centre Manager',
+      'Distribution Centre Head',
+      'Distribution Officer',
+      'Driver'
+    ];
 
-if (ccRoles.includes(this.officerObj.jobRole)) {
-  if (this.officerObj.regCode) {
-    centerText = `${this.officerObj.regCode} Centre`;
-  }
-} else if (dcRoles.includes(this.officerObj.jobRole)) {
-  if (this.officerObj.distributedCenterRegCode) {
-    centerText = `${this.officerObj.distributedCenterRegCode} Centre`;
-  }
-}
+    if (ccRoles.includes(this.officerObj.jobRole)) {
+      if (this.officerObj.regCode) {
+        centerText = `${this.officerObj.regCode} Centre`;
+      }
+    } else if (dcRoles.includes(this.officerObj.jobRole)) {
+      if (this.officerObj.distributedCenterRegCode) {
+        centerText = `${this.officerObj.distributedCenterRegCode} Centre`;
+      }
+    }
 
-// Apply text in PDF
-doc.text(centerText, startX, 29);
-doc.setFont("Inter", "normal");
+    // Apply text in PDF
+    doc.text(centerText, startX, 29);
+    doc.setFont("Inter", "normal");
 
     doc.text(getValueOrNA(this.officerObj.companyNameEnglish), startX, 36);
-
   
     doc.setFontSize(12);
     doc.setFont("Inter", "normal");
@@ -333,19 +318,19 @@ doc.setFont("Inter", "normal");
     doc.setFont("Inter", "bold");
 
     // Box start above the heading
-const boxX = 10;
-const boxY = startY + 54;  // move above heading
-const boxWidth = 190;
+    const boxX = 10;
+    const boxY = startY + 54;  // move above heading
+    const boxWidth = 190;
 
-// The last Y position after district field
-const lastY = startY + 108; 
-const boxHeight = (lastY + 4) - boxY; // +10 padding at bottom
+    // The last Y position after district field
+    const lastY = startY + 108; 
+    const boxHeight = (lastY + 4) - boxY; // +10 padding at bottom
 
-// Draw rounded border first (so it’s in background)
-doc.setDrawColor(241, 247, 250); // border color #F1F7FA
-doc.setLineWidth(0.5);
-doc.roundedRect(boxX, boxY, boxWidth, boxHeight, 3, 3, "S"); 
-// "S" = Stroke only (no fill, text will stay visible)
+    // Draw rounded border first (so it’s in background)
+    doc.setDrawColor(241, 247, 250); // border color #F1F7FA
+    doc.setLineWidth(0.5);
+    doc.roundedRect(boxX, boxY, boxWidth, boxHeight, 3, 3, "S"); 
+    // "S" = Stroke only (no fill, text will stay visible)
 
     doc.text("Address Details", 14, startY + 60);
 
@@ -392,16 +377,16 @@ doc.roundedRect(boxX, boxY, boxWidth, boxHeight, 3, 3, "S");
     doc.setFont("Inter", "bold");
 
     const bankBoxX = 10;
-const bankBoxY = startY + 114;   // start slightly above heading
-const bankBoxWidth = 190;
+    const bankBoxY = startY + 114;   // start slightly above heading
+    const bankBoxWidth = 190;
 
-// Last Y position after Branch Name value
-const bankLastY = startY + 152;
-const bankBoxHeight = (bankLastY + 4) - bankBoxY; // +4 for a little padding
+    // Last Y position after Branch Name value
+    const bankLastY = startY + 152;
+    const bankBoxHeight = (bankLastY + 4) - bankBoxY; // +4 for a little padding
 
-doc.setDrawColor(241, 247, 250); // border color #F1F7FA
-doc.setLineWidth(0.5);
-doc.roundedRect(bankBoxX, bankBoxY, bankBoxWidth, bankBoxHeight, 3, 3, "S");
+    doc.setDrawColor(241, 247, 250); // border color #F1F7FA
+    doc.setLineWidth(0.5);
+    doc.roundedRect(bankBoxX, bankBoxY, bankBoxWidth, bankBoxHeight, 3, 3, "S");
 
     doc.text("Bank Details", 14, startY + 120);
 
@@ -622,9 +607,6 @@ doc.roundedRect(bankBoxX, bankBoxY, bankBoxWidth, bankBoxHeight, 3, 3, "S");
   viewOfficerTarget(officerId: number, centerName: string) {
 
     const newCenterName = centerName ? centerName : 'Disclaimed'
-
-    console.log('newCenterName', newCenterName)
-
     if (this.logingRole === 'Collection Centre Head' || this.logingRole === 'Collection Centre Manager') {
       this.router.navigate([`/manage-officers/view-officer-target/${officerId}/${newCenterName}`]);
     } else if (this.logingRole === 'Distribution Centre Head' || this.logingRole === 'Distribution Centre Manager') {
@@ -638,26 +620,14 @@ doc.roundedRect(bankBoxX, bankBoxY, bankBoxWidth, bankBoxHeight, 3, 3, "S");
   }
 
   confirmDisclaim(id: number) {
-    console.log('id', id)
     this.isLoading = true;
 
     this.ManageOficerSrv.disclaimOfficer(id).subscribe(
       (response) => {
-
-        console.log(response)
-
         this.isLoading = false;
         this.showDisclaimView = false;
-
-        // if (this.logingRole === 'Distribution Centre Manager') {
-        //   this.router.navigate(['/distribution-officers']);
-        // } else if (this.logingRole === 'Collection Centre Manager') {
-        //   this.router.navigate(['/manage-officers']);
-        // }
-        this.fetchOfficer(this.officerId);
-        
+        this.fetchOfficer(this.officerId);      
         this.toastSrv.success('Officer Disclaimed successfully!');
-
       },
       (error) => {
         console.error('Error sending Officer ID:', error);
@@ -677,11 +647,6 @@ doc.roundedRect(bankBoxX, bankBoxY, bankBoxWidth, bankBoxHeight, 3, 3, "S");
     const currentPath = this.router.url.split('?')[0];
     // Extract the first segment after the initial slash
     this.naviPath = currentPath.split('/')[1];
-
-    console.log('naviPath', this.naviPath)
-  }
-
-  viewImage(imageUrl: string) {
   }
 
   navigateToCenterDashboard() {

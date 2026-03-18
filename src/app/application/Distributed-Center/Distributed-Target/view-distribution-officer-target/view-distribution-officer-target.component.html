@@ -40,11 +40,8 @@
                 <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
                     <span>{{ selectStatus || 'Status' }}</span>
                     <div class="flex items-center">
-                        <!-- X icon (shown ONLY when option is selected) -->
                         <i *ngIf="selectStatus" (click)="cancelStatus($event)"
                             class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
-
-                        <!-- Arrow icon (shown when EITHER: dropdown is open OR no selection exists) -->
                         <i *ngIf="isStatusDropdownOpen || !selectStatus"
                             class="fa-solid text-lg text-[#828282] transition-transform duration-200"
                             [class.fa-angle-down]="!isStatusDropdownOpen"
@@ -52,8 +49,6 @@
                     </div>
                 </div>
             </div>
-
-            
 
             <!-- Custom dropdown options -->
             <div *ngIf="isStatusDropdownOpen"
@@ -68,7 +63,7 @@
             </div>
         </div>
 
-        <div class="relative w-40 custom-completion-status-dropdown-container">
+        <div class="relative w-48 custom-completion-status-dropdown-container">
             <!-- Hidden native select -->
             <select [(ngModel)]="selectCompletingStatus" class="hidden" (change)="filterCompletingStatus()">
                 <option value="" selected disabled>Completing Status</option>
@@ -86,11 +81,8 @@
                 <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
                     <span>{{ selectCompletingStatus || 'Completing Status' }}</span>
                     <div class="flex items-center">
-                        <!-- X icon (shown ONLY when option is selected) -->
                         <i *ngIf="selectCompletingStatus" (click)="cancelCompletingStatus($event)"
                             class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
-
-                        <!-- Arrow icon (shown when EITHER: dropdown is open OR no selection exists) -->
                         <i *ngIf="isCompletingStatusDropdownOpen || !selectCompletingStatus"
                             class="fa-solid text-lg text-[#828282] transition-transform duration-200"
                             [class.fa-angle-down]="!isCompletingStatusDropdownOpen"
@@ -98,8 +90,6 @@
                     </div>
                 </div>
             </div>
-
-            
 
             <!-- Custom dropdown options -->
             <div *ngIf="isCompletingStatusDropdownOpen"
@@ -113,16 +103,6 @@
                 </div>
             </div>
         </div>
-
-
-        <!-- <div class="relative w-36">
-            <div
-                class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
-                <input type="date" #toDateInput [(ngModel)]="date" name="date"
-                    (change)="onDateChange()"
-                    class="block w-full appearance-none text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none dark:bg-[#292929] custom-date-input" />
-            </div>
-        </div> -->
 
         <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
             <input type="text" placeholder="Search by Invoice No.." [(ngModel)]="searchText" (keyup.enter)="onSearch()"
@@ -143,7 +123,6 @@
                 </svg>
             </button>
         </div>
-
     </div>
     </div>
     
@@ -264,15 +243,9 @@
               [disabled]="false"
               class="block w-full mb-4"
             ></app-searchable-dropdown>
-          
-            <!-- Validation error message -->
-            <!-- <div *ngIf="selectedOfficer && officerSelect.touched" class="text-red-500 text-sm">
-              Please select an officer.
-            </div> -->
-          </div>
-          
         
-
+          </div>
+        
     </div>
 
     <hr class=""/>
@@ -334,17 +307,7 @@
                 </tr>
             </tbody>
         </table>
-
-        
-
     </div>
-
-    <!-- <div class="">jasfjsdjfjsdjdfcld</div> -->
-
-    <!-- <div class="flex mt-2 flex-row gap-2 justify-center" >
-        <button (click)="cancell()" class="border border-[#95A1AC] font-medium rounded-lg bg-[#F6F7F9] text-[#6B7D8C] px-3 py-1" >Cancel</button>
-        <button (click)="passTargetToBackEnd()" class="border border-[#415CFF] font-medium rounded-lg bg-[#415CFF] text-[#FFFFFF] px-6 py-1" >Pass</button>
-   </div> -->
 </div>
 
 <div class="flex mt-6 flex-row gap-2 justify-center" >

@@ -21,24 +21,14 @@ export class TargetProgressOngoingComponent implements OnInit {
   ordersArr!: orders[];
   searchText: string = '';
   selectStatus: string = '';
-
   centerName!: string;
-
   selectedDate: string | Date | null = null;
-
-  // page: number = 1;
   totalItems: number = 0;
-  // itemsPerPage: number = 10;
   hasData: boolean = true;
-
   isLoading:boolean = true;
-
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Pending', 'Completed', 'Opened'];
-
   isDownloading = false;
-
-
 
   toggleStatusDropdown() {
     this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
@@ -54,9 +44,7 @@ export class TargetProgressOngoingComponent implements OnInit {
     private router: Router,
     private ComplainSrv: ComplaintsService,
     private DistributionSrv: DistributionServiceService
-  ) {
-    
-   }
+  ) { }
 
 
   ngOnInit(): void {
@@ -65,17 +53,6 @@ export class TargetProgressOngoingComponent implements OnInit {
     this.fetchAllAssignOrders();
     this.fetchCenterData();
   }
-
-  // @HostListener('document:click', ['$event'])
-  // onDocumentClick(event: MouseEvent) {
-  //   const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
-  //   const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
-
-  //   if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
-  //     this.isStatusDropdownOpen = false;
-  //   }
-
-  // }
 
   fetchAllAssignOrders(status: string = this.selectStatus, search: string = this.searchText, selectDate: string | Date | null = this.selectedDate) {
     this.isLoading = true;
@@ -118,8 +95,6 @@ export class TargetProgressOngoingComponent implements OnInit {
           };
         });
         
-        console.log('orders', this.ordersArr);
-        
         this.hasData = res.items.length > 0;
         this.isLoading = false;
       }
@@ -130,15 +105,10 @@ export class TargetProgressOngoingComponent implements OnInit {
     this.isLoading = true;
     this.DistributionSrv.getCenterData().subscribe(
       (res) => {
-        console.log('res', res)
         this.centerName = res?.centerName ?? '';
-  
         const items = res?.items ?? []; // safe fallback
-  
         this.totalItems = items.length;
-  
         this.hasData = items.length > 0;
-  
         this.isLoading = false;
       }
     );
@@ -153,7 +123,6 @@ export class TargetProgressOngoingComponent implements OnInit {
   offSearch() {
     this.searchText = '';
     this.fetchAllAssignOrders();
-
   }
 
   filterStatus() {
@@ -167,11 +136,6 @@ export class TargetProgressOngoingComponent implements OnInit {
     this.selectStatus = '';
     this.fetchAllAssignOrders();
   }
-
-  // onDateChange(newDate: string | Date | null) {
-  //   this.selectedDate = newDate;
-  //   this.fetchAllAssignOrders();
-  // }
 
   onDateChange(newDate: string | Date | null) {
     let dateString: string;
@@ -192,11 +156,6 @@ export class TargetProgressOngoingComponent implements OnInit {
     this.selectedDate = dateString;
     this.fetchAllAssignOrders();
   }
-
-  // onPageChange(event: number) {
-  //   this.page = event;
-  //   this.fetchAllAssignOrders(this.page, this.itemsPerPage);
-  // }
 
   navigateViewReply(id:number){
     this.router.navigate([`/cch-complaints/view-recive-reply/${id}`])
@@ -257,31 +216,21 @@ export class TargetProgressOngoingComponent implements OnInit {
 
   downloadTemplate1() {
     this.isDownloading = true;
+    // Example: selectedDate = "2025-11-10" or "11/10/2025"
+    const selectedDateStr = String(this.selectedDate); 
+    // Convert safely to Date
+    const selectedDateObj = new Date(selectedDateStr);
+    // Example: "10 Nov"
+    const dateStr = selectedDateObj.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+    // Example: "11-10" (MM-DD format)
+    const fullDateStr = `${String(selectedDateObj.getMonth() + 1).padStart(2, '0')}-${String(selectedDateObj.getDate()).padStart(2, '0')}`;
+    const now = new Date();
+    const timeStr = now
+      .toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
+      .replace(':', '.')
+      .replace(' ', '');
 
-// Example: selectedDate = "2025-11-10" or "11/10/2025"
-const selectedDateStr = String(this.selectedDate); 
-
-// Convert safely to Date
-const selectedDateObj = new Date(selectedDateStr);
-
-// Example: "10 Nov"
-const dateStr = selectedDateObj.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
-
-// Example: "11-10" (MM-DD format)
-const fullDateStr = `${String(selectedDateObj.getMonth() + 1).padStart(2, '0')}-${String(selectedDateObj.getDate()).padStart(2, '0')}`;
-console.log(fullDateStr); // e.g. "11-10"
-
-const now = new Date();
-
-const timeStr = now
-  .toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
-  .replace(':', '.')
-  .replace(' ', '');
-
-const finalStr = `${fullDateStr} ${timeStr}`;
-console.log(finalStr);
-
-
+    const finalStr = `${fullDateStr} ${timeStr}`;
     this.DistributionSrv
       .downloadAllTargetProgressReport(this.selectStatus, this.selectedDate, this.searchText )
       .subscribe({

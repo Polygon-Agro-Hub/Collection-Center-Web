@@ -1,9 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { ComplaintsService } from '../../../../services/Complaints-Service/complaints.service';
-import { ToastAlertService } from '../../../../services/toast-alert/toast-alert.service';
-import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
 import { TargetProgressOngoingComponent } from '../target-progress-ongoing/target-progress-ongoing.component';
 import { TargetProgressTodoComponent } from "../target-progress-todo/target-progress-todo.component";
 import { TargetProgressCompletedComponent } from "../target-progress-completed/target-progress-completed.component";
@@ -23,13 +20,9 @@ export class TargetProgressAllComponent implements OnInit {
   isSelectCompleted: boolean = false;
   isSelectOutForDelivery: boolean = false;
 
-  constructor(
-    
-  ) { }
+  constructor() { }
 
-  ngOnInit(): void {
-
-  }
+  ngOnInit(): void { }
 
   selectAll() {
     this.isSelectAll = true;

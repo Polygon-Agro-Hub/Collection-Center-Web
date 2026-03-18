@@ -50,17 +50,6 @@ export class TargetProgressCompletedComponent implements OnInit{
     this.fetchCompletedAssignOrders();
   }
 
-  // @HostListener('document:click', ['$event'])
-  // onDocumentClick(event: MouseEvent) {
-  //   const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
-  //   const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
-
-  //   if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
-  //     this.isStatusDropdownOpen = false;
-  //   }
-
-  // }
-
   fetchCompletedAssignOrders(search: string = this.searchText, selectDate: string = this.date) {
     this.isLoading = true;
     this.DistributionSrv.getCompletedAssignOrders(search, selectDate).subscribe(
@@ -103,10 +92,6 @@ export class TargetProgressCompletedComponent implements OnInit{
           };
         });
 
-        console.log('trders', this.ordersArr)
-
-        
-        
         if (res.items.length === 0) {
           this.hasData = false;
         } else {
@@ -121,13 +106,11 @@ export class TargetProgressCompletedComponent implements OnInit{
 
   onSearch() {
     this.fetchCompletedAssignOrders();
-
   }
 
   offSearch() {
     this.searchText = '';
     this.fetchCompletedAssignOrders();
-
   }
 
   onDateChange(newDate: string | Date | null) {
@@ -180,7 +163,6 @@ export class TargetProgressCompletedComponent implements OnInit{
 
 
 toggleOrder(orderId: number, event: Event): void {
-  console.log('toggoling order')
     const isChecked = (event.target as HTMLInputElement).checked;
     
     if (isChecked) {
@@ -190,8 +172,6 @@ toggleOrder(orderId: number, event: Event): void {
     } else {
         this.selectedOrderIds = this.selectedOrderIds.filter(id => id !== orderId);
     }
-    console.log('selectedOrderIds', this.selectedOrderIds);
-    
 
     this.allChecked = this.selectedOrderIds.length === this.ordersArr.length;
 }
@@ -208,7 +188,6 @@ toggleAllOrders(event: Event): void {
         // Deselect all orders
         this.selectedOrderIds = [];
     }
-    console.log('selectedOrderIds', this.selectedOrderIds)
 }
 
 deSelectAll() {
@@ -223,36 +202,23 @@ outForDelivery() {
 sendOutForDelivery() {
 
   const now = new Date();
+  const year = now.getFullYear();
+  const month = String(now.getMonth() + 1).padStart(2, '0');  // Months are 0-based
+  const day = String(now.getDate()).padStart(2, '0');
 
-const year = now.getFullYear();
-const month = String(now.getMonth() + 1).padStart(2, '0');  // Months are 0-based
-const day = String(now.getDate()).padStart(2, '0');
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const seconds = String(now.getSeconds()).padStart(2, '0');
 
-const hours = String(now.getHours()).padStart(2, '0');
-const minutes = String(now.getMinutes()).padStart(2, '0');
-const seconds = String(now.getSeconds()).padStart(2, '0');
-
-const currentTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-
-console.log(currentTime);
-
-  if (this.allChecked) {
-    console.log('allcehcke');
-  } else {
-    console.log('count', this.selectedOrderIds.length);
-  }
-  console.log('currentTime', currentTime)
-
-  this.changeStatusAndTime({
-    orderIds: this.selectedOrderIds,
-    time: currentTime
-  });
+  const currentTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    this.changeStatusAndTime({
+      orderIds: this.selectedOrderIds,
+      time: currentTime
+    });
 }
 
 changeStatusAndTime(data: { orderIds: any[]; time: string }) {
   this.isLoading = true;
-  console.log('change status');
-
   this.DistributionSrv.setStatusAndTime(data).subscribe({
     next: (res) => {
       this.isLoading = false;
@@ -311,7 +277,6 @@ getScheduleClass(item: any): string {
     upperLimit.setHours(upperLimitHour, 0, 0, 0);
 
     if (now <= upperLimit) {
-      console.log('active')
       return 'schedule-active'; // CSS class name
     } else {
       return 'schedule-expired'; // CSS class name

@@ -5,8 +5,6 @@
         <i class="fa-solid fa-list text-2xl"></i>
 
         <p class="text-lg">Filter By</p>
-
-
         <div class="relative w-40 custom-employee-dropdown-container">
             <!-- Hidden native select -->
             <select [(ngModel)]="selectStatus" class="hidden" (change)="filterEmployee()">
@@ -144,9 +142,6 @@
                         <span *ngIf="item.officerId !== officerId">{{item.empId}}</span>
                     </td>
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.complainCategory}}</td>
-                    <!-- <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
-                        {{item.complain | slice:0:100}}{{item.complain.length > 50 ? '...' : ''}}
-                    </td> -->
 
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
                         {{ truncateText(item.complain, item.id) }}
@@ -184,8 +179,6 @@
                             (click)="item.reply !== null && viewReply(item.id)">
                         </i>
                     </td>
-
-
                 </tr>
             </tbody>
         </table>
@@ -264,9 +257,7 @@
                     (click)="cancelViewReply()">
                     Close
                 </button>
-
             </div>
-
         </div>
     </div>
 </div>

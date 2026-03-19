@@ -48,7 +48,6 @@ export class PriceListService {
   }
 
   getAllRequestPrice(page: number = 1, limit: number = 10, grade: string = '', status: string = '', searchText: string = ''): Observable<any> {
-    console.log('grade', grade, 'status', status, 'search', searchText)
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
@@ -140,7 +139,6 @@ export class PriceListService {
   }
 
   getAllRequestPriceCCH(page: number = 1, limit: number = 10, grade: string = '', status: string = '', searchText: string = ''): Observable<any> {
-    console.log('grade', grade, 'status', status, 'search', searchText)
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
@@ -182,8 +180,6 @@ export class PriceListService {
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
     });
-
-    console.log('pahe', page)
 
     let url = `${this.apiUrl}/view-all-price-cch?userId=${userId}&page=${page}&limit=${limit}`
 

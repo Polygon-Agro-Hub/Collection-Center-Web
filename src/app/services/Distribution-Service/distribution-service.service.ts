@@ -21,8 +21,6 @@ export class DistributionServiceService {
       Authorization: `Bearer ${this.token}`
     });
 
-    console.log('province', province, 'district', district)
-
     let url = `${this.apiUrl}/get-all-distribution-centers?page=${page}&limit=${limit}`;
 
     if (province) {
@@ -42,7 +40,6 @@ export class DistributionServiceService {
 
 
   createDistributionCenter(centerData: any) {
-    console.log('centerData', centerData)
     const formData = new FormData();
     formData.append('centerData', JSON.stringify(centerData));
 
@@ -76,18 +73,6 @@ export class DistributionServiceService {
       headers,
     });
   }
-
-  // getDistributionCenterOfficers(centerData: any): Observable<any> {
-  //   const formData = new FormData();
-  //   formData.append('centerData', JSON.stringify(centerData));
-
-  //   const headers = new HttpHeaders({
-  //     Authorization: `Bearer ${this.token}`,
-  //   });
-  //   return this.http.post(`${this.apiUrl}/create-distribution-center`, formData, {
-  //     headers,
-  //   });
-  // }
 
   getDistributionCenterOfficers(): Observable<any> {
 
@@ -129,13 +114,10 @@ export class DistributionServiceService {
       processOrderIds: orderIdList
     };
 
-    console.log('data', data)
-  
     return this.http.post<any>(url, data, { headers });
   }
 
   getAllRequests(date: string = '', status: string = '', searchText: string = ''): Observable<any> {
-    console.log('date', date, 'status', status, 'search', searchText)
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
@@ -161,7 +143,6 @@ export class DistributionServiceService {
   }
 
   getProductsForUser(rrId: number): Observable<any> {
-    console.log('rrId', rrId)
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
@@ -175,7 +156,6 @@ export class DistributionServiceService {
   }
 
   approveRequest(requestObj: any): Observable<any> {
-    console.log()
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
@@ -187,7 +167,6 @@ export class DistributionServiceService {
   }
 
   rejectRequest(requestObj: any): Observable<any> {
-    console.log()
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
@@ -234,7 +213,6 @@ export class DistributionServiceService {
 
     if (searchText) {
       url += `&searchText=${searchText}`
-
     }
 
     if (selectDate) {
@@ -277,7 +255,6 @@ export class DistributionServiceService {
 
     if (searchText) {
       url += `&searchText=${searchText}`
-
     }
 
     return this.http.get<any>(url, { headers });
@@ -299,10 +276,8 @@ export class DistributionServiceService {
       Authorization: `Bearer ${this.token}`
     });
 
-
     let url = `${this.apiUrl}/get-officer-targets/${date}`;
     
-
     return this.http.get<any>(url, { headers });
   }
 
@@ -311,12 +286,10 @@ export class DistributionServiceService {
       Authorization: `Bearer ${this.token}`
     });
   
-    console.log('get-selected-officer-targets', searchText)
     let url = `${this.apiUrl}/get-selected-officer-targets?officerId=${officerId}`;
   
     if (searchText) {
       url += `&searchText=${searchText}`
-  
     }
   
     if (status) {
@@ -339,10 +312,8 @@ export class DistributionServiceService {
       Authorization: `Bearer ${this.token}`
     });
   
-  
     let url = `${this.apiUrl}/get-officers`;
 
-  
     return this.http.get<any>(url, { headers });
   }
 
@@ -364,28 +335,15 @@ export class DistributionServiceService {
     return this.http.post<any>(url, data, { headers });
   }
 
-  // getAllProducts(): Observable<any> {
-  //   const headers = new HttpHeaders({
-  //     Authorization: `Bearer ${this.token}`,
-  //     'Content-Type': 'application/json'
-  //   });
-  
-  //   const url = `${this.apiUrl}/get-all-products`; 
-  
-  //   return this.http.get<any>(url, { headers });
-  // }
-
   getCenterTarget(centerId: number, searchText: string = '', status: string = '', selectDate: string | Date | null = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
-  
-    console.log('selectDate', selectDate)
+
     let url = `${this.apiUrl}/get-center-target?centerId=${centerId}`;
   
     if (searchText) {
       url += `&searchText=${searchText}`
-  
     }
   
     if (status) {
@@ -404,14 +362,10 @@ export class DistributionServiceService {
       Authorization: `Bearer ${this.token}`
     });
 
-    console.log('selectDate', selectDate, 'status', status)
-  
-  
     let url = `${this.apiUrl}/get-center-target-out-for-delivery?centerId=${centerId}`;
   
     if (searchText) {
       url += `&searchText=${searchText}`
-  
     }
   
     if (status) {
@@ -446,8 +400,6 @@ export class DistributionServiceService {
   ): Observable<Blob> {
     let url = `${this.apiUrl}/download-all-target-progress?test=${1}`;
 
-    console.log('donwloading')
-
     if (status) {
       url += `&status=${status}`;
     }
@@ -462,7 +414,6 @@ export class DistributionServiceService {
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
-      // Optional: 'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     });
 
     return this.http.get(url, { headers, responseType: 'blob' });
@@ -484,7 +435,6 @@ export class DistributionServiceService {
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
-      // Optional: 'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     });
 
     return this.http.get(url, { headers, responseType: 'blob' });
@@ -512,15 +462,12 @@ export class DistributionServiceService {
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
-      // Optional: 'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     });
 
     return this.http.get(url, { headers, responseType: 'blob' });
   }
 
   getAssignForCityes(province: string, district: string): Observable<any> {
-    // province = 'Western',
-    // district = 'Colombo'
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
@@ -555,13 +502,10 @@ export class DistributionServiceService {
       Authorization: `Bearer ${this.token}`
     });
 
-    console.log('date', date)
-  
     let url = `${this.apiUrl}/get-selected-distribution-officer-targets?officerId=${officerId}&centerId=${centerId}`;
   
     if (searchText) {
       url += `&searchText=${searchText}`
-  
     }
   
     if (status) {
@@ -620,13 +564,11 @@ getCenterData(): Observable<any> {
     Authorization: `Bearer ${this.token}`
   });
 
-
   let url = `${this.apiUrl}/get-center-data`;
   return this.http.get<any>(url, { headers });
 }
 
 getCentreDataById(centreId: number): Observable<any> {
-  console.log('fetchinh')
   const headers = new HttpHeaders({
     Authorization: `Bearer ${this.token}`
   });
@@ -650,7 +592,6 @@ editCenter(centerData: any): Observable<any> {
 
 
 getTodaysDeliveries(activeTab: string = '', status: string = '', searchText: string = '', date: string | Date | null = '', timeSlot: string = '' ): Observable<any> {
-  console.log('date', date)
   const headers = new HttpHeaders({
     Authorization: `Bearer ${this.token}`,
     'Content-Type': 'application/json',

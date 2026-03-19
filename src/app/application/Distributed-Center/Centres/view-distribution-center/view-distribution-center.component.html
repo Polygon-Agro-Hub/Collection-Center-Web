@@ -61,18 +61,6 @@
               </div>
    
           </div>
-
-          <!-- Dropdown list -->
-          <!-- <div *ngIf="dropdownOpen"
-              class="absolute left-0 mt-1 w-full border border-gray-300 rounded-md bg-white dark:bg-[#1D1D1F] z-10 max-h-40 overflow-y-auto">
-              <div *ngFor="let country of countries"
-                  class="flex items-center gap-2 p-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
-                  (click)="selectCountry1(country)">
-                  <img [src]="getFlagUrl(country.code)" width="24" height="18"
-                      alt="{{ country.name }}" />
-                  <span class="dark:text-white">{{ country.dialCode }}</span>
-              </div>
-          </div> -->
       </div>
           <input id="phoneNumber01" name="phoneNumber01" type="tell"
               [(ngModel)]="centerData.phoneNumber01"
@@ -111,18 +99,6 @@
             </div>
             
         </div>
-
-        <!-- Dropdown list -->
-        <!-- <div *ngIf="dropdownOpen2"
-            class="absolute left-0 mt-1 w-full border border-gray-300 rounded-md bg-white dark:bg-[#1D1D1F] z-10 max-h-40 overflow-y-auto">
-            <div *ngFor="let country of countries"
-                class="flex items-center gap-2 p-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
-                (click)="selectCountry2(country)">
-                <img [src]="getFlagUrl(country.code)" width="24" height="18"
-                    alt="{{ country.name }}" />
-                <span class="dark:text-white">{{ country.dialCode }}</span>
-            </div>
-        </div> -->
     </div>
         <input id="phoneNumber02" name="phoneNumber02" type="tell" #phoneNumber02Input="ngModel"
             [(ngModel)]="centerData.phoneNumber02"
@@ -249,10 +225,6 @@
       </p>
     </div>
   </div>
-
-    
   </form>
-  
 </div>
 
-<!-- [disabled]="!centerForm.valid" -->

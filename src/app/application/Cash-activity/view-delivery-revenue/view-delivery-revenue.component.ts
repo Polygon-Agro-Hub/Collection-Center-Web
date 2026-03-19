@@ -29,13 +29,11 @@ export class ViewDeliveryRevenueComponent implements OnInit, OnDestroy {
   selectedStatus: string = '';
   hasData: boolean = false;
 
-  // Data arrays
   revenueData: RevenueItem[] = [];
   filteredRevenueData: RevenueItem[] = [];
 
   private destroy$ = new Subject<void>();
 
-  // Summary statistics
   totalAmount: number = 0;
   totalOrders: number = 0;
 

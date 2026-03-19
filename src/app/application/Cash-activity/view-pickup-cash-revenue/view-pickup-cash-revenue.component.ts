@@ -27,11 +27,9 @@ export class ViewPickupCashRevenueComponent implements OnInit, OnDestroy {
   selectedDate: string | Date | null = null;
   hasData: boolean = false;
 
-  // Data arrays
   revenueData: RevenueItem[] = [];
   filteredRevenueData: RevenueItem[] = [];
 
-  // Remove the searchSubject as we don't need debounce anymore
   private destroy$ = new Subject<void>();
 
   isStatusDropdownOpen = false;
@@ -53,14 +51,12 @@ export class ViewPickupCashRevenueComponent implements OnInit, OnDestroy {
 
   cancelStatus(event?: MouseEvent) {
     if (event) {
-      event.stopPropagation(); // Prevent triggering the dropdown toggle
+      event.stopPropagation(); 
     }
     this.selectedStatus = '';
     this.loadRevenueData();
   }
 
-
-  // Summary statistics
   totalAmount: number = 0;
   totalOrders: number = 0;
 

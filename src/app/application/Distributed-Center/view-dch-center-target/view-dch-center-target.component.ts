@@ -65,27 +65,13 @@ export class ViewDchCenterTargetComponent implements OnInit{
     this.centerId = Number(this.route.snapshot.paramMap.get('id'));
     this.centerName = String(this.route.snapshot.paramMap.get('centerName'));
     this.regCode = String(this.route.snapshot.paramMap.get('regCode'));
-    console.log('centerId', this.centerId)
     const today = new Date();
     this.date = today.toISOString().split('T')[0];
     this.fetchCenterTarget();
-    // this.fetchOfficers();
   }
-
-  // @HostListener('document:click', ['$event'])
-  // onDocumentClick(event: MouseEvent) {
-  //   const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
-  //   const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
-
-  //   if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
-  //     this.isStatusDropdownOpen = false;
-  //   }
-
-  // }
 
   fetchCenterTarget(centerId: number = this.centerId!, search: string = this.searchText, status: string = this.selectStatus, selectDate: string | Date | null = this.date) {
     this.isLoading = true;
-    console.log('selectStatus', this.selectStatus)
     this.DistributionSrv.getCenterTarget(centerId, search, status, selectDate ).subscribe(
       (res) => {
         this.ordersArr = res.items.map((item: any) => {
@@ -123,11 +109,7 @@ export class ViewDchCenterTargetComponent implements OnInit{
             combinedStatus: status
           };
         });
-        
-  
-        console.log('ordersarr', this.ordersArr);
         this.totalItems = res.total;
-  
         this.hasData = this.ordersArr.length > 0;
         this.isLoading = false;
       }
@@ -138,9 +120,7 @@ export class ViewDchCenterTargetComponent implements OnInit{
     this.isLoading = true;
     this.DistributionSrv.getOfficers().subscribe(
       (res) => {
-        console.log('officer', res)
         this.officersArr = res
-        console.log('officersArr', this.officersArr)
         this.totalOfficers = res.length;
         this.isLoading = false;
 
@@ -160,11 +140,6 @@ export class ViewDchCenterTargetComponent implements OnInit{
     this.fetchCenterTarget();
 
   }
-
-  // onDateChange() {
-  //   console.log('called')
-  //   this.fetchCenterTarget();
-  // }
 
   onDateChange(newDate: string | Date | null) {
     this.date = newDate;

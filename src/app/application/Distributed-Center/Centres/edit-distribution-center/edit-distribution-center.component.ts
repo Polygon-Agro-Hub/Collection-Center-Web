@@ -34,7 +34,6 @@ export class EditDistributionCenterComponent implements OnInit{
   phone02: false,
 };
 
-
 provinces: string[] = [
   'Western',
   'Central',
@@ -89,7 +88,6 @@ allDistricts = [
     private route: ActivatedRoute,
     private router: Router,
     private toastSrv: ToastAlertService,
-    // private targetService: TargetService,
     private DistributionSrv: DistributionServiceService,
     private location: Location
   ) {
@@ -101,7 +99,6 @@ allDistricts = [
   ngOnInit() {
     const idParam = this.route.snapshot.paramMap.get('centerId');
     this.centreId = idParam !== null ? Number(idParam) : null;
-    console.log('Received ID:', this.centreId);
     this.fetchCentreData(this.centreId!)
   }
 
@@ -124,31 +121,15 @@ get districtItems() {
 }
 
 
-//   @HostListener('document:click', ['$event.target'])
-// onClick(targetElement: HTMLElement) {
-//   const insideDropdown1 = targetElement.closest('.dropdown-wrapper-1');
-//   const insideDropdown2 = targetElement.closest('.dropdown-wrapper-2');
-
-//   // Close dropdowns only if click is outside their wrapper
-//   if (!insideDropdown1) {
-//     this.dropdownOpen = false;
-//   }
-//   if (!insideDropdown2) {
-//     this.dropdownOpen2 = false;
-//   }
-// }
-
 selectCountry1(country: Country) {
   this.selectedCountry1 = country;
-  this.centerData.phoneNumber01Code = country.dialCode; // update ngModel
-  console.log('sdsf', this.centerData.phoneNumber01Code)
+  this.centerData.phoneNumber01Code = country.dialCode; 
   this.dropdownOpen = false;
 }
 
 selectCountry2(country: Country) {
   this.selectedCountry2 = country;
-  this.centerData.phoneNumber02Code = country.dialCode; // update ngModel
-  console.log('sdsf', this.centerData.phoneNumber02Code)
+  this.centerData.phoneNumber02Code = country.dialCode; 
   this.dropdownOpen2 = false;
 }
 
@@ -159,12 +140,10 @@ getFlagUrl(code: string): string {
 
   fetchCentreData(centreId: number) {
     this.isLoading = true;
-    console.log('fetching')
     this.DistributionSrv.getCentreDataById(centreId).subscribe(
       (res) => {
         this.isLoading = false;
         this.centerData = res.centreData[0];
-        console.log(this.centerData)
         this.isLoading = false;
       }
     );
@@ -172,13 +151,8 @@ getFlagUrl(code: string): string {
   }
   onProvinceChange(selectedProvince: string | null): void {
     this.centerData.province = selectedProvince || '';
-
-    console.log('this.centerData.province 1 ', this.centerData.province )
-    
-    // Clear district selection when province changes
     if (!selectedProvince) {
         this.centerData.province = '';
-        console.log('this.centerData.province 2', this.centerData.province )
     } else {
         // Check if current district is still valid for the selected province
         const isDistrictValid = this.allDistricts.some(d => 
@@ -188,7 +162,6 @@ getFlagUrl(code: string): string {
             this.centerData.district = '';
         }
     }
-
     this.updateRegCode();
   }
 
@@ -196,20 +169,14 @@ getFlagUrl(code: string): string {
 onDistrictChange(selectedDistrict: string | null): void {
     this.centerData.district = selectedDistrict || '';
 
-    console.log('this.centerData.district 1', this.centerData.district )
-    
-    // When district is selected, automatically set the province
     if (selectedDistrict) {
         const district = this.allDistricts.find(d => d.name === selectedDistrict);
         if (district && district.province !== this.centerData.province) {
             this.centerData.province = district.province;
-
-            console.log('this.centerData.province 1', this.centerData.province )
         }
     }
 
     this.updateRegCode();
-  
 }
 
   validateSriLankanPhone(input: string, key: string): void {
@@ -243,12 +210,8 @@ onDistrictChange(selectedDistrict: string | null): void {
 
   onSubmitForm(form: NgForm) {
 
-    console.log('submitting')
-
     form.form.markAllAsTouched();
-
     const missingFields: string[] = [];
-
     if (!this.centerData.centerName) {
       missingFields.push('Centre Name is required');
     }
@@ -301,10 +264,7 @@ onDistrictChange(selectedDistrict: string | null): void {
         missingFields.push('Mobile Number - 2 - Must be different from Mobile Number - 1');
       }
     }
-  
-    
-  
-    // Display errors if any
+
     if (missingFields.length > 0) {
       let errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following issues:</p><ul class="list-disc pl-5">';
       missingFields.forEach((field) => {
@@ -325,14 +285,10 @@ onDistrictChange(selectedDistrict: string | null): void {
       });
       return;
     }
-
      this.onSubmit();
-    
   }
 
   onSubmit() {
-
-    console.log('center data', this.centerData)
     this.isLoading = true;
 
     // Validate form data
@@ -395,13 +351,8 @@ onDistrictChange(selectedDistrict: string | null): void {
   capitalizeFirstLetter(field: keyof CenterData) {
     if (this.centerData[field]) {
       let value = this.centerData[field] as unknown as string;
-  
-      // Trim spaces
       value = value.trim();
-  
-      // Capitalize first letter
       value = value.charAt(0).toUpperCase() + value.slice(1);
-  
       this.centerData[field] = value as never; // assign back safely
     }
   }
@@ -412,13 +363,9 @@ onDistrictChange(selectedDistrict: string | null): void {
   }
 
   updateRegCode() {
-    console.log('update reg code');
     const province = this.centerData.province;
     const district = this.centerData.district;
     const city = this.centerData.city;
-
-    console.log('province', province, 'district', district, 'city', city);
-
     if (province && district && city) {
       this.isLoadingregcode = true;
       this.DistributionSrv
@@ -434,7 +381,6 @@ onDistrictChange(selectedDistrict: string | null): void {
             const regCode = `${province.slice(0, 2).toUpperCase()}${district
               .slice(0, 1)
               .toUpperCase()}${city.slice(0, 1).toUpperCase()}`;
-            console.log('regCode fallback', regCode);
             this.centerData.regCode = '';
             this.isLoadingregcode = false;
           }
@@ -455,7 +401,6 @@ onDistrictChange(selectedDistrict: string | null): void {
       customClass: {
         popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
         title: 'dark:text-white',
-
         icon: '',
         confirmButton: 'hover:bg-red-600 dark:hover:bg-red-700 focus:ring-red-500 dark:focus:ring-red-800',
         cancelButton: 'hover:bg-blue-600 dark:hover:bg-blue-700 focus:ring-blue-500 dark:focus:ring-blue-800',
@@ -463,7 +408,6 @@ onDistrictChange(selectedDistrict: string | null): void {
       }
     }).then((result) => {
       if (result.isConfirmed) {
-
         this.toastSrv.warning('Centre Edit Operation Canceled.')
         this.location.back();
       }

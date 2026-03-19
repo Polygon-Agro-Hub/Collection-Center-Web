@@ -91,44 +91,6 @@ export class ViewCenterOfficersComponent implements OnInit {
     this.applyRoleFilters();
   }
 
-  // isCenterDropdownOpen = false;
-  // centerDropdownOptions = [];
-
-  // toggleCenterDropdown() {
-  //   this.isCenterDropdownOpen = !this.isCenterDropdownOpen;
-  // }
-
-  // selectCenterOption(center: Center) {
-  //   this.selectCenters = center.id.toString(); // convert id to string
-  //   this.isCenterDropdownOpen = false;
-  //   this.applyCompanyFilters();
-  // }
-
-
-  // @HostListener('document:click', ['$event'])
-  // onDocumentClick(event: MouseEvent) {
-  //   const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
-  //   const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
-
-  //   const roleDropdownElement = document.querySelector('.custom-role-dropdown-container');
-  //   const roleDropdownClickedInside = roleDropdownElement?.contains(event.target as Node);
-
-  //   // const centerDropdownElement = document.querySelector('.custom-center-dropdown-container');
-  //   // const centerDropdownClickedInside = centerDropdownElement?.contains(event.target as Node);
-
-  //   if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
-  //     this.isStatusDropdownOpen = false;
-  //   }
-
-  //   if (!roleDropdownClickedInside && this.isRoleDropdownOpen) {
-  //     this.isRoleDropdownOpen = false;
-  //   }
-
-  //   // if (!centerDropdownClickedInside && this.isCenterDropdownOpen) {
-  //   //   this.isCenterDropdownOpen = false;
-  //   // }
-  // }
-
   navigate(path: string) {
     this.router.navigate([`${path}`])
   }
@@ -361,15 +323,6 @@ const tableHtml = `
     this.fetchByRole();
   }
 
-  // applyStatusFilters() {
-  //   this.fetchByRole();
-  // }
-
-  // clearStatusFilter() {
-  //   this.selectStatus = ''
-  //   this.fetchByRole();
-  // }
-
   applyRoleFilters() {
 
     if (this.selectRole === 'Distribution Centre Manager') {
@@ -404,16 +357,6 @@ const tableHtml = `
     this.fetchByRole();
   }
 
-  // applyCompanyFilters() {
-  //   this.fetchByRole();
-  // }
-
-  // clearCompanyFilter(event: MouseEvent) {
-  //   event.stopPropagation();
-  //   this.selectCenters = '';
-  //   this.applyCompanyFilters();
-  // }
-
   getAllCenters() {
     this.ManageOficerSrv.getDCHOwnCenters().subscribe(
       (res) => {
@@ -445,8 +388,6 @@ class CollectionOfficers {
   status!: string;
   created_at!: string;
   phoneCode01!: string;
-
-  // cch
   centerName!: string;
 }
 

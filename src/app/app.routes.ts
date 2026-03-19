@@ -501,8 +501,6 @@ export const routes: Routes = [
                         component: ViewOfficerTargetComponent
                     },
 
-                    
-
                     {
                         path: 'view-distribution-officer-target/:officerId/:centerName/:centerId/:empId',
                         component: ViewOfficerTargetDistributionComponent

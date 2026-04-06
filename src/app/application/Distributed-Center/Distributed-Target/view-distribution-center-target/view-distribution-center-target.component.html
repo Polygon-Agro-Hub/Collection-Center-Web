@@ -17,14 +17,11 @@
 
     <button (click)="navigateToAssignTarget()" class="rounded-lg coursor-pointer shadow-lg px-7 py-2 bg-[#415CFF] text-[#FFFFFF]">
     Assign
-    
     </button>
 
     <p class="text-lg font-semibold text-[#292929] mt-4 dark:text-[#FFFFFF]">
         All ({{ordersArr.length < 10 ? '0' + ordersArr.length : ordersArr.length}})
     </p>
-
-    
 
     <div *ngIf="hasData" class="w-full md:w-2/3 max-w-full  overflow-x-auto  mt-4 mr-5 border-gray-100 dark:border-[#202021] border-[2px] rounded-lg">
         <div class="min-w-[600px]"> <!-- Adjust min-width to match your content needs -->
@@ -50,9 +47,5 @@
           </table>
         </div>
       </div>
-      
-
 
     </div>
-
-<!-- WHERE po.isTargetAssigned = false AND po.status = 'Processing'; -->

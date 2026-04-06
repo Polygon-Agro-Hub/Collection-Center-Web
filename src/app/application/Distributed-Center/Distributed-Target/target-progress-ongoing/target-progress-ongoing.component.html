@@ -1,9 +1,9 @@
 <app-loading-spinner *ngIf="isLoading" />
 
 
-<div *ngIf="!isLoading" class="w-full overflow-x-auto">
+<div *ngIf="!isLoading" class="w-full min-h-screen overflow-x-auto">
 
-    <button
+    <button *ngIf="hasData"
                 class="bg-[#415CFF] text-white shadow-md font-medium rounded-lg py-2 px-5 mr-5 text-lg flex items-center"
                 (click)="downloadTemplate1()">
                 <i class="fa-solid fa-download px-2" *ngIf="!isDownloading"></i>
@@ -64,15 +64,6 @@
                 </div>
             </div>
         </div>
-
-        <!-- <div class="relative w-36">
-            <div
-                class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#272F45] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
-                <input type="date" #toDateInput [(ngModel)]="date" name="date"
-                    (change)="onDateChange()"
-                    class="block w-full appearance-none text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none dark:bg-[#292929] custom-date-input" />
-            </div>
-        </div> -->
 
         <app-custom-datepicker
         [placeholder]="'Delivery Date'"

@@ -52,7 +52,6 @@ export class DcmDashboardComponent implements OnInit {
   this.isLoading = true;
   this.DistributionSrv.getDispatchChartData().subscribe({
     next: (data: any[]) => {
-      console.log('API Response:', data);
       this.processChartData(data);
       this.isLoading = false;
       
@@ -73,7 +72,6 @@ export class DcmDashboardComponent implements OnInit {
 }
 
   processChartData(apiData: any[]): void {
-  console.log('Raw API data:', apiData);
   
   // Initialize array with zeros for all 24 hours
   this.chartData = new Array(24).fill(0);
@@ -81,19 +79,14 @@ export class DcmDashboardComponent implements OnInit {
   // Map the API data to our chart data array
   if (apiData && apiData.length > 0) {
 
-    console.log('we have api ata')
     apiData.forEach(item => {
       const hour = item.hourSlot; // This should be 0-23 from the API
       const orderCount = item.orderCount;
       
-      console.log(`Processing hour ${hour}: ${orderCount} orders`);
-      
-      // Ensure hour is within valid range and update the corresponding position
       if (hour >= 0 && hour < 24) {
         this.chartData[hour] = orderCount;
       }
     });
-    console.log('Final chart data:', this.chartData);
   }
   
   

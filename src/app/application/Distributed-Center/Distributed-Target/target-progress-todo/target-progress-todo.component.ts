@@ -56,17 +56,6 @@ export class TargetProgressTodoComponent implements OnInit {
     this.fetchToDoAssignOrders();
   }
 
-  // @HostListener('document:click', ['$event'])
-  // onDocumentClick(event: MouseEvent) {
-  //   const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
-  //   const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
-
-  //   if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
-  //     this.isStatusDropdownOpen = false;
-  //   }
-
-  // }
-
   fetchToDoAssignOrders(status: string = this.selectStatus, search: string = this.searchText, selectDate: string = this.date) {
     this.isLoading = true;
     this.DistributionSrv.getToDoAssignOrders(status, search, selectDate).subscribe(
@@ -109,10 +98,6 @@ export class TargetProgressTodoComponent implements OnInit {
           };
         });
 
-        console.log('trders', this.ordersArr)
-
-        
-        
         if (res.items.length === 0) {
           this.hasData = false;
         } else {
@@ -161,13 +146,6 @@ export class TargetProgressTodoComponent implements OnInit {
     this.date = formattedDate;
     this.fetchToDoAssignOrders();
   }
-  
-
-
-  // onPageChange(event: number) {
-  //   this.page = event;
-  //   this.fetchToDoAssignOrders(this.page, this.itemsPerPage);
-  // }
 
   navigateViewReply(id:number){
     this.router.navigate([`/cch-complaints/view-recive-reply/${id}`])

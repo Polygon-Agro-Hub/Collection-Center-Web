@@ -50,11 +50,7 @@ export class RequestedItemsComponent implements OnInit {
 
   ngOnInit(): void {
     this.selectedDate = new Date().toISOString().split('T')[0];
-
-    console.log('loging role', this.logingRole)
-  
     if (this.logingRole === 'Distribution Centre Manager') {
-      console.log('manager')
       this.fetchDistributionCentre().subscribe({
         next: () => {
           this.callMethodByRole();
@@ -65,7 +61,6 @@ export class RequestedItemsComponent implements OnInit {
         }
       });
     } else if (this.logingRole === 'Distribution Centre Head') {
-      console.log('head')
       this.callMethodByRole();
     }
   
@@ -83,11 +78,9 @@ export class RequestedItemsComponent implements OnInit {
   }
 
   fetchDistributionCentre(): Observable<any> {
-    console.log('fetching dcm');
     return this.ProcurementsService.getDistributionCenter().pipe(
       tap((res) => {
         this.centerId = String(res);
-        console.log('centerId', this.centerId);
       })
     );
   }
@@ -106,11 +99,9 @@ export class RequestedItemsComponent implements OnInit {
     let dateString: string;
   
     if (!newDate) {
-      
       dateString = new Date().toISOString().split('T')[0];
     } 
     else if (newDate instanceof Date) {
-      
       dateString = newDate.toISOString().split('T')[0];
     } 
     else {
@@ -141,8 +132,7 @@ export class RequestedItemsComponent implements OnInit {
     this.callMethodByRole();
   }
 
-  fetchAllRequestedItemsForDCH(center: string = this.selectCenters, date: string = this.selectedDate, search: string = this.searchText) {
-    console.log('calling dch')  
+  fetchAllRequestedItemsForDCH(center: string = this.selectCenters, date: string = this.selectedDate, search: string = this.searchText) { 
     this.isLoading = true;
       this.ProcurementsService.getAllRequestedItemsForDCH(center, date, search).subscribe(
           (res) => {
@@ -157,16 +147,12 @@ export class RequestedItemsComponent implements OnInit {
               } else {
                 this.hasData = false;
               }
-
-              console.log('itemsArr', this.itemsArr)
           }
       );
   }
 
   fetchAllRequestedItemsForDCM(center: string = this.centerId, date: string = this.selectedDate, search: string = this.searchText) {
     this.isLoading = true;
-    console.log('calling dcm');
-  
     this.ProcurementsService.getAllRequestedItemsForDCH(center, date, search).subscribe(
       (res) => {
         // Sort grouped products alphabetically by productName
@@ -177,8 +163,6 @@ export class RequestedItemsComponent implements OnInit {
         this.totalItems = res.totalItems;
         this.isLoading = false;
         this.hasData = this.itemsArr.length > 0;
-  
-        console.log('itemsArr', this.itemsArr);
       },
       (error) => {
         this.isLoading = false;
@@ -280,10 +264,7 @@ export class RequestedItemsComponent implements OnInit {
         }
       });
     }
-
-    
   }
-
 
 }
 

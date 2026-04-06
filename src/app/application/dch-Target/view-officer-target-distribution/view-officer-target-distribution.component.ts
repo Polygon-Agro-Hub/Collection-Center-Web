@@ -22,25 +22,16 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
   searchText: string = '';
   selectStatus: string = '';
   selectedDate!: string;
-
   isDownloading: boolean = false;
-
   centerName: string = '';
   empId: string = '';
-
   officersArr!: Officer[];
-
   totalOfficers: number = 0;
   officerId!: number;
   centerId!: number;
-
   date:  string = '';
-
   hasData: boolean = false;
-
   isLoading:boolean = true;
-
-
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Pending', 'Completed', 'Opened'];
 
@@ -73,13 +64,9 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
       : null;
     this.centerId = this.route.snapshot.params['centerId'];
     this.empId = this.route.snapshot.params['empId']
-    console.log('Selected officerId:', this.officerId);
-    // this.fetchOfficers();
-
     const today = new Date();
     this.selectedDate = today.toISOString().split('T')[0];
     this.fetchSelectedOfficerTargets();
-    
   }
 
   @HostListener('document:click', ['$event'])
@@ -90,7 +77,6 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
     if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
       this.isStatusDropdownOpen = false;
     }
-
   }
 
   fetchSelectedOfficerTargets(
@@ -105,7 +91,7 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
       (res) => {
         this.ordersArr = res.items.map((item: any) => {
           let status = '';
-          
+    
           const pkgStatus = item.packageStatus;
           const addStatus = item.additionalItemsStatus;
           
@@ -139,9 +125,6 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
           };
         });
         
-  
-        console.log('ordersarr', this.ordersArr);
-  
         this.hasData = this.ordersArr.length > 0;
         this.isLoading = false;
       }
@@ -152,15 +135,12 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
     let dateString: string;
   
     if (!newDate) {
-      
       dateString = new Date().toISOString().split('T')[0];
     } 
     else if (newDate instanceof Date) {
-      
       dateString = newDate.toISOString().split('T')[0];
     } 
     else {
-      
       dateString = newDate;
     }
   
@@ -173,12 +153,9 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
     this.isLoading = true;
     this.DistributionSrv.getOfficers().subscribe(
       (res) => {
-        console.log('officer', res)
         this.officersArr = res
-        console.log('officersArr', this.officersArr)
         this.totalOfficers = res.length;
         this.isLoading = false;
-
       }
     )
   }
@@ -186,13 +163,11 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
   onSearch() {
     this.searchText = this.searchText?.trim() || '';
     this.fetchSelectedOfficerTargets();
-
   }
 
   offSearch() {
     this.searchText = '';
     this.fetchSelectedOfficerTargets();
-
   }
 
   getDisplayDate(scheduleDate: string | Date): string {
@@ -232,67 +207,54 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
     }
   }
   
-  
-
   removeWithin(time: string): string {
     return time ? time.replace('Within ', '') : time;
   }
 
-filterStatus() {
-  this.fetchSelectedOfficerTargets();
-}
-
-cancelStatus(event?: MouseEvent) {
-  if (event) {
-    event.stopPropagation(); // Prevent triggering the dropdown toggle
-  }
-  this.selectStatus = '';
-  this.fetchSelectedOfficerTargets();
-}
-
-goBack() {
-  this.location.back();
-}
-
-navigateToManageOfficers() {
-  this.router.navigate(['/distribution-officers'])
-}
-
-getStatus(item: orders): string {
-  if (!item.completeTime) {
-    return 'Not Completed';
+  filterStatus() {
+    this.fetchSelectedOfficerTargets();
   }
 
-  // Convert both into Date objects
-  const completeTime = new Date(item.completeTime);
-  const scheduleDate = new Date(item.sheduleDate);
-
-  // Clone scheduleDate for deadline
-  let deadline = new Date(scheduleDate);
-
-  if (item.sheduleTime) {
-    const timeSlot = item.sheduleTime.trim();
-
-    if (timeSlot === 'Within 8-12 PM') {
-      deadline.setHours(12, 0, 0, 0); // 12:00 PM
-    } else if (timeSlot === 'Within 12-4 PM') {
-      deadline.setHours(16, 0, 0, 0); // 4:00 PM
-    } else if (timeSlot === 'Within 4-8 PM') {
-      deadline.setHours(20, 0, 0, 0); // 8:00 PM
+  cancelStatus(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
     }
+    this.selectStatus = '';
+    this.fetchSelectedOfficerTargets();
   }
 
-  // --- Debug with Sri Lanka local time ---
-  console.log(
-    'Complete (SL):',
-    completeTime.toLocaleString('en-GB', { timeZone: 'Asia/Colombo', hour12: false })
-  );
-  console.log(
-    'Deadline (SL):',
-    deadline.toLocaleString('en-GB', { timeZone: 'Asia/Colombo', hour12: false })
-  );
+  goBack() {
+    this.location.back();
+  }
 
-  // ✅ Compare using timestamps (still works for SL)
+  navigateToManageOfficers() {
+    this.router.navigate(['/distribution-officers'])
+  }
+
+  getStatus(item: orders): string {
+    if (!item.completeTime) {
+      return 'Not Completed';
+    }
+
+    // Convert both into Date objects
+    const completeTime = new Date(item.completeTime);
+    const scheduleDate = new Date(item.sheduleDate);
+
+    // Clone scheduleDate for deadline
+    let deadline = new Date(scheduleDate);
+
+    if (item.sheduleTime) {
+      const timeSlot = item.sheduleTime.trim();
+
+      if (timeSlot === 'Within 8-12 PM') {
+        deadline.setHours(12, 0, 0, 0); // 12:00 PM
+      } else if (timeSlot === 'Within 12-4 PM') {
+        deadline.setHours(16, 0, 0, 0); // 4:00 PM
+      } else if (timeSlot === 'Within 4-8 PM') {
+        deadline.setHours(20, 0, 0, 0); // 8:00 PM
+      }
+  }
+
   return completeTime.getTime() <= deadline.getTime() ? 'On Time' : 'Late';
 }
 
@@ -338,7 +300,6 @@ downloadTemplate1() {
       }
     });
 
-  
 }
 
 }

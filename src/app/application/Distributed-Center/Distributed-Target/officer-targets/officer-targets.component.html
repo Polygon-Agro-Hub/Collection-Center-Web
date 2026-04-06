@@ -9,30 +9,22 @@
         <div><p class="text-lg dark:text-white whitespace-nowrap">All Officers ({{ totalItems < 10 ? ('0' + totalItems) : totalItems }})</p></div>
     <div class="flex flex-row items-center justify-end gap-5 ">
         
-
         <i class="fa-solid fa-list text-2xl dark:text-white"></i>
-
         <p class="text-lg dark:text-white">Filter By</p>
-
         <div class="w-36">
             <app-custom-datepicker
-        [placeholder]="'Scheduled Date'"
-  [selectedDate]="selectedDate"
-  (dateChange)="onDateChange($event)"
-></app-custom-datepicker>
+              [placeholder]="'Scheduled Date'"
+              [selectedDate]="selectedDate"
+              (dateChange)="onDateChange($event)"
+            ></app-custom-datepicker>
         </div>
-
-    
     </div>
-    
     </div>
         
-
     <div *ngIf="!hasData" class="flex flex-col items-center w-full h-screen mt-6">
         <p class="text-[#494949] my-6 dark:text-white">--No orders found--</p>
         <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
     </div>
-
 
     <div *ngIf="hasData"
         class="overflow-x-auto mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
@@ -89,9 +81,6 @@
                         
                       </td>
 
-                      
-                      
-                
                 </tr>
             </tbody>
         </table>

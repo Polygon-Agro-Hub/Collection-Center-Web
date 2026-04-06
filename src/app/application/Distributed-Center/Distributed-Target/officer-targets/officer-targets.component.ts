@@ -18,20 +18,16 @@ import { CustomDatepickerComponent } from '../../../../components/custom-datepic
 export class OfficerTargetsComponent implements OnInit {
 
   officersArr: Officers[] = [];
-
   hasData: boolean = true;
   totalItems!: number;
   selectedDate!: string;
-
   isLoading:boolean = true;
 
-  
   constructor(
     private router: Router,
     private ComplainSrv: ComplaintsService,
     private DistributionSrv: DistributionServiceService
   ) { }
-
 
   ngOnInit(): void {
     const today = new Date();
@@ -43,19 +39,14 @@ export class OfficerTargetsComponent implements OnInit {
     this.isLoading = true;
     this.DistributionSrv.getofficerTargets(date).subscribe(
       (res) => {
-        console.log('res', res)
         this.officersArr = res.officers
-        console.log('officersArr', this.officersArr)
         this.totalItems = res.officers.length | 0;
-        
         if (res.officers.length === 0) {
           this.hasData = false;
         } else {
           this.hasData = true;
-
         }
         this.isLoading = false;
-
       }
     )
   }
@@ -66,26 +57,18 @@ export class OfficerTargetsComponent implements OnInit {
 
   onDateChange(newDate: string | Date | null) {
     let dateString: string;
-  
     if (!newDate) {
-      
       dateString = new Date().toISOString().split('T')[0];
     } 
     else if (newDate instanceof Date) {
-      
       dateString = newDate.toISOString().split('T')[0];
     } 
     else {
-      
       dateString = newDate;
     }
-  
     this.selectedDate = dateString;
     this.fetchofficerTargets();
   }
-
-  
-
 }
 
 class Officers {

@@ -17,7 +17,6 @@ import { CustomDatepickerComponent } from '../../../components/custom-datepicker
     LoadingSpinnerComponent,
     DropdownModule,
     FormsModule,
-    SerchableDropdownComponent,
     TodayDeliveriesViewPopupComponent,
     CustomDatepickerComponent
 ],
@@ -27,27 +26,19 @@ import { CustomDatepickerComponent } from '../../../components/custom-datepicker
 export class DispatchedDashboardComponent implements OnInit {
   isLoading: boolean = false;
   activeTab: string = 'all';
-
   placeholderDate: string = 'Date';
-
   selectedDate: string | Date | null = null;
-  
-  // Data from backend
   allDeliveries: Delivery[] = [];
   deliveryObj: Partial<Delivery> = {};
-
-  // Filtered data for tabs
   allFilteredDeliveries: Delivery[] = [];
   outForDeliveryData: Delivery[] = [];
   onTheWayData: Delivery[] = [];
   holdData: Delivery[] = [];
   returnData: Delivery[] = [];
   deliveredData: Delivery[] = []; // This will hold Delivered status data
-
   displayedDeliveries: Delivery[] = [];
   showDetailsPopup: boolean = false;
   selectedDeliveryId!: number;
-
   hasData: boolean = false;
 
   searchPlaceHolder: string = "Search By Order ID...";
@@ -113,7 +104,6 @@ export class DispatchedDashboardComponent implements OnInit {
     this.fetchDeliveries();
   }
 
-
   isStatusDropdownOpen = false;
 
   toggleStatusDropdown() {
@@ -164,8 +154,6 @@ export class DispatchedDashboardComponent implements OnInit {
   // 5. Add selection change handler
   onStatusSelectionChange(selectedValue: string) {
     this.selectedStatus = selectedValue || '';
-    // Add any additional logic you need when category changes
-    console.log('Category selected:', selectedValue);
     this.fetchDeliveries();
   }
 
@@ -227,8 +215,6 @@ export class DispatchedDashboardComponent implements OnInit {
       next: (response) => {
         if (response.status && response.data) {
           this.allDeliveries = response.data;
-          console.log('allDeliveries', this.allDeliveries)
-
           this.hasData = this.allDeliveries.length > 0
           this.prepareDeliveryData();
           this.filterDataByStatus();
@@ -244,25 +230,20 @@ export class DispatchedDashboardComponent implements OnInit {
 
   prepareDeliveryData(): void {
     this.allDeliveries = this.allDeliveries.map((delivery, index) => {
-      // Format return time from createdAt or outDlvrTime
       const returnTime = this.formatToReturnTime(delivery.createdAt || delivery.outDlvrTime);
-      
-      // Format delivery time slot from sheduleTime
       const deliveryTimeSlot = this.formatDeliveryTimeSlot(delivery.sheduleTime);
-      
-      // Format delivery time for delivered items (use outDlvrTime or createdAt)
       const deliveryTime = this.formatToReturnTime(delivery.outDlvrTime || delivery.createdAt);
       
       return {
         ...delivery,
         no: index + 1,
-        driver: 'DIV000001', // Placeholder - update with actual data if available
-        phoneNumber: '0781112300', // Placeholder - update with actual data if available
+        driver: 'DIV000001', 
+        phoneNumber: '0781112300',
         returnTime: returnTime,
         deliveryTimeSlot: deliveryTimeSlot,
-        deliveryTime: deliveryTime, // Add deliveryTime for delivered tab
-        orderId: delivery.invNo, // Map invNo to orderId
-        centre: delivery.regCode // Map regCode to centre
+        deliveryTime: deliveryTime, 
+        orderId: delivery.invNo,
+        centre: delivery.regCode
       };
     });
   }
@@ -364,9 +345,7 @@ export class DispatchedDashboardComponent implements OnInit {
     if (timeRange.startsWith('Within ')) {
       timeRange = timeRange.substring(7);
     }
-    
-    // Convert "8-12 PM" to "8AM - 12PM"
-    // Handle various formats
+
     if (timeRange.includes('AM') || timeRange.includes('PM')) {
       // If it already has AM/PM indicators
       return timeRange.replace('-', ' - ');
@@ -453,18 +432,14 @@ export class DispatchedDashboardComponent implements OnInit {
     let dateString: string;
   
     if (!newDate) {
-      
       dateString = '';
     } 
     else if (newDate instanceof Date) {
-      
       dateString = newDate.toISOString().split('T')[0];
     } 
     else {
-      
       dateString = newDate;
     }
-  
     this.selectedDate = dateString;
     this.fetchDeliveries();
   }
@@ -485,7 +460,6 @@ class Delivery {
   phoneCode1!: string;
   returnTime!: string;
   deliveryTimeSlot!: string;
-  // Add these properties for child component compatibility
   orderId!: string;
   centre!: string;
   deliveryTime!: string;

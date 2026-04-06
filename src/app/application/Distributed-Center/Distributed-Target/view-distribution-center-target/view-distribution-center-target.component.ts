@@ -32,20 +32,15 @@ export class ViewDistributionCenterTargetComponent implements OnInit {
 
   ngOnInit(): void {
     this.fetchDistributionOrders();
-
   }
 
   fetchDistributionOrders() {
     this.isLoading = true;
     this.DistributionSrv.getDistributionOrders().subscribe(
       (res) => {
-        console.log('res', res);
-
         if (res.length === 0 ) {
-          console.log('fasle')
           this.hasData = false
         }
-
         const today = new Date();
         today.setHours(0, 0, 0, 0);
   
@@ -67,18 +62,14 @@ export class ViewDistributionCenterTargetComponent implements OnInit {
           } else if (scheduleDate.getTime() === dayAfterTomorrow.getTime()) {
             formattedDateLabel = 'The Day After Tomorrow';
           }
-  
           // Remove 'Within' from sheduleTime (case-insensitive, trims leading spaces)
           const cleanedTime = order.sheduleTime.replace(/^Within\s*/i, '');
-  
           return {
             ...order,
             sheduleTime: cleanedTime,
             scheduleLabel: formattedDateLabel
           };
         });
-  
-        console.log('ordersArr', this.ordersArr);
         this.isLoading = false;
       }
     );
@@ -87,8 +78,6 @@ export class ViewDistributionCenterTargetComponent implements OnInit {
   navigateToAssignTarget() {
     this.router.navigate([`/assign-targets/Assign`])
   }
-  
-  
 
 }
 

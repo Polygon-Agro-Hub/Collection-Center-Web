@@ -1,11 +1,9 @@
 <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
 
-
-
 <div>
   <p class="font-semibold text-[#424242] mb-4 mr-5 ml-0 dark:text-[#FFFFFF] dark:bg-black cursor-pointer">Dispatched</p>
   
-  <div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg">
+  <div class="w-full px-10 py-7 min-h-screen bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg">
     
     <!-- Tabs Section - Fixed width, separate scroll -->
     <div class="pt-5 pb-5 dark:bg-[#363636] rounded-lg mr-4">
@@ -206,9 +204,9 @@
         }">
           <app-custom-datepicker
           [placeholder]="placeholderDate"
-        [selectedDate]="selectedDate"
-        (dateChange)="onDateChange($event)"
-        ></app-custom-datepicker>
+          [selectedDate]="selectedDate"
+          (dateChange)="onDateChange($event)"
+          ></app-custom-datepicker>
         </div>
 
         <div *ngIf="activeTab === 'Ready to Pickup'" class="relative w-36  custom-status-dropdown-container">
@@ -513,14 +511,6 @@
           {{ deliveryObj.sheduleTime }} {{ deliveryObj.sheduleDate | date:'on MMMM d, y'}}
         </span>
       </div>
-
-      <!-- <div class="flex items-start">
-        <span class="text-sm text-gray-600 dark:text-gray-400 w-44 flex-shrink-0">Order Scheduled Date</span>
-        <span class="text-sm text-gray-600 dark:text-gray-400 mx-3">:</span>
-        <span class="text-sm text-textLight dark:text-textDark font-medium flex-1 whitespace-nowrap">
-          {{ deliveryObj.sheduleDate | date:'hh:mm a on MMMM d, y' }}
-        </span>
-      </div> -->
 
       <div class="flex items-start">
         <span class="text-sm text-gray-600 dark:text-gray-400 w-44 flex-shrink-0">Receiver’s Name</span>

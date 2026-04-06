@@ -79,7 +79,7 @@ export const MENU_ITEMS = [
     id: 21,
     key: 'procurement',
     path: '/procurement',
-    label: 'procurement',
+    label: 'Procurement',
     icon: 'fa-solid fa-box-open',
     permission: ['Collection Centre Head'],
 

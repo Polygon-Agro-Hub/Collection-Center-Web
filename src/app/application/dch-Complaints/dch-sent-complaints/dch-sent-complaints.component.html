@@ -4,7 +4,7 @@
     <div class="flex flex-row items-center justify-end gap-8 dark:text-white">
         <i class="fa-solid fa-list text-2xl"></i>
 
-        <p class="text-lg">Filter By</p>
+        <p class="text-[#4A4A4A]">Filter By</p>
         <div class="relative w-40 custom-employee-dropdown-container">
             <!-- Hidden native select -->
             <select [(ngModel)]="selectStatus" class="hidden" (change)="filterEmployee()">
@@ -36,8 +36,8 @@
 
             <!-- Custom dropdown options -->
             <div *ngIf="isEmployeeDropdownOpen"
-                class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
-                <div class="py-1">
+                class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282] overflow-hidden">
+                <div class="">
                     <div *ngFor="let option of employeeDropdownOptions" (click)="selectEmployeeOption(option)"
                         class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
                         <span class="flex-grow">{{ option }}</span>
@@ -78,8 +78,8 @@
 
             <!-- Custom dropdown options -->
             <div *ngIf="isStatusDropdownOpen"
-                class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
-                <div class="py-1">
+                class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282] overflow-hidden">
+                <div class="">
                     <div *ngFor="let option of statusDropdownOptions" (click)="selectStatusOption(option)"
                         class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
                         <span class="flex-grow">{{ option }}</span>
@@ -163,11 +163,11 @@
                     </td>
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
                         <div class="flex items-center justify-center h-full">
-                          <span *ngIf="item.status === 'Opened'" class="bg-[#C8E0FF] text-[#415CFF] px-3 py-1 rounded-lg">
+                          <span *ngIf="item.status === 'Opened'" class="bg-[#C8E0FF] text-center text-[#415CFF] px-3 py-1 rounded-lg min-w-24">
                             Opened
                           </span>
                       
-                          <span *ngIf="item.status === 'Closed'" class="bg-[#B7FFBE] text-[#02BB3D] px-3 py-1 rounded-lg">
+                          <span *ngIf="item.status === 'Closed'" class="bg-[#B7FFBE] text-center text-[#02BB3D] px-3 py-1 rounded-lg min-w-24">
                             Closed
                           </span>
                         </div>

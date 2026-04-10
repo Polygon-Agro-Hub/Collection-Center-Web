@@ -147,7 +147,7 @@ export class ViewDcmReceiveReplyComponent implements OnInit {
       (res) => {
         if (res.status) {
           this.isLoading = false;
-          this.toastSrv.success(res.message)
+          this.toastSrv.success('Your reply was sent.')
           this.router.navigate(['/dcm-complaints']);
         } else {
           this.isLoading = false;

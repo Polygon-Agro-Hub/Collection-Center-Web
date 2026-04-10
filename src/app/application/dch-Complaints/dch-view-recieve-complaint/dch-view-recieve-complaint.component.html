@@ -15,7 +15,7 @@
             <p>
                 Preferred Language : <span class="font-bold dark:text-white">{{compalintObj.language}}</span>
             </p>
-            <p>Received : {{compalintObj.createdAt | date:'yyyy/mm/dd'}} at {{compalintObj.createdAt | date:'hh:mm a'}}
+            <p>Received : {{compalintObj.createdAt | date:'yyyy/MM/dd'}} at {{compalintObj.createdAt | date:'hh:mm a'}}
             </p>
         </div>
 
@@ -35,7 +35,7 @@
                 </textarea>
             </div>
 
-            <div class="flex flex-row items-center gap-5 col-span-2">
+            <div class="flex flex-row items-center gap-y-5 gap-x-6 col-span-2">
                 <p class="font-medium text-gray-600 dark:text-textDark">Complainant</p>
                 <input type="text"
                     class="w-1/2 bg-gray-100 dark:bg-[#1D1D1F] text-gray-900 dark:text-textDark border rounded-lg px-3 py-2"
@@ -49,7 +49,7 @@
                     [value]="compalintObj.empId" disabled />
             </div>
 
-            <div class="flex flex-row items-center gap-5 col-span-2">
+            <div class="flex flex-row items-center gap-y-5 gap-x-6 col-span-2">
                 <p class="font-medium text-gray-600 dark:text-textDark">Phone No - 1</p>
                 <input type="text"
                     class="w-1/2 bg-gray-100 dark:bg-[#1D1D1F] text-gray-900 dark:text-textDark border rounded-lg px-3 py-2"
@@ -71,7 +71,7 @@
                 (click)="forwordComplain()">
                 Forward
             </button>
-            <button class="bg-[#415CFF] text-white font-semibold px-7 py-2 rounded-lg" (click)="replyBtn()">
+            <button class="bg-[#415CFF] text-white font-semibold px-7 py-2 rounded-lg shadow-lg" (click)="replyBtn()">
                 Reply
             </button>
         </div>
@@ -108,17 +108,29 @@
                             <textarea rows="5" class="bg-[#F6F6F6] dark:bg-[#363636] w-full border-none outline-none " cols="6" [(ngModel)]="replyObj.reply" name="reply" placeholder="[ Add message here... ]"></textarea>
                         </div>
     
+                    </div>
+
+                    <div class='flex flex-col mt-2'>
                         <p>
                             {{
-                                compalintObj.language === 'Sinhala' ? 'ඔබට තවත් ගැටළු හෝ ප්‍රශ්න තිබේ නම්, කරුණාකර අප හා සම්බන්ධ වන්න. ඔබේ ඉවසීම සහ අවබෝධය වෙනුවෙන් ස්තූතියි. '
-                                : compalintObj.language === 'Tamil' ? 'உங்களுக்கு மேலும் ஏதேனும் சிக்கல்கள் அல்லது கேள்விகள் இருந்தால், தயவுசெய்து எங்களைத் தொடர்பு கொள்ளவும். உங்கள் பொறுமைக்கும் புரிதலுக்கும் நன்றி. ' 
-                                : 'If you have any further concerns or questions, feel free to reach out.Thank you for your patience and understanding. '
+                                compalintObj.language === 'Sinhala' ? 'ඔබට තවත් ගැටළු හෝ ප්‍රශ්න තිබේ නම්, කරුණාකර අප හා සම්බන්ධ වන්න. '
+                                : compalintObj.language === 'Tamil' ? 'உங்களுக்கு மேலும் ஏதேனும் சிக்கல்கள் அல்லது கேள்விகள் இருந்தால், தயவுசெய்து எங்களைத் தொடர்பு கொள்ளவும். ' 
+                                : 'If you have any further concerns or questions, feel free to reach out. '
+                            }}
+    
+                        </p>
+    
+                        <p>
+                            {{
+                                compalintObj.language === 'Sinhala' ? 'ඔබේ ඉවසීම සහ අවබෝධය වෙනුවෙන් ස්තූතියි. '
+                                : compalintObj.language === 'Tamil' ? 'தயவுசெய்து எங்களைத் தொடர்பு கொள்ளவும். உங்கள் பொறுமைக்கும் புரிதலுக்கும் நன்றி. ' 
+                                : 'Thank you for your patience and understanding. '
                             }}
     
                         </p>
                     </div>
 
-                    <div  class="flex flex-col mt-1 gap-y-0">
+                    <div  class="flex flex-col mt-4 gap-y-0">
                         <p *ngIf="compalintObj.language === 'Sinhala'">
                             මෙයට,<br/>
                             {{ templateData.EngName }}<br/>
@@ -142,12 +154,12 @@
 
                 <div class="flex flex-row justify-center items-center gap-8">
                     <button
-                        class="bg-[#F6F7F9] dark:bg-gray-600 text-[#6B7D8C] dark:text-white font-semibold border-[1px] shadow-lg px-4 py-2 rounded-lg"
+                        class="bg-[#F6F7F9] min-w-32 dark:bg-gray-600 text-[#6B7D8C] dark:text-white font-semibold border-[1px] shadow-lg px-4 py-2 rounded-lg"
                         (click)="cancelViewReply()">
                         Go Back
                     </button>
                     <button
-                        class="text-xl bg-[#415CFF] text-white border-[2px] font-semibold rounded-lg shadow-lg px-6 py-2"
+                        class="text-xl bg-[#415CFF] min-w-32 text-white border-[2px] border-[#415CFF] font-semibold rounded-lg shadow-lg px-6 py-2"
                         (click)="sendReply()">
                         Send
                     </button>

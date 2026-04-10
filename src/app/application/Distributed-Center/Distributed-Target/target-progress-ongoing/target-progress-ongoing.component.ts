@@ -221,7 +221,24 @@ export class TargetProgressOngoingComponent implements OnInit {
     // Convert safely to Date
     const selectedDateObj = new Date(selectedDateStr);
     // Example: "10 Nov"
-    const dateStr = selectedDateObj.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+    function getOrdinal(day: number): string {
+      if (day > 3 && day < 21) return 'th';
+    
+      switch (day % 10) {
+        case 1: return 'st';
+        case 2: return 'nd';
+        case 3: return 'rd';
+        default: return 'th';
+      }
+    }
+    
+    const day = selectedDateObj.getDate();
+    const month = selectedDateObj.toLocaleString('en-GB', { month: 'long' });
+    const year = selectedDateObj.getFullYear();
+    
+    const dateStr = `${String(day).padStart(2, '0')}${getOrdinal(day)} ${month} ${year}`;
+    
+    console.log(dateStr); // 04th August 2026
     // Example: "11-10" (MM-DD format)
     const fullDateStr = `${String(selectedDateObj.getMonth() + 1).padStart(2, '0')}-${String(selectedDateObj.getDate()).padStart(2, '0')}`;
     const now = new Date();
@@ -239,9 +256,9 @@ export class TargetProgressOngoingComponent implements OnInit {
           const a = document.createElement("a");
           a.href = url;
           if (this.selectStatus) {
-            a.download = `${this.centerName} All Orders on ${dateStr} filtered by ${this.selectStatus} Generated at ${finalStr}.xlsx`;
+            a.download = `${this.centerName} All Orders on ${dateStr} filtered by ${this.selectStatus} Generated at ${day}/${month}/${year} ${timeStr}.xlsx`;
           } else {
-            a.download = `${this.centerName} All Orders on ${dateStr}  Generated at ${finalStr}.xlsx`;
+            a.download = `${this.centerName} All Orders on ${dateStr}  Generated at ${day}/${month}/${year} ${timeStr}.xlsx`;
           }
           a.click();
           window.URL.revokeObjectURL(url);

@@ -123,7 +123,7 @@ export class DchViewRecieveComplaintComponent {
       (res) => {
         if (res.status) {
           this.isLoading = false;
-          this.toastSrv.success(res.message)
+          this.toastSrv.success('Your reply was sent')
           this.router.navigate(['/dch-complaints']);
         } else {
           this.isLoading = false;

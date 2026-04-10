@@ -178,9 +178,9 @@
 
           <div *ngIf="isStatusDropdownOpen"
             class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]
-                   max-h-[160px] overflow-y-auto">
+                   max-h-[160px] overflow-hidden">
                   
-            <div class="py-1">
+            <div class="">
               <div *ngFor="let option of statusOptionsArr"
                 (click)="selectStatusOption(option.value)"
                 class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center"
@@ -320,7 +320,7 @@
               Delivered Time
             </th>
   
-            <th class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-center whitespace-nowrap">
+            <th class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-left whitespace-nowrap">
               Payment
             </th>
 
@@ -363,17 +363,25 @@
               {{ delivery?.phone1 ? (delivery.phoneCode1 + ' ' + delivery.phone1) : '--' }}
             </td>
   
-            <td *ngIf="activeTab !== 'all'" class="px-4 py-3 text-center whitespace-nowrap">
-              <button 
-                (click)="openInfoPopup(delivery)"
-                class="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
-                <svg class="w-5 h-5 mx-auto" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-                  <path
-                    d="M3 14C3 9.02944 7.02944 5 12 5C16.9706 5 21 9.02944 21 14M17 14C17 16.7614 14.7614 19 12 19C9.23858 19 7 16.7614 7 14C7 11.2386 9.23858 9 12 9C14.7614 9 17 11.2386 17 14Z"
-                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                </svg>
-              </button>
-            </td>
+            <td *ngIf="activeTab !== 'all'"
+              class="px-4 py-3 text-center whitespace-nowrap align-middle">
+            <button
+              (click)="openInfoPopup(delivery)"
+              class="flex items-center justify-center w-full text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
+
+              <svg class="w-5 h-5"
+                   viewBox="0 0 24 24"
+                   fill="none"
+                   xmlns="http://www.w3.org/2000/svg">
+                <path
+                  d="M3 14C3 9.02944 7.02944 5 12 5C16.9706 5 21 9.02944 21 14M17 14C17 16.7614 14.7614 19 12 19C9.23858 19 7 16.7614 7 14C7 11.2386 9.23858 9 12 9C14.7614 9 17 11.2386 17 14Z"
+                  stroke="currentColor"
+                  stroke-width="2"
+                  stroke-linecap="round"
+                  stroke-linejoin="round" />
+              </svg>
+            </button>
+          </td>
   
             <td class="px-4 py-3 text-center text-[#000000] dark:text-textDark whitespace-nowrap">
              <p> {{ formatTimeRange(delivery.sheduleTime) }}</p>
@@ -388,30 +396,30 @@
             <td *ngIf="activeTab === 'delivered'" class="px-4 py-3 text-center text-[#000000] dark:text-textDark whitespace-nowrap">
               <p> {{ delivery.completeTime | date:'h:mm a' }}</p>
               <p>{{delivery.completeTime | date:'MMMM d, y'}}</p> 
-             </td>
+            </td>
   
-            <td class="px-4 py-3 text-center whitespace-nowrap">
-              <div class="flex items-center justify-center h-full">
-                  <span *ngIf="delivery.isPaid === 0"
-                      class="px-3 py-1"
-                      [ngClass]="{
-                          'text-[#EB3223]': delivery.status === 'Return Received' && activeTab !== 'all'
-                        }">
-                      Pending
-                  </span>
-  
-                  <span *ngIf="delivery.isPaid === 1 && delivery.paymentMethod === 'Cash'"
-                      class="px-3 py-1">
-                      Recieved
-                  </span>
-  
-                  <span *ngIf="delivery.isPaid === 1 && delivery.paymentMethod === 'Card'"
-                      class="px-3 py-1"
-                      [ngClass]="{
-                          'text-[#415CFF]': delivery.status === 'Ready to Pickup' && activeTab !== 'all'
-                        }">
-                      Paid
-                  </span>
+            <td class="px-4 py-3 text-left whitespace-nowrap">
+              <div class="flex items-center justify-start h-full">
+                <span *ngIf="delivery.isPaid === 0"
+                  class=" dark:text-textDark"
+                  [ngClass]="{
+                    'text-[#EB3223] dark:text-[#EB3223]': delivery.status === 'Return Received' && activeTab !== 'all'
+                  }">
+                  Pending
+                </span>
+            
+                <span *ngIf="delivery.isPaid === 1 && delivery.paymentMethod === 'Cash'"
+                  class="dark:text-textDark">
+                  Received
+                </span>
+            
+                <span *ngIf="delivery.isPaid === 1 && delivery.paymentMethod === 'Card'"
+                  class="dark:text-textDark"
+                  [ngClass]="{
+                    'text-[#415CFF] dark:text-[#415CFF]': delivery.status === 'Ready to Pickup' && activeTab !== 'all'
+                  }">
+                  Paid
+                </span>
               </div>
           </td>
 
@@ -450,11 +458,11 @@
 <div *ngIf="showInfoModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50"
   (click)="closeInfoPopup()">
 
-  <div class="bg-white dark:bg-tileBlack rounded-lg shadow-2xl  mx-4" (click)="$event.stopPropagation()">
+  <div class="bg-white dark:bg-[#363636] rounded-lg shadow-2xl  mx-4" (click)="$event.stopPropagation()">
 
     <!-- Modal Header -->
     <div class="px-6 py-4 border-b border-[#5C5C5C] dark:border-[#5C5C5C]">
-      <h2 class="text-lg font-semibold text-center text-textLight dark:text-textDark">
+      <h2 class="font-semibold text-base text-center text-[#000000] dark:text-textDark">
         Order ID : {{ deliveryObj.invNo }}
       </h2>
     </div>
@@ -464,27 +472,27 @@
 
       <!-- Farmer Name -->
       <div class="flex items-start">
-        <span class="text-sm text-gray-600 dark:text-gray-400 w-44 flex-shrink-0">Customer Name</span>
-        <span class="text-sm text-gray-600 dark:text-gray-400 mx-3">:</span>
-        <span class="text-sm text-textLight dark:text-textDark font-medium flex-1">
+        <span class="text-sm text-[#4B5563] dark:text-gray-400 w-44 flex-shrink-0">Customer Name</span>
+        <span class="text-sm text-[#000000] dark:text-gray-400 mx-3">:</span>
+        <span class="text-sm text-[#000000] dark:text-textDark font-medium flex-1">
             {{deliveryObj.title}}. {{ deliveryObj.customerName }}
         </span>
       </div>
 
 
       <div class="flex items-start">
-        <span class="text-sm text-gray-600 dark:text-gray-400 w-44 flex-shrink-0">Customer Phone Number</span>
-        <span class="text-sm text-gray-600 dark:text-gray-400 mx-3">:</span>
-        <span class="text-sm text-textLight dark:text-textDark font-medium flex-1">
+        <span class="text-sm text-[#4B5563] dark:text-gray-400 w-44 flex-shrink-0">Customer Phone Number</span>
+        <span class="text-sm text-[#000000] dark:text-gray-400 mx-3">:</span>
+        <span class="text-sm text-[#000000] dark:text-textDark font-medium flex-1">
           {{ deliveryObj.customerPhone }}
         </span>
       </div>
 
       <!-- NIC Number -->
       <div class="flex items-start">
-        <span class="text-sm text-gray-600 dark:text-gray-400 w-44 flex-shrink-0">Platform</span>
-        <span class="text-sm text-gray-600 dark:text-gray-400 mx-3">:</span>
-        <span class="text-sm text-textLight dark:text-textDark font-medium flex-1">
+        <span class="text-sm text-[#4B5563] dark:text-gray-400 w-44 flex-shrink-0">Platform</span>
+        <span class="text-sm text-[#000000] dark:text-gray-400 mx-3">:</span>
+        <span class="text-sm text-[#000000] dark:text-textDark font-medium flex-1">
           {{
             deliveryObj.orderApp === 'Marketplace'
               ? 'GoVi Mart'
@@ -497,42 +505,42 @@
 
       <!-- Phone Number -->
       <div class="flex items-start">
-        <span class="text-sm text-gray-600 dark:text-gray-400 w-44 flex-shrink-0 whitespace-nowrap">Order Placed</span>
-        <span class="text-sm text-gray-600 dark:text-gray-400 mx-3">:</span>
-        <span class="text-sm text-textLight dark:text-textDark font-medium flex-1 whitespace-nowrap">
+        <span class="text-sm text-[#4B5563] dark:text-gray-400 w-44 flex-shrink-0 whitespace-nowrap">Order Placed</span>
+        <span class="text-sm text-[#000000] dark:text-gray-400 mx-3">:</span>
+        <span class="text-sm text-[#000000] dark:text-textDark font-medium flex-1 whitespace-nowrap">
           {{ deliveryObj.createdAt | date:'At hh:mm a on MMMM d, y' }}
         </span>
       </div>
 
       <div class="flex items-start">
-        <span class="text-sm text-gray-600 dark:text-gray-400 w-44 flex-shrink-0 whitespace-nowrap">Scheduled Time</span>
-        <span class="text-sm text-gray-600 dark:text-gray-400 mx-3">:</span>
-        <span class="text-sm text-textLight dark:text-textDark font-medium flex-1 whitespace-nowrap">
+        <span class="text-sm text-[#4B5563] dark:text-gray-400 w-44 flex-shrink-0 whitespace-nowrap">Scheduled Time</span>
+        <span class="text-sm text-[#000000] dark:text-gray-400 mx-3">:</span>
+        <span class="text-sm text-[#000000] dark:text-textDark font-medium flex-1 whitespace-nowrap">
           {{ deliveryObj.sheduleTime }} {{ deliveryObj.sheduleDate | date:'on MMMM d, y'}}
         </span>
       </div>
 
       <div class="flex items-start">
-        <span class="text-sm text-gray-600 dark:text-gray-400 w-44 flex-shrink-0">Receiver’s Name</span>
-        <span class="text-sm text-gray-600 dark:text-gray-400 mx-3">:</span>
-        <span class="text-sm text-textLight dark:text-textDark font-medium flex-1 whitespace-nowrap">
+        <span class="text-sm text-[#4B5563] dark:text-gray-400 w-44 flex-shrink-0">Receiver’s Name</span>
+        <span class="text-sm text-[#000000] dark:text-gray-400 mx-3">:</span>
+        <span class="text-sm text-[#000000] dark:text-textDark font-medium flex-1 whitespace-nowrap">
           {{deliveryObj.recieverTitle}}. {{ deliveryObj.fullName }}
         </span>
       </div>
 
       <div class="flex items-start">
-        <span class="text-sm text-gray-600 dark:text-gray-400 w-44 flex-shrink-0 whitespace-nowrap">Receiver’s Phone Number - 1</span>
-        <span class="text-sm text-gray-600 dark:text-gray-400 mx-3">:</span>
-        <span class="text-sm text-textLight dark:text-textDark font-medium flex-1 whitespace-nowrap">
+        <span class="text-sm text-[#4B5563] dark:text-gray-400 w-44 flex-shrink-0 whitespace-nowrap">Receiver’s Phone Number - 1</span>
+        <span class="text-sm text-[#000000] dark:text-gray-400 mx-3">:</span>
+        <span class="text-sm text-[#000000] dark:text-textDark font-medium flex-1 whitespace-nowrap">
             {{ deliveryObj.phoneCode1 }} {{ deliveryObj.phone1 }}
         </span>
       </div>
 
       <!-- Crop -->
       <div class="flex items-start">
-        <span class="text-sm text-gray-600 dark:text-gray-400 w-44 flex-shrink-0 whitespace-nowrap">Receiver’s Phone Number - 2</span>
-        <span class="text-sm text-gray-600 dark:text-gray-400 mx-3">:</span>
-        <span class="text-sm text-textLight dark:text-textDark font-medium flex-1">
+        <span class="text-sm text-[#4B5563] dark:text-gray-400 w-44 flex-shrink-0 whitespace-nowrap">Receiver’s Phone Number - 2</span>
+        <span class="text-sm text-[#000000] dark:text-gray-400 mx-3">:</span>
+        <span class="text-sm text-[#000000] dark:text-textDark font-medium flex-1">
           {{ deliveryObj.phone2 ? (deliveryObj.phoneCode2 + ' ' + deliveryObj.phone2) : '--' }}
         </span>
       </div>

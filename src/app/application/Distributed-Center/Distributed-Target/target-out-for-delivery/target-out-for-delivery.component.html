@@ -13,9 +13,9 @@
         <div><p class="text-lg dark:text-white whitespace-nowrap">All ({{ totalItems < 10 ? ('0' + totalItems) : totalItems }})</p></div>
     <div class="flex flex-row items-center justify-end gap-5 ">
         
-        <i class="fa-solid fa-list text-2xl dark:text-white"></i>
+        <i class="fa-solid fa-list text-xl dark:text-white"></i>
 
-        <p class="text-lg dark:text-white">Filter By</p>
+        <p class="dark:text-white">Filter By</p>
 
         <div class="relative w-40 custom-status-dropdown-container">
             <!-- Hidden native select -->
@@ -47,8 +47,8 @@
 
             <!-- Custom dropdown options -->
             <div *ngIf="isStatusDropdownOpen"
-                class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
-                <div class="py-1">
+                class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282] overflow-hidden">
+                <div class="">
                     <div *ngFor="let option of statusDropdownOptions" (click)="selectStatusOption(option)"
                         class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
                         <span class="flex-grow">{{ option }}</span>
@@ -92,12 +92,12 @@
         <table class="w-full divide-y-2 overflow-hidden">
             <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
                 <tr>
-                    <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">No</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">Order ID</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">Completed By</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">Delivery Time Slot</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">Out Time</th>
-                    <th class="px-6 py-3 text-center text-sm font-medium text-[#4B5563] dark:text-white">Status</th>
+                    <th class="px-6 py-3 text-left font-medium text-[#4B5563] dark:text-white">No</th>
+                    <th class="px-6 py-3 text-left font-medium text-[#4B5563] dark:text-white">Order ID</th>
+                    <th class="px-6 py-3 text-left font-medium text-[#4B5563] dark:text-white">Completed By</th>
+                    <th class="px-6 py-3 text-left font-medium text-[#4B5563] dark:text-white">Delivery Time Slot</th>
+                    <th class="px-6 py-3 text-left font-medium text-[#4B5563] dark:text-white">Out Time</th>
+                    <th class="px-6 py-3 text-center font-medium text-[#4B5563] dark:text-white">Status</th>
                     
                 </tr>
             </thead>
@@ -105,22 +105,22 @@
                 <tr
                     *ngFor="let item of ordersArr let i = index">
                     <!-- <tr *ngFor="let item of complainArr"> -->
-                        <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
+                        <td class="px-6 py-4 font-medium text-gray-900 dark:text-[#C5C5C5]">
                             {{ (i + 1) < 10 ? ('0' + (i + 1)) : (i + 1) }}
                           </td>
-                        <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.invNo}}</td>
-                    <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.firstNameEnglish}} {{item.lastNameEnglish}}</td>
-                    <td class="px-6 py-4 text-sm font-medium"
+                        <td class="px-6 py-4 font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.invNo}}</td>
+                    <td class="px-6 py-4 font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.firstNameEnglish}} {{item.lastNameEnglish}}</td>
+                    <td class="px-6 py-4 font-medium"
                     [ngClass]="{
                         'text-[#606060] dark:text-[#606060]': (item.deliveryPeriod === 'On Time' && item.scheduleDateStatus === 'Not Passed' ),
                         'text-[#000000] dark:text-[#C5C5C5]': (item.deliveryPeriod === 'On Time' && item.scheduleDateStatus !== 'Not Passed' || item.deliveryPeriod === 'Late' || item.deliveryPeriod === 'Later')
                     }"
                     >{{ getDisplayDate(item.sheduleDate) }} {{ removeWithin(item.sheduleTime) }}</td>
 
-                      <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
+                      <td class="px-6 py-4 font-medium text-gray-900 dark:text-[#C5C5C5]">
                         {{ item.outDlvrDateLocal | date: 'hh.mm a' : 'UTC' }}
                       </td>
-                      <td class="px-6 py-4 text-sm ">
+                      <td class="px-6 py-4">
 
                         <div class="flex font-medium items-center justify-center h-full">
                             <span *ngIf="item.deliveryPeriod ==='On Time'"

@@ -80,8 +80,6 @@ export class ManageOfficersService {
       url += `&searchText=${searchText}`
     }
 
-
-
     return this.http.get(url, {
       headers,
     });
@@ -143,7 +141,6 @@ export class ManageOfficersService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
     });
-  console.log('id', id)
     return this.http.put(`${this.apiUrl}/manage-officers/disclaim-officer/${id}`, {}, {
       headers,
     });
@@ -266,8 +263,6 @@ export class ManageOfficersService {
   CCHcreateCollectiveOfficer(person: any, selectedFile: File | null, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
     const formData = new FormData();
 
-    console.log('person', person)
-
     if (person.jobRole === 'Driver') {
       formData.append('driverData', JSON.stringify(driver));
       formData.append('licFront', licFront);
@@ -285,8 +280,6 @@ export class ManageOfficersService {
       formData.append('file', selectedFile); 
     }
 
-    console.log('formData', formData)
-
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
     });
@@ -298,7 +291,6 @@ export class ManageOfficersService {
   CCHupdateCollectiveOfficer(person: any, id: number, selectedFile: File | null, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
     const formData = new FormData();
 
-    console.log('person for edit' , person)
     if (person.jobRole === 'Driver') {
       formData.append('driverData', JSON.stringify(driver));
       formData.append('licFront', licFront);

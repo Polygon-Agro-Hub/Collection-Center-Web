@@ -104,8 +104,6 @@ export class CashActivityDashboardComponent implements OnInit {
     this.isLoading = true;
     this.distributionSrv.getRecivedCashDashbord().subscribe(
       (res) => {
-        console.log(res);
-        // this.pickUpObj = res.pickupResult;
         this.assignPickUpOrders(res.pickupResult)
         this.assignDelivaryOrders(res.delivaryResult)
         this.isLoading = false;

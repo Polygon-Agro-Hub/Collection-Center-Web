@@ -5,9 +5,9 @@
         <div><p class="text-lg dark:text-white whitespace-nowrap">All ({{ totalItems < 10 ? ('0' + totalItems) : totalItems }})</p></div>
     <div class="flex flex-row items-center justify-end gap-5 ">
         
-        <i class="fa-solid fa-list text-2xl dark:text-white"></i>
+        <i class="fa-solid fa-list text-xl dark:text-white"></i>
 
-        <p class="text-lg dark:text-white">Filter By</p>
+        <p class="dark:text-white">Filter By</p>
 
         <div class="relative w-36">
 
@@ -58,32 +58,32 @@
         <table class="w-full divide-y-2 overflow-hidden">
             <thead class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
                 <tr>
-                    <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">
-                        <input class="cursor-pointer" type="checkbox" 
+                    <th class="px-6 py-3 text-left font-medium text-[#4B5563] dark:text-white">
+                        <input class="cursor-pointer scale-150" type="checkbox" 
                                [checked]="allChecked" 
                                (change)="toggleAllOrders($event)">
                     </th>
-                    <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">No</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">Order ID</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">Completed By</th>
-                    <th class="px-6 py-3 text-center text-sm font-medium text-[#4B5563] dark:text-white">Delivery Time Slot</th>
+                    <th class="px-6 py-3 text-left font-medium text-[#4B5563] dark:text-white">No</th>
+                    <th class="px-6 py-3 text-left font-medium text-[#4B5563] dark:text-white">Order ID</th>
+                    <th class="px-6 py-3 text-left font-medium text-[#4B5563] dark:text-white">Completed By</th>
+                    <th class="px-6 py-3 text-center font-medium text-[#4B5563] dark:text-white">Delivery Time Slot</th>
                 </tr>
             </thead>
             <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
                 <tr *ngFor="let item of ordersArr let i = index">
-                    <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
-                        <input class="cursor-pointer" type="checkbox" 
+                    <td class="px-6 py-4 font-medium text-gray-900 dark:text-[#C5C5C5]">
+                        <input class="cursor-pointer scale-150" type="checkbox" 
                                [checked]="isChecked(item.processOrderId)" 
                                (change)="toggleOrder(item.processOrderId, $event)">
                     </td>
-                    <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
+                    <td class="px-6 py-4 font-medium text-gray-900 dark:text-[#C5C5C5]">
                         {{ (i + 1) < 10 ? ('0' + (i + 1)) : (i + 1) }}
                     </td>
-                    <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.invNo}}</td>
-                    <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.firstNameEnglish}} {{item.lastNameEnglish}}</td>
+                    <td class="px-6 py-4 font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.invNo}}</td>
+                    <td class="px-6 py-4 font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.firstNameEnglish}} {{item.lastNameEnglish}}</td>
                     
                     <td 
-                      class="px-6 py-4 text-sm text-center font-medium"
+                      class="px-6 py-4 text-center font-medium"
                       [ngClass]="getScheduleClass(item)">
                       {{ getDisplayDate(item.sheduleDate) }} <br/> 
                       {{ removeWithin(item.sheduleTime) }}

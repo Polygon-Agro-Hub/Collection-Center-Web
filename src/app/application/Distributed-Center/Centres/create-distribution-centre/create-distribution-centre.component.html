@@ -173,16 +173,6 @@
         <!-- District -->
         <div>
             <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">District *</label>
-            <!-- <select
-                class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                [(ngModel)]="centerData.district" name="district" required #district="ngModel"
-                (change)="onDistrictChange()">
-                <option value="" disabled>Select District</option>
-                <option *ngFor="let district of filteredDistricts" [value]="district.name">
-                    {{ district.name }}
-                </option>
-            </select> -->
-
             <app-searchable-dropdown id="district" name="district" [items]="districtItems"
                         [placeholder]="'Select a district'" [searchPlaceholder]="'Search districts...'"
                         [(ngModel)]="centerData.district" #district="ngModel"

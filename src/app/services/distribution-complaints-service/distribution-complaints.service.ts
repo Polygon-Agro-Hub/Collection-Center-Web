@@ -11,7 +11,6 @@ export class DistributionComplaintsService {
 
   private apiUrl = `${environment.API_BASE_URL}/distribution-complaints`;
   private token!: string | null;
-
   constructor(private http: HttpClient, private tokenSrv: TokenServiceService) {
     this.token = this.tokenSrv.getToken()
   }
@@ -21,16 +20,13 @@ export class DistributionComplaintsService {
       Authorization: `Bearer ${this.token}`
     });
 
-
     let url = `${this.apiUrl}/dcm-get-recived-complaints?page=${page}&limit=${limit}`;
-    console.log('fetching service')
     if (status) {
       url += `&status=${status}`
     }
 
     if (searchText) {
       url += `&searchText=${searchText}`
-
     }
 
     return this.http.get<any>(url, { headers });
@@ -62,15 +58,6 @@ export class DistributionComplaintsService {
     let url = `${this.apiUrl}/dcm-forword-to-complaint/${id}`;
     return this.http.patch<any>(url, {}, { headers });
   }
-
-  // getComplainCategory(): Observable<any> {
-  //   const headers = new HttpHeaders({
-  //     Authorization: `Bearer ${this.token}`
-  //   });
-
-  //   let url = `${this.apiUrl}/get-complain-category`;
-  //   return this.http.get<any>(url, { headers });
-  // }
 
   dcmSubmitComplaint(data: { category: string; complaint: string }): Observable<any> {
     const headers = new HttpHeaders({
@@ -117,7 +104,6 @@ export class DistributionComplaintsService {
       Authorization: `Bearer ${this.token}`
     });
 
-
     let url = `${this.apiUrl}/get-recived-dch-complaints?page=${page}&limit=${limit}`;
     if (status) {
       url += `&status=${status}`
@@ -125,7 +111,6 @@ export class DistributionComplaintsService {
 
     if (searchText) {
       url += `&searchText=${searchText}`
-
     }
 
     return this.http.get<any>(url, { headers });
@@ -162,7 +147,6 @@ export class DistributionComplaintsService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
-
 
     let url = `${this.apiUrl}/get-all-sent-dch-complaint?page=${page}&limit=${limit}`;
     if (status) {

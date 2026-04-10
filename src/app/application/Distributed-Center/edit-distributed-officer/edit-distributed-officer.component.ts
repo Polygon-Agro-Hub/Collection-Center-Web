@@ -60,13 +60,13 @@ export class EditDistributedOfficerComponent implements OnInit {
   isLoading: boolean = true;
 
   banks: Bank[] = [];
-branches: Branch[] = [];
-selectedBankId: number | null = null;
-selectedBranchId: number | null = null;
-allBranches: BranchesData = {};
+  branches: Branch[] = [];
+  selectedBankId: number | null = null;
+  selectedBranchId: number | null = null;
+  allBranches: BranchesData = {};
 
-bankItems: { value: number; label: string }[] = [];
-branchItems: { value: number; label: string }[] = [];
+  bankItems: { value: number; label: string }[] = [];
+  branchItems: { value: number; label: string }[] = [];
 
   invalidFields: Set<string> = new Set();
   naviPath!: string
@@ -194,12 +194,10 @@ branchItems: { value: number; label: string }[] = [];
     this.loadBranches();
     this.getAllCenters();
     this.editOfficerId = this.route.snapshot.params['id'];
-    console.log('editOfficerId', this.editOfficerId)
     this.centerId = this.route.snapshot.params['centerId'];
     this.fetchOffierById(this.editOfficerId);
 
     this.setJobRoles();
-    // this.UpdateEpmloyeIdCreate();
     this.setActiveTabFromRoute()
   }
 
@@ -224,10 +222,7 @@ branchItems: { value: number; label: string }[] = [];
 
   toggleJobRoleDropdown() {
     this.isJobRoleOpen = !this.isJobRoleOpen;
-
     this.jobRoleInputTouched = true;
-
-    console.log('jobRoleInputTouched', this.jobRoleInputTouched)
   }
 
   getJobRole(role: string) {
@@ -240,23 +235,7 @@ branchItems: { value: number; label: string }[] = [];
     }
     this.isJobRoleOpen = false;
     this.jobRoleInputTouched = true;
-
-    console.log('jobRoleInputTouched', this.jobRoleInputTouched)
   }
-
-  // @HostListener('document:click', ['$event.target'])
-  // onClick(targetElement: HTMLElement) {
-  //   const insideDropdown1 = targetElement.closest('.dropdown-wrapper-1');
-  //   const insideDropdown2 = targetElement.closest('.dropdown-wrapper-2');
-  
-  //   // Close dropdowns only if click is outside their wrapper
-  //   if (!insideDropdown1) {
-  //     this.dropdownOpen = false;
-  //   }
-  //   if (!insideDropdown2) {
-  //     this.dropdownOpen2 = false;
-  //   }
-  // }
 
   @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent) {
@@ -269,17 +248,12 @@ branchItems: { value: number; label: string }[] = [];
   onSearchInput(event: Event) {
     const input = event.target as HTMLInputElement;
     const value = input.value.toLowerCase();
-    console.log('value', value);
-  
     this.filteredCenterArr = this.centerArr.filter(c => {
       const combined1 = `${c.regCode}-${c.centerName}`.toLowerCase();
       const combined2 = `${c.regCode} - ${c.centerName}`.toLowerCase();
       return combined1.includes(value) || combined2.includes(value);
       }
     );
-
-    console.log('filtered centers', this.filteredCenterArr);
-  
   }
   
   
@@ -293,13 +267,9 @@ branchItems: { value: number; label: string }[] = [];
   }
   
   selectCenter(item: Center) {
-    console.log('center selected');
-  
     this.personalData.centerId = item.id;
     this.selectedCenterName = item.centerName;
     this.centreDropdownOpen = false; // close dropdown
-  
-    // Reset search input and filtered array
     this.filteredCenterArr = [...this.centerArr]; // show full list next time
     const searchInput = document.querySelector<HTMLInputElement>('.dropdown-search-input');
     if (searchInput) {
@@ -312,51 +282,38 @@ branchItems: { value: number; label: string }[] = [];
   onManagerSearchInput(event: Event) {
     const input = event.target as HTMLInputElement;
     const value = input.value.toLowerCase().trim(); // remove leading/trailing spaces
-    console.log('search value', value);
-  
     this.filteredManagerArr = this.managerArr.filter(m => {
       const fullName = `${m.empId}-${m.firstNameEnglish} ${m.lastNameEnglish}`.toLowerCase();
       const fullName2 = `${m.empId} - ${m.firstNameEnglish} ${m.lastNameEnglish}`.toLowerCase();
       return fullName.includes(value) || fullName2.includes(value);
     }
   );
-  
-    console.log('filtered managers', this.filteredManagerArr);
+
   }
   
   
   selectManager(item: Manager) {
-    console.log('Manager selected');
-  
+    
     this.personalData.irmId = item.id;
     this.selectedManager = item.firstNameEnglish + ' ' + item.lastNameEnglish;
-    console.log('name', item.firstNameEnglish )
     this.managerDropdownOpen = false; // close dropdown
-  
-    // Reset search input and filtered array
     this.filteredManagerArr = [...this.managerArr]; // show full list next time
     const searchInput = document.querySelector<HTMLInputElement>('.dropdown-manager-search-input');
     if (searchInput) {
       searchInput.value = '';
     }
-  
-    console.log('id', this.personalData.irmId)
-  
-    // this.changeCenter();
   }
   
 
   selectCountry1(country: Country) {
     this.selectedCountry1 = country;
-    this.personalData.phoneCode01 = country.dialCode; // update ngModel
-    console.log('sdsf', this.personalData.phoneCode01)
+    this.personalData.phoneCode01 = country.dialCode; 
     this.dropdownOpen = false;
   }
 
   selectCountry2(country: Country) {
     this.selectedCountry2 = country;
-    this.personalData.phoneCode01 = country.dialCode; // update ngModel
-    console.log('sdsf', this.personalData.phoneCode01)
+    this.personalData.phoneCode01 = country.dialCode; 
     this.dropdownOpen2 = false;
   }
   
@@ -369,17 +326,11 @@ branchItems: { value: number; label: string }[] = [];
     this.isLoading = true;
     this.DistributedManageOfficerSrv.getOfficerById(id).subscribe(
       (res: any) => {
-        console.log('res', res)
-        console.log('job', res.officerData.collectionOfficer.jobRole)
-        
+
         this.personalData = res.officerData.collectionOfficer;
-        console.log('personalDatajon', this.personalData.jobRole)
-        console.log('PERSONAL', this.personalData)
         this.personalData.conformAccNumber = this.personalData.accNumber
-        console.log(this.personalData);
         this.ExistirmId = res.officerData.irmId;
         this.personalData.jobRole = res.officerData.collectionOfficer.jobRole
-        console.log('persjobrole' , this.personalData.jobRole)
         this.personalData.previousjobRole = res.officerData.collectionOfficer.jobRole;
         this.personalData.previousEmpId = res.officerData.collectionOfficer.empIdPrefix
         this.selectedCenterName = res.officerData.collectionOfficer.centerName
@@ -387,22 +338,15 @@ branchItems: { value: number; label: string }[] = [];
         if (res.officerData.collectionOfficer.irmId != null) {
           this.selectedManager = res.managerName.firstNameEnglish + ' ' + res.managerName.lastNameEnglish
         }
-        console.log('previousjobRole', this.personalData.previousjobRole)
   
         this.getUpdateLastID(res.officerData.collectionOfficer.jobRole);
-        
         this.personalData.previousQR = this.personalData.QRcode;
         this.personalData.previousImage = this.personalData.image;
-  
-        console.log('personaldarta', this.personalData)
-
         this.driverObj = res.officerData.driver;
         this.driverObj.insExpDate = this.formatDateForInput(this.driverObj.insExpDate);
         this.selectVehicletype = this.VehicleTypes.find(
           (v) => v.name === this.driverObj.vType && v.capacity === this.driverObj.vCapacity
         );
-
-        console.log('driverObj', this.driverObj)
 
         this.driverObj.confirmLicNo =  res.officerData.driver.licNo || '';
         this.driverObj.confirmInsNo =  res.officerData.driver.insNo || '';
@@ -472,15 +416,12 @@ branchItems: { value: number; label: string }[] = [];
             lastId = this.personalData.empId;
             this.UpdatelastID = lastId;
 
-
           } else {
             this.UpdatelastID = res.result.empId;
             lastId = res.result.empId
-
-
           }
           ;
-          resolve(lastId); // Resolve the Promise with the empId
+          resolve(lastId); 
         },
         (error) => {
           console.error('Error fetching last ID:', error);
@@ -513,9 +454,7 @@ branchItems: { value: number; label: string }[] = [];
 
   validateLanguages() {
     this.languagesRequired = !this.personalData.languages || this.personalData.languages.trim() === '';
-    console.log('language', this.languagesRequired)
   }
-
 
   nextForm(page: 'pageOne' | 'pageTwo' | 'pageThree') {
 
@@ -539,7 +478,7 @@ branchItems: { value: number; label: string }[] = [];
 
 
   onFileSelected(event: any): void {
-    this.imageLoadError = false; // Reset error state when new file is selected
+    this.imageLoadError = false; 
     const file: File = event.target.files[0];
 
     if (file) {
@@ -560,7 +499,6 @@ branchItems: { value: number; label: string }[] = [];
       const reader = new FileReader();
       reader.onload = (e: any) => {
         this.selectedImage = e.target.result;
-        // Clear any previous image error
         this.imageLoadError = false;
       };
       reader.readAsDataURL(file);
@@ -575,14 +513,10 @@ branchItems: { value: number; label: string }[] = [];
   }
 
   onSubmit() {
-    console.log('personaldata', this.personalData)
-
-    // this.personalData.empId = this.upateEmpID;
-
+  
     if (this.personalData.accNumber !== this.personalData.conformAccNumber) {
       return;
     }
-
     if (this.personalData.phoneNumber01 == this.personalData.phoneNumber02) {
       this.toastSrv.warning('Pleace enter 2 different Mobile numbers')
    }
@@ -596,8 +530,7 @@ branchItems: { value: number; label: string }[] = [];
       if (this.logingRole === 'Distribution Centre Manager') {
 
         if (this.personalData.jobRole === 'Driver') {
-          
-
+        
           this.driverObj.licFrontName = this.licenseFrontImageFileName
           this.driverObj.licBackName = this.licenseBackImageFileName
           this.driverObj.insFrontName = this.insurenceFrontImageFileName
@@ -742,13 +675,8 @@ branchItems: { value: number; label: string }[] = [];
               return;
             }
           }
-
-
         );
       }
-
-
-
     }
   }
 
@@ -786,8 +714,7 @@ branchItems: { value: number; label: string }[] = [];
       (res) => {
         this.centerArr = res
         this.filteredCenterArr = [...this.centerArr];
-        console.log('centerArr', this.centerArr)
-
+        
       }
     )
 
@@ -807,8 +734,6 @@ branchItems: { value: number; label: string }[] = [];
         // this.personalData.jobRole = ''
         this.managerArr = res
         this.filteredManagerArr = [...this.managerArr];
-        console.log('managerArr', this.managerArr)
-
       }
     )
   }
@@ -872,16 +797,10 @@ branchItems: { value: number; label: string }[] = [];
     // Only proceed if both banks and branches are loaded and we have existing data
     if (this.bankItems.length > 0 && Object.keys(this.allBranches).length > 0 &&
       this.personalData && this.personalData.bankName) {
-  
-      // Find the bank ID that matches the existing bank name
       const matchedBank = this.bankItems.find(bank => bank.label === this.personalData.bankName);
-  
       if (matchedBank) {
         this.selectedBankId = matchedBank.value;
-        // Load branches for this bank
         this.updateBranchItems(this.selectedBankId);
-  
-        // If we also have a branch name, try to match it
         if (this.personalData.branchName) {
           const matchedBranch = this.branchItems.find(branch => branch.label === this.personalData.branchName);
           if (matchedBranch) {
@@ -954,22 +873,10 @@ branchItems: { value: number; label: string }[] = [];
     this.personalData.image = ''; // Clear the invalid image URL
   }
 
-  // onSubmitForm(form: NgForm) {
-  //   form.form.markAllAsTouched();
-  // }
-
   onSubmitFormPage1(form: NgForm) {
-    console.log('personal', this.personalData)
     form.form.markAllAsTouched();
-
     this.validateLanguages();
-
     const missingFields: string[] = [];
-
-  // Validation for pageOne fields
-  // if (!this.personalData.empType) {
-  //   missingFields.push('Staff Employee Type');
-  // }
 
   if (!this.personalData.centerId && this.personalData.jobRole === 'Distribution Officer') {
     missingFields.push('Distribution Centre Name is required');
@@ -990,12 +897,6 @@ branchItems: { value: number; label: string }[] = [];
   if (!this.personalData.employeeType) {
     missingFields.push('Employee Type is required');
   }
-
-  
-
-  // if (!this.personalData.companyId) {
-  //   missingFields.push('Company Name');
-  // }
 
   if (!this.personalData.firstNameEnglish) {
     missingFields.push('First Name (in English) is required');
@@ -1070,8 +971,6 @@ branchItems: { value: number; label: string }[] = [];
     }
   }
 
-  
-
   onSubmitFormPage2(form: NgForm) {
     form.form.markAllAsTouched();
 
@@ -1144,7 +1043,6 @@ branchItems: { value: number; label: string }[] = [];
   }
 
   onSubmitFormPage3(form: NgForm) {
-    console.log('page3')
     form.form.markAllAsTouched();
     this.onDatePickerClicked();
 
@@ -1363,19 +1261,6 @@ onNicInput(event: any) {
   this.personalData.nic = value;
 }
 
-// capitalizeFirstLetter(field: keyof typeof this.personalData) {
-//   if (this.personalData[field]) {
-//     // Trim spaces
-//     this.personalData[field] = this.personalData[field].trim();
-
-//     // Capitalize first letter
-//     this.personalData[field] =
-//       this.personalData[field].charAt(0).toUpperCase() +
-//       this.personalData[field].slice(1);
-//   }
-// }
-
-
 onFormatInput(event: Event, modelRef: any, fieldName: string): void { // no spaces at all
   const inputElement = event.target as HTMLInputElement;
 
@@ -1412,7 +1297,6 @@ onFormatInput2(event: Event, modelRef: any, fieldName: string): void {  //trim s
   }
 }
 
-
   navigateToCenters() {
     this.router.navigate(['/centers']); // Change '/reports' to your desired route
   }
@@ -1423,12 +1307,8 @@ onFormatInput2(event: Event, modelRef: any, fieldName: string): void {  //trim s
 
 
   openPopup(item: Personal) {
-    console.log('personal', item);
-    console.log('officerId', this.editOfficerId);
     this.isPopupVisible = true;
-  
     const message = `Are you sure you want to reset password for this ${item.jobRole}?`;
-  
     const approveButton = `
       <button id="approveButton" 
         class="bg-[#415CFF] hover:bg-[#415CFF] text-white px-4 py-2 rounded-lg mx-2">
@@ -1510,7 +1390,6 @@ onFormatInput2(event: Event, modelRef: any, fieldName: string): void {  //trim s
           this.toastSrv.success(`The Distribution Officer Password was reseted successfully.`);
         } else {
           this.isLoading = false;
-          console.log(`Failed to reset the Distribution Officer's password.`)
         }
       },
       error: (err) => {
@@ -1790,8 +1669,6 @@ clearVehicleSideAImage(): void {
   if (fileInput) fileInput.value = '';
 }
 
-
-
 onVehicleSideBImageSelected(event: any): void {
   const file: File = event.target.files[0];
   if (file) {
@@ -1854,33 +1731,23 @@ preventSpecialCharactersPaste(event: ClipboardEvent) {
 
 onInsuranceDateChange(newDate: string | Date | null) {
   let dateString: string;
-
-  console.log('newDate', newDate)
-
   if (!newDate) {
     
     dateString = '';
-    console.log('dateString1', dateString)
   } 
   else if (newDate instanceof Date) {
     
     dateString = newDate.toISOString().split('T')[0];
-    console.log('dateString2', dateString)
   } 
   else {
     
     dateString = newDate;
-    console.log('dateString3', dateString)
   }
 
   this.driverObj.insExpDate = dateString;
-
-  console.log('date', this.driverObj.insExpDate)
-
 }
 
 onDatePickerClicked() {
-  console.log('Date picker clicked/opened');
   this.insExpDateTouched = true;
 }
 
@@ -1966,30 +1833,23 @@ class Personal {
   languages: string = '';
   QRcode!: string;
   status!: string;
-
   accHolderName!: string;
   accNumber!: string;
   bankName!: string;
   branchName!: string;
   conformAccNumber!: string;
-
   jobRole!: string;
-  empId!: string    //empIdWithoutPrefix
+  empId!: string    
   employeeType!: string;
-
   image!: any
-
   previousQR!: string
   previousImage!: string
-
-
   centerId: number | string = '';
   irmId: number | string | null = '';
   previousjobRole!: string;
-  empIdFirst!: string;       //prifix
+  empIdFirst!: string;      
   empIdPrefix!: string; 
-  previousEmpId!: string;     //entire empId
-
+  previousEmpId!: string;     
   myJobRole!: string;
 
 }

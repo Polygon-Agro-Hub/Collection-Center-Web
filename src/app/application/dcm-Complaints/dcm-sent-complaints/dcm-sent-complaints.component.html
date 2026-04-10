@@ -4,7 +4,7 @@
     <div class="flex flex-row items-center justify-end gap-8 ">
         <i class="fa-solid fa-list text-2xl dark:text-white"></i>
 
-        <p class="text-lg dark:text-white">Filter By</p>
+        <p class="text-[#4A4A4A] dark:text-white">Filter By</p>
 
         <div class="relative w-36 custom-employee-dropdown-container">
             <!-- Hidden native select -->
@@ -36,8 +36,8 @@
 
             <!-- Custom dropdown options -->
             <div *ngIf="isEmployeeDropdownOpen"
-                class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
-                <div class="py-1">
+                class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282] overflow-hidden">
+                <div class="">
                     <div *ngFor="let option of employeeDropdownOptions" (click)="selectEmployeeOption(option)"
                         class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
                         <span class="flex-grow">{{ option }}</span>
@@ -80,8 +80,8 @@
 
             <!-- Custom dropdown options -->
             <div *ngIf="isStatusDropdownOpen"
-                class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
-                <div class="py-1">
+                class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282] overflow-hidden">
+                <div class="">
                     <div *ngFor="let option of statusDropdownOptions" (click)="selectStatusOption(option)"
                         class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
                         <span class="flex-grow">{{ option }}</span>
@@ -144,9 +144,6 @@
                         <span *ngIf="item.officerId !== officerId">{{item.empId}}</span>
                     </td>
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.complainCategory}}</td>
-                    <!-- <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
-                        {{ truncateText(item.complain) }}
-                    </td> -->
 
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
                         {{ truncateText(item.complain, item.id) }}
@@ -169,11 +166,11 @@
                     </td>
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300 align-middle">
                         <div class="flex items-center justify-center">
-                          <span *ngIf="item.status === 'Opened'" class="bg-[#C8E0FF] text-[#415CFF] px-3 py-1 rounded-lg">
+                          <span *ngIf="item.status === 'Opened'" class="bg-[#C8E0FF] text-[#415CFF] px-3 py-1 rounded-lg text-center min-w-24">
                             Opened
                           </span>
                       
-                          <span *ngIf="item.status === 'Closed'" class="bg-[#B7FFBE] text-[#02BB3D] px-3 py-1 rounded-lg">
+                          <span *ngIf="item.status === 'Closed'" class="bg-[#B7FFBE] text-[#02BB3D] px-3 py-1 rounded-lg text-center min-w-24">
                             Closed
                           </span>
                         </div>
@@ -199,31 +196,6 @@
             [screenReaderCurrentLabel]="'Youre on page'">
         </pagination-controls>
     </div>
-
-    <!-- <div *ngIf="isReplyView" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-    <div class="bg-white dark:bg-[#363636] shadow-lg rounded-lg p-6 w-1/2">
-        <div class="flex flex-col items-center justify-center gap-5">
-            <div class="bg-[#F6F6F6] rounded-full shadow-md p-5">
-                <i class="fa-regular fa-envelope text-4xl"></i>
-            </div>
-
-            <p class="text-3xl font-bold dark:text-white">Reply from Center Head</p>
-
-            <textarea 
-                class="w-full border-[1px] border-[#D9D9D9] dark:text-textDark dark:bg-[#1D1D1F] rounded-lg p-5"
-                rows="10"
-                readonly
-                [(ngModel)]="replyObj.reply">
-            </textarea>
-
-            <button
-                class="bg-[#F6F7F9] text-[#6B7D8C] text-lg border-2 border-gray-400 rounded-lg px-6 py-2 font-medium shadow-md hover:bg-gray-100"
-                (click)="cancelViewReply()">
-                Close
-            </button>
-        </div>
-    </div>
-</div> -->
 
 <div *ngIf="isReplyView" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
     <div class="bg-white dark:bg-[#363636] shadow-lg rounded-lg p-6 w-2/5">

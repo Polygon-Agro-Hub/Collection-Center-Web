@@ -60,8 +60,6 @@ export class ViewOfficerTargetComponent implements OnInit {
   ngOnInit(): void {
     this.officerId = this.route.snapshot.params['officerId'];
     this.centerName = this.route.snapshot.params['newCenterName']
-
-    console.log('centerName', this.centerName)
     this.fetchSelectedOfficerTarget(this.officerId);
   }
 
@@ -69,7 +67,6 @@ export class ViewOfficerTargetComponent implements OnInit {
   onDocumentClick(event: MouseEvent) {
     const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
     const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
-
     if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
       this.isStatusDropdownOpen = false;
     }

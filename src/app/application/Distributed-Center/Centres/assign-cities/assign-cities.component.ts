@@ -100,16 +100,10 @@ export class AssignCitiesComponent implements OnInit {
     
     this.distributionSrv.getAssignForCityes(this.selectProvince, this.selectDistrict).subscribe(
       (res) => {
-        console.log(res);
         this.citiesArr = res.cities;
 
         this.centersArrWithDups = (res.centers);
-        
-        // Filter out duplicate centers by id
         this.centersArr = this.removeDuplicateCenters(res.centers);
-
-        console.log('centers', this.centersArr)
-        
         this.isLoading = false;
         this.hasData = true;
         
@@ -131,10 +125,6 @@ export class AssignCitiesComponent implements OnInit {
 
     const selected = this.allDistricts.find(d => d.name === districtName || '');
     this.selectProvince = selected ? selected.province : '';
-    console.log('selectProvince', this.selectProvince)
-    console.log('selectDistrict', this.selectDistrict)
-
-    
   }
 
   filterProvince(provinceName: string | null) {
@@ -145,11 +135,7 @@ export class AssignCitiesComponent implements OnInit {
 
     const selected = this.provinceItems.find(p => p.value === provinceName || '');
     this.updateFilteredDistricts(); 
-    // this.selectProvince = selected ? selected.province : '';
-    console.log('selectProvince', this.selectProvince)
-    console.log('selectDistrict', this.selectDistrict)
-
-   
+    
   }
 
   removeDuplicateCenters(centers: Centers[]): Centers[] {
@@ -170,24 +156,16 @@ export class AssignCitiesComponent implements OnInit {
        this.districtItems = this.filteredDistricts.map(d => ({ value: d.name, label: d.name }));
     } else {
         this.filteredDistricts = this.allDistricts;
-        console.log('filteredDistricts', this.filteredDistricts)
         this.districtItems = this.filteredDistricts.map(d => ({ value: d.name, label: d.name }));
     }
 }
 
   initializeAssignments(): void {
 
-    console.log('initialize assignments')
     this.assignments.clear();
-
-    console.log('cities arr', this.citiesArr)
-    
     this.citiesArr.forEach(city => {
       this.assignments.set(city.id, -1);
     });
-
-    console.log('centers arr', this.centersArrWithDups)
-    
     this.centersArrWithDups.forEach(center => {
       if (center.ownCityId) {
         const cityId = parseInt(center.ownCityId, 10);
@@ -197,7 +175,6 @@ export class AssignCitiesComponent implements OnInit {
       }
     });
     
-    console.log('Initialized assignments:', this.assignments);
   }
 
   isCityAssignedToCenter(cityId: number, centerId: number): boolean {
@@ -221,115 +198,105 @@ export class AssignCitiesComponent implements OnInit {
       this.removeAssignment(cityId, previousCenterId as any);
     }
     
-    console.log('Updated assignments:', this.assignments);
   }
 
   saveAssignment(cityId: number, centerId: number): void {
     this.isLoading = true;
-    
     const assignmentToSave = { cityId, centerId };
-    
-    console.log('Saving assignment:', assignmentToSave);
-    
     this.isLoading = true;
 
-this.distributionSrv.AssigCityToDistributedCenter(assignmentToSave).subscribe(
-  (res) => {
-    this.isLoading = false;
+  this.distributionSrv.AssigCityToDistributedCenter(assignmentToSave).subscribe(
+    (res) => {
+      this.isLoading = false;
 
-    // Handle backend failure response
-    if (!res || res.status === false) {
-      Swal.fire({
-        title: 'Error',
-        text: res?.message || 'Failed to assign city to center',
-        icon: 'error',
-        customClass: {
-          popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-          title: 'dark:text-white',
-        },
-      });
-      this.assignments.set(cityId, -1);
-      return;
-    }
-
-    // Success alert
-    Swal.fire({
-      title: 'Success',
-      text: 'City assigned to center successfully!',
-      icon: 'success',
-      customClass: {
-        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-        title: 'dark:text-white',
-      },
-    });
-  },
-  (error) => {
-    this.isLoading = false;
-    console.error('Error while assigning city:', error);
-
-    Swal.fire({
-      title: 'Error',
-      text: 'Failed to assign city to center',
-      icon: 'error',
-      customClass: {
-        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-        title: 'dark:text-white',
-      },
-    });
-
-    this.assignments.set(cityId, -1);
-  }
-);
-
-  }
-
-  removeAssignment(cityId: number, centerId: number): void {
-    this.isLoading = true;
-    
-    const assignmentToRemove = { cityId, centerId };
-    
-    console.log('Removing assignment:', assignmentToRemove);
-    
-    this.distributionSrv.removeAssigCityToDistributedCenter(assignmentToRemove).subscribe(
-      (res) => {
-        this.isLoading = false;
-        Swal.fire({
-          title: 'Success',
-          text: 'City removed from centre successfully!',
-          icon: 'success',
-          customClass: {
-            popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-            title: 'dark:text-white',
-          },
-        });
-      },
-      (error) => {
-        this.isLoading = false;
+      // Handle backend failure response
+      if (!res || res.status === false) {
         Swal.fire({
           title: 'Error',
-          text: 'Failed to remove city from centre',
+          text: res?.message || 'Failed to assign city to center',
           icon: 'error',
           customClass: {
             popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
             title: 'dark:text-white',
           },
         });
-        this.assignments.set(cityId, centerId);
+        this.assignments.set(cityId, -1);
+        return;
       }
-    );
-  }
 
-  selectStatusChange(){
-    this.hasData = false;
-  }
+      // Success alert
+      Swal.fire({
+        title: 'Success',
+        text: 'City assigned to center successfully!',
+        icon: 'success',
+        customClass: {
+          popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+          title: 'dark:text-white',
+        },
+      });
+    },
+    (error) => {
+      this.isLoading = false;
+      console.error('Error while assigning city:', error);
 
-  clearDistrictFilter(event?: MouseEvent) {
-    if (event) {
-        event.stopPropagation(); // Prevent triggering the dropdown toggle
+      Swal.fire({
+        title: 'Error',
+        text: 'Failed to assign city to center',
+        icon: 'error',
+        customClass: {
+          popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+          title: 'dark:text-white',
+        },
+      });
+
+      this.assignments.set(cityId, -1);
     }
-    this.selectDistrict = '';
-   
-}
+  );
+
+    }
+
+    removeAssignment(cityId: number, centerId: number): void {
+      this.isLoading = true;
+      const assignmentToRemove = { cityId, centerId };
+      this.distributionSrv.removeAssigCityToDistributedCenter(assignmentToRemove).subscribe(
+        (res) => {
+          this.isLoading = false;
+          Swal.fire({
+            title: 'Success',
+            text: 'City removed from centre successfully!',
+            icon: 'success',
+            customClass: {
+              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+              title: 'dark:text-white',
+            },
+          });
+        },
+        (error) => {
+          this.isLoading = false;
+          Swal.fire({
+            title: 'Error',
+            text: 'Failed to remove city from centre',
+            icon: 'error',
+            customClass: {
+              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+              title: 'dark:text-white',
+            },
+          });
+          this.assignments.set(cityId, centerId);
+        }
+      );
+    }
+
+    selectStatusChange(){
+      this.hasData = false;
+    }
+
+    clearDistrictFilter(event?: MouseEvent) {
+      if (event) {
+          event.stopPropagation(); // Prevent triggering the dropdown toggle
+      }
+      this.selectDistrict = '';
+  }
 }
 
 interface Cities {

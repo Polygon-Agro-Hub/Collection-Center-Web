@@ -1097,9 +1097,6 @@
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
-                    <!-- <div *ngIf="!vehicleBackImageFileName" class="text-red-500 text-sm mt-1">
-                        <div>Vehicle’s Back Image is required</div>
-                    </div> -->
                 </div>
 
                 <div>
@@ -1128,9 +1125,6 @@
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
-                    <!-- <div *ngIf="!vehicleSideAImageFileName" class="text-red-500 text-sm mt-1">
-                        <div>Vehicle’s Side Image - 1 is required</div>
-                    </div> -->
                 </div>
 
                 <div>
@@ -1159,9 +1153,6 @@
                             <i class="fas fa-times"></i>
                         </button>
                     </div>
-                    <!-- <div *ngIf="!vehicleSideBImageFileName" class="text-red-500 text-sm mt-1">
-                        <div>Vehicle’s Side Image - 2 is required</div>
-                    </div> -->
                 </div>
             </div>
 
@@ -1173,8 +1164,6 @@
                 <button type="submit" class="px-6 py-1 bg-[#415CFF] text-white rounded-lg"
                     (click)="!PageThreeForm.invalid && (driverObj.licNo === driverObj.confirmLicNo) && (driverObj.insNo === driverObj.confirmInsNo) && (driverObj.vRegNo === driverObj.confirmVRegNo) ? onSubmit() : nextForm('pageThree')">Sent to
                     Approve</button>
-                <!-- <button type="submit" class="px-4 py-2 bg-[#3980C0] text-white rounded-md" (click)="onSubmit()">Sent to
-                        Approve</button> -->
             </div>
         </div>
     </form>

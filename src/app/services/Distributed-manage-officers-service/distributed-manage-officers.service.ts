@@ -36,8 +36,6 @@ export class DistributedManageOfficersService {
       url += `&searchText=${searchText}`
     }
 
-
-
     return this.http.get(url, {
       headers,
     });
@@ -109,7 +107,6 @@ export class DistributedManageOfficersService {
   }
 
   getDistributionCenterManagers(id: number | string): Observable<any> {
-    console.log('id', id)
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
@@ -121,7 +118,6 @@ export class DistributedManageOfficersService {
   }
 
   getDistributionCenterManagersEdit(id: number | string, officerId: number): Observable<any> {
-    console.log('id', id)
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
@@ -143,8 +139,6 @@ export class DistributedManageOfficersService {
   }
 
   createDistributionOfficer(person: any, selectedFile: File | null, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
-    console.log('person', person)
-    console.log('file', selectedFile)
     const formData = new FormData();
 
     if (person.jobRole === 'Driver') {
@@ -172,8 +166,6 @@ export class DistributedManageOfficersService {
   }
 
   createDistributionOfficerDIO(person: any, selectedFile: File | null, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
-    console.log('person', person)
-    console.log('selectedFile', selectedFile)
     const formData = new FormData();
 
     if (person.jobRole === 'Driver') {
@@ -272,7 +264,5 @@ export class DistributedManageOfficersService {
     let url = `${this.apiUrl}/manage-officers/reset-password/${id}`;
     return this.http.get<any>(url, { headers });
   }
-
-
 
 }

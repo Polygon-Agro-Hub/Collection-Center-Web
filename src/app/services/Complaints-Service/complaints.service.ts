@@ -20,7 +20,6 @@ export class ComplaintsService {
       Authorization: `Bearer ${this.token}`
     });
 
-
     let url = `${this.apiUrl}/get-recived-complaints?page=${page}&limit=${limit}`;
     if (status) {
       url += `&status=${status}`
@@ -52,7 +51,6 @@ export class ComplaintsService {
     return this.http.get<any>(url, { headers });
   }
 
-
   forwordComplain(id: number): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
@@ -61,7 +59,6 @@ export class ComplaintsService {
     let url = `${this.apiUrl}/forword-to-complain/${id}`;
     return this.http.patch<any>(url, {}, { headers });
   }
-
 
   replyToComplain(data: any): Observable<any> {
     const headers = new HttpHeaders({
@@ -76,7 +73,6 @@ export class ComplaintsService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
-
 
     let url = `${this.apiUrl}/get-all-sent-complaint?page=${page}&limit=${limit}`;
     if (status) {
@@ -95,7 +91,6 @@ export class ComplaintsService {
   }
 
   submitComplaint(data: { category: string; complaint: string }): Observable<any> {
-    console.log('add-complain')
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
@@ -109,7 +104,6 @@ export class ComplaintsService {
       Authorization: `Bearer ${this.token}`
     });
 
-
     let url = `${this.apiUrl}/get-recived-cch-complaints?page=${page}&limit=${limit}`;
     if (status) {
       url += `&status=${status}`
@@ -117,7 +111,6 @@ export class ComplaintsService {
 
     if (searchText) {
       url += `&searchText=${searchText}`
-
     }
 
     return this.http.get<any>(url, { headers });
@@ -128,7 +121,6 @@ export class ComplaintsService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
-
 
     let url = `${this.apiUrl}/get-all-sent-cch-complaint?page=${page}&limit=${limit}`;
     if (status) {
@@ -183,7 +175,6 @@ export class ComplaintsService {
     let url = `${this.apiUrl}/cch-reply-complain`;
     return this.http.patch<any>(url, data, { headers });
   }
-
 
 }
 

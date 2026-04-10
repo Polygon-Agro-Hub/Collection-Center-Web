@@ -75,34 +75,13 @@ export class DcmSentComplaintsComponent implements OnInit {
     this.fetchAllDcmSentComplaint();
   }
 
-  // @HostListener('document:click', ['$event'])
-  // onDocumentClick(event: MouseEvent) {
-  //   const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
-  //   const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
-
-  //   const employeeDropdownElement = document.querySelector('.custom-employee-dropdown-container');
-  //   const employeeDropdownClickedInside = employeeDropdownElement?.contains(event.target as Node);
-
-  //   if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
-  //     this.isStatusDropdownOpen = false;
-  //   }
-
-  //   if (!employeeDropdownClickedInside && this.isEmployeeDropdownOpen) {
-  //     this.isEmployeeDropdownOpen = false;
-  //   }
-
-  // }
-
   fetchAllDcmSentComplaint(page: number = 1, limit: number = this.itemsPerPage, status: string = this.selectStatus, emptype: string = this.selectEmployee, search: string = this.searchText) {
     this.isLoading = true;
     this.DistributionComplaintsSrv.dcmGetAllSentComplains(page, limit, status, emptype, search).subscribe(
       (res) => {
         this.complainArr = res.items
-        console.log(this.complainArr);
         this.totalItems = res.total;
         this.officerId = res.userId
-
-
         if (res.items.length === 0) {
           this.hasData = false;
         } else {
@@ -120,7 +99,6 @@ export class DcmSentComplaintsComponent implements OnInit {
         this.replyObj = res.data;
         this.templateData = res.template
         this.isLoading = false;
-
       }
     )
 

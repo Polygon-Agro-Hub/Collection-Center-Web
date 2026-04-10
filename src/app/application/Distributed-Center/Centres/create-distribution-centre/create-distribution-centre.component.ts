@@ -81,8 +81,6 @@ export class CreateDistributionCentreComponent implements OnInit {
     { name: 'Vavuniya', province: 'Northern' },
   ];
 
-  // Districts filtered by selected province
-  // filteredDistricts: { name: string, province: string }[] = [];
   districtItems = this.districts.map(d => ({ value: d.name, label: d.name }));
 
 
@@ -98,34 +96,7 @@ export class CreateDistributionCentreComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // this.updateFilteredDistricts(); // Initialize filtered districts
   }
-
-  // Update the filtered districts based on selected province
-  // updateFilteredDistricts() {
-  //   if (this.centerData.province) {
-  //     this.filteredDistricts = this.allDistricts.filter(d => d.province === this.centerData.province);
-  //   } else {
-  //     this.filteredDistricts = this.allDistricts;
-  //   }
-  //   this.centerData.district = ''; // Clear district selection when province changes
-
-  //   this.updateRegCode();
-
-  //   const province = this.centerData.province;
-  //   const district = this.centerData.district;
-  //   const city = this.centerData.city;
-
-  //   if (province && district && city) {
-  //     this.isLoadingregcode = true;
-  //     this.DistributionService
-  //       .generateRegCode(province, district, city)
-  //       .subscribe((response) => {
-  //         this.centerData.regCode = response.regCode;
-  //         this.isLoadingregcode = false;
-  //       });
-  //   }
-  // }
 
   @HostListener('document:click', ['$event.target'])
 onClick(target: EventTarget | null) {
@@ -140,15 +111,13 @@ onClick(target: EventTarget | null) {
 
 selectCountry1(country: Country) {
   this.selectedCountry1 = country;
-  this.centerData.phoneNumber01Code = country.dialCode; // update ngModel
-  console.log('sdsf', this.centerData.phoneNumber01Code)
+  this.centerData.phoneNumber01Code = country.dialCode; 
   this.dropdownOpen = false;
 }
 
 selectCountry2(country: Country) {
   this.selectedCountry2 = country;
-  this.centerData.phoneNumber02Code = country.dialCode; // update ngModel
-  console.log('sdsf', this.centerData.phoneNumber02Code)
+  this.centerData.phoneNumber02Code = country.dialCode; 
   this.dropdownOpen2 = false;
 }
 
@@ -158,12 +127,9 @@ getFlagUrl(code: string): string {
 }
 
   updateRegCode() {
-    console.log('update reg code');
     const province = this.centerData.province;
     const district = this.centerData.district;
     const city = this.centerData.city;
-
-    console.log('province', province, 'district', district, 'city', city);
 
     if (province && district && city) {
       this.isLoadingregcode = true;
@@ -180,7 +146,6 @@ getFlagUrl(code: string): string {
             const regCode = `${province.slice(0, 2).toUpperCase()}${district
               .slice(0, 1)
               .toUpperCase()}${city.slice(0, 1).toUpperCase()}`;
-            console.log('regCode fallback', regCode);
             this.centerData.regCode = '';
             this.isLoadingregcode = false;
           }
@@ -188,22 +153,7 @@ getFlagUrl(code: string): string {
     }
   }
 
-  // When district is selected, automatically set the province
-  // filterDistrict() {
-  //   if (this.centerData.district) {
-  //     const selectedDistrict = this.allDistricts.find(d => d.name === this.centerData.district);
-  //     if (selectedDistrict) {
-  //       // Update the province based on the selected district
-  //       this.centerData.province = selectedDistrict.province;
-
-  //       // Update filtered districts for the selected province
-  //       this.filteredDistricts = this.allDistricts.filter(d => d.province === this.centerData.province);
-  //     }
-  //   }
-  // }
-
   onCityChange() {
-    // Update reg code when city changes
     this.updateRegCode();
   }
 
@@ -215,10 +165,6 @@ getFlagUrl(code: string): string {
 
     this.updateRegCode();
   }
-
-  // onDistrictChange() {
-  //   this.updateRegCode();
-  // }
 
   validateSriLankanPhone(input: string, key: string): void {
     if (!input) {
@@ -254,8 +200,6 @@ getFlagUrl(code: string): string {
     Object.values(this.centerForm.controls).forEach(control => {
       control.markAsTouched();
     });
-
-    // form.form.markAllAsTouched();
 
     const missingFields: string[] = [];
 
@@ -391,8 +335,6 @@ this.isLoading = true;
     });
       }
     })
-
-    
   }
 
   onCancel() {
@@ -420,16 +362,6 @@ this.isLoading = true;
       }
     });
   }
-
-  // enforceLatitudeRange(event: Event): void {
-  //   const input = event.target as HTMLInputElement;
-  //   let value = parseFloat(input.value);
-  
-  //   if (value > 90) input.value = '90';
-  //   if (value < -90) input.value = '-90';
-  
-  //   this.centerData.latitude = parseFloat(input.value); // update model
-  // }
 
   enforceLatitudeRange(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -504,16 +436,6 @@ this.isLoading = true;
       this.centerData.longitude = parseFloat(input.value);
     }
   }
-
-  // enforceLongitudeRange(event: Event): void {
-  //   const input = event.target as HTMLInputElement;
-  //   let value = parseFloat(input.value);
-  
-  //   if (value > 180) input.value = '180';
-  //   if (value < -180) input.value = '-180';
-  
-  //   this.centerData.longitude = parseFloat(input.value); // update model
-  // }
 
   onTrimInput(event: Event, modelRef: any, fieldName: string): void {
     const inputElement = event.target as HTMLInputElement;

@@ -50,11 +50,8 @@ export class ViewDcmReceiveReplyComponent implements OnInit {
     this.isLoading = true;
     this.DistributionComplaintsSrv.dcmGetComplainById(id).subscribe(
       (res) => {
-        console.log('res', res)
         this.compalintObj = res.data;
         this.templateData = res.template
-        console.log('compalintObj', this.compalintObj)
-
         this.officerName =
           (this.compalintObj?.firstNameEnglish || '') + ' ' +
           (this.compalintObj?.lastNameEnglish || '');
@@ -84,9 +81,6 @@ export class ViewDcmReceiveReplyComponent implements OnInit {
         } else {
           this.hasData = true;
         }
-        // this.replyObj.reply = res.data.reply === null ? this.createTemplate(this.officerName, res.data.language, res.template) : res.data.reply;
-
-
         this.isLoading = false;
       },
       (error) => {
@@ -95,26 +89,7 @@ export class ViewDcmReceiveReplyComponent implements OnInit {
       }
     );
   }
-  // Swal.fire({
-  //   title: 'Are you sure?',
-  //   text: 'Do you really want to delete this Collection Officer? This action cannot be undone.',
-  //   icon: 'warning',
-  //   showCancelButton: true,
-  //   confirmButtonColor: '#3085d6', // Default blue
-  //   cancelButtonColor: '#d33',
-  //   confirmButtonText: 'Yes, delete it!',
-  //   cancelButtonText: 'Cancel',
-  //   customClass: {
-  //     popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-  //     title: 'dark:text-white',
-  //     icon: '!border-gray-200 dark:!border-gray-500',
-  //     confirmButton: 'hover:!bg-[#3085d6] dark:hover:!bg[#3085d6]', 
-  //     cancelButton: '',
-  //     actions: 'gap-2'
-  //   }
-  // })
-
-
+  
   forwordComplain() {
     Swal.fire({
       title: 'Are you sure?',
@@ -172,7 +147,7 @@ export class ViewDcmReceiveReplyComponent implements OnInit {
       (res) => {
         if (res.status) {
           this.isLoading = false;
-          this.toastSrv.success(res.message)
+          this.toastSrv.success('Your reply was sent.')
           this.router.navigate(['/dcm-complaints']);
         } else {
           this.isLoading = false;

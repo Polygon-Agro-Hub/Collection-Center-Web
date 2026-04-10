@@ -180,18 +180,18 @@ export class ViewDistributedOfficersComponent implements OnInit {
           this.ManageOficerSrv.deleteOfficer(id).subscribe(
             (data) => {
               if (data.status) {
-                this.toastSrv.success('The Officer has been deleted.')
+                this.toastSrv.success('Officer deleted successfully.')
                 this.fetchByRole()
                 this.isLoading = false;
               } else {
                 this.isLoading = false;
-                this.toastSrv.error('There was an error deleting the ofiicer')
+                this.toastSrv.error('There was an error while deleting the officer.')
               }
             },
             (error) => {
               console.error('Error deleting news:', error);
               this.isLoading = false;
-              this.toastSrv.error('There was an error deleting the ofiicer')
+              this.toastSrv.error('There was an error while deleting the officer.')
             }
           );
         }
@@ -218,13 +218,13 @@ export class ViewDistributedOfficersComponent implements OnInit {
     }
 
     const rejectButton = (item.status === 'Approved' || item.status === 'Not Approved')
-      ? `<button id="rejectButton" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg mr-2">
+      ? `<button id="rejectButton" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg mr-2 focus:outline-none focus:ring-0">
            Reject
          </button>`
       : '';
 
     const approveButton = (item.status === 'Rejected' || item.status === 'Not Approved')
-      ? `<button id="approveButton" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
+      ? `<button id="approveButton" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-0">
            Approve
          </button>`
       : '';

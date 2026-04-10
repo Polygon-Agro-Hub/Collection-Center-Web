@@ -341,10 +341,10 @@
 
                 <div class="mb-4 text-center dark:text-textDark">
                     <p class="text-lg mb-2">
-                        Are you sure you want to Discharge the officer
+                        Are you sure you want to Disclaim the officer
                     </p>
                     <p class="font-semibold text-lg dark:text-white">
-                        "{{officerObj.firstNameEnglish}} {{officerObj.lastNameEnglish}}"" (EMP ID -
+                        "{{officerObj.firstNameEnglish}} {{officerObj.lastNameEnglish}}" (EMP ID -
                         "{{officerObj.empIdPrefix}}")
                         <span class="font-normal">from centre</span> <br>
                         <span *ngIf="officerObj.jobRole ==='Collection Officer'">"{{officerObj.regCode}}"?</span>
@@ -360,7 +360,7 @@
                 <div class="flex justify-center gap-4">
                     <button class="bg-[#E8E8E8] border-[1px] border-[#6B7D8C] px-10 py-0.35 rounded-lg shadow-md"
                         (click)="confirmDisclaim(officerId)"><span class="font-semibold text-[#6B7D8C]">Yes,</span> <br>
-                        <span class="text-light text-whight-700 button-text text-[#6B7D8C]">Discharge</span>
+                        <span class="text-light text-whight-700 button-text text-[#6B7D8C]">Disclaim</span>
                     </button>
                     <button class="bg-[#415CFF] border-[1px] border-[#415CFF] px-10 py-0.35 rounded-lg shadow-md"
                         (click)="cancelDisclaim()"><span class="font-semibold text-white">No,</span> <br>

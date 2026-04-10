@@ -1,8 +1,6 @@
 import { CommonModule } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-// import { CchReceviedComplaintComponent } from '../cch-recevied-complaint/cch-recevied-complaint.component';
-// import { CchSendComplaintComponent } from 'cch-send-complaint/cch-send-complaint.component';
 import { ComplaintsService } from '../../../services/Complaints-Service/complaints.service';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
@@ -25,13 +23,9 @@ export class CenterDashboardComponent implements OnInit {
   isSelectViewOutForDelivery: boolean =  false;
   isAddComplaintOpen: boolean = false;
   categoryArr: Category[] = [];
-
   category: string = '';
   complaint: string = '';
-
   centerId: number | null = null;
-
-
   isLoading: boolean = false;
 
   constructor(

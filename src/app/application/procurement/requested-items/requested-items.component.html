@@ -13,9 +13,7 @@
                 <p class="text-lg font-semibold dark:text-white">Required Items on {{selectedDate | date:'yyyy/MM/dd' }}</p>
             </div>
             <div class="flex flex-row items-center gap-8 flex-shrink-0">
-                <i class="fa-solid fa-list md:text-2xl lg:text-lg dark:text-white flex-shrink-0 ml-8"></i>
-                <p class="md:text-2xl lg:text-lg dark:text-white whitespace-nowrap flex-shrink-0">Filter By</p>
-
+                
                 <div class="flex gap-4 flex-shrink-0">
                     <!-- Province Dropdown -->
                     <div class="w-48">
@@ -90,7 +88,7 @@
                         <th class="px-6 py-3 text-left font-normal ">Qty (kg)</th>
                         <th class="px-6 py-3 text-center font-normal ">Delivery Date</th>
                         <th *ngIf="logingRole === 'Distribution Centre Head'" class="px-6 py-3 text-center font-normal">Centre Code</th>
-                        <th *ngIf="logingRole === 'Distribution Centre Head'" class="px-6 py-3 text-center font-normal">Centre Name</th>
+                        <th *ngIf="logingRole === 'Distribution Centre Head'" class="px-6 py-3 text-left font-normal">Centre Name</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
@@ -108,7 +106,7 @@
                             {{ item.sheduleDate | date:'d MMM, y' }}
                           </td>
                         <td *ngIf="logingRole === 'Distribution Centre Head'" class="px-6 py-3 font-medium text-center">{{ item.regCode }}</td>
-                        <td *ngIf="logingRole === 'Distribution Centre Head'" class="px-6 py-3 font-medium text-center">{{ item.centerName }}</td>
+                        <td *ngIf="logingRole === 'Distribution Centre Head'" class="px-6 py-3 font-medium text-left">{{ item.centerName }}</td>
                         
                     </tr>
                 </tbody>

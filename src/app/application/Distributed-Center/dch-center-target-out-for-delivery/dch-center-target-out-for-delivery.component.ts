@@ -69,41 +69,23 @@ export class DchCenterTargetOutForDeliveryComponent implements OnInit{
     this.centerId = Number(this.route.snapshot.paramMap.get('id'));
     this.centerName = String(this.route.snapshot.paramMap.get('centerName'));
     this.regCode = String(this.route.snapshot.paramMap.get('regCode'));
-    console.log('centerId', this.centerId)
-
     const today = new Date();
     this.date = today.toISOString().split('T')[0];
     this.fetchCenterTargetOutForDelivery();
   }
 
-  // @HostListener('document:click', ['$event'])
-  // onDocumentClick(event: MouseEvent) {
-  //   const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
-  //   const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
-
-  //   if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
-  //     this.isStatusDropdownOpen = false;
-  //   }
-
-  // }
-
   fetchCenterTargetOutForDelivery(centerId: number = this.centerId!, search: string = this.searchText, status: string = this.selectStatus, selectDate: string | Date | null = this.date) {
-    console.log('selectDate', selectDate, 'status', status)
     this.isLoading = true;
     this.DistributionSrv.getCenterTargetForDelivery(centerId, search, status, selectDate).subscribe(
       (res) => {
         this.ordersArr = res.items
-        console.log('orders', this.ordersArr)
         this.totalItems = res.total;
-        
         if (res.items.length === 0) {
           this.hasData = false;
         } else {
           this.hasData = true;
-
         }
         this.isLoading = false;
-
       }
     )
   }
@@ -113,20 +95,12 @@ export class DchCenterTargetOutForDeliveryComponent implements OnInit{
       this.searchText = this.searchText.trim();
     }
     this.fetchCenterTargetOutForDelivery();
-
   }
 
   offSearch() {
     this.searchText = '';
     this.fetchCenterTargetOutForDelivery();
-
   }
-
-  // onDateChange() {
-  //   console.log('called')
-  //   this.fetchCenterTargetOutForDelivery();
-  // }
-  
 
   onDateChange(newDate: string | Date | null) {
     this.date = newDate;
@@ -141,8 +115,6 @@ export class DchCenterTargetOutForDeliveryComponent implements OnInit{
   getDisplayDate(scheduleDate: string | Date): string {
     const today = new Date();
     const schedule = new Date(scheduleDate);
-  
-    // Normalize times to midnight for accurate date-only comparison
     today.setHours(0, 0, 0, 0);
     schedule.setHours(0, 0, 0, 0);
   
@@ -177,29 +149,19 @@ export class DchCenterTargetOutForDeliveryComponent implements OnInit{
 
   downloadTemplate1() {
     this.isDownloading = true;
+    const selectedDateStr = String(this.date); 
+    const selectedDateObj = new Date(selectedDateStr);
+    const dateStr = selectedDateObj.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+    const fullDateStr = `${String(selectedDateObj.getMonth() + 1).padStart(2, '0')}-${String(selectedDateObj.getDate()).padStart(2, '0')}`;
 
-    // Example: selectedDate = "2025-11-10" or "11/10/2025"
-const selectedDateStr = String(this.date); 
+    const now = new Date();
 
-// Convert safely to Date
-const selectedDateObj = new Date(selectedDateStr);
+    const timeStr = now
+      .toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
+      .replace(':', '.')
+      .replace(' ', '');
 
-// Example: "10 Nov"
-const dateStr = selectedDateObj.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
-
-// Example: "11-10" (MM-DD format)
-const fullDateStr = `${String(selectedDateObj.getMonth() + 1).padStart(2, '0')}-${String(selectedDateObj.getDate()).padStart(2, '0')}`;
-console.log(fullDateStr); // e.g. "11-10"
-
-const now = new Date();
-
-const timeStr = now
-  .toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
-  .replace(':', '.')
-  .replace(' ', '');
-
-const finalStr = `${fullDateStr} ${timeStr}`;
-console.log(finalStr);
+    const finalStr = `${fullDateStr} ${timeStr}`;
 
     this.DistributionSrv
       .downloadDCHOutForDeliveryTargetProgressReport(this.selectStatus, this.date, this.searchText, this.centerId! )
@@ -242,8 +204,6 @@ console.log(finalStr);
       });
   }
   
-  
-
   removeWithin(time: string): string {
     return time ? time.replace('Within ', '') : time;
   }
@@ -260,7 +220,6 @@ cancelStatus(event?: MouseEvent) {
   this.selectStatus = '';
   this.fetchCenterTargetOutForDelivery();
 }
-
 
 goBack() {
   this.location.back();

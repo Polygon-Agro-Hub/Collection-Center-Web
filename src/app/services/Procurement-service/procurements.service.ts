@@ -46,7 +46,6 @@ export class ProcurementsService {
   }
 
   getAllCollectionReport(role: string, page: number = 1, limit: number = 10, searchText: string = '', centerId:string=''): Observable<any> {
-    console.log('this is seacrch', searchText)
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
@@ -145,7 +144,6 @@ export class ProcurementsService {
   }
 
   updateDefinePackageItemData(array: any, id:number): Observable<any> {
-    console.log('array', array)
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
@@ -153,7 +151,6 @@ export class ProcurementsService {
   
     const url = `${this.apiUrl}/update-define-package-data`;
   
-    // Send the array as a named field in the body
     return this.http.post<any>(url, { definePackageItems: array, orderId:id}, { headers });
   }
 
@@ -162,7 +159,6 @@ export class ProcurementsService {
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
     });
-  
   
     let url = `${this.apiUrl}/get-excluded-items/${orderId}`;
   
@@ -183,9 +179,6 @@ export class ProcurementsService {
       orderPackageId: orderPackageId,
       products: products,
     };
-
-    // Log the data being sent
-    console.log('Sending package items:', requestData);
 
     return this.http
       .post(`${this.apiUrl}/add-order-package-item`, requestData, {
@@ -210,8 +203,6 @@ export class ProcurementsService {
       'Content-Type': 'application/json',
     });
 
-    console.log('datefilte', dateFilter, 'searchTerm', searchTerm)
-
     let url = `${this.apiUrl}/orders-process-info-dispatched?page=${page}&limit=${limit}`;
 
     if (dateFilter) {
@@ -226,7 +217,6 @@ export class ProcurementsService {
   }
 
   getOrderPackagesByOrderId(orderId: number): Observable<any> {
-    console.log('sending oid', orderId)
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
@@ -236,7 +226,6 @@ export class ProcurementsService {
 
     return this.http.get<any>(url, { headers }).pipe(
       map((response) => {
-        console.log('response', response)
         if (response.success) {
           return {
             invNo: response.data.invNo,
@@ -272,8 +261,6 @@ export class ProcurementsService {
       'Content-Type': 'application/json',
     });
 
-    console.log('filter', filterType, 'date', date, 'search', search);
-
     let url = `${this.apiUrl}/get-received-orders?page=${page}&limit=${limit}`;
 
     if (filterType) {
@@ -291,8 +278,7 @@ export class ProcurementsService {
   }
 
   getAllRequestedItemsForDCH(center: string = '', date: string = '', search: string = ''): Observable<any> {
-    console.log('center', center,  'date', date)
-    
+
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
@@ -337,7 +323,6 @@ export class ProcurementsService {
   downloadRequestedItemsReportFile(
     center: string = '', date: string = '', search: string = ''
   ): Observable<Blob> {
-    console.log('center', center,  'date', date)
     let url = `${this.apiUrl}/download-Requested-items-report?page=${1}`;
 
     if (center) {
@@ -354,12 +339,10 @@ export class ProcurementsService {
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
-      // Optional: 'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     });
 
     return this.http.get(url, { headers, responseType: 'blob' });
   }
-
 
 }
 

@@ -155,7 +155,7 @@ export class ViewDistributedOfficersComponent implements OnInit {
     )
   }
 
-  deleteCollectionOfficer(id: number) {
+  deleteCollectionOfficer(id: number, jobRole: string) {
     Swal.fire({
       title: 'Are you sure?',
       text: 'Do you really want to delete this Distribution Officer? This action cannot be undone.',
@@ -180,7 +180,7 @@ export class ViewDistributedOfficersComponent implements OnInit {
           this.ManageOficerSrv.deleteOfficer(id).subscribe(
             (data) => {
               if (data.status) {
-                this.toastSrv.success('Officer deleted successfully.')
+                this.toastSrv.success(`${jobRole} deleted successfully.`)
                 this.fetchByRole()
                 this.isLoading = false;
               } else {
@@ -189,9 +189,9 @@ export class ViewDistributedOfficersComponent implements OnInit {
               }
             },
             (error) => {
-              console.error('Error deleting news:', error);
+              console.error(`Error deleting ${jobRole}:`, error);
               this.isLoading = false;
-              this.toastSrv.error('There was an error while deleting the officer.')
+              this.toastSrv.error(`There was an error while deleting the ${jobRole}.`)
             }
           );
         }

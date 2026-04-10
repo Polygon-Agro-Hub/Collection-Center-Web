@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ManageOfficersService } from '../../../services/manage-officers-service/manage-officers.service';
 import jsPDF from 'jspdf';
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { TokenServiceService } from '../../../services/Token/token-service.service';
@@ -30,6 +30,7 @@ export class OfficerProfileComponent implements OnInit {
     private ManageOficerSrv: ManageOfficersService,
     private router: Router,
     private route: ActivatedRoute,
+    private location: Location,
     private toastSrv: ToastAlertService,
     private tokenSrv: TokenServiceService
 
@@ -627,7 +628,8 @@ export class OfficerProfileComponent implements OnInit {
         this.isLoading = false;
         this.showDisclaimView = false;
         this.fetchOfficer(this.officerId);      
-        this.toastSrv.success('Officer Disclaimed successfully!');
+        this.toastSrv.success('Officer Disclaimed Successfully!');
+        this.location.back();
       },
       (error) => {
         console.error('Error sending Officer ID:', error);

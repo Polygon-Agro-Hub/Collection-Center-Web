@@ -209,7 +209,7 @@
           ></app-custom-datepicker>
         </div>
 
-        <div *ngIf="activeTab === 'Ready to Pickup'" class="relative w-36  custom-status-dropdown-container">
+        <div *ngIf="activeTab === 'Ready to Pickup'" class="relative w-40 custom-status-dropdown-container">
           <select [(ngModel)]="selectedStatus" class="hidden" (change)="filterTimeSlot()">
               <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300" value="Assigned">
                   8AM - 2PM</option>

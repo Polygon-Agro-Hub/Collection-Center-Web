@@ -9,7 +9,7 @@
         <i class="fa-solid fa-spinner fa-spin px-2" *ngIf="isDownloading"></i>
         {{ isDownloading ? " Downloading..." : " Download" }}
     </button>
-    <div class="flex flex-row items-center justify-between gap-4">
+    <div class="flex flex-row items-center justify-between gap-4 mt-2">
         <div><p class="text-lg dark:text-white whitespace-nowrap">All ({{ totalItems < 10 ? ('0' + totalItems) : totalItems }})</p></div>
     <div class="flex flex-row items-center justify-end gap-5 ">
         
@@ -97,7 +97,7 @@
                     <th class="px-6 py-3 text-left font-medium text-[#4B5563] dark:text-white">Completed By</th>
                     <th class="px-6 py-3 text-left font-medium text-[#4B5563] dark:text-white">Delivery Time Slot</th>
                     <th class="px-6 py-3 text-left font-medium text-[#4B5563] dark:text-white">Out Time</th>
-                    <th class="px-6 py-3 text-center font-medium text-[#4B5563] dark:text-white">Status</th>
+                    <th class="px-6 py-3 text-left font-medium text-[#4B5563] dark:text-white">Status</th>
                     
                 </tr>
             </thead>
@@ -120,21 +120,21 @@
                       <td class="px-6 py-4 font-medium text-gray-900 dark:text-[#C5C5C5]">
                         {{ item.outDlvrDateLocal | date: 'hh.mm a' : 'UTC' }}
                       </td>
-                      <td class="px-6 py-4">
+                      <td class="px-6 py-3">
 
-                        <div class="flex font-medium items-center justify-center h-full">
+                        <div class="flex font-medium items-left justify-start h-full">
                             <span *ngIf="item.deliveryPeriod ==='On Time'"
-                                class="text-[#415CFF] px-3 py-1">
+                                class="text-[#415CFF] ">
                                 On Time
                             </span>
 
                             <span *ngIf="item.deliveryPeriod ==='Late'"
-                                class="text-[#FF0000] px-3 py-1">
+                                class="text-[#FF0000] ">
                                 Late
                             </span>
 
                             <span *ngIf="item.deliveryPeriod ==='Later'"
-                                class="text-[#AC0003] px-3 py-1">
+                                class="text-[#AC0003] ">
                                 Late
                             </span>
 

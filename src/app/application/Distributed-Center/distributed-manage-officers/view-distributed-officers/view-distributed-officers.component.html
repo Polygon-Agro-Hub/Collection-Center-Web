@@ -266,7 +266,7 @@
                             <button class="text-[#FF415C] px-2" [ngClass]="{
                                 'text-gray-400 hover:text-gray-600': (logingRole ==='Distribution Centre Manager' && (item.jobRole === 'Distribution Centre Manager'))
                               }"
-                                (click)="(logingRole ==='Distribution Centre Manager' && item.jobRole === 'Distribution Centre Manager') ? '' : deleteCollectionOfficer(item.id)">
+                                (click)="(logingRole ==='Distribution Centre Manager' && item.jobRole === 'Distribution Centre Manager') ? '' : deleteCollectionOfficer(item.id, item.jobRole)">
                                 <i class="fa-solid fa-trash text-lg"></i>
                             </button>
 

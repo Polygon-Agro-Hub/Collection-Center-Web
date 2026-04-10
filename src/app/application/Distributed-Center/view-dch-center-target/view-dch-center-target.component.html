@@ -14,9 +14,9 @@
           </div>
     <div class="flex flex-row items-center justify-end gap-5 ">
         
-        <i class="fa-solid fa-list text-2xl dark:text-white"></i>
+        <i class="fa-solid fa-list text-lg dark:text-white"></i>
 
-        <p class="text-lg dark:text-white">Filter By</p>
+        <p class="text-[#4A4A4A] dark:text-white">Filter By</p>
 
         <div class="relative w-40 custom-status-dropdown-container">
             <!-- Hidden native select -->
@@ -51,8 +51,8 @@
 
             <!-- Custom dropdown options -->
             <div *ngIf="isStatusDropdownOpen"
-                class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
-                <div class="py-1">
+                class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282] overflow-hidden">
+                <div class="">
                     <div *ngFor="let option of statusDropdownOptions" (click)="selectStatusOption(option)"
                         class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
                         <span class="flex-grow">{{ option }}</span>
@@ -103,9 +103,6 @@
         <table class="w-full min-w-max divide-y-2 overflow-hidden">
             <thead class="text-[#4B5563] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
                 <tr>
-                    <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">
-                        
-                    </th>
                     <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">No</th>
                     <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">Order ID</th>
                     <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">Assigned To</th>
@@ -116,9 +113,6 @@
             </thead>
             <tbody class="bg-white dark:bg-[#1D1D1F] text-[#000000] dark:border-[#1D1D1F] cursor-default">
                 <tr *ngFor="let item of ordersArr let i = index">
-                    <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
-                     
-                    </td>
                     <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
                         {{ (i + 1) < 10 ? ('0' + (i + 1)) : (i + 1) }}
                     </td>
@@ -150,17 +144,17 @@
 
                         <div class="flex font-medium items-center justify-center h-full">
                             <span *ngIf="item.combinedStatus ==='Completed'"
-                                class="bg-[#C8E0FF] text-[#415CFF] px-3 py-1 rounded-lg">
+                                class="bg-[#C8E0FF] text-[#415CFF] px-3 py-1 rounded-lg text-center min-w-28">
                                 Completed
                             </span>
 
                             <span *ngIf="item.combinedStatus ==='Pending'"
-                                class="bg-[#FFD4D4] text-[#FF0000] px-3 py-1 rounded-lg">
+                                class="bg-[#FFD4D4] text-[#FF0000] px-3 py-1 rounded-lg text-center min-w-28">
                                 Pending
                             </span>
 
                             <span *ngIf="item.combinedStatus ==='Opened'"
-                                class="bg-[#FFFDC5] text-[#A8A100] px-3 py-1 rounded-lg">
+                                class="bg-[#FFFDC5] text-[#A8A100] px-3 py-1 rounded-lg text-center min-w-28">
                                 Opened
                             </span>
                         </div>

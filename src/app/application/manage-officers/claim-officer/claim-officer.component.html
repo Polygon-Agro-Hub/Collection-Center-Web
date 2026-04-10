@@ -47,7 +47,7 @@
           <p *ngIf="selectJobRole === 'Customer Officer'">CUO</p>
           <p *ngIf="selectJobRole === 'Distribution Officer'">DIO</p>
         </span>
-        <input type="text" [(ngModel)]="inputId" name="inputId" placeholder="ex : 0122"
+        <input type="text" [(ngModel)]="inputId" name="inputId" placeholder="ex : 00001"
           class="rounded-none rounded-e-lg placeholder:text bg-gray-50 border border-gray-300 dark:border-gray-600 text-[#534E4E] focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full  pl-4 dark:text-textDark  dark:bg-[#1D1D1F] dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" />
       </div>
     </div>
@@ -59,9 +59,9 @@
     </button>
   </div>
 
-  <hr *ngIf="isOfficerExist" class="border-gray-300 border-[1px] my-8" />
+  <hr *ngIf="isOfficerExist && !isReset" class="border-gray-300 border-[1px] my-8" />
 
-  <div *ngIf="isOfficerExist && officerObj.claimStatus === 0"
+  <div *ngIf="isOfficerExist && officerObj.claimStatus === 0 && !isReset"
     class="flex flex-row justify-between items-center border-[#F1F7FA] border-[3px] rounded-lg shadowmd p-8 mx-[10%]">
     <div class="flex flex-row items-center">
       <img *ngIf="officerObj.image" class="w-28 h-28 rounded-full " [src]="officerObj.image" />
@@ -123,8 +123,8 @@
             Are you sure you want to Claim the officer
           </p>
           <p class="font-semibold text-lg dark:text-white">
-            "{{officerObj.firstNameEnglish}} {{officerObj.lastNameEnglish}} (EMP ID -
-            "{{officerObj.empId}}")
+            "{{officerObj.firstNameEnglish}} {{officerObj.lastNameEnglish}}" (EMP ID -
+            {{officerObj.empId}})?
           </p>
         </div>
 

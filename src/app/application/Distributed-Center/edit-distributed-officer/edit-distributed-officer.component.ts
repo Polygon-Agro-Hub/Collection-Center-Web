@@ -547,7 +547,7 @@ export class EditDistributedOfficerComponent implements OnInit {
             this.isLoading = false;
             if (res && res.message) {
               // Success response from backend
-              this.toastSrv.success(`${this.personalData.jobRole} Profile Updated Successfull`);
+              this.toastSrv.success(`${this.personalData.jobRole} Profile Updated Successfully`);
               this.router.navigate(['/distribution-officers']);
             } else {
               // Handle unexpected format
@@ -1387,7 +1387,7 @@ onFormatInput2(event: Event, modelRef: any, fieldName: string): void {  //trim s
         if (res.status) {
           this.isLoading = false;
           swalInstance.close();
-          this.toastSrv.success(`The Distribution Officer Password was reseted successfully.`);
+          this.toastSrv.success(`The Distribution Officer Password was reseted Successfully.`);
         } else {
           this.isLoading = false;
         }

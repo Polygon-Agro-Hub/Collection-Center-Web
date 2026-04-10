@@ -60,6 +60,7 @@ export class TargetOutForDeliveryComponent implements OnInit {
     this.DistributionSrv.getOutForDeliveryOrders(status, search).subscribe(
       (res) => {
         this.ordersArr = res.items
+        this.centerName = res.centerName;
         this.totalItems = res.items.length | 0;
         if (res.items.length === 0) {
           this.hasData = false;
@@ -69,28 +70,8 @@ export class TargetOutForDeliveryComponent implements OnInit {
         this.isLoading = false;
       }
     )
+    
   }
-
-  fetchCenterData() {
-    this.isLoading = true;
-  
-    this.DistributionSrv.getCenterData().subscribe(
-      (res) => {
-        this.centerName = res?.centerName ?? '';
-        const items = res?.items ?? [];  // safe fallback
-        this.totalItems = items.length;
-        this.hasData = items.length > 0;
-        this.isLoading = false;
-      },
-      (err) => {
-        console.error(err);
-        this.totalItems = 0;
-        this.hasData = false;
-        this.isLoading = false;
-      }
-    );
-  }
-  
 
   onSearch() {
     this.searchText = this.searchText.trimStart();
@@ -148,13 +129,29 @@ export class TargetOutForDeliveryComponent implements OnInit {
   }
 
   downloadTemplate1() {
-    this.fetchCenterData();
     this.isDownloading = true;
   
     const now = new Date();
+    const selectedDateStr = String(now); 
+    // Convert safely to Date
+    const selectedDateObj = new Date(selectedDateStr);
+    // Example: "10 Nov"
+    function getOrdinal(day: number): string {
+      if (day > 3 && day < 21) return 'th';
+    
+      switch (day % 10) {
+        case 1: return 'st';
+        case 2: return 'nd';
+        case 3: return 'rd';
+        default: return 'th';
+      }
+    }
 
-// Example: "10 Nov"
-const dateStr = now.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
+    const day = selectedDateObj.getDate();
+    const month = selectedDateObj.toLocaleString('en-GB', { month: 'long' });
+    const year = selectedDateObj.getFullYear();
+    
+    const dateStr = `${String(day).padStart(2, '0')}${getOrdinal(day)} ${month} ${year}`;
 
 // Example: "10/11" → convert to "10-11" (safe for filenames)
 const fullDateStr = `${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
@@ -175,9 +172,9 @@ const finalStr = `${fullDateStr} ${timeStr}`;
           a.href = url;
   
           if (this.selectStatus) {
-            a.download = `${this.centerName} OFD Orders on ${dateStr} filtered by ${this.selectStatus} Generated at ${finalStr}.xlsx`;
+            a.download = `${this.centerName} OFD Orders on ${dateStr} filtered by ${this.selectStatus} Generated at ${day}/${month}/${year} ${timeStr}.xlsx`;
           } else {
-            a.download = `${this.centerName} OFD Orders on ${dateStr} Generated at ${finalStr}.xlsx`;
+            a.download = `${this.centerName} OFD Orders on ${dateStr} Generated at ${day}/${month}/${year} ${timeStr}.xlsx`;
           }
   
           a.click();

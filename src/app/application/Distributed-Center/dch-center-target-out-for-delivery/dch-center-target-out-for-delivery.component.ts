@@ -149,6 +149,7 @@ export class DchCenterTargetOutForDeliveryComponent implements OnInit{
 
   downloadTemplate1() {
     this.isDownloading = true;
+    
     const selectedDateStr = String(this.date); 
     const selectedDateObj = new Date(selectedDateStr);
     const dateStr = selectedDateObj.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });

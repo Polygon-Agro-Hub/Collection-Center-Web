@@ -25,6 +25,7 @@ export class ClaimOfficerComponent implements OnInit {
   isLoading:boolean = false;
   showClaimView = false;
   logingRole: string | null = null;
+  isReset: boolean = false;
 
   constructor(
     private ManageOficerSrv: ManageOfficersService,
@@ -46,7 +47,7 @@ export class ClaimOfficerComponent implements OnInit {
 
   fetchOfficer() {
     if (!this.inputId) {
-      return this.toastSrv.warning('Pleace enter valid employee id!');
+      return this.toastSrv.warning('Please enter a valid Employee ID!');
     }
     
     this.inputId = this.inputId?.trim();
@@ -82,7 +83,6 @@ export class ClaimOfficerComponent implements OnInit {
 
   cancelClaim() {
     this.showClaimView = false;
-    this.router.navigate(['/distribution-officers']);
   }
 
   confirmClaim(id: number) {
@@ -91,10 +91,12 @@ export class ClaimOfficerComponent implements OnInit {
       (res) => {
         this.isLoading = false;
         if (res.status) {
-          this.toastSrv.success(`${this.officerObj.firstNameEnglish} ${this.officerObj.lastNameEnglish} (EMP ID - "${this.officerObj.empId}") Claim Successful`);
+          this.toastSrv.success(`${this.officerObj.firstNameEnglish} ${this.officerObj.lastNameEnglish} (EMP ID - "${this.officerObj.empId}") Claimed Successfully`);
           this.showClaimView = false;
+          this.inputId = ''
+          this.isReset = true;
           // Call fetchOfficer directly without navigation
-          this.fetchOfficer();
+          // this.fetchOfficer();
         } else {
           this.toastSrv.error(`${this.officerObj.firstNameEnglish} ${this.officerObj.lastNameEnglish} (EMP ID - "${this.officerObj.empId}") Claim Unsuccessful!`);
         }

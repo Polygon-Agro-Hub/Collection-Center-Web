@@ -3,8 +3,8 @@
   <p>Officer Reports</p> 
 </div>
 
-<div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg">
-  <div class="flex flex-row items-center justify-center">
+<div >
+  <div class="flex flex-row items-center justify-center shadow-lg rounded-lg bg-tileLight dark:bg-[#363636] w-full px-10 py-5">
     <p class="text-xl font-semibold text-[#292929] mx-5 dark:text-[#FFFFFF]">
       Select Report Type
     </p>
@@ -50,15 +50,15 @@
 </div>
 
 <div *ngIf="type === ''"
-  class="flex flex-col items-center w-full h-screen px-10 py-7 bg-tileLight dark:bg-[#363636] rounded-lg mt-6 dark:text-black">
+  class="flex flex-col items-center w-full h-screen px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg mt-6 dark:text-black">
   <p class="text-[#494949] my-6 dark:text-[#FFFFFF]">--No Data Availabale--</p>
   <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20 dark:text-black" />
 </div>
 
-<div *ngIf="type === 'Collection Reports'">
+<div *ngIf="type === 'Collection Reports'" class="shadow-lg rounded-lg">
   <app-collection-report-component />
 </div>
 
-<div *ngIf="type === 'Sales Reports'">
+<div *ngIf="type === 'Sales Reports'" class="shadow-lg rounded-lg">
   <app-sales-report-component />
 </div>

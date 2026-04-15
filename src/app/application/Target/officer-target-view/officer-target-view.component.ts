@@ -40,12 +40,60 @@ export class OfficerTargetViewComponent {
   isDownloading: boolean = false;
   hasData2: boolean = true;
 
+  isStatusDropdownOpen = false;
+isValidityDropdownOpen = false;
+
+statusDropdownOptions = ['Pending', 'Completed', 'Exceeded', 'Extra'];
+validityDropdownOptions = ['Expired', 'Active', 'Unassigned'];
+
+private validityLabelToValue: Record<string, string> = {
+  'Expired': 'Expired',
+  'Active': 'Valid',
+  'Unassigned': 'Unassigned'
+};
+
   constructor(
     private router: Router,
     private TargetSrv: TargetService,
     private toastSrv: ToastAlertService,
     private route: ActivatedRoute
   ) { }
+
+  toggleStatusDropdown() {
+  this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
+  this.isValidityDropdownOpen = false; // close the other
+}
+
+toggleValidityDropdown() {
+  this.isValidityDropdownOpen = !this.isValidityDropdownOpen;
+  this.isStatusDropdownOpen = false; // close the other
+}
+
+selectStatusOption(option: string) {
+  this.selectStatus = option;
+  this.isStatusDropdownOpen = false;
+  this.applyStatusFilters();
+}
+
+selectValidityOption(label: string) {
+  this.selectValidity = this.validityLabelToValue[label];
+  this.isValidityDropdownOpen = false;
+  this.applyValidityFilters();
+}
+
+clearStatusFilter(event: Event) {
+  event.stopPropagation();
+  this.selectStatus = '';
+  this.isStatusDropdownOpen = false;
+  this.applyStatusFilters();
+}
+
+clearValidityFilter(event: Event) {
+  event.stopPropagation();
+  this.selectValidity = '';
+  this.isValidityDropdownOpen = false;
+  this.applyValidityFilters();
+}
 
   onInit(): void {
     this.onSubmit()
@@ -195,19 +243,19 @@ export class OfficerTargetViewComponent {
     this.fetchAllOfficers();
   }
 
-  clearStatusFilter() {
-    this.selectStatus = ''
-    this.fetchAllOfficers();
-  }
+  // clearStatusFilter() {
+  //   this.selectStatus = ''
+  //   this.fetchAllOfficers();
+  // }
 
   applyValidityFilters() {
     this.fetchAllOfficers();
   }
 
-  clearValidityFilter() {
-    this.selectValidity = ''
-    this.fetchAllOfficers();
-  }
+  // clearValidityFilter() {
+  //   this.selectValidity = ''
+  //   this.fetchAllOfficers();
+  // }
 
   onSearch() {
     this.fetchAllOfficers();

@@ -4,7 +4,7 @@
     <div class="flex flex-row items-center justify-end gap-8 ">
         <i class="fa-solid fa-list text-2xl dark:text-white"></i>
 
-        <p class="text-lg dark:text-white">Filter By</p>
+        <p class="text-md text-[#4A4A4A] dark:text-white">Filter By</p>
 
         <div class="relative w-44 custom-employee-dropdown-container">
             <!-- Hidden native select -->
@@ -148,7 +148,7 @@
                     *ngFor="let item of complainArr | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index">
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.refNo}}</td>
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
-                        <span *ngIf="item.officerId === officerId" class="text-[#415CFF] italic">Own Complaint</span>
+                        <span *ngIf="item.officerId === officerId" class="text-[#415CFF] italic whitespace-nowrap">Own Complaint</span>
                         <span *ngIf="item.officerId !== officerId">{{item.empId}}</span>
                     </td>
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.complainCategory}}</td>

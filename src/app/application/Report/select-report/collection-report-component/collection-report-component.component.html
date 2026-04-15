@@ -57,8 +57,8 @@
                     <th class="px-5 py-3 text-left  font-medium">Last Name</th>
                     <th class="px-5 py-3 text-left  font-medium" *ngIf="logingRole === 'Collection Centre Head'">Centre</th>
                     <th class="px-5 py-3 text-center  font-medium">Monthly Report</th>
-                    <th class="px-5 py-3 text-left  font-medium">Daily Report</th>
-                    <th class="px-5 py-3 text-left  font-medium">Farmers</th>
+                    <th class="px-5 py-3 text-center  font-medium">Daily Report</th>
+                    <th class="px-5 py-3 text-center  font-medium">Farmers</th>
                 </tr>
             </thead>
             <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
@@ -76,24 +76,29 @@
                     <td class="px-5 py-4  text-gray-900 dark:text-gray-300">{{item.lastNameEnglish}}</td>
                     <td class="px-5 py-4  text-gray-900 dark:text-gray-300" *ngIf="logingRole === 'Collection Centre Head'">{{item.centerName}}</td>
                     
-                    <td class="flex justify-center px-5  py-4  text-gray-900 dark:text-gray-300">
-                        <button class="flex items-center justify-center text-[#415CFF] hover:text-gray-600 w-10 h-10"
-                            (click)="viewmonthlyReport(item.id)">
-                            <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>
-                        </button>
-                    </td>
-                    <td class="px-5 py-4  text-gray-900 dark:text-gray-300 "
-                        (click)="viewDailyReport(item.id, item.firstNameEnglish, item.lastNameEnglish, item.empId)">
-                        <button class="flex items-center justify-center text-[#415CFF] hover:text-blue-500 w-10 h-10">
-                            <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>
-                        </button>
-                    </td>
-                    <td class="px-5 py-4  text-gray-900 dark:text-gray-300">
-                        <button class="flex items-center justify-center text-[#415CFF] hover:text-blue-500 w-10 h-10"
-                            (click)="viewFarmerList(item.id,item.firstNameEnglish,item.lastNameEnglish)">
-                            <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>
-                        </button>
-                    </td>
+                    <!-- Monthly Report td -->
+<td class="px-5 py-4 text-center text-gray-900 dark:text-gray-300">
+    <button class="inline-flex items-center justify-center text-[#415CFF] hover:text-gray-600 w-10 h-10 mx-auto"
+        (click)="viewmonthlyReport(item.id)">
+        <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>
+    </button>
+</td>
+
+<!-- Daily Report td -->
+<td class="px-5 py-4 text-center text-gray-900 dark:text-gray-300">
+    <button class="inline-flex items-center justify-center text-[#415CFF] hover:text-gray-600 w-10 h-10 mx-auto"
+        (click)="viewDailyReport(item.id, item.firstNameEnglish, item.lastNameEnglish, item.empId)">
+        <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>
+    </button>
+</td>
+
+<!-- Farmers td -->
+<td class="px-5 py-4 text-center text-gray-900 dark:text-gray-300">
+    <button class="inline-flex items-center justify-center text-[#415CFF] hover:text-blue-500 w-10 h-10 mx-auto"
+        (click)="viewFarmerList(item.id, item.firstNameEnglish, item.lastNameEnglish)">
+        <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>
+    </button>
+</td>
 
                 </tr>
             </tbody>

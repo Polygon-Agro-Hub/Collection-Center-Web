@@ -67,7 +67,7 @@
                             <th class="px-5 py-3 text-left  font-medium">Last Name</th>
                             <th class="px-5 py-3 text-left  font-medium">NIC</th>
                             <th class="px-5 py-3 text-left  font-medium">Total (Rs.)</th>
-                            <th class="px-5 py-3 text-left  font-medium">Collection</th>
+                            <th class="px-5 py-3 text-center  font-medium">Collection</th>
                         </tr>
                     </thead>
                     <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
@@ -85,7 +85,7 @@
                             <td class="px-5 py-4  text-[#000000] dark:text-textDark">{{item.NICnumber}}</td>
                             <td class="px-5 py-4  text-[#000000] dark:text-textDark">{{item.totalAmount | number: '1.2-2' }}</td>
     
-                            <td class="px-5 py-4  text-[#000000] dark:text-textDark">
+                            <td class="flex justify-center px-5 py-4  text-[#000000] dark:text-textDark">
                                 <button (click)="vieFarmerReport(item.id)"
                                     class="flex items-center justify-center text-[#415CFF] hover:text-blue-500 w-10 h-10">
                                     <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>

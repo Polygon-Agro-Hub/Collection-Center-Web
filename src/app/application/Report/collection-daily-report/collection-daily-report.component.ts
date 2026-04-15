@@ -13,10 +13,16 @@ import { CustomDatepickerComponent } from '../../../components/custom-datepicker
 @Component({
   selector: 'app-collection-daily-report',
   standalone: true,
-  imports: [CommonModule, FormsModule, CanvasJSAngularChartsModule, LoadingSpinnerComponent, CustomDatepickerComponent],
+  imports: [
+    CommonModule,
+    FormsModule,
+    CanvasJSAngularChartsModule,
+    LoadingSpinnerComponent,
+    CustomDatepickerComponent,
+  ],
   templateUrl: './collection-daily-report.component.html',
   styleUrl: './collection-daily-report.component.css',
-  providers: [DatePipe]
+  providers: [DatePipe],
 })
 export class CollectionDailyReportComponent implements OnInit {
   dailyReportArr: DailyReport[] = [];
@@ -39,9 +45,9 @@ export class CollectionDailyReportComponent implements OnInit {
     private route: ActivatedRoute,
     private datePipe: DatePipe,
     private themeService: ThemeService,
-
-  ) { 
-    this.isDarkTheam = this.themeService.getActiveTheme() === 'dark' ? true : false;
+  ) {
+    this.isDarkTheam =
+      this.themeService.getActiveTheme() === 'dark' ? true : false;
   }
 
   ngOnInit(): void {
@@ -87,14 +93,13 @@ export class CollectionDailyReportComponent implements OnInit {
         this.isLoading = false;
       },
       (err) => {
-        console.error("Error fetching daily report:", err);
+        console.error('Error fetching daily report:', err);
         this.loadingTable = false;
         this.loadingChart = false;
         this.isLoading = false;
-      }
+      },
     );
   }
-
 
   navigateToReports() {
     this.router.navigate(['/reports']); // Change '/reports' to your desired route
@@ -116,7 +121,7 @@ export class CollectionDailyReportComponent implements OnInit {
     const gradeAData = this.dailyReportArr.map((crop) => ({
       label: crop.varietyNameEnglish,
       y: crop.gradeA || 0,
-      color: "#2B88D9",
+      color: '#2B88D9',
     }));
 
     console.log(gradeAData);
@@ -124,26 +129,26 @@ export class CollectionDailyReportComponent implements OnInit {
     const gradeBData = this.dailyReportArr.map((crop) => ({
       label: crop.varietyNameEnglish,
       y: crop.gradeB || 0,
-      color: "#79BAF2",
+      color: '#79BAF2',
     }));
 
     const gradeCData = this.dailyReportArr.map((crop) => ({
       label: crop.varietyNameEnglish,
       y: crop.gradeC || 0,
-      color: "#A7D5F2",
+      color: '#A7D5F2',
     }));
 
     // Set colors based on theme
-    const backgroundColor = this.isDarkTheam ? "#1F2937" : "#FFFFFF";
-    const textColor = this.isDarkTheam ? "#FFFFFF" : "#000000";
-    const gridColor = this.isDarkTheam ? "#374151" : "#E5E7EB";
+    const backgroundColor = this.isDarkTheam ? '#1F2937' : '#FFFFFF';
+    const textColor = this.isDarkTheam ? '#FFFFFF' : '#000000';
+    const gridColor = this.isDarkTheam ? '#374151' : '#E5E7EB';
 
     this.chartOptions = {
       animationEnabled: true,
-      theme: this.isDarkTheam ? "dark2" : "light2", // Use appropriate theme
+      theme: this.isDarkTheam ? 'dark2' : 'light2', // Use appropriate theme
       backgroundColor: backgroundColor, // Set background color
       axisX: {
-        title: "Crop Variety",
+        title: 'Crop Variety',
         titleFontColor: textColor,
         labelFontColor: textColor,
         lineColor: gridColor,
@@ -151,54 +156,60 @@ export class CollectionDailyReportComponent implements OnInit {
         reversed: true,
       },
       axisY: {
-        title: "kg",
-        titleFontColor: textColor,
-        labelFontColor: textColor,
-        lineColor: gridColor,
-        tickColor: gridColor,
-        gridColor: gridColor,
-        includeZero: true,
-      },
+    title: "kg",
+    titleFontColor: textColor,
+    labelFontColor: textColor,
+    lineColor: gridColor,
+    tickColor: gridColor,
+    gridColor: gridColor,
+    includeZero: true,
+    margin: 15,   // <-- adds space between axisY and the data/legend area
+},
       legend: {
-        cursor: "pointer",
-        fontColor: textColor, // Legend text color
+        cursor: 'pointer',
+        fontColor: textColor,
+        markerMargin: 10, // space between marker and label
+        verticalAlign: 'bottom', // move legend below the chart
+        horizontalAlign: 'center',
+        margin: 20, // space around the legend block
         itemclick: (e: any) => {
-          e.dataSeries.visible = typeof e.dataSeries.visible === "undefined" || e.dataSeries.visible;
+          e.dataSeries.visible =
+            typeof e.dataSeries.visible === 'undefined' || e.dataSeries.visible;
           e.chart.render();
         },
       },
       toolTip: {
         shared: true,
-        backgroundColor: this.isDarkTheam ? "#374151" : "#FFFFFF",
+        backgroundColor: this.isDarkTheam ? '#374151' : '#FFFFFF',
         fontColor: textColor,
-        borderColor: gridColor
+        borderColor: gridColor,
       },
       data: [
         {
-          type: "stackedBar",
-          name: "Grade A",
+          type: 'stackedBar',
+          name: 'Grade A',
           showInLegend: true,
-          legendMarkerColor: "#2B88D9",
+          legendMarkerColor: '#2B88D9',
           dataPoints: gradeAData,
-          cursor: "pointer",
+          cursor: 'pointer',
         },
         {
-          type: "stackedBar",
-          name: "Grade B",
+          type: 'stackedBar',
+          name: 'Grade B',
           showInLegend: true,
-          legendMarkerColor: "#79BAF2",
+          legendMarkerColor: '#79BAF2',
           dataPoints: gradeBData,
-          cursor: "pointer",
+          cursor: 'pointer',
         },
         {
-          type: "stackedBar",
-          name: "Grade C",
+          type: 'stackedBar',
+          name: 'Grade C',
           showInLegend: true,
-          legendMarkerColor: "#A7D5F2",
+          legendMarkerColor: '#A7D5F2',
           dataPoints: gradeCData,
-          cursor: "pointer",
+          cursor: 'pointer',
         },
-      ]
+      ],
     };
 
     this.loadingChart = false;
@@ -217,7 +228,9 @@ export class CollectionDailyReportComponent implements OnInit {
 
     // Capture the chart as an image with reduced size
     try {
-      const chartElement = document.querySelector('canvasjs-chart') as HTMLElement;
+      const chartElement = document.querySelector(
+        'canvasjs-chart',
+      ) as HTMLElement;
       if (chartElement) {
         // Reduce the scale to make the captured image smaller
         const scale = 0.7; // Adjust this value (0.5-1.0) to change size
@@ -232,7 +245,7 @@ export class CollectionDailyReportComponent implements OnInit {
 
         // Set reduced dimensions for the PDF image
         const pdfImageWidth = 150; // mm (reduced from 180)
-        const imgHeight = canvas.height * pdfImageWidth / canvas.width;
+        const imgHeight = (canvas.height * pdfImageWidth) / canvas.width;
 
         // Add chart image to PDF
         doc.addImage(imgData, 'PNG', 15, 40, pdfImageWidth, imgHeight);
@@ -290,9 +303,6 @@ export class CollectionDailyReportComponent implements OnInit {
       currentY += rowHeight;
     });
   }
-
-
-
 }
 
 class DailyReport {

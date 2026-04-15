@@ -1585,6 +1585,7 @@ class ManagerDetails {
 
 class Center {
   id!: number
+  regCode!: string
   centerName!: string
 }
 

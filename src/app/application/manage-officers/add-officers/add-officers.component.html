@@ -212,7 +212,7 @@
                               <div *ngFor="let item of filteredManagerArr"
                                    class="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-textDark cursor-pointer"
                                    (click)="selectManager(item)">
-                                {{ item.firstNameEnglish }} {{item.lastNameEnglish}}
+                                {{item.empId}} - {{ item.firstNameEnglish }} {{item.lastNameEnglish}}
                               </div>
                             </div>
                           </div>

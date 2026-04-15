@@ -1590,6 +1590,7 @@ class Center {
 
 class Manager {
   id!: number;
+  empId!: string;
   firstNameEnglish!: string;
   lastNameEnglish!: string;
 }

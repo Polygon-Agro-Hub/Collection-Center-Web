@@ -56,7 +56,7 @@
                     <th class="px-5 py-3 text-left  font-medium">First Name</th>
                     <th class="px-5 py-3 text-left  font-medium">Last Name</th>
                     <th class="px-5 py-3 text-left  font-medium" *ngIf="logingRole === 'Collection Centre Head'">Centre</th>
-                    <th class="px-5 py-3 text-left  font-medium">Monthly Report</th>
+                    <th class="px-5 py-3 text-center  font-medium">Monthly Report</th>
                     <th class="px-5 py-3 text-left  font-medium">Daily Report</th>
                     <th class="px-5 py-3 text-left  font-medium">Farmers</th>
                 </tr>
@@ -76,7 +76,7 @@
                     <td class="px-5 py-4  text-gray-900 dark:text-gray-300">{{item.lastNameEnglish}}</td>
                     <td class="px-5 py-4  text-gray-900 dark:text-gray-300" *ngIf="logingRole === 'Collection Centre Head'">{{item.centerName}}</td>
                     
-                    <td class="px-5  py-4  text-gray-900 dark:text-gray-300">
+                    <td class="flex justify-center px-5  py-4  text-gray-900 dark:text-gray-300">
                         <button class="flex items-center justify-center text-[#415CFF] hover:text-gray-600 w-10 h-10"
                             (click)="viewmonthlyReport(item.id)">
                             <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>

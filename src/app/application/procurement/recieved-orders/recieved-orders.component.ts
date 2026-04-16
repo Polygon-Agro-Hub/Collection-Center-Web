@@ -90,9 +90,9 @@ export class RecievedOrdersComponent {
     this.isLoading = true;
 
     // Reset to page 1 when searching or filtering
-    if (this.search || this.filterType) {
-      page = 1;
-    }
+    // if (this.search || this.filterType) {
+    //   page = 1;
+    // }
 
     this.procumentService
       .getRecievedOrdersQuantity(page, limit, this.filterType, this.date, this.search)
@@ -138,6 +138,7 @@ export class RecievedOrdersComponent {
     this.date = '';
     this.selectedFilterType = null;
     this.filterApplied = false;
+    this.displayDate = '';
     this.page = 1; // Reset to first page when clearing filter
     this.fetchAllPurchaseReport();
   }

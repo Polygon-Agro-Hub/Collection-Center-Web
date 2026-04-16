@@ -6,9 +6,9 @@
         <p class="text-xl font-bold ml-10 text-right dark:text-white text-[#030308]">{{centerDetails.regCode}}
             {{centerDetails.centerName}}</p>
         <div class="flex flex-row items-center gap-5 ">
-            <i class="fa-solid fa-list text-2xl dark:text-white ml-8"></i>
+            <i class="fa-solid fa-list text-xl dark:text-white ml-8"></i>
 
-            <p class="font-normal dark:text-white">Filter By</p>
+            <p class="font-normal text-[#4A4A4A] dark:text-white">Filter By</p>
 
             <div class="w-28">
                 <app-custom-datepicker
@@ -124,16 +124,17 @@
         </div>
 
         <div *ngIf="isNew && isDateValid" class="flex flex-row justify-center items-center my-7 gap-8">
-            <button class="bg-[#FFFFFF] text-[#6B7D8C] border-[2px] border-[#95A1AC] rounded-lg px-5 py-2"
-                (click)="onCancel()">
-                Cancel
-            </button>
-            <button class="rounded-lg px-7 py-2"
-                [ngClass]="isFormValid ? 'bg-[hsl(231,100%,63%)] text-[#FFFFFF]' : 'bg-[#95A1AC] text-[#6B7D8C]'"
-                (click)="isFormValid && onSubmit()">
-                Save
-            </button>
-        </div>
+        <div *ngIf="isNew && isDateValid" class="flex flex-row justify-center items-center my-7 gap-8">
+    <button class="w-32 bg-[#FFFFFF] text-[#6B7D8C] border-[1px] border-[#95A1AC] rounded-lg px-7 py-2"
+        (click)="onCancel()">
+        Cancel
+    </button>
+    <button class="w-32 rounded-lg px-7 py-2"
+        [ngClass]="isFormValid ? 'bg-[hsl(231,100%,63%)] text-[#FFFFFF]' : 'bg-[#95A1AC] text-[#6B7D8C]'"
+        (click)="isFormValid && onSubmit()">
+        Save
+    </button>
+</div>
 
     </div>
 

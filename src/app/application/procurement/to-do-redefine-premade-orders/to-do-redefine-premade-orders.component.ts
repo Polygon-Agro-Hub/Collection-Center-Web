@@ -127,8 +127,8 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.recalculatePackageTotal();
-    console.log('Component initialized');
+    // this.recalculatePackageTotal();
+    console.log('is wothing limi', this.isWithinLimit);
     this.route.queryParamMap.subscribe((params) => {
       const id = params.get('id');
       console.log('Query parameter ID:', id);
@@ -241,6 +241,7 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
 
         console.log('Total Define Package Price (discounted):', this.totalDefinePkgPrice);
         console.log('Total Package Price (original from OrderDetails):', this.totalPackagePrice);
+        this.calculateTotalPrice();
 
         this.loading = false;
         this.isLoading = false;
@@ -309,8 +310,11 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
 
 
   recalculatePackageTotal(): void {
+    console.log('recalculating')
     this.totalDefinePkgPrice = 0.00;
     this.totalPackagePrice = 0.00;
+
+    console.log('orderdetailsArr', this.orderdetailsArr)
 
     this.orderdetailsArr.forEach((pkg: OrderDetails) => {
       // Sum up the definePkgPrice using item prices
@@ -708,6 +712,7 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.clearForm();
+        // this.recalculatePackageTotal();
       }
     });
   }
@@ -739,8 +744,6 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
   }
 
   clearForm() {
-    // Implement your clear logic here
-    // For now, just calling ngOnInit as in your original code
     this.ngOnInit();
   }
 

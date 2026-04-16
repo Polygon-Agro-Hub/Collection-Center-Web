@@ -408,7 +408,7 @@ export class FarmerReportInvoiceComponent implements OnInit {
     }
     doc.setTextColor('#000000');
     doc.setFontSize(12);
-    doc.text('Farmer Qr Code', farmerQrX + 6, labelY);
+    doc.text('Farmer’s QR Code', farmerQrX + 3, labelY);
 
     // Add officer QR code
     if (officerQrImagebase64) {
@@ -421,7 +421,7 @@ export class FarmerReportInvoiceComponent implements OnInit {
     }
     doc.setTextColor('#000000');
     doc.setFontSize(12);
-    doc.text('Officer Qr Code', officerQrX + 6, labelY);
+    doc.text('Officer’s QR Code', officerQrX + 3, labelY);
 
     // Save the PDF
     doc.save(`Invoice_${this.userObj.invNo}.pdf`);

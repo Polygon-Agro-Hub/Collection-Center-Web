@@ -1585,11 +1585,13 @@ class ManagerDetails {
 
 class Center {
   id!: number
+  regCode!: string
   centerName!: string
 }
 
 class Manager {
   id!: number;
+  empId!: string;
   firstNameEnglish!: string;
   lastNameEnglish!: string;
 }

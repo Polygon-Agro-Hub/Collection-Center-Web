@@ -30,6 +30,10 @@ export class RedefineOrdersComponent implements OnInit {
 
   }
 
+  onSwitchToOutForDelivery() {
+    this.selectSentToDispatch();
+  }
+
   selectToDo() {
     this.isSelectToDo = true;
     this.isSelectSentToDispatch = false;

@@ -20,7 +20,7 @@
         </div>
 
         
-        <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+        <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929] mr-5">
             <input type="text" placeholder="Search by EMP ID, First / Last name" [(ngModel)]="searchText" (keyup.enter)="onSearch()" (keyup.esc)="offSearch()" (input)="checkLeadingSpace()"
                 class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
             <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
@@ -56,9 +56,9 @@
                     <th class="px-5 py-3 text-left  font-medium">First Name</th>
                     <th class="px-5 py-3 text-left  font-medium">Last Name</th>
                     <th class="px-5 py-3 text-left  font-medium" *ngIf="logingRole === 'Collection Centre Head'">Centre</th>
-                    <th class="px-5 py-3 text-left  font-medium">Monthly Report</th>
-                    <th class="px-5 py-3 text-left  font-medium">Daily Report</th>
-                    <th class="px-5 py-3 text-left  font-medium">Farmers</th>
+                    <th class="px-5 py-3 text-center  font-medium">Monthly Report</th>
+                    <th class="px-5 py-3 text-center  font-medium">Daily Report</th>
+                    <th class="px-5 py-3 text-center  font-medium">Farmers</th>
                 </tr>
             </thead>
             <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
@@ -76,24 +76,29 @@
                     <td class="px-5 py-4  text-gray-900 dark:text-gray-300">{{item.lastNameEnglish}}</td>
                     <td class="px-5 py-4  text-gray-900 dark:text-gray-300" *ngIf="logingRole === 'Collection Centre Head'">{{item.centerName}}</td>
                     
-                    <td class="px-5  py-4  text-gray-900 dark:text-gray-300">
-                        <button class="flex items-center justify-center text-[#415CFF] hover:text-gray-600 w-10 h-10"
-                            (click)="viewmonthlyReport(item.id)">
-                            <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>
-                        </button>
-                    </td>
-                    <td class="px-5 py-4  text-gray-900 dark:text-gray-300 "
-                        (click)="viewDailyReport(item.id, item.firstNameEnglish, item.lastNameEnglish, item.empId)">
-                        <button class="flex items-center justify-center text-[#415CFF] hover:text-blue-500 w-10 h-10">
-                            <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>
-                        </button>
-                    </td>
-                    <td class="px-5 py-4  text-gray-900 dark:text-gray-300">
-                        <button class="flex items-center justify-center text-[#415CFF] hover:text-blue-500 w-10 h-10"
-                            (click)="viewFarmerList(item.id,item.firstNameEnglish,item.lastNameEnglish)">
-                            <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>
-                        </button>
-                    </td>
+                    <!-- Monthly Report td -->
+<td class="px-5 py-4 text-center text-gray-900 dark:text-gray-300">
+    <button class="inline-flex items-center justify-center text-[#415CFF] hover:text-gray-600 w-10 h-10 mx-auto"
+        (click)="viewmonthlyReport(item.id)">
+        <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>
+    </button>
+</td>
+
+<!-- Daily Report td -->
+<td class="px-5 py-4 text-center text-gray-900 dark:text-gray-300">
+    <button class="inline-flex items-center justify-center text-[#415CFF] hover:text-gray-600 w-10 h-10 mx-auto"
+        (click)="viewDailyReport(item.id, item.firstNameEnglish, item.lastNameEnglish, item.empId)">
+        <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>
+    </button>
+</td>
+
+<!-- Farmers td -->
+<td class="px-5 py-4 text-center text-gray-900 dark:text-gray-300">
+    <button class="inline-flex items-center justify-center text-[#415CFF] hover:text-blue-500 w-10 h-10 mx-auto"
+        (click)="viewFarmerList(item.id, item.firstNameEnglish, item.lastNameEnglish)">
+        <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>
+    </button>
+</td>
 
                 </tr>
             </tbody>

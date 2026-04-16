@@ -123,9 +123,9 @@
                 <tr *ngFor="let item of selectedOfficerDataArr; let i = index">
                     <td class="px-2 py-4 text-gray-900 dark:text-gray-300">
                         {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }} </td>
-                    <td class="px-3 py-4 text-black font-normal dark:text-gray-300 text-left">{{item.cropNameEnglish}}
+                    <td class="px-3 py-4 text-black font-normal dark:text-gray-300 text-left whitespace-nowrap">{{item.cropNameEnglish}}
                     </td>
-                    <td class="px-3 py-4 text-black font-normal dark:text-gray-300 text-left">
+                    <td class="px-3 py-4 text-black font-normal dark:text-gray-300 text-left whitespace-nowrap">
                         {{item.varietyNameEnglish}}</td>
                     <td class="px-3 py-4 text-black font-normal dark:text-gray-300 text-center">{{item.grade}}</td>
                     <td class="px-5 py-4 text-black font-normal dark:text-gray-300 text-left">{{item.target}}</td>

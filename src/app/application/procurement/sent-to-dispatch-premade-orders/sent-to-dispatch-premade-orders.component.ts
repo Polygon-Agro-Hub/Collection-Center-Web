@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { ProcurementsService } from '../../../services/Procurement-service/procurements.service';
-
+import { Location } from '@angular/common';
 
 interface OrderDetailItem {
   packageId: number;
@@ -54,6 +54,9 @@ interface AdditionalItem {
   styleUrl: './sent-to-dispatch-premade-orders.component.css'
 })
 export class SentToDispatchPremadeOrdersComponent implements OnInit {
+
+  @Output() switchToOutForDelivery = new EventEmitter<void>();
+
   excludedItemsArr: ExcludeItems[] = [];
   orderDetails: OrderDetailItem[] = [];
   marketplaceItems: MarketplaceItem[] = [];
@@ -74,7 +77,8 @@ export class SentToDispatchPremadeOrdersComponent implements OnInit {
   constructor(
     private procurementService: ProcurementsService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) { }
 
   goBack() {
@@ -439,6 +443,11 @@ export class SentToDispatchPremadeOrdersComponent implements OnInit {
 
   navigateToProdurement() {
     this.router.navigate(['/procurement']);
+  }  
+
+  navigateToDispatch() {
+    this.switchToOutForDelivery.emit();
+    this.location.back();
   }
 }
 

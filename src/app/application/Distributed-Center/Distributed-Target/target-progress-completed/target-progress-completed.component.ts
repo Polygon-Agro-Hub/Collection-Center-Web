@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe, Location  } from '@angular/common';
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { DistributionServiceService } from '../../../../services/Distribution-Service/distribution-service.service'
@@ -17,6 +17,9 @@ import { CustomDatepickerComponent } from '../../../../components/custom-datepic
   styleUrl: './target-progress-completed.component.css'
 })
 export class TargetProgressCompletedComponent implements OnInit{
+
+  @Output() switchToOutForDelivery = new EventEmitter<void>();
+
   ordersArr!: orders[];
   searchText: string = '';
   selectStatus: string = '';
@@ -229,6 +232,7 @@ changeStatusAndTime(data: { orderIds: any[]; time: string }) {
        
         this.toastSrv.success(`${orderCount} ${orderLabel} been released to the next stage.`, 'Success');
         this.isOutForDelivery = false;
+        this.switchToOutForDelivery.emit();
       } else {
         this.toastSrv.error('Failed to sent out for delivery!', 'Error');
         this.isOutForDelivery = false;

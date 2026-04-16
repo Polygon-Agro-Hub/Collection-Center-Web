@@ -335,7 +335,7 @@ export class OfficerProfileComponent implements OnInit {
 
     doc.text("Address Details", 14, startY + 60);
 
-    doc.setFontSize(12);
+    doc.setFontSize(10);
     doc.setFont("Inter", "normal");
 
     // House / Plot Number

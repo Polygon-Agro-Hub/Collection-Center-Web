@@ -10,11 +10,11 @@
         <div class="flex flex-row items-center justify-between min-w-max max-w-[80vw] mx-auto">
             <div class="flex flex-col justify-between flex-shrink-0">
                 <p class="font-semibold md:text-lg lg:text-lg mb-1 dark:text-white whitespace-nowrap">Total Centres
-                    ({{countOfOfficers}})</p>
+                    ({{countOfOfficers | number:'2.0-0'}})</p>
             </div>
             <div class="flex flex-row items-center gap-8 flex-shrink-0">
                 <i class="fa-solid fa-list md:text-2xl lg:text-lg dark:text-white flex-shrink-0 ml-8"></i>
-                <p class="md:text-2xl lg:text-lg dark:text-white whitespace-nowrap flex-shrink-0">Filter By</p>
+                <p class="md:text-1xl lg:text-1xl text-[#4A4A4A] dark:text-white whitespace-nowrap flex-shrink-0">Filter By</p>
 
                 <div class="flex gap-4 flex-shrink-0">
                     <!-- Province Dropdown -->
@@ -69,7 +69,7 @@
         </div>
 
         <div class="flex flex-row mt-3 mb-0">
-            <button class="bg-[#415CFF] text-white font-semibold px-4 py-2 rounded-lg" (click)="addCenter()">Add a
+            <button class="bg-[#415CFF] text-white font-semibold px-4 py-2 rounded-lg shadow-xl" (click)="addCenter()">Add a
                 Centre</button>
         </div>
 
@@ -82,7 +82,7 @@
                         <th class="px-6 py-3 text-left font-normal w-32">Reg Code</th>
                         <th class="px-6 py-3 text-left font-normal w-48 whitespace-nowrap">Centre Name</th>
                         <th class="px-6 py-3 text-left font-normal w-28">Province</th>
-                        <th class="px-6 py-3 text-center font-normal w-28">District</th>
+                        <th class="px-6 py-3 text-left font-normal w-28">District</th>
                         <th class="px-6 py-3 text-left font-normal w-28">City</th>
                         <th class="px-6 py-3 text-left font-normal w-40">Contact Number -1</th>
                         <th class="px-6 py-3 text-center font-normal w-32">CCM Profiles</th>
@@ -99,7 +99,7 @@
                         <td class="px-6 py-3 font-medium text-left">{{ item.regCode }}</td>
                         <td class="px-6 py-3 font-medium text-left whitespace-nowrap">{{ item.centerName }}</td>
                         <td class="px-6 py-3 font-medium text-left">{{ item.province }}</td>
-                        <td class="px-6 py-3 font-medium text-center">{{ item.district }}</td>
+                        <td class="px-6 py-3 font-medium text-left">{{ item.district }}</td>
                         <td class="px-6 py-3 font-medium text-left">{{ item.city }}</td>
                         <td class="px-6 py-3 font-medium text-left">
                             <ng-container *ngIf="item.contact01; else noContact">

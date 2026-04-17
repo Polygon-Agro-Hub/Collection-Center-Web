@@ -12,17 +12,17 @@
 <div *ngIf="!isLoading" class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg ">
     <div class="flex flex-row items-center justify-between">
         <div class="flex flex-col justify-between gap-1">
-            <p class="font-semibold text-lg mb-1 dark:text-white">Current Active Target</p>
-            <p *ngIf="hasData" class="font-semibold text-lg mb-1 dark:text-white">EMP ID :
+            <p class="font-normal text-lg mb-1 dark:text-white">Current Active Target</p>
+            <p *ngIf="hasData" class="font-normal text-lg mb-1 dark:text-white">EMP ID :
                 {{selectedOfficerDataArr[0].empId}}</p>
                 <p class="font-semibold text-base mb-1 dark:text-white text-[#545454]">
                     Centre : {{ centerName ? centerName : 'N/A' }}
                   </p>
         </div>
         <div class="flex flex-row items-center gap-8 ">
-            <i class="fa-solid fa-list text-2xl dark:text-white"></i>
+            <i class="fa-solid fa-list text-xl dark:text-white"></i>
 
-            <p class="text-lg dark:text-white">Filter By</p>
+            <p class="text-md text-[#4A4A4A] dark:text-white">Filter By</p>
 
             <div class="relative w-40 custom-status-dropdown-container">
                 <!-- Hidden native select -->
@@ -102,20 +102,20 @@
     </div>
 
     <div *ngIf="hasData"
-        class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+        class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021] px-5">
         <table class="w-full divide-y-2 overflow-hidden">
             <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
                 <tr>
-                    <th class="px-2 py-3 text-left font-semibold">No</th>
-                    <th class="px-3 py-3 text-left font-semibold">Crop Name</th>
-                    <th class="px-3 py-3 text-left font-semibold">Variety Name</th>
-                    <th class="px-3 py-3 text-center font-semibold">Grade</th>
-                    <th class="px-3 py-3 text-left font-semibold">Target (kg)</th>
-                    <th class="px-3 py-3 text-left font-semibold">To Do (kg)</th>
-                    <th class="px-3 py-3 text-left font-semibold">Completed (kg)</th>
-                    <th class="px-3 py-3 text-center font-semibold">Status</th>
-                    <th class="px-3 py-3 text-left font-semibold">Ends At</th>
-                    <th class="px-3 py-3 text-left font-semibold" *ngIf="logingRole === 'Collection Centre Manager'">
+                    <th class="px-2 py-3 text-left font-normal whitespace-nowrap">No</th>
+                    <th class="px-3 py-3 text-left font-normal whitespace-nowrap">Crop Name</th>
+                    <th class="px-3 py-3 text-left font-normal whitespace-nowrap">Variety Name</th>
+                    <th class="px-3 py-3 text-center font-normal whitespace-nowrap">Grade</th>
+                    <th class="px-5 py-3 text-left font-normal whitespace-nowrap">Target (kg)</th>
+                    <th class="px-5 py-3 text-left font-normal whitespace-nowrap">To Do (kg)</th>
+                    <th class="px-5 py-3 text-left font-normal whitespace-nowrap">Completed (kg)</th>
+                    <th class="px-3 py-3 text-center font-normal whitespace-nowrap">Status</th>
+                    <th class="px-3 py-3 text-left font-normal whitespace-nowrap">Ends At</th>
+                    <th class="px-3 py-3 text-left font-normal whitespace-nowrap" *ngIf="logingRole === 'Collection Centre Manager'">
                     </th>
                 </tr>
             </thead>
@@ -123,14 +123,14 @@
                 <tr *ngFor="let item of selectedOfficerDataArr; let i = index">
                     <td class="px-2 py-4 text-gray-900 dark:text-gray-300">
                         {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }} </td>
-                    <td class="px-3 py-4 text-black font-semibold dark:text-gray-300 text-left">{{item.cropNameEnglish}}
+                    <td class="px-3 py-4 text-black font-normal dark:text-gray-300 text-left whitespace-nowrap">{{item.cropNameEnglish}}
                     </td>
-                    <td class="px-3 py-4 text-black font-semibold dark:text-gray-300 text-left">
+                    <td class="px-3 py-4 text-black font-normal dark:text-gray-300 text-left whitespace-nowrap">
                         {{item.varietyNameEnglish}}</td>
-                    <td class="px-3 py-4 text-black font-semibold dark:text-gray-300 text-center">{{item.grade}}</td>
-                    <td class="px-3 py-4 text-black font-semibold dark:text-gray-300 text-left">{{item.target}}</td>
-                    <td class="px-3 py-4 text-black font-semibold dark:text-gray-300 text-left">{{item.remaining}}</td>
-                    <td class="px-3 py-4 text-black font-semibold dark:text-gray-300 text-left">{{item.complete}}</td>
+                    <td class="px-3 py-4 text-black font-normal dark:text-gray-300 text-center">{{item.grade}}</td>
+                    <td class="px-5 py-4 text-black font-normal dark:text-gray-300 text-left">{{item.target}}</td>
+                    <td class="px-5 py-4 text-black font-normal dark:text-gray-300 text-left">{{item.remaining}}</td>
+                    <td class="px-5 py-4 text-black font-normal dark:text-gray-300 text-left">{{item.complete}}</td>
                     <td class="px-6 py-4 text-gray-[#000000] font-semibold dark:text-gray-300">
                         <div class="flex justify-center">
                           <span *ngIf="item.status === 'Pending'"

@@ -169,12 +169,12 @@ export class RecievedOrdersComponent {
   // 5. Add selection change handler
   onCategorySelectionChange(selectedValue: string) {
     this.filterType = selectedValue || '';
-  
+
     // Find the matching filter type object
     this.selectedFilterType = this.filterTypes.find(
       filter => filter.value === selectedValue
     ) || null;
-  
+
     console.log('Category selected:', selectedValue, this.selectedFilterType);
   }
 
@@ -406,13 +406,17 @@ export class RecievedOrdersComponent {
 
     let finalFileName = fileName;
     if (this.filterType) {
-      finalFileName += `_${this.filterType}`;
+      const matched = this.filterTypes.find(f => f.value === this.filterType);
+      if (matched) {
+        finalFileName += `_${matched.display.replace(/\s+/g, '_')}`;
+      }
     }
+
     if (this.date) {
       finalFileName += `_${this.date}`;
     }
     if (this.search) {
-      finalFileName += `_search_${this.search.substring(0, 10)}`;
+      finalFileName += `_Search_${this.search.substring(0, 10)}`;
     }
     finalFileName += '.xlsx';
 
@@ -445,14 +449,14 @@ export class RecievedOrdersComponent {
   }
 
   onDateChange(newDate: string | Date | null) {
-    this.displayDate =  newDate
+    this.displayDate = newDate
     let convertedDate: Date | null = null;
-  
+
     if (newDate) {
       convertedDate = typeof newDate === 'string' ? new Date(newDate) : newDate;
     }
-  
+
     this.dateTemp = convertedDate;
   }
-  
+
 }

@@ -447,8 +447,12 @@ export class SentToDispatchPremadeOrdersComponent implements OnInit {
 
   navigateToDispatch() {
     this.switchToOutForDelivery.emit();
-    this.location.back();
+    const route = 'dispatch'
+    this.router.navigate(['/procurement/redefine-orders'], {
+      queryParams: { route },
+    });
   }
+    
 }
 
 class ExcludeItems {

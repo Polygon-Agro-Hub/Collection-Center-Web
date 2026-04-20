@@ -314,10 +314,11 @@ const approveButton = (item.status === 'Rejected' || item.status === 'Not Approv
     this.getAllOfficers(this.centerId, this.page, this.itemsPerPage, this.selectRole, this.selectStatus, this.searchText)
   }
 
-  onPageChange(event: number) {
-    this.page = event;
-    this.getAllOfficers(this.page, this.itemsPerPage);
-  }
+
+onPageChange(event: number) {
+  this.page = event;
+  this.getAllOfficers(this.centerId, this.page, this.itemsPerPage, this.selectRole, this.selectStatus, this.searchText);
+}
 
   navigateToCenters() {
     this.router.navigate(['/centers']); // Change '/reports' to your desired route

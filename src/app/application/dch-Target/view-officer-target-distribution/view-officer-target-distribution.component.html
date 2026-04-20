@@ -12,7 +12,7 @@
     <div class="w-full px-10 py-7 bg-tileLight min-h-screen dark:bg-[#363636] shadow-lg rounded-lg overflow-x-auto">
 
         <div *ngIf="hasData" class="flex justify-between flex-row  mb-2">
-            <p class="text-lg font-semibold dark:text-white whitespace-nowrap">
+            <p class="text-lg text-[#030308] font-[500] dark:text-white whitespace-nowrap">
                 Current Active Target
             </p>
             <button
@@ -26,7 +26,7 @@
 
     <div class="flex flex-row items-center justify-between gap-4">
         <div>
-            <p class="text-lg font-semibold dark:text-white whitespace-nowrap">
+            <p class="text-lg font-[500] text-[#030308] dark:text-white whitespace-nowrap">
                 EMP ID : {{ empId}}
             </p>
             <p class="dark:text-white whitespace-nowrap">
@@ -37,7 +37,7 @@
         
         <i class="fa-solid fa-list text-lg dark:text-white"></i>
 
-        <p class="text-[#4A4A4A ] dark:text-white">Filter By</p>
+        <p class="text-[#4A4A4A] dark:text-white">Filter By</p>
 
         <div class="w-36">
             <app-custom-datepicker
@@ -78,8 +78,8 @@
 
             <!-- Custom dropdown options -->
             <div *ngIf="isStatusDropdownOpen"
-                class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
-                <div class="py-1">
+                class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282] overflow-hidden">
+                <div class="">
                     <div *ngFor="let option of statusDropdownOptions" (click)="selectStatusOption(option)"
                         class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
                         <span class="flex-grow">{{ option }}</span>

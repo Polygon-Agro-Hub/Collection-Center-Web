@@ -32,8 +32,20 @@
         Job Role
       </label>
 
-      <input type="text" [(ngModel)]="selectJobRole" name="jobRole" id="jobRole" readonly
-      class="form-control mt-1 block w-full p-2  border border-gray-300 dark:border-gray-600 rounded-md text-[#534E4E] bg-gray-200 dark:text-textDark  dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500">
+            <app-searchable-dropdown
+              [items]="jobRoleItems"
+              placeholder=" --Select Job Role-- "
+              searchPlaceholder="Search Job Role..."
+              [(ngModel)]="selectJobRole"
+              (selectionChange)="onJobRoleSelectionChange($event)"
+              [clearable]="true"
+              [showSelected]="true"
+              [disabled]="false"
+              class="block w-full mb-4"
+            ></app-searchable-dropdown>
+
+      <!-- <input type="text" [(ngModel)]="selectJobRole" name="jobRole" id="jobRole" readonly
+      class="form-control mt-1 block w-full p-2  border border-gray-300 dark:border-gray-600 rounded-md text-[#534E4E] bg-gray-200 dark:text-textDark  dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500"> -->
 
     </div>
 
@@ -46,6 +58,7 @@
           <p *ngIf="selectJobRole === 'Collection Officer'">COO</p>
           <p *ngIf="selectJobRole === 'Customer Officer'">CUO</p>
           <p *ngIf="selectJobRole === 'Distribution Officer'">DIO</p>
+          <p *ngIf="selectJobRole === 'Driver'">DVR</p>
         </span>
         <input type="text" [(ngModel)]="inputId" name="inputId" placeholder="ex : 00001"
           class="rounded-none rounded-e-lg placeholder:text bg-gray-50 border border-gray-300 dark:border-gray-600 text-[#534E4E] focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full  pl-4 dark:text-textDark  dark:bg-[#1D1D1F] dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" />

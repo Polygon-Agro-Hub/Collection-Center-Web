@@ -7,11 +7,12 @@ import { ToastAlertService } from '../../../services/toast-alert/toast-alert.ser
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import Swal from 'sweetalert2';
 import { TokenServiceService } from '../../../services/Token/token-service.service';
+import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
 
 @Component({
   selector: 'app-claim-officer',
   standalone: true,
-  imports: [CommonModule, FormsModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent, SerchableDropdownComponent],
   templateUrl: './claim-officer.component.html',
   styleUrl: './claim-officer.component.css'
 })
@@ -26,6 +27,11 @@ export class ClaimOfficerComponent implements OnInit {
   showClaimView = false;
   logingRole: string | null = null;
   isReset: boolean = false;
+
+  jobRoleItems = [
+    {value: 'Distribution Officer', label: 'Distribution Officer'},
+    {value: 'Driver', label: 'Driver'}
+  ]
 
   constructor(
     private ManageOficerSrv: ManageOfficersService,
@@ -57,9 +63,13 @@ export class ClaimOfficerComponent implements OnInit {
       empId = 'CUO' + this.inputId
     } else if (this.selectJobRole === 'Collection Officer'){
       empId = 'COO' + this.inputId
-    } else {
+    } else if (this.selectJobRole === 'Distribution Officer') {
       empId = 'DIO' + this.inputId
+    } else {
+      empId = 'DRV' + this.inputId
     }
+
+    console.log('empId', empId)
 
     this.ManageOficerSrv.getOfficerByEmpId(empId).subscribe(
       (res) => {
@@ -68,6 +78,7 @@ export class ClaimOfficerComponent implements OnInit {
           this.isOfficerExist = true
           this.hasData = false
           this.isLoading = false;
+          this.selectJobRole = '';
         } else {
           this.isOfficerExist = false;
           this.hasData = true
@@ -75,6 +86,11 @@ export class ClaimOfficerComponent implements OnInit {
         }
       }
     )
+  }
+
+  onJobRoleSelectionChange(selectedValue: string) {
+    this.selectJobRole = selectedValue || '';
+    
   }
 
   toggleClaimView() {

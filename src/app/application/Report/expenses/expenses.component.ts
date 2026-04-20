@@ -53,6 +53,7 @@ export class ExpensesComponent implements OnInit {
 
   isCenterDropdownOpen = false;
   centerDropdownOptions = [];
+  grandTotal: number = 0;
 
   toggleCenterDropdown() {
     this.isCenterDropdownOpen = !this.isCenterDropdownOpen;
@@ -134,6 +135,7 @@ export class ExpensesComponent implements OnInit {
       (res) => {
         this.farmerPaymentsArr = res.items;
         this.totalItems = res.total;
+        this.grandTotal = res.grandTotal;
         this.hasData = res.items.length > 0;
         this.isLoading = false;
         this.calculateTotalPayments();

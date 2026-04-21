@@ -191,26 +191,48 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
     });
   }
 
-  // Prevent typing zero or negative values
 preventZeroAndNegative(event: KeyboardEvent) {
   const inputChar = event.key;
-  const currentValue = (event.target as HTMLInputElement).value;
-  
-  // Prevent typing '-' or '0' as first character
-  if ((inputChar === '-' || inputChar === '0') && currentValue === '') {
-      event.preventDefault();
-  }
-  
-  // Prevent typing '0' after existing '0' (like "00")
-  if (inputChar === '0' && currentValue === '0') {
-      event.preventDefault();
+
+  // Block minus sign entirely
+  if (inputChar === '-') {
+    event.preventDefault();
   }
 }
 
-// Validate the input value
 validatePassAmount() {
-  if (this.passAmount <= 0) {
-      this.passAmount = 1; // Reset to minimum valid value
+  const input = document.getElementById('passAmount') as HTMLInputElement;
+  const raw = input?.value ?? '';
+
+  // Block negative
+  if (this.passAmount < 0) {
+    this.passAmount = 0.1;
+    return;
+  }
+
+  // If it looks like "0", "00", "0.0", "0.00" etc. (all zeros, no non-zero digit)
+  const allZeros = /^0*\.?0*$/.test(raw) && raw !== '' && !raw.includes('e');
+  if (allZeros) {
+    this.passAmount = 0.1;
+  }
+}
+
+onBlurPassAmount() {
+  const input = document.getElementById('passAmount') as HTMLInputElement;
+  const raw = input?.value ?? '';
+
+  // On blur: if last digit makes it 0.00...0, force last digit to 1
+  // e.g. "0.000" → "0.001", "0.00" → "0.01", "0" → "0.1"
+  if (/^0\.0*$/.test(raw)) {
+    // Replace trailing zero with 1 → e.g. "0.00" → "0.01"
+    const fixed = raw.replace(/0$/, '1');
+    this.passAmount = parseFloat(fixed);
+    return;
+  }
+
+  // Catch any remaining <= 0 edge cases
+  if (!this.passAmount || this.passAmount <= 0) {
+    this.passAmount = 0.1;
   }
 }
 

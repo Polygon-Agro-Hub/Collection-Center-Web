@@ -144,8 +144,6 @@ export class OfficerProfileComponent implements OnInit {
     doc.setLineWidth(0.5);
     doc.roundedRect(imageboxX, imageboxY, imageboxWidth, imageboxHeight, 3, 3, "S");
 
-    doc.setFontSize(16);
-
     const personalboxX = 10;
     const personalboxY = startY - 6;
     const personalboxWidth = 190;
@@ -155,6 +153,7 @@ export class OfficerProfileComponent implements OnInit {
     doc.setLineWidth(0.5);
     doc.roundedRect(personalboxX, personalboxY, personalboxWidth, personalboxHeight, 3, 3, "S");
 
+    doc.setFontSize(14);
     doc.text("Personal Information", 14, startY);
 
     doc.setFontSize(12);
@@ -262,8 +261,6 @@ export class OfficerProfileComponent implements OnInit {
     }
 
     // Address Details Section
-    doc.setFontSize(16);
-
     const boxX = 10;
     const boxY = startY + 54;
     const boxWidth = 190;
@@ -274,6 +271,7 @@ export class OfficerProfileComponent implements OnInit {
     doc.setLineWidth(0.5);
     doc.roundedRect(boxX, boxY, boxWidth, boxHeight, 3, 3, "S");
 
+    doc.setFontSize(14);
     doc.text("Address Details", 14, startY + 60);
 
     doc.setFontSize(12);
@@ -297,8 +295,6 @@ export class OfficerProfileComponent implements OnInit {
     doc.text(getValueOrNA(this.officerObj.district), 100, startY + 108);
 
     // Bank Details Section
-    doc.setFontSize(16);
-
     const bankBoxX = 10;
     const bankBoxY = startY + 114;
     const bankBoxWidth = 190;
@@ -309,6 +305,7 @@ export class OfficerProfileComponent implements OnInit {
     doc.setLineWidth(0.5);
     doc.roundedRect(bankBoxX, bankBoxY, bankBoxWidth, bankBoxHeight, 3, 3, "S");
 
+    doc.setFontSize(14);
     doc.text("Bank Details", 14, startY + 120);
 
     doc.setFontSize(12);

@@ -33,8 +33,7 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
   hasData: boolean = false;
   isLoading:boolean = true;
   isStatusDropdownOpen = false;
-  flitered = false;
-  isTargetData = false;
+  isTarget: boolean = false;
   firstTime = true;
   statusDropdownOptions = ['Pending', 'Completed', 'Opened'];
 
@@ -69,7 +68,10 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
     this.empId = this.route.snapshot.params['empId']
     const today = new Date();
     this.selectedDate = today.toISOString().split('T')[0];
-    this.flitered = false;
+    // if ( this.selectStatus === '' ) {
+
+    // }
+
     this.fetchSelectedOfficerTargets();
   }
 
@@ -130,8 +132,9 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
         });
         
         this.hasData = this.ordersArr.length > 0;
-        this.isTargetData = this.flitered && this.hasData || !this.flitered && this.firstTime
-        console.log('isTargetData', this.isTargetData)
+        if (this.selectStatus === '' && this.hasData) {
+          this.isTarget = true;
+        } 
         this.isLoading = false;
       }
     );
@@ -151,6 +154,7 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
     }
   
     this.selectedDate = dateString;
+    this.isTarget = false;
     this.fetchSelectedOfficerTargets();
   }
   
@@ -168,15 +172,11 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
 
   onSearch() {
     this.searchText = this.searchText?.trim() || '';
-    this.flitered = true;
-    this.firstTime = false;
     this.fetchSelectedOfficerTargets();
   }
 
   offSearch() {
     this.searchText = '';
-    this.flitered = false;
-    this.firstTime = false;
     this.fetchSelectedOfficerTargets();
   }
 
@@ -222,8 +222,6 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
   }
 
   filterStatus() {
-    this.flitered = true;
-    this.firstTime = false;
     this.fetchSelectedOfficerTargets();
   }
 
@@ -232,8 +230,6 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
       event.stopPropagation(); // Prevent triggering the dropdown toggle
     }
     this.selectStatus = '';
-    this.flitered = false;
-    this.firstTime = false;
     this.fetchSelectedOfficerTargets();
   }
 

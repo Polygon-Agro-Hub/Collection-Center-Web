@@ -139,8 +139,8 @@
             <th class="px-6 py-3 text-left text-sm font-medium">Category</th>
             <th class="px-6 py-3 text-left text-sm font-medium">Description</th>
             <th class="px-6 py-3 text-left text-sm font-medium whitespace-nowrap">Submitted At</th>
-            <th class="px-6 py-3 text-left text-sm font-medium">Status</th>
-            <th class="px-6 py-3 text-left text-sm font-medium">Action</th>
+            <th class="px-6 py-3 text-center text-sm font-medium">Status</th>
+            <th class="px-6 py-3 text-center text-sm font-medium">Action</th>
         </tr>
     </thead>
     <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F] cursor-default">
@@ -178,7 +178,7 @@
             </td>
 
             <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300 text-left align-middle">
-                <div class="flex items-center justify-start">
+                <div class="flex items-center justify-center">
                     <span *ngIf="item.status === 'Opened'"
                         class="bg-[#C8E0FF] text-center text-[#415CFF] py-1 w-20 rounded-lg">
                         Opened
@@ -190,7 +190,7 @@
                 </div>
             </td>
 
-            <td class="px-6 py-4 text-left">
+            <td class="px-6 py-4 text-center">
                 <i class="fa-solid fa-file-circle-check text-lg"
                     [ngClass]="{'text-gray-200 cursor-not-allowed': item.reply === null,
                     'text-[#415CFF] cursor-pointer': item.reply !== null}"

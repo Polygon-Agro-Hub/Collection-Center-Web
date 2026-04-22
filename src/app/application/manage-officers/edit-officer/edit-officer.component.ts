@@ -490,7 +490,7 @@ export class EditOfficerComponent implements OnInit {
     const file: File = event.target.files[0];
 
     if (file) {
-      if (file.size > 3000000) {
+      if (file.size > 3 * 1024 * 1024) {
         this.toastSrv.error('File size should not exceed 3MB');
         return;
       }

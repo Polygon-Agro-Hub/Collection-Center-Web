@@ -2,7 +2,7 @@
 
 <div *ngIf="!isLoading">
     <div class="flex flex-row pt-0 mb-7 gap-5 cursor-pointer">
-        <p class="font-semibold text-[#424242] dark:text-white" onclick="history.back()">Officer Targets</p>
+        <p class="font-semibold text-[#424242] dark:text-white" (click)="back()">Officer Targets</p>
         <p class="font-semibold text-[#424242] dark:text-white">Edit Officer Targets</p>
     </div>
 
@@ -51,10 +51,20 @@
                 <label for="passAmount" class="block text-sm font-semibold text-[#534E4E] dark:text-textDark">
                     The Amount (kg) :
                 </label>
-                <input id="passAmount" name="passAmount" type="number" [(ngModel)]="passAmount" min="0.001" step="any"
-                    (keydown)="preventZeroAndNegative($event)" (input)="validatePassAmount()"
+                <input #passAmountRef="ngModel" id="passAmount" name="passAmount" type="number" [(ngModel)]="passAmount"
+                    min="0.001" step="any" (keydown)="preventZeroAndNegative($event)" (input)="validatePassAmount()"
                     (blur)="onBlurPassAmount()"
                     class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
+
+                <div *ngIf="passAmountRef.invalid && passAmountRef.touched" class="text-red-500 text-sm mt-1">
+                    <span *ngIf="passAmountRef.errors?.['required']">
+                        Amount is required.
+                    </span>
+
+                    <span *ngIf="passAmountRef.errors?.['min'] || passAmount <= 0">
+                        Amount must be greater than 0.
+                    </span>
+                </div>
             </div>
         </div>
 

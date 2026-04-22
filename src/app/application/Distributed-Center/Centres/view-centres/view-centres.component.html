@@ -14,20 +14,20 @@
                     Centres
                     ({{countOfOfficers < 10 ? '0'+ countOfOfficers : countOfOfficers }})</p>
             </div>
-            <div class="flex flex-row items-center gap-5 flex-shrink-0">
+            <div class="flex flex-row items-center gap-4 flex-shrink-0">
                 <i class="fa-solid fa-list text-lg dark:text-white flex-shrink-0 ml-5"></i>
-                <p class="text-[#4A4A4A] dark:text-white whitespace-nowrap flex-shrink-0">Filter By</p>
+                <p class="text-[#4A4A4A] dark:text-white whitespace-nowrap flex-shrink-0 mr-1">Filter By</p>
 
                 <div class="flex gap-4 flex-shrink-0">
 
 
-                    <div class="relative w-44 rounded-lg flex-shrink-0">
+                    <div class="relative w-44 rounded-lg flex-shrink-0 mr-1">
                         <app-searchable-dropdown id="province" name="province" [items]="provinceItems"
                             [placeholder]="'Province'" [searchPlaceholder]="'Search...'" [(ngModel)]="selectProvince"
                             #provinceInput="ngModel" (ngModelChange)="filterProvince($event)"></app-searchable-dropdown>
                     </div>
 
-                    <div class="relative w-44 rounderd-lg flex-shrink-0">
+                    <div class="relative w-44 rounderd-lg flex-shrink-0 mr-1">
                         <app-searchable-dropdown id="district" name="district" [items]="districtItems"
                             [placeholder]="'District'" [searchPlaceholder]="'Search...'" [(ngModel)]="selectDistrict"
                             #districtInput="ngModel" (ngModelChange)="filterDistrict($event)"></app-searchable-dropdown>

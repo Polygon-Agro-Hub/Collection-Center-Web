@@ -21,7 +21,7 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
   filteredOfficers: Officers[] = [];
 
   targetItemId!: number;
-  toDate! :string;
+  toDate!: string;
   fromDate!: string;
 
   passAmount: number = 0.00;
@@ -32,6 +32,8 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
   officer1: string = '';
 
   isLoading: boolean = true;
+
+  officerId!: string;
 
 
   constructor(
@@ -45,7 +47,13 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
     this.targetItemId = this.route.snapshot.params['id'];
     this.toDate = this.route.snapshot.params['toDate'];
     this.fromDate = this.route.snapshot.params['fromDate'];
-  
+
+    this.route.queryParams.subscribe(params => {
+      this.officerId = params['officerId'];
+
+      console.log('officerId', this.officerId)
+    });
+
     this.fetchTargetDetalis();
   }
 
@@ -84,7 +92,7 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
 
   // onOfficerSelectionChange(selectedValue: string) {
   //   this.selectedOfficerId = selectedValue ? Number(selectedValue) : null;
-  
+
   //   console.log('Officer selected:', this.selectedOfficerId);
   //   console.log('officer', this.officer1);
   // }
@@ -108,11 +116,19 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
   }
 
   onSubmit() {
-    this.isLoading = true;
+    // this.isLoading = true;
+
+    console.log('passAmount', this.passAmount)
 
     if (!this.selectedOfficerId) {
       this.isLoading = false;
       this.toastSrv.warning('Please fill all fields!')
+      return;
+    }
+
+    if (!this.passAmount || this.passAmount <= 0) {
+      this.isLoading = false;
+      this.toastSrv.warning('Amount must be greater than 0.');
       return;
     }
 
@@ -130,7 +146,9 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
           this.toastSrv.success("Successfully changed the Target Amount");
           this.isLoading = false;
           this.fetchTargetDetalis()
-          this.router.navigate(['/officer-target'])
+          this.router.navigate(['/officer-target'], {
+            queryParams: { id: this.targetItemId, toDate: this.toDate, fromDate: this.fromDate, officerId: this.officerId },
+          });
         } else {
           this.isLoading = false;
           this.toastSrv.error(res.message);
@@ -138,6 +156,12 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
       }
     )
 
+  }
+
+  back() {
+    this.router.navigate(['/officer-target'], {
+      queryParams: { id: this.targetItemId, toDate: this.toDate, fromDate: this.fromDate, officerId: this.officerId },
+    });
   }
 
   formatDate(dateString: string | Date): string {
@@ -191,50 +215,50 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
     });
   }
 
-preventZeroAndNegative(event: KeyboardEvent) {
-  const inputChar = event.key;
+  preventZeroAndNegative(event: KeyboardEvent) {
+    const inputChar = event.key;
 
-  // Block minus sign entirely
-  if (inputChar === '-') {
-    event.preventDefault();
-  }
-}
-
-validatePassAmount() {
-  const input = document.getElementById('passAmount') as HTMLInputElement;
-  const raw = input?.value ?? '';
-
-  // Block negative
-  if (this.passAmount < 0) {
-    this.passAmount = 0.1;
-    return;
+    // Block minus sign entirely
+    if (inputChar === '-') {
+      event.preventDefault();
+    }
   }
 
-  // If it looks like "0", "00", "0.0", "0.00" etc. (all zeros, no non-zero digit)
-  const allZeros = /^0*\.?0*$/.test(raw) && raw !== '' && !raw.includes('e');
-  if (allZeros) {
-    this.passAmount = 0.1;
-  }
-}
+  validatePassAmount() {
+    const input = document.getElementById('passAmount') as HTMLInputElement;
+    const raw = input?.value ?? '';
 
-onBlurPassAmount() {
-  const input = document.getElementById('passAmount') as HTMLInputElement;
-  const raw = input?.value ?? '';
+    // Block negative
+    if (this.passAmount < 0) {
+      this.passAmount = 0.1;
+      return;
+    }
 
-  // On blur: if last digit makes it 0.00...0, force last digit to 1
-  // e.g. "0.000" → "0.001", "0.00" → "0.01", "0" → "0.1"
-  if (/^0\.0*$/.test(raw)) {
-    // Replace trailing zero with 1 → e.g. "0.00" → "0.01"
-    const fixed = raw.replace(/0$/, '1');
-    this.passAmount = parseFloat(fixed);
-    return;
+    // If it looks like "0", "00", "0.0", "0.00" etc. (all zeros, no non-zero digit)
+    const allZeros = /^0*\.?0*$/.test(raw) && raw !== '' && !raw.includes('e');
+    if (allZeros) {
+      this.passAmount = 0.1;
+    }
   }
 
-  // Catch any remaining <= 0 edge cases
-  if (!this.passAmount || this.passAmount <= 0) {
-    this.passAmount = 0.1;
+  onBlurPassAmount() {
+    const input = document.getElementById('passAmount') as HTMLInputElement;
+    const raw = input?.value ?? '';
+
+    // On blur: if last digit makes it 0.00...0, force last digit to 1
+    // e.g. "0.000" → "0.001", "0.00" → "0.01", "0" → "0.1"
+    if (/^0\.0*$/.test(raw)) {
+      // Replace trailing zero with 1 → e.g. "0.00" → "0.01"
+      const fixed = raw.replace(/0$/, '1');
+      this.passAmount = parseFloat(fixed);
+      return;
+    }
+
+    // Catch any remaining <= 0 edge cases
+    if (!this.passAmount || this.passAmount <= 0) {
+      this.passAmount = 0.1;
+    }
   }
-}
 
 }
 

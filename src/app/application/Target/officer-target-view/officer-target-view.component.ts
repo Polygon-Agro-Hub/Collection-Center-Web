@@ -43,6 +43,11 @@ export class OfficerTargetViewComponent {
   isStatusDropdownOpen = false;
 isValidityDropdownOpen = false;
 
+targetItemId!: number;
+toDate!: string;
+fromDate!: string;
+officerId!: string;
+
 statusDropdownOptions = ['Pending', 'Completed', 'Exceeded', 'Extra'];
 validityDropdownOptions = ['Expired', 'Active', 'Unassigned'];
 
@@ -95,9 +100,24 @@ clearValidityFilter(event: Event) {
   this.applyValidityFilters();
 }
 
-  onInit(): void {
-    this.onSubmit()
-  }
+ngOnInit(): void {
+  this.route.queryParams.subscribe(params => {
+    this.targetItemId = params['id'];
+    this.toDate = params['toDate'];
+    this.fromDate = params['fromDate'];
+    this.officerId = params['officerId'];
+
+    if (this.officerId) {
+        this.OfficerObj.officerId = this.officerId
+        this.OfficerObj.fromDate = this.fromDate
+        this.OfficerObj.toDate = this.toDate
+        this.onSubmit();
+    }
+
+    // Now you can safely call onSubmit if needed
+    // this.onSubmit();
+  });
+}
 
   fetchAllOfficers(page: number = this.page, limit: number = this.itemsPerPage, status: string = this.selectStatus, validity: string = this.selectValidity, searchText: string = this.searchText) {
     this.isLoading = true;
@@ -136,6 +156,9 @@ clearValidityFilter(event: Event) {
     console.log(this.hasData);
     this.isLoading = true
 
+    // this.OfficerObj.officerId = this.
+    // this.OfficerObj.fromDate = this.fromDate
+    // this.OfficerObj.toDate = this.toDate
     console.log('from', this.OfficerObj.fromDate, 'to', this.OfficerObj.toDate)
     if (!this.OfficerObj.jobRole || !this.OfficerObj.officerId || !this.OfficerObj.fromDate || !this.OfficerObj.toDate) {
       this.responseTitle = 'Fill input fields first'
@@ -235,8 +258,12 @@ clearValidityFilter(event: Event) {
     }
   }
 
-  editOfficerTarget(id: number, toDate: string, fromDate: string) {
-    this.router.navigate(['/officer-target/edit-officer-target', id, toDate, fromDate]);
+  editOfficerTarget(id: number, toDate: string, fromDate: string, officerId: string) {
+    this.router.navigate(['/officer-target/edit-officer-target', id, toDate, fromDate],
+      {
+        queryParams: {officerId: officerId}
+      }
+    );
   }
 
   applyStatusFilters() {

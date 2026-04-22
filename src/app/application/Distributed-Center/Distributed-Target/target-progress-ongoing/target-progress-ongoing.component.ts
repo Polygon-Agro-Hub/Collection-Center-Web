@@ -235,6 +235,7 @@ export class TargetProgressOngoingComponent implements OnInit {
     const day = selectedDateObj.getDate();
     const month = selectedDateObj.toLocaleString('en-GB', { month: 'long' });
     const year = selectedDateObj.getFullYear();
+    const monthNumber = String(selectedDateObj.getMonth() + 1).padStart(2, '0');
     
     const dateStr = `${String(day).padStart(2, '0')}${getOrdinal(day)} ${month} ${year}`;
     
@@ -256,9 +257,9 @@ export class TargetProgressOngoingComponent implements OnInit {
           const a = document.createElement("a");
           a.href = url;
           if (this.selectStatus) {
-            a.download = `${this.centerName} All Orders on ${dateStr} filtered by ${this.selectStatus} Generated at ${day}/${month}/${year} ${timeStr}.xlsx`;
+            a.download = `${this.centerName} All Orders on ${dateStr} filtered by ${this.selectStatus} Generated at ${day}/${monthNumber}/${year} ${timeStr}.xlsx`;
           } else {
-            a.download = `${this.centerName} All Orders on ${dateStr}  Generated at ${day}/${month}/${year} ${timeStr}.xlsx`;
+            a.download = `${this.centerName} All Orders on ${dateStr}  Generated at ${day}/${monthNumber}/${year} ${timeStr}.xlsx`;
           }
           a.click();
           window.URL.revokeObjectURL(url);

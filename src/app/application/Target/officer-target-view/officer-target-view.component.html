@@ -279,7 +279,7 @@
                         </i> -->
                         <button
   [disabled]="!(item.validity === 'Active' && item.status === 'Pending')"
-  (click)="editOfficerTarget(item.id, OfficerObj.toDate, OfficerObj.fromDate)"
+  (click)="editOfficerTarget(item.id, OfficerObj.toDate, OfficerObj.fromDate, OfficerObj.officerId )"
   class="cursor-pointer"
 >
   <i

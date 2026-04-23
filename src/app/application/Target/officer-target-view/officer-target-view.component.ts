@@ -51,6 +51,8 @@ officerId!: string;
 statusDropdownOptions = ['Pending', 'Completed', 'Exceeded', 'Extra'];
 validityDropdownOptions = ['Expired', 'Active', 'Unassigned'];
 
+thisValidityAfterLabelFix: string = '';
+
 private validityLabelToValue: Record<string, string> = {
   'Expired': 'Expired',
   'Active': 'Valid',
@@ -81,7 +83,8 @@ selectStatusOption(option: string) {
 }
 
 selectValidityOption(label: string) {
-  this.selectValidity = this.validityLabelToValue[label];
+  console.log('validity', this.selectValidity)
+  this.thisValidityAfterLabelFix = this.validityLabelToValue[label];
   this.isValidityDropdownOpen = false;
   this.applyValidityFilters();
 }
@@ -119,7 +122,7 @@ ngOnInit(): void {
   });
 }
 
-  fetchAllOfficers(page: number = this.page, limit: number = this.itemsPerPage, status: string = this.selectStatus, validity: string = this.selectValidity, searchText: string = this.searchText) {
+  fetchAllOfficers(page: number = this.page, limit: number = this.itemsPerPage, status: string = this.selectStatus, validity: string = this.thisValidityAfterLabelFix, searchText: string = this.searchText) {
     this.isLoading = true;
     if (this.OfficerObj.jobRole === 'Collection Officer') {
       this.OfficerObj.empId = 'COO' + this.OfficerObj.officerId;

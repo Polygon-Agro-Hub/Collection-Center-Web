@@ -65,21 +65,17 @@
                                     {{ step.payload.empId }} – {{ step.payload.driverName }} – {{
                                         step.payload.driverPhone }} driver collected the order from the centre
                                     at
-                                    {{ formatTime(step.payload.collectTime) }} on {{
-                                    formatDate(step.payload.collectTime)
-                                    }}.
-                                </ng-container>
-            
+                                    {{ step.payload.collectTime | date: 'hh:mm a on MMMM dd, yyyy' }}.
+                                </ng-container>         
                                 <!-- STARTED -->
                                 <ng-container *ngIf="step.type === 'started'">
-                                    Driver has started the journey at {{ formatTime(step.payload.startTime) }} on {{
-                                    formatDate(step.payload.startTime) }}.
+                                    Driver has started the journey at {{ step.payload.startTime | date: 'hh:mm a on MMMM dd, yyyy' }}.
                                 </ng-container>
             
                                 <!-- HOLD -->
                                 <ng-container *ngIf="step.type === 'hold'">
                                     Driver marked this order's status as <span class="font-bold">Hold</span> at 
-                                    {{ step.payload.holdTime }}.
+                                    {{ step.payload.holdTime | date: 'hh:mm a on MMMM dd, yyyy' }}.
                                     <div class="mt-1 dark:text-gray-400">
                                         Reason:
                                         <span class="font-semibold">"{{ step.payload.holdReason }}"</span>

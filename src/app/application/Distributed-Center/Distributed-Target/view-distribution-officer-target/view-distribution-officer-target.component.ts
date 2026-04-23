@@ -400,18 +400,20 @@ getStatus(item: orders): string {
   const scheduleDate = new Date(item.sheduleDate);
   const completeTime = item.completeTime ? new Date(item.completeTime) : null;
 
+  console.log('completeTime', completeTime)
+
   // Create the schedule deadline
   const deadline = new Date(scheduleDate);
+
+  console.log('deadline', deadline)
 
   if (item.sheduleTime) {
     const timeSlot = item.sheduleTime.trim();
 
-    if (timeSlot === 'Within 8-12 PM') {
-      deadline.setHours(12, 0, 0, 0); // 12:00 PM
-    } else if (timeSlot === 'Within 12-4 PM') {
-      deadline.setHours(16, 0, 0, 0); // 4:00 PM
-    } else if (timeSlot === 'Within 4-8 PM') {
-      deadline.setHours(20, 0, 0, 0); // 8:00 PM
+    if (timeSlot === 'Within 8AM - 2PM') {
+      deadline.setHours(14, 0, 0, 0); // 12:00 PM
+    } else if (timeSlot === 'Within 2PM - 8PM') {
+      deadline.setHours(20, 0, 0, 0); // 4:00 PM
     }
   }
 

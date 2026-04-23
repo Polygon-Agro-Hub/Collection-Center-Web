@@ -435,8 +435,8 @@ export class AddOfficersComponent implements OnInit {
   onFileSelected(event: any): void {
     const file: File = event.target.files[0];
     if (file) {
-      if (file.size > 3000000) {
-        this.toastSrv.error('File size should not exceed 3MB')
+      if (file.size > 3 * 1024 * 1024) {
+        this.toastSrv.error('File size should not exceed 3MB');
         return;
       }
 

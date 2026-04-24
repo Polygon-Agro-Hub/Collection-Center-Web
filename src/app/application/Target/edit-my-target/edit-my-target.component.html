@@ -1,88 +1,133 @@
-<app-loading-spinner *ngIf="isLoading"/>
+<app-loading-spinner *ngIf="isLoading" />
 
-
-<div *ngIf="!isLoading" class="w-full h-full px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg">
-    <div class="flex flex-col items-center justify-center my-4">
-        <p class="text-lg text-black dark:text-textDark font-bold my-2">EMP ID : {{targetObj.empId}}</p>
-    </div>
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">
-        <div>
-            <label for="varietyNameEnglish" class="block text-sm font-medium text-gray-700 dark:text-textDark">Variety
-                Name :</label>
-            <input id="varietyNameEnglish" [value]="targetObj.varietyNameEnglish" disabled
-                class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
-        </div>
-
-        <div>
-            <label for="todo" class="block text-sm font-medium text-gray-700 dark:text-textDark">The maximum amount you can pass (kg) :</label>
-            <input id="todo" [value]="targetObj.todo" disabled
-                class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
-        </div>
-    </div>
-
-    <hr class="border-b-1 border-[#BDBDBD] my-5" />
-
-    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">
-        <div>
-            <label for="variety" class="block text-sm font-medium text-gray-700 dark:text-textDark my-1">
-                Select Short Stock Assignee : 
-            </label>
-            <div class="relative">
-  <button
-    type="button"
-    (click)="toggleDropdown()"
-    (blur)="onBlur()"
-    class="w-full p-2 border border-gray-300 rounded-md text-left text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack flex justify-between items-center"
-  >
-    <span [class.text-gray-400]="!selectedOfficerId">
-      {{ searchTerm || '-- Select Officer --' }}
-    </span>
-    <i class="fa-solid fa-chevron-down text-xs text-gray-400 transition-transform duration-200"
-      [class.rotate-180]="isOpen"></i>
-  </button>
-
-  <div *ngIf="isOpen"
-    class="absolute z-10 w-full mt-1 bg-white dark:bg-tileBlack border border-gray-300 dark:border-gray-600 rounded-md shadow-lg max-h-48 overflow-auto">
-    
-    <!-- Search input inside dropdown -->
-    <div class="p-2 border-b border-gray-200 dark:border-gray-600">
+<div
+  *ngIf="!isLoading"
+  class="w-full h-full px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg"
+>
+  <div class="flex flex-col items-center justify-center my-4">
+    <p class="text-lg text-black dark:text-textDark font-bold my-2">
+      EMP ID : {{ targetObj.empId }}
+    </p>
+  </div>
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">
+    <div>
+      <label
+        for="varietyNameEnglish"
+        class="block text-sm font-semibold text-[#534E4E] dark:text-textDark"
+        >Variety Name :</label
+      >
       <input
-        type="text"
-        [(ngModel)]="filterTerm"
-        (input)="filterOfficer()"
-        placeholder="Search officer..."
-        class="w-full p-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-md text-textLight dark:text-textDark bg-white dark:bg-tileDark outline-none focus:border-blue-400"
+        id="varietyNameEnglish"
+        [value]="targetObj.varietyNameEnglish"
+        disabled
+        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack"
       />
     </div>
 
-    <!-- Empty state -->
-    <div *ngIf="filteredOfficers.length === 0"
-      class="p-3 text-sm text-gray-400 text-center">
-      No officers found
-    </div>
-
-    <!-- Options -->
-    <div
-      *ngFor="let item of filteredOfficers"
-      (mousedown)="selectOfficer(item.id)"
-      class="p-2.5 px-3 cursor-pointer text-sm text-textLight dark:text-textDark hover:bg-gray-100 dark:hover:bg-gray-700"
-    >
-      {{ item.firstNameEnglish }} {{ item.lastNameEnglish }}
+    <div>
+      <label
+        for="todo"
+        class="block text-sm font-semibold text-[#534E4E] dark:text-textDark"
+        >The maximum amount you can pass (kg) :</label
+      >
+      <input
+        id="todo"
+        [value]="targetObj.todo"
+        disabled
+        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack"
+      />
     </div>
   </div>
-</div>
-        </div>
-        
 
-        <div>
-            <label for="passAmount" class="block text-sm font-medium text-gray-700 dark:text-textDark">The Amount (kg) :</label>
-            <input id="passAmount" name="passAmount" type="number" [(ngModel)]="passAmount" 
-                class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
+  <hr class="border-b-1 border-[#BDBDBD] my-5" />
+
+  <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">
+    <div>
+      <label
+        for="variety"
+        class="block text-sm font-semibold text-[#534E4E] dark:text-textDark my-1"
+      >
+        Select Short Stock Assignee :
+      </label>
+      <div class="relative">
+        <button
+          type="button"
+          (click)="toggleDropdown()"
+          (blur)="onBlur()"
+          class="w-full p-2 border border-gray-300 rounded-md text-left text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack flex justify-between items-center"
+        >
+          <span [class.text-gray-400]="!selectedOfficerId">
+            {{ searchTerm || "-- Select Officer --" }}
+          </span>
+          <i
+            class="fa-solid fa-chevron-down text-xs text-gray-400 transition-transform duration-200"
+            [class.rotate-180]="isOpen"
+          ></i>
+        </button>
+
+        <div
+          *ngIf="isOpen"
+          class="absolute z-10 w-full mt-1 bg-white dark:bg-tileBlack border border-gray-300 dark:border-gray-600 rounded-md shadow-lg max-h-48 overflow-auto"
+        >
+          <!-- Search input inside dropdown -->
+          <div class="p-2 border-b border-gray-200 dark:border-gray-600">
+            <input
+              type="text"
+              [(ngModel)]="filterTerm"
+              (input)="filterOfficer()"
+              placeholder="Search officer..."
+              class="w-full p-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-md text-textLight dark:text-textDark bg-white dark:bg-tileDark outline-none focus:border-blue-400"
+            />
+          </div>
+
+          <!-- Empty state -->
+          <div
+            *ngIf="filteredOfficers.length === 0"
+            class="p-3 text-sm text-gray-400 text-center"
+          >
+            No officers found
+          </div>
+
+          <!-- Options -->
+          <div
+            *ngFor="let item of filteredOfficers"
+            (mousedown)="selectOfficer(item.id)"
+            class="p-2.5 px-3 cursor-pointer text-sm text-textLight dark:text-textDark hover:bg-gray-100 dark:hover:bg-gray-700"
+          >
+            {{ item.firstNameEnglish }} {{ item.lastNameEnglish }}
+          </div>
         </div>
+      </div>
     </div>
 
-    <div class="flex flex-row justify-center items-center gap-12 my-10">
-        <button class="text-[#6B7D8C] bg-[#F6F7F9] border-[#6B7D8C] border-[1px] rounded-lg shadow-md px-4 py-2" onclick="history.back()">Cancel</button>
-        <button class="bg-[#415CFF] text-white rounded-lg shadow-md px-6 py-2" (click)="onSubmit()">Save</button>
+    <div>
+      <label
+        for="passAmount"
+        class="block text-sm font-semibold text-[#534E4E] dark:text-textDark"
+        >The Amount (kg) :</label
+      >
+      <input
+        id="passAmount"
+        name="passAmount"
+        type="number"
+        [(ngModel)]="passAmount"
+        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack"
+      />
     </div>
+  </div>
+
+  <div class="flex flex-row justify-center items-center gap-12 my-10">
+    <button
+      class="text-[#6B7D8C] bg-[#F6F7F9] border-[#6B7D8C] border-[1px] rounded-lg shadow-md px-4 py-2"
+      onclick="history.back()"
+    >
+      Cancel
+    </button>
+    <button
+      class="bg-[#415CFF] text-white rounded-lg shadow-md px-6 py-2"
+      (click)="onSubmit()"
+    >
+      Save
+    </button>
+  </div>
 </div>

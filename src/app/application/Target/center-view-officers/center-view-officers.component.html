@@ -150,85 +150,85 @@
         </div>
 
         <div *ngIf="hasData">
-            <div class="min-w-max mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
-                <table class="w-full min-w-max divide-y-2 border-[1px] border-gray-300 rounded-lg overflow-hidden">
-                    <thead class=" text-[#000000] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
-                        <tr>
-                            <th class="px-5 py-3 text-left text-sm font-medium">No</th>
-                            <th class="px-3 py-3 text-left text-sm font-medium">EMP ID</th>
-                            <th class="px-3 py-3 text-left text-sm font-medium">First Name</th>
-                            <th class="px-3 py-3 text-left text-sm font-medium">Last Name</th>
+  <div class="overflow-hidden mt-8 mr-5 border border-gray-200 rounded-lg dark:border-[#202021]">
+    <table class="w-full divide-y divide-gray-200 dark:divide-[#202021]">
+      <thead class="text-[#000000] dark:text-gray-300 dark:bg-[#0F0F0F]">
+        <tr>
+          <th class="px-5 py-3 text-left text-sm font-medium">No</th>
+          <th class="px-3 py-3 text-left text-sm font-medium">EMP ID</th>
+          <th class="px-3 py-3 text-left text-sm font-medium">First Name</th>
+          <th class="px-3 py-3 text-left text-sm font-medium">Last Name</th>
+          <th class="px-3 py-3 text-left text-sm font-medium">Role</th>
+          <th class="px-3 py-3 text-center text-sm font-medium">Status</th>
+          <th class="px-3 py-3 text-center text-sm font-medium">Mobile Number</th>
+          <th class="px-3 py-3 text-left text-sm font-medium">NIC</th>
+          <th class="px-3 py-3 text-center text-sm font-medium"></th>
+        </tr>
+      </thead>
+      <tbody class="bg-white divide-y divide-gray-100 dark:bg-[#1D1D1F] dark:divide-[#202021]">
+        <tr *ngFor="let officer of OfficerArr | paginate
+            : {
+                itemsPerPage: itemsPerPage,
+                currentPage: page,
+                totalItems: totalItems
+              }; let i = index">
+          <td class="px-5 py-4 text-sm text-[#000000] dark:text-textDark">
+            {{ ((page - 1) * itemsPerPage + i + 1) < 10 ? '0' + ((page - 1) * itemsPerPage + i + 1) : ((page - 1) * itemsPerPage + i + 1) }}
+          </td>
+          <td class="px-3 py-4 text-sm text-[#000000] dark:text-textDark">{{ officer.empId }}</td>
+          <td class="px-3 py-4 text-sm text-[#000000] dark:text-textDark">{{ officer.firstNameEnglish }}</td>
+          <td class="px-3 py-4 text-sm text-[#000000] dark:text-textDark">{{ officer.lastNameEnglish }}</td>
+          <td class="px-3 py-4 text-sm text-[#000000] dark:text-textDark">{{ officer.jobRole }}</td>
 
-                            <th class="px-3 py-3 text-left text-sm font-medium">Role</th>
-                            <th class="px-3 py-3 text-center text-sm font-medium">Status</th>
-                            <th class="px-3 py-3 text-center text-sm font-medium">Mobile Number</th>
-                            <th class="px-3 py-3 text-left text-sm font-medium">NIC</th>
-                            <th class="px-3 py-3 text-center text-sm font-medium"></th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
-                        <tr *ngFor="let officer of OfficerArr | paginate
-                    : {
-                        itemsPerPage: itemsPerPage,
-                        currentPage: page,
-                        totalItems: totalItems
-                      };  let i = index">
-                            <td class="px-5 py-4 text-sm text-[#000000] dark:text-textDark">
-  {{ ((page - 1) * itemsPerPage + i + 1) < 10 ? '0' + ((page - 1) * itemsPerPage + i + 1) : ((page - 1) * itemsPerPage + i + 1) }}
-</td>
-                            <td class="px-3 py-4 text-sm text-[#000000] dark:text-textDark">{{ officer.empId }}</td>
-                            <td class="px-3 py-4 text-sm text-[#000000] dark:text-textDark">{{ officer.firstNameEnglish
-                                }}
-                            </td>
-                            <td class="px-3 py-4 text-sm text-[#000000] dark:text-textDark">{{ officer.lastNameEnglish }}
-                            </td>
-
-                            <td class="px-3 py-4 text-sm text-[#000000] dark:text-textDark">{{ officer.jobRole }}</td>
-                            <td class="px-3 py-4">
-    <div class="flex justify-center items-center w-full cursor-pointer" (click)="openPopup(officer)">
-        <span *ngIf="officer.status === 'Approved'"
-            class="inline-block w-[120px] text-center px-3 py-2 bg-[#C8E0FF] text-[#415CFF] text-sm font-medium rounded-md shadow-md">
-            Approved
-        </span>
-        <span *ngIf="officer.status === 'Not Approved'"
-            class="inline-block w-[120px] text-center px-3 py-2 bg-[#F8FFA6] text-[#A8A100] text-sm font-medium rounded-md shadow-md">
-            Not Approved
-        </span>
-        <span *ngIf="officer.status === 'Rejected'"
-            class="inline-block w-[120px] text-center px-3 py-2 bg-[#FFB9B7] text-[#D16D6A] text-sm font-medium rounded-md shadow-md">
-            Rejected
-        </span>
-    </div>
-</td>
-                            <td class="px-3  py-4 text-sm text-[#000000] text-center dark:text-gray-300">{{officer.phoneCode01}}{{officer.phoneNumber01}}
-                            </td>
-                            <td class="px-3 py-4 text-sm text-[#000000] dark:text-gray-300">{{officer.nic}}</td>
-                            <td class="px-3 py-4 text-sm text-[#000000] text-center dark:text-gray-300 flex flex-row gap-4">
-                                <button class="text-gray-400 hover:text-gray-600"
-                                    (click)="navigateToProfile(officer.id, this.centerId)">
-                                    <i class="fa-regular fa-file text-lg"></i>
-                                </button>
-                                <button class="text-[#415CFF] hover:text-blue-500" (click)="navigateToEdit(officer.id, this.centerId)">
-                                    <i class="fa-solid fa-pen-to-square text-lg"></i>
-                                </button>
-                                <button class="text-[#FF415C] hover:text-red-500"
-                                    (click)="deleteCollectionOfficer(officer.id)">
-                                    <i class="fa-solid fa-trash text-lg"></i>
-                                </button>
-
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
+          <td class="px-3 py-4">
+            <div class="flex justify-center items-center w-full cursor-pointer" (click)="openPopup(officer)">
+              <span *ngIf="officer.status === 'Approved'"
+                class="inline-block w-[120px] text-center px-3 py-2 bg-[#C8E0FF] text-[#415CFF] text-sm font-medium rounded-md">
+                Approved
+              </span>
+              <span *ngIf="officer.status === 'Not Approved'"
+                class="inline-block w-[120px] text-center px-3 py-2 bg-[#F8FFA6] text-[#A8A100] text-sm font-medium rounded-md">
+                Not Approved
+              </span>
+              <span *ngIf="officer.status === 'Rejected'"
+                class="inline-block w-[120px] text-center px-3 py-2 bg-[#FFB9B7] text-[#D16D6A] text-sm font-medium rounded-md">
+                Rejected
+              </span>
             </div>
+          </td>
 
-            <div class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#1D1D1F] text-right">
-                <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true"
-                    [previousLabel]="'Previous'" [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'"
-                    [screenReaderPageLabel]="'page'" [screenReaderCurrentLabel]="'Youre on page'">
-                </pagination-controls>
+          <td class="px-3 py-4 text-sm text-[#000000] text-center dark:text-gray-300">
+            {{ officer.phoneCode01 }}{{ officer.phoneNumber01 }}
+          </td>
+          <td class="px-3 py-4 text-sm text-[#000000] dark:text-gray-300">{{ officer.nic }}</td>
+          <td class="px-3 py-4 text-sm text-center dark:text-gray-300">
+            <div class="flex flex-row justify-center gap-4">
+              <button class="text-gray-400 hover:text-gray-600"
+                (click)="navigateToProfile(officer.id, this.centerId)">
+                <i class="fa-regular fa-file text-lg"></i>
+              </button>
+              <button class="text-[#415CFF] hover:text-blue-500"
+                (click)="navigateToEdit(officer.id, this.centerId)">
+                <i class="fa-solid fa-pen-to-square text-lg"></i>
+              </button>
+              <button class="text-[#FF415C] hover:text-red-500"
+                (click)="deleteCollectionOfficer(officer.id)">
+                <i class="fa-solid fa-trash text-lg"></i>
+              </button>
             </div>
-        </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#1D1D1F] text-right">
+    <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true"
+      [previousLabel]="'Previous'" [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'"
+      [screenReaderPageLabel]="'page'" [screenReaderCurrentLabel]="'Youre on page'">
+    </pagination-controls>
+  </div>
+</div>
 
         
     </div>

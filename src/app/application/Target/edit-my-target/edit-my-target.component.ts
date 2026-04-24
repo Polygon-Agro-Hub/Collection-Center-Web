@@ -85,7 +85,7 @@ filterTerm: string = '';
 
     if (!this.selectedOfficerId) {
       this.isLoading = false;
-      this.toastSrv.warning('Pleace fill all feild!')
+      this.toastSrv.warning('Please fill all fields!')
       return;
     }
 

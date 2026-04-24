@@ -28,25 +28,49 @@
                 Select Short Stock Assignee : 
             </label>
             <div class="relative">
-                <input 
-                    type="text" 
-                    [(ngModel)]="searchTerm" 
-                    (input)="filterOfficer()" 
-                    placeholder="--Select Officers--"
-                    class="w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack"
-                />
-        
-                <div *ngIf="searchTerm !== ''" 
-                    class="absolute w-full mt-1 bg-white border border-gray-300 rounded-md shadow-lg max-h-40 overflow-auto">
-                    <div 
-                        *ngFor="let item of filteredOfficers" 
-                        (click)="selectOfficer(item.id)"
-                        class="p-2 cursor-pointer hover:bg-gray-200"
-                    >
-                        {{ item.firstNameEnglish }} {{ item.lastNameEnglish }}
-                    </div>
-                </div>
-            </div>
+  <button
+    type="button"
+    (click)="toggleDropdown()"
+    (blur)="onBlur()"
+    class="w-full p-2 border border-gray-300 rounded-md text-left text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack flex justify-between items-center"
+  >
+    <span [class.text-gray-400]="!selectedOfficerId">
+      {{ searchTerm || '-- Select Officer --' }}
+    </span>
+    <i class="fa-solid fa-chevron-down text-xs text-gray-400 transition-transform duration-200"
+      [class.rotate-180]="isOpen"></i>
+  </button>
+
+  <div *ngIf="isOpen"
+    class="absolute z-10 w-full mt-1 bg-white dark:bg-tileBlack border border-gray-300 dark:border-gray-600 rounded-md shadow-lg max-h-48 overflow-auto">
+    
+    <!-- Search input inside dropdown -->
+    <div class="p-2 border-b border-gray-200 dark:border-gray-600">
+      <input
+        type="text"
+        [(ngModel)]="filterTerm"
+        (input)="filterOfficer()"
+        placeholder="Search officer..."
+        class="w-full p-1.5 text-sm border border-gray-300 dark:border-gray-600 rounded-md text-textLight dark:text-textDark bg-white dark:bg-tileDark outline-none focus:border-blue-400"
+      />
+    </div>
+
+    <!-- Empty state -->
+    <div *ngIf="filteredOfficers.length === 0"
+      class="p-3 text-sm text-gray-400 text-center">
+      No officers found
+    </div>
+
+    <!-- Options -->
+    <div
+      *ngFor="let item of filteredOfficers"
+      (mousedown)="selectOfficer(item.id)"
+      class="p-2.5 px-3 cursor-pointer text-sm text-textLight dark:text-textDark hover:bg-gray-100 dark:hover:bg-gray-700"
+    >
+      {{ item.firstNameEnglish }} {{ item.lastNameEnglish }}
+    </div>
+  </div>
+</div>
         </div>
         
 

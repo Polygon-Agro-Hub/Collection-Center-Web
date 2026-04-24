@@ -25,6 +25,9 @@ export class EditMyTargetComponent implements OnInit {
 
   searchTerm: string = '';
   selectedOfficerId!: number | null;
+  isOpen: boolean = false;
+filterTerm: string = '';
+
 
 
   isLoading: boolean = true;
@@ -58,22 +61,24 @@ export class EditMyTargetComponent implements OnInit {
   }
 
   filterOfficer() {
-    if (!this.officerArr) return;
-    const search = this.searchTerm.toLowerCase();
-    this.filteredOfficers = this.officerArr.filter(officer =>
-      officer.firstNameEnglish.toLowerCase().includes(search) ||
-      officer.lastNameEnglish.toLowerCase().includes(search)
-    );
-  }
+  if (!this.officerArr) return;
+  const search = this.filterTerm.toLowerCase();
+  this.filteredOfficers = this.officerArr.filter(officer =>
+    officer.firstNameEnglish.toLowerCase().includes(search) ||
+    officer.lastNameEnglish.toLowerCase().includes(search)
+  );
+}
 
   selectOfficer(id: number) {
-    const selectedOfficer = this.officerArr.find(officer => officer.id === id);
-    if (selectedOfficer) {
-      this.searchTerm = `${selectedOfficer.firstNameEnglish} ${selectedOfficer.lastNameEnglish}`;
-      this.selectedOfficerId = id;
-      this.filteredOfficers = [];
-    }
+  const selectedOfficer = this.officerArr.find(officer => officer.id === id);
+  if (selectedOfficer) {
+    this.searchTerm = `${selectedOfficer.firstNameEnglish} ${selectedOfficer.lastNameEnglish}`;
+    this.selectedOfficerId = id;
+    this.isOpen = false;
+    this.filterTerm = '';
+    this.filteredOfficers = [...this.officerArr];
   }
+}
 
   onSubmit() {
     this.isLoading = true;
@@ -108,6 +113,21 @@ export class EditMyTargetComponent implements OnInit {
     this.fetchTargetDetalis();
     this.toastSrv.warning("Cancel this process")
   }
+
+  toggleDropdown() {
+  this.isOpen = !this.isOpen;
+  if (this.isOpen) {
+    this.filterTerm = '';
+    this.filteredOfficers = [...this.officerArr];
+  }
+}
+
+onBlur() {
+  // Small delay so mousedown on option fires before blur closes the dropdown
+  setTimeout(() => {
+    this.isOpen = false;
+  }, 150);
+}
 }
 
 class TargetDetalis {

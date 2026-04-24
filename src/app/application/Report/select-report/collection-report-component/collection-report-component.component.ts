@@ -61,7 +61,7 @@ export class CollectionReportComponentComponent implements OnInit {
     if (this.logingRole === 'Collection Centre Head') {
       this.getAllCenters();
     }
-    this.fetchAllOfficers();
+    this.fetchAllOfficers(this.page, this.itemsPerPage, this.searchText);
   }
 
   get centerDropdownItems() {
@@ -79,7 +79,7 @@ export class CollectionReportComponentComponent implements OnInit {
   }
 
   applyCompanyFilters() {
-    this.fetchAllOfficers();
+    this.fetchAllOfficers(this.page, this.itemsPerPage, this.searchText);
   }
 
   @HostListener('document:click', ['$event'])
@@ -93,7 +93,7 @@ export class CollectionReportComponentComponent implements OnInit {
     }
   }
 
-  fetchAllOfficers(page: number = 1, limit: number = this.itemsPerPage, searchText: string = '', centerId: string = this.selectCenters) {
+  fetchAllOfficers(page: number, limit: number = this.itemsPerPage, searchText: string = '', centerId: string = this.selectCenters) {
     this.isLoading = true;
     let role: string;
     if (this.logingRole === 'Collection Centre Head') {
@@ -118,6 +118,7 @@ export class CollectionReportComponentComponent implements OnInit {
   }
 
   onSearch() {
+    this.page = 1;
     this.searchText = this.searchText.trimStart();
     this.fetchAllOfficers(this.page, this.itemsPerPage, this.searchText);
   }
@@ -162,7 +163,7 @@ export class CollectionReportComponentComponent implements OnInit {
   clearCompanyFilter(event: MouseEvent) {
     event.stopPropagation();
     this.selectCenters = '';
-    this.fetchAllOfficers();
+    this.fetchAllOfficers(this.page, this.itemsPerPage, this.searchText);
   }
 
 

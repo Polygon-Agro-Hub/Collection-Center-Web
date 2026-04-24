@@ -82,16 +82,18 @@ selectStatusOption(option: string) {
   this.applyStatusFilters();
 }
 
-selectValidityOption(label: string) {
+selectValidityOption(option: string) {
   console.log('validity', this.selectValidity)
-  this.thisValidityAfterLabelFix = this.validityLabelToValue[label];
+  this.selectValidity = option;
   this.isValidityDropdownOpen = false;
+  this.page = 1;
   this.applyValidityFilters();
 }
 
 clearStatusFilter(event: Event) {
   event.stopPropagation();
   this.selectStatus = '';
+  this.page = 1;
   this.isStatusDropdownOpen = false;
   this.applyStatusFilters();
 }
@@ -100,6 +102,7 @@ clearValidityFilter(event: Event) {
   event.stopPropagation();
   this.selectValidity = '';
   this.isValidityDropdownOpen = false;
+  this.page = 1;
   this.applyValidityFilters();
 }
 
@@ -122,7 +125,7 @@ ngOnInit(): void {
   });
 }
 
-  fetchAllOfficers(page: number = this.page, limit: number = this.itemsPerPage, status: string = this.selectStatus, validity: string = this.thisValidityAfterLabelFix, searchText: string = this.searchText) {
+  fetchAllOfficers(page: number = this.page, limit: number = this.itemsPerPage, status: string = this.selectStatus, validity: string = this.selectValidity, searchText: string = this.searchText) {
     this.isLoading = true;
     if (this.OfficerObj.jobRole === 'Collection Officer') {
       this.OfficerObj.empId = 'COO' + this.OfficerObj.officerId;
@@ -270,6 +273,7 @@ ngOnInit(): void {
   }
 
   applyStatusFilters() {
+    this.page = 1;
     this.fetchAllOfficers();
   }
 
@@ -279,6 +283,7 @@ ngOnInit(): void {
   // }
 
   applyValidityFilters() {
+    this.page = 1;
     this.fetchAllOfficers();
   }
 
@@ -288,6 +293,7 @@ ngOnInit(): void {
   // }
 
   onSearch() {
+    this.page = 1;
     this.fetchAllOfficers();
   }
 

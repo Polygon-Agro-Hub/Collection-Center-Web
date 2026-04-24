@@ -47,63 +47,62 @@
         </div>
 
     <div *ngIf="hasData"
-        class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
-        <table class="w-full divide-y-2 border-[1px] border-gray-300 rounded-lg overflow-hidden">
-            <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
-                <tr>
-                    <th class="px-5 py-3 text-left  font-medium">No</th>
-                    <th class="px-5 py-3 text-left  font-medium">EMP ID</th>
-                    <th class="px-5 py-3 text-left  font-medium">First Name</th>
-                    <th class="px-5 py-3 text-left  font-medium">Last Name</th>
-                    <th class="px-5 py-3 text-left  font-medium" *ngIf="logingRole === 'Collection Centre Head'">Centre</th>
-                    <th class="px-5 py-3 text-center  font-medium">Monthly Report</th>
-                    <th class="px-5 py-3 text-center  font-medium">Daily Report</th>
-                    <th class="px-5 py-3 text-center  font-medium">Farmers</th>
-                </tr>
-            </thead>
-            <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
-                <tr *ngFor="let item of OfficerArr | paginate
-                : {
-                    itemsPerPage: itemsPerPage,
-                    currentPage: page,
-                    totalItems: totalItems
-                  };  let i = index">
-                    <td class="px-5 py-4  text-gray-900 dark:text-gray-300">
-                        {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i + 1) : (((page - 1) * itemsPerPage) + i + 1) }}
-                            </td>
-                    <td class="px-5 py-4  text-gray-900 dark:text-gray-300">{{item.empId}}</td>
-                    <td class="px-5 py-4  text-gray-900 dark:text-gray-300">{{item.firstNameEnglish}}</td>
-                    <td class="px-5 py-4  text-gray-900 dark:text-gray-300">{{item.lastNameEnglish}}</td>
-                    <td class="px-5 py-4  text-gray-900 dark:text-gray-300" *ngIf="logingRole === 'Collection Centre Head'">{{item.centerName}}</td>
-                    
-                    <!-- Monthly Report td -->
-<td class="px-5 py-4 text-center text-gray-900 dark:text-gray-300">
-    <button class="inline-flex items-center justify-center text-[#415CFF] hover:text-gray-600 w-10 h-10 mx-auto"
-        (click)="viewmonthlyReport(item.id)">
-        <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>
-    </button>
-</td>
+  class="overflow-hidden mt-8 mr-5 border border-gray-200 rounded-lg dark:border-[#202021]">
+  <table class="w-full divide-y divide-gray-200 dark:divide-[#202021]">
+    <thead class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F]">
+      <tr>
+        <th class="px-5 py-3 text-left font-medium">No</th>
+        <th class="px-5 py-3 text-left font-medium">EMP ID</th>
+        <th class="px-5 py-3 text-left font-medium">First Name</th>
+        <th class="px-5 py-3 text-left font-medium">Last Name</th>
+        <th class="px-5 py-3 text-left font-medium" *ngIf="logingRole === 'Collection Centre Head'">Centre</th>
+        <th class="px-5 py-3 text-center font-medium">Monthly Report</th>
+        <th class="px-5 py-3 text-center font-medium">Daily Report</th>
+        <th class="px-5 py-3 text-center font-medium">Farmers</th>
+      </tr>
+    </thead>
+    <tbody class="bg-white divide-y divide-gray-100 dark:bg-[#1D1D1F] dark:divide-[#202021]">
+      <tr *ngFor="let item of OfficerArr | paginate
+          : {
+              itemsPerPage: itemsPerPage,
+              currentPage: page,
+              totalItems: totalItems
+            }; let i = index">
+        <td class="px-5 py-4 text-gray-900 dark:text-gray-300">
+          {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i + 1) : (((page - 1) * itemsPerPage) + i + 1) }}
+        </td>
+        <td class="px-5 py-4 text-gray-900 dark:text-gray-300">{{item.empId}}</td>
+        <td class="px-5 py-4 text-gray-900 dark:text-gray-300">{{item.firstNameEnglish}}</td>
+        <td class="px-5 py-4 text-gray-900 dark:text-gray-300">{{item.lastNameEnglish}}</td>
+        <td class="px-5 py-4 text-gray-900 dark:text-gray-300" *ngIf="logingRole === 'Collection Centre Head'">{{item.centerName}}</td>
 
-<!-- Daily Report td -->
-<td class="px-5 py-4 text-center text-gray-900 dark:text-gray-300">
-    <button class="inline-flex items-center justify-center text-[#415CFF] hover:text-gray-600 w-10 h-10 mx-auto"
-        (click)="viewDailyReport(item.id, item.firstNameEnglish, item.lastNameEnglish, item.empId)">
-        <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>
-    </button>
-</td>
+        <!-- Monthly Report td -->
+        <td class="px-5 py-4 text-center text-gray-900 dark:text-gray-300">
+          <button class="inline-flex items-center justify-center text-[#415CFF] hover:text-gray-600 w-10 h-10 mx-auto"
+            (click)="viewmonthlyReport(item.id)">
+            <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>
+          </button>
+        </td>
 
-<!-- Farmers td -->
-<td class="px-5 py-4 text-center text-gray-900 dark:text-gray-300">
-    <button class="inline-flex items-center justify-center text-[#415CFF] hover:text-blue-500 w-10 h-10 mx-auto"
-        (click)="viewFarmerList(item.id, item.firstNameEnglish, item.lastNameEnglish)">
-        <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>
-    </button>
-</td>
+        <!-- Daily Report td -->
+        <td class="px-5 py-4 text-center text-gray-900 dark:text-gray-300">
+          <button class="inline-flex items-center justify-center text-[#415CFF] hover:text-gray-600 w-10 h-10 mx-auto"
+            (click)="viewDailyReport(item.id, item.firstNameEnglish, item.lastNameEnglish, item.empId)">
+            <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>
+          </button>
+        </td>
 
-                </tr>
-            </tbody>
-        </table>
-    </div>
+        <!-- Farmers td -->
+        <td class="px-5 py-4 text-center text-gray-900 dark:text-gray-300">
+          <button class="inline-flex items-center justify-center text-[#415CFF] hover:text-blue-500 w-10 h-10 mx-auto"
+            (click)="viewFarmerList(item.id, item.firstNameEnglish, item.lastNameEnglish)">
+            <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>
+          </button>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
     <div *ngIf="hasData" class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#1D1D1F] text-right">
         <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
             [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"

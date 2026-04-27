@@ -280,7 +280,7 @@ export class FarmerReportInvoiceComponent implements OnInit {
       ],
       x,
       y,
-      [40, 50, 30, 30], // Column widths
+      [40, 45, 50, 45], // Column widths
       7,  // lineHeight
       3,  // padding
       '#434343',  // Header text color (red)

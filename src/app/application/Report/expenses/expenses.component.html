@@ -51,7 +51,7 @@
 
             <div class="flex flex-row items-center gap-5 ">
                 <i *ngIf="logingRole === 'Collection Centre Head'"
-                    class="fa-solid fa-list text-2xl dark:text-white ml-8"></i>
+                    class="fa-solid fa-list text-lg dark:text-white ml-8"></i>
 
                 <p *ngIf="logingRole === 'Collection Centre Head'" class="font-normal dark:text-white">Filter By</p>
 
@@ -126,16 +126,16 @@
             <table class="w-full min-w-max divide-y-2 border-[1px] border-gray-300 rounded-lg overflow-hidden">
                 <thead class=" dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] text-[#4B5563]">
                     <tr>
-                        <th class="px-2 py-3 text-left text-sm font-medium">No</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium">GRN No</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium">Amount (Rs.)</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium"
+                        <th class="px-2 py-3 text-left  font-medium">No</th>
+                        <th class="px-3 py-3 text-left  font-medium">GRN No</th>
+                        <th class="px-3 py-3 text-left  font-medium">Amount (Rs.)</th>
+                        <th class="px-3 py-3 text-left  font-medium"
                             *ngIf="logingRole === 'Collection Centre Head'">Centre Code</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium"
+                        <th class="px-3 py-3 text-left font-medium"
                             *ngIf="logingRole === 'Collection Centre Head'">Centre Name</th>
-                        <th class="px-3 py-3 text-center text-sm font-medium ">Farmer NIC</th>
-                        <th class="px-3 py-3 text-center text-sm font-medium">Collected Time</th>
-                        <th class="px-3 py-3 text-center text-sm font-medium"></th>
+                        <th class="px-3 py-3 text-center font-medium ">Farmer NIC</th>
+                        <th class="px-3 py-3 text-center font-medium">Collected Time</th>
+                        <th class="px-3 py-3 text-center font-medium"></th>
                     </tr>
                 </thead>
                 <tbody class="bg-white text-[#000000] font-semibold dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
@@ -145,18 +145,18 @@
                     currentPage: page,
                     totalItems: totalItems
                   };  let i = index">
-                        <td class="px-2 py-4 text-sm text-gray-900 dark:text-gray-300 ">
+                        <td class="px-2 py-4  text-gray-900 dark:text-gray-300 ">
                             {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i + 1)
                                 : (((page - 1) * itemsPerPage) + i + 1) }} </td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.invNo}}</td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300 ">
+                        <td class="px-3 py-4 text-gray-900 dark:text-gray-300">{{item.invNo}}</td>
+                        <td class="px-3 py-4 text-gray-900 dark:text-gray-300 ">
                             {{item.totalAmount | number:'1.2-2'}}
                         </td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300"
+                        <td class="px-3 py-4  text-gray-900 dark:text-gray-300"
                             *ngIf="logingRole === 'Collection Centre Head'">{{item.centerCode}}</td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300"
+                        <td class="px-3 py-4 text-gray-900 dark:text-gray-300"
                             *ngIf="logingRole === 'Collection Centre Head'">{{item.centerName}}</td>
-                        <td class="px-3 py-4 text-sm text-center text-gray-900 dark:text-gray-300">{{item.nic}}</td>
+                        <td class="px-3 py-4  text-center text-gray-900 dark:text-gray-300">{{item.nic}}</td>
                         <td class="px-3 py-4 text-center text-[#646464] dark:text-gray-300">
                             <span class="block">{{ item.createdAt | date:'MMM d, y' }}</span>
                             <span class="block">{{ item.createdAt | date:'h:mm a' }}</span>

@@ -51,6 +51,8 @@ officerId!: string;
 statusDropdownOptions = ['Pending', 'Completed', 'Exceeded', 'Extra'];
 validityDropdownOptions = ['Expired', 'Active', 'Unassigned'];
 
+thisValidityAfterLabelFix: string = '';
+
 private validityLabelToValue: Record<string, string> = {
   'Expired': 'Expired',
   'Active': 'Valid',
@@ -80,15 +82,18 @@ selectStatusOption(option: string) {
   this.applyStatusFilters();
 }
 
-selectValidityOption(label: string) {
-  this.selectValidity = this.validityLabelToValue[label];
+selectValidityOption(option: string) {
+  console.log('validity', this.selectValidity)
+  this.selectValidity = option;
   this.isValidityDropdownOpen = false;
+  this.page = 1;
   this.applyValidityFilters();
 }
 
 clearStatusFilter(event: Event) {
   event.stopPropagation();
   this.selectStatus = '';
+  this.page = 1;
   this.isStatusDropdownOpen = false;
   this.applyStatusFilters();
 }
@@ -97,6 +102,7 @@ clearValidityFilter(event: Event) {
   event.stopPropagation();
   this.selectValidity = '';
   this.isValidityDropdownOpen = false;
+  this.page = 1;
   this.applyValidityFilters();
 }
 
@@ -267,6 +273,7 @@ ngOnInit(): void {
   }
 
   applyStatusFilters() {
+    this.page = 1;
     this.fetchAllOfficers();
   }
 
@@ -276,6 +283,7 @@ ngOnInit(): void {
   // }
 
   applyValidityFilters() {
+    this.page = 1;
     this.fetchAllOfficers();
   }
 
@@ -285,6 +293,7 @@ ngOnInit(): void {
   // }
 
   onSearch() {
+    this.page = 1;
     this.fetchAllOfficers();
   }
 

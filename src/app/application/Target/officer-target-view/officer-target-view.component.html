@@ -134,9 +134,9 @@
 
 <!-- Validity Dropdown -->
 <div class="relative w-40 custom-validity-dropdown-container">
-    <select [(ngModel)]="selectValidity" class="hidden" (change)="applyValidityFilters()">
+    <select [(ngModel)]="selectValidity" class="hidden">
         <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300" value="Expired">Expired</option>
-        <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300" value="Valid">Active</option>
+        <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300" value="Active">Active</option>
         <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300" value="Unassigned">Unassigned</option>
     </select>
 

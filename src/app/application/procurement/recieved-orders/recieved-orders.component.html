@@ -9,7 +9,7 @@
   class="fixed-width-container overflow-x-auto scrollbar-thin scrollbar-thumb-scrollBarColor scrollbar-track-transparent scrollbar-thumb-rounded-full"
 >
   <div
-    class="pt-5 pr-12 pl-12 pb-5 min-w-[1200px] bg-white dark:bg-[#363636] shadow-lg rounded-lg relative"
+    class="pt-5 pr-12 pl-12 pb-5 min-w-max w-full bg-white dark:bg-[#363636] shadow-lg rounded-lg relative"
   >
     <div class="flex justify-end items-center mb-8 relative">
       <div class="flex items-center relative">
@@ -126,7 +126,7 @@
         <div class="w-5"></div>
 
         <!-- Search Box -->
-        <div class="flex items-center rounded-full bg-gray-100 dark:bg-[#292929] px-4 py-2 w-96 group relative">
+        <div class="flex mr-5 items-center rounded-full bg-gray-100 dark:bg-[#292929] px-4 py-2 w-96 group relative">
   
           <input 
             type="text" 
@@ -177,7 +177,7 @@
       </button>
     </div>
 
-    <div *ngIf="purchaseReport.length > 0" class="min-w-max mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+    <div *ngIf="purchaseReport.length > 0" class="mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
       <table class="w-full min-w-max divide-y-2 border-[1px] border-gray-300 rounded-lg overflow-hidden" >
         <thead class=" text-[#4B5563] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
             <tr>

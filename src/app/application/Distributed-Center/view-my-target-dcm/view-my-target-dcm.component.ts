@@ -412,10 +412,13 @@ changeStatusAndTime(data: { orderIds: any[]; time: string }) {
 }
 
 cancelPass() {
+  
   this.isPassTarget = false;
 }
 
 cancell() {
+  this.selectedOfficerId = '';
+  this.selectedOfficer = '';
   this.isPass = false;
 }
 
@@ -448,6 +451,8 @@ passTargetToBackEnd() {
         this.isPass = false;
         this.isPassTarget = false;
         this.selectedOrderIds = [];
+        this.selectedOfficerId = '';
+        this.selectedOfficer = '';
       }
        
       else {
@@ -510,6 +515,7 @@ onOfficerChange(event: Event) {
 }
 
 goBack() {
+  this.selectedOfficerId = '';
   window.location.reload();
 }
 
@@ -518,56 +524,48 @@ navigateToProfile() {
 }
 
 getStatus(item: orders): string {
-  // console.log('Setting status');
+  if (!item?.sheduleDate) return 'Not Completed';
 
-  // Convert both into Date objects
+  // Parse dates
   const scheduleDate = new Date(item.sheduleDate);
   const completeTime = item.completeTime ? new Date(item.completeTime) : null;
 
-  // Create the schedule deadline
+  // Build deadline
   const deadline = new Date(scheduleDate);
 
   if (item.sheduleTime) {
     const timeSlot = item.sheduleTime.trim();
 
-    if (timeSlot === 'Within 8-12 PM') {
-      deadline.setHours(12, 0, 0, 0); // 12:00 PM
-    } else if (timeSlot === 'Within 12-4 PM') {
-      deadline.setHours(16, 0, 0, 0); // 4:00 PM
-    } else if (timeSlot === 'Within 4-8 PM') {
+    if (timeSlot === 'Within 8AM - 2PM') {
+      deadline.setHours(14, 0, 0, 0); // 2:00 PM
+    } else if (timeSlot === 'Within 2PM - 8PM') {
       deadline.setHours(20, 0, 0, 0); // 8:00 PM
-    }
-  }
-
-  // Current time in SL
-  const now = new Date(
-    new Date().toLocaleString('en-US', { timeZone: 'Asia/Colombo' })
-  );
-
-  // console.log(
-  //   'Now (SL):',
-  //   now.toLocaleString('en-GB', { timeZone: 'Asia/Colombo', hour12: false })
-  // );
-  // console.log(
-  //   'Deadline (SL):',
-  //   deadline.toLocaleString('en-GB', { timeZone: 'Asia/Colombo', hour12: false })
-  // );
-
-  // --- Case 1: Not completed yet ---
-  if (!completeTime) {
-    if (now.getTime() > deadline.getTime()) {
-      this.isLateAndNotCompleted = true;
-      return 'Not Completed';
     } else {
-      this.isLateAndNotCompleted = false;
-      return 'Not Completed';
+      // Default fallback (optional)
+      deadline.setHours(23, 59, 59, 999);
     }
+  } else {
+    // If no time slot, assume end of day
+    deadline.setHours(23, 59, 59, 999);
   }
 
-  // --- Case 2: Completed: Check on-time or late ---
-  return completeTime.getTime() <= deadline.getTime() ? 'On Time' : 'Late';
-}
+  const now = new Date(); // local time (Sri Lanka)
 
+  // --- Case 1: Not completed ---
+  if (!completeTime) {
+    this.isLateAndNotCompleted = now.getTime() > deadline.getTime();
+    return 'Not Completed';
+  }
+
+  console.log('completeTime', completeTime)
+  console.log('time', completeTime.getTime())
+   console.log('getTime', deadline.getTime())
+
+  // --- Case 2: Completed ---
+  return completeTime.getTime() <= deadline.getTime()
+    ? 'On Time'
+    : 'Late';
+}
 }
 
 class orders {

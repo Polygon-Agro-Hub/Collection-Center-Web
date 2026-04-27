@@ -209,7 +209,9 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.toastSrv.warning('Officer Target Edit Canceled.')
-        this.router.navigate(['/officer-target']);
+        this.router.navigate(['/officer-target'], {
+            queryParams: { id: this.targetItemId, toDate: this.toDate, fromDate: this.fromDate, officerId: this.officerId },
+          });
 
       }
     });

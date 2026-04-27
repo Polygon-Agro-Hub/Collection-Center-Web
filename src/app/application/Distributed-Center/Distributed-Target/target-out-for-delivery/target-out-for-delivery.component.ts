@@ -60,6 +60,7 @@ export class TargetOutForDeliveryComponent implements OnInit {
     this.DistributionSrv.getOutForDeliveryOrders(status, search).subscribe(
       (res) => {
         this.ordersArr = res.items
+        console.log('ordersArr', this.ordersArr)
         this.centerName = res.centerName;
         this.totalItems = res.items.length | 0;
         if (res.items.length === 0) {
@@ -293,5 +294,6 @@ class orders {
   outDlvrDateLocal!: Date
   deliveryPeriod!: string
   scheduleDateStatus!: string
+  outDlvrDate!: Date;
 }
 

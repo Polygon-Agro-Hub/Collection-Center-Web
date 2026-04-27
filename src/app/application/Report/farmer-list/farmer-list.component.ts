@@ -76,12 +76,28 @@ export class FarmerListComponent implements OnInit {
     this.fetchFarmerList(this.page, this.itemsPerPage, this.searchText);
   }
 
-  // filterDate() {
-  //   this.fetchFarmerList(this.page, this.itemsPerPage, this.searchText, this.selectDate);
+  // onDateChange(newDate: string | Date | null) {
+  //   this.selectedDate = newDate ? newDate : new Date();
+  //   this.fetchFarmerList();
   // }
 
   onDateChange(newDate: string | Date | null) {
-    this.selectedDate = newDate;
+    let dateString: string;
+  
+    if (!newDate) {
+      
+      dateString = new Date().toISOString().split('T')[0];
+    } 
+    else if (newDate instanceof Date) {
+      
+      dateString = newDate.toISOString().split('T')[0];
+    } 
+    else {
+      
+      dateString = newDate;
+    }
+  
+    this.selectedDate = dateString;
     this.fetchFarmerList();
   }
 

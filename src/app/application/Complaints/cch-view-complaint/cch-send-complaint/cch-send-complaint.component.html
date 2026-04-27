@@ -2,7 +2,7 @@
 
 <div *ngIf="!isLoading">
     <div class="flex flex-row items-center justify-end gap-8 dark:text-white">
-        <i class="fa-solid fa-list text-lg"></i>
+        <i class="fa-solid text-[#4A4A4A] fa-list text-lg"></i>
 
         <p class="text-[#4A4A4A]">Filter By</p>
 
@@ -153,11 +153,6 @@
                     </td>
                     <td class="px-6 align-top py-4 text-sm text-gray-900 dark:text-gray-300">{{item.complainCategory}}
                     </td>
-                    <!-- <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
-                        {{item.complain | slice:0:100}}{{item.complain.length > 50 ? '...' : ''}}
-                    </td> -->
-
-                    <!-- Add w-1/3 to the description td -->
                     <td
                         class="px-6 align-top py-4 text-sm text-gray-900 dark:text-gray-300 w-1/3 break-words whitespace-normal">
                         {{ truncateText(item.complain, item.id) }}

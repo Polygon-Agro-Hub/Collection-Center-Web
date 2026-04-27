@@ -118,7 +118,7 @@
                     >{{ getDisplayDate(item.sheduleDate) }} {{ removeWithin(item.sheduleTime) }}</td>
 
                       <td class="px-6 py-4 font-medium text-gray-900 dark:text-[#C5C5C5]">
-                        {{ item.outDlvrDateLocal | date: 'hh.mm a'}}
+                        {{ item.outDlvrDateLocal | date: 'hh.mm a' : 'UTC'}}
                       </td>
                       <td class="px-6 py-3">
 

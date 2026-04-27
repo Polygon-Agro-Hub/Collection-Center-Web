@@ -276,8 +276,8 @@ export class FarmerReportComponent implements OnInit {
       ],
       x,
       y,
-      [40, 50, 30, 30], // Column widths
-      7,  // lineHeight
+      [40, 45, 50, 45], // Column widths
+      5,  // lineHeight
       3,  // padding
       '#434343',  // Header text color (red)
       '#000000'   // Body text color (dark gray)

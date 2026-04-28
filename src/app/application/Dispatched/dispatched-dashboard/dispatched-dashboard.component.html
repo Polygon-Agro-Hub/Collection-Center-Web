@@ -149,7 +149,7 @@
       </div>
       <div class="flex w-full flex-row items-center justify-end gap-x-5 mr-5">
 
-        <i *ngIf="activeTab === 'all' || activeTab === 'Ready to Pickup' || activeTab === 'out-for-delivery' || activeTab === 'Return Received' || activeTab === 'Picked Up'" class="fa-solid fa-list text-lg dark:text-white ml-5"></i>
+        <i *ngIf="activeTab === 'all' || activeTab === 'Ready to Pickup' || activeTab === 'out-for-delivery' || activeTab === 'Return Received' || activeTab === 'Picked Up'" class="fa-solid text-[#4A4A4A] fa-list text-lg dark:text-white ml-5"></i>
         <p *ngIf="activeTab === 'all' || activeTab === 'Ready to Pickup' || activeTab === 'out-for-delivery' || activeTab === 'Return Received' || activeTab === 'Picked Up'" class="text-[#4A4A4A] dark:text-textDark whitespace-nowrap">Filter By</p>
   
         <div *ngIf="activeTab === 'all'" class="relative w-48  custom-status-dropdown-container">
@@ -277,7 +277,7 @@
     </div>
   
     <!-- Table Section - Horizontally Scrollable -->
-    <div *ngIf="hasData" class="mt-8 mr-5 overflow-x-auto border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+    <div *ngIf="hasData" class="mt-8 mr-5 overflow-x-auto border-gray-100 border-[2px] rounded-lg dark:border-[#202021] overflow-hidden">
       <table class="w-full min-w-max divide-y-2 border-[1px] border-gray-300 rounded-lg overflow-hidden">
         <thead class="text-[#4B5563] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
           <tr>

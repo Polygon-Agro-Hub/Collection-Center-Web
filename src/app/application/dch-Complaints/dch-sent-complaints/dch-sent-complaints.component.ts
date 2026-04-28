@@ -91,7 +91,7 @@ export class DchSentComplaintsComponent implements OnInit{
 
   // }
 
-  fetchAllreciveComplaint(page: number = 1, limit: number = this.itemsPerPage, status: string = this.selectStatus, emptype: string = this.selectEmployee, search: string = this.searchText) {
+  fetchAllreciveComplaint(page: number = this.page, limit: number = this.itemsPerPage, status: string = this.selectStatus, emptype: string = this.selectEmployee, search: string = this.searchText) {
     this.isLoading = true;
     this.DistributionComplaintsSrv.getAllSentDCHComplains(page, limit, status, emptype, search).subscribe(
       (res) => {
@@ -122,6 +122,7 @@ export class DchSentComplaintsComponent implements OnInit{
   }
 
   filterStatus() {
+    this.page = 1;
     this.fetchAllreciveComplaint();
   }
 
@@ -139,6 +140,7 @@ export class DchSentComplaintsComponent implements OnInit{
   // }
 
   filterEmployee() {
+    this.page = 1;
     this.fetchAllreciveComplaint();
   }
 
@@ -151,6 +153,7 @@ export class DchSentComplaintsComponent implements OnInit{
   }
 
   onSearch() {
+    this.page = 1;
     this.fetchAllreciveComplaint();
 
   }

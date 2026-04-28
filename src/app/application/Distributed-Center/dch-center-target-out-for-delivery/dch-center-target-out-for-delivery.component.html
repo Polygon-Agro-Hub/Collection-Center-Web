@@ -68,7 +68,7 @@
                 (dateChange)="onDateChange($event)"></app-custom-datepicker>
             </div>
 
-            <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+            <div class="flex mr-5 items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
                 <input type="text" placeholder="Search by Order ID.." [(ngModel)]="searchText" (keyup.enter)="onSearch()" (keyup.esc)="offSearch()"
                     class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
                 <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
@@ -121,7 +121,7 @@
             </thead>
             <tbody class="bg-white dark:bg-[#1D1D1F] text-[#000000] dark:border-[#1D1D1F] cursor-default">
                 <tr
-                    *ngFor="let item of ordersArr | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index">
+                    *ngFor="let item of ordersArr; let i = index">
 
                     <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
                         {{ (i + 1) < 10 ? ('0' + (i + 1)) : (i + 1) }} </td>

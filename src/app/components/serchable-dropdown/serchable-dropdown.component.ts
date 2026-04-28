@@ -33,6 +33,7 @@ export class SerchableDropdownComponent {
   @Input() searchInputClass: string = '';
   @Input() dropdownMenuClass: string = '';
   @Input() dropdownTriggerClass: string | string[] | { [klass: string]: boolean } = '';
+  @Input() showClearIcon: boolean = true;  // existing behavior x icon upon selected
 
   isOpen: boolean = false;
   searchTerm: string = '';

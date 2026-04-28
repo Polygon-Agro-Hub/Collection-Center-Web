@@ -1,10 +1,10 @@
 <app-loading-spinner *ngIf="loading"></app-loading-spinner>
 
 <div class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
-  <p (click)="navigateToProdurement()" >Procurement</p>
+  <p (click)="navigateToProdurement()">Procurement</p>
   <!-- <p onclick="history.back()">Officer Reports</p> -->
-  <p onclick="history.back()" >Redefine Orders</p>
-  <p  >View Order</p>
+  <p onclick="history.back()">Redefine Orders</p>
+  <p>View Order</p>
 </div>
 
 <div class="min-w-[1200px] bg-white dark:bg-[#363636] shadow-lg rounded-lg">
@@ -62,9 +62,8 @@
       <button class="px-4 py-2 bg-[#74788D] text-[#D3D3D3] rounded-lg text-sm" (click)="confirmClear()">
         Cancel
       </button>
-      <button class="px-4 py-2 e rounded-lg text-sm" [disabled]="!isWithinLimit" 
-        [class.opacity-50]="!isWithinLimit" [class.cursor-not-allowed]="!isWithinLimit" (click)="confirmComplete()"
-        [ngClass]="{
+      <button class="px-4 py-2 e rounded-lg text-sm" [disabled]="!isWithinLimit" [class.opacity-50]="!isWithinLimit"
+        [class.cursor-not-allowed]="!isWithinLimit" (click)="confirmComplete()" [ngClass]="{
           'bg-[#415CFF] text-white': isWithinLimit,
           'bg-[#F6F7F9] text-[#6B7D8C] border border-[#6B7D8C]': !isWithinLimit
         }">
@@ -91,30 +90,21 @@
               <div class="w-8 text-sm text-gray-700 dark:text-white">
                 {{ item.productTypeShortCode }}
               </div>
-              
-              <div class="flex items-center flex-1">
-                <app-searchable-dropdown
-                  [items]="getMarketplaceDropdownItems()"
-                  [customStyles]="item.isExcluded === true ? 'border-red-500 text-red-600 bg-red-50' : ''"
-                  placeholder="--Select Product--"
-                  searchPlaceholder="Search products..."
-                  [ngModel]="getProductValue(item)"
-                  (ngModelChange)="onProductSelectionChange($event, item)"
-                  [clearable]="true"
-                  [showSelected]="true"
-                  [disabled]="false"
-                  class="w-full"
-                  
-                ></app-searchable-dropdown>
-              </div>
-              
+
+              <app-searchable-dropdown [items]="getMarketplaceDropdownItems()"
+                [customStyles]="item.isExcluded === true ? 'border-red-500 text-red-600 bg-red-50' : ''"
+                placeholder="--Select Product--" searchPlaceholder="Search products..."
+                [ngModel]="getProductValue(item)" (ngModelChange)="onProductSelectionChange($event, item)"
+                [clearable]="true" [showSelected]="true" [disabled]="false" [showClearIcon]="false"
+                class="w-full"></app-searchable-dropdown>
+
               <input type="number" step="0.01" min="0" placeholder="--Quantity in kg--"
                 class="rounded-xl dark:bg-[#292929] w-36 px-4 py-4 border border-gray-300 dark:border-gray-600 bg-white text-gray-500 dark:text-white placeholder-gray-500 dark:placeholder-gray-400 text-sm"
                 [(ngModel)]="item.qty" (change)="validateQuantity(item)" (keydown)="preventNegativeInput($event)" />
               <div class="w-16 text-right text-sm text-gray-900 dark:text-gray-100">
                 Rs.{{ item.price | number : "1.2-2" }}
               </div>
-            
+
             </div>
           </span>
           <div class="mt-3 flex justify-end px-10">
@@ -169,177 +159,171 @@
     <!-- Modal Content with Scroll -->
     <div class="flex-1 overflow-hidden flex flex-col">
 
-  <!-- Table Header (Fixed) -->
-  <div class="shrink-0 px-6 pt-4 pb-2">
-    <div class="flex items-center text-sm font-medium text-[#8492A3] dark:text-gray-400 uppercase tracking-wide border-b border-gray-100 dark:border-gray-700 pb-2">
-      <div class="w-1/4 py-2 px-4 text-center whitespace-nowrap">
-        NO ({{ additionalItemsCount < 10 ? '0' + additionalItemsCount : additionalItemsCount }})
-      </div>
-      <div class="w-1/4 py-2 px-4 text-left whitespace-nowrap">Item Name</div>
-      <div class="w-1/4 py-2 px-4 text-center whitespace-nowrap">Quantity</div>
-      <div class="w-1/4 py-2 px-4 text-center whitespace-nowrap">Unit</div>
-    </div>
-  </div>
-
-  <!-- Scrollable Items List -->
-  <div class="flex-1 overflow-y-auto px-6 pb-4">
-    <div class="space-y-2">
-      <div
-        *ngFor="let item of additionalItems; let i = index"
-        class="flex items-center py-2 border-b border-gray-50 dark:border-gray-700">
-
-        <div class="w-1/4 py-2 px-4 text-center text-sm text-[#212121] dark:text-gray-100">
-          {{ additionalItems.length < 10 ? '0' + (i + 1) : i + 1 }}
-        </div>
-        <div class="w-1/4 py-2 px-4 text-sm text-[#212121] text-left dark:text-gray-100 ">
-          {{ item.displayName }}
-        </div>
-        <div class="w-1/4 py-2 px-4 text-center text-sm text-[#000000] dark:text-gray-100">
-          {{ item.qty }}
-        </div>
-        <div class="w-1/4 py-2 px-4 text-center text-sm text-[#808080] dark:text-gray-400">
-          {{ item.unit }}
-        </div>
-      </div>
-
-      <!-- Empty State -->
-      <div *ngIf="additionalItems.length === 0" class="text-center py-8 text-gray-400 dark:text-gray-500">
-        No additional items
-      </div>
-    </div>
-  </div>
-
-</div>
-
-    <!-- Modal Footer -->
-    <div class="px-6 py-4 flex justify-center shrink-0 border-t border-gray-100 dark:border-gray-700">
-      <button type="button"
-        class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-md text-sm font-medium transition-colors"
-        (click)="closeAdditionalItemsModal()">
-        Cancel
-      </button>
-    </div>
-  </div>
-</div>
-
-
-<div *ngIf="showExcludedItemsModal"
-     class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-     (click)="closeExcludedItemsModal()">
-
-  <div class="bg-white rounded-lg dark:bg-[#363636] shadow-xl w-96 max-w-md mx-4 max-h-[90vh] flex flex-col"
-       (click)="$event.stopPropagation()">
-
-    <!-- Modal Header -->
-    <div class="px-6 py-4 text-center shrink-0 border-b border-gray-200 dark:border-gray-700">
-      <h3 class="text-lg font-semibold text-[#000000] dark:text-gray-100">
-        Excluded List Items
-      </h3>
-    </div>
-
-    <!-- Modal Content -->
-    <div class="overflow-hidden flex flex-col items-center">
-
-      <!-- CENTERED TABLE CONTAINER -->
-      <div class="w-full max-w-xs mx-auto">
-
-        <!-- Table Header -->
-        <div class="px-4 pt-4">
-          <div class="flex text-sm font-medium text-[#8492A3] dark:text-gray-400 uppercase tracking-wide border-b border-gray-200 dark:border-gray-700 pb-2">
-
-            <!-- Number Column -->
-            <div class="w-16 text-center">
-              NO ({{ excludedItemsCount }})
-            </div>
-
-            <!-- Name Column -->
-            <div class="flex-1 text-left pl-6">
-              Item Name
-            </div>
-
+      <!-- Table Header (Fixed) -->
+      <div class="shrink-0 px-6 pt-4 pb-2">
+        <div
+          class="flex items-center text-sm font-medium text-[#8492A3] dark:text-gray-400 uppercase tracking-wide border-b border-gray-100 dark:border-gray-700 pb-2">
+          <div class="w-1/4 py-2 px-4 text-center whitespace-nowrap">
+            NO ({{ additionalItemsCount < 10 ? '0' + additionalItemsCount : additionalItemsCount }}) </div>
+              <div class="w-1/4 py-2 px-4 text-left whitespace-nowrap">Item Name</div>
+              <div class="w-1/4 py-2 px-4 text-center whitespace-nowrap">Quantity</div>
+              <div class="w-1/4 py-2 px-4 text-center whitespace-nowrap">Unit</div>
           </div>
         </div>
 
-        <!-- Scrollable Body -->
-        <div class="overflow-y-auto px-4 pb-4 max-h-64 scrollbar-thumb-scrollBarColor scrollbar-track-transparent scrollbar-thumb-rounded-full">
-
+        <!-- Scrollable Items List -->
+        <div class="flex-1 overflow-y-auto px-6 pb-4">
           <div class="space-y-2">
+            <div *ngFor="let item of additionalItems; let i = index"
+              class="flex items-center py-2 border-b border-gray-50 dark:border-gray-700">
 
-            <div *ngFor="let item of excludeItemsArr; let i = index"
-                 class="flex items-center py-2 border-b border-gray-100 dark:border-gray-700">
-
-              <!-- Number -->
-              <div class="w-16 text-center text-gray-600 dark:text-gray-300">
-                {{ i + 1 }}
+              <div class="w-1/4 py-2 px-4 text-center text-sm text-[#212121] dark:text-gray-100">
+                {{ additionalItems.length < 10 ? '0' + (i + 1) : i + 1 }} </div>
+                  <div class="w-1/4 py-2 px-4 text-sm text-[#212121] text-left dark:text-gray-100 ">
+                    {{ item.displayName }}
+                  </div>
+                  <div class="w-1/4 py-2 px-4 text-center text-sm text-[#000000] dark:text-gray-100">
+                    {{ item.qty }}
+                  </div>
+                  <div class="w-1/4 py-2 px-4 text-center text-sm text-[#808080] dark:text-gray-400">
+                    {{ item.unit }}
+                  </div>
               </div>
 
-              <!-- Name -->
-              <div class="flex-1 text-left pl-6 text-gray-800 dark:text-gray-100 truncate">
-                {{ item.displayName }}
+              <!-- Empty State -->
+              <div *ngIf="additionalItems.length === 0" class="text-center py-8 text-gray-400 dark:text-gray-500">
+                No additional items
               </div>
+            </div>
+          </div>
 
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="px-6 py-4 flex justify-center shrink-0 border-t border-gray-100 dark:border-gray-700">
+          <button type="button"
+            class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-md text-sm font-medium transition-colors"
+            (click)="closeAdditionalItemsModal()">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
+
+    <div *ngIf="showExcludedItemsModal"
+      class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+      (click)="closeExcludedItemsModal()">
+
+      <div class="bg-white rounded-lg dark:bg-[#363636] shadow-xl w-96 max-w-md mx-4 max-h-[90vh] flex flex-col"
+        (click)="$event.stopPropagation()">
+
+        <!-- Modal Header -->
+        <div class="px-6 py-4 text-center shrink-0 border-b border-gray-200 dark:border-gray-700">
+          <h3 class="text-lg font-semibold text-[#000000] dark:text-gray-100">
+            Excluded List Items
+          </h3>
+        </div>
+
+        <!-- Modal Content -->
+        <div class="overflow-hidden flex flex-col items-center">
+
+          <!-- CENTERED TABLE CONTAINER -->
+          <div class="w-full max-w-xs mx-auto">
+
+            <!-- Table Header -->
+            <div class="px-4 pt-4">
+              <div
+                class="flex text-sm font-medium text-[#8492A3] dark:text-gray-400 uppercase tracking-wide border-b border-gray-200 dark:border-gray-700 pb-2">
+
+                <!-- Number Column -->
+                <div class="w-16 text-center">
+                  NO ({{ excludedItemsCount }})
+                </div>
+
+                <!-- Name Column -->
+                <div class="flex-1 text-left pl-6">
+                  Item Name
+                </div>
+
+              </div>
             </div>
 
-            <!-- Empty State -->
-            <div *ngIf="excludeItemsArr.length === 0"
-                 class="text-center py-8 text-gray-400 dark:text-gray-500">
-              No excluded items
+            <!-- Scrollable Body -->
+            <div
+              class="overflow-y-auto px-4 pb-4 max-h-64 scrollbar-thumb-scrollBarColor scrollbar-track-transparent scrollbar-thumb-rounded-full">
+
+              <div class="space-y-2">
+
+                <div *ngFor="let item of excludeItemsArr; let i = index"
+                  class="flex items-center py-2 border-b border-gray-100 dark:border-gray-700">
+
+                  <!-- Number -->
+                  <div class="w-16 text-center text-gray-600 dark:text-gray-300">
+                    {{ i + 1 }}
+                  </div>
+
+                  <!-- Name -->
+                  <div class="flex-1 text-left pl-6 text-gray-800 dark:text-gray-100 truncate">
+                    {{ item.displayName }}
+                  </div>
+
+                </div>
+
+                <!-- Empty State -->
+                <div *ngIf="excludeItemsArr.length === 0" class="text-center py-8 text-gray-400 dark:text-gray-500">
+                  No excluded items
+                </div>
+
+              </div>
             </div>
 
           </div>
         </div>
 
+        <!-- Modal Footer -->
+        <div class="px-6 py-4 flex justify-center shrink-0 border-t border-gray-200 dark:border-gray-700">
+          <button type="button"
+            class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-md text-sm font-medium transition-colors"
+            (click)="closeExcludedItemsModal()">
+            Cancel
+          </button>
+        </div>
+
       </div>
     </div>
 
-    <!-- Modal Footer -->
-    <div class="px-6 py-4 flex justify-center shrink-0 border-t border-gray-200 dark:border-gray-700">
-      <button type="button"
-              class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-md text-sm font-medium transition-colors"
-              (click)="closeExcludedItemsModal()">
-        Cancel
-      </button>
+
+    <div *ngIf="isNewAddPopUp" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+      (click)="closeAddNewItemPopUp()">
+      <div class="bg-white dark:bg-[#363636]  rounded-lg shadow-xl w-1/3 max-w-md mx-4"
+        (click)="$event.stopPropagation()">
+        <!-- Modal Header -->
+        <div class="px-6 py-4 text-center">
+          <h3 class="text-lg font-semibold text-[#000000] dark:text-gray-100">
+            Select Category
+          </h3>
+        </div>
+
+        <div class="flex justify-center">
+          <app-searchable-dropdown [items]="categoryDropdownItems" placeholder="Select Category"
+            searchPlaceholder="Search categories..." [(ngModel)]="selectCategoryId"
+            (selectionChange)="onCategorySelectionChange($event)" [clearable]="true" [showSelected]="true"
+            [disabled]="false" class="w-96 mb-4"></app-searchable-dropdown>
+        </div>
+
+        <!-- Modal Footer -->
+        <div class="px-6 py-4 flex flex-row justify-center gap-x-4">
+          <button type="button"
+            class="px-4 py-2 bg-[#74788D] text-[#D3D3D3] rounded-md text-sm font-medium transition-colors"
+            (click)="closeAddNewItemPopUp()">
+            Cancel
+          </button>
+          <button type="button"
+            class="px-6 py-2 bg-[#415CFF] text-white rounded-md text-sm font-medium transition-colors"
+            (click)="addNewItems()">
+            Add
+          </button>
+        </div>
+      </div>
     </div>
-
-  </div>
-</div>
-
-
-<div *ngIf="isNewAddPopUp" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-  (click)="closeAddNewItemPopUp()">
-  <div class="bg-white dark:bg-[#363636]  rounded-lg shadow-xl w-1/3 max-w-md mx-4" (click)="$event.stopPropagation()">
-    <!-- Modal Header -->
-    <div class="px-6 py-4 text-center">
-      <h3 class="text-lg font-semibold text-[#000000] dark:text-gray-100">
-        Select Category
-      </h3>
-    </div>
-
-    <div class="flex justify-center">
-      <app-searchable-dropdown
-        [items]="categoryDropdownItems"
-        placeholder="Select Category"
-        searchPlaceholder="Search categories..."
-        [(ngModel)]="selectCategoryId"
-        (selectionChange)="onCategorySelectionChange($event)"
-        [clearable]="true"
-        [showSelected]="true"
-        [disabled]="false"
-        class="w-96 mb-4"
-      ></app-searchable-dropdown>
-    </div>
-
-    <!-- Modal Footer -->
-    <div class="px-6 py-4 flex flex-row justify-center gap-x-4">
-      <button type="button"
-        class="px-4 py-2 bg-[#74788D] text-[#D3D3D3] rounded-md text-sm font-medium transition-colors"
-        (click)="closeAddNewItemPopUp()">
-        Cancel
-      </button>
-      <button type="button" class="px-6 py-2 bg-[#415CFF] text-white rounded-md text-sm font-medium transition-colors"
-        (click)="addNewItems()">
-        Add
-      </button>
-    </div>
-  </div>
-</div>

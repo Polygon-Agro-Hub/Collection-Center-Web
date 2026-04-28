@@ -1,4 +1,4 @@
-import { CommonModule, DatePipe, Location  } from '@angular/common';
+import { CommonModule, DatePipe, Location } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -17,7 +17,7 @@ import Swal from 'sweetalert2';
   templateUrl: './dch-center-target-out-for-delivery.component.html',
   styleUrl: './dch-center-target-out-for-delivery.component.css'
 })
-export class DchCenterTargetOutForDeliveryComponent implements OnInit{
+export class DchCenterTargetOutForDeliveryComponent implements OnInit {
 
   ordersArr!: orders[];
   searchText: string = '';
@@ -27,7 +27,7 @@ export class DchCenterTargetOutForDeliveryComponent implements OnInit{
 
   officerId!: number;
 
-  date:  string | Date | null = null;
+  date: string | Date | null = null;
 
   page: number = 1;
   totalItems: number = 0;
@@ -38,7 +38,7 @@ export class DchCenterTargetOutForDeliveryComponent implements OnInit{
   centerName: string | null = null;
   regCode: string | null = null;
 
-  isLoading:boolean = true;
+  isLoading: boolean = true;
 
   isDownloading: boolean = false;
 
@@ -117,9 +117,9 @@ export class DchCenterTargetOutForDeliveryComponent implements OnInit{
     const schedule = new Date(scheduleDate);
     today.setHours(0, 0, 0, 0);
     schedule.setHours(0, 0, 0, 0);
-  
+
     const diffDays = Math.floor((schedule.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-  
+
     if (diffDays === 0) {
       return 'Today';
     } else if (diffDays === 1) {
@@ -128,10 +128,10 @@ export class DchCenterTargetOutForDeliveryComponent implements OnInit{
       return 'Day after tomorrow';
     } else {
       const day = schedule.getDate();
-      const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
-                          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
       const month = monthNames[schedule.getMonth()];
-  
+
       // Get ordinal for the day
       const ordinal = (n: number) => {
         if (n > 3 && n < 21) return 'th';
@@ -142,89 +142,93 @@ export class DchCenterTargetOutForDeliveryComponent implements OnInit{
           default: return 'th';
         }
       }
-  
+
       return `${day}${ordinal(day)} ${month}`;
     }
   }
 
   downloadTemplate1() {
-    this.isDownloading = true;
-    
-    const selectedDateStr = String(this.date); 
-    const selectedDateObj = new Date(selectedDateStr);
-    const dateStr = selectedDateObj.toLocaleDateString('en-GB', { day: '2-digit', month: 'short' });
-    const fullDateStr = `${String(selectedDateObj.getMonth() + 1).padStart(2, '0')}-${String(selectedDateObj.getDate()).padStart(2, '0')}`;
+  this.isDownloading = true;
+  const now = new Date();
 
-    const now = new Date();
+  // Today's date for "Generated at" — with year
+  const generatedDateStr = `${String(now.getDate()).padStart(2, '0')}-${String(now.getMonth() + 1).padStart(2, '0')}-${now.getFullYear()}`;
+  const timeStr = now
+    .toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
+    .replace(':', '.')
+    .replace(' ', ' ');
+  const generatedAt = `${generatedDateStr} ${timeStr}`;
 
-    const timeStr = now
-      .toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
-      .replace(':', '.')
-      .replace(' ', '');
-
-    const finalStr = `${fullDateStr} ${timeStr}`;
-
-    this.DistributionSrv
-      .downloadDCHOutForDeliveryTargetProgressReport(this.selectStatus, this.date, this.searchText, this.centerId! )
-      .subscribe({
-        next: (blob) => {
-          const url = window.URL.createObjectURL(blob);
-          const a = document.createElement("a");
-          a.href = url;
-          if (this.selectStatus) {
-            a.download = `OFD Orders on ${dateStr} filtered by ${this.selectStatus} Generated at ${finalStr}.xlsx`;
-          } else {
-            a.download = `OFD Orders on ${dateStr}  Generated at ${finalStr}.xlsx`;
-          }
-          a.click();
-          window.URL.revokeObjectURL(url);
-
-          Swal.fire({
-            icon: "success",
-            title: "Downloaded",
-            text: "Please check your downloads folder",
-            customClass: {
-              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-              title: 'dark:text-white',
-            }
-          });
-          this.isDownloading = false;
-        },
-        error: (error) => {
-          Swal.fire({
-            icon: "error",
-            title: "Download Failed",
-            text: error.message,
-            customClass: {
-              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-              title: 'dark:text-white',
-            }
-          });
-          this.isDownloading = false;
-        }
-      });
+  // Selected date label (only built if date is selected) — with year
+  let datePart = '';
+  if (this.date) {
+    const selectedDateObj = new Date(String(this.date));
+    const dateStr = selectedDateObj.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+    datePart = ` on ${dateStr}`;
   }
-  
+
+  // Status filter label
+  const statusPart = this.selectStatus ? ` filtered by ${this.selectStatus}` : '';
+
+  // Final filename
+  const fileName = `OFD Orders${datePart}${statusPart} Generated at ${generatedAt}.xlsx`;
+
+  this.DistributionSrv
+    .downloadDCHOutForDeliveryTargetProgressReport(this.selectStatus, this.date, this.searchText, this.centerId!)
+    .subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = fileName;
+        a.click();
+        window.URL.revokeObjectURL(url);
+        Swal.fire({
+          icon: 'success',
+          title: 'Downloaded',
+          text: 'Please check your downloads folder',
+          customClass: {
+            popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+            title: 'dark:text-white',
+          }
+        });
+        this.isDownloading = false;
+      },
+      error: (error) => {
+        Swal.fire({
+          icon: 'error',
+          title: 'Download Failed',
+          text: error.message,
+          customClass: {
+            popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+            title: 'dark:text-white',
+          }
+        });
+        this.isDownloading = false;
+      }
+    });
+}
+
   removeWithin(time: string): string {
     return time ? time.replace('Within ', '') : time;
   }
 
 
-filterStatus() {
-  this.fetchCenterTargetOutForDelivery();
-}
-
-cancelStatus(event?: MouseEvent) {
-  if (event) {
-    event.stopPropagation(); // Prevent triggering the dropdown toggle
+  filterStatus() {
+    this.fetchCenterTargetOutForDelivery();
   }
-  this.selectStatus = '';
-  this.fetchCenterTargetOutForDelivery();
-}
 
-goBack() {
-  this.location.back();
-}
+  cancelStatus(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
+    this.selectStatus = '';
+    this.fetchCenterTargetOutForDelivery();
+  }
+
+  goBack() {
+    this.location.back();
+  }
 
 }
 

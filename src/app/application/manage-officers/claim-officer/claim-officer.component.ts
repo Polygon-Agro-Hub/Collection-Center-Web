@@ -45,7 +45,7 @@ export class ClaimOfficerComponent implements OnInit {
   ngOnInit(): void {
     
     if (this.logingRole === 'Distribution Centre Manager') {
-      this.selectJobRole = 'Distribution Officer';
+      this.selectJobRole = '';
     } else if (this.logingRole === 'Collection Centre Manager') {
        this.selectJobRole = 'Collection Officer'
     }

@@ -66,7 +66,7 @@
 
                         <!-- Grade A Column -->
                         <td class="px-6 py-3 text-gray-900 dark:text-gray-300 ">
-                            <input type="number" [(ngModel)]="item.targetA" name="targetA" min="0" (change)="checkNegativeValue(item, 'A')"
+                            <input type="number" [(ngModel)]="item.targetA" step="any" name="targetA" min="0" (change)="checkNegativeValue(item, 'A')"
                                 class="border-[#415CFF] dark:bg-[#363636] border-[2px] border-dotted rounded-lg w-20 px-2 py-1 mr-4"
                                 [disabled]="!isNew && !item.editingA" (change)="validateForm()" />
                             <button *ngIf="!isNew && !item.editingA && isDateValid"
@@ -85,7 +85,7 @@
 
                         <!-- Grade B Column -->
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
-                            <input type="number" [(ngModel)]="item.targetB" name="targetB" min="0" (change)="checkNegativeValue(item, 'B')"
+                            <input type="number" [(ngModel)]="item.targetB" step="any" name="targetB" min="0" (change)="checkNegativeValue(item, 'B')"
                                 class="border-[#415CFF] dark:bg-[#363636] border-[2px] border-dotted rounded-lg w-20 px-2 py-1 mr-4"
                                 [disabled]="!isNew && !item.editingB" (change)="validateForm()" />
                             <button *ngIf="!isNew && !item.editingB && isDateValid"
@@ -103,7 +103,7 @@
 
                         <!-- Grade C Column -->
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
-                            <input type="number" [(ngModel)]="item.targetC" name="targetC" min="0" (change)="checkNegativeValue(item, 'C')"
+                            <input type="number" [(ngModel)]="item.targetC" step="any" name="targetC" min="0" (change)="checkNegativeValue(item, 'C')"
                                 class="border-[#415CFF] dark:bg-[#363636] border-[2px] border-dotted rounded-lg w-20 px-2 py-1 mr-4"
                                 [disabled]="!isNew && !item.editingC" (change)="validateForm()" />
                             <button *ngIf="!isNew && !item.editingC && isDateValid"

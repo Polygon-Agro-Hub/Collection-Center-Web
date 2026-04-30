@@ -9,4 +9,7 @@ export const environment = {
   // local
    API_BASE_URL: 'http://localhost:5000/agro-api/collection-center-api/api',
 
+   Collection_Com_Category: 'Collection',
+   Distribution_Com_Category: 'Distribution'
+
 };

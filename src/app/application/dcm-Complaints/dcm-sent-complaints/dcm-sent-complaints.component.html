@@ -93,7 +93,7 @@
         </div>
 
 
-        <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+        <div class="flex mr-5 items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
             <input type="text" placeholder="Search by Ref No, EMP ID" [(ngModel)]="searchText"
                 class="bg-transparent outline-none w-full text-textLight dark:text-textDark" (keyup.enter)="onSearch()"
                 (keyup.esc)="offSearch()" />
@@ -137,7 +137,7 @@
             </thead>
             <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F] cursor-default">
                 <tr
-                    *ngFor="let item of complainArr | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index">
+                    *ngFor="let item of complainArr | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index" class="align-top">
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.refNo}}</td>
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
                         <span *ngIf="item.officerId === officerId" class="text-[#415CFF] italic">Own Complaint</span>
@@ -164,7 +164,7 @@
                           </div>
                           
                     </td>
-                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300 align-middle">
+                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300 align-top">
                         <div class="flex items-center justify-center">
                           <span *ngIf="item.status === 'Opened'" class="bg-[#C8E0FF] text-[#415CFF] px-3 py-1 rounded-lg text-center min-w-24">
                             Opened
@@ -232,15 +232,29 @@
                         <textarea rows="5" class="bg-[#F6F6F6] dark:bg-[#363636] w-full border-none outline-none " cols="6" [(ngModel)]="replyObj.reply" name="reply" placeholder="[ Add message here... ]" disabled=""></textarea>
                     </div>
     
-                    <p>
-                        {{
-                            replyObj.language === 'Sinhala' ? 'ඔබට තවත් ගැටළු හෝ ප්‍රශ්න තිබේ නම්, කරුණාකර අප හා සම්බන්ධ වන්න. ඔබේ ඉවසීම සහ අවබෝධය වෙනුවෙන් ස්තූතියි. '
-                            : replyObj.language === 'Tamil' ? 'உங்களுக்கு மேலும் ஏதேனும் சிக்கல்கள் அல்லது கேள்விகள் இருந்தால், தயவுசெய்து எங்களைத் தொடர்பு கொள்ளவும். உங்கள் பொறுமைக்கும் புரிதலுக்கும் நன்றி. ' 
-                            : 'If you have any further concerns or questions, feel free to reach out.Thank you for your patience and understanding. '
-                        }}
-    
-                    </p>
                 </div>
+
+            <div class="flex flex-col mt-1 mb-1">
+                <p>
+                    {{
+                        replyObj.language === 'Sinhala' ? 'ඔබට තවත් ගැටළු හෝ ප්‍රශ්න තිබේ නම්, කරුණාකර අප හා සම්බන්ධ වන්න. '
+                        : replyObj.language === 'Tamil' ? 'உங்களுக்கு மேலும் ஏதேனும் சிக்கல்கள் அல்லது கேள்விகள் இருந்தால், தயவுசெய்து எங்களைத் தொடர்பு கொள்ளவும். ' 
+                        : 'If you have any further concerns or questions, feel free to reach out. '
+                    }}
+
+                </p>
+
+                <p>
+                    {{
+                        replyObj.language === 'Sinhala' ? 'ඔබේ ඉවසීම සහ අවබෝධය වෙනුවෙන් ස්තූතියි. '
+                        : replyObj.language === 'Tamil' ? 'உங்கள் பொறுமைக்கும் புரிதலுக்கும் நன்றி. ' 
+                        : 'Thank you for your patience and understanding. '
+                    }}
+
+                </p>
+            </div>
+
+
                 <div class="flex flex-col mt-1 gap-y-0">
                     <p *ngIf="replyObj.language === 'Sinhala'">
                     මෙයට,<br />

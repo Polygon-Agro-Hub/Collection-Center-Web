@@ -136,7 +136,7 @@ export class DcmComplaintsComponent implements OnInit {
 
 
   fetchAllCategory() {
-    this.complaintsService.getComplainCategory().subscribe(
+    this.DistributionComplaintsSrv.getComplainCategory().subscribe(
       (res) => {
         this.categoryArr = res;
       }

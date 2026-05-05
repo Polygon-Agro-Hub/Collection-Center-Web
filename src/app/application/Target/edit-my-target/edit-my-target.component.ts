@@ -27,7 +27,7 @@ export class EditMyTargetComponent implements OnInit {
   searchTerm: string = '';
   selectedOfficerId!: number | string| null;
   isOpen: boolean = false;
-filterTerm: string = '';
+  filterTerm: string = '';
 
 
 

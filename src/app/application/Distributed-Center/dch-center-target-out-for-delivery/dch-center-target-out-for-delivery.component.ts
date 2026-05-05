@@ -170,8 +170,8 @@ export class DchCenterTargetOutForDeliveryComponent implements OnInit {
   // Status filter label
   const statusPart = this.selectStatus ? ` filtered by ${this.selectStatus}` : '';
 
-  // Final filename
-  const fileName = `OFD Orders${datePart}${statusPart} Generated at ${generatedAt}.xlsx`;
+  // Final filenameFV
+  const fileName = `${this.regCode} OFD Orders${datePart}${statusPart} Generated at ${generatedAt}.xlsx`;
 
   this.DistributionSrv
     .downloadDCHOutForDeliveryTargetProgressReport(this.selectStatus, this.date, this.searchText, this.centerId!)

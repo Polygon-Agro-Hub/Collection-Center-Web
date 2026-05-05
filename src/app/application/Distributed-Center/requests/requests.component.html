@@ -8,7 +8,7 @@
     <div class="w-full min-h-screen px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg overflow-x-auto">
         <div class="flex flex-row items-center justify-between">
             <div class="flex flex-col justify-between">
-                <p class="font-semibold text-lg mb-1 dark:text-white">Product Change Requests on {{today}}</p>
+                <p class="font-semibold text-lg mb-1 dark:text-white">Product Change Requests <span *ngIf="date">on {{date}}</span></p>
             </div>
             <div class="flex flex-row items-center gap-8 ">
                 <i class="fa-solid fa-list text-[#4A4A4A] text-lg dark:text-white ml-8"></i>
@@ -102,7 +102,7 @@
             <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
         </div>
 
-        <div *ngIf="hasData" class="min-w-max mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+        <div *ngIf="hasData" class="min-w-max mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021] overflow-hidden">
             <table class="w-full min-w-max divide-y-2 overflow-hidden">
                 <thead
                     class=" text-[#4B5563] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
@@ -276,7 +276,7 @@
               [(ngModel)]="selectedRequestObj.replaceQty"
               (input)="onQtyChange()"
               (keypress)="allowOnlyNumbers($event)"
-              class="w-20 h-11 text-center border border-[#666666] rounded-lg px-4 py-2"
+              class="w-24 h-11 text-center border border-[#666666] rounded-lg px-4 py-2"
             />
           </td>
 
@@ -309,10 +309,10 @@
         (click)="onReject()"
         class="w-28 px-6 py-2 rounded-lg shadow-lg font-medium"
         [ngClass]="{
-          'text-[#FFFFFF] bg-[#FC0004] hover:bg-[#FC0004]': isPriceValid !== false,
-          'text-[#6B7D8C] bg-[#F6F7F9] hover:bg-[#F6F7F9]': isPriceValid === false
+          'text-[#FFFFFF] bg-[#FC0004] hover:bg-[#FC0004]': isPriceValid !== false && productId && selectedRequestObj.replaceQty && selectedRequestObj.replaceUnitPrice,
+          'text-[#6B7D8C] bg-[#F6F7F9] hover:bg-[#F6F7F9]': !isPriceValid || !productId || !selectedRequestObj.replaceQty || !selectedRequestObj.replaceUnitPrice
         }"
-        [disabled]="isPriceValid === false"
+        [disabled]="!isPriceValid || !productId || !selectedRequestObj.replaceQty || !selectedRequestObj.replaceUnitPrice"
       >
         Reject
       </button>
@@ -320,10 +320,10 @@
         (click)="onApprove()"
         class="w-28  px-6 py-2 shadow-lg rounded-lg font-medium "
         [ngClass]="{
-          'text-[#FFFFFF] bg-[#415CFF] hover:bg-[#415CFF]': isPriceValid !== false,
-          'text-[#6B7D8C] bg-[#F6F7F9] hover:bg-[#F6F7F9]': isPriceValid === false
+          'text-[#FFFFFF] bg-[#415CFF] hover:bg-[#415CFF]': isPriceValid !== false && productId && selectedRequestObj.replaceQty && selectedRequestObj.replaceUnitPrice,
+          'text-[#6B7D8C] bg-[#F6F7F9] hover:bg-[#F6F7F9]': !isPriceValid || !productId || !selectedRequestObj.replaceQty || !selectedRequestObj.replaceUnitPrice
         }"
-        [disabled]="isPriceValid === false"
+            [disabled]="!isPriceValid || !productId || !selectedRequestObj.replaceQty || !selectedRequestObj.replaceUnitPrice"
       >
         Approve
       </button>
@@ -334,79 +334,101 @@
 
 
 <div *ngIf="isViewProductReplacement"
-    class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
-    <div class="bg-white rounded-lg shadow-lg w-[800px] h-[300px] dark:bg-[#363636] p-6">
+     class="fixed inset-0 flex items-center justify-center bg-black bg-opacity-40 z-50">
 
-        <!-- Title -->
-        <h2 class="text-lg font-semibold text-center text-[#212121] dark:text-white mb-6">Product Replacement Details
-        </h2>
+  <div class="bg-white rounded-lg shadow-lg w-1/2 max-w-4xl dark:bg-[#363636] py-6 px-4">
 
-        <!-- Table -->
-        <div class="mr-5 min-w-max border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
-            <table class="w-full min-w-max divide-y-2 overflow-hidden">
-                <thead class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
-                    <tr>
-                        <th class="px-4 py-2 text-left text-sm font-bold text-[#8492A3] dark:text-white">STEPS</th>
-                        <th class="px-4 py-2 text-left text-sm font-bold text-[#8492A3] dark:text-white">PRODUCT NAME
-                        </th>
-                        <th class="px-4 py-2 text-left text-sm font-bold text-[#8492A3] dark:text-white">QUANTITY (KG)
-                        </th>
-                        <th class="px-4 py-2 text-left text-sm font-bold text-[#8492A3] dark:text-white">UNIT PRICE
-                            (RS.)</th>
-                        <th class="px-4 py-2 text-left text-sm font-bold text-[#8492A3] dark:text-white">TOTAL PRICE
-                            (RS.)</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
-                    <tr>
-                        <td class="px-4 py-2 text-sm text-black dark:text-gray-300">Defined Product</td>
-                        <td class="px-4 py-2 text-sm text-black dark:text-gray-300">{{
-                            this.selectedRequestObj.prevDefineProduct }}</td>
-                        <td class="px-4 py-2 text-sm text-black dark:text-gray-300">{{
-                            this.selectedRequestObj.prevDefineProductQty | number:'1.2-2' }}</td>
-                        <td class="px-4 py-2 text-sm text-black dark:text-gray-300">{{
-                            this.selectedRequestObj.prevDefineProductUnitPrice | number:'1.2-2' }}</td>
-                        <td class="px-4 py-2 text-sm text-black dark:text-gray-300">
-                            <span class="text-blue-600  hover:underline cursor-pointer">{{
-                                this.selectedRequestObj.prevDefineProductPrice | number:'1.2-2' }}</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="px-4 py-2 text-sm text-black dark:text-gray-300">Requested Product</td>
-                        <td class="px-4 py-2 text-sm text-black dark:text-gray-300">{{
-                            this.selectedRequestObj.replaceProduct }}</td>
-                        <td class="px-4 py-2 text-sm text-black dark:text-gray-300">{{
-                            this.selectedRequestObj.replaceQty | number:'1.2-2'}}</td>
-                        <td class="px-4 py-2 text-sm text-black dark:text-gray-300">{{
-                            this.selectedRequestObj.replaceUnitPrice | number:'1.2-2' }}</td>
-                        <td class="px-4 py-2 text-sm text-black dark:text-gray-300">
-                            <span class="text-blue-600  hover:underline cursor-pointer">{{
-                                this.selectedRequestObj.replacePrice | number:'1.2-2' }}</span>
-                        </td>
-                    </tr>
-                    <tr>
-                        <td class="px-4 py-2 text-sm text-black dark:text-gray-300">Replaced Product</td>
-                        <td class="px-4 py-2 text-sm text-black dark:text-gray-300">{{
-                            this.selectedRequestObj.currentProduct }}</td>
-                        <td class="px-4 py-2 text-sm text-black dark:text-gray-300">{{
-                            this.selectedRequestObj.currentProductQty | number:'1.2-2' }}</td>
-                        <td class="px-4 py-2 text-sm text-black dark:text-gray-300">{{
-                            this.selectedRequestObj.currentProductUnitPrice | number:'1.2-2' }}</td>
-                        <td class="px-4 py-2 text-sm text-black dark:text-gray-300">
-                            <span class="text-blue-600  hover:underline cursor-pointer">{{
-                                this.selectedRequestObj.currentProductPrice | number:'1.2-2' }}</span>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+    <!-- Title -->
+    <h2 class="text-lg font-semibold text-center text-[#212121] dark:text-white mb-6">
+      Product Replacement Details
+    </h2>
 
-        <!-- Close Button -->
-        <div class="flex justify-center mt-6">
-            <button (click)="closeModal()"
-                class="px-6 py-2 w-24 bg-[#F6F7F9] border-2 border-[#95A1AC] hover:bg-gray-300 text-[#6B7D8C] rounded-lg">
-                Close
-            </button>
-        </div>
+    <!-- Table Wrapper (Centered Properly) -->
+    <div class="flex justify-center">
+      <div class="w-full border-gray-100 border-[2px] rounded-lg dark:border-[#202021] overflow-x-auto">
+
+        <table class="w-full divide-y-2">
+          <thead class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F]">
+            <tr>
+              <th class="px-4 py-2 text-left text-sm font-bold text-[#8492A3] dark:text-white">STEPS</th>
+              <th class="px-4 py-2 text-left text-sm font-bold text-[#8492A3] dark:text-white">PRODUCT NAME</th>
+              <th class="px-4 py-2 text-right text-sm font-bold text-[#8492A3] dark:text-white">QUANTITY (KG)</th>
+              <th class="px-4 py-2 text-right text-sm font-bold text-[#8492A3] dark:text-white">UNIT PRICE (RS.)</th>
+              <th class="px-4 py-2 text-right text-sm font-bold text-[#8492A3] dark:text-white">TOTAL PRICE (RS.)</th>
+            </tr>
+          </thead>
+
+          <tbody class="bg-white dark:bg-[#1D1D1F]">
+            <!-- Defined Product -->
+            <tr>
+              <td class="px-4 py-2 text-sm text-black dark:text-gray-300">Defined Product</td>
+              <td class="px-4 py-2 text-sm text-black dark:text-gray-300">
+                {{ selectedRequestObj?.prevDefineProduct }}
+              </td>
+              <td class="px-4 py-2 text-sm text-right text-black dark:text-gray-300">
+                {{ selectedRequestObj?.prevDefineProductQty | number:'1.2-2' }}
+              </td>
+              <td class="px-4 py-2 text-sm text-right text-black dark:text-gray-300">
+                {{ selectedRequestObj?.prevDefineProductUnitPrice | number:'1.2-2' }}
+              </td>
+              <td class="px-4 py-2 text-sm text-right text-black dark:text-gray-300">
+                <span class="text-blue-600">
+                  {{ selectedRequestObj?.prevDefineProductPrice | number:'1.2-2' }}
+                </span>
+              </td>
+            </tr>
+
+            <!-- Requested Product -->
+            <tr>
+              <td class="px-4 py-2 text-sm text-black dark:text-gray-300">Requested Product</td>
+              <td class="px-4 py-2 text-sm text-black dark:text-gray-300">
+                {{ selectedRequestObj?.replaceProduct }}
+              </td>
+              <td class="px-4 py-2 text-sm text-right text-black dark:text-gray-300">
+                {{ selectedRequestObj?.replaceQty | number:'1.2-2' }}
+              </td>
+              <td class="px-4 py-2 text-sm text-right text-black dark:text-gray-300">
+                {{ selectedRequestObj?.replaceUnitPrice | number:'1.2-2' }}
+              </td>
+              <td class="px-4 py-2 text-sm text-right text-black dark:text-gray-300">
+                <span class="text-blue-600">
+                  {{ selectedRequestObj?.replacePrice | number:'1.2-2' }}
+                </span>
+              </td>
+            </tr>
+
+            <!-- Replaced Product -->
+            <tr>
+              <td class="px-4 py-2 text-sm text-black dark:text-gray-300">Replaced Product</td>
+              <td class="px-4 py-2 text-sm text-black dark:text-gray-300">
+                {{ selectedRequestObj?.currentProduct }}
+              </td>
+              <td class="px-4 py-2 text-sm text-right text-black dark:text-gray-300">
+                {{ selectedRequestObj?.currentProductQty | number:'1.2-2' }}
+              </td>
+              <td class="px-4 py-2 text-sm text-right text-black dark:text-gray-300">
+                {{ selectedRequestObj?.currentProductUnitPrice | number:'1.2-2' }}
+              </td>
+              <td class="px-4 py-2 text-sm text-right text-black dark:text-gray-300">
+                <span class="text-blue-600">
+                  {{ selectedRequestObj?.currentProductPrice | number:'1.2-2' }}
+                </span>
+              </td>
+            </tr>
+
+          </tbody>
+        </table>
+
+      </div>
     </div>
+
+    <!-- Close Button -->
+    <div class="flex justify-center mt-6">
+      <button (click)="closeModal()"
+              class="px-6 py-2 w-24 bg-[#F6F7F9] border-2 border-[#95A1AC] hover:bg-gray-300 text-[#6B7D8C] rounded-lg">
+        Close
+      </button>
+    </div>
+
+  </div>
 </div>

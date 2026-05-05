@@ -1,15 +1,16 @@
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule, DatePipe, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TargetService } from '../../../services/Target-service/target.service';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
+import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
 
 @Component({
   selector: 'app-edit-my-target',
   standalone: true,
-  imports: [CommonModule, FormsModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent, SerchableDropdownComponent],
   templateUrl: './edit-my-target.component.html',
   styleUrl: './edit-my-target.component.css',
   providers: [DatePipe]
@@ -24,7 +25,7 @@ export class EditMyTargetComponent implements OnInit {
   amount: number = 0.00;
 
   searchTerm: string = '';
-  selectedOfficerId!: number | null;
+  selectedOfficerId!: number | string| null;
   isOpen: boolean = false;
 filterTerm: string = '';
 
@@ -36,7 +37,8 @@ filterTerm: string = '';
     private router: Router,
     private TargetSrv: TargetService,
     private toastSrv: ToastAlertService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private location: Location
   ) { }
 
   ngOnInit(): void {
@@ -53,32 +55,48 @@ filterTerm: string = '';
         this.passAmount = res.resultTarget.todo;
         this.amount = res.resultTarget.todo;
         this.officerArr = res.resultOfficer;
-        this.filteredOfficers = [...this.officerArr];
+        // this.filteredOfficers = [...this.officerArr];
 
         this.isLoading = false;
       }
     );
   }
 
-  filterOfficer() {
-  if (!this.officerArr) return;
-  const search = this.filterTerm.toLowerCase();
-  this.filteredOfficers = this.officerArr.filter(officer =>
-    officer.firstNameEnglish.toLowerCase().includes(search) ||
-    officer.lastNameEnglish.toLowerCase().includes(search)
-  );
-}
-
-  selectOfficer(id: number) {
-  const selectedOfficer = this.officerArr.find(officer => officer.id === id);
-  if (selectedOfficer) {
-    this.searchTerm = `${selectedOfficer.firstNameEnglish} ${selectedOfficer.lastNameEnglish}`;
-    this.selectedOfficerId = id;
-    this.isOpen = false;
-    this.filterTerm = '';
-    this.filteredOfficers = [...this.officerArr];
+  get officerDropdownItems() {
+    return this.officerArr.map(officer => ({
+      value: officer.id.toString(),
+      label: officer.firstNameEnglish + ' ' + officer.lastNameEnglish + ' - ' + officer.empId,
+      disabled: false
+    }));
   }
-}
+
+  onOfficerSelectionChange(selectedValue: string) {
+    this.selectedOfficerId = selectedValue || '';
+    // Add any additional logic you need when category changes
+    console.log('Category selected:', selectedValue);
+
+    console.log('officer', this.selectedOfficerId)
+  }
+
+//   filterOfficer() {
+//   if (!this.officerArr) return;
+//   const search = this.filterTerm.toLowerCase();
+//   this.filteredOfficers = this.officerArr.filter(officer =>
+//     officer.firstNameEnglish.toLowerCase().includes(search) ||
+//     officer.lastNameEnglish.toLowerCase().includes(search)
+//   );
+// }
+
+//   selectOfficer(id: number) {
+//   const selectedOfficer = this.officerArr.find(officer => officer.id === id);
+//   if (selectedOfficer) {
+//     this.searchTerm = `${selectedOfficer.firstNameEnglish} ${selectedOfficer.lastNameEnglish}`;
+//     this.selectedOfficerId = id;
+//     this.isOpen = false;
+//     this.filterTerm = '';
+//     this.filteredOfficers = [...this.officerArr];
+//   }
+// }
 
   onSubmit() {
     this.isLoading = true;
@@ -95,11 +113,14 @@ filterTerm: string = '';
       return;
     }
 
+    this.selectedOfficerId = Number(this.selectedOfficerId);
+
     this.TargetSrv.passToTargetToOfficer(this.selectedOfficerId, this.targetItemId, this.passAmount).subscribe(
       (res) => {
         if (res.status) {
           this.toastSrv.success(res.message);
           this.isLoading = false;
+          this.location.back();
         } else {
           this.isLoading = false;
           this.toastSrv.error(res.message);
@@ -111,7 +132,7 @@ filterTerm: string = '';
   onCancel() {
     this.searchTerm = '';
     this.fetchTargetDetalis();
-    this.toastSrv.warning("Cancel this process")
+    this.toastSrv.warning("Canceled this process");
   }
 
   toggleDropdown() {
@@ -128,6 +149,11 @@ onBlur() {
     this.isOpen = false;
   }, 150);
 }
+
+back() {
+    this.location.back();
+  }
+
 }
 
 class TargetDetalis {
@@ -141,6 +167,7 @@ class TargetDetalis {
 
 class Officers {
   id!: number;
+  empId!: string;
   firstNameEnglish!: string;
   lastNameEnglish!: string;
 }

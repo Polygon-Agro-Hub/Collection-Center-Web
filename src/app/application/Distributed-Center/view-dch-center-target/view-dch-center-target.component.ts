@@ -38,6 +38,8 @@ export class ViewDchCenterTargetComponent implements OnInit{
 
   isLoading:boolean = true;
 
+  isTarget: boolean = false;
+
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Pending', 'Completed', 'Opened'];
 
@@ -111,6 +113,9 @@ export class ViewDchCenterTargetComponent implements OnInit{
         });
         this.totalItems = res.total;
         this.hasData = this.ordersArr.length > 0;
+        if (this.selectStatus === '' && this.hasData) {
+          this.isTarget = true;
+        } 
         this.isLoading = false;
       }
     )
@@ -143,6 +148,7 @@ export class ViewDchCenterTargetComponent implements OnInit{
 
   onDateChange(newDate: string | Date | null) {
     this.date = newDate;
+    this.isTarget = false;
     this.fetchCenterTarget();
   }
 

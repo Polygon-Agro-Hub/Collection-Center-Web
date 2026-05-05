@@ -45,7 +45,7 @@ export class ClaimOfficerComponent implements OnInit {
   ngOnInit(): void {
     
     if (this.logingRole === 'Distribution Centre Manager') {
-      this.selectJobRole = 'Distribution Officer';
+      this.selectJobRole = '';
     } else if (this.logingRole === 'Collection Centre Manager') {
        this.selectJobRole = 'Collection Officer'
     }
@@ -78,7 +78,7 @@ export class ClaimOfficerComponent implements OnInit {
           this.isOfficerExist = true
           this.hasData = false
           this.isLoading = false;
-          this.selectJobRole = '';
+          // this.selectJobRole = '';
         } else {
           this.isOfficerExist = false;
           this.hasData = true
@@ -111,6 +111,7 @@ export class ClaimOfficerComponent implements OnInit {
           this.showClaimView = false;
           this.inputId = ''
           this.isReset = true;
+          this.selectJobRole = '';
           // Call fetchOfficer directly without navigation
           // this.fetchOfficer();
         } else {

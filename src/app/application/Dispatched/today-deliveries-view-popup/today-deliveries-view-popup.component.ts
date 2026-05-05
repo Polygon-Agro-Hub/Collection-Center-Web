@@ -153,7 +153,7 @@ export class TodayDeliveriesViewPopupComponent implements OnInit, OnChanges
     const holds = Array.isArray(d.holdDetails) ? d.holdDetails : [];
     for (const hold of holds) {
       if (hold?.holdTime) {
-        steps.push({ type: 'hold', payload: { holdTime: this.formatUTCStringToLocal(hold.holdTime), holdReason: hold.holdReason } });
+        steps.push({ type: 'hold', payload: { holdTime: hold.holdTime, holdReason: hold.holdReason } });
       }
       if (hold?.restartedTime) {
         steps.push({ type: 'restart', payload: { restartedTime: hold.restartedTime } });
@@ -172,6 +172,7 @@ export class TodayDeliveriesViewPopupComponent implements OnInit, OnChanges
       steps.push({ type: 'return recieved', payload: { returnRecivedTime: d.returnRecivedTime } });
     }
 
+    console.log('steps', steps)
     return steps;
   }
 

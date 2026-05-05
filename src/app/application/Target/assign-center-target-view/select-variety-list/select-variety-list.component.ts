@@ -72,6 +72,7 @@ export class SelectVarietyListComponent implements OnInit {
   }
 
   onAdd(isAssing: number, cropId: number) {
+    this.isLoading = true;
     let isSelected = 0;
     if (isAssing === 1) {
       isSelected = 0;

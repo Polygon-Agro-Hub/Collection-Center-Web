@@ -8,27 +8,21 @@
         <div class="w-full dark:bg-[#363636]">
             <div class="flex flex-row items-center justify-center">
                 <p class="text-lg font-semibold text-[#292929] mx-3 dark:text-white">From :</p>
-        
+
                 <div class="relative w-56 mr-10">
-                    <app-custom-datepicker 
-                        #fromDatePicker
-                        [placeholder]="'--Select Date--'"
-                        [(selectedDate)]="fromDate"
+                    <app-custom-datepicker #fromDatePicker [placeholder]="'--Select Date--'" [(selectedDate)]="fromDate"
                         (dateChange)="onFromDateChange($event)">
                     </app-custom-datepicker>
                 </div>
-        
+
                 <p class="text-lg font-semibold text-[#292929] mx-3 dark:text-white">To :</p>
-        
+
                 <div class="relative w-56 mr-6">
-                    <app-custom-datepicker 
-                        #toDatePicker
-                        [placeholder]="'--Select Date--'" 
-                        [selectedDate]="toDate" 
+                    <app-custom-datepicker #toDatePicker [placeholder]="'--Select Date--'" [selectedDate]="toDate"
                         (dateChange)="onToDateChange($event)">
                     </app-custom-datepicker>
                 </div>
-        
+
                 <button (click)="goBtn()"
                     class="bg-[#415CFF] text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-lg ml-5 dark:text-textDark">
                     Go
@@ -57,26 +51,20 @@
 
                 <div class="relative w-52 custom-center-dropdown-container">
                     <div *ngIf="logingRole === 'Collection Centre Head'">
-                        <app-searchable-dropdown
-                        [items]="centerDropdownItems"
-                        placeholder="Select Centre..."
-                        searchPlaceholder="Search centre..."
-                        [(ngModel)]="selectCenters"
-                        (selectionChange)="onCenterSelectionChange($event)"
-                        [clearable]="true"
-                        [showSelected]="true"
-                        [disabled]="false"
-                        class="w-full"
-                      ></app-searchable-dropdown>
-                        
+                        <app-searchable-dropdown [items]="centerDropdownItems" placeholder="Select Centre..."
+                            searchPlaceholder="Search centre..." [(ngModel)]="selectCenters"
+                            (selectionChange)="onCenterSelectionChange($event)" [clearable]="true" [showSelected]="true"
+                            [disabled]="false" class="w-full"></app-searchable-dropdown>
+
                     </div>
                 </div>
 
 
 
                 <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
-                    <input type="text" placeholder="Search by GRN No & NIC..." [(ngModel)]="searchText" (keyup.enter)="onSearch()"  (input)="checkLeadingSpace()"
-                        (keyup.esc)="offSearch()" (ngModelChange)="searchText = $event.trimStart()"
+                    <input type="text" placeholder="Search by GRN No & NIC..." [(ngModel)]="searchText"
+                        (keyup.enter)="onSearch()" (input)="checkLeadingSpace()" (keyup.esc)="offSearch()"
+                        (ngModelChange)="searchText = $event.trimStart()"
                         class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
                     <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                         (click)="onSearch()">
@@ -120,7 +108,7 @@
 
 
 
-        <div class="min-w-max mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+        <div class="min-w-max mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021] overflow-hidden">
 
 
             <table class="w-full min-w-max divide-y-2 border-[1px] border-gray-300 rounded-lg overflow-hidden">
@@ -129,10 +117,10 @@
                         <th class="px-2 py-3 text-left  font-medium">No</th>
                         <th class="px-3 py-3 text-left  font-medium">GRN No</th>
                         <th class="px-3 py-3 text-left  font-medium">Amount (Rs.)</th>
-                        <th class="px-3 py-3 text-left  font-medium"
-                            *ngIf="logingRole === 'Collection Centre Head'">Centre Code</th>
-                        <th class="px-3 py-3 text-left font-medium"
-                            *ngIf="logingRole === 'Collection Centre Head'">Centre Name</th>
+                        <th class="px-3 py-3 text-left  font-medium" *ngIf="logingRole === 'Collection Centre Head'">
+                            Centre Code</th>
+                        <th class="px-3 py-3 text-left font-medium" *ngIf="logingRole === 'Collection Centre Head'">
+                            Centre Name</th>
                         <th class="px-3 py-3 text-center font-medium ">Farmer NIC</th>
                         <th class="px-3 py-3 text-center font-medium">Collected Time</th>
                         <th class="px-3 py-3 text-center font-medium"></th>
@@ -158,8 +146,8 @@
                             *ngIf="logingRole === 'Collection Centre Head'">{{item.centerName}}</td>
                         <td class="px-3 py-4  text-center text-gray-900 dark:text-gray-300">{{item.nic}}</td>
                         <td class="px-3 py-4 text-center text-[#646464] dark:text-gray-300">
-                            <span class="block">{{ item.createdAt | date:'MMM d, y' }}</span>
-                            <span class="block">{{ item.createdAt | date:'h:mm a' }}</span>
+                            <span class="block">{{ item.createdAt | date:'MMM d, y':'UTC' }}</span>
+                            <span class="block">{{ item.createdAt | date:'h:mm a':'UTC' }}</span>
                         </td>
                         <td class="px-3 py-4 text-center dark:text-gray-300">
                             <i (click)="navigateToFarmerReport(item.invNo)"
@@ -228,24 +216,18 @@
 
                 <div class="relative w-64 custom-center-dropdown-container"
                     *ngIf="logingRole === 'Collection Centre Head'">
-                    <app-searchable-dropdown
-                        [items]="centerDropdownItems"
-                        placeholder="Select Centre..."
-                        searchPlaceholder="Search centre..."
-                        [(ngModel)]="selectCenters"
-                        (selectionChange)="onCenterSelectionChange($event)"
-                        [clearable]="true"
-                        [showSelected]="true"
-                        [disabled]="false"
-                        class="w-full"
-                      ></app-searchable-dropdown>
+                    <app-searchable-dropdown [items]="centerDropdownItems" placeholder="Select Centre..."
+                        searchPlaceholder="Search centre..." [(ngModel)]="selectCenters"
+                        (selectionChange)="onCenterSelectionChange($event)" [clearable]="true" [showSelected]="true"
+                        [disabled]="false" class="w-full"></app-searchable-dropdown>
                 </div>
 
 
 
                 <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
-                    <input type="text" placeholder="Search by GRN No & NIC..." [(ngModel)]="searchText" (keyup.enter)="onSearch()"
-                        (keyup.esc)="offSearch()" (ngModelChange)="searchText = $event.trimStart()"
+                    <input type="text" placeholder="Search by GRN No & NIC..." [(ngModel)]="searchText"
+                        (keyup.enter)="onSearch()" (keyup.esc)="offSearch()"
+                        (ngModelChange)="searchText = $event.trimStart()"
                         class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
                     <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                         (click)="onSearch()">

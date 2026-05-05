@@ -320,11 +320,12 @@ const tableHtml = `
 
   // Keep your existing methods
   applyStatusFilters() {
+    this.page = 1;
     this.fetchByRole();
   }
 
   applyRoleFilters() {
-
+    this.page = 1;
     if (this.selectRole === 'Distribution Centre Manager') {
       this.selectRole = 'Distribution Centre Manager'
     }
@@ -341,6 +342,7 @@ const tableHtml = `
   }
 
   onSearch() {
+    this.page = 1;
     if (this.searchText) {
       this.searchText = this.searchText.trim();
     }

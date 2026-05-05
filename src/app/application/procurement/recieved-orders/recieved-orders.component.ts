@@ -309,10 +309,10 @@ export class RecievedOrdersComponent {
       .subscribe(
         (response) => {
           // Aggregate the data
-          const aggregatedData = this.aggregatePurchaseData(response.items);
+          // const aggregatedData = this.aggregatePurchaseData(response.items);
 
           // Now proceed with download using the aggregated data
-          this.downloadAggregatedReport(aggregatedData);
+          this.downloadAggregatedReport(response.items);
         },
         (error) => {
           console.error('Error fetching data for download:', error);
@@ -322,78 +322,127 @@ export class RecievedOrdersComponent {
       );
   }
 
-  private aggregatePurchaseData(items: any[]): any[] {
-    const aggregationMap = new Map();
+  private downloadAggregatedReport(items: any[]) {
+  let queryParams = [];
 
-    items.forEach(item => {
-      // Create a unique key based on crop, variety, order date, and schedule date
-      const key = `${item.cropNameEnglish}_${item.varietyNameEnglish}_${item.OrderDate}_${item.scheduleDate}`;
-
-      if (aggregationMap.has(key)) {
-        // If the key exists, add the quantity to the existing entry
-        const existingItem = aggregationMap.get(key);
-        existingItem.quantity += item.quantity;
-      } else {
-        // If the key doesn't exist, create a new entry
-        aggregationMap.set(key, {
-          ...item,
-          // Make sure to clone the object to avoid reference issues
-          quantity: item.quantity
-        });
-      }
-    });
-
-    // Convert the map back to an array
-    return Array.from(aggregationMap.values());
+  if (this.filterType) {
+    queryParams.push(`filterType=${this.filterType}`);
   }
 
-  private downloadAggregatedReport(aggregatedData: any[]) {
-    let queryParams = [];
-
-    if (this.filterType) {
-      queryParams.push(`filterType=${this.filterType}`);
-    }
-
-    if (this.date) {
-      queryParams.push(`date=${this.date}`);
-    }
-
-    if (this.search) {
-      queryParams.push(`search=${encodeURIComponent(this.search)}`);
-    }
-
-    const queryString = queryParams.length > 0 ? `?${queryParams.join('&')}` : '';
-
-    // Sort the aggregated data by Crop (A-Z) and then by Variety (A-Z)
-    const sortedData = aggregatedData.sort((a, b) => {
-      // First sort by crop name
-      const cropComparison = a.cropNameEnglish.localeCompare(b.cropNameEnglish);
-      if (cropComparison !== 0) {
-        return cropComparison;
-      }
-
-      // If crops are the same, sort by variety name
-      return a.varietyNameEnglish.localeCompare(b.varietyNameEnglish);
-    });
-
-    // Create a Blob from the sorted aggregated data
-    const worksheet = XLSX.utils.json_to_sheet(sortedData.map(item => ({
-      'Crop': item.cropNameEnglish,
-      'Variety': item.varietyNameEnglish,
-      'Quantity (kg)': item.quantity,
-      'Ordered On': this.formatDateForExcel(item.createdAt),
-      'Scheduled Date': this.formatDateForExcel(item.sheduleDate),
-      'To Collection Centre': this.formatDateForExcel(item.toCollectionCentre),
-      'To Dispatch Centre': this.formatDateForExcel(item.toDispatchCenter)
-    })));
-
-    const workbook = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(workbook, worksheet, 'Procurement Report');
-
-    // Generate Excel file
-    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    this.saveAsExcelFile(excelBuffer, 'Procument_Items_Report');
+  if (this.date) {
+    queryParams.push(`date=${this.date}`);
   }
+
+  if (this.search) {
+    queryParams.push(`search=${encodeURIComponent(this.search)}`);
+  }
+
+  const queryString = queryParams.length > 0 ? `?${queryParams.join('&')}` : '';
+
+  // Sort (unchanged)
+  // const sortedData = items.sort((a, b) => {
+  //   const cropComparison = a.cropNameEnglish.localeCompare(b.cropNameEnglish);
+  //   if (cropComparison !== 0) {
+  //     return cropComparison;
+  //   }
+  //   return a.varietyNameEnglish.localeCompare(b.varietyNameEnglish);
+  // });
+
+  // No aggregation — each item becomes a row
+  const worksheet = XLSX.utils.json_to_sheet(items.map(item => ({
+    'Crop': item.cropNameEnglish,
+    'Variety': item.varietyNameEnglish,
+    'Quantity (kg)': item.quantity,
+    'Ordered On': this.formatDateForExcel(item.createdAt),
+    'Scheduled Date': this.formatDateForExcel(item.scheduleDate), // fix typo here
+    'To Collection Centre': this.formatDateForExcel(item.toCollectionCentre),
+    'To Dispatch Centre': this.formatDateForExcel(item.toDispatchCenter)
+  })));
+
+  const workbook = XLSX.utils.book_new();
+  XLSX.utils.book_append_sheet(workbook, worksheet, 'Procurement Report');
+
+  const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+
+  // Keep your original naming (with query params if you plan to use it)
+  this.saveAsExcelFile(excelBuffer, `Procument_Items_Report${queryString}`);
+}
+
+
+  // private aggregatePurchaseData(items: any[]): any[] {
+  //   const aggregationMap = new Map();
+
+  //   console.log('items', items)
+
+  //   items.forEach(item => {
+  //     // Create a unique key based on crop, variety, order date, and schedule date
+  //     const key = `${item.cropNameEnglish}_${item.varietyNameEnglish}_${item.OrderDate}_${item.scheduleDate}`;
+
+  //     if (aggregationMap.has(key)) {
+  //       // If the key exists, add the quantity to the existing entry
+  //       const existingItem = aggregationMap.get(key);
+  //       existingItem.quantity += item.quantity;
+  //     } else {
+  //       // If the key doesn't exist, create a new entry
+  //       aggregationMap.set(key, {
+  //         ...item,
+  //         // Make sure to clone the object to avoid reference issues
+  //         quantity: item.quantity
+  //       });
+  //     }
+  //   });
+
+  //   // Convert the map back to an array
+  //   return Array.from(aggregationMap.values());
+  // }
+
+  // private downloadAggregatedReport(aggregatedData: any[]) {
+  //   let queryParams = [];
+
+  //   if (this.filterType) {
+  //     queryParams.push(`filterType=${this.filterType}`);
+  //   }
+
+  //   if (this.date) {
+  //     queryParams.push(`date=${this.date}`);
+  //   }
+
+  //   if (this.search) {
+  //     queryParams.push(`search=${encodeURIComponent(this.search)}`);
+  //   }
+
+  //   const queryString = queryParams.length > 0 ? `?${queryParams.join('&')}` : '';
+
+  //   // Sort the aggregated data by Crop (A-Z) and then by Variety (A-Z)
+  //   const sortedData = aggregatedData.sort((a, b) => {
+  //     // First sort by crop name
+  //     const cropComparison = a.cropNameEnglish.localeCompare(b.cropNameEnglish);
+  //     if (cropComparison !== 0) {
+  //       return cropComparison;
+  //     }
+
+  //     // If crops are the same, sort by variety name
+  //     return a.varietyNameEnglish.localeCompare(b.varietyNameEnglish);
+  //   });
+
+  //   // Create a Blob from the sorted aggregated data
+  //   const worksheet = XLSX.utils.json_to_sheet(sortedData.map(item => ({
+  //     'Crop': item.cropNameEnglish,
+  //     'Variety': item.varietyNameEnglish,
+  //     'Quantity (kg)': item.quantity,
+  //     'Ordered On': this.formatDateForExcel(item.createdAt),
+  //     'Scheduled Date': this.formatDateForExcel(item.sheduleDate),
+  //     'To Collection Centre': this.formatDateForExcel(item.toCollectionCentre),
+  //     'To Dispatch Centre': this.formatDateForExcel(item.toDispatchCenter)
+  //   })));
+
+  //   const workbook = XLSX.utils.book_new();
+  //   XLSX.utils.book_append_sheet(workbook, worksheet, 'Procurement Report');
+
+  //   // Generate Excel file
+  //   const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+  //   this.saveAsExcelFile(excelBuffer, 'Procument_Items_Report');
+  // }
 
   private formatDateForExcel(dateString: string): string {
     if (!dateString) return '';

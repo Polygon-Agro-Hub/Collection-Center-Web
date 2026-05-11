@@ -83,7 +83,7 @@ export class RequestsComponent implements OnInit {
   ngOnInit(): void {
     this.date = new Date().toISOString().split('T')[0];
     console.log('date', this.date)
-    this.today = new Date().toISOString().split('T')[0];
+    // this.today = new Date().toISOString().split('T')[0];
     this.fetchAllRequests();
     
   }
@@ -167,32 +167,39 @@ export class RequestsComponent implements OnInit {
     this.router.navigate([`${path}`]);
   }
 
-  openReplacePopUp(item: Request) {
-    this.selectedRequestObj = item
-    console.log('selectedRequestObj', this.selectedRequestObj);
+openReplacePopUp(item: Request) {
+  this.selectedRequestObj = item;
+  console.log('selectedRequestObj', this.selectedRequestObj);
 
-    this.productId =  String(this.selectedRequestObj.replaceProductId)
+  // Start loading
+  this.isLoading = true;
+  this.hasData = false;
 
-    this.distributionSrv.getProductsForUser(this.selectedRequestObj.rrId).subscribe(
+  this.distributionSrv
+    .getProductsForUser(this.selectedRequestObj.rrId)
+    .subscribe(
       (res) => {
+        console.log(res);
 
-        console.log(res)
-        this.productsArr = res.products;
-        console.log('productsArr', this.productsArr)
+        this.productsArr = res?.products || [];
+        this.hasData = this.productsArr.length > 0;
 
-        if (res.items.length === 0) {
-          this.hasData = false;
-        } else {
-          this.hasData = true;
+        this.productId = String(this.selectedRequestObj?.replaceProductId || '');
+        console.log('productId', this.productId);
 
-        }
+        this.isLoading = false;
+      },
+      (error) => {
+        console.error('Error fetching products:', error);
+
+        this.productsArr = [];
+        this.hasData = false;
         this.isLoading = false;
       }
-    )
+    );
 
-    this.isReplacePopUpOpen = true;
-  }
-
+  this.isReplacePopUpOpen = true;
+}
   onReject() {
     this.isReplacePopUpOpen = false;
     this.selectedRequestObj.status = 'Rejected'

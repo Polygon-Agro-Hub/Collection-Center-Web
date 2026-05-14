@@ -65,11 +65,11 @@
                                     {{ step.payload.empId }} – {{ step.payload.driverName }} – {{
                                         step.payload.driverPhone }} driver collected the order from the centre
                                     at
-                                    {{ step.payload.collectTime | date: 'hh:mm a on MMMM dd, yyyy' }}.
+                                    {{ step.payload.collectTime | date:'hh:mm a on MMMM dd, yyyy':'UTC' }}
                                 </ng-container>         
                                 <!-- STARTED -->
                                 <ng-container *ngIf="step.type === 'started'">
-                                    Driver has started the journey at {{ step.payload.startTime | date: 'hh:mm a on MMMM dd, yyyy' }}.
+                                    Driver has started the journey at {{ step.payload.startTime | date: 'hh:mm a on MMMM dd, yyyy':'UTC' }}.
                                 </ng-container>
             
                                 <!-- HOLD -->

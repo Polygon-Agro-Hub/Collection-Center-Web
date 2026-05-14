@@ -1,11 +1,12 @@
 <app-loading-spinner *ngIf="isLoading" />
 
 <div *ngIf="!isLoading">
-    <div class="flex flex-row items-center justify-end gap-8 dark:text-white">
-        <i class="fa-solid text-[#4A4A4A] fa-list text-lg"></i>
+    <div class="flex flex-row items-center justify-end gap-5 dark:text-white">
+        <div class="flex flex-row gap-5">
+            <i class="fa-solid text-[#4A4A4A] fa-list text-lg"></i>
 
-        <p class="text-[#4A4A4A]">Filter By</p>
-
+            <p class="text-[#4A4A4A]">Filter By</p>
+        </div>
 
         <div class="relative w-44 custom-employee-dropdown-container">
             <!-- Hidden native select -->

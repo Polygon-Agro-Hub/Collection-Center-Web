@@ -22,6 +22,7 @@ export class
   totalItems: number = 0;
   itemsPerPage: number = 10;
   hasData: boolean = true;
+  centerName: string = ''
 
   selectGrade: string = '';
   searchText: string = '';
@@ -63,6 +64,8 @@ export class
     ).subscribe({
       next: (res) => {
         this.priceListArr = res.items || [];
+        this.centerName = res.centerName;
+        console.log('centerName', this.centerName);
         this.totalItems = res.total || 0;
   
         this.hasData = this.priceListArr.length > 0;

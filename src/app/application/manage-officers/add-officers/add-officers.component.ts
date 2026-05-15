@@ -242,7 +242,7 @@ export class AddOfficersComponent implements OnInit {
     console.log('center selected');
   
     this.personalData.centerId = item.id;
-    this.selectedCenterName = item.centerName;
+    this.selectedCenterName = item.regCode + ' - ' + item.centerName;
     this.centreDropdownOpen = false; // close dropdown
   
     // Reset search input and filtered array
@@ -285,7 +285,7 @@ export class AddOfficersComponent implements OnInit {
     console.log('Manager selected');
   
     this.personalData.irmId = item.id;
-    this.selectedManager = item.firstNameEnglish + ' ' + item.lastNameEnglish;
+    this.selectedManager = item.empId + ' - ' + item.firstNameEnglish + ' ' + item.lastNameEnglish;
     console.log('selectedManager', this.selectedManager )
     this.managerDropdownOpen = false; // close dropdown
   
@@ -486,7 +486,7 @@ export class AddOfficersComponent implements OnInit {
             if (res.status) {
               this.officerId = res.officerId;
               this.isLoading = false;
-              this.toastSrv.success('Collective Officer Created Successfully')
+              this.toastSrv.success(`${this.personalData.jobRole} Created Successfully`)
               this.router.navigate(['/manage-officers'])
             } else {
               this.isLoading = false;
@@ -625,10 +625,6 @@ export class AddOfficersComponent implements OnInit {
       }
 
     }
-
-
-
-
   }
 
   onCancel() {

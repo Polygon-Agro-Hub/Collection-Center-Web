@@ -566,7 +566,9 @@
                     <app-searchable-dropdown id="district" name="district" [items]="districtItems"
                         [placeholder]="'Select a district'" [searchPlaceholder]="'Search districts...'"
                         [(ngModel)]="personalData.district" #districtInput="ngModel"
-                        (ngModelChange)="onDistrictChange($event)"></app-searchable-dropdown>
+                        (ngModelChange)="onDistrictChange($event)"
+                        borderClass="border border-gray-300"
+                        placeholderClass="text-gray-400"></app-searchable-dropdown>
 
                     <div *ngIf="districtInput.touched && !personalData.district" class="text-red-500 text-sm mt-1">
                         <div>District is required</div>
@@ -666,7 +668,9 @@
 
                     <app-searchable-dropdown id="bankDropdown" name="bankDropdown" [items]="bankItems"
                         [placeholder]="'Select a bank'" [searchPlaceholder]="'Search banks...'"
-                        [(ngModel)]="selectedBankId" #selectedBank="ngModel" (ngModelChange)="onBankChange($event)">
+                        [(ngModel)]="selectedBankId" #selectedBank="ngModel" (ngModelChange)="onBankChange($event)"
+                        borderClass="border border-gray-300"
+                        placeholderClass="text-gray-400">
                     </app-searchable-dropdown>
 
                     <div *ngIf="!selectedBankId && selectedBank.touched" class="text-red-500 text-sm mt-1">
@@ -682,7 +686,9 @@
                     <app-searchable-dropdown id="branchDropdown" name="branchDropdown" [items]="branchItems"
                         [placeholder]="'Select a branch'" [searchPlaceholder]="'Search branches...'"
                         [(ngModel)]="selectedBranchId" #selectedBranch="ngModel"
-                        (ngModelChange)="onBranchChange($event)" [disabled]="!selectedBankId">
+                        (ngModelChange)="onBranchChange($event)" [disabled]="!selectedBankId"
+                        borderClass="border border-gray-300"
+                        placeholderClass="text-gray-400">
                     </app-searchable-dropdown>
 
                     <div *ngIf="!selectedBranchId && selectedBranch.touched" class="text-red-500 text-sm mt-1">

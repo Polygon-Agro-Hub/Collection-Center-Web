@@ -1662,10 +1662,10 @@ export class EditOfficerComponent implements OnInit {
         if (res.status) {
           this.isLoading = false;
           swalInstance.close();
-          this.toastSrv.success(`The Collection Officer Password was reseted successfully.`);
+          this.toastSrv.success(`Officer password reset successfully.`);
         } else {
           this.isLoading = false;
-          console.log(`Failed to reset the Collection Officer's password.`)
+          console.log(`Failed to reset the Officer password.`)
         }
       },
       error: (err) => {

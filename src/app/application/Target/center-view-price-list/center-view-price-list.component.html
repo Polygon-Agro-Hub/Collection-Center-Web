@@ -12,7 +12,7 @@
         <div class="h-[100px]"> <!-- Set a fixed height to prevent layout shifts -->
             <ng-container *ngIf="hasData">
                 <p class="font-semibold text-black text-base dark:text-white">
-                    Centre: {{ priceListArr[0].centerName }}
+                    Centre: {{ centerName }}
                 </p>
                 <p class="font-semibold text-black text-base dark:text-white">
                     Market price on {{ priceListArr[0].createdAt | date: 'yyyy/MM/dd' }}

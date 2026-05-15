@@ -27,22 +27,24 @@
         Centre Name is Requied.
       </p>
     </div>
-    <!-- Country -->
+
     <div>
-      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Country</label>
-     
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Collection Centre Reg Code</label>
       <input
-      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-        [(ngModel)]="centerData.country"
-        name="country"
+        type="text"
+        class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+        [(ngModel)]="centerData.regCode"
+        name="regCode"
+        placeholder=" ----- "
         required
-        #country="ngModel"
+        #regCode="ngModel"
         readonly
       />
-      <p *ngIf="country.invalid && country.touched" class="text-red-500 text-sm">
-        Country is required.
+      <p *ngIf="regCode.invalid && regCode.touched" class="text-red-500 text-sm">
+        Registration Code is required.
       </p>
     </div>
+    
 
     <div>
       <label for="phoneNumber01" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
@@ -147,6 +149,23 @@
       </div>
 </div>
 
+<!-- Country -->
+    <div>
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Country</label>
+     
+      <input
+      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+        [(ngModel)]="centerData.country"
+        name="country"
+        required
+        #country="ngModel"
+        readonly
+      />
+      <p *ngIf="country.invalid && country.touched" class="text-red-500 text-sm">
+        Country is required.
+      </p>
+    </div>
+
     <!-- Province -->
     <div>
       <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Province</label>
@@ -236,22 +255,7 @@
       </p>
     </div>
     <!-- Registration Code -->
-    <div>
-      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Collection Centre Reg Code</label>
-      <input
-        type="text"
-        class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-        [(ngModel)]="centerData.regCode"
-        name="regCode"
-        placeholder=" ----- "
-        required
-        #regCode="ngModel"
-        readonly
-      />
-      <p *ngIf="regCode.invalid && regCode.touched" class="text-red-500 text-sm">
-        Registration Code is required.
-      </p>
-    </div>
+    
   </form>
   <div class="flex justify-end mt-6 space-x-4">
     <button

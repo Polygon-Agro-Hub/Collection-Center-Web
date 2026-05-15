@@ -242,7 +242,7 @@ export class AddOfficersComponent implements OnInit {
     console.log('center selected');
   
     this.personalData.centerId = item.id;
-    this.selectedCenterName = item.centerName;
+    this.selectedCenterName = item.regCode + ' ' + item.centerName;
     this.centreDropdownOpen = false; // close dropdown
   
     // Reset search input and filtered array

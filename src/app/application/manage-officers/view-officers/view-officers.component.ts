@@ -233,7 +233,7 @@ export class ViewOfficersComponent implements OnInit {
         this.ManageOficerSrv.deleteOfficer(id).subscribe(
           (data) => {
             if (data.status) {
-              this.toastSrv.success('The Officer has been deleted.')
+              this.toastSrv.success('Officer deleted successfully.')
               this.fetchByRole()
               this.isLoading = false;
             } else {
@@ -344,11 +344,11 @@ const approveButton = (item.status === 'Rejected' || item.status === 'Not Approv
           this.isLoading = false;
           swalInstance.close();
           const action = status === 'Approved' ? 'approved' : 'rejected';
-          this.toastSrv.success(`The collection officer was ${action} successfully.`);
+          this.toastSrv.success(`Officer ${action} successfully.`);
           this.fetchByRole();
         } else {
           this.isLoading = false;
-          this.toastSrv.error(`Failed to ${status.toLowerCase()} the collection officer.`);
+          this.toastSrv.error(`Failed to ${status.toLowerCase()} the Officer.`);
         }
       },
       error: (err) => {

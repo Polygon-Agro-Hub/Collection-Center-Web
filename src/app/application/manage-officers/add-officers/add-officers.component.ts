@@ -34,7 +34,7 @@ export class AddOfficersComponent implements OnInit {
 
 
   languages: string[] = ['Sinhala', 'English', 'Tamil'];
-  selectedPage: 'pageOne' | 'pageTwo' | 'pageThree' = 'pageOne';
+  selectedPage: 'pageOne' | 'pageTwo' | 'pageThree' = 'pageTwo';
   lastID!: number
   itemId: number | null = null;
   officerId!: number
@@ -486,7 +486,7 @@ export class AddOfficersComponent implements OnInit {
             if (res.status) {
               this.officerId = res.officerId;
               this.isLoading = false;
-              this.toastSrv.success('Collective Officer Created Successfully')
+              this.toastSrv.success(`${this.personalData.jobRole} Created Successfully`)
               this.router.navigate(['/manage-officers'])
             } else {
               this.isLoading = false;
@@ -625,10 +625,6 @@ export class AddOfficersComponent implements OnInit {
       }
 
     }
-
-
-
-
   }
 
   onCancel() {

@@ -187,7 +187,9 @@
                         <th class="px-3 py-3 text-center text-sm font-medium ">Status</th>
                         <th class="px-3 py-3 text-center text-sm font-medium">Mobile Number</th>
                         <th class="px-3 py-3 text-center text-sm font-medium">NIC</th>
-                        <th class="px-3 py-3 text-center text-sm font-medium"></th>
+                        <th class="px-1 py-3 text-center text-sm font-medium"></th>
+                        <th class="px-1 py-3 text-center text-sm font-medium"></th>
+                        <th class="px-1 py-3 text-center text-sm font-medium"></th>
                     </tr>
                 </thead>
                 <tbody class="bg-white text-[#000000] dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
@@ -231,16 +233,22 @@
                             {{ item.phoneNumber01 ? item.phoneCode01 + item.phoneNumber01 : 'N/A' }}
                         </td>
                         <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300 text-center">{{item.nic}}</td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300 text-center">
+                        <td class="px-1 py-4 text-sm text-gray-900 dark:text-gray-300 text-center">
                             <button class="text-gray-400 hover:text-gray-600 px-2" (click)="navigateToProfile(item.id)">
                                 <i class="fa-regular fa-file text-lg text- dark:text-white"></i>
                             </button>
+                            
+                        </td>
+                        <td class="px-1 py-4 text-sm text-gray-900 dark:text-gray-300 text-center">
                             <button class="text-[#415CFF] hover:text-blue-500 px-2" [ngClass]="{
                                     'text-gray-400 hover:text-gray-600': (logingRole ==='Collection Centre Manager' && (item.jobRole === 'Collection Centre Manager' || item.jobRole ==='Driver'))
                                   }"
                                 (click)="(logingRole ==='Collection Centre Manager' && (item.jobRole === 'Collection Centre Manager' || item.jobRole ==='Driver')) ? '' : navigateToEdit(item.id)">
                                 <i class="fa-solid fa-pen-to-square text-lg"></i>
                             </button>
+                        </td>
+
+                        <td class="px-1 py-4 text-sm text-gray-900 dark:text-gray-300 text-center">
                             <button class="text-[#FF415C] px-2"
                             [ngClass]="{
                                 'text-gray-400 hover:text-gray-600': (logingRole ==='Collection Centre Manager' && (item.jobRole === 'Collection Centre Manager' || item.jobRole ==='Driver'))
@@ -248,8 +256,9 @@
                                 (click)="(logingRole ==='Collection Centre Manager' && (item.jobRole === 'Collection Centre Manager' || item.jobRole ==='Driver')) ? '' : deleteCollectionOfficer(item.id)">
                                 <i class="fa-solid fa-trash text-lg"></i>
                             </button>
-
                         </td>
+
+                
                     </tr>
                 </tbody>
             </table>

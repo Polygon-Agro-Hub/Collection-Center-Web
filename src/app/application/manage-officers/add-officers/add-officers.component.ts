@@ -242,7 +242,7 @@ export class AddOfficersComponent implements OnInit {
     console.log('center selected');
   
     this.personalData.centerId = item.id;
-    this.selectedCenterName = item.centerName;
+    this.selectedCenterName = item.regCode + ' - ' + item.centerName;
     this.centreDropdownOpen = false; // close dropdown
   
     // Reset search input and filtered array
@@ -285,7 +285,7 @@ export class AddOfficersComponent implements OnInit {
     console.log('Manager selected');
   
     this.personalData.irmId = item.id;
-    this.selectedManager = item.firstNameEnglish + ' ' + item.lastNameEnglish;
+    this.selectedManager = item.empId + ' - ' + item.firstNameEnglish + ' ' + item.lastNameEnglish;
     console.log('selectedManager', this.selectedManager )
     this.managerDropdownOpen = false; // close dropdown
   
@@ -486,7 +486,7 @@ export class AddOfficersComponent implements OnInit {
             if (res.status) {
               this.officerId = res.officerId;
               this.isLoading = false;
-              this.toastSrv.success('Collective Officer Created Successfully')
+              this.toastSrv.success(`${this.personalData.jobRole} Created Successfully`)
               this.router.navigate(['/manage-officers'])
             } else {
               this.isLoading = false;
@@ -625,10 +625,6 @@ export class AddOfficersComponent implements OnInit {
       }
 
     }
-
-
-
-
   }
 
   onCancel() {
@@ -653,7 +649,7 @@ export class AddOfficersComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.personalData = new Personal();
-        this.toastSrv.warning('Officer Add canceled.')
+        this.toastSrv.warning('Officer addition canceled.')
         this.location.back();
 
       }
@@ -1407,31 +1403,34 @@ export class AddOfficersComponent implements OnInit {
   }
 
 
-  onNicInput(event: any) {
-    // Get value and trim leading/trailing spaces
-    let value: string = event.target.value.trimStart().toUpperCase();
-  
-    // Remove all invalid characters except digits and V
-    value = value.replace(/[^0-9V]/g, '');
-  
-    // Prevent entering V anywhere except last character of 10-char NIC
-    if (value.includes('V') && value.length !== 10) {
-      value = value.replace(/V/g, '');
-    }
-  
-    // Handle 10-char NIC ending with V
-    if (value.length === 10 && value.endsWith('V')) {
-      value = value.slice(0, 10);
-    }
-  
-    // Limit 12-digit NIC
-    if (value.length > 12) {
-      value = value.slice(0, 12);
-    }
-  
-    // Update the model
-    this.personalData.nic = value;
+onNicInput(event: any) {
+  // Convert to uppercase and remove leading spaces
+  let value: string = event.target.value.trimStart().toUpperCase();
+
+  // Allow ONLY numbers and V
+  value = value.replace(/[^0-9V]/g, '');
+
+  // Old NIC format: 9 digits + V
+  // If V exists, enforce old NIC rules
+  if (value.includes('V')) {
+    // Remove all V except the last one
+    value = value.replace(/V/g, '') + 'V';
+
+    // Limit to 10 chars total (9 digits + V)
+    value = value.slice(0, 10);
+
+    // Ensure V is only at the end
+    const digits = value.replace(/V/g, '').slice(0, 9);
+    value = digits + (value.endsWith('V') ? 'V' : '');
+  } else {
+    // New NIC format: max 12 digits
+    value = value.slice(0, 12);
   }
+
+  // Update input and model
+  event.target.value = value;
+  this.personalData.nic = value;
+}
   
 
   onFormatInput(event: Event, modelRef: any, fieldName: string): void {  // no spaces at all

@@ -132,7 +132,7 @@ export class EditMyTargetComponent implements OnInit {
   onCancel() {
     this.searchTerm = '';
     this.fetchTargetDetalis();
-    this.toastSrv.warning("Canceled this process");
+    this.location.back();
   }
 
   toggleDropdown() {

@@ -436,7 +436,7 @@ onDistrictChange(selectedDistrict: string | null): void {
   onCancel() {
     Swal.fire({
       title: 'Are you sure?',
-      text: 'Do you really want to clear this form?',
+      text: 'You may lose the added data after canceling!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',

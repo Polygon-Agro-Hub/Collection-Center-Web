@@ -1,7 +1,7 @@
 <app-loading-spinner *ngIf="isLoading" />
 
 <div class="flex flex-row items-center gap-6 font-semibold text[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
-  <p onclick="history.back()" >Centres</p>
+  <p (click)="onCancel()" >Centres</p>
   <p>Edit Centre</p>
 </div>
 <div class="p-8 mx-auto bg-tileLight dark:bg-[#363636] shadow-lg dark:text-[White] rounded-lg w-full">
@@ -12,7 +12,7 @@
     <div class="grid grid-cols-2 gap-4">
     <!-- Collection Centre Name -->
     <div>
-      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Collection Centre Name</label>
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Collection Centre Name *</label>
       <input
         type="text"
         class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F] "
@@ -25,28 +25,28 @@
         Centre Name is required.
       </p>
     </div>
-    <!-- Country -->
+
+    <!-- Registration Code -->
     <div>
-      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Country</label>
-      
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Collection Centre Reg Code</label>
       <input
         type="text"
         class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-        [(ngModel)]="centerData.country"
-        name="country"
+        [(ngModel)]="centerData.regCode"
+        name="regCode"
+        placeholder=" ----- "
         required
-        #country="ngModel"
-        readonly
+        #regCode="ngModel"
       />
-      
-      <p *ngIf="country.invalid && country.touched" class="text-red-500 text-sm">
-        Country is required.
+      <p *ngIf="regCode.invalid && regCode.touched" class="text-red-500 text-sm">
+        Registration Code is required.
       </p>
     </div>
+    
 
     <div>
       <label for="phoneNumber01" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
-          Contact Number - 1
+          Contact Number - 1 *
       </label>
       <div class="mt-1 flex">
         <div class="dropdown-wrapper-1 relative inline-block w-36 mr-2">
@@ -147,9 +147,27 @@
       </div>
 </div>
 
+<div>
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Country *</label>
+      
+      <input
+        type="text"
+        class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+        [(ngModel)]="centerData.country"
+        name="country"
+        required
+        #country="ngModel"
+        readonly
+      />
+      
+      <p *ngIf="country.invalid && country.touched" class="text-red-500 text-sm">
+        Country is required.
+      </p>
+    </div>
+
     <!-- Province -->
     <div>
-      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Province</label>
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Province *</label>
 
 
       <div class="w-full">
@@ -172,7 +190,7 @@
     </div>
     <!-- District -->
     <div>
-      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">District</label>
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">District *</label>
       
       <div class="w-full">
                         <app-searchable-dropdown
@@ -182,7 +200,7 @@
                             [clearable]="true"
                             [showSelected]="true"
                             id="district" name="district"
-                            [(ngModel)]="centerData.province"
+                            [(ngModel)]="centerData.district"
                             #districtInput="ngModel"
                             (selectionChange)="onDistrictChange($event)">
                         </app-searchable-dropdown>
@@ -195,7 +213,7 @@
     </div>
     <!-- Building Number -->
     <div>
-      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Building No</label>
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Building No *</label>
       <input
         type="text"
         class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
@@ -210,7 +228,7 @@
     </div>
     <!-- Street Name -->
     <div>
-      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Street Name</label>
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Street Name *</label>
       <input
         type="text"
         class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
@@ -225,7 +243,7 @@
     </div>
     <!-- City -->
     <div>
-      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">City</label>
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">City *</label>
       <input
         (input)="capitalizeFirstLetter('city'); onCityChange()"
         type="text"
@@ -239,22 +257,7 @@
         City is required.
       </p>
     </div>
-    <!-- Registration Code -->
-    <div>
-      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Collection Centre Reg Code</label>
-      <input
-        type="text"
-        class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-        [(ngModel)]="centerData.regCode"
-        name="regCode"
-        placeholder=" ----- "
-        required
-        #regCode="ngModel"
-      />
-      <p *ngIf="regCode.invalid && regCode.touched" class="text-red-500 text-sm">
-        Registration Code is required.
-      </p>
-    </div>
+    
   </div>
 
     <div class="flex justify-end mt-6 space-x-4">

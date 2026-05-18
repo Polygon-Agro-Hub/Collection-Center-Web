@@ -1,10 +1,10 @@
 <app-loading-spinner *ngIf="isLoading" />
 
 
-<div *ngIf="!isLoading" class="flex flex-row mb-5 mr-5 ml-0 gap-5 cursor-pointer">
-    <p class="font-semibold text-sm text-[#424242] dark:text-white " (click)="navigateToCenters()">Centres</p>
-    <p class="font-semibold text-sm text-[#424242] dark:text-white" onclick="history.back()">Centre Dashboard</p>
-    <p class="font-semibold text-sm text-[#424242] dark:text-white">View Price List</p>
+<div *ngIf="!isLoading" class="flex flex-row items-center gap-6 font-semibold text[#424242] mb-4 mr-5 ml-0 dark:text-white cursor-pointer">
+    <p class=" " (click)="navigateToCenters()">Centres</p>
+    <p class="" onclick="history.back()">Centre Dashboard</p>
+    <p class="">View Price List</p>
 </div>
 
 <div *ngIf="!isLoading" class="w-full overflow-x-auto px-10 py-7 bg-tileLight shadow-lg rounded-lg dark:bg-[#363636]">
@@ -12,7 +12,7 @@
         <div class="h-[100px]"> <!-- Set a fixed height to prevent layout shifts -->
             <ng-container *ngIf="hasData">
                 <p class="font-semibold text-black text-base dark:text-white">
-                    Centre: {{ priceListArr[0].centerName }}
+                    Centre: {{ centerName }}
                 </p>
                 <p class="font-semibold text-black text-base dark:text-white">
                     Market price on {{ priceListArr[0].createdAt | date: 'yyyy/MM/dd' }}
@@ -23,8 +23,8 @@
                 </p>
             </ng-container>
         </div>
-        <div class="flex flex-row items-center gap-8 ">
-            <i class="fa-solid fa-list text-lg dark:text-white ml-8"></i>
+        <div class="flex flex-row items-center gap-5 ">
+            <i class="fa-solid fa-list text-[#4A4A4A] text-lg dark:text-white ml-5"></i>
 
             <p class="text-[#4A4A4A] dark:text-white">Filter By</p>
 
@@ -67,7 +67,7 @@
 </div>
 
 
-            <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+            <div class="flex items-center rounded-full mr-5 px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
                 <input type="text" placeholder="Search by Crop / Variety name.." [(ngModel)]="searchText"
                     class="bg-transparent outline-none w-full text-textLight dark:text-textDark"
                     (keydown.esc)="offSearch()" (keydown.enter)="onSearch()" />
@@ -114,9 +114,9 @@
                     <th class="px-6 py-3 text-left text-sm font-medium">No</th>
                     <th class="px-6 py-3 text-left text-sm font-medium">Crop Name</th>
                     <th class="px-6 py-3 text-left text-sm font-medium">Variety Name</th>
-                    <th class="px-6 py-3 text-center text-sm font-medium">Grade</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium">Average Price (Rs.)</th>
-                    <th class="px-6 py-3 text-center text-sm font-medium">Price (Rs.)</th>
+                    <th class="px-8 py-3  text-center text-sm font-medium">Grade</th>
+                    <th class="px-6 w-44 py-3  text-left text-sm font-medium">Average Price (Rs.)</th>
+                    <th class="px-6 py-3  text-center text-sm font-medium">Price (Rs.)</th>
 
                 </tr>
             </thead>
@@ -124,11 +124,16 @@
                 <tr
                     *ngFor="let item of priceListArr | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index">
                     <td class="px-6 py-3 text-sm text-gray-900 dark:text-[#C5C5C5]">
-                        {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }} </td>
+                        {{
+                          ((page - 1) * itemsPerPage + i + 1) < 10
+                            ? '0' + ((page - 1) * itemsPerPage + i + 1)
+                            : ((page - 1) * itemsPerPage + i + 1)
+                        }}
+                    </td>
                     <td class="px-6 py-3 text-sm text-gray-900 dark:text-[#C5C5C5]">{{ item.cropNameEnglish }}</td>
                     <td class="px-6 py-3 text-sm text-gray-900 dark:text-[#C5C5C5]">{{ item.varietyNameEnglish }}</td>
-                    <td class="px-6 py-3 text-center text-sm text-gray-900 dark:text-[#C5C5C5]">{{ item.grade }}</td>
-                    <td class="px-6 py-3 text-sm text-gray-900 dark:text-[#C5C5C5]">{{ item.averagePrice | number:
+                    <td class="px-8 py-3 text-center text-sm text-gray-900 dark:text-[#C5C5C5]">{{ item.grade }}</td>
+                    <td class="pl-6 w-44 py-3 text-sm text-gray-900 dark:text-[#C5C5C5]">{{ item.averagePrice | number:
                         '1.2-2' }}</td>
                     <td class="px-6 py-3 text-center text-sm text-gray-900 dark:text-[#C5C5C5]">{{ item.updatedPrice | number:
                         '1.2-2' }}</td>

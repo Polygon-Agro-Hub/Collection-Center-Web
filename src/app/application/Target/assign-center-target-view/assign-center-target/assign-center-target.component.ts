@@ -72,6 +72,7 @@ export class AssignCenterTargetComponent implements OnInit {
         this.companyCenterId = res.companyCenterId
         this.isLoading = false;
         this.hasData = res.result.data.length > 0 ? true : false;
+        console.log('hasData', this.hasData)
 
       }
     )
@@ -88,7 +89,7 @@ export class AssignCenterTargetComponent implements OnInit {
       (res) => {
         if (res.status) {
           this.isLoading = false;
-          this.toastSrv.success(res.message)
+          this.toastSrv.success('New target quantity added successfully.')
           this.fetchSavedCenterCrops();
         }
       }

@@ -106,7 +106,7 @@
                     <th class="px-5 py-3 text-left font-normal whitespace-nowrap">To Do (kg)</th>
                     <th class="px-5 py-3 text-left font-normal whitespace-nowrap">Completed (kg)</th>
                     <th class="px-3 py-3 text-center font-normal whitespace-nowrap">Status</th>
-                    <th class="px-3 py-3 text-left font-normal whitespace-nowrap">Ends At</th>
+                    <!-- <th class="px-3 py-3 text-left font-normal whitespace-nowrap">Ends At</th> -->
                     <th class="px-3 py-3 text-left font-normal whitespace-nowrap" *ngIf="logingRole === 'Collection Centre Manager'">
                     </th>
                 </tr>
@@ -144,10 +144,10 @@
                           </span>
                         </div>
                       </td>
-                    <td class="px-3 py-4 text-gray-900 dark:text-textDark">
+                    <!-- <td class="px-3 py-4 text-gray-900 dark:text-textDark">
                         <p class="text-[#646464] dark:text-textDark text-sm">{{ item.toDate | date: 'yyyy/MM/dd' }}</p>
                         <p class="text-[#646464] dark:text-textDark text-sm">{{ item.toDate | date: 'hh:mm a' }}</p>
-                    </td>
+                    </td> -->
                     <td class="px-3 py-4 text-gray-900 dark:text-gray-300"
                         *ngIf="logingRole === 'Collection Centre Manager'">
                         <i *ngIf="item.status === 'Pending'"

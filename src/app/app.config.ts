@@ -16,7 +16,7 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     provideHttpClient(withInterceptors([])),
     provideToastr(),
-    { provide: UrlSerializer, useClass: CustomUrlSerializer }, //this one for encript url
+    // { provide: UrlSerializer, useClass: CustomUrlSerializer }, //this one for encript url
 
 
   ]

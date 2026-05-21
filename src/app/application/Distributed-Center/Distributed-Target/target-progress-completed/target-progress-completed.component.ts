@@ -8,6 +8,8 @@ import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/
 import { ComplaintsService } from '../../../../services/Complaints-Service/complaints.service';
 import { ToastAlertService } from '../../../../services/toast-alert/toast-alert.service';
 import { CustomDatepickerComponent } from '../../../../components/custom-datepicker/custom-datepicker.component';
+import { PostInvoiceServiceService } from '../../../../services/post-invoice-service/post-invoice-service.service';
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-target-progress-completed',
@@ -43,7 +45,8 @@ export class TargetProgressCompletedComponent implements OnInit{
     private ComplainSrv: ComplaintsService,
     private DistributionSrv: DistributionServiceService,
     private location: Location,
-    private toastSrv: ToastAlertService
+    private toastSrv: ToastAlertService,
+    private postInvoiceService: PostInvoiceServiceService
   ) { }
 
 

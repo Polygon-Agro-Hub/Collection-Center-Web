@@ -23,29 +23,49 @@
         All ({{ordersArr.length < 10 ? '0' + ordersArr.length : ordersArr.length}})
     </p>
 
-    <div *ngIf="hasData" class="w-full md:w-2/3 max-w-full  overflow-x-auto  mt-4 mr-5 border-gray-100 dark:border-[#202021] border-[2px] rounded-lg">
-        <div class="min-w-[600px]"> <!-- Adjust min-width to match your content needs -->
-          <table class="w-full divide-y-2 divide-gray-200 dark:divide-[#202021] overflow-hidden border-[1px] border-gray-300 dark:border-[#202021] rounded-lg">
-            <thead class=" text-[#4B5563] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
-              <tr>
-                <th class="px-6 py-3 text-left font-medium">No</th>
-                <th class="px-6 py-3 text-left font-medium">Order ID</th>
-                <th class="px-6 py-3 text-left font-medium">Delivery Time Slot</th>
-              </tr>
-            </thead>
-            <tbody class="bg-white divide-y-2 divide-gray-200 dark:divide-[#202021] dark:bg-[#1D1D1F]">
-              <tr *ngFor="let item of ordersArr; let i = index">
-                <td class="px-6 py-4 text-sm text-[#000000] font-medium dark:text-gray-300">
-                  {{ (i + 1) < 10 ? '0' + (i + 1) : i + 1 }}
-                </td>
-                <td class="px-6 py-4 text-sm text-[#000000] font-medium dark:text-gray-300">{{ item.invNo }}</td>
-                <td class="px-6 py-4 text-sm text-[#415CFF] dark:text-[#415CFF] font-medium ">
-                  {{ item.scheduleLabel }} {{ item.sheduleTime }}
-                </td>
-              </tr>
-            </tbody>
-          </table>
-        </div>
-      </div>
+    <div
+  *ngIf="hasData"
+  class="w-2/3 mt-4 mr-5 border-gray-100 dark:border-[#202021] border-[2px] rounded-lg overflow-hidden"
+>
+  <div class="overflow-x-auto">
+    <table class="w-full min-w-[700px] divide-y-2 overflow-hidden">
+      <thead
+        class="text-[#4B5563] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default"
+      >
+        <tr>
+          <th class="px-6 py-3 text-left font-medium">No</th>
+          <th class="px-6 py-3 text-left font-medium">Order ID</th>
+          <th class="px-6 py-3 text-left font-medium">
+            Delivery Time Slot
+          </th>
+        </tr>
+      </thead>
+
+      <tbody
+        class="bg-white divide-y-2 divide-gray-200 dark:divide-[#202021] dark:bg-[#1D1D1F]"
+      >
+        <tr *ngFor="let item of ordersArr; let i = index">
+          <td
+            class="px-6 py-4 text-sm text-[#000000] font-medium dark:text-gray-300 whitespace-nowrap"
+          >
+            {{ (i + 1) < 10 ? '0' + (i + 1) : i + 1 }}
+          </td>
+
+          <td
+            class="px-6 py-4 text-sm text-[#000000] font-medium dark:text-gray-300 whitespace-nowrap"
+          >
+            {{ item.invNo }}
+          </td>
+
+          <td
+            class="px-6 py-4 text-sm text-[#415CFF] dark:text-[#415CFF] font-medium whitespace-nowrap"
+          >
+            {{ item.scheduleLabel }} {{ item.sheduleTime }}
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>
 
     </div>

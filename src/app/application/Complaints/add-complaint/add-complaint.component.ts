@@ -66,6 +66,7 @@ export class AddComplaintComponent implements OnInit {
           this.category = '';
           this.complaint = '';
           this.isLoading = false;
+          console.log('Complaint submitted successfully:', response.status);
 
         } else {
           this.isLoading = false;

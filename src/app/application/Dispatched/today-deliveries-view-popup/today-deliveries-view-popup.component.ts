@@ -141,6 +141,7 @@ export class TodayDeliveriesViewPopupComponent implements OnInit, OnChanges
     if (!d) return steps;
 
     if (d.collectTime) {
+      console.log('collectTime', d.collectTime)
       steps.push({ type: 'collected', payload: { empId: d.empId, driverName: d.driverName, driverPhone: d.driverPhone, collectTime: d.collectTime } });
     } else {
       return steps; 

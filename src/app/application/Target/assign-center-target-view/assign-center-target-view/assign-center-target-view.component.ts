@@ -1,10 +1,11 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SelectVarietyListComponent } from '../select-variety-list/select-variety-list.component';
 import { AssignCenterTargetComponent } from '../assign-center-target/assign-center-target.component';
 import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
+import { ToastAlertService } from '../../../../services/toast-alert/toast-alert.service';
 
 @Component({
   selector: 'app-assign-center-target-view',
@@ -22,7 +23,9 @@ export class AssignCenterTargetViewComponent implements OnInit {
 
   constructor(
     private router: Router,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+    private location: Location,
+    private toastSrv: ToastAlertService
   ) { }
 
   ngOnInit(): void {
@@ -42,7 +45,17 @@ export class AssignCenterTargetViewComponent implements OnInit {
   }
 
   navigateToCenters() {
-    this.router.navigate(['/centers']); // Change '/reports' to your desired route
+    if (this.isAssignTarget) {
+      this.toastSrv.warning('Cancel Add New Center Target');
+    }
+    this.router.navigate(['/centers']);
+  }
+
+  navigateToCentreDashboard() {
+    if (this.isAssignTarget) {
+      this.toastSrv.warning('Cancel Add New Center Target');
+    }
+    this.location.back();
   }
 
 }

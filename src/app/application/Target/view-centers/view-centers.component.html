@@ -81,12 +81,12 @@
                         <th class="px-6 py-3 text-left font-normal w-10">No</th>
                         <th class="px-6 py-3 text-left font-normal w-32">Reg Code</th>
                         <th class="px-6 py-3 text-left font-normal w-48 whitespace-nowrap">Centre Name</th>
-                        <th class="px-6 py-3 text-left font-normal w-28">Province</th>
-                        <th class="px-6 py-3 text-left font-normal w-28">District</th>
+                        <th class="px-6 py-3 text-left font-normal w-28 whitespace-nowrap">Province</th>
+                        <th class="px-6 py-3 text-left font-normal w-28 whitespace-nowrap">District</th>
                         <th class="px-6 py-3 text-left font-normal w-28">City</th>
-                        <th class="px-6 py-3 text-left font-normal w-40">Contact Number -1</th>
-                        <th class="px-6 py-3 text-center font-normal w-32">CCM Profiles</th>
-                        <th class="px-6 py-3 text-center font-normal w-32">COO Profiles</th>
+                        <th class="px-6 py-3 text-left font-normal w-40 whitespace-nowrap">Contact Number -1</th>
+                        <th class="px-6 py-3 text-center font-normal w-32 whitespace-nowrap">CCM Profiles</th>
+                        <th class="px-6 py-3 text-center font-normal w-32 whitespace-nowrap">COO Profiles</th>
                     </tr>
                 </thead>
                 <tbody *ngIf="countOfOfficers != 0" class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
@@ -99,9 +99,9 @@
                         <td class="px-6 py-3 font-medium text-left">{{ item.regCode }}</td>
                         <td class="px-6 py-3 font-medium text-left whitespace-nowrap">{{ item.centerName }}</td>
                         <td class="px-6 py-3 font-medium text-left">{{ item.province }}</td>
-                        <td class="px-6 py-3 font-medium text-left">{{ item.district }}</td>
-                        <td class="px-6 py-3 font-medium text-left">{{ item.city }}</td>
-                        <td class="px-6 py-3 font-medium text-left">
+                        <td class="px-6 py-3 font-medium text-left whitespace-nowrap">{{ item.district }}</td>
+                        <td class="px-6 py-3 font-medium text-left whitespace-nowrap">{{ item.city }}</td>
+                        <td class="px-6 py-3 font-medium text-left whitespace-nowrap">
                             <ng-container *ngIf="item.contact01; else noContact">
                                 {{ '+94' + item.contact01 }}
                             </ng-container>

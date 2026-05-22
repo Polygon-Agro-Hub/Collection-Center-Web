@@ -9,8 +9,8 @@
     </div>
 
 
-    <div class="w-full px-10 py-7 bg-tileLight dark:text-white dark:bg-[#363636] shadow-lg rounded-lg mt-5" >
-        <div class="flex flex-row items-center justify-end gap-8 ">
+    <div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg overflow-x-auto">
+        <div class="flex flex-row items-center justify-between min-w-max max-w-[80vw] mx-auto">
             <div class="flex flex-row items-center gap-4">
                 <p class="text-xl font-semibold dark:text-white">Date :</p>
                 <div class="relative w-48 mr-6">
@@ -57,10 +57,10 @@
             <p class="text-[#494949] text-lg my-2 dark:text-textDark">On {{selectedDate}}</p>
         </div>
 
-        <div *ngIf="hasData">
-            <div class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
-                <table class="w-full divide-y-2 border-[1px] border-gray-300 rounded-lg overflow-hidden">
-                    <thead class="text-[#4B5563] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
+        <div *ngIf="hasData" class=" min-w-max mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021] overflow-hidden">
+            
+                <table class="w-full min-w-max divide-y-2">
+                    <thead class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
                         <tr>
                             <th class="px-5 py-3 text-left  font-medium">No</th>
                             <th class="px-5 py-3 text-left  font-medium">First Name</th>
@@ -94,22 +94,25 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
-            <div class="flex items-center justify-end my-5 mr-5">
+            
+        </div>
+
+        <div *ngIf="hasData" class="flex items-center justify-end my-5 mr-5">
                 <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true"
                     [previousLabel]="'Previous'" [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'"
                     [screenReaderPageLabel]="'page'" [screenReaderCurrentLabel]="'Youre on page'">
                 </pagination-controls>
             </div>
-        </div>
-        
-    </div>
 
-    
-    <div *ngIf="!hasData"
+        <div *ngIf="!hasData"
         class="flex flex-col items-center w-full h-screen px-10 py-7 bg-tileLight  shadow-lg rounded-lg mt-6 dark:bg-[#363636]">
         <p class="text-[#494949] my-6 dark:text-textDark">--No Data Availabale--</p>
         <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
     </div>
 
+        
+    </div>
+
+    
+    
 </div>

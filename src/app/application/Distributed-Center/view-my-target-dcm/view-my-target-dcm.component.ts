@@ -526,45 +526,43 @@ navigateToProfile() {
 getStatus(item: orders): string {
   if (!item?.sheduleDate) return 'Not Completed';
 
-  // Parse dates
-  const scheduleDate = new Date(item.sheduleDate);
-  const completeTime = item.completeTime ? new Date(item.completeTime) : null;
+  const SL_OFFSET_MS = 5.5 * 60 * 60 * 1000; // UTC+5:30
 
-  // Build deadline
-  const deadline = new Date(scheduleDate);
+  // Shift both UTC timestamps into Sri Lanka time
+  const scheduleDateSL = new Date(new Date(item.sheduleDate).getTime() + SL_OFFSET_MS);
+  console.log('scheduleDateSL', scheduleDateSL)
+  const completeTimeSL = item.completeTime
+    ? new Date(new Date(item.completeTime).getTime() + SL_OFFSET_MS)
+    : null;
+
+  console.log('completeTimeSL', completeTimeSL)
+
+  // Build deadline using setUTCHours on the already-shifted date
+  // (setUTCHours on a SL-shifted date = setting SL local hours, browser-independent)
+  const deadline = new Date(scheduleDateSL);
+  console.log('deadline', deadline)
 
   if (item.sheduleTime) {
     const timeSlot = item.sheduleTime.trim();
-
     if (timeSlot === 'Within 8AM - 2PM') {
-      deadline.setHours(14, 0, 0, 0); // 2:00 PM
+      deadline.setUTCHours(14, 0, 0, 0);
     } else if (timeSlot === 'Within 2PM - 8PM') {
-      deadline.setHours(20, 0, 0, 0); // 8:00 PM
+      deadline.setUTCHours(20, 0, 0, 0);
     } else {
-      // Default fallback (optional)
-      deadline.setHours(23, 59, 59, 999);
+      deadline.setUTCHours(23, 59, 59, 999);
     }
   } else {
-    // If no time slot, assume end of day
-    deadline.setHours(23, 59, 59, 999);
+    deadline.setUTCHours(23, 59, 59, 999);
   }
 
-  const now = new Date(); // local time (Sri Lanka)
+  const nowSL = new Date(Date.now() + SL_OFFSET_MS);
 
-  // --- Case 1: Not completed ---
-  if (!completeTime) {
-    this.isLateAndNotCompleted = now.getTime() > deadline.getTime();
+  if (!completeTimeSL) {
+    this.isLateAndNotCompleted = nowSL.getTime() > deadline.getTime();
     return 'Not Completed';
   }
 
-  console.log('completeTime', completeTime)
-  console.log('time', completeTime.getTime())
-   console.log('getTime', deadline.getTime())
-
-  // --- Case 2: Completed ---
-  return completeTime.getTime() <= deadline.getTime()
-    ? 'On Time'
-    : 'Late';
+  return completeTimeSL.getTime() <= deadline.getTime() ? 'On Time' : 'Late';
 }
 }
 

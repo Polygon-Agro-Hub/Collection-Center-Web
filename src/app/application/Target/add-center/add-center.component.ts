@@ -99,20 +99,6 @@ export class AddCenterComponent implements OnInit {
     this.updateFilteredDistricts(); // Initialize filtered districts
   }
 
-  @HostListener('document:click', ['$event.target'])
-onClick(targetElement: HTMLElement) {
-  const insideDropdown1 = targetElement.closest('.dropdown-wrapper-1');
-  const insideDropdown2 = targetElement.closest('.dropdown-wrapper-2');
-
-  // Close dropdowns only if click is outside their wrapper
-  if (!insideDropdown1) {
-    this.dropdownOpen = false;
-  }
-  if (!insideDropdown2) {
-    this.dropdownOpen2 = false;
-  }
-}
-
 selectCountry1(country: Country) {
   this.selectedCountry1 = country;
   this.centerData.phoneNumber01Code = country.dialCode; // update ngModel

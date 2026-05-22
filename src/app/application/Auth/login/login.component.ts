@@ -60,7 +60,7 @@ export class LoginComponent {
       Swal.fire({
         icon: 'error',
         title: 'Unsuccessful',
-        text: 'User Name is required',
+        text: 'Employee ID is Required',
         customClass: {
           popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white rounded-lg',
           title: 'dark:text-white',

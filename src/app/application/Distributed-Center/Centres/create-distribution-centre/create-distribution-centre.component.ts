@@ -409,7 +409,7 @@ this.isLoading = true;
       this.centerData.longitude = 180;
       Swal.fire({
         icon: 'warning',
-        title: 'Invalid Latitude',
+        title: 'Invalid Longitude',
         text: 'Longitude cannot be greater than 180.',
         confirmButtonColor: '#3085d6',
         customClass: {
@@ -423,7 +423,7 @@ this.isLoading = true;
       this.centerData.longitude = -180;
       Swal.fire({
         icon: 'warning',
-        title: 'Invalid Latitude',
+        title: 'Invalid Longitude',
         text: 'Longitude cannot be less than -180.',
         confirmButtonColor: '#3085d6',
         customClass: {

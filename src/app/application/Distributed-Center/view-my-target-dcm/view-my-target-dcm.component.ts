@@ -584,6 +584,7 @@ class orders {
   combinedStatus!: string
   completeTime!: Date
   lockStatus!: number
+  deliveryStatus!: string;
 }
 
 class Officer {

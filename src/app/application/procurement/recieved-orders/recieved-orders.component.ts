@@ -323,6 +323,7 @@ export class RecievedOrdersComponent {
   }
 
   private downloadAggregatedReport(items: any[]) {
+    console.log('items', items)
   let queryParams = [];
 
   if (this.filterType) {
@@ -354,7 +355,7 @@ export class RecievedOrdersComponent {
     'Variety': item.varietyNameEnglish,
     'Quantity (kg)': item.quantity,
     'Ordered On': this.formatDateForExcel(item.createdAt),
-    'Scheduled Date': this.formatDateForExcel(item.scheduleDate), // fix typo here
+    'Scheduled Date': this.formatDateForExcel(item.sheduleDate), 
     'To Collection Centre': this.formatDateForExcel(item.toCollectionCentre),
     'To Dispatch Centre': this.formatDateForExcel(item.toDispatchCenter)
   })));

@@ -10,11 +10,12 @@ import { ToastrModule } from 'ngx-toastr';   // Import ToastrModule
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import Swal from 'sweetalert2';
+import { CustomDatepickerComponent } from '../../../components/custom-datepicker/custom-datepicker.component';
 
 @Component({
   selector: 'app-download-target',
   standalone: true,
-  imports: [CommonModule, FormsModule, ToastrModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, ToastrModule, CustomDatepickerComponent, LoadingSpinnerComponent],
   templateUrl: './download-target.component.html',
   styleUrls: ['./download-target.component.css'],
   providers: [DatePipe]
@@ -63,10 +64,101 @@ export class DownloadTargetComponent {
     );
   }
 
-  validateToDate() {
-    // Case 1: User hasn't selected fromDate yet
+  // validateToDate() {
+  //   // Case 1: User hasn't selected fromDate yet
+  //   if (!this.fromDate) {
+  //     this.toDate = ''; // Reset toDate
+  //     this.toastSrv.warning("Please select the 'From' date first.");
+  //     return;
+  //   }
+
+  //   // Case 2: toDate is earlier than fromDate
+  //   if (this.toDate) {
+  //     const from = new Date(this.fromDate);
+  //     const to = new Date(this.toDate);
+
+  //     if (to <= from) {
+  //       this.toDate = ''; // Reset toDate
+  //       this.toastSrv.warning("The 'To' date cannot be earlier than or same to the 'From' date.");
+  //     }
+  //   }
+  // }
+
+  // validateFromDate() {
+  //   // Case 1: User hasn't selected fromDate yet
+  //   if (!this.toDate) {
+  //     return;
+  //   }
+
+  //   // Case 2: toDate is earlier than fromDate
+  //   if (this.toDate) {
+  //     const from = new Date(this.fromDate);
+  //     const to = new Date(this.toDate);
+
+  //     if (to <= from) {
+  //       this.fromDate = ''; // Reset toDate
+  //       this.toastSrv.warning("The 'From' date cannot be Later than or same to the 'From' date.");
+  //     }
+  //   }
+  // }
+
+  onDateFromDateChange(newDate: string | Date | null) {
+    let dateString: string;
+  
+    if (!newDate) {
+      
+      return
+    }
+    else if (newDate instanceof Date) {
+      
+      dateString = newDate.toISOString().split('T')[0];
+    } 
+    else {
+      
+      dateString = newDate;
+    }
+
+    if (!this.toDate) {
+      return;
+    }
+
+    this.fromDate = dateString;
+
+    // Case 2: toDate is earlier than fromDate
+    if (this.toDate) {
+      const from = new Date(this.fromDate);
+      const to = new Date(this.toDate);
+
+      if (to <= from) {
+        this.fromDate = ''; // Reset toDate
+        newDate = '';
+        this.toastSrv.warning("The 'From' date cannot be Later than or same to the 'From' date.");
+      }
+    }
+  
+  }
+
+  onDateToDateChange(newDate: string | Date | null) {
+    let dateString: string;
+  
+    if (!newDate) {
+      
+      return
+    } 
+    else if (newDate instanceof Date) {
+      
+      dateString = newDate.toISOString().split('T')[0];
+    } 
+    else {
+      
+      dateString = newDate;
+    }
+
+    this.toDate = dateString;
+
     if (!this.fromDate) {
       this.toDate = ''; // Reset toDate
+      newDate = ''
       this.toastSrv.warning("Please select the 'From' date first.");
       return;
     }
@@ -78,27 +170,11 @@ export class DownloadTargetComponent {
 
       if (to <= from) {
         this.toDate = ''; // Reset toDate
+        newDate = ''
         this.toastSrv.warning("The 'To' date cannot be earlier than or same to the 'From' date.");
       }
     }
-  }
 
-  validateFromDate() {
-    // Case 1: User hasn't selected fromDate yet
-    if (!this.toDate) {
-      return;
-    }
-
-    // Case 2: toDate is earlier than fromDate
-    if (this.toDate) {
-      const from = new Date(this.fromDate);
-      const to = new Date(this.toDate);
-
-      if (to <= from) {
-        this.fromDate = ''; // Reset toDate
-        this.toastSrv.warning("The 'From' date cannot be Later than or same to the 'From' date.");
-      }
-    }
   }
 
 

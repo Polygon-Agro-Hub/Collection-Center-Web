@@ -121,6 +121,7 @@ export class RedefineSentToDispatchOrdersComponent implements OnInit {
     }
   
     this.dateFilter = dateString; // ✅ assign as string
+    this.page = 1;
     this.fetchOrders();
   }
 

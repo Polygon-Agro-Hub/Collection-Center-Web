@@ -90,7 +90,7 @@ export class AssignCitiesComponent implements OnInit {
     // Convert provinces to objects for PrimeNG dropdown
     this.updateFilteredDistricts();
 
-    this.fetchData();
+    // this.fetchData();
   }
 
   fetchData() {
@@ -134,6 +134,7 @@ export class AssignCitiesComponent implements OnInit {
     }; // keep your original guard
 
     const selected = this.provinceItems.find(p => p.value === provinceName || '');
+    this.selectDistrict = '';
     this.updateFilteredDistricts(); 
     
   }
@@ -213,7 +214,7 @@ export class AssignCitiesComponent implements OnInit {
       if (!res || res.status === false) {
         Swal.fire({
           title: 'Error',
-          text: res?.message || 'Failed to assign city to center',
+          text: res?.message || 'Failed to assign city to centre',
           icon: 'error',
           customClass: {
             popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
@@ -227,7 +228,7 @@ export class AssignCitiesComponent implements OnInit {
       // Success alert
       Swal.fire({
         title: 'Success',
-        text: 'City assigned to center successfully!',
+        text: 'City assigned to centre successfully!',
         icon: 'success',
         customClass: {
           popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
@@ -241,7 +242,7 @@ export class AssignCitiesComponent implements OnInit {
 
       Swal.fire({
         title: 'Error',
-        text: 'Failed to assign city to center',
+        text: 'Failed to assign city to centre',
         icon: 'error',
         customClass: {
           popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
@@ -296,6 +297,10 @@ export class AssignCitiesComponent implements OnInit {
           event.stopPropagation(); // Prevent triggering the dropdown toggle
       }
       this.selectDistrict = '';
+  }
+
+  back() {
+    this.location.back();
   }
 }
 

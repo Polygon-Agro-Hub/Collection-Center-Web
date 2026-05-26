@@ -221,6 +221,8 @@ export class EditDistributedOfficerComponent implements OnInit {
   }
 
   toggleJobRoleDropdown() {
+    this.centreDropdownOpen = false;
+    this.managerDropdownOpen = false;
     this.isJobRoleOpen = !this.isJobRoleOpen;
     this.jobRoleInputTouched = true;
   }
@@ -259,10 +261,14 @@ export class EditDistributedOfficerComponent implements OnInit {
 
 
   toggleDropdown() {
+    this.isJobRoleOpen = false;
+    this.managerDropdownOpen = false;
     this.centreDropdownOpen = !this.centreDropdownOpen;
   }
 
   toggleManagerDropdown() {
+    this.isJobRoleOpen = false;
+    this.centreDropdownOpen = false;
     this.managerDropdownOpen = !this.managerDropdownOpen;
   }
 
@@ -295,7 +301,7 @@ export class EditDistributedOfficerComponent implements OnInit {
   selectManager(item: Manager) {
 
     this.personalData.irmId = item.id;
-    this.selectedManager = item.firstNameEnglish + ' ' + item.lastNameEnglish;
+    this.selectedManager = item.empId + ' - ' + item.firstNameEnglish + ' ' + item.lastNameEnglish;
     this.managerDropdownOpen = false; // close dropdown
     this.filteredManagerArr = [...this.managerArr]; // show full list next time
     const searchInput = document.querySelector<HTMLInputElement>('.dropdown-manager-search-input');
@@ -336,7 +342,7 @@ export class EditDistributedOfficerComponent implements OnInit {
         this.selectedCenterName = res.officerData.collectionOfficer.centerName
 
         if (res.officerData.collectionOfficer.irmId != null) {
-          this.selectedManager = res.managerName.firstNameEnglish + ' ' + res.managerName.lastNameEnglish
+          this.selectedManager = res.managerName.empId + ' - ' + res.managerName.firstNameEnglish + ' ' + res.managerName.lastNameEnglish
         }
 
         this.getUpdateLastID(res.officerData.collectionOfficer.jobRole);
@@ -945,7 +951,7 @@ export class EditDistributedOfficerComponent implements OnInit {
 
     if (!this.personalData.email) {
       missingFields.push('Email is required');
-    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.com$/.test(this.personalData.email)) {
+    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(this.personalData.email)) {
       missingFields.push('Email - Must be in a valid format (format: example&#64;domain.com)');
     }
 

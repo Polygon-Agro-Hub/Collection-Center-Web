@@ -149,7 +149,7 @@ export class CenterViewOfficersComponent implements OnInit {
         this.ManageOficerSrv.deleteOfficer(id).subscribe(
           (data) => {
             if (data.status) {
-              this.toastSrv.success('The Officer has been deleted successfully.')
+              this.toastSrv.success('Officer deleted successfully.')
               this.getAllOfficers(this.centerId, this.page, this.itemsPerPage, this.selectRole, this.selectStatus, this.searchText);
             } else {
               this.toastSrv.error('There was an error deleting the ofiicer')

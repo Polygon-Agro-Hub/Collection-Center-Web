@@ -459,6 +459,7 @@ class orders {
   completeTime!: Date
   lockStatus!: number
   isComplete!: number
+  deliveryStatus!: string;
 }
 
 class Officer {

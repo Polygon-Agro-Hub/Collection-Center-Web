@@ -151,9 +151,9 @@
             <thead class="sticky top-0 bg-white dark:bg-gray-800 z-10">
               <tr>
                 <th class="py-3 text-center w-20 whitespace-nowrap border-b border-gray-300 dark:border-gray-700">
-                  ITEM ({{ excludedItemsArr.length }})
+                  ITEM ({{ excludedItemsArr.length | number:'2.0-0' }})
                 </th>
-                <th class="py-3 text-left whitespace-nowrap border-b border-gray-300 dark:border-gray-700">
+                <th class="py-3 px-5 text-left whitespace-nowrap border-b border-gray-300 dark:border-gray-700">
                   ITEM NAME
                 </th>
               </tr>
@@ -164,7 +164,7 @@
               <tr *ngFor="let item of excludedItemsArr; let i = index"
                 class="border-b border-gray-100 dark:border-gray-700">
                 <td class="py-3 text-center">{{ i + 1 }}</td>
-                <td class="py-3 text-left">{{ item.displayName }}</td>
+                <td class="py-3 px-5 text-left">{{ item.displayName }}</td>
               </tr>
 
               <!-- Empty state -->

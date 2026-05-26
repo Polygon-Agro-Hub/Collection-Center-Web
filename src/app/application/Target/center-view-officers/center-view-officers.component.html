@@ -10,10 +10,11 @@
     <div class="w-full overflow-x-auto px-10 py-7 bg-tileLight shadow-lg rounded-lg dark:bg-[#363636]">
         <div class="flex flex-row items-center justify-between">
             <div class="flex flex-row gap-3">
-                <h1 class="font-semibold text-black dark:text-white">All ({{ totalItems }})</h1>
+                <h1 class="font-semibold text-black dark:text-white">All ({{totalItems === 0 ? '0' : totalItems < 10 ? '0' + totalItems : totalItems}})</h1>
+
             </div>
             <div class="flex flex-row items-center gap-5 ">
-                <i class="fa-solid fa-list text-lg dark:text-white ml-8"></i>
+                <i class="fa-solid fa-list text-[#4A4A4A] text-lg dark:text-white ml-8"></i>
 
                 <p class="text-[#4A4A4A] dark:text-white">Filter By</p>
 
@@ -193,15 +194,15 @@
                                 <div class="flex justify-center items-center w-full cursor-pointer"
                                     (click)="openPopup(officer)">
                                     <span *ngIf="officer.status === 'Approved'"
-                                        class="inline-block w-[120px] text-center px-3 py-2 bg-[#C8E0FF] text-[#415CFF] text-sm font-medium rounded-md shadow-md">
+                                        class="inline-block w-[120px] text-center px-3 py-1 bg-[#C8E0FF] text-[#415CFF] text-sm font-medium rounded-md shadow-md">
                                         Approved
                                     </span>
                                     <span *ngIf="officer.status === 'Not Approved'"
-                                        class="inline-block w-[120px] text-center px-3 py-2 bg-[#F8FFA6] text-[#A8A100] text-sm font-medium rounded-md shadow-md">
+                                        class="inline-block w-[120px] text-center px-3 py-1 bg-[#F8FFA6] text-[#A8A100] text-sm font-medium rounded-md shadow-md">
                                         Not Approved
                                     </span>
                                     <span *ngIf="officer.status === 'Rejected'"
-                                        class="inline-block w-[120px] text-center px-3 py-2 bg-[#FFB9B7] text-[#D16D6A] text-sm font-medium rounded-md shadow-md">
+                                        class="inline-block w-[120px] text-center px-3 py-1 bg-[#FFB9B7] text-[#D16D6A] text-sm font-medium rounded-md shadow-md">
                                         Rejected
                                     </span>
                                 </div>

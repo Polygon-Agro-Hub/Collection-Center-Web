@@ -284,7 +284,7 @@
                            }">
                         </i> -->
                             <button [disabled]="!(item.validity === 'Active' && item.status === 'Pending')"
-                                (click)="editOfficerTarget(item.id, OfficerObj.toDate, OfficerObj.fromDate, OfficerObj.officerId )"
+                                (click)="editOfficerTarget(item.id, OfficerObj.toDate, OfficerObj.fromDate, OfficerObj.officerId, OfficerObj.empId )"
                                 class="cursor-pointer">
                                 <i class="fa-solid fa-pen-to-square text-xl" [ngClass]="{
       'text-[#415CFF] cursor-pointer': item.validity === 'Active' && item.status === 'Pending',

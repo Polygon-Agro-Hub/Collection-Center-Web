@@ -34,6 +34,7 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
   isLoading: boolean = true;
 
   officerId!: string;
+  empId!: string;
 
 
   constructor(
@@ -50,6 +51,7 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
 
     this.route.queryParams.subscribe(params => {
       this.officerId = params['officerId'];
+      this.empId = params['empId'];
 
       console.log('officerId', this.officerId)
     });
@@ -59,7 +61,7 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
 
   fetchTargetDetalis() {
     this.isLoading = true;
-    this.TargetSrv.getOfficerTartgetItem(this.targetItemId).subscribe(
+    this.TargetSrv.getOfficerTartgetItem2(this.targetItemId, this.empId).subscribe(
       (res) => {
 
         this.targetObj = res.resultTarget;

@@ -146,7 +146,7 @@
                 </table>
             </div>
 
-            <p class="text-lg font-medium my-8 dark:text-white">
+            <p class="text-[18px] font-medium text-[#000000] my-8 dark:text-white">
                 Full Total (Rs.) :
                 <span class="dark:text-textDark">
                   {{ totalAmount != null ? (totalAmount | number: '1.2-2') : '0.00' }}
@@ -158,14 +158,14 @@
 
                     <img class="w-36 h-auto" [src]="userObj.farmerQr" />
                     <!-- <img src="../../../../assets/images/logo.png" class="w-36 h-auto" /> -->
-                    <p class="text-lg font-medium dark:text-textDark">Farmer’s QR Code</p>
+                    <p class="text-[18px] text-[#000000] font-medium dark:text-textDark">Farmer’s QR Code</p>
                 </div>
 
                 <div class="flex flex-col gap-2">
 
                     <img [src]="userObj.officerQr" class="w-36 h-auto" />
                     <!-- <img src="../../../../assets/images/logo.png" class="w-36 h-auto" /> -->
-                    <p class="text-lg font-medium dark:text-textDark">Officer’s QR Code</p>
+                    <p class="text-[18px] text-[#000000] font-medium dark:text-textDark">Officer’s QR Code</p>
                 </div>
 
             </div>

@@ -131,7 +131,7 @@ export class EditAssignOfficerTargetComponent {
     }).then((result) => {
       if (result.isConfirmed) {
 
-        this.toastSrv.warning('Edit Assign Officer Target Operation Canceled.')
+        this.toastSrv.warning('Assign Officer Target edit was canceled.')
         this.location.back();
       }
     });

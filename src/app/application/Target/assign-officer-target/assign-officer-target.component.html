@@ -52,9 +52,9 @@
     </div>
 
     <div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg my-8">
-        <div class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg">
-            <table class="w-full min-w-max divide-y-2 border-[1px] border-gray-300 rounded-lg overflow-hidden">
-                <thead class=" text-[#4B5563] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
+        <div class=" min-w-max mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021] overflow-hidden">
+            <table class="w-full min-w-max divide-y-2">
+                <thead class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
                     <tr>
                         <th class="px-6 py-3 text-left font-medium">No</th>
                         <th class="px-6 py-3 text-left font-medium">EMP ID</th>
@@ -64,7 +64,7 @@
                         <th class="px-6 py-3 text-left font-medium">Grade C</th>
                     </tr>
                 </thead>
-                <tbody class="bg-white text-[#000000] dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
+                <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
                     <tr *ngFor="let item of officerArr; let i = index">
                         <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
                             {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }} </td>

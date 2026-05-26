@@ -509,6 +509,16 @@ export class TargetService {
     return this.http.get(url, { headers, responseType: 'blob' });
   }
 
+  getOfficerTartgetItem2(id: number, empId: string): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/get-officer-target-by-id-2/${id}/${empId}`;
+
+    return this.http.get<any>(url, { headers });
+  }
+
   
 
 }

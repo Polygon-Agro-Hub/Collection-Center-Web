@@ -264,10 +264,11 @@ ngOnInit(): void {
     }
   }
 
-  editOfficerTarget(id: number, toDate: string, fromDate: string, officerId: string) {
+  editOfficerTarget(id: number, toDate: string, fromDate: string, officerId: string, empId: string) {
+    console.log('officerObj', this.OfficerObj)
     this.router.navigate(['/officer-target/edit-officer-target', id, toDate, fromDate],
       {
-        queryParams: {officerId: officerId}
+        queryParams: {officerId: officerId, empId: empId} 
       }
     );
   }

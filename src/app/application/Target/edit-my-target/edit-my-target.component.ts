@@ -98,6 +98,44 @@ export class EditMyTargetComponent implements OnInit {
 //   }
 // }
 
+  onPassAmountInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    let val = input.value;
+
+    val = val.replace(/[^0-9.]/g, '');
+
+    const dotIndex = val.indexOf('.');
+    if (dotIndex !== -1) {
+      val = val.slice(0, dotIndex + 1) + val.slice(dotIndex + 1).replace(/\./g, '');
+    }
+
+    if (val.startsWith('0') && !val.startsWith('0.')) {
+      val = val.replace(/^0+/, '');
+    }
+
+    if (val.startsWith('.')) {
+      val = '0' + val;
+    }
+
+    input.value = val;
+    this.passAmount = val && val !== '.' ? Number(val) : 0;
+  }
+
+  enforceMinAmount(): void {
+    if (!this.passAmount || this.passAmount <= 0) {
+      this.passAmount = 1;
+    }
+  }
+
+  incrementAmount(): void {
+    this.passAmount = Math.floor(this.passAmount || 0) + 1;
+  }
+
+  decrementAmount(): void {
+    const current = Math.floor(this.passAmount || 1);
+    this.passAmount = current > 1 ? current - 1 : 1;
+  }
+
   onSubmit() {
     this.isLoading = true;
 

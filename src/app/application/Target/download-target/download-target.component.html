@@ -54,76 +54,72 @@
         class="mt-8 overflow-x-auto bg-tileLight shadow-lg rounded-lg dark:text-[#FFFFFF] dark:bg-[#363636] p-8">
 
 
-        <div class="min-w-max mt-6 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
-            <table class="min-w-full divide-y-2 table-fixed">
-                <thead class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
-                    <tr>
-                        <th class="px-6 py-3 text-left font-medium w-16">No</th>
-                        <th class="px-6 py-3 text-left font-medium w-1/6">Crop Name</th>
-                        <th class="px-6 py-3 text-left font-medium w-1/6">Variety Name</th>
-                        <th class="px-6 py-3 text-center font-medium w-1/6">Grade</th>
-                        <th class="px-6 py-3 text-center font-medium whitespace-nowrap w-1/6">Target (kg)</th>
-                        <th class="px-6 py-3 text-center font-medium whitespace-nowrap w-1/6">Completed (kg)</th>
-                        <th class="px-6 py-3 text-center font-medium w-24">Status</th>
-                        <th class="px-6 py-3 text-center font-medium w-24">Validity</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
-                    <tr *ngFor="let item of targetArr; let i = index">
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
-                            {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }} </td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300 truncate">{{item.cropNameEnglish}}</td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300 truncate">{{item.varietyNameEnglish}}</td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300 text-center">{{item.grade}}</td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300 text-center">{{item.target | number: '1.2-2'}}</td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300 text-center">
-                            {{ item.complete != null ? (item.complete | number: '1.2-2') : '-' }}
-                        </td>
-                        <td class="px-6 py-4 text-gray-[#000000] font-semibold dark:text-gray-300">
-                            <div class="flex justify-center">
-                              <span *ngIf="item.status === 'Pending'"
-                                class="bg-[#F8FFA6] text-[#A8A100] min-w-32 text-center rounded-lg py-1 h-full ">
-                                Pending
-                              </span>
-                              <span *ngIf="item.status === 'Exceeded'"
-                                class="bg-[#C8E0FF] text-[#415CFF] min-w-32 text-center rounded-lg py-1 h-full ">
-                                Exceeded
-                              </span>
-                              <span *ngIf="item.status === 'Completed'"
-                                class="bg-[#c0f8ac] text-[#30911a] min-w-32 text-center rounded-lg py-1 h-full ">
-                                Completed
-                              </span>
-
-                              <span *ngIf="item.status === 'Extra'"
-                                class="bg-[#FFE4C9] text-[#CD6700] min-w-32 text-center rounded-lg py-1 h-full ">
-                                Extra
-                              </span>
-
-                            
-
-                            </div>
-                          </td>
-                          <td class="px-6 py-4 text-gray-[#000000] font-semibold dark:text-gray-300">
-                            <div class="flex justify-center">
-                              <span *ngIf="item.validity === 'Unassigned'"
-                                class="bg-[#B7F4FF] text-[#008CA2] min-w-32 text-center rounded-lg py-1 h-full ">
-                                Unassigned
-                              </span>
-                              <span *ngIf="item.validity === 'Expired'"
-                                class="bg-[#D9D9D9] text-[#8A8A8A] min-w-32 text-center rounded-lg py-1 h-full ">
-                                Expired
-                              </span>
-                              <span *ngIf="item.validity === 'Active'"
-                                class="bg-[#c0f8ac] text-[#30911a] min-w-32 text-center rounded-lg py-1 h-full ">
-                                Active
-                              </span>                            
-
-                            </div>
-                          </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+        <div class="min-w-max mt-6 border border-gray-200 rounded-lg overflow-hidden dark:border-[#202021]">
+    <table class="min-w-full divide-y-2 table-fixed">
+        <thead class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F]">
+            <tr>
+                <th class="px-6 py-3 text-left font-medium w-16">No</th>
+                <th class="px-6 py-3 text-left font-medium w-1/6">Crop Name</th>
+                <th class="px-6 py-3 text-left font-medium w-1/6">Variety Name</th>
+                <th class="px-6 py-3 text-center font-medium w-1/6">Grade</th>
+                <th class="px-6 py-3 text-left font-medium whitespace-nowrap w-1/6">Target (kg)</th>
+                <th class="px-6 py-3 text-left font-medium whitespace-nowrap w-1/6">Completed (kg)</th>
+                <th class="px-6 py-3 text-center font-medium w-24">Status</th>
+                <th class="px-6 py-3 text-center font-medium w-24">Validity</th>
+            </tr>
+        </thead>
+        <tbody class="bg-white dark:bg-[#1D1D1F]">
+            <tr *ngFor="let item of targetArr; let i = index">
+                <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
+                    {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }}
+                </td>
+                <td class="px-6 py-4 text-gray-900 dark:text-gray-300 truncate">{{item.cropNameEnglish}}</td>
+                <td class="px-6 py-4 text-gray-900 dark:text-gray-300 truncate">{{item.varietyNameEnglish}}</td>
+                <td class="px-6 py-4 text-gray-900 dark:text-gray-300 text-center">{{item.grade}}</td>
+                <td class="px-6 py-4 text-gray-900 dark:text-gray-300 text-left">{{item.target | number: '1.2-2'}}</td>
+                <td class="px-6 py-4 text-gray-900 dark:text-gray-300 text-left">
+                    {{ item.complete != null ? (item.complete | number: '1.2-2') : '-' }}
+                </td>
+                <td class="px-6 py-4 font-semibold dark:text-gray-300">
+                    <div class="flex justify-center">
+                        <span *ngIf="item.status === 'Pending'"
+                            class="bg-[#F8FFA6] text-[#A8A100] min-w-32 text-center rounded-lg py-1">
+                            Pending
+                        </span>
+                        <span *ngIf="item.status === 'Exceeded'"
+                            class="bg-[#C8E0FF] text-[#415CFF] min-w-32 text-center rounded-lg py-1">
+                            Exceeded
+                        </span>
+                        <span *ngIf="item.status === 'Completed'"
+                            class="bg-[#c0f8ac] text-[#30911a] min-w-32 text-center rounded-lg py-1">
+                            Completed
+                        </span>
+                        <span *ngIf="item.status === 'Extra'"
+                            class="bg-[#FFE4C9] text-[#CD6700] min-w-32 text-center rounded-lg py-1">
+                            Extra
+                        </span>
+                    </div>
+                </td>
+                <td class="px-6 py-4 font-semibold dark:text-gray-300">
+                    <div class="flex justify-center">
+                        <span *ngIf="item.validity === 'Unassigned'"
+                            class="bg-[#B7F4FF] text-[#008CA2] min-w-32 text-center rounded-lg py-1">
+                            Unassigned
+                        </span>
+                        <span *ngIf="item.validity === 'Expired'"
+                            class="bg-[#D9D9D9] text-[#8A8A8A] min-w-32 text-center rounded-lg py-1">
+                            Expired
+                        </span>
+                        <span *ngIf="item.validity === 'Active'"
+                            class="bg-[#c0f8ac] text-[#30911a] min-w-32 text-center rounded-lg py-1">
+                            Active
+                        </span>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
         <div class="flex items-center justify-center mt-8">
             <button class="bg-[#415CFF] text-white text-lg font-semibold px-6 py-2 rounded-lg shadow-md"

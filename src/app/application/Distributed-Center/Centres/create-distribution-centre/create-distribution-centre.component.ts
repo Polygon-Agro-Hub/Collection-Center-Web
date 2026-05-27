@@ -208,17 +208,17 @@ getFlagUrl(code: string): string {
     }
 
     if (!this.centerData.phoneNumber01) {
-      missingFields.push('Mobile Number - 1 is required');
+      missingFields.push('Contact Number - 01 is required');
     } else if (!/^[0-9]{9}$/.test(this.centerData.phoneNumber01) || this.isPhoneInvalidMap['phone01']) {
-      missingFields.push('Mobile Number - 1 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+      missingFields.push('Contact Number - 01 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
     }
   
     if (this.centerData.phoneNumber02) {
       if (!/^[0-9]{9}$/.test(this.centerData.phoneNumber02) || this.isPhoneInvalidMap['phone02']) {
-        missingFields.push('Mobile Number - 2 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+        missingFields.push('Contact Number - 02 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
       }
       if (this.centerData.phoneNumber01 === this.centerData.phoneNumber02) {
-        missingFields.push('Mobile Number - 2 - Must be different from Mobile Number - 1');
+        missingFields.push('Contact Number - 02 - Must be different from Contact Number - 01');
       }
     }
 
@@ -236,10 +236,6 @@ getFlagUrl(code: string): string {
 
     if (!this.centerData.district) {
       missingFields.push('District is required');
-    }
-
-    if (!this.centerData.buildingNo) {
-      missingFields.push('Building Number is required');
     }
 
     if (!this.centerData.streetName) {
@@ -404,7 +400,7 @@ this.isLoading = true;
     const input = event.target as HTMLInputElement;
     let value = parseFloat(input.value);
   
-    if (value > 90) {
+    if (value > 180) {
       input.value = '180';
       this.centerData.longitude = 180;
       Swal.fire({
@@ -418,7 +414,7 @@ this.isLoading = true;
           htmlContainer: 'text-center',
         },
       });
-    } else if (value < -90) {
+    } else if (value < -180) {
       input.value = '-180';
       this.centerData.longitude = -180;
       Swal.fire({
@@ -481,7 +477,6 @@ class CenterData {
   phoneNumber01!: string;
   phoneNumber02Code: string = '+94';
   phoneNumber02!: string;
-  buildingNo!: string;
   streetName!: string;
   email!: string
 

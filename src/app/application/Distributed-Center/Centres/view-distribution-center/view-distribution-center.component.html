@@ -122,6 +122,38 @@
       </div>
 </div>
 
+        <div>
+            <label for="email"
+                class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Email *</label>
+            <input type="email" id="email" name="email" [(ngModel)]="centerData.email"
+                #email="ngModel" readonly required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+               
+                class="form-control pointer-events-none mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F] " />
+        </div>
+
+            <div class="">
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Geo Location</label>
+      <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl border border-red-200 bg-red-50 shadow-sm">
+        <a
+        *ngIf="centerData.longitude && centerData.latitude"
+        href="https://www.google.com/maps?q={{ centerData.latitude }},{{ centerData.longitude }}"
+        target="_blank"
+        title="View on map"
+        (click)="$event.stopPropagation()"
+        class="text-red-500 hover:text-red-600 text-2xl transition-colors duration-200"
+      >
+        <i class="fas fa-map-marker-alt"></i>
+      </a>
+    
+      <span
+        *ngIf="!centerData.longitude || !centerData.latitude"
+        class="text-gray-400 text-2xl"
+      >
+        <i class="fas fa-map-marker-alt"></i>
+      </span>
+      </div>
+    </div>
+
     <!-- Province -->
     <div>
       <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Province</label>
@@ -191,28 +223,7 @@
       </p>
     </div>
 
-    <div class="">
-      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Geo Location</label>
-      <div class="inline-flex items-center justify-center w-12 h-12 rounded-xl border border-red-200 bg-red-50 shadow-sm">
-        <a
-        *ngIf="centerData.longitude && centerData.latitude"
-        href="https://www.google.com/maps?q={{ centerData.latitude }},{{ centerData.longitude }}"
-        target="_blank"
-        title="View on map"
-        (click)="$event.stopPropagation()"
-        class="text-red-500 hover:text-red-600 text-2xl transition-colors duration-200"
-      >
-        <i class="fas fa-map-marker-alt"></i>
-      </a>
-    
-      <span
-        *ngIf="!centerData.longitude || !centerData.latitude"
-        class="text-gray-400 text-2xl"
-      >
-        <i class="fas fa-map-marker-alt"></i>
-      </span>
-      </div>
-    </div>
+
 
   </div>
   </form>

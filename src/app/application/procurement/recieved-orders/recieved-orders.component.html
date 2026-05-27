@@ -207,7 +207,7 @@
             </th>
           </tr>
         </thead>
-        <tbody class="bg-white  dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
+        <tbody class="bg-white  dark:bg-[#1D1D1F] border-b dark:border-[#1D1D1F]">
           <tr
           *ngFor="
               let item of purchaseReport
@@ -218,7 +218,7 @@
                       totalItems: totalItems
                     }
                     let i = index
-            ">
+            " class="border-b">
             <td class="px-4 py-3 text-[#000000] dark:text-textDark text-left">
               {{ ((page - 1) * itemsPerPage + i + 1) < 10 ? '0' + ((page - 1) * itemsPerPage + i + 1) : ((page - 1) * itemsPerPage + i + 1) }} 
             </td>

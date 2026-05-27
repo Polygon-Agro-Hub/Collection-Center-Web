@@ -511,7 +511,7 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
         // Show success message and redirect to sent tab
         Swal.fire({
           title: 'Success!',
-          text: 'Order has been successfully dispatched',
+          text: 'The order has been dispatched successfully.',
           icon: 'success',
           confirmButtonColor: '#415CFF',
           customClass: {

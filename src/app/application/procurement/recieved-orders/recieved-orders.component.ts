@@ -366,7 +366,7 @@ export class RecievedOrdersComponent {
   const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
 
   // Keep your original naming (with query params if you plan to use it)
-  this.saveAsExcelFile(excelBuffer, `Procument_Items_Report${queryString}`);
+  this.saveAsExcelFile(excelBuffer, `Procument_Items_Report`);
 }
 
 

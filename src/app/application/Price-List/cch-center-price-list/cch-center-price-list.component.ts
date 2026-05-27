@@ -190,7 +190,7 @@ export class CchCenterPriceListComponent implements OnInit {
           if (res.status) {
             this.isLoading = false;
             this.toastSrv.success(
-              `Successfully changed price of <b style="color:black;">${crop}-${variety}-${grade}</b><br>
+              `Successfully changed price of <b style="color:black;">${crop} - ${grade} - Grade ${variety}</b><br>
                from <b style="color:black;">Rs.${this.originalValue}</b> to 
                <b style="color:black;">Rs.${this.editValue}</b>`,
               { enableHtml: true }

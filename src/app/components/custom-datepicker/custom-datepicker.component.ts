@@ -26,6 +26,7 @@ export class CustomDatepickerComponent {
   @Input() placeholder: string = 'Date';
   @Input() showClearButton: boolean = true;
   @Output() pickerOpened = new EventEmitter<void>();
+  @Input() placeholderClass: string = 'italic';
   
   showCalendar = false;
   showYearPicker = false;

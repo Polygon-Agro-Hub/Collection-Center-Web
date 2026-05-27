@@ -20,6 +20,7 @@
                     #fromDatePicker
                     [(selectedDate)]="selectedFromDate"
                     (dateChange)="onFromDateChange($event)"
+                    placeholder="--Select Date--"
                     ></app-custom-datepicker>
                     
                 </div>
@@ -32,6 +33,7 @@
                         <app-custom-datepicker
                         #toDatePicker
       [(selectedDate)]="selectedToDate"
+      placeholder="--Select Date--"
       (dateChange)="onToDateChange($event)"
     ></app-custom-datepicker>
                     

@@ -25,6 +25,7 @@ import { CustomDatepickerComponent } from '../../../components/custom-datepicker
   providers: [DatePipe],
 })
 export class CollectionDailyReportComponent implements OnInit {
+  @ViewChild(CustomDatepickerComponent) datePicker!: CustomDatepickerComponent;
   dailyReportArr: DailyReport[] = [];
   officerId!: number;
   officerName!: string;
@@ -111,10 +112,22 @@ export class CollectionDailyReportComponent implements OnInit {
   // }
 
   onDateChange(newDate: string | Date | null) {
-    this.dailyReportArr = [];
+  this.dailyReportArr = [];
+
+  if (!newDate) {
+    const today = new Date().toISOString().split('T')[0];
+    this.selectDate = today;
+
+    // ✅ Also reset the datepicker UI to show today's date
+    if (this.datePicker) {
+      this.datePicker.selectedDate = today;
+    }
+  } else {
     this.selectDate = newDate;
-    this.fetchDailyReport();
   }
+
+  this.fetchDailyReport();
+}
 
   updateChart() {
     this.isLoading = true;

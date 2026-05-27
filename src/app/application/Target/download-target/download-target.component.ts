@@ -276,7 +276,7 @@ export class DownloadTargetComponent {
 
     const data: Blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
     saveAs(data, `Target-Report (${this.fromDate} - ${this.toDate}).xlsx`);
-    this.toastSrv.success(`Target-Report (${this.fromDate} - ${this.toDate}).xlsx Downloaded`);
+    this.toastSrv.success(`Downloaded Successfully`);
   }
 
 }

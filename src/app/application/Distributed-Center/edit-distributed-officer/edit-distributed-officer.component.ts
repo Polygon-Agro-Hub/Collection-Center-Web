@@ -95,6 +95,8 @@ export class EditDistributedOfficerComponent implements OnInit {
   jobRoles: string[] = [];
 
   jobRoleInputTouched = false;
+  vehicleTypeDropdownOpen = false;
+  vehicleTypeTouched = false;
 
   selectVehicletype: any = { name: '', capacity: '' };
 
@@ -956,7 +958,7 @@ export class EditDistributedOfficerComponent implements OnInit {
     }
 
     if (missingFields.length > 0) {
-      let errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following issues:</p><ul class="list-disc pl-5">';
+      let errorMessage = '<div class="text-left"><p class="mb-2">Please fill all required fields:</p><ul class="list-disc pl-5">';
       missingFields.forEach((field) => {
         errorMessage += `<li>${field}</li>`;
       });
@@ -1026,7 +1028,7 @@ export class EditDistributedOfficerComponent implements OnInit {
 
     // Display errors if any
     if (missingFields.length > 0) {
-      let errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following issues:</p><ul class="list-disc pl-5">';
+      let errorMessage = '<div class="text-left"><p class="mb-2">Please fill all required fields:</p><ul class="list-disc pl-5">';
       missingFields.forEach((field) => {
         errorMessage += `<li>${field}</li>`;
       });
@@ -1051,6 +1053,7 @@ export class EditDistributedOfficerComponent implements OnInit {
   onSubmitFormPage3(form: NgForm) {
     form.form.markAllAsTouched();
     this.onDatePickerClicked();
+    this.vehicleTypeTouched = true;
 
     const missingFields: string[] = [];
 
@@ -1131,7 +1134,7 @@ export class EditDistributedOfficerComponent implements OnInit {
 
     // Display errors if any
     if (missingFields.length > 0) {
-      let errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following issues:</p><ul class="list-disc pl-5">';
+      let errorMessage = '<div class="text-left"><p class="mb-2">Please fill all required fields:</p><ul class="list-disc pl-5">';
       missingFields.forEach((field) => {
         errorMessage += `<li>${field}</li>`;
       });
@@ -1715,6 +1718,18 @@ export class EditDistributedOfficerComponent implements OnInit {
   vehicleChange() {
     this.driverObj.vType = this.selectVehicletype.name
     this.driverObj.vCapacity = this.selectVehicletype.capacity
+  }
+
+  toggleVehicleTypeDropdown() {
+    this.vehicleTypeDropdownOpen = !this.vehicleTypeDropdownOpen;
+    this.vehicleTypeTouched = true;
+  }
+
+  selectVehicleTypeItem(item: { name: string; capacity: number }) {
+    this.selectVehicletype = item;
+    this.vehicleChange();
+    this.vehicleTypeDropdownOpen = false;
+    this.vehicleTypeTouched = true;
   }
 
   preventSpecialCharacters(event: KeyboardEvent) {

@@ -16,7 +16,7 @@
             <div class="relative w-56 mr-10">
 
             <app-custom-datepicker
-              [placeholder]="'Delivery Date'"
+              [placeholder]="'--Select Start Date--'"
               [selectedDate]="fromDate"
               (dateChange)="onDateFromDateChange($event)"
             ></app-custom-datepicker>
@@ -26,7 +26,7 @@
 
             <div class="relative w-56 mr-6">
                 <app-custom-datepicker
-              [placeholder]="'Delivery Date'"
+              [placeholder]="'--Select End Date--'"
               [selectedDate]="toDate"
               (dateChange)="onDateToDateChange($event)"
             ></app-custom-datepicker>

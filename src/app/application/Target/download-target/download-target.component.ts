@@ -102,41 +102,70 @@ export class DownloadTargetComponent {
   //   }
   // }
 
+  // onDateFromDateChange(newDate: string | Date | null) {
+  //   let dateString: string;
+  
+  //   if (!newDate) {
+      
+  //     return
+  //   }
+  //   else if (newDate instanceof Date) {
+      
+  //     dateString = newDate.toISOString().split('T')[0];
+  //   } 
+  //   else {
+      
+  //     dateString = newDate;
+  //   }
+
+  //   if (!this.toDate) {
+  //     return;
+  //   }
+
+  //   this.fromDate = dateString;
+
+  //   // Case 2: toDate is earlier than fromDate
+  //   if (this.toDate) {
+  //     const from = new Date(this.fromDate);
+  //     const to = new Date(this.toDate);
+
+  //     if (to <= from) {
+  //       this.fromDate = ''; // Reset toDate
+  //       newDate = '';
+  //       this.toastSrv.warning("The 'From' date cannot be Later than or same to the 'From' date.");
+  //     }
+  //   }
+  
+  // }
+
   onDateFromDateChange(newDate: string | Date | null) {
-    let dateString: string;
-  
-    if (!newDate) {
-      
-      return
-    }
-    else if (newDate instanceof Date) {
-      
-      dateString = newDate.toISOString().split('T')[0];
-    } 
-    else {
-      
-      dateString = newDate;
-    }
+  let dateString: string;
 
-    if (!this.toDate) {
-      return;
-    }
-
-    this.fromDate = dateString;
-
-    // Case 2: toDate is earlier than fromDate
-    if (this.toDate) {
-      const from = new Date(this.fromDate);
-      const to = new Date(this.toDate);
-
-      if (to <= from) {
-        this.fromDate = ''; // Reset toDate
-        newDate = '';
-        this.toastSrv.warning("The 'From' date cannot be Later than or same to the 'From' date.");
-      }
-    }
-  
+  if (!newDate) {
+    return;
+  } else if (newDate instanceof Date) {
+    dateString = newDate.toISOString().split('T')[0];
+  } else {
+    dateString = newDate;
   }
+
+  // ✅ Save fromDate FIRST, before any early returns
+  this.fromDate = dateString;
+
+  // If toDate isn't selected yet, nothing to cross-validate
+  if (!this.toDate) {
+    return;
+  }
+
+  // Cross-validate only when both dates are present
+  const from = new Date(this.fromDate);
+  const to = new Date(this.toDate);
+
+  if (to <= from) {
+    this.fromDate = '';
+    this.toastSrv.warning("The 'From' date cannot be later than or the same as the 'To' date.");
+  }
+}
 
   onDateToDateChange(newDate: string | Date | null) {
     let dateString: string;

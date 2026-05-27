@@ -10,86 +10,76 @@
     <div class="w-full overflow-x-auto px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg mb-6">
     <p class="font-semibold text-lg mb-1 dark:text-white">Price Update Request on {{today}}</p>
 
-        <div *ngIf="hasData" class="min-w-max mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
-            <table class="w-full min-w-max divide-y-2 overflow-hidden">
-                <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
-                    <tr>
-                        <th class="px-6 py-3 text-left font-medium">No</th>
-                        <th class="px-6 py-3 text-left font-medium">Crop Name</th>
-                        <th class="px-6 py-3 text-left font-medium">Variety Name</th>
-                        <th class="px-6 py-3 text-center font-medium">Grade</th>
-                        <th class="px-6 py-3 text-left font-medium">Requested (Rs.)</th>
-                        <th class="px-6 py-3 text-left font-medium">EMP ID</th>
-                        <th class="px-6 py-3 text-left font-medium">Time</th>
-                        <th class="px-6 py-3 text-center font-medium">Status</th>
-                        <th class="px-6 py-3 text-center font-medium">View</th>
-                        
-                    </tr>
-                </thead>
-                <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F] cursor-default">
-                    <tr >
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
-                           {{"01"}} </td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{priceRequestObj.cropNameEnglish}}</td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{priceRequestObj.varietyNameEnglish}}</td>
-                        <td class="px-6 py-4 text-gray-900 text-center dark:text-gray-300">{{priceRequestObj.grade}}</td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{priceRequestObj.requestPrice }}</td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
-                            {{ priceRequestObj.empId }}
-                        </td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{priceRequestObj.createdAt | date: 'hh:mm a'}}
-                        </td>
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300 flex justify-center items-center "
-                            >
-                            <span *ngIf="priceRequestObj.status === 'Pending'"
-                                class="bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-6 py-1 ">
-                                Pending
-                            </span>
-                            <span *ngIf="priceRequestObj.status === 'Approved'"
-                                class="bg-[#C8E0FF] text-[#415CFF] text-center rounded-lg px-4 py-1 ">
-                                Approved
-                            </span>
-                            <span *ngIf="priceRequestObj.status === 'Rejected'"
-                                class="bg-[#FFB9B7] text-[#D16D6A] text-center rounded-lg px-5 py-1 ">
-                                Rejected
-                            </span>
-                        </td>
-
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300 text-center">
-                            <button
-                              (click)="openPopUp()"
-                              [disabled]="priceRequestObj.status !== 'Pending'"
-                              [ngClass]="{
-                                'opacity-50 cursor-not-allowed': priceRequestObj.status !== 'Pending'
-                              }"
-                              class="p-2 rounded-lg transition"
-                            >
-                              <svg
-                                width="25px"
-                                height="25px"
-                                viewBox="0 0 24 24"
-                                fill="none"
-                                xmlns="http://www.w3.org/2000/svg"
-                                [attr.stroke]="priceRequestObj.status === 'Pending' ? '#415CFF' : '#9CA3AF'"
-                              >
-                                <path
-                                  d="M3 14C3 9.02944 7.02944 5 12 5C16.9706 5 21 9.02944 21 14M17 14C17 16.7614 14.7614 19 12 19C9.23858 19 7 16.7614 7 14C7 11.2386 9.23858 9 12 9C14.7614 9 17 11.2386 17 14Z"
-                                  stroke-width="2"
-                                  stroke-linecap="round"
-                                  stroke-linejoin="round"
-                                ></path>
-                              </svg>
-                            </button>
-                          </td>
-                          
-                        
-                        
-    
-                    </tr>
-                </tbody>
-    
-            </table>
-        </div>
+        <div *ngIf="hasData" class="min-w-max mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021] overflow-hidden">
+    <table class="w-full min-w-max divide-y-2 border-collapse">
+        <thead class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
+            <tr>
+                <th class="px-6 py-3 text-left font-medium">No</th>
+                <th class="px-6 py-3 text-left font-medium">Crop Name</th>
+                <th class="px-6 py-3 text-left font-medium">Variety Name</th>
+                <th class="px-6 py-3 text-center font-medium">Grade</th>
+                <th class="px-6 py-3 text-left font-medium">Requested (Rs.)</th>
+                <th class="px-6 py-3 text-left font-medium">EMP ID</th>
+                <th class="px-6 py-3 text-left font-medium">Time</th>
+                <th class="px-6 py-3 text-center font-medium">Status</th>
+                <th class="px-6 py-3 text-center font-medium">View</th>
+            </tr>
+        </thead>
+        <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F] cursor-default">
+            <tr>
+                <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
+                    {{"01"}}
+                </td>
+                <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{priceRequestObj.cropNameEnglish}}</td>
+                <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{priceRequestObj.varietyNameEnglish}}</td>
+                <td class="px-6 py-4 text-gray-900 text-center dark:text-gray-300">{{priceRequestObj.grade}}</td>
+                <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{priceRequestObj.requestPrice}}</td>
+                <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
+                    {{ priceRequestObj.empId }}
+                </td>
+                <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{priceRequestObj.createdAt | date: 'hh:mm a'}}</td>
+                <td class="px-6 py-4 text-gray-900 dark:text-gray-300 flex justify-center items-center">
+                    <span *ngIf="priceRequestObj.status === 'Pending'"
+                        class="bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-6 py-1">
+                        Pending
+                    </span>
+                    <span *ngIf="priceRequestObj.status === 'Approved'"
+                        class="bg-[#C8E0FF] text-[#415CFF] text-center rounded-lg px-4 py-1">
+                        Approved
+                    </span>
+                    <span *ngIf="priceRequestObj.status === 'Rejected'"
+                        class="bg-[#FFB9B7] text-[#D16D6A] text-center rounded-lg px-5 py-1">
+                        Rejected
+                    </span>
+                </td>
+                <td class="px-6 py-4 text-gray-900 dark:text-gray-300 text-center">
+                    <button
+                        (click)="openPopUp()"
+                        [disabled]="priceRequestObj.status !== 'Pending'"
+                        [ngClass]="{
+                            'opacity-50 cursor-not-allowed': priceRequestObj.status !== 'Pending'
+                        }"
+                        class="p-2 rounded-lg transition">
+                        <svg
+                            width="25px"
+                            height="25px"
+                            viewBox="0 0 24 24"
+                            fill="none"
+                            xmlns="http://www.w3.org/2000/svg"
+                            [attr.stroke]="priceRequestObj.status === 'Pending' ? '#415CFF' : '#9CA3AF'">
+                            <path
+                                d="M3 14C3 9.02944 7.02944 5 12 5C16.9706 5 21 9.02944 21 14M17 14C17 16.7614 14.7614 19 12 19C9.23858 19 7 16.7614 7 14C7 11.2386 9.23858 9 12 9C14.7614 9 17 11.2386 17 14Z"
+                                stroke-width="2"
+                                stroke-linecap="round"
+                                stroke-linejoin="round">
+                            </path>
+                        </svg>
+                    </button>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
 
     </div>
 

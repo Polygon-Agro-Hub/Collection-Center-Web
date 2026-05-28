@@ -141,7 +141,7 @@
                 class="border border-[#95A1AC] font-medium rounded-lg bg-[#F6F7F9] text-[#6B7D8C] px-3 py-1">Cancel</button>
             <button (click)="passTarget()"
                 class="border border-[#415CFF] font-medium rounded-lg bg-[#415CFF] text-[#FFFFFF] px-6 py-1">Pass</button>
-            <p class="text-[#415CFF] px-3 py-1 italic">Selected ({{selectedOrderIds.length}})</p>
+            <p class="text-[#415CFF] px-3 py-1 italic">Selected ({{ formatSelectedCount(selectedOrderIds.length) }})</p>
         </div>
 
         <div *ngIf="!hasData" class="flex flex-col items-center w-full h-screen mt-6">

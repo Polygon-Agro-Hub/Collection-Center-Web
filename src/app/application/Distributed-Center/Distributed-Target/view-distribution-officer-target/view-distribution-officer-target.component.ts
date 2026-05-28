@@ -395,6 +395,10 @@ goBack() {
   this.location.back();
 }
 
+formatSelectedCount(count: number): string {
+  return count < 10 ? `0${count}` : `${count}`;
+}
+
 getStatus(item: orders): string {
   // Convert both into Date objects
   const scheduleDate = new Date(item.sheduleDate);

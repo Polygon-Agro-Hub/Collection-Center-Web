@@ -69,50 +69,48 @@
                 </div>
 
                 <div class="relative w-48 custom-completion-status-dropdown-container">
-                    <!-- Hidden native select -->
-                    <select [(ngModel)]="selectCompletingStatus" class="hidden" (change)="filterCompletingStatus()">
-                        <option value="" selected disabled>Completing Status</option>
-                        <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
-                            value="Pending">
-                            On Time</option>
-                        <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
-                            value="Completed">
-                            Late</option>
-                        <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
-                            value="Opened">
-                            Not Completed</option>
-                    </select>
+    <!-- Hidden native select -->
+    <select [(ngModel)]="selectCompletingStatus" class="hidden" (change)="filterCompletingStatus()">
+        <option value="" selected disabled>Completing Status</option>
+        <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
+            value="Pending">
+            On Time</option>
+        <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
+            value="Completed">
+            Late</option>
+        <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
+            value="Opened">
+            Not Completed</option>
+    </select>
 
-                    <!-- Custom dropdown trigger -->
-                    <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
-                        (click)="toggleCompletingStatusDropdown()">
-                        <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
-                            <span>{{ selectCompletingStatus || 'Completing Status' }}</span>
-                            <div class="flex items-center">
-                                <i *ngIf="selectCompletingStatus" (click)="cancelCompletingStatus($event)"
-                                    class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
-                                <i *ngIf="isCompletingStatusDropdownOpen || !selectCompletingStatus"
-                                    class="fa-solid text-lg text-[#828282] transition-transform duration-200"
-                                    [class.fa-angle-down]="!isCompletingStatusDropdownOpen"
-                                    [class.fa-angle-up]="isCompletingStatusDropdownOpen"></i>
-                            </div>
-                        </div>
-                    </div>
+    <!-- Custom dropdown trigger -->
+    <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
+        (click)="toggleCompletingStatusDropdown()">
+        <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
+            <span>{{ selectCompletingStatus || 'Completing Status' }}</span>
+            <div class="flex items-center">
+                <i *ngIf="selectCompletingStatus" (click)="cancelCompletingStatus($event)"
+                    class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
+                <i *ngIf="isCompletingStatusDropdownOpen || !selectCompletingStatus"
+                    class="fa-solid text-lg text-[#828282] transition-transform duration-200"
+                    [class.fa-angle-down]="!isCompletingStatusDropdownOpen"
+                    [class.fa-angle-up]="isCompletingStatusDropdownOpen"></i>
+            </div>
+        </div>
+    </div>
 
-                    <!-- Custom dropdown options -->
-                    <div *ngIf="isCompletingStatusDropdownOpen"
-                        class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
-                        <div class="py-1">
-                            <div *ngFor="let option of completingStatusDropdownOptions"
-                                (click)="selectCompletingStatusOption(option)"
-                                class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
-                                <span class="flex-grow">{{ option }}</span>
-                                <i
-                                    class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <!-- Custom dropdown options -->
+    <div *ngIf="isCompletingStatusDropdownOpen"
+        class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282] overflow-hidden">
+        <div class="">
+            <div *ngFor="let option of completingStatusDropdownOptions" 
+                (click)="selectCompletingStatusOption(option)"
+                class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center group">
+                <span class="flex-grow">{{ option }}</span>
+            </div>
+        </div>
+    </div>
+</div>
 
                 <div class="flex mr-5 items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
                     <input type="text" placeholder="Search by Invoice No.." [(ngModel)]="searchText"

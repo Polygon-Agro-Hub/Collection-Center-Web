@@ -97,47 +97,47 @@
                 <table>
                     <thead>
                         <tr>
-                            <th class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white">Crop Name
+                            <th class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white text-[14px]">Crop Name
                             </th>
-                            <th class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white">Variety</th>
-                            <th class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white">Unit Price
+                            <th class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white text-[14px]">Variety</th>
+                            <th class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white text-[14px]">Unit Price
                                 (A)
                             </th>
-                            <th class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white">Quantity
+                            <th class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white text-[14px]">Quantity
                             </th>
-                            <th class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white">Unit Price
+                            <th class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white text-[14px]">Unit Price
                                 (B)
                             </th>
-                            <th class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white">Quantity
+                            <th class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white text-[14px]">Quantity
                             </th>
-                            <th class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white">Unit Price
+                            <th class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white text-[14px]">Unit Price
                                 (C)
                             </th>
-                            <th class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white">Quantity
+                            <th class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white text-[14px]">Quantity
                             </th>
-                            <th class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white">Total (Rs.)</th>
+                            <th class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white text-[14px]">Total (Rs.)</th>
 
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of CropArr">
-                            <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark">
+                            <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark text-[14px]">
                                 {{item.cropNameEnglish}}</td>
-                            <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark">
+                            <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark text-[14px]">
                                 {{item.varietyNameEnglish}}</td>
-                            <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark">
+                            <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark text-[14px]">
                                 {{item.gradeAprice}}</td>
-                            <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark">
+                            <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark text-[14px]">
                                 {{(item.gradeAquan | number: '1.2-2' )}}</td>
-                            <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark">
+                            <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark text-[14px]">
                                 {{item.gradeBprice}}</td>
-                            <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark">
+                            <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark text-[14px]">
                                 {{(item.gradeBquan | number: '1.2-2' )}}</td>
-                            <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark">
+                            <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark text-[14px]">
                                 {{item.gradeCprice}}</td>
-                            <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark">
+                            <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark text-[14px]">
                                 {{(item.gradeCquan | number: '1.2-2' )}}</td>
-                            <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark">
+                            <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark text-[14px]">
                                 
                                 {{ calculateRowTotal(item) != null ? (calculateRowTotal(item) | number: '1.2-2') : '0.00' }}
                             </td>

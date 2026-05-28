@@ -170,7 +170,7 @@
     <div>
       <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Province</label>
       <select
-      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F] cursor-pointer"
         [(ngModel)]="centerData.province"
         (change)="updateFilteredDistricts()"
         name="province"
@@ -190,7 +190,7 @@
     <div>
       <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">District</label>
       <select
-      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F] cursor-pointer"
         [(ngModel)]="centerData.district"
         name="district"
         required

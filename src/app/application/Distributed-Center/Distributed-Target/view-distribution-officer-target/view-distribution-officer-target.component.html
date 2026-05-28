@@ -226,8 +226,9 @@
     </div>
 
     <div *ngIf="isPass"
-        class="w-full h-screen px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg overflow-x-auto">
-        <span class="font-medium text-[16px] text-[#030308] dark:text-textDark">EMP ID : {{ ordersArr[0].empId}}</span>
+        class="w-full h-screen py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg overflow-x-auto">
+        <div class="px-10">
+            <span class="font-medium text-[16px] text-[#030308] dark:text-textDark">EMP ID : {{ ordersArr[0].empId}}</span>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 mt-5 ">
 
             <div>
@@ -263,6 +264,8 @@
             </div>
 
         </div>
+        </div>
+        
 
         <hr class="" />
         <div class="flex justify-center">

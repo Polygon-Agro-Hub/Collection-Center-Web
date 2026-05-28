@@ -35,7 +35,6 @@ export class CollectionMonthlyReportComponent implements OnInit {
 
   hasData: boolean = false;
   isLoading: boolean = false;
-  totFarmers!: number ;
 
 
   constructor(
@@ -63,7 +62,6 @@ export class CollectionMonthlyReportComponent implements OnInit {
       (res) => {
         this.officerDataObj = res.officer;
         this.farmerDataArr = res.dates;
-        this.totFarmers = this.farmerDataArr.length;
         if (res.dates.length > 0) {
           this.hasData = true;
         } else {
@@ -273,7 +271,7 @@ export class CollectionMonthlyReportComponent implements OnInit {
 
     // Fourth row - Weight and Farmer
     leftY = addField('Weight', String(this.officerDataObj.TotalQty) + ' kg', margin + 5, y, halfWidth);
-    rightY = addField('Collections', String(this.totFarmers), margin + halfWidth + 10, y, halfWidth);
+    rightY = addField('Collections', String(this.officerDataObj.TotalFarmers), margin + halfWidth + 10, y, halfWidth);
     y = Math.max(leftY, rightY) + 15;
 
     // Table

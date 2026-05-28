@@ -16,14 +16,14 @@
 
                     <div class="flex gap-4 flex-shrink-0">
                         <!-- Province Dropdown -->
-                        <div class="w-48">
+                        <div class="w-48 ">
                             <app-custom-datepicker
                               [selectedDate]="selectedDate"
                               (dateChange)="onDateChange($event)"
                             ></app-custom-datepicker>
                         </div>
 
-                        <div *ngIf="logingRole === 'Distribution Centre Head'" class="relative w-52 custom-center-dropdown-container">
+                        <div *ngIf="logingRole === 'Distribution Centre Head'" class="relative w-52  custom-center-dropdown-container">
                             <app-searchable-dropdown
                                 [items]="centerDropdownItems"
                                 placeholder="Centre"

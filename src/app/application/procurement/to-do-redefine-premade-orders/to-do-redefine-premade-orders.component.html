@@ -150,7 +150,7 @@
   <div class="bg-white dark:bg-[#363636] rounded-lg shadow-xl w-1/3 mx-4 max-h-[90vh] flex flex-col"
     (click)="$event.stopPropagation()">
     <!-- Modal Header -->
-    <div class="px-6 py-4 text-center shrink-0 border-b border-gray-100 dark:border-gray-700">
+    <div class="px-6 py-4 text-center shrink-0 border-b border-[#A8B0C5] dark:border-gray-700">
       <h3 class="text-lg font-semibold text-[#000000] dark:text-gray-100">
         Additional Items
       </h3>
@@ -160,9 +160,9 @@
     <div class="flex-1 overflow-hidden flex flex-col">
 
       <!-- Table Header (Fixed) -->
-      <div class="shrink-0 px-6 pt-4 pb-2">
+      <div class="shrink-0 pt-4 pb-2">
         <div
-          class="flex items-center text-sm font-medium text-[#8492A3] dark:text-gray-400 uppercase tracking-wide border-b border-gray-100 dark:border-gray-700 pb-2">
+          class="flex items-center text-sm font-medium text-[#8492A3] dark:text-gray-400 uppercase tracking-wide border-b border-[#A8B0C5] dark:border-gray-700 pb-2">
           <div class="w-1/4 py-2 px-4 text-center whitespace-nowrap">
             NO ({{ additionalItemsCount < 10 ? '0' + additionalItemsCount : additionalItemsCount }}) </div>
               <div class="w-1/4 py-2 px-4 text-left whitespace-nowrap">Item Name</div>
@@ -172,10 +172,10 @@
         </div>
 
         <!-- Scrollable Items List -->
-        <div class="flex-1 overflow-y-auto px-6 pb-4">
+        <div class="flex-1 overflow-y-auto ">
           <div class="space-y-2">
             <div *ngFor="let item of additionalItems; let i = index"
-              class="flex items-center py-2 border-b border-gray-50 dark:border-gray-700">
+              class="flex items-center py-2 border-b border-[#A8B0C5] dark:border-gray-700">
 
               <div class="w-1/4 py-2 px-4 text-center text-sm text-[#212121] dark:text-gray-100">
                 {{ additionalItems.length < 10 ? '0' + (i + 1) : i + 1 }} </div>
@@ -200,7 +200,7 @@
         </div>
 
         <!-- Modal Footer -->
-        <div class="px-6 py-4 flex justify-center shrink-0 border-t border-gray-100 dark:border-gray-700">
+        <div class="px-6 py-4 flex justify-center shrink-0">
           <button type="button"
             class="px-4 py-2 bg-gray-500 hover:bg-gray-600 text-white rounded-md text-sm font-medium transition-colors"
             (click)="closeAdditionalItemsModal()">

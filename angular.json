@@ -83,6 +83,13 @@
               "sourceMap": true,
               "baseHref": "/",
               "deployUrl": "/"
+            },
+            "local": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "baseHref": "/cc/",
+              "deployUrl": "/cc/"
             }
           },
           "defaultConfiguration": "production"
@@ -98,6 +105,9 @@
             },
             "uat": {
               "buildTarget": "collection-center:build:uat"
+            },
+            "local": {
+              "buildTarget": "collection-center:build:local"
             }
           },
           "defaultConfiguration": "development"

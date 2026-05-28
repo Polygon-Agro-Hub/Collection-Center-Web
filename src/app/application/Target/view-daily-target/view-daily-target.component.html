@@ -305,7 +305,7 @@
                 </thead>
                 <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
                     <tr
-                        *ngFor="let item of assignTargetArr | paginate : { itemsPerPage: assignItemsPerPage, currentPage: page, totalItems: assignTotalItems }; let i = index">
+                        *ngFor="let item of assignTargetArr | paginate : { itemsPerPage: assignItemsPerPage, currentPage: page, totalItems: assignTotalItems }; let i = index" class="border-b">
                         <!--  -->
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
                             {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i + 1)

@@ -95,6 +95,8 @@ export class EditDistributedOfficerComponent implements OnInit {
   jobRoles: string[] = [];
 
   jobRoleInputTouched = false;
+  vehicleTypeDropdownOpen = false;
+  vehicleTypeTouched = false;
 
   selectVehicletype: any = { name: '', capacity: '' };
 
@@ -221,6 +223,8 @@ export class EditDistributedOfficerComponent implements OnInit {
   }
 
   toggleJobRoleDropdown() {
+    this.centreDropdownOpen = false;
+    this.managerDropdownOpen = false;
     this.isJobRoleOpen = !this.isJobRoleOpen;
     this.jobRoleInputTouched = true;
   }
@@ -259,10 +263,14 @@ export class EditDistributedOfficerComponent implements OnInit {
 
 
   toggleDropdown() {
+    this.isJobRoleOpen = false;
+    this.managerDropdownOpen = false;
     this.centreDropdownOpen = !this.centreDropdownOpen;
   }
 
   toggleManagerDropdown() {
+    this.isJobRoleOpen = false;
+    this.centreDropdownOpen = false;
     this.managerDropdownOpen = !this.managerDropdownOpen;
   }
 
@@ -295,7 +303,7 @@ export class EditDistributedOfficerComponent implements OnInit {
   selectManager(item: Manager) {
 
     this.personalData.irmId = item.id;
-    this.selectedManager = item.firstNameEnglish + ' ' + item.lastNameEnglish;
+    this.selectedManager = item.empId + ' - ' + item.firstNameEnglish + ' ' + item.lastNameEnglish;
     this.managerDropdownOpen = false; // close dropdown
     this.filteredManagerArr = [...this.managerArr]; // show full list next time
     const searchInput = document.querySelector<HTMLInputElement>('.dropdown-manager-search-input');
@@ -336,7 +344,7 @@ export class EditDistributedOfficerComponent implements OnInit {
         this.selectedCenterName = res.officerData.collectionOfficer.centerName
 
         if (res.officerData.collectionOfficer.irmId != null) {
-          this.selectedManager = res.managerName.firstNameEnglish + ' ' + res.managerName.lastNameEnglish
+          this.selectedManager = res.managerName.empId + ' - ' + res.managerName.firstNameEnglish + ' ' + res.managerName.lastNameEnglish
         }
 
         this.getUpdateLastID(res.officerData.collectionOfficer.jobRole);
@@ -945,12 +953,12 @@ export class EditDistributedOfficerComponent implements OnInit {
 
     if (!this.personalData.email) {
       missingFields.push('Email is required');
-    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.com$/.test(this.personalData.email)) {
+    } else if (!/^[A-Za-z0-9](?!.*\.\.)([A-Za-z0-9._%+-]{0,62}[A-Za-z0-9])?@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(this.personalData.email)) {
       missingFields.push('Email - Must be in a valid format (format: example&#64;domain.com)');
     }
 
     if (missingFields.length > 0) {
-      let errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following issues:</p><ul class="list-disc pl-5">';
+      let errorMessage = '<div class="text-left"><p class="mb-2">Please fill all required fields:</p><ul class="list-disc pl-5">';
       missingFields.forEach((field) => {
         errorMessage += `<li>${field}</li>`;
       });
@@ -1020,7 +1028,7 @@ export class EditDistributedOfficerComponent implements OnInit {
 
     // Display errors if any
     if (missingFields.length > 0) {
-      let errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following issues:</p><ul class="list-disc pl-5">';
+      let errorMessage = '<div class="text-left"><p class="mb-2">Please fill all required fields:</p><ul class="list-disc pl-5">';
       missingFields.forEach((field) => {
         errorMessage += `<li>${field}</li>`;
       });
@@ -1045,6 +1053,7 @@ export class EditDistributedOfficerComponent implements OnInit {
   onSubmitFormPage3(form: NgForm) {
     form.form.markAllAsTouched();
     this.onDatePickerClicked();
+    this.vehicleTypeTouched = true;
 
     const missingFields: string[] = [];
 
@@ -1125,7 +1134,7 @@ export class EditDistributedOfficerComponent implements OnInit {
 
     // Display errors if any
     if (missingFields.length > 0) {
-      let errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following issues:</p><ul class="list-disc pl-5">';
+      let errorMessage = '<div class="text-left"><p class="mb-2">Please fill all required fields:</p><ul class="list-disc pl-5">';
       missingFields.forEach((field) => {
         errorMessage += `<li>${field}</li>`;
       });
@@ -1709,6 +1718,18 @@ export class EditDistributedOfficerComponent implements OnInit {
   vehicleChange() {
     this.driverObj.vType = this.selectVehicletype.name
     this.driverObj.vCapacity = this.selectVehicletype.capacity
+  }
+
+  toggleVehicleTypeDropdown() {
+    this.vehicleTypeDropdownOpen = !this.vehicleTypeDropdownOpen;
+    this.vehicleTypeTouched = true;
+  }
+
+  selectVehicleTypeItem(item: { name: string; capacity: number }) {
+    this.selectVehicletype = item;
+    this.vehicleChange();
+    this.vehicleTypeDropdownOpen = false;
+    this.vehicleTypeTouched = true;
   }
 
   preventSpecialCharacters(event: KeyboardEvent) {

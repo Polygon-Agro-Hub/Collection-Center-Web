@@ -1,6 +1,7 @@
 <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
-<div class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
-    <p onclick="history.back()">Distribution Centres</p>
+<div class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-4 mr-5 ml-0 ">
+    <p (click)="back()" class="cursor-pointer">Distribution Centres</p>
+    <p >Assign Cities</p>
 </div>
 <div class="mx-auto p-6 bg-white dark:bg-[#363636] rounded-lg shadow-mg gap-y-2">
     <h2 class="font-semibold dark:text-white">Assign Cities to Centre</h2>
@@ -11,7 +12,7 @@
             <label class="dark:text-white mb-1">Province</label>
         <div class="relative  rounded-lg flex-shrink-0">
             <app-searchable-dropdown id="province" name="province" [items]="provinceItems"
-            [placeholder]="'Province'" [searchPlaceholder]="'Search provinces...'"
+            [placeholder]="'--Select Province--'" [searchPlaceholder]="'Search provinces...'"
             [(ngModel)]="selectProvince" #provinceInput="ngModel"
             (ngModelChange)="filterProvince($event)"></app-searchable-dropdown>
         </div>
@@ -22,7 +23,7 @@
             <label class="dark:text-white mb-1">District</label>
         <div class="relative rounderd-lg flex-shrink-0">
             <app-searchable-dropdown id="district" name="district" [items]="districtItems"
-            [placeholder]="'District'" [searchPlaceholder]="'Search districts...'"
+            [placeholder]="'--Select District--'" [searchPlaceholder]="'Search districts...'"
             [(ngModel)]="selectDistrict" #districtInput="ngModel"
             (ngModelChange)="filterDistrict($event)"></app-searchable-dropdown>
         </div>

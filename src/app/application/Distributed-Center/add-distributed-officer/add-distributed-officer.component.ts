@@ -33,7 +33,7 @@ export class AddDistributedOfficerComponent implements OnInit {
   driverObj: Drivers = new Drivers()
 
   languages: string[] = ['Sinhala', 'English', 'Tamil'];
-  selectedPage: 'pageOne' | 'pageTwo' | 'pageThree' = 'pageOne';
+  selectedPage: 'pageOne' | 'pageTwo' | 'pageThree' = 'pageThree';
   lastID!: number
   itemId: number | null = null;
   officerId!: number
@@ -78,6 +78,8 @@ export class AddDistributedOfficerComponent implements OnInit {
   selectedManagerName: string = "";
   jobRoles: string[] = [];
   jobRoleInputTouched = false;
+  vehicleTypeDropdownOpen = false;
+  vehicleTypeTouched = false;
 
   // Driver Images
   licenseFrontImageFileName!: string;
@@ -194,6 +196,8 @@ export class AddDistributedOfficerComponent implements OnInit {
   }
 
   toggleJobRoleDropdown() {
+    this.centreDropdownOpen = false;
+    this.managerDropdownOpen = false;
     this.isJobRoleOpen = !this.isJobRoleOpen;
     this.jobRoleInputTouched = true;
   }
@@ -249,10 +253,14 @@ export class AddDistributedOfficerComponent implements OnInit {
   }
 
   toggleDropdown() {
+    this.isJobRoleOpen = false;
+    this.managerDropdownOpen = false;
     this.centreDropdownOpen = !this.centreDropdownOpen;
   }
 
   toggleManagerDropdown() {
+    this.isJobRoleOpen = false;
+    this.centreDropdownOpen = false;
     this.managerDropdownOpen = !this.managerDropdownOpen;
   }
 
@@ -283,7 +291,7 @@ export class AddDistributedOfficerComponent implements OnInit {
 
   selectManager(item: Manager) {
     this.personalData.irmId = item.id;
-    this.selectedManager = item.firstNameEnglish + ' ' + item.lastNameEnglish;
+    this.selectedManager = item.empId + ' - ' + item.firstNameEnglish + ' ' + item.lastNameEnglish;
     this.managerDropdownOpen = false; // close dropdown
     // Reset search input and filtered array
     this.filteredManagerArr = [...this.managerArr]; // show full list next time
@@ -574,7 +582,7 @@ export class AddDistributedOfficerComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.personalData = new Personal();
-        this.toastSrv.warning('Officer Add canceled.')
+        this.toastSrv.warning('Officer addition canceled.')
         this.location.back();
       }
     });
@@ -715,12 +723,12 @@ export class AddDistributedOfficerComponent implements OnInit {
 
     if (!this.personalData.email) {
       missingFields.push('Email is required');
-    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.com$/.test(this.personalData.email)) {
+    } else if (!/^[A-Za-z0-9](?!.*\.\.)([A-Za-z0-9._%+-]{0,62}[A-Za-z0-9])?@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(this.personalData.email)) {
       missingFields.push('Email - Must be in a valid format (format: example&#64;domain.com)');
     }
 
     if (missingFields.length > 0) {
-      let errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following issues:</p><ul class="list-disc pl-5">';
+      let errorMessage = '<div class="text-left"><p class="mb-2">Please fill all required fields:</p><ul class="list-disc pl-5">';
       missingFields.forEach((field) => {
         errorMessage += `<li>${field}</li>`;
       });
@@ -792,7 +800,7 @@ export class AddDistributedOfficerComponent implements OnInit {
 
     // Display errors if any
     if (missingFields.length > 0) {
-      let errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following issues:</p><ul class="list-disc pl-5">';
+      let errorMessage = '<div class="text-left"><p class="mb-2">Please fill all required fields:</p><ul class="list-disc pl-5">';
       missingFields.forEach((field) => {
         errorMessage += `<li>${field}</li>`;
       });
@@ -816,6 +824,7 @@ export class AddDistributedOfficerComponent implements OnInit {
   onSubmitFormPage3(form: NgForm) {
     form.form.markAllAsTouched();
     this.onDatePickerClicked();
+    this.vehicleTypeTouched = true;
 
     const missingFields: string[] = [];
 
@@ -896,7 +905,7 @@ export class AddDistributedOfficerComponent implements OnInit {
 
     // Display errors if any
     if (missingFields.length > 0) {
-      let errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following issues:</p><ul class="list-disc pl-5">';
+      let errorMessage = '<div class="text-left"><p class="mb-2">Please fill all required fields:</p><ul class="list-disc pl-5">';
       missingFields.forEach((field) => {
         errorMessage += `<li>${field}</li>`;
       });
@@ -1446,6 +1455,18 @@ export class AddDistributedOfficerComponent implements OnInit {
     this.driverObj.vCapacity = this.selectVehicletype.capacity
   }
 
+  toggleVehicleTypeDropdown() {
+    this.vehicleTypeDropdownOpen = !this.vehicleTypeDropdownOpen;
+    this.vehicleTypeTouched = true;
+  }
+
+  selectVehicleTypeItem(item: { name: string; capacity: number }) {
+    this.selectVehicletype = item;
+    this.vehicleChange();
+    this.vehicleTypeDropdownOpen = false;
+    this.vehicleTypeTouched = true;
+  }
+
   onDateChange(newDate: string | Date | null) {
     let dateString: string;
 
@@ -1570,7 +1591,7 @@ class Personal {
   branchName!: string;
   conformAccNumber!: string;
 
-  jobRole!: string;
+  jobRole: string = '';
   empId!: string
   employeeType!: string;
 

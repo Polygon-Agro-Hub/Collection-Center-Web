@@ -246,22 +246,22 @@ onDistrictChange(selectedDistrict: string | null): void {
 
     if (!this.centerData.email) {
       missingFields.push('Email is required');
-    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(this.centerData.email)) {
+    } else if (!/^[a-zA-Z0-9](\.?[a-zA-Z0-9_%+-])*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(this.centerData.email)) {
       missingFields.push('Email - Must be in a valid format (format: example&#64;domain.com)');
     }
 
     if (!this.centerData.phoneNumber01) {
-      missingFields.push('Mobile Number - 1 is required');
+      missingFields.push('Contact Number - 01 is required');
     } else if (!/^[0-9]{9}$/.test(this.centerData.phoneNumber01) || this.isPhoneInvalidMap['phone01']) {
-      missingFields.push('Mobile Number - 1 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+      missingFields.push('Contact Number - 01 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
     }
   
     if (this.centerData.phoneNumber02) {
       if (!/^[0-9]{9}$/.test(this.centerData.phoneNumber02) || this.isPhoneInvalidMap['phone02']) {
-        missingFields.push('Mobile Number - 2 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+        missingFields.push('Contact Number - 02 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
       }
       if (this.centerData.phoneNumber01 === this.centerData.phoneNumber02) {
-        missingFields.push('Mobile Number - 2 - Must be different from Mobile Number - 1');
+        missingFields.push('Contact Number - 02 - Must be different from Contact Number - 01');
       }
     }
 
@@ -304,6 +304,8 @@ onDistrictChange(selectedDistrict: string | null): void {
       this.toastSrv.warning('Please fill all required fields');
       return;
     }
+
+    console.log('this.centerData', this.centerData)
 
     // Call the service to create a center
     this.DistributionSrv.editCenter(this.centerData).subscribe({
@@ -348,13 +350,27 @@ onDistrictChange(selectedDistrict: string | null): void {
     });
   }
 
-  capitalizeFirstLetter(field: keyof CenterData) {
-    if (this.centerData[field]) {
-      let value = this.centerData[field] as unknown as string;
-      value = value.trim();
-      value = value.charAt(0).toUpperCase() + value.slice(1);
-      this.centerData[field] = value as never; // assign back safely
-    }
+  trimAndCapitalize(event: Event, field: keyof CenterData) {
+  const input = event.target as HTMLInputElement;
+
+  // Remove leading spaces
+  let value = input.value.replace(/^\s+/, '');
+
+  // Capitalize first letter
+  if (value.length > 0) {
+    value = value.charAt(0).toUpperCase() + value.slice(1);
+  }
+
+  // Update input and model
+  input.value = value;
+  this.centerData[field] = value as never;
+}
+
+  onTrimInput(event: Event, modelRef: any, fieldName: string): void {
+    const inputElement = event.target as HTMLInputElement;
+    const trimmedValue = inputElement.value.trimStart();
+    modelRef[fieldName] = trimmedValue;
+    inputElement.value = trimmedValue;
   }
 
   onCityChange() {
@@ -389,30 +405,30 @@ onDistrictChange(selectedDistrict: string | null): void {
   }
 
   onCancel() {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'Do you really want to clear this form?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#d33',
-      cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, cancel it!',
-      cancelButtonText: 'No, Stay On Page',
-      customClass: {
-        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-        title: 'dark:text-white',
-        icon: '',
-        confirmButton: 'hover:bg-red-600 dark:hover:bg-red-700 focus:ring-red-500 dark:focus:ring-red-800',
-        cancelButton: 'hover:bg-blue-600 dark:hover:bg-blue-700 focus:ring-blue-500 dark:focus:ring-blue-800',
-        actions: 'gap-2'
-      }
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.toastSrv.warning('Centre Edit Operation Canceled.')
-        this.location.back();
-      }
-    });
-  }
+      Swal.fire({
+        title: 'Are you sure?',
+        text: 'You may lose the added data after canceling!',
+        icon: 'warning',
+        showCancelButton: true,
+        confirmButtonText: 'Yes, cancel',
+        cancelButtonText: 'No, Keep Editing',
+        customClass: {
+          popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+          title: 'dark:text-white',
+  
+          icon: '',
+          confirmButton: 'hover:bg-red-600 dark:hover:bg-red-700 focus:ring-red-500 dark:focus:ring-red-800',
+          cancelButton: 'hover:bg-blue-600 dark:hover:bg-blue-700 focus:ring-blue-500 dark:focus:ring-blue-800',
+          actions: 'gap-2'
+        }
+      }).then((result) => {
+        if (result.isConfirmed) {
+  
+          this.toastSrv.warning('Distribution Centre Edit Operation Canceled.')
+          this.location.back();
+        }
+      });
+    }
 
   enforceLatitudeRange(event: Event): void {
     const input = event.target as HTMLInputElement;
@@ -455,12 +471,12 @@ onDistrictChange(selectedDistrict: string | null): void {
     const input = event.target as HTMLInputElement;
     let value = parseFloat(input.value);
   
-    if (value > 90) {
+    if (value > 180) {
       input.value = '180';
       this.centerData.longitude = 180;
       Swal.fire({
         icon: 'warning',
-        title: 'Invalid Latitude',
+        title: 'Longitude Latitude',
         text: 'Longitude cannot be greater than 180.',
         confirmButtonColor: '#3085d6',
         customClass: {
@@ -469,12 +485,12 @@ onDistrictChange(selectedDistrict: string | null): void {
           htmlContainer: 'text-center',
         },
       });
-    } else if (value < -90) {
+    } else if (value < -180) {
       input.value = '-180';
       this.centerData.longitude = -180;
       Swal.fire({
         icon: 'warning',
-        title: 'Invalid Latitude',
+        title: 'Invalid Longitude',
         text: 'Longitude cannot be less than -180.',
         confirmButtonColor: '#3085d6',
         customClass: {

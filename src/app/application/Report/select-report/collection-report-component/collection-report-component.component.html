@@ -49,7 +49,7 @@
     <div *ngIf="hasData"
   class="overflow-hidden mt-8 mr-5 border border-gray-200 rounded-lg dark:border-[#202021]">
   <table class="w-full divide-y divide-gray-200 dark:divide-[#202021]">
-    <thead class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F]">
+    <thead class="text-[#4B5563] text-[14px] dark:text-gray-300 dark:bg-[#0F0F0F]">
       <tr>
         <th class="px-5 py-3 text-left font-medium">No</th>
         <th class="px-5 py-3 text-left font-medium">EMP ID</th>
@@ -71,10 +71,10 @@
         <td class="px-5 py-4 text-gray-900 dark:text-gray-300">
           {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i + 1) : (((page - 1) * itemsPerPage) + i + 1) }}
         </td>
-        <td class="px-5 py-4 text-gray-900 dark:text-gray-300">{{item.empId}}</td>
-        <td class="px-5 py-4 text-gray-900 dark:text-gray-300">{{item.firstNameEnglish}}</td>
-        <td class="px-5 py-4 text-gray-900 dark:text-gray-300">{{item.lastNameEnglish}}</td>
-        <td class="px-5 py-4 text-gray-900 dark:text-gray-300" *ngIf="logingRole === 'Collection Centre Head'">{{item.centerName}}</td>
+        <td class="px-5 py-4 text-[#000000] text-[16px] font-medium dark:text-gray-300">{{item.empId}}</td>
+        <td class="px-5 py-4 text-[#000000] text-[16px] font-medium dark:text-gray-300">{{item.firstNameEnglish}}</td>
+        <td class="px-5 py-4 text-[#000000] text-[16px] font-medium dark:text-gray-300">{{item.lastNameEnglish}}</td>
+        <td class="px-5 py-4 text-[#000000] text-[16px] font-medium dark:text-gray-300" *ngIf="logingRole === 'Collection Centre Head'">{{item.centerName}}</td>
 
         <!-- Monthly Report td -->
         <td class="px-5 py-4 text-center text-gray-900 dark:text-gray-300">

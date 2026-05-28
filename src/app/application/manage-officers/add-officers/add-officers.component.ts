@@ -64,9 +64,9 @@ export class AddOfficersComponent implements OnInit {
 
   allowedPrefixes = ['70', '71', '72', '75', '76', '77', '78'];
   isPhoneInvalidMap: { [key: string]: boolean } = {
-  phone01: false,
-  phone02: false,
-};
+    phone01: false,
+    phone02: false,
+  };
 
   countries: Country[] = COUNTRIES;
   selectedCountry1: Country | null = null;
@@ -174,7 +174,7 @@ export class AddOfficersComponent implements OnInit {
   districtItems = this.districts.map(d => ({ value: d.name, label: d.name }));
 
   VehicleTypes = [
-    { name: 'Mahindra Bollero', capacity: 272},
+    { name: 'Mahindra Bollero', capacity: 272 },
     { name: 'Dimo Batta', capacity: 750 },
     { name: 'Three Wheeler', capacity: 100 },
   ]
@@ -189,7 +189,7 @@ export class AddOfficersComponent implements OnInit {
     this.setJobRoles();
 
     console.log('loging role', this.logingRole)
-    
+
     // this.getLastID('COO');
     // this.EpmloyeIdCreate();
   }
@@ -198,7 +198,7 @@ export class AddOfficersComponent implements OnInit {
     if (this.logingRole === 'Collection Centre Manager') {
       // Only allow Collection Officer
       this.jobRoles = ['Collection Officer'];
-    } 
+    }
     else if (this.logingRole === 'Collection Centre Head') {
       // Allow all roles
       this.jobRoles = [
@@ -206,7 +206,7 @@ export class AddOfficersComponent implements OnInit {
         'Collection Officer',
         // 'Driver'
       ];
-    } 
+    }
     else {
       // Default (if needed)
       this.jobRoles = [];
@@ -233,89 +233,89 @@ export class AddOfficersComponent implements OnInit {
   toggleDropdown() {
     this.centreDropdownOpen = !this.centreDropdownOpen;
   }
-  
+
   toggleManagerDropdown() {
     this.managerDropdownOpen = !this.managerDropdownOpen;
   }
-  
+
   selectCenter(item: Center) {
     console.log('center selected');
-  
+
     this.personalData.centerId = item.id;
     this.selectedCenterName = item.regCode + ' - ' + item.centerName;
     this.centreDropdownOpen = false; // close dropdown
-  
+
     // Reset search input and filtered array
     this.filteredCenterArr = [...this.centerArr]; // show full list next time
     const searchInput = document.querySelector<HTMLInputElement>('.dropdown-search-input');
     if (searchInput) {
       searchInput.value = '';
     }
-  
+
     this.changeCenter();
   }
 
   changeCenter() {
     console.log('changing')
-    console.log('perosnal center change,',  this.personalData)
+    console.log('perosnal center change,', this.personalData)
     this.personalData.jobRole = ''
     this.personalData.irmId = null
     this.selectedManager = ''
     this.filteredManagerArr = []
     console.log('personalData.irmId', this.personalData.irmId)
     console.log('filteredManagerArr', this.filteredManagerArr)
-   this.getAllManagers()
- }
-  
+    this.getAllManagers()
+  }
+
   onManagerSearchInput(event: Event) {
     const input = event.target as HTMLInputElement;
     const value = input.value.toLowerCase().trim(); // remove leading/trailing spaces
     console.log('search value', value);
-  
+
     this.filteredManagerArr = this.managerArr.filter(m => {
       const fullName = `${m.firstNameEnglish} ${m.lastNameEnglish}`.toLowerCase();
       return fullName.includes(value);
     });
-  
+
     console.log('filtered managers', this.filteredManagerArr);
   }
-  
-  
+
+
   selectManager(item: Manager) {
     console.log('Manager selected');
-  
+
     this.personalData.irmId = item.id;
     this.selectedManager = item.empId + ' - ' + item.firstNameEnglish + ' ' + item.lastNameEnglish;
-    console.log('selectedManager', this.selectedManager )
+    console.log('selectedManager', this.selectedManager)
     this.managerDropdownOpen = false; // close dropdown
-  
+
     // Reset search input and filtered array
     this.filteredManagerArr = [...this.managerArr]; // show full list next time
     const searchInput = document.querySelector<HTMLInputElement>('.dropdown-manager-search-input');
     if (searchInput) {
       searchInput.value = '';
     }
-  
+
     console.log('id', this.personalData.irmId)
-  
+
     // this.changeCenter();
   }
 
-//   @HostListener('document:click', ['$event.target'])
-// onClick(targetElement: HTMLElement) {
-//   const insideDropdown1 = targetElement.closest('.dropdown-wrapper-1');
-//   const insideDropdown2 = targetElement.closest('.dropdown-wrapper-2');
+  //   @HostListener('document:click', ['$event.target'])
+  // onClick(targetElement: HTMLElement) {
+  //   const insideDropdown1 = targetElement.closest('.dropdown-wrapper-1');
+  //   const insideDropdown2 = targetElement.closest('.dropdown-wrapper-2');
 
-//   // Close dropdowns only if click is outside their wrapper
-//   if (!insideDropdown1) {
-//     this.dropdownOpen = false;
-//   }
-//   if (!insideDropdown2) {
-//     this.dropdownOpen2 = false;
-//   }
-// }
+  //   // Close dropdowns only if click is outside their wrapper
+  //   if (!insideDropdown1) {
+  //     this.dropdownOpen = false;
+  //   }
+  //   if (!insideDropdown2) {
+  //     this.dropdownOpen2 = false;
+  //   }
+  // }
 
-@HostListener('document:click', ['$event'])
+  @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent) {
     const target = event.target as HTMLElement;
     if (!target.closest('.relative')) {
@@ -350,13 +350,13 @@ export class AddOfficersComponent implements OnInit {
     const input = event.target as HTMLInputElement;
     const value = input.value.toLowerCase();
     console.log('value', value);
-  
+
     this.filteredCenterArr = this.centerArr.filter(c =>
       (c.centerName || '').toLowerCase().includes(value)
     );
-  
+
     console.log('filtered centers', this.filteredCenterArr);
-  
+
   }
 
   selectCountry1(country: Country) {
@@ -372,7 +372,7 @@ export class AddOfficersComponent implements OnInit {
     console.log('sdsf', this.personalData.phoneNumber02Code)
     this.dropdownOpen2 = false;
   }
-  
+
   // get flag
   getFlagUrl(code: string): string {
     return `https://flagcdn.com/24x18/${code}.png`;
@@ -383,27 +383,27 @@ export class AddOfficersComponent implements OnInit {
       this.isPhoneInvalidMap[key] = false;
       return;
     }
-  
+
     const firstDigit = input.charAt(0);
     const prefix = input.substring(0, 2);
     const isValidPrefix = this.allowedPrefixes.includes(prefix);
     const isValidLength = input.length === 9;
-  
+
     // if (firstDigit !== '7') {
     //   this.isPhoneInvalidMap[key] = true;
     //   return;
     // }
-  
+
     // if (!isValidPrefix && input.length >= 2) {
     //   this.isPhoneInvalidMap[key] = true;
     //   return;
     // }
-  
+
     if (input.length === 9 && isValidPrefix) {
       this.isPhoneInvalidMap[key] = false;
       return;
     }
-  
+
     this.isPhoneInvalidMap[key] = false;
   }
 
@@ -435,14 +435,34 @@ export class AddOfficersComponent implements OnInit {
   onFileSelected(event: any): void {
     const file: File = event.target.files[0];
     if (file) {
-      if (file.size > 3 * 1024 * 1024) {
-        this.toastSrv.error('File size should not exceed 3MB');
+      // Check file extension first
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+      const allowedExtensions = ['jpg', 'jpeg', 'png'];
+
+      if (!fileExtension || !allowedExtensions.includes(fileExtension)) {
+        this.toastSrv.error('Only JPEG, JPG and PNG files are allowed');
+        this.selectedFile = null;
+        this.selectedFileName = '';
+        event.target.value = '';
         return;
       }
 
+      // Check file size
+      if (file.size > 3 * 1024 * 1024) {
+        this.toastSrv.error('File size should not exceed 3MB');
+        this.selectedFile = null;
+        this.selectedFileName = '';
+        event.target.value = '';
+        return;
+      }
+
+      // Check MIME type (additional safety)
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
-        this.toastSrv.error('Only JPEG, JPG and PNG files are allowed')
+        this.toastSrv.error('Only JPEG, JPG and PNG files are allowed');
+        this.selectedFile = null;
+        this.selectedFileName = '';
+        event.target.value = '';
         return;
       }
 
@@ -451,9 +471,9 @@ export class AddOfficersComponent implements OnInit {
 
       const reader = new FileReader();
       reader.onload = (e: any) => {
-        this.selectedImage = e.target.result; // Set selectedImage to the base64 string or URL
+        this.selectedImage = e.target.result;
       };
-      reader.readAsDataURL(file); // Read the file as a data URL
+      reader.readAsDataURL(file);
     }
   }
 
@@ -669,7 +689,7 @@ export class AddOfficersComponent implements OnInit {
     )
   }
 
-  
+
 
   getAllManagers() {
     this.isLoading = true;
@@ -679,7 +699,7 @@ export class AddOfficersComponent implements OnInit {
         this.filteredManagerArr = [];
         this.filteredManagerArr = [...this.managerArr];
         console.log('managerArr', this.managerArr)
-        console.log('perosnal,',  this.personalData)
+        console.log('perosnal,', this.personalData)
         this.isLoading = false;
 
 
@@ -711,72 +731,72 @@ export class AddOfficersComponent implements OnInit {
 
     const missingFields: string[] = [];
 
-  if (!this.personalData.centerId && this.logingRole === 'Collection Centre Head') {
-    missingFields.push('Collection Centre Name is required');
-  }
-
-  if (!this.personalData.jobRole) {
-    missingFields.push('Job Role is required');
-  }
-
-  if (!this.personalData.irmId && this.personalData.jobRole === 'Collection Officer' && this.logingRole === 'Collection Centre Head') {
-    missingFields.push('Collection Centre Manager is required');
-  }
-
-  if (this.languagesRequired) {
-    missingFields.push('Please select at least one preferred language');
-  }
-
-  if (!this.personalData.employeeType) {
-    missingFields.push('Employee Type is required');
-  }
-
-  if (!this.personalData.firstNameEnglish) {
-    missingFields.push('First Name (in English) is required');
-  }
-
-  if (!this.personalData.lastNameEnglish ) {
-    missingFields.push('Last Name (in English) is required');
-  }
-
-  if (!this.personalData.firstNameSinhala) {
-    missingFields.push('First Name (in Sinhala) is required');
-  }
-
-  if (!this.personalData.lastNameSinhala) {
-    missingFields.push('Last Name (in Sinhala) is required');
-  }
-
-  if (!this.personalData.firstNameTamil) {
-    missingFields.push('First Name (in Tamil) is required');
-  }
-
-  if (!this.personalData.lastNameTamil) {
-    missingFields.push('Last Name (in Tamil) is required');
-  }
-
-  if (!this.personalData.phoneNumber01) {
-    missingFields.push('Mobile Number - 1 is required');
-  } else if (!/^[0-9]{9}$/.test(this.personalData.phoneNumber01) || this.isPhoneInvalidMap['phone01']) {
-    missingFields.push('Mobile Number - 1 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
-  }
-
-  if (this.personalData.phoneNumber02) {
-    if (!/^[0-9]{9}$/.test(this.personalData.phoneNumber02) || this.isPhoneInvalidMap['phone02']) {
-      missingFields.push('Mobile Number - 2 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+    if (!this.personalData.centerId && this.logingRole === 'Collection Centre Head') {
+      missingFields.push('Collection Centre Name is required');
     }
-    if (this.personalData.phoneNumber01 === this.personalData.phoneNumber02) {
-      missingFields.push('Mobile Number - 2 - Must be different from Mobile Number - 1');
+
+    if (!this.personalData.jobRole) {
+      missingFields.push('Job Role is required');
     }
-  }
 
-  if (!this.personalData.nic) {
-    missingFields.push('NIC Number is required');
-  } else if (!/^(\d{9}[V]|\d{12})$/.test(this.personalData.nic)) {
-    missingFields.push('NIC Number - Must be 9 digits followed by V or 12 digits');
-  }
+    if (!this.personalData.irmId && this.personalData.jobRole === 'Collection Officer' && this.logingRole === 'Collection Centre Head') {
+      missingFields.push('Collection Centre Manager is required');
+    }
 
-  if (!this.personalData.email) {
+    if (this.languagesRequired) {
+      missingFields.push('Please select at least one preferred language');
+    }
+
+    if (!this.personalData.employeeType) {
+      missingFields.push('Employee Type is required');
+    }
+
+    if (!this.personalData.firstNameEnglish) {
+      missingFields.push('First Name (in English) is required');
+    }
+
+    if (!this.personalData.lastNameEnglish) {
+      missingFields.push('Last Name (in English) is required');
+    }
+
+    if (!this.personalData.firstNameSinhala) {
+      missingFields.push('First Name (in Sinhala) is required');
+    }
+
+    if (!this.personalData.lastNameSinhala) {
+      missingFields.push('Last Name (in Sinhala) is required');
+    }
+
+    if (!this.personalData.firstNameTamil) {
+      missingFields.push('First Name (in Tamil) is required');
+    }
+
+    if (!this.personalData.lastNameTamil) {
+      missingFields.push('Last Name (in Tamil) is required');
+    }
+
+    if (!this.personalData.phoneNumber01) {
+      missingFields.push('Mobile Number - 1 is required');
+    } else if (!/^[0-9]{9}$/.test(this.personalData.phoneNumber01) || this.isPhoneInvalidMap['phone01']) {
+      missingFields.push('Mobile Number - 1 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+    }
+
+    if (this.personalData.phoneNumber02) {
+      if (!/^[0-9]{9}$/.test(this.personalData.phoneNumber02) || this.isPhoneInvalidMap['phone02']) {
+        missingFields.push('Mobile Number - 2 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+      }
+      if (this.personalData.phoneNumber01 === this.personalData.phoneNumber02) {
+        missingFields.push('Mobile Number - 2 - Must be different from Mobile Number - 1');
+      }
+    }
+
+    if (!this.personalData.nic) {
+      missingFields.push('NIC Number is required');
+    } else if (!/^(\d{9}[V]|\d{12})$/.test(this.personalData.nic)) {
+      missingFields.push('NIC Number - Must be 9 digits followed by V or 12 digits');
+    }
+
+    if (!this.personalData.email) {
       missingFields.push('Email is required');
     } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(this.personalData.email)) {
       missingFields.push('Email - Must be in a valid format (format: example&#64;domain.com)');
@@ -788,7 +808,7 @@ export class AddOfficersComponent implements OnInit {
         errorMessage += `<li>${field}</li>`;
       });
       errorMessage += '</ul></div>';
-  
+
       Swal.fire({
         icon: 'error',
         title: 'Missing or Invalid Information',
@@ -813,45 +833,45 @@ export class AddOfficersComponent implements OnInit {
     if (!this.personalData.houseNumber) {
       missingFields.push('House Number is required');
     }
-  
+
     if (!this.personalData.streetName) {
       missingFields.push('Street Name is required');
     }
-  
+
     if (!this.personalData.city) {
       missingFields.push('City is required');
     }
-  
+
     if (!this.personalData.district) {
       missingFields.push('District is required');
     }
-  
+
     if (!this.personalData.province) {
       missingFields.push('Province is required');
     }
-  
+
     if (!this.personalData.accHolderName) {
       missingFields.push('Account Holder’s Name is required');
     }
-  
+
     if (!this.personalData.accNumber) {
       missingFields.push('Account Number is required');
     }
-  
+
     if (!this.personalData.conformAccNumber) {
       missingFields.push('Confirm Account Number is required');
     } else if (this.personalData.accNumber !== this.personalData.conformAccNumber) {
       missingFields.push('Confirm Account Number - Must match Account Number');
     }
-  
+
     if (!this.selectedBankId) {
       missingFields.push('Bank Name is required');
     }
-  
+
     if (!this.selectedBranchId) {
       missingFields.push('Branch Name is required');
     }
-  
+
     // Display errors if any
     if (missingFields.length > 0) {
       let errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following issues:</p><ul class="list-disc pl-5">';
@@ -859,7 +879,7 @@ export class AddOfficersComponent implements OnInit {
         errorMessage += `<li>${field}</li>`;
       });
       errorMessage += '</ul></div>';
-  
+
       Swal.fire({
         icon: 'error',
         title: 'Missing or Invalid Information',
@@ -884,11 +904,11 @@ export class AddOfficersComponent implements OnInit {
     if (!this.driverObj.licNo) {
       missingFields.push('License Number is Required');
     }
-  
+
     if (!this.licenseFrontImageFileName) {
       missingFields.push("License's Front Image is required");
     }
-  
+
     if (!this.licenseBackImageFileName) {
       missingFields.push("License's Back Image is required");
     }
@@ -900,11 +920,11 @@ export class AddOfficersComponent implements OnInit {
     if (!this.driverObj.insExpDate) {
       missingFields.push('Insurance Expire Date is required');
     }
-  
+
     if (!this.insurenceFrontImageFileName) {
       missingFields.push("Insurance's Front Image is required");
     }
-  
+
     if (!this.insurenceBackImageFileName) {
       missingFields.push("Insurance's Back Image is required");
     }
@@ -912,7 +932,7 @@ export class AddOfficersComponent implements OnInit {
     if (!this.driverObj.vRegNo) {
       missingFields.push('Vehicle Registration Number is required');
     }
-  
+
     if (!this.driverObj.vType) {
       missingFields.push('Vehicle Type is required');
     }
@@ -928,7 +948,7 @@ export class AddOfficersComponent implements OnInit {
     if (!this.vehicleBackImageFileName) {
       missingFields.push("Vehicle's Back Image Image is required");
     }
-  
+
     if (!this.vehicleSideAImageFileName) {
       missingFields.push("Vehicle's Side Image - 1 is required");
     }
@@ -936,7 +956,7 @@ export class AddOfficersComponent implements OnInit {
     if (!this.vehicleSideBImageFileName) {
       missingFields.push("Vehicle's Side Image - 2 is required");
     }
-  
+
     // Display errors if any
     if (missingFields.length > 0) {
       let errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following issues:</p><ul class="list-disc pl-5">';
@@ -944,7 +964,7 @@ export class AddOfficersComponent implements OnInit {
         errorMessage += `<li>${field}</li>`;
       });
       errorMessage += '</ul></div>';
-  
+
       Swal.fire({
         icon: 'error',
         title: 'Missing or Invalid Information',
@@ -966,7 +986,7 @@ export class AddOfficersComponent implements OnInit {
     this.http.get<Bank[]>('assets/json/banks.json').subscribe(
       data => {
         this.banks = data.sort((a, b) => a.name.localeCompare(b.name));
-  
+
         // Map to dropdown items
         this.bankItems = this.banks.map(b => ({
           value: b.ID,
@@ -978,7 +998,7 @@ export class AddOfficersComponent implements OnInit {
       }
     );
   }
-  
+
   loadBranches() {
     this.http.get<BranchesData>('assets/json/branches.json').subscribe(
       data => {
@@ -992,25 +1012,25 @@ export class AddOfficersComponent implements OnInit {
       }
     );
   }
-  
+
   onBankChange(bankId: number | null) {
     if (bankId) {
       this.selectedBankId = bankId;
-  
+
       // Update branches
       this.branches = this.allBranches[bankId.toString()] || [];
       this.branchItems = this.branches.map(br => ({
         value: br.ID,
         label: br.name
       }));
-  
+
       // Update personalData
       const selectedBank = this.banks.find(bank => bank.ID === bankId);
       if (selectedBank) {
         this.personalData.bankName = selectedBank.name;
         this.invalidFields.delete('bankName');
       }
-  
+
       // Reset branch selection
       this.selectedBranchId = null;
       this.personalData.branchName = '';
@@ -1020,11 +1040,11 @@ export class AddOfficersComponent implements OnInit {
       this.personalData.bankName = '';
     }
   }
-  
+
   onBranchChange(branchId: number | null) {
     if (branchId) {
       this.selectedBranchId = branchId;
-  
+
       const selectedBranch = this.branches.find(branch => branch.ID === branchId);
       if (selectedBranch) {
         this.personalData.branchName = selectedBranch.name;
@@ -1354,10 +1374,10 @@ export class AddOfficersComponent implements OnInit {
     const allowedKeys = [
       'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', ' '
     ];
-  
+
     // Regex: Only allow alphabets and spaces
     const regex = /^[a-zA-Z\s]*$/;
-  
+
     // Block if key is not allowed
     if (!allowedKeys.includes(event.key) && !regex.test(event.key)) {
       event.preventDefault();
@@ -1368,7 +1388,7 @@ export class AddOfficersComponent implements OnInit {
     if (this.personalData[field]) {
       // Trim spaces
       this.personalData[field] = this.personalData[field].trim();
-  
+
       // Capitalize first letter
       this.personalData[field] =
         this.personalData[field].charAt(0).toUpperCase() +
@@ -1378,11 +1398,11 @@ export class AddOfficersComponent implements OnInit {
 
   onTrimInput(event: Event, modelRef: any, fieldName: string): void {
     const inputElement = event.target as HTMLInputElement;
-  
+
     if (inputElement) {
       // Trim spaces at start and end
       const trimmedValue = inputElement.value.trim();
-  
+
       // Update model and input
       modelRef[fieldName] = trimmedValue;
       inputElement.value = trimmedValue;
@@ -1391,11 +1411,11 @@ export class AddOfficersComponent implements OnInit {
 
   onTrimInputAccountNumber(event: Event, modelRef: any, fieldName: string): void {
     const inputElement = event.target as HTMLInputElement;
-  
+
     if (inputElement) {
       // Remove **all spaces** (not just trim)
       const noSpaceValue = inputElement.value.replace(/\s+/g, '');
-  
+
       // Update model and input
       modelRef[fieldName] = noSpaceValue;
       inputElement.value = noSpaceValue;
@@ -1403,46 +1423,46 @@ export class AddOfficersComponent implements OnInit {
   }
 
 
-onNicInput(event: any) {
-  // Convert to uppercase and remove leading spaces
-  let value: string = event.target.value.trimStart().toUpperCase();
+  onNicInput(event: any) {
+    // Convert to uppercase and remove leading spaces
+    let value: string = event.target.value.trimStart().toUpperCase();
 
-  // Allow ONLY numbers and V
-  value = value.replace(/[^0-9V]/g, '');
+    // Allow ONLY numbers and V
+    value = value.replace(/[^0-9V]/g, '');
 
-  // Old NIC format: 9 digits + V
-  // If V exists, enforce old NIC rules
-  if (value.includes('V')) {
-    // Remove all V except the last one
-    value = value.replace(/V/g, '') + 'V';
+    // Old NIC format: 9 digits + V
+    // If V exists, enforce old NIC rules
+    if (value.includes('V')) {
+      // Remove all V except the last one
+      value = value.replace(/V/g, '') + 'V';
 
-    // Limit to 10 chars total (9 digits + V)
-    value = value.slice(0, 10);
+      // Limit to 10 chars total (9 digits + V)
+      value = value.slice(0, 10);
 
-    // Ensure V is only at the end
-    const digits = value.replace(/V/g, '').slice(0, 9);
-    value = digits + (value.endsWith('V') ? 'V' : '');
-  } else {
-    // New NIC format: max 12 digits
-    value = value.slice(0, 12);
+      // Ensure V is only at the end
+      const digits = value.replace(/V/g, '').slice(0, 9);
+      value = digits + (value.endsWith('V') ? 'V' : '');
+    } else {
+      // New NIC format: max 12 digits
+      value = value.slice(0, 12);
+    }
+
+    // Update input and model
+    event.target.value = value;
+    this.personalData.nic = value;
   }
 
-  // Update input and model
-  event.target.value = value;
-  this.personalData.nic = value;
-}
-  
 
   onFormatInput(event: Event, modelRef: any, fieldName: string): void {  // no spaces at all
     const inputElement = event.target as HTMLInputElement;
-  
+
     if (inputElement && inputElement.value) {
       // Remove only leading spaces
       let value = inputElement.value.replace(/^\s+/, '');
-  
+
       // Capitalize first letter (if exists)
       value = value.charAt(0).toUpperCase() + value.slice(1);
-  
+
       // Update model and input box
       modelRef[fieldName] = value;
       inputElement.value = value;
@@ -1452,17 +1472,17 @@ onNicInput(event: any) {
 
   onFormatInput2(event: Event, modelRef: any, fieldName: string): void {  //trim spaces only from start
     const inputElement = event.target as HTMLInputElement;
-  
+
     if (inputElement && inputElement.value) {
       // Trim spaces only at the start
       let value = inputElement.value.trimStart();
-  
+
       // Capitalize first letter
       value = value.charAt(0).toUpperCase() + value.slice(1);
-  
+
       // Update model
       modelRef[fieldName] = value;
-  
+
       // Update input box value
       inputElement.value = value;
     }
@@ -1471,61 +1491,61 @@ onNicInput(event: any) {
   blockInvalidKeypressForPhone(event: KeyboardEvent) {
 
     const input = event.target as HTMLInputElement;
-  
+
     // Allow control keys
     if (['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete'].includes(event.key)) {
       return;
     }
-  
+
     // Only allow digits
     if (!/^[0-9]$/.test(event.key)) {
       event.preventDefault();
       return;
     }
-  
+
     // If first digit and not 7 → force 7
     if (input.value.length === 0 && event.key !== '7') {
       event.preventDefault();
-  
+
       input.value = '7';                 // visually set
       input.dispatchEvent(new Event('input')); // update ngModel
     }
   }
-  
+
   blockInvalidPasteForPhone(event: ClipboardEvent) {
-  
+
     const pastedData = event.clipboardData?.getData('text') || '';
-  
+
     // Must match 7XXXXXXXX
     if (!/^7[0-9]{0,8}$/.test(pastedData)) {
       event.preventDefault();
     }
   }
-  
+
   onPhoneInput(event: Event) {
     const input = event.target as HTMLInputElement;
-  
+
     // Remove non-digits (extra safety)
     let value = input.value.replace(/\D/g, '');
-  
+
     // If empty → do nothing
     if (value.length === 0) {
       input.value = '';
       return;
     }
-  
+
     // If first digit is not 7 → force it
     if (value[0] !== '7') {
       value = '7' + value.substring(1);
     }
-  
+
     input.value = value;
-  
+
     // Trigger ngModel update
     input.dispatchEvent(new Event('input'));
   }
-  
-  
+
+
 }
 
 

@@ -17,7 +17,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   @ViewChild('myChartCanvas') myChartCanvas!: any;
 
   COOCount: number = 0;
-  CUOCount: number = 0;
   totals: Total[] = [];
   activityLogs!: ActiveData[];
   chart: any;
@@ -48,7 +47,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
       (data) => {
         console.log('data', data);
         this.COOCount = data.COOCount.COOCOUNT;
-        this.CUOCount = data.CUOCount.CUOCount;
         this.activityLogs = data.activities;
         this.isLoading = false;
 

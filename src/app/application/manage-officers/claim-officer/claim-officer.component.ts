@@ -23,14 +23,14 @@ export class ClaimOfficerComponent implements OnInit {
   inputId: string = '';
   isOfficerExist: boolean = false;
   hasData!: boolean
-  isLoading:boolean = false;
+  isLoading: boolean = false;
   showClaimView = false;
   logingRole: string | null = null;
   isReset: boolean = false;
 
   jobRoleItems = [
-    {value: 'Distribution Officer', label: 'Distribution Officer'},
-    {value: 'Driver', label: 'Driver'}
+    { value: 'Distribution Officer', label: 'Distribution Officer' },
+    { value: 'Driver', label: 'Driver' }
   ]
 
   constructor(
@@ -40,14 +40,14 @@ export class ClaimOfficerComponent implements OnInit {
     private tokenSrv: TokenServiceService
   ) {
     this.logingRole = tokenSrv.getUserDetails().role
-   }
+  }
 
   ngOnInit(): void {
-    
+
     if (this.logingRole === 'Distribution Centre Manager') {
-      this.selectJobRole = '';
+      this.selectJobRole = 'Distribution Officer';
     } else if (this.logingRole === 'Collection Centre Manager') {
-       this.selectJobRole = 'Collection Officer'
+      this.selectJobRole = 'Collection Officer'
     }
   }
 
@@ -55,13 +55,13 @@ export class ClaimOfficerComponent implements OnInit {
     if (!this.inputId) {
       return this.toastSrv.warning('Please enter a valid Employee ID!');
     }
-    
+
     this.inputId = this.inputId?.trim();
     this.isLoading = true;
     let empId;
     if (this.selectJobRole === 'Customer Officer') {
       empId = 'CUO' + this.inputId
-    } else if (this.selectJobRole === 'Collection Officer'){
+    } else if (this.selectJobRole === 'Collection Officer') {
       empId = 'COO' + this.inputId
     } else if (this.selectJobRole === 'Distribution Officer') {
       empId = 'DIO' + this.inputId
@@ -90,7 +90,7 @@ export class ClaimOfficerComponent implements OnInit {
 
   onJobRoleSelectionChange(selectedValue: string) {
     this.selectJobRole = selectedValue || '';
-    
+
   }
 
   toggleClaimView() {
@@ -111,7 +111,7 @@ export class ClaimOfficerComponent implements OnInit {
           this.showClaimView = false;
           this.inputId = ''
           this.isReset = true;
-          this.selectJobRole = '';
+          // this.selectJobRole = '';
           // Call fetchOfficer directly without navigation
           // this.fetchOfficer();
         } else {
@@ -124,7 +124,7 @@ export class ClaimOfficerComponent implements OnInit {
       }
     );
   }
-  
+
 }
 
 class OfficerDetails {

@@ -314,7 +314,11 @@ export class CollectionComponent implements OnInit {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
-          a.download = `Collection Report From ${this.fromDate} To ${this.toDate}.xlsx`;
+          const selectedCenter = this.centerArr.find(
+          center => center.id.toString() === this.selectCenters
+        );
+        const centrePrefix = selectedCenter ? `${selectedCenter.regCode} ` : '';
+          a.download = `${centrePrefix} Collection Report From ${this.fromDate} To ${this.toDate}.xlsx`;
           a.click();
           window.URL.revokeObjectURL(url);
 

@@ -271,8 +271,7 @@
                     <thead
                         class="text-[#4B5563] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
                         <tr>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">
-                            </th>
+                            
                             <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">No</th>
                             <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">Invoice
                                 No</th>
@@ -286,9 +285,6 @@
                     </thead>
                     <tbody class="bg-white dark:bg-[#1D1D1F] text-[#000000] dark:border-[#1D1D1F] cursor-default">
                         <tr *ngFor="let item of filteredOrdersArr let i = index">
-                            <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
-
-                            </td>
                             <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
                                 {{ (i + 1) < 10 ? ('0' + (i + 1)) : (i + 1) }} </td>
                             <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.invNo}}

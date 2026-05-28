@@ -25,6 +25,8 @@ export class AddDistributedOfficerComponent implements OnInit {
   oday: string = new Date().toISOString().split('T')[0];
   @ViewChild('scrollTarget') scrollTarget!: ElementRef;
 
+  today = new Date();
+
   personalData: Personal = new Personal();
   collectionCenterData: CollectionCenter[] = []
   ManagerArr!: ManagerDetails[]

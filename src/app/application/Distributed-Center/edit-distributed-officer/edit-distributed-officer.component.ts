@@ -24,7 +24,7 @@ import { CustomDatepickerComponent } from '../../../components/custom-datepicker
 export class EditDistributedOfficerComponent implements OnInit {
   @ViewChild('scrollTarget') scrollTarget!: ElementRef;
 
-
+  today = new Date();
   personalData: Personal = new Personal();
   centerArr: Center[] = [];
   managerArr: Manager[] = [];

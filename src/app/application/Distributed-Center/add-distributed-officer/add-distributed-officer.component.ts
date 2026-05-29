@@ -25,6 +25,8 @@ export class AddDistributedOfficerComponent implements OnInit {
   oday: string = new Date().toISOString().split('T')[0];
   @ViewChild('scrollTarget') scrollTarget!: ElementRef;
 
+  today = new Date();
+
   personalData: Personal = new Personal();
   collectionCenterData: CollectionCenter[] = []
   ManagerArr!: ManagerDetails[]
@@ -33,7 +35,7 @@ export class AddDistributedOfficerComponent implements OnInit {
   driverObj: Drivers = new Drivers()
 
   languages: string[] = ['Sinhala', 'English', 'Tamil'];
-  selectedPage: 'pageOne' | 'pageTwo' | 'pageThree' = 'pageThree';
+  selectedPage: 'pageOne' | 'pageTwo' | 'pageThree' = 'pageOne';
   lastID!: number
   itemId: number | null = null;
   officerId!: number
@@ -367,14 +369,32 @@ export class AddDistributedOfficerComponent implements OnInit {
   onFileSelected(event: any): void {
     const file: File = event.target.files[0];
     if (file) {
+
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+      const allowedExtensions = ['jpg', 'jpeg', 'png'];
+
+      if (!fileExtension || !allowedExtensions.includes(fileExtension)) {
+        this.toastSrv.error('Only JPEG, JPG and PNG files are allowed');
+        this.selectedFile = null;
+        this.selectedFileName = '';
+        event.target.value = '';
+        return;
+      }
+
       if (file.size > 3 * 1024 * 1024) {
         this.toastSrv.error('File size should not exceed 3MB');
+        this.selectedFile = null;
+        this.selectedFileName = '';
+        event.target.value = '';
         return;
       }
 
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
         this.toastSrv.error('Only JPEG, JPG and PNG files are allowed')
+        this.selectedFile = null;
+        this.selectedFileName = '';
+        event.target.value = '';
         return;
       }
       this.selectedFile = file;
@@ -1147,9 +1167,24 @@ export class AddDistributedOfficerComponent implements OnInit {
   onLicenseFrontImageSelected(event: any): void {
     const file: File = event.target.files[0];
     if (file) {
+
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+      const allowedExtensions = ['jpg', 'jpeg', 'png'];
+
+      if (!fileExtension || !allowedExtensions.includes(fileExtension)) {
+        this.toastSrv.error('Only JPEG, JPG and PNG files are allowed');
+        this.licenseFrontImageFile = null;
+        this.licenseFrontImageFileName = '';
+        event.target.value = '';
+        return;
+      }
+
       // Validate file size (5MB max)
       if (file.size > 5000000) {
         this.toastSrv.error('License image size should not exceed 5MB');
+        this.licenseFrontImageFile = null;
+        this.licenseFrontImageFileName = '';
+        event.target.value = '';
         return;
       }
 
@@ -1157,6 +1192,9 @@ export class AddDistributedOfficerComponent implements OnInit {
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
         this.toastSrv.error('License image must be JPEG, JPG or PNG format');
+        this.licenseFrontImageFile = null;
+        this.licenseFrontImageFileName = '';
+        event.target.value = '';
         return;
       }
 
@@ -1190,9 +1228,24 @@ export class AddDistributedOfficerComponent implements OnInit {
   onLicenseBackImageSelected(event: any): void {
     const file: File = event.target.files[0];
     if (file) {
+
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+      const allowedExtensions = ['jpg', 'jpeg', 'png'];
+
+      if (!fileExtension || !allowedExtensions.includes(fileExtension)) {
+        this.toastSrv.error('Only JPEG, JPG and PNG files are allowed');
+        this.licenseBackImageFile = null;
+        this.licenseBackImageFileName = '';
+        event.target.value = '';
+        return;
+      }
+
       // Validate file size (5MB max)
       if (file.size > 5000000) {
         this.toastSrv.error('License image size should not exceed 5MB');
+        this.licenseBackImageFile = null;
+        this.licenseBackImageFileName = '';
+        event.target.value = '';
         return;
       }
 
@@ -1200,6 +1253,9 @@ export class AddDistributedOfficerComponent implements OnInit {
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
         this.toastSrv.error('License image must be JPEG, JPG or PNG format');
+        this.licenseBackImageFile = null;
+        this.licenseBackImageFileName = '';
+        event.target.value = '';
         return;
       }
 
@@ -1227,9 +1283,23 @@ export class AddDistributedOfficerComponent implements OnInit {
   onInsurenceFrontImageSelected(event: any): void {
     const file: File = event.target.files[0];
     if (file) {
+
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+      const allowedExtensions = ['jpg', 'jpeg', 'png'];
+
+      if (!fileExtension || !allowedExtensions.includes(fileExtension)) {
+        this.toastSrv.error('Only JPEG, JPG and PNG files are allowed');
+        this.insurenceFrontImageFile = null;
+        this.insurenceFrontImageFileName = '';
+        event.target.value = '';
+        return;
+      }
       // Validate file size (5MB max)
       if (file.size > 5000000) {
         this.toastSrv.error('Insurence image size should not exceed 5MB');
+        this.insurenceFrontImageFile = null;
+        this.insurenceFrontImageFileName = '';
+        event.target.value = '';
         return;
       }
 
@@ -1237,6 +1307,9 @@ export class AddDistributedOfficerComponent implements OnInit {
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
         this.toastSrv.error('Insurence image must be JPEG, JPG or PNG format');
+        this.insurenceFrontImageFile = null;
+        this.insurenceFrontImageFileName = '';
+        event.target.value = '';
         return;
       }
 
@@ -1265,9 +1338,24 @@ export class AddDistributedOfficerComponent implements OnInit {
   onInsurenceBackImageSelected(event: any): void {
     const file: File = event.target.files[0];
     if (file) {
+
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+      const allowedExtensions = ['jpg', 'jpeg', 'png'];
+
+      if (!fileExtension || !allowedExtensions.includes(fileExtension)) {
+        this.toastSrv.error('Only JPEG, JPG and PNG files are allowed');
+        this.insurenceBackImageFile = null;
+        this.insurenceBackImageFileName = '';
+        event.target.value = '';
+        return;
+      }
+
       // Validate file size (5MB max)
       if (file.size > 5000000) {
         this.toastSrv.error('Insurence image size should not exceed 5MB');
+        this.insurenceBackImageFile = null;
+        this.insurenceBackImageFileName = '';
+        event.target.value = '';
         return;
       }
 
@@ -1275,6 +1363,9 @@ export class AddDistributedOfficerComponent implements OnInit {
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
         this.toastSrv.error('Insurence image must be JPEG, JPG or PNG format');
+        this.insurenceBackImageFile = null;
+        this.insurenceBackImageFileName = '';
+        event.target.value = '';
         return;
       }
 
@@ -1302,9 +1393,24 @@ export class AddDistributedOfficerComponent implements OnInit {
   onVehicleFrontImageSelected(event: any): void {
     const file: File = event.target.files[0];
     if (file) {
+
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+      const allowedExtensions = ['jpg', 'jpeg', 'png'];
+
+      if (!fileExtension || !allowedExtensions.includes(fileExtension)) {
+        this.toastSrv.error('Only JPEG, JPG and PNG files are allowed');
+        this.vehicleFrontImageFile = null;
+        this.vehicleFrontImageFileName = '';
+        event.target.value = '';
+        return;
+      }
+
       // Validate file size (5MB max)
       if (file.size > 5000000) {
         this.toastSrv.error('License image size should not exceed 5MB');
+        this.vehicleFrontImageFile = null;
+        this.vehicleFrontImageFileName = '';
+        event.target.value = '';
         return;
       }
 
@@ -1312,6 +1418,9 @@ export class AddDistributedOfficerComponent implements OnInit {
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
         this.toastSrv.error('License image must be JPEG, JPG or PNG format');
+        this.vehicleFrontImageFile = null;
+        this.vehicleFrontImageFileName = '';
+        event.target.value = '';
         return;
       }
 
@@ -1340,9 +1449,24 @@ export class AddDistributedOfficerComponent implements OnInit {
   onVehicleBackImageSelected(event: any): void {
     const file: File = event.target.files[0];
     if (file) {
+
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+      const allowedExtensions = ['jpg', 'jpeg', 'png'];
+
+      if (!fileExtension || !allowedExtensions.includes(fileExtension)) {
+        this.toastSrv.error('Only JPEG, JPG and PNG files are allowed');
+        this.vehicleBackImageFile = null;
+        this.vehicleBackImageFileName = '';
+        event.target.value = '';
+        return;
+      }
+
       // Validate file size (5MB max)
       if (file.size > 5000000) {
         this.toastSrv.error('Vehicle Back image size should not exceed 5MB');
+        this.vehicleBackImageFile = null;
+        this.vehicleBackImageFileName = '';
+        event.target.value = '';
         return;
       }
 
@@ -1350,6 +1474,9 @@ export class AddDistributedOfficerComponent implements OnInit {
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
         this.toastSrv.error('Vehicle Back image must be JPEG, JPG or PNG format');
+        this.vehicleBackImageFile = null;
+        this.vehicleBackImageFileName = '';
+        event.target.value = '';
         return;
       }
 
@@ -1377,9 +1504,24 @@ export class AddDistributedOfficerComponent implements OnInit {
   onVehicleSideAImageSelected(event: any): void {
     const file: File = event.target.files[0];
     if (file) {
+
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+      const allowedExtensions = ['jpg', 'jpeg', 'png'];
+
+      if (!fileExtension || !allowedExtensions.includes(fileExtension)) {
+        this.toastSrv.error('Only JPEG, JPG and PNG files are allowed');
+        this.vehicleSideAImageFile = null;
+        this.vehicleSideAImageFileName = '';
+        event.target.value = '';
+        return;
+      }
+
       // Validate file size (5MB max)
       if (file.size > 5000000) {
         this.toastSrv.error('Vehicle Back image size should not exceed 5MB');
+        this.vehicleSideAImageFile = null;
+        this.vehicleSideAImageFileName = '';
+        event.target.value = '';
         return;
       }
 
@@ -1387,6 +1529,9 @@ export class AddDistributedOfficerComponent implements OnInit {
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
         this.toastSrv.error('Vehicle Back image must be JPEG, JPG or PNG format');
+        this.vehicleSideAImageFile = null;
+        this.vehicleSideAImageFileName = '';
+        event.target.value = '';
         return;
       }
 
@@ -1416,9 +1561,24 @@ export class AddDistributedOfficerComponent implements OnInit {
   onVehicleSideBImageSelected(event: any): void {
     const file: File = event.target.files[0];
     if (file) {
+
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+      const allowedExtensions = ['jpg', 'jpeg', 'png'];
+
+      if (!fileExtension || !allowedExtensions.includes(fileExtension)) {
+        this.toastSrv.error('Only JPEG, JPG and PNG files are allowed');
+        this.vehicleSideBImageFile = null;
+        this.vehicleSideBImageFileName = '';
+        event.target.value = '';
+        return;
+      }
+
       // Validate file size (5MB max)
       if (file.size > 5000000) {
         this.toastSrv.error('Vehicle Back image size should not exceed 5MB');
+        this.vehicleSideBImageFile = null;
+        this.vehicleSideBImageFileName = '';
+        event.target.value = '';
         return;
       }
 
@@ -1426,6 +1586,9 @@ export class AddDistributedOfficerComponent implements OnInit {
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
         this.toastSrv.error('Vehicle Back image must be JPEG, JPG or PNG format');
+        this.vehicleSideBImageFile = null;
+        this.vehicleSideBImageFileName = '';
+        event.target.value = '';
         return;
       }
 

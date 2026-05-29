@@ -856,7 +856,7 @@
                     <label for="insNo" class="block text-sm font-medium text-gray-700 dark:text-textDark">
                       Insurance Number *
                     </label>
-                    <input id="insNo" type="text" #insurenceNoInput="ngModel" name="insNo" [(ngModel)]="driverObj.insNo" (input)="onTrimInput($event, driverObj, 'insNo')"
+                    <input id="insNo" maxlength="13" type="text" #insurenceNoInput="ngModel" name="insNo" [(ngModel)]="driverObj.insNo" (input)="onTrimInput($event, driverObj, 'insNo')"
                       class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
                       <div>
                         <span class="text-red-600 text-sm" *ngIf="insurenceNoInput.touched && !driverObj.insNo">
@@ -869,7 +869,7 @@
                     <label for="confirmInsNo" class="block text-sm font-medium text-gray-700 dark:text-textDark">
                       Confirm Insurance Number *
                     </label>
-                    <input id="confirmInsNo" type="text" #confirmInsurenceNoInput="ngModel" name="confirmInsNo" [(ngModel)]="driverObj.confirmInsNo"
+                    <input id="confirmInsNo" maxlength="13" type="text" #confirmInsurenceNoInput="ngModel" name="confirmInsNo" [(ngModel)]="driverObj.confirmInsNo"
                       class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
             
                       <div>
@@ -940,19 +940,21 @@
                     </label>
                   
                     <app-custom-datepicker
-                         name="insExpDate"
-                         [(selectedDate)]="driverObj.insExpDate"
-                         placeholder="mm/dd/yyyy"
-                         (dateChange)="onInsuranceDateChange($event)"
-                         (pickerOpened)="onDatePickerClicked()"
-                    ></app-custom-datepicker>
+  name="insExpDate"
+  [(selectedDate)]="driverObj.insExpDate"
+  placeholder="mm/dd/yyyy"
+  [minDate]="today"
+  (dateChange)="onInsuranceDateChange($event)"
+  triggerClass="w-full h-12 border-[1.8px] border-gray-300 rounded-xl flex items-center px-3 py-2 cursor-pointer dark:bg-[#292929]"
+  (pickerOpened)="onDatePickerClicked()"
+></app-custom-datepicker>
                   
                     <div
                          *ngIf="insExpDateTouched && !driverObj.insExpDate"
                          class="text-red-500 text-sm mt-1">
                          Insurance Expire Date is required
                     </div>
-                  </div>
+                </div>
             </div>
 
 

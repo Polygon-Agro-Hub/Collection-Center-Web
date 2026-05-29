@@ -206,13 +206,13 @@ export class ViewDistributedOfficersComponent implements OnInit {
 
     if (item.status === 'Approved') {
       message = `Are you sure you want to reject this ${item.jobRole} ?`;
-    } 
+    }
     else if (item.status === 'Rejected') {
       message = `Are you sure you want to approve this ${item.jobRole} ?`;
-    } 
+    }
     else if (item.status === 'Not Approved') {
       message = `Are you sure you want to approve or reject this ${item.jobRole} ?`;
-    } 
+    }
     else {
       message = ``;
     }
@@ -257,11 +257,12 @@ export class ViewDistributedOfficersComponent implements OnInit {
       didOpen: () => {
         // Approve Button
         document.getElementById('approveButton')?.addEventListener('click', () => {
+          Swal.close();
           this.handleStatusChange(swalInstance, item.id, 'Approved');
         });
 
-        // Reject Button
         document.getElementById('rejectButton')?.addEventListener('click', () => {
+          Swal.close();
           this.handleStatusChange(swalInstance, item.id, 'Rejected');
         });
       }
@@ -327,14 +328,14 @@ export class ViewDistributedOfficersComponent implements OnInit {
 
   clearRoleFilter(event?: MouseEvent) {
     if (event) {
-      event.stopPropagation(); 
+      event.stopPropagation();
     }
     this.selectRole = ''
     this.fetchByRole();
   }
 
   onSearch() {
-    this.searchText = this.searchText?.trim() || '';   
+    this.searchText = this.searchText?.trim() || '';
     this.fetchByRole();
   }
 

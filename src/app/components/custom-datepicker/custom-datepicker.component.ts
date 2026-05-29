@@ -12,22 +12,27 @@ import { FormsModule } from '@angular/forms';
 export class CustomDatepickerComponent {
 
   private _selectedDate: string | Date | null = null;
-  
-  @Input() 
+
+  @Input()
   set selectedDate(value: string | Date | null) {
     this._selectedDate = value === '' ? null : value;
   }
   get selectedDate(): string | Date | null {
     return this._selectedDate;
   }
-  
+
   @Output() selectedDateChange = new EventEmitter<string | Date | null>();
   @Output() dateChange = new EventEmitter<string | Date | null>();
   @Input() placeholder: string = 'Date';
   @Input() showClearButton: boolean = true;
   @Output() pickerOpened = new EventEmitter<void>();
   @Input() placeholderClass: string = 'italic';
-  
+
+  // ✅ NEW: optional min date (dates on or before this are disabled)
+  @Input() minDate: string | Date | null = null;
+
+  @Input() triggerClass: string = 'w-full h-12 border-[1.8px] border-[#828282] rounded-xl flex items-center px-3 py-2 cursor-pointer dark:bg-[#292929]';
+
   showCalendar = false;
   showYearPicker = false;
 
@@ -38,8 +43,8 @@ export class CustomDatepickerComponent {
 
   weekDays = ['Su', 'Mo', 'Tu', 'We', 'Th', 'Fr', 'Sa'];
   months = [
-    'January','February','March','April','May','June',
-    'July','August','September','October','November','December'
+    'January', 'February', 'March', 'April', 'May', 'June',
+    'July', 'August', 'September', 'October', 'November', 'December'
   ];
 
   constructor() {
@@ -49,15 +54,25 @@ export class CustomDatepickerComponent {
     this.generateCalendar(this.currentMonth, this.currentYear);
   }
 
+  // ✅ NEW: checks whether a given calendar day should be disabled
+  isDisabled(day: { fullDate: Date }): boolean {
+    if (!this.minDate) return false;
+    const min = new Date(this.minDate);
+    // Normalize both to midnight for a clean date-only comparison
+    min.setHours(0, 0, 0, 0);
+    const d = new Date(day.fullDate);
+    d.setHours(0, 0, 0, 0);
+    return d <= min;
+  }
+
   toggleCalendar() {
     this.showCalendar = !this.showCalendar;
     this.showYearPicker = false;
 
     if (this.showCalendar) {
-      this.pickerOpened.emit(); // 👈 track click/open
+      this.pickerOpened.emit();
     }
-    
-    // Reset to current date or selected date when opening
+
     if (this.showCalendar) {
       if (this.selectedDate) {
         const date = new Date(this.selectedDate);
@@ -78,10 +93,8 @@ export class CustomDatepickerComponent {
       this.generateYearRange();
     }
   }
-  
 
   generateYearRange() {
-    // Generate 5 years before and after current year (11 years total)
     const startYear = this.currentYear - 5;
     this.yearRange = [];
     for (let i = 0; i < 11; i++) {
@@ -111,36 +124,36 @@ export class CustomDatepickerComponent {
     this.selectedDateChange.emit(this._selectedDate);
     this.dateChange.emit(this._selectedDate);
     this.showCalendar = false;
-    console.log('date cleared');
   }
 
-  selectDate(day: any) {
-    console.log('day', day);
+  selectDate(day: { date: number; currentMonth: boolean; fullDate: Date }) {
+    // ✅ NEW: block click on disabled days
+    if (this.isDisabled(day)) return;
+
     const d = day.fullDate;
     const year = d.getFullYear();
     const month = String(d.getMonth() + 1).padStart(2, '0');
     const date = String(d.getDate()).padStart(2, '0');
 
     this.selectedDate = `${year}-${month}-${date}`;
-    console.log('selectedDate', this.selectedDate);
     this.selectedDateChange.emit(this.selectedDate);
     this.dateChange.emit(this.selectedDate);
     this.showCalendar = false;
   }
 
-  isSelected(day: any): boolean {
+  isSelected(day: { fullDate: Date }): boolean {
     if (!this.selectedDate) return false;
-  
+
     const d = day.fullDate;
     const year = d.getFullYear();
     const month = String(d.getMonth() + 1).padStart(2, '0');
     const date = String(d.getDate()).padStart(2, '0');
     const dayStr = `${year}-${month}-${date}`;
-  
-    const dateToCompare = typeof this.selectedDate === 'string' 
-      ? this.selectedDate 
+
+    const dateToCompare = typeof this.selectedDate === 'string'
+      ? this.selectedDate
       : null;
-      
+
     return dateToCompare === dayStr;
   }
 

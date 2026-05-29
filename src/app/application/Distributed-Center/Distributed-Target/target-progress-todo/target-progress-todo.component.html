@@ -5,9 +5,9 @@
         <div><p class="text-lg dark:text-white whitespace-nowrap">All ({{ totalItems < 10 ? ('0' + totalItems) : totalItems }})</p></div>
     <div class="flex flex-row items-center justify-end gap-5 ">
         
-        <i class="fa-solid fa-list text-xl dark:text-white"></i>
+        <i class="fa-solid fa-list text-xl text-[#4A4A4A] dark:text-white"></i>
 
-        <p class=" dark:text-white">Filter By</p>
+        <p class="text-[#4A4A4A] dark:text-white">Filter By</p>
 
         <div class="relative w-40 custom-status-dropdown-container">
             <!-- Hidden native select -->
@@ -82,7 +82,7 @@
     </div>
 
     <div *ngIf="!hasData" class="flex flex-col items-center w-full h-screen mt-6">
-        <p class="text-[#494949] my-6 dark:text-white">--The centre target is empty at the moment--</p>
+        <p class="text-[#494949] my-6 dark:text-white">--No results found--</p>
         <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
     </div>
 

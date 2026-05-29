@@ -13,7 +13,7 @@
     <div *ngIf="!isPass" class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg overflow-x-auto">
         <div class="flex flex-row items-center justify-between gap-4">
             <div>
-                <p class="text-lg font-semibold dark:text-white whitespace-nowrap " *ngIf="ordersArr.length !== 0 ">
+                <p class="text-[16px] font-medium text-[#030308] dark:text-white whitespace-nowrap " *ngIf="ordersArr.length !== 0 ">
                     EMP ID : {{ ordersArr[0].empId}}
                 </p>
             </div>
@@ -69,50 +69,48 @@
                 </div>
 
                 <div class="relative w-48 custom-completion-status-dropdown-container">
-                    <!-- Hidden native select -->
-                    <select [(ngModel)]="selectCompletingStatus" class="hidden" (change)="filterCompletingStatus()">
-                        <option value="" selected disabled>Completing Status</option>
-                        <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
-                            value="Pending">
-                            On Time</option>
-                        <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
-                            value="Completed">
-                            Late</option>
-                        <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
-                            value="Opened">
-                            Not Completed</option>
-                    </select>
+    <!-- Hidden native select -->
+    <select [(ngModel)]="selectCompletingStatus" class="hidden" (change)="filterCompletingStatus()">
+        <option value="" selected disabled>Completing Status</option>
+        <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
+            value="Pending">
+            On Time</option>
+        <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
+            value="Completed">
+            Late</option>
+        <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300"
+            value="Opened">
+            Not Completed</option>
+    </select>
 
-                    <!-- Custom dropdown trigger -->
-                    <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
-                        (click)="toggleCompletingStatusDropdown()">
-                        <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
-                            <span>{{ selectCompletingStatus || 'Completing Status' }}</span>
-                            <div class="flex items-center">
-                                <i *ngIf="selectCompletingStatus" (click)="cancelCompletingStatus($event)"
-                                    class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
-                                <i *ngIf="isCompletingStatusDropdownOpen || !selectCompletingStatus"
-                                    class="fa-solid text-lg text-[#828282] transition-transform duration-200"
-                                    [class.fa-angle-down]="!isCompletingStatusDropdownOpen"
-                                    [class.fa-angle-up]="isCompletingStatusDropdownOpen"></i>
-                            </div>
-                        </div>
-                    </div>
+    <!-- Custom dropdown trigger -->
+    <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
+        (click)="toggleCompletingStatusDropdown()">
+        <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
+            <span>{{ selectCompletingStatus || 'Completing Status' }}</span>
+            <div class="flex items-center">
+                <i *ngIf="selectCompletingStatus" (click)="cancelCompletingStatus($event)"
+                    class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
+                <i *ngIf="isCompletingStatusDropdownOpen || !selectCompletingStatus"
+                    class="fa-solid text-lg text-[#828282] transition-transform duration-200"
+                    [class.fa-angle-down]="!isCompletingStatusDropdownOpen"
+                    [class.fa-angle-up]="isCompletingStatusDropdownOpen"></i>
+            </div>
+        </div>
+    </div>
 
-                    <!-- Custom dropdown options -->
-                    <div *ngIf="isCompletingStatusDropdownOpen"
-                        class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
-                        <div class="py-1">
-                            <div *ngFor="let option of completingStatusDropdownOptions"
-                                (click)="selectCompletingStatusOption(option)"
-                                class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
-                                <span class="flex-grow">{{ option }}</span>
-                                <i
-                                    class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
-                            </div>
-                        </div>
-                    </div>
-                </div>
+    <!-- Custom dropdown options -->
+    <div *ngIf="isCompletingStatusDropdownOpen"
+        class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282] overflow-hidden">
+        <div class="">
+            <div *ngFor="let option of completingStatusDropdownOptions" 
+                (click)="selectCompletingStatusOption(option)"
+                class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center group">
+                <span class="flex-grow">{{ option }}</span>
+            </div>
+        </div>
+    </div>
+</div>
 
                 <div class="flex mr-5 items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
                     <input type="text" placeholder="Search by Invoice No.." [(ngModel)]="searchText"
@@ -143,15 +141,15 @@
                 class="border border-[#95A1AC] font-medium rounded-lg bg-[#F6F7F9] text-[#6B7D8C] px-3 py-1">Cancel</button>
             <button (click)="passTarget()"
                 class="border border-[#415CFF] font-medium rounded-lg bg-[#415CFF] text-[#FFFFFF] px-6 py-1">Pass</button>
-            <p class="text-[#415CFF] px-3 py-1 italic">Selected ({{selectedOrderIds.length}})</p>
+            <p class="text-[#415CFF] px-3 py-1 italic">Selected ({{ formatSelectedCount(selectedOrderIds.length) }})</p>
         </div>
 
         <div *ngIf="!hasData" class="flex flex-col items-center w-full h-screen mt-6">
-            <p class="text-[#494949] my-6 dark:text-white">--The target of this officer is empty at the moment--</p>
+            <p class="text-[#494949] my-6 dark:text-white">--No results found--</p>
             <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
         </div>
 
-        <div class="text-[#030308] font-[500] mt-2">
+        <div class="text-[#030308] font-medium text-[16px] mt-2">
             Scheduled Date : {{ ordersArr[0].sheduleDate | date: 'MMM dd, yyyy' }}
         </div>
 
@@ -168,7 +166,7 @@
                         <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">No</th>
                         <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">Invoice No
                         </th>
-                        <th class="px-6 py-3 text-center text-sm font-medium text-[#4B5563] dark:text-white">Scheduled
+                        <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">Scheduled
                             Delivery</th>
                         <th class="px-6 py-3 text-center text-sm font-medium text-[#4B5563] dark:text-white">Status</th>
                         <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">Completing
@@ -189,7 +187,7 @@
                         <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
                             {{ (i + 1) < 10 ? ('0' + (i + 1)) : (i + 1) }} </td>
                         <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.invNo}}</td>
-                        <td class="px-6 py-4 text-sm text-center font-medium text-gray-900 dark:text-[#C5C5C5]">{{
+                        <td class="px-6 py-4 text-sm text-left font-medium text-gray-900 dark:text-[#C5C5C5]">{{
                             removeWithin(item.sheduleTime) }}</td>
                         <!-- <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.packagePackStatus}}</td> -->
                         <td class="px-6 py-4 text-sm text-left text-gray-900 dark:text-[#C5C5C5] cursor-default">
@@ -228,12 +226,13 @@
     </div>
 
     <div *ngIf="isPass"
-        class="w-full h-screen px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg overflow-x-auto">
+        class="w-full h-screen py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg overflow-x-auto">
+        <div class="px-10">
+            <span class="font-medium text-[16px] text-[#030308] dark:text-textDark">EMP ID : {{ ordersArr[0].empId}}</span>
         <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6 mt-5 ">
 
             <div>
-                <label class="block font-medium text-[#534E4E] dark:text-textDark">No. of orders
-                    selected</label>
+                <label class="block text-[16px] font-semibold text-[#534E4E] dark:text-textDark">No. of Orders Selected</label>
                 <div class="flex mt-1">
 
                     <input
@@ -248,14 +247,25 @@
                     Select Short Stock Assignee
                 </label>
 
-                <app-searchable-dropdown [items]="categoryDropdownItems" placeholder=" --Select Officer-- "
-                    searchPlaceholder="Search officers..." [(ngModel)]="selectedOfficer"
-                    (selectionChange)="onCategorySelectionChange($event)" [clearable]="true" [showSelected]="true"
-                    [disabled]="false" class="block w-full mb-4"></app-searchable-dropdown>
+                <app-searchable-dropdown 
+  [items]="categoryDropdownItems" 
+  placeholder=" --Select Officer-- "
+  searchPlaceholder="Search officers..." 
+  [(ngModel)]="selectedOfficer"
+  (selectionChange)="onCategorySelectionChange($event)" 
+  [clearable]="true" 
+  [showSelected]="true"
+  [disabled]="false" 
+  [borderClass]="'border border-[#D9D9D9]'"
+  [placeholderClass]="'text-[#959595] dark:text-[#828282] italic'"
+  class="block w-full mb-4">
+</app-searchable-dropdown>
 
             </div>
 
         </div>
+        </div>
+        
 
         <hr class="" />
         <div class="flex justify-center">
@@ -264,8 +274,7 @@
                     <thead
                         class="text-[#4B5563] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
                         <tr>
-                            <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">
-                            </th>
+                            
                             <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">No</th>
                             <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">Invoice
                                 No</th>
@@ -273,15 +282,12 @@
                                 Delivery</th>
                             <th class="px-6 py-3 text-center text-sm font-medium text-[#4B5563] dark:text-white">Status
                             </th>
-                            <th class="px-6 py-3 text-center text-sm font-medium text-[#4B5563] dark:text-white">
-                                Completing Status</th>
+                            <!-- <th class="px-6 py-3 text-center text-sm font-medium text-[#4B5563] dark:text-white">
+                                Completing Status</th> -->
                         </tr>
                     </thead>
                     <tbody class="bg-white dark:bg-[#1D1D1F] text-[#000000] dark:border-[#1D1D1F] cursor-default">
                         <tr *ngFor="let item of filteredOrdersArr let i = index">
-                            <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
-
-                            </td>
                             <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
                                 {{ (i + 1) < 10 ? ('0' + (i + 1)) : (i + 1) }} </td>
                             <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.invNo}}
@@ -308,7 +314,7 @@
                                     </span>
                                 </div>
                             </td>
-                            <td class="px-6 py-4 text-sm text-left font-medium text-gray-900 dark:text-[#C5C5C5]">
+                            <!-- <td class="px-6 py-4 text-sm text-left font-medium text-gray-900 dark:text-[#C5C5C5]">
                                 <span [ngClass]="{
                             'text-red-500': item.deliveryStatus === 'Late',
                             'text-blue-500': item.deliveryStatus === 'On Time',
@@ -316,18 +322,18 @@
                           }">
                                 {{ item.deliveryStatus }}
                             </span>
-                            </td>
+                            </td> -->
                         </tr>
                     </tbody>
                 </table>
             </div>
         </div>
 
-        <div class="flex mt-6 flex-row gap-2 justify-center">
+        <div class="flex mt-6 flex-row gap-6 justify-center">
             <button (click)="cancell()"
-                class="border border-[#95A1AC] font-medium rounded-lg shadow-lg bg-[#F6F7F9] text-[#6B7D8C] px-3 py-1">Cancel</button>
+                class="border border-[#95A1AC] font-medium rounded-lg shadow-lg bg-[#F6F7F9] text-[#6B7D8C] px-6 py-1">Cancel</button>
             <button (click)="passTargetToBackEnd()"
-                class="border border-[#415CFF] font-medium rounded-lg shadow-lg bg-[#415CFF] text-[#FFFFFF] px-6 py-1"
+                class="border border-[#415CFF] font-medium rounded-lg shadow-lg bg-[#415CFF] text-[#FFFFFF] px-8 py-1"
                 [ngClass]="{
         'bg-[#F6F7F9] border-[#95A1AC] text-[#6B7D8C]': !selectedOfficerId,
         'bg-[#415CFF] border-[#415CFF] text-[#FFFFFF]': selectedOfficerId

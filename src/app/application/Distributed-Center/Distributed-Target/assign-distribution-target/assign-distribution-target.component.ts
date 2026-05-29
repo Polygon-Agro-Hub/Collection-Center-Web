@@ -125,9 +125,16 @@ export class AssignDistributionTargetComponent implements OnInit {
   }
 
   onCancel() {
-    this.toastSrv.warning('Distribution Centre Targets Assign Cancelled')
+  // Check if there are unsaved changes
+  if (this.hasDataChanged) {
+    // Show the popup instead of immediate toast
+    this.isExitAssignTarget = true;
+  } else {
+    // No changes, just cancel and navigate
+    this.toastSrv.warning('Distribution Centre Targets Assign Cancelled');
     this.router.navigate([`/assign-targets`]);
   }
+}
 
   onSubmit() {
     this.isLeaveWithOutSaving = false;
@@ -167,13 +174,19 @@ export class AssignDistributionTargetComponent implements OnInit {
   }
 
   leaveWithoutSaving() {
-    this.hasDataChanged = false;
-    this.fetchData();
-    this.isLeaveWithOutSaving = false;
-    this.router.navigate([`/assign-targets`]).then(() => {
-        this.isExitAssignTarget = false;
-      });
-  }
+  // Clear the changed flag
+  this.hasDataChanged = false;
+  
+  // Reset the data
+  this.fetchData();
+  
+  // Navigate away
+  this.router.navigate([`/assign-targets`]).then(() => {
+    this.isExitAssignTarget = false;
+    // Show the toast message only when leaving without saving
+    this.toastSrv.warning('Distribution Centre Targets Assign Cancelled');
+  });
+}
   
   stayOnPage() {
     this.isExitAssignTarget = false;

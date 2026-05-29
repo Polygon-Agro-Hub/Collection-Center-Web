@@ -85,7 +85,7 @@ export class RequestsComponent implements OnInit {
     console.log('date', this.date)
     // this.today = new Date().toISOString().split('T')[0];
     this.fetchAllRequests();
-    
+
   }
 
   // @HostListener('document:click', ['$event'])
@@ -99,7 +99,7 @@ export class RequestsComponent implements OnInit {
 
   // }
 
-  fetchAllRequests(date: string = this.date, status: string = '', search: string = this.searchText) {
+  fetchAllRequests(date: string = this.date, status: string = this.selectStatus, search: string = this.searchText) {
     this.isLoading = true;
     this.distributionSrv.getAllRequests(date, status, search).subscribe(
       (res) => {
@@ -124,18 +124,19 @@ export class RequestsComponent implements OnInit {
 
   closePopup() {
     this.isReplacePopUpOpen = false;
+    this.fetchAllRequests();
   }
 
   onDateChange(newDate: string | Date | null) {
     let formattedDate: string = '';
-  
+
     if (newDate instanceof Date) {
       // Convert Date object to string (YYYY-MM-DD)
       formattedDate = newDate.toISOString().split('T')[0];
     } else if (typeof newDate === 'string') {
       formattedDate = newDate;
     }
-  
+
     this.date = formattedDate;
     this.fetchAllRequests(this.date, this.selectStatus, this.searchText);
   }
@@ -167,39 +168,43 @@ export class RequestsComponent implements OnInit {
     this.router.navigate([`${path}`]);
   }
 
-openReplacePopUp(item: Request) {
-  this.selectedRequestObj = item;
-  console.log('selectedRequestObj', this.selectedRequestObj);
+  openReplacePopUp(item: Request) {
+    this.selectedRequestObj = item;
+    this.selectedRequestObj.replaceQty = this.selectedRequestObj.reqreplaceQty
+    console.log(this.selectedRequestObj.replaceQty, 'replaceqty', this.selectedRequestObj.reqreplaceQty, 'req')
 
-  // Start loading
-  this.isLoading = true;
-  this.hasData = false;
+    this.onQtyChange();
+    console.log('selectedRequestObj', this.selectedRequestObj);
 
-  this.distributionSrv
-    .getProductsForUser(this.selectedRequestObj.rrId)
-    .subscribe(
-      (res) => {
-        console.log(res);
+    // Start loading
+    this.isLoading = true;
+    this.hasData = false;
 
-        this.productsArr = res?.products || [];
-        this.hasData = this.productsArr.length > 0;
+    this.distributionSrv
+      .getProductsForUser(this.selectedRequestObj.rrId)
+      .subscribe(
+        (res) => {
+          console.log(res);
 
-        this.productId = String(this.selectedRequestObj?.replaceProductId || '');
-        console.log('productId', this.productId);
+          this.productsArr = res?.products || [];
+          this.hasData = this.productsArr.length > 0;
 
-        this.isLoading = false;
-      },
-      (error) => {
-        console.error('Error fetching products:', error);
+          this.productId = String(this.selectedRequestObj?.replaceProductId || '');
+          console.log('productId', this.productId);
 
-        this.productsArr = [];
-        this.hasData = false;
-        this.isLoading = false;
-      }
-    );
+          this.isLoading = false;
+        },
+        (error) => {
+          console.error('Error fetching products:', error);
 
-  this.isReplacePopUpOpen = true;
-}
+          this.productsArr = [];
+          this.hasData = false;
+          this.isLoading = false;
+        }
+      );
+
+    this.isReplacePopUpOpen = true;
+  }
   onReject() {
     this.isReplacePopUpOpen = false;
     this.selectedRequestObj.status = 'Rejected'
@@ -291,7 +296,7 @@ openReplacePopUp(item: Request) {
 
   allowOnlyNumbers(event: KeyboardEvent) {
     const charCode = event.which ? event.which : event.keyCode;
-  
+
     // Allow: digits (0–9) and dot (.)
     if (
       (charCode < 48 || charCode > 57) && // not a digit
@@ -299,14 +304,14 @@ openReplacePopUp(item: Request) {
     ) {
       event.preventDefault();
     }
-  
+
     // Prevent multiple dots
     const input = event.target as HTMLInputElement;
     if (charCode === 46 && input.value.includes('.')) {
       event.preventDefault();
     }
   }
-  
+
 
   setIsPriceValid() {
     this.isPriceValid = true;
@@ -357,6 +362,7 @@ class Request {
   currentProduct!: string
   replaceProductId!: number
   replaceQty!: number
+  reqreplaceQty!: number
   replaceProduct!: string
   replacePrice!: number
   replaceProductType!: string;

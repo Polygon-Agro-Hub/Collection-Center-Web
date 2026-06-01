@@ -4,11 +4,11 @@
 
 <div *ngIf="!isLoading" class="w-full min-h-screen overflow-x-auto">
 
-    <div class="text-lg font-semibold dark:text-white whitespace-nowrap">{{regCode}} {{centerName}}</div>
+    <div class="text-base font-semibold dark:text-white whitespace-nowrap">{{regCode}} {{centerName}}</div>
     
     <div class="flex flex-row items-center justify-between gap-4">
         <div>
-            <p class="text-lg font-semibold dark:text-white whitespace-nowrap ">
+            <p class="text-base font-semibold dark:text-white whitespace-nowrap ">
                 All ({{ ordersArr.length < 10 ? '0' + ordersArr.length : ordersArr.length }})
               </p>
           </div>
@@ -128,18 +128,7 @@
                     <td class="px-6 py-4 text-sm text-left font-medium text-gray-900 dark:text-[#C5C5C5]">
 
                         <div class="font-medium">
-                            <span *ngIf="item.combinedStatus ==='Completed'"
-                                class="text-[#415CFF]">
-                                {{ getDisplayDate(item.sheduleDate) }} {{ removeWithin(item.sheduleTime) }}
-                            </span>
-
-                            <span *ngIf="item.combinedStatus ==='Pending'"
-                                class="text-[#FF0000]">
-                                {{ getDisplayDate(item.sheduleDate) }} {{ removeWithin(item.sheduleTime) }}
-                            </span>
-
-                            <span *ngIf="item.combinedStatus ==='Opened'"
-                                class="">
+                            <span [ngClass]="getScheduleDateColor(item.sheduleDate)">
                                 {{ getDisplayDate(item.sheduleDate) }} {{ removeWithin(item.sheduleTime) }}
                             </span>
                         </div>

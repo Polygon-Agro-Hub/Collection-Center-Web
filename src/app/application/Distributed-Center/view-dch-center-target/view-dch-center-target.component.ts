@@ -191,6 +191,17 @@ export class ViewDchCenterTargetComponent implements OnInit{
   
   
 
+  getScheduleDateColor(scheduleDate: string | Date): string {
+    const today = new Date();
+    const schedule = new Date(scheduleDate);
+    today.setHours(0, 0, 0, 0);
+    schedule.setHours(0, 0, 0, 0);
+    const diffDays = Math.floor((schedule.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
+    if (diffDays === 0) return 'text-[#FF0000]';
+    if (diffDays === 1) return 'text-[#415CFF]';
+    return 'text-gray-900 dark:text-[#C5C5C5]';
+  }
+
   removeWithin(time: string): string {
     return time ? time.replace('Within ', '') : time;
   }

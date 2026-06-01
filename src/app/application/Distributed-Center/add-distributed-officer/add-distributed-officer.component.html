@@ -136,7 +136,7 @@
                             <div
                               *ngFor="let role of jobRoles"
                               (click)="getJobRole(role)"
-                              class="p-2 dark:text-textDark cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700"
+                              class="p-2 dark:text-textDark bg-white cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700"
                             >
                               {{ role }}
                             </div>
@@ -205,7 +205,7 @@
                           
                               <!-- List -->
                               <div *ngFor="let item of filteredManagerArr"
-                                   class="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-textDark cursor-pointer"
+                                   class="p-2 bg-white hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-textDark cursor-pointer"
                                    (click)="selectManager(item)">
                                 {{item.empId}} - {{ item.firstNameEnglish }} {{item.lastNameEnglish}}
                               </div>

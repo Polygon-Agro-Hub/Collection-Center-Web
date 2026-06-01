@@ -29,7 +29,7 @@
 <div #scrollTarget *ngIf="!isLoading" class="mx-auto p-6 bg-white dark:bg-[#363636] rounded-lg shadow-mg">
     <form #PageOneForm="ngForm" (ngSubmit)="onSubmitFormPage1(PageOneForm)">
         <div *ngIf="selectedPage === 'pageOne'">
-            <h2 class="text-xl mb-6 text-[#292929] dark:text-textDark">Edit Personal Details</h2>
+            <h2 class="text-xl mb-6 text-[#292929] dark:text-textDark font-semibold">Edit Personal Details</h2>
             <div>
                 <div class="flex justify-center pt-3 pb-9">
                     <div class="relative">
@@ -60,7 +60,7 @@
                 </div>
 
                 <div *ngIf="personalData.status === 'Approved' " class="w-40 mb-4" (click)="openPopup(personalData)">
-                    <button class="w-full text-normal bg-[#FF0000] py-3 px-1 text-white rounded-xl shadow-lg">
+                    <button class="w-full text-normal font-bold bg-[#FF0000] hover:bg-red-700 py-3 px-1 text-white rounded-xl shadow-lg">
                       Reset Password   
                     </button>
               </div>
@@ -118,7 +118,7 @@
                       
                           <!-- List -->
                           <div *ngFor="let item of filteredCenterArr"
-                               class="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-textDark cursor-pointer"
+                               class="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 bg-white dark:text-textDark cursor-pointer"
                                (click)="selectCenter(item)">
                                {{item.regCode}} - {{ item.centerName }}
                           </div>
@@ -161,7 +161,7 @@
                         <div
                           *ngFor="let role of jobRoles"
                           (click)="getJobRole(role)"
-                          class="p-2 dark:text-textDark cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700"
+                          class="p-2 dark:text-textDark bg-white cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700"
                         >
                           {{ role }}
                         </div>
@@ -226,7 +226,7 @@
                       
                           <!-- List -->
                           <div *ngFor="let item of filteredManagerArr"
-                               class="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-textDark cursor-pointer"
+                               class="p-2 hover:bg-gray-200 bg-white dark:hover:bg-gray-700 dark:text-textDark cursor-pointer"
                                (click)="selectManager(item)">
                                {{item.empId}} - {{ item.firstNameEnglish }} {{item.lastNameEnglish}}
                           </div>

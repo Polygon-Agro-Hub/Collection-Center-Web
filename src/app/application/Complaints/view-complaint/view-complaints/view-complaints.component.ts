@@ -89,7 +89,7 @@ export class ViewComplaintsComponent implements OnInit {
     this.complaintsService.submitComplaint(formData).subscribe(
       (response) => {
         if (response.status) {
-          this.toastSrv.success('Your complaint has been submitted successfully!');
+          this.toastSrv.success('Your complaint was submitted');
           // Reset the form fields
           this.isAddComplaintOpen = false;
           this.category = '';

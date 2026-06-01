@@ -42,6 +42,8 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Pending', 'Completed', 'Opened'];
 
+  today = new Date();
+
   toggleStatusDropdown() {
     this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
   }

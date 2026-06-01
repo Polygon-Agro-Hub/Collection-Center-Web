@@ -112,6 +112,7 @@
     </div>
 </div>
 
+
                 <div class="flex mr-5 items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
                     <input type="text" placeholder="Search by Invoice No.." [(ngModel)]="searchText"
                         (keyup.enter)="onSearch()" (keyup.esc)="offSearch()"
@@ -150,7 +151,7 @@
         </div>
 
         <div class="text-[#030308] font-medium text-[16px] mt-2">
-            Scheduled Date : {{ ordersArr[0].sheduleDate | date: 'MMM dd, yyyy' }}
+            Scheduled Date : {{ today | date: 'MMM dd, yyyy' }}
         </div>
 
         <div *ngIf="hasData" class="min-w-max mt-4 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021] overflow-hidden">

@@ -57,9 +57,9 @@ export class OfficerProfileComponent implements OnInit {
   async generatePDF() {
 
     if (this.officerObj.jobRole === 'Driver') {
-      this.contentHeight = 420
+      this.contentHeight = 397
     } else {
-      this.contentHeight = 320
+      this.contentHeight = 297
     }
 
     const doc = new jsPDF({
@@ -128,263 +128,309 @@ export class OfficerProfileComponent implements OnInit {
       img.src = await loadImageAsBase64(modifiedFarmerUrl);
 
       doc.saveGraphicsState();
-      doc.addImage(img, 'JPEG', 16, 12, 40, 40);
+      doc.addImage(img, 'JPEG', 14, 10, 40, 40);
       doc.restoreGraphicsState();
     }
 
-    const startX = hasImage ? 62 : 16;
-    const startY = hasImage ? 62 : 52;
+    const startX = hasImage ? 60 : 14;
+    const startY = hasImage ? 60 : 50;
 
-    // ─── Header Box ───────────────────────────────────────────
     const imageboxX = 10;
     const imageboxY = 8;
     const imageboxWidth = 190;
-    const imageboxHeight = hasImage ? 46 : 32;
+    const imageboxHeight = hasImage ? 44 : 30;
 
     doc.setDrawColor(241, 247, 250);
     doc.setLineWidth(0.5);
     doc.roundedRect(imageboxX, imageboxY, imageboxWidth, imageboxHeight, 3, 3, "S");
 
-    doc.setFontSize(12);
-    doc.text(getValueOrNA(this.officerObj.firstNameEnglish) + ' ' + getValueOrNA(this.officerObj.lastNameEnglish), startX, 17);
-
-    let empType = '';
-    let empCode = '';
-
-    switch (this.officerObj.jobRole) {
-      case 'Customer Officer':         empType = 'Customer Officer';           empCode = 'CUO'; break;
-      case 'Collection Centre Manager': empType = 'Collection Centre Manager'; empCode = 'CCM'; break;
-      case 'Collection Centre Head':    empType = 'Collection Centre Head';    empCode = 'CCH'; break;
-      case 'Collection Officer':        empType = 'Collection Officer';        empCode = 'COO'; break;
-      case 'Driver':                    empType = 'Driver';                    empCode = 'DVR'; break;
-      case 'Distribution Centre Head':  empType = 'Distribution Centre Head';  empCode = 'DCH'; break;
-      case 'Distribution Centre Manager': empType = 'Distribution Centre Manager'; empCode = 'DCM'; break;
-      case 'Distribution Officer':      empType = 'Distribution Officer';      empCode = 'DIO'; break;
-    }
-
-    let empId = this.officerObj.empId || '';
-    let empCodeText = empCode ? `${empCode}${empId}` : empId;
-    let empTypeText = `${getValueOrNA(empType)} - `;
-    doc.text(empTypeText, startX, 24);
-    let textWidth = doc.getTextWidth(empTypeText);
-    doc.text(getValueOrNA(empCodeText), startX + textWidth, 24);
-
-    let centerText = 'Officer has been disclaimed - No Assigned Centre';
-    const ccRoles = ['Collection Centre Manager', 'Collection Centre Head', 'Collection Officer', 'Customer Officer'];
-    const dcRoles = ['Distribution Centre Manager', 'Distribution Centre Head', 'Distribution Officer', 'Driver'];
-
-    if (ccRoles.includes(this.officerObj.jobRole)) {
-      if (this.officerObj.regCode) centerText = `${this.officerObj.regCode} Centre`;
-    } else if (dcRoles.includes(this.officerObj.jobRole)) {
-      if (this.officerObj.distributedCenterRegCode) centerText = `${this.officerObj.distributedCenterRegCode} Centre`;
-    }
-
-    doc.text(centerText, startX, 31);
-    doc.text(getValueOrNA(this.officerObj.companyNameEnglish), startX, 38);
-
-    // ─── Personal Information Box ──────────────────────────────
-    const sectionGap = 8; // gap between sections
-
     const personalboxX = 10;
-    const personalboxY = startY - 8;
+    const personalboxY = startY - 6;
     const personalboxWidth = 190;
-    const personalboxHeight = 68;
+    const personalboxHeight = 57;
 
     doc.setDrawColor(241, 247, 250);
     doc.setLineWidth(0.5);
     doc.roundedRect(personalboxX, personalboxY, personalboxWidth, personalboxHeight, 3, 3, "S");
 
     doc.setFontSize(14);
-    doc.text("Personal Information", 16, startY);
+    doc.text("Personal Information", 14, startY);
+
+    doc.setFontSize(12);
+    doc.text(getValueOrNA(this.officerObj.firstNameEnglish) + ' ' + getValueOrNA(this.officerObj.lastNameEnglish), startX, 15);
+
+    let empType = '';
+    let empCode = '';
+
+    switch (this.officerObj.jobRole) {
+      case 'Customer Officer':
+        empType = 'Customer Officer';
+        empCode = 'CUO';
+        break;
+      case 'Collection Centre Manager':
+        empType = 'Collection Centre Manager';
+        empCode = 'CCM';
+        break;
+      case 'Collection Centre Head':
+        empType = 'Collection Centre Head';
+        empCode = 'CCH';
+        break;
+      case 'Collection Officer':
+        empType = 'Collection Officer';
+        empCode = 'COO';
+        break;
+      case 'Driver':
+        empType = 'Driver';
+        empCode = 'DVR';
+        break;
+      case 'Distribution Centre Head':
+        empType = 'Distribution Centre Head';
+        empCode = 'DCH';
+        break;
+      case 'Distribution Centre Manager':
+        empType = 'Distribution Centre Manager';
+        empCode = 'DCM';
+        break;
+      case 'Distribution Officer':
+        empType = 'Distribution Officer';
+        empCode = 'DIO';
+        break;
+    }
+
+    let empId = this.officerObj.empId || '';
+    let empCodeText = empCode ? `${empCode}${empId}` : empId;
+
+    let empTypeText = `${getValueOrNA(empType)} - `;
+    doc.text(empTypeText, startX, 22);
+
+    let textWidth = doc.getTextWidth(empTypeText);
+    doc.text(getValueOrNA(empCodeText), startX + textWidth, 22);
+
+    let centerText = 'Officer has been disclaimed - No Assigned Centre';
+
+    const ccRoles = ['Collection Centre Manager', 'Collection Centre Head', 'Collection Officer', 'Customer Officer'];
+    const dcRoles = ['Distribution Centre Manager', 'Distribution Centre Head', 'Distribution Officer', 'Driver'];
+
+    if (ccRoles.includes(this.officerObj.jobRole)) {
+      if (this.officerObj.regCode) {
+        centerText = `${this.officerObj.regCode} Centre`;
+      }
+    } else if (dcRoles.includes(this.officerObj.jobRole)) {
+      if (this.officerObj.distributedCenterRegCode) {
+        centerText = `${this.officerObj.distributedCenterRegCode} Centre`;
+      }
+    }
+
+    doc.text(centerText, startX, 29);
+    doc.text(getValueOrNA(this.officerObj.companyNameEnglish), startX, 36);
 
     doc.setFontSize(12);
 
-    doc.text("First Name", 16, startY + 12);
-    doc.text(getValueOrNA(this.officerObj.firstNameEnglish), 16, startY + 19);
+    // First Name
+    doc.text("First Name", 14, startY + 10);
+    doc.text(getValueOrNA(this.officerObj.firstNameEnglish), 14, startY + 16);
 
-    doc.text("Last Name", 105, startY + 12);
-    doc.text(getValueOrNA(this.officerObj.lastNameEnglish), 105, startY + 19);
+    // Last Name
+    doc.text("Last Name", 100, startY + 10);
+    doc.text(getValueOrNA(this.officerObj.lastNameEnglish), 100, startY + 16);
 
-    doc.text("NIC Number", 16, startY + 29);
-    doc.text(getValueOrNA(this.officerObj.nic), 16, startY + 36);
+    // NIC Number
+    doc.text("NIC Number", 14, startY + 26);
+    doc.text(getValueOrNA(this.officerObj.nic), 14, startY + 32);
 
-    doc.text("Email", 105, startY + 29);
-    doc.text(getValueOrNA(this.officerObj.email), 105, startY + 36);
+    // Email
+    doc.text("Email", 100, startY + 26);
+    doc.text(getValueOrNA(this.officerObj.email), 100, startY + 32);
 
-    doc.text("Mobile Number - 1", 16, startY + 46);
+    // Mobile Number 1
+    doc.text("Mobile Number - 1", 14, startY + 42);
     if (this.officerObj.phoneNumber01 == null || this.officerObj.phoneNumber01 === "") {
-      doc.text("N/A", 16, startY + 53);
+      doc.text("N/A", 14, startY + 48);
     } else {
-      doc.text(getValueOrNA(this.officerObj.phoneCode01), 16, startY + 53);
-      doc.text(getValueOrNA(this.officerObj.phoneNumber01), 25, startY + 53);
+      doc.text(getValueOrNA(this.officerObj.phoneCode02), 14, startY + 48);
+      doc.text(getValueOrNA(this.officerObj.phoneNumber01), 22, startY + 48);
     }
 
-    doc.text("Mobile Number - 2", 105, startY + 46);
+    // Mobile Number 2
+    doc.text("Mobile Number - 2", 100, startY + 42);
     if (this.officerObj.phoneNumber02 == null || this.officerObj.phoneNumber02 === "") {
-      doc.text("-", 105, startY + 53);
+      doc.text("-", 100, startY + 48);
     } else {
-      doc.text(getValueOrNA(this.officerObj.phoneCode02), 105, startY + 53);
-      doc.text(getValueOrNA(this.officerObj.phoneNumber02), 114, startY + 53);
+      doc.text(getValueOrNA(this.officerObj.phoneCode02), 100, startY + 48);
+      doc.text(getValueOrNA(this.officerObj.phoneNumber02), 108, startY + 48);
     }
 
-    // ─── Address Details Box ───────────────────────────────────
-    const addrY = personalboxY + personalboxHeight + sectionGap;
+    // Address Details Section
+    const boxX = 10;
+    const boxY = startY + 54;
+    const boxWidth = 190;
+    const lastY = startY + 108;
+    const boxHeight = (lastY + 4) - boxY;
 
     doc.setDrawColor(241, 247, 250);
     doc.setLineWidth(0.5);
-    doc.roundedRect(10, addrY, 190, 68, 3, 3, "S");
+    doc.roundedRect(boxX, boxY, boxWidth, boxHeight, 3, 3, "S");
 
     doc.setFontSize(14);
-    doc.text("Address Details", 16, addrY + 10);
+    doc.text("Address Details", 14, startY + 60);
 
     doc.setFontSize(12);
 
-    doc.text("House / Plot Number", 16, addrY + 22);
-    doc.text(getValueOrNA(this.officerObj.houseNumber), 16, addrY + 29);
+    doc.text("House / Plot Number", 14, startY + 70);
+    doc.text(getValueOrNA(this.officerObj.houseNumber), 14, startY + 76);
 
-    doc.text("Street Name", 105, addrY + 22);
-    doc.text(getValueOrNA(this.officerObj.streetName), 105, addrY + 29);
+    doc.text("Street Name", 100, startY + 70);
+    doc.text(getValueOrNA(this.officerObj.streetName), 100, startY + 76);
 
-    doc.text("City", 16, addrY + 39);
-    doc.text(getValueOrNA(this.officerObj.city), 16, addrY + 46);
+    doc.text("City", 14, startY + 86);
+    doc.text(getValueOrNA(this.officerObj.city), 14, startY + 92);
 
-    doc.text("Country", 105, addrY + 39);
-    doc.text(getValueOrNA(this.officerObj.country), 105, addrY + 46);
+    doc.text("Country", 100, startY + 86);
+    doc.text(getValueOrNA(this.officerObj.country), 100, startY + 92);
 
-    doc.text("Province", 16, addrY + 56);
-    doc.text(getValueOrNA(this.officerObj.province), 16, addrY + 63);
+    doc.text("Province", 14, startY + 102);
+    doc.text(getValueOrNA(this.officerObj.province), 14, startY + 108);
 
-    doc.text("District", 105, addrY + 56);
-    doc.text(getValueOrNA(this.officerObj.district), 105, addrY + 63);
+    doc.text("District", 100, startY + 102);
+    doc.text(getValueOrNA(this.officerObj.district), 100, startY + 108);
 
-    // ─── Bank Details Box ──────────────────────────────────────
-    const bankY = addrY + 68 + sectionGap;
+    // Bank Details Section
+    const bankBoxX = 10;
+    const bankBoxY = startY + 114;
+    const bankBoxWidth = 190;
+    const bankLastY = startY + 152;
+    const bankBoxHeight = (bankLastY + 4) - bankBoxY;
 
     doc.setDrawColor(241, 247, 250);
     doc.setLineWidth(0.5);
-    doc.roundedRect(10, bankY, 190, 52, 3, 3, "S");
+    doc.roundedRect(bankBoxX, bankBoxY, bankBoxWidth, bankBoxHeight, 3, 3, "S");
 
     doc.setFontSize(14);
-    doc.text("Bank Details", 16, bankY + 10);
+    doc.text("Bank Details", 14, startY + 120);
 
     doc.setFontSize(12);
 
-    doc.text("Account Holder's Name", 16, bankY + 22);
-    doc.text(getValueOrNA(this.officerObj.accHolderName), 16, bankY + 29);
+    doc.text("Account Holder's Name", 14, startY + 130);
+    doc.text(getValueOrNA(this.officerObj.accHolderName), 14, startY + 136);
 
-    doc.text("Account Number", 105, bankY + 22);
-    doc.text(getValueOrNA(this.officerObj.accNumber), 105, bankY + 29);
+    doc.text("Account Number", 100, startY + 130);
+    doc.text(getValueOrNA(this.officerObj.accNumber), 100, startY + 136);
 
-    doc.text("Bank Name", 16, bankY + 39);
-    doc.text(getValueOrNA(this.officerObj.bankName), 16, bankY + 46);
+    doc.text("Bank Name", 14, startY + 146);
+    doc.text(getValueOrNA(this.officerObj.bankName), 14, startY + 152);
 
-    doc.text("Branch Name", 105, bankY + 39);
-    doc.text(getValueOrNA(this.officerObj.branchName), 105, bankY + 46);
+    doc.text("Branch Name", 100, startY + 146);
+    doc.text(getValueOrNA(this.officerObj.branchName), 100, startY + 152);
 
-    // ─── Driver Sections ───────────────────────────────────────
     if (this.officerObj.jobRole === 'Driver') {
 
-      // Driver Details
-      const driverY = bankY + 52 + sectionGap;
+      const DdetailsX = 10;
+      const DdetailsY = startY + 158;
+      const DdetailsboxWidth = 190;
+      const DdetailslastY = startY + 198;
+      const DdetailsboxHeight = (DdetailslastY + 4) - DdetailsY;
 
       doc.setDrawColor(241, 247, 250);
       doc.setLineWidth(0.5);
-      doc.roundedRect(10, driverY, 190, 52, 3, 3, "S");
+      doc.roundedRect(DdetailsX, DdetailsY, DdetailsboxWidth, DdetailsboxHeight, 3, 3, "S");
 
-      doc.setFontSize(14);
-      doc.text("Driver Details", 16, driverY + 10);
+      doc.setFontSize(16);
+      doc.text("Driver Details", 14, startY + 164);
 
       doc.setFontSize(12);
+      doc.text("Driving License ID", 14, startY + 174);
+      doc.text(getValueOrNAforInsOrLiscNo(this.officerObj.licNo), 14, startY + 180);
 
-      doc.text("Driving License ID", 16, driverY + 22);
-      doc.text(getValueOrNAforInsOrLiscNo(this.officerObj.licNo), 16, driverY + 29);
-
-      doc.text("License's Front Image", 16, driverY + 39);
-      doc.addImage(iconBase64, 'PNG', 16, driverY + 42, 9, 9);
+      doc.text("License's Front Image", 14, startY + 190);
+      doc.addImage(iconBase64, 'PNG', 14, startY + 192, 9, 9);
       if (this.officerObj.licFrontImg) {
-        doc.link(16, driverY + 42, 9, 9, { url: this.officerObj.licFrontImg });
+        doc.link(14, startY + 192, 9, 9, { url: this.officerObj.licFrontImg });
       }
 
-      doc.text("License's Back Image", 105, driverY + 39);
-      doc.addImage(iconBase64, 'PNG', 105, driverY + 42, 9, 9);
+      doc.text("License's Back Image", 100, startY + 190);
+      doc.addImage(iconBase64, 'PNG', 100, startY + 192, 9, 9);
       if (this.officerObj.licBackImg) {
-        doc.link(105, driverY + 42, 9, 9, { url: this.officerObj.licBackImg });
+        doc.link(100, startY + 192, 9, 9, { url: this.officerObj.licBackImg });
       }
 
-      // Vehicle Insurance Details
-      const insY = driverY + 52 + sectionGap;
+      const VidetailsX = 10;
+      const VidetailsY = startY + 204;
+      const VidetailsboxWidth = 190;
+      const VidetailslastY = startY + 248;
+      const VidetailsboxHeight = (VidetailslastY + 4) - VidetailsY;
 
       doc.setDrawColor(241, 247, 250);
       doc.setLineWidth(0.5);
-      doc.roundedRect(10, insY, 190, 52, 3, 3, "S");
+      doc.roundedRect(VidetailsX, VidetailsY, VidetailsboxWidth, VidetailsboxHeight, 3, 3, "S");
 
-      doc.setFontSize(14);
-      doc.text("Vehicle Insurance Details", 16, insY + 10);
+      doc.setFontSize(16);
+      doc.text("Vehicle Insurance Details", 14, startY + 212);
 
       doc.setFontSize(12);
+      doc.text("Vehicle Insurance Number", 14, startY + 222);
+      doc.text(getValueOrNAforInsOrLiscNo(this.officerObj.insNo), 14, startY + 228);
 
-      doc.text("Vehicle Insurance Number", 16, insY + 22);
-      doc.text(getValueOrNAforInsOrLiscNo(this.officerObj.insNo), 16, insY + 29);
+      doc.text("Vehicle Expire Date", 100, startY + 222);
+      doc.text(this.officerObj.insExpDate.split("T")[0], 100, startY + 228);
 
-      doc.text("Vehicle Expire Date", 105, insY + 22);
-      doc.text(this.officerObj.insExpDate.split("T")[0], 105, insY + 29);
-
-      doc.text("Insurance's Front Image", 16, insY + 39);
-      doc.addImage(iconBase64, 'PNG', 16, insY + 42, 9, 9);
+      doc.text("Insurance's Front Image", 14, startY + 238);
+      doc.addImage(iconBase64, 'PNG', 14, startY + 240, 9, 9);
       if (this.officerObj.insFrontImg) {
-        doc.link(16, insY + 42, 9, 9, { url: this.officerObj.insFrontImg });
+        doc.link(14, startY + 240, 9, 9, { url: this.officerObj.insFrontImg });
       }
 
-      doc.text("Insurance's Back Image", 105, insY + 39);
-      doc.addImage(iconBase64, 'PNG', 105, insY + 42, 9, 9);
+      doc.text("Insurance's Back Image", 100, startY + 238);
+      doc.addImage(iconBase64, 'PNG', 100, startY + 240, 9, 9);
       if (this.officerObj.insBackImg) {
-        doc.link(105, insY + 42, 9, 9, { url: this.officerObj.insBackImg });
+        doc.link(100, startY + 240, 9, 9, { url: this.officerObj.insBackImg });
       }
 
-      // Vehicle Details
-      const vehY = insY + 52 + sectionGap;
+      const VdetailsX = 10;
+      const VdetailsY = startY + 254;
+      const VdetailsboxWidth = 190;
+      const VdetailslastY = startY + 330;
+      const VdetailsboxHeight = (VdetailslastY + 4) - VdetailsY;
 
       doc.setDrawColor(241, 247, 250);
       doc.setLineWidth(0.5);
-      doc.roundedRect(10, vehY, 190, 85, 3, 3, "S");
+      doc.roundedRect(VdetailsX, VdetailsY, VdetailsboxWidth, VdetailsboxHeight, 3, 3, "S");
 
-      doc.setFontSize(14);
-      doc.text("Vehicle Details", 16, vehY + 10);
+      doc.setFontSize(16);
+      doc.text("Vehicle Details", 14, startY + 260);
 
       doc.setFontSize(12);
+      doc.text("Vehicle Registration Number", 14, startY + 270);
+      doc.text(getValueOrNA(this.officerObj.vRegNo), 14, startY + 276);
 
-      doc.text("Vehicle Registration Number", 16, vehY + 22);
-      doc.text(getValueOrNA(this.officerObj.vRegNo), 16, vehY + 29);
+      doc.text("Vehicle Type", 14, startY + 286);
+      doc.text(getValueOrNA(this.officerObj.vType), 14, startY + 292);
 
-      doc.text("Vehicle Type", 16, vehY + 39);
-      doc.text(getValueOrNA(this.officerObj.vType), 16, vehY + 46);
-
-      doc.text("Vehicle Capacity", 105, vehY + 39);
+      doc.text("Vehicle Capacity", 100, startY + 286);
       let value = getValueOrNA(String(this.officerObj.vCapacity));
-      doc.text(value === "N/A" ? value : value + " Kg", 105, vehY + 46);
+      doc.text(value === "N/A" ? value : value + " Kg", 100, startY + 292);
 
-      doc.text("Vehicle's Front Image", 16, vehY + 56);
-      doc.addImage(iconBase64, 'PNG', 16, vehY + 59, 9, 9);
+      doc.text("Vehicle's Front Image", 14, startY + 302);
+      doc.addImage(iconBase64, 'PNG', 14, startY + 304, 9, 9);
       if (this.officerObj.vehFrontImg) {
-        doc.link(16, vehY + 59, 9, 9, { url: this.officerObj.vehFrontImg });
+        doc.link(14, startY + 304, 9, 9, { url: this.officerObj.vehFrontImg });
       }
 
-      doc.text("Vehicle's Back Image", 105, vehY + 56);
-      doc.addImage(iconBase64, 'PNG', 105, vehY + 59, 9, 9);
+      doc.text("Vehicle's Back Image", 100, startY + 302);
+      doc.addImage(iconBase64, 'PNG', 100, startY + 304, 9, 9);
       if (this.officerObj.vehBackImg) {
-        doc.link(105, vehY + 59, 9, 9, { url: this.officerObj.vehBackImg });
+        doc.link(100, startY + 304, 9, 9, { url: this.officerObj.vehBackImg });
       }
 
-      doc.text("Vehicle's Side Image - 1", 16, vehY + 73);
-      doc.addImage(iconBase64, 'PNG', 16, vehY + 76, 9, 9);
+      doc.text("Vehicle's Side Image - 1", 14, startY + 320);
+      doc.addImage(iconBase64, 'PNG', 14, startY + 322, 9, 9);
       if (this.officerObj.vehSideImgA) {
-        doc.link(16, vehY + 76, 9, 9, { url: this.officerObj.vehSideImgA });
+        doc.link(14, startY + 322, 9, 9, { url: this.officerObj.vehSideImgA });
       }
 
-      doc.text("Vehicle's Side Image - 2", 105, vehY + 73);
-      doc.addImage(iconBase64, 'PNG', 105, vehY + 76, 9, 9);
+      doc.text("Vehicle's Side Image - 2", 100, startY + 320);
+      doc.addImage(iconBase64, 'PNG', 100, startY + 322, 9, 9);
       if (this.officerObj.vehSideImgB) {
-        doc.link(105, vehY + 76, 9, 9, { url: this.officerObj.vehSideImgB, newWindow: true });
+        doc.link(100, startY + 322, 9, 9, { url: this.officerObj.vehSideImgB, newWindow: true });
       }
     }
 

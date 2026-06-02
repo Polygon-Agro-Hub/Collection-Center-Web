@@ -49,43 +49,43 @@
     <div *ngIf="hasData"
   class="overflow-hidden mt-8 mr-5 border border-gray-200 rounded-lg dark:border-[#202021]">
   <table class="w-full divide-y divide-gray-200 dark:divide-[#202021]">
-    <thead class="text-[#4B5563] text-[14px] dark:text-gray-300 dark:bg-[#0F0F0F]">
+    <thead class="text-[#4B5563] text-base font-medium dark:text-gray-300 dark:bg-[#0F0F0F]">
       <tr>
-        <th class="px-5 py-3 text-left font-medium">No</th>
-        <th class="px-5 py-3 text-left font-medium">EMP ID</th>
-        <th class="px-5 py-3 text-left font-medium">First Name</th>
-        <th class="px-5 py-3 text-left font-medium">Last Name</th>
-        <th class="px-5 py-3 text-left font-medium" *ngIf="logingRole === 'Collection Centre Head'">Centre</th>
-        <th class="px-5 py-3 text-center font-medium">Monthly Report</th>
-        <th class="px-5 py-3 text-center font-medium">Daily Report</th>
-        <th class="px-5 py-3 text-center font-medium">Farmers</th>
+        <th class="px-5 py-3 text-left text-[#4B5563] text-base font-medium">No</th>
+        <th class="px-5 py-3 text-left text-[#4B5563] text-base font-medium">EMP ID</th>
+        <th class="px-5 py-3 text-left text-[#4B5563] text-base font-medium">First Name</th>
+        <th class="px-5 py-3 text-left text-[#4B5563] text-base font-medium">Last Name</th>
+        <th class="px-5 py-3 text-left text-[#4B5563] text-base font-medium" *ngIf="logingRole === 'Collection Centre Head'">Centre</th>
+        <th class="px-5 py-3 text-center text-[#4B5563] text-base font-medium">Monthly Report</th>
+        <th class="px-5 py-3 text-center text-[#4B5563] text-base font-medium">Daily Report</th>
+        <th class="px-5 py-3 text-center text-[#4B5563] text-base font-medium">Farmers</th>
       </tr>
     </thead>
-    <tbody class="bg-white divide-y divide-gray-100 dark:bg-[#1D1D1F] dark:divide-[#202021]">
+    <tbody class="bg-white divide-y divide-gray-100 text-[#000000] font-semibold dark:bg-[#1D1D1F] dark:divide-[#202021]">
       <tr *ngFor="let item of OfficerArr | paginate
           : {
               itemsPerPage: itemsPerPage,
               currentPage: page,
               totalItems: totalItems
             }; let i = index">
-        <td class="px-5 py-4 text-gray-900 dark:text-gray-300">
+        <td class="px-5 py-4 text-base text-gray-900 dark:text-gray-300">
           {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i + 1) : (((page - 1) * itemsPerPage) + i + 1) }}
         </td>
-        <td class="px-5 py-4 text-[#000000] text-[16px] font-medium dark:text-gray-300">{{item.empId}}</td>
-        <td class="px-5 py-4 text-[#000000] text-[16px] font-medium dark:text-gray-300">{{item.firstNameEnglish}}</td>
-        <td class="px-5 py-4 text-[#000000] text-[16px] font-medium dark:text-gray-300">{{item.lastNameEnglish}}</td>
-        <td class="px-5 py-4 text-[#000000] text-[16px] font-medium dark:text-gray-300" *ngIf="logingRole === 'Collection Centre Head'">{{item.centerName}}</td>
+        <td class="px-5 py-4 text-base text-gray-900 dark:text-gray-300">{{item.empId}}</td>
+        <td class="px-5 py-4 text-base text-gray-900 dark:text-gray-300">{{item.firstNameEnglish}}</td>
+        <td class="px-5 py-4 text-base text-gray-900 dark:text-gray-300">{{item.lastNameEnglish}}</td>
+        <td class="px-5 py-4 text-base text-gray-900 dark:text-gray-300" *ngIf="logingRole === 'Collection Centre Head'">{{item.centerName}}</td>
 
         <!-- Monthly Report td -->
-        <td class="px-5 py-4 text-center text-gray-900 dark:text-gray-300">
-          <button class="inline-flex items-center justify-center text-[#415CFF] hover:text-gray-600 w-10 h-10 mx-auto"
+        <td class="px-5 py-4 text-center text-base text-gray-900 dark:text-gray-300">
+          <button class="inline-flex items-center justify-center text-base text-[#415CFF] hover:text-gray-600 w-10 h-10 mx-auto"
             (click)="viewmonthlyReport(item.id)">
             <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>
           </button>
         </td>
 
         <!-- Daily Report td -->
-        <td class="px-5 py-4 text-center text-gray-900 dark:text-gray-300">
+        <td class="px-5 py-4 text-center text-base text-gray-900 dark:text-gray-300">
           <button class="inline-flex items-center justify-center text-[#415CFF] hover:text-gray-600 w-10 h-10 mx-auto"
             (click)="viewDailyReport(item.id, item.firstNameEnglish, item.lastNameEnglish, item.empId)">
             <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>

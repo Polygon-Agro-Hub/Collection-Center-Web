@@ -35,6 +35,7 @@ export class CollectionMonthlyReportComponent implements OnInit {
 
   hasData: boolean = false;
   isLoading: boolean = false;
+  totalFarmersSum: number = 0;
 
 
   constructor(
@@ -62,6 +63,7 @@ export class CollectionMonthlyReportComponent implements OnInit {
       (res) => {
         this.officerDataObj = res.officer;
         this.farmerDataArr = res.dates;
+        this.totalFarmersSum = res.dates.reduce((sum: number, item: FarmerDetails) => sum + (Number(item.TotalFarmers) || 0), 0);
         if (res.dates.length > 0) {
           this.hasData = true;
         } else {

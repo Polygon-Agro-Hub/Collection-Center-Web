@@ -202,7 +202,7 @@
           {{ district.name }}
         </option>
       </select>
-      <p *ngIf="district.invalid && district.touched" class="text-red-500 text-sm">
+      <p *ngIf="!centerData.district && district.touched" class="text-red-500 text-sm">
         District is required.
       </p>
     </div>

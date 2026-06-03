@@ -325,7 +325,7 @@ export class CollectionComponent implements OnInit {
           Swal.fire({
             icon: "success",
             title: "Downloaded",
-            text: "Please check your downloads folder",
+            text: "File Downloaded Successfully",
             customClass: {
               popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
               title: 'dark:text-white',

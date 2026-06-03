@@ -336,6 +336,7 @@ this.farmerDataArr.forEach(row => {
     // Save the PDF
     const fileName = `Monthly Report_${this.officerDataObj.empId}_From ${this.startDate} To ${this.endDate}.pdf`;
     doc.save(fileName);
+    this.toastSrv.success('File Downloaded Successfully')
 
   }
 

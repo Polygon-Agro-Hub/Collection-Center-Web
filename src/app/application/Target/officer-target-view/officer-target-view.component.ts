@@ -317,7 +317,7 @@ ngOnInit(): void {
           a.click();
           window.URL.revokeObjectURL(url);
 
-          this.toastSrv.success('Please check your downloads folder')
+          this.toastSrv.success('File Downloaded Successfully')
           this.isDownloading = false;
         },
         error: (error) => {

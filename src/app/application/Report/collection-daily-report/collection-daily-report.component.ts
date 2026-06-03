@@ -9,6 +9,7 @@ import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loa
 import html2canvas from 'html2canvas';
 import { ThemeService } from '../../../theme.service';
 import { CustomDatepickerComponent } from '../../../components/custom-datepicker/custom-datepicker.component';
+import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 
 @Component({
   selector: 'app-collection-daily-report',
@@ -46,6 +47,7 @@ export class CollectionDailyReportComponent implements OnInit {
     private route: ActivatedRoute,
     private datePipe: DatePipe,
     private themeService: ThemeService,
+    private toastSrv: ToastAlertService
   ) {
     this.isDarkTheam =
       this.themeService.getActiveTheme() === 'dark' ? true : false;
@@ -274,6 +276,7 @@ export class CollectionDailyReportComponent implements OnInit {
     }
 
     doc.save(`Daily_Report_${this.officerName}_${this.selectDate}.pdf`);
+    this.toastSrv.success('File Downloaded Successfully')
   }
 
   // Helper method to add table to PDF

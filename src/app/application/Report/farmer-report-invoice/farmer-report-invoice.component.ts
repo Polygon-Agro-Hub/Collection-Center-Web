@@ -64,7 +64,7 @@ export class FarmerReportInvoiceComponent implements OnInit {
   }
 
   navigateToCollectionReports() {
-    this.router.navigate(['/reports/collection-reports']); // Change '/reports' to your desired route
+    this.router.navigate(['/reports']); // Change '/reports' to your desired route
   }
 
   navigateToOfficerReports() {

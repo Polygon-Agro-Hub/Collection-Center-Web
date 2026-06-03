@@ -286,7 +286,7 @@ export class FarmerReportComponent implements OnInit {
     // Add Crop Details section
     y += yIncrement * 0.25;
     y += yIncrement;
-    doc.setFontSize(11);
+    doc.setFontSize(12);
     doc.text('Crop Details', x, y);
     y += yIncrement;
     doc.setFontSize(9);
@@ -321,7 +321,7 @@ export class FarmerReportComponent implements OnInit {
 
     // Add Full Total
     y += yIncrement
-    doc.setFontSize(11);
+    doc.setFontSize(12);
     doc.setTextColor('#000000');
     doc.text('Full Total (Rs.) : ' + formatValueForAmounts(this.calculateOverallTotalforReport().toFixed(2)), x, y);
     y += yIncrement * 2.5;
@@ -405,7 +405,7 @@ export class FarmerReportComponent implements OnInit {
     }
     doc.setTextColor('#000000');
 
-    doc.setFontSize(11);
+    doc.setFontSize(12);
     doc.text('Farmer’s QR Code', farmerQrX + 3, labelY);
 
     // Add officer QR code
@@ -418,11 +418,11 @@ export class FarmerReportComponent implements OnInit {
       doc.text('Available', officerQrX + 10, qrY + 23);
     }
     doc.setTextColor('#000000');
-    doc.setFontSize(11);
+    doc.setFontSize(12);
     doc.text('Officer’s QR Code', officerQrX + 3, labelY);
 
     // Save the PDF
-    doc.save(`invoice_${this.userObj.invNo}.pdf`);
+    doc.save(`Invoice_${this.userObj.invNo}.pdf`);
     this.isLoading = false;
   }
 

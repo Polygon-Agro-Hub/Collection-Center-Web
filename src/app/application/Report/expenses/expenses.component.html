@@ -116,7 +116,7 @@
             <table class="w-full min-w-max divide-y-2">
                 <thead class=" dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] text-[#4B5563]">
                     <tr>
-                        <th class="px-2 py-3 text-left  font-medium">No</th>
+                        <th class="px-2 py-3 text-center  font-medium">No</th>
                         <th class="px-3 py-3 text-left  font-medium">GRN No</th>
                         <th class="px-3 py-3 text-left  font-medium">Amount (Rs.)</th>
                         <th class="px-3 py-3 text-left  font-medium" *ngIf="logingRole === 'Collection Centre Head'">
@@ -135,7 +135,7 @@
                     currentPage: page,
                     totalItems: totalItems
                   };  let i = index">
-                        <td class="px-2 py-4  text-gray-900 dark:text-gray-300 ">
+                        <td class="px-2 py-4 text-center text-gray-900 dark:text-gray-300 ">
                             {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i + 1)
                                 : (((page - 1) * itemsPerPage) + i + 1) }} </td>
                         <td class="px-3 py-4 text-gray-900 dark:text-gray-300">{{item.invNo}}</td>

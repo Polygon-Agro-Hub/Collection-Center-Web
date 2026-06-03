@@ -203,13 +203,23 @@
     
                         <p>
                             {{
-                                replyObj.language === 'Sinhala' ? 'ඔබට තවත් ගැටළු හෝ ප්‍රශ්න තිබේ නම්, කරුණාකර අප හා සම්බන්ධ වන්න. ඔබේ ඉවසීම සහ අවබෝධය වෙනුවෙන් ස්තූතියි. '
-                                : replyObj.language === 'Tamil' ? 'உங்களுக்கு மேலும் ஏதேனும் சிக்கல்கள் அல்லது கேள்விகள் இருந்தால், தயவுசெய்து எங்களைத் தொடர்பு கொள்ளவும். உங்கள் பொறுமைக்கும் புரிதலுக்கும் நன்றி. ' 
-                                : 'If you have any further concerns or questions, feel free to reach out. Thank you for your patience and understanding. '
+                                replyObj.language === 'Sinhala' ? 'ඔබට තවත් ගැටළු හෝ ප්‍රශ්න තිබේ නම්, කරුණාකර අප හා සම්බන්ධ වන්න.'
+                                : replyObj.language === 'Tamil' ? 'உங்களுக்கு மேலும் ஏதேனும் சிக்கல்கள் அல்லது கேள்விகள் இருந்தால், தயவுசெய்து எங்களைத் தொடர்பு கொள்ளவும்.' 
+                                : 'If you have any further concerns or questions, feel free to reach out. '
                             }}
     
                         </p>
+
                     </div >
+
+                    <p class="mt-b">
+                            {{
+                                replyObj.language === 'Sinhala' ? 'ඉවසීම සහ අවබෝධය වෙනුවෙන් ස්තූතියි. '
+                                : replyObj.language === 'Tamil' ? 'உங்கள் பொறுமைக்கும் புரிதலுக்கும் நன்றி. ' 
+                                : 'Thank you for your patience and understanding. '
+                            }}
+    
+                    </p>
                         <div  class="flex flex-col mt-1 gap-y-0">
                             <p *ngIf="replyObj.language === 'Sinhala'">
                                 මෙයට,<br/>

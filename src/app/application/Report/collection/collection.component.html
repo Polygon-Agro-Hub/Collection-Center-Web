@@ -124,17 +124,17 @@
             <table class="w-full min-w-max divide-y-2">
                 <thead class=" dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] text-[#4B5563]">
                     <tr>
-                        <th class="px-2 py-3 text-left text-sm font-medium">No</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium"
+                        <th class="px-2 py-3 text-base text-center font-medium">No</th>
+                        <th class="px-3 py-3 text-left text-base font-medium"
                             *ngIf="logingRole === 'Collection Centre Head'">Centre Code</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium"
+                        <th class="px-3 py-3 text-left text-base font-medium"
                             *ngIf="logingRole === 'Collection Centre Head'">Centre Name</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium">Crop</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium ">Variety</th>
-                        <th class="px-3 py-3 text-center text-sm font-medium ">Quantity A (kg)</th>
-                        <th class="px-3 py-3 text-center text-sm font-medium">Quantity B (kg)</th>
-                        <th class="px-3 py-3 text-center text-sm font-medium">Quantity C (kg)</th>
-                        <th class="px-3 py-3 text-center text-sm font-medium">Total (kg)</th>
+                        <th class="px-3 py-3 text-left text-base font-medium">Crop</th>
+                        <th class="px-3 py-3 text-left text-base font-medium ">Variety</th>
+                        <th class="px-3 py-3 text-center text-base font-medium ">Quantity A (kg)</th>
+                        <th class="px-3 py-3 text-center text-base font-medium">Quantity B (kg)</th>
+                        <th class="px-3 py-3 text-center text-base font-medium">Quantity C (kg)</th>
+                        <th class="px-3 py-3 text-center text-base font-medium">Total (kg)</th>
                     </tr>
                 </thead>
                 <tbody class="bg-white text-[#000000] font-semibold dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
@@ -144,26 +144,26 @@
                     currentPage: page,
                     totalItems: totalItems
                   };  let i = index">
-                        <td class="px-2 py-4 text-sm text-gray-900 dark:text-gray-300 ">
+                        <td class="px-2 py-4 text-center text-base text-gray-900 dark:text-gray-300 ">
                             {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i + 1)
                                 : (((page - 1) * itemsPerPage) + i + 1) }} </td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300"
+                        <td class="px-3 py-4 text-base text-gray-900 dark:text-gray-300"
                             *ngIf="logingRole === 'Collection Centre Head'">{{item.centerCode}}</td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300"
+                        <td class="px-3 py-4 text-base text-gray-900 dark:text-gray-300"
                             *ngIf="logingRole === 'Collection Centre Head'">{{item.centerName}}</td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">
+                        <td class="px-3 py-4 text-base text-gray-900 dark:text-gray-300">
                             {{ item.cropNameEnglish || '-' }}
                         </td>
-                        <td class="px-3 py-4 text-sm text-left text-gray-900 dark:text-gray-300">
+                        <td class="px-3 py-4 text-base text-left text-gray-900 dark:text-gray-300">
                             {{ item.varietyNameEnglish || '-' }}
                         </td>
-                        <td class="px-3 py-4 text-center dark:text-gray-300">{{item.totalGradeAQuantity | number:
+                        <td class="px-3 py-4 text-base text-center dark:text-gray-300">{{item.totalGradeAQuantity | number:
                             '1.2-2' }}</td>
-                        <td class="px-3 py-4 text-center dark:text-gray-300">{{item.totalGradeBQuantity | number:
+                        <td class="px-3 py-4 text-base text-center dark:text-gray-300">{{item.totalGradeBQuantity | number:
                             '1.2-2' }}</td>
-                        <td class="px-3 py-4 text-center dark:text-gray-300">{{item.totalGradeCQuantity | number:
+                        <td class="px-3 py-4 text-base text-center dark:text-gray-300">{{item.totalGradeCQuantity | number:
                             '1.2-2' }}</td>
-                        <td class="px-3 py-4 text-center dark:text-gray-300">
+                        <td class="px-3 py-4 text-base text-center dark:text-gray-300">
                             {{ item.totalQuantity | number: '1.2-2' }}
                         </td>
                     </tr>

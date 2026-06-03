@@ -403,13 +403,15 @@ onDistrictChange(selectedDistrict: string | null): void {
         });
     }
   }
-
+  
   onCancel() {
       Swal.fire({
         title: 'Are you sure?',
         text: 'You may lose the added data after canceling!',
         icon: 'warning',
         showCancelButton: true,
+        confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
         confirmButtonText: 'Yes, cancel',
         cancelButtonText: 'No, Keep Editing',
         customClass: {

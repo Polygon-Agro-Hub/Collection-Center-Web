@@ -122,6 +122,10 @@
                                (click)="selectCenter(item)">
                                {{item.regCode}} - {{ item.centerName }}
                           </div>
+                          <div *ngIf="filteredCenterArr.length === 0"
+                               class="p-2 text-gray-500 dark:text-gray-400 bg-white dark:bg-[#1D1D1F] text-sm text-center">
+                            No options found
+                          </div>
                         </div>
                       </div>
                     <div *ngIf="centerIdInput.touched && !personalData.centerId && logingRole === 'Distribution Centre Head'"
@@ -229,6 +233,10 @@
                                class="p-2 hover:bg-gray-200 bg-white dark:hover:bg-gray-700 dark:text-textDark cursor-pointer"
                                (click)="selectManager(item)">
                                {{item.empId}} - {{ item.firstNameEnglish }} {{item.lastNameEnglish}}
+                          </div>
+                          <div *ngIf="filteredManagerArr.length === 0"
+                               class="p-2 text-gray-500 dark:text-gray-400 bg-white dark:bg-[#1D1D1F] text-sm text-center">
+                            No options found
                           </div>
                         </div>
                       </div>
@@ -1190,7 +1198,7 @@
 
 
 
-            <div class="flex justify-end m-10">
+            <div class="flex justify-end mt-10">
                 <button (click)="nextForm('pageTwo')" type="button"
                     class="px-6 py-2 bg-[#F6F7F9] border-gray-400 border-[2px] text-[#6B7D8C] rounded-lg mr-2">Back</button>
                 <button type="submit" class="px-6 py-1 bg-[#415CFF] text-white rounded-lg"

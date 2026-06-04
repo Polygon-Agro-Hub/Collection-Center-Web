@@ -216,7 +216,7 @@ export class RequestsComponent implements OnInit {
         console.log('res', res)
 
         if (res.data.success) {
-          this.toastSrv.success('The Request has been Rejected successfully.')
+          this.toastSrv.success('Request rejected successfully.')
           this.fetchAllRequests();
         } else {
           this.toastSrv.error('Request Rejection failed. Please try again.');
@@ -243,7 +243,7 @@ export class RequestsComponent implements OnInit {
 
         if (res.data.success) {
 
-          this.toastSrv.success('The Request has been Approved and product replaced successfully.')
+          this.toastSrv.success('Request approved successfully.')
 
           this.fetchAllRequests();
         } else {

@@ -171,7 +171,7 @@ export class DchCenterTargetOutForDeliveryComponent implements OnInit {
   const statusPart = this.selectStatus ? ` filtered by ${this.selectStatus}` : '';
 
   // Final filenameFV
-  const fileName = `${this.regCode} OFD Orders${datePart}${statusPart} Generated at ${generatedAt}.xlsx`;
+  const fileName = `${this.regCode} OFH Orders${datePart}${statusPart} Generated at ${generatedAt}.xlsx`;
 
   this.DistributionSrv
     .downloadDCHOutForDeliveryTargetProgressReport(this.selectStatus, this.date, this.searchText, this.centerId!)
@@ -186,7 +186,7 @@ export class DchCenterTargetOutForDeliveryComponent implements OnInit {
         Swal.fire({
           icon: 'success',
           title: 'Downloaded',
-          text: 'Please check your downloads folder',
+          text: 'File Downloaded Successfully',
           customClass: {
             popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
             title: 'dark:text-white',

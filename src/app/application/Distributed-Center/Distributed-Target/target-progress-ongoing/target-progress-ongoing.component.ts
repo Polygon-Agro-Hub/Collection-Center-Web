@@ -183,32 +183,36 @@ export class TargetProgressOngoingComponent implements OnInit {
     }
   }
 
-  getDateColor(item: any): string {
-    const today = new Date();
-    const schedule = new Date(item.sheduleDate);
-  
-    // Normalize both to midnight
-    today.setHours(0, 0, 0, 0);
-    schedule.setHours(0, 0, 0, 0);
-  
-    const diffDays = Math.floor((schedule.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-  
-    if (item.combinedStatus === 'Pending' || item.combinedStatus === 'Opened') {
-      if (diffDays > 0) {
-        // Future date
-        return '#606060';
-      } else if (diffDays < 0) {
-        // Past date
-        return '#AC0003';
-      } else {
-        // Today
-        return '#FF0000';
-      }
-    }
-  
-    // Default color for Completed or other statuses
-    return '#415CFF';
+getDateColor(item: any): string {
+  const today = new Date();
+  const schedule = new Date(item.sheduleDate);
+
+  // Normalize both dates to midnight
+  today.setHours(0, 0, 0, 0);
+  schedule.setHours(0, 0, 0, 0);
+
+  const diffDays = Math.floor(
+    (schedule.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+  );
+
+  // Past dates
+  if (diffDays < 0) {
+    return '#800000'; // Maroon
   }
+
+  // Today
+  if (diffDays === 0) {
+    return '#FF0000'; // Red
+  }
+
+  // Tomorrow
+  if (diffDays === 1) {
+    return '#415CFF'; // Blue
+  }
+
+  // Day after tomorrow and beyond
+  return '#606060'; // Grey
+}
   
   removeWithin(time: string): string {
     return time ? time.replace('Within ', '') : time;
@@ -267,7 +271,7 @@ export class TargetProgressOngoingComponent implements OnInit {
           Swal.fire({
             icon: "success",
             title: "Downloaded",
-            text: "Please check your downloads folder",
+            text: "File Downloaded Successfully",
             customClass: {
               popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
               title: 'dark:text-white',

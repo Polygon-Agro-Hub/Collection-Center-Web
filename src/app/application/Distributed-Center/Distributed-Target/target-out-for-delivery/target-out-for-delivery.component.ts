@@ -174,9 +174,9 @@ const finalStr = `${fullDateStr} ${timeStr}`;
           a.href = url;
   
           if (this.selectStatus) {
-            a.download = `${this.centerName} OFD Orders on ${dateStr} filtered by ${this.selectStatus} Generated at ${day}/${monthNumber}/${year} ${timeStr}.xlsx`;
+            a.download = `${this.centerName} OFH Orders on ${dateStr} filtered by ${this.selectStatus} Generated at ${day}/${monthNumber}/${year} ${timeStr}.xlsx`;
           } else {
-            a.download = `${this.centerName} OFD Orders on ${dateStr} Generated at ${day}/${monthNumber}/${year} ${timeStr}.xlsx`;
+            a.download = `${this.centerName} OFH Orders on ${dateStr} Generated at ${day}/${monthNumber}/${year} ${timeStr}.xlsx`;
           }
   
           a.click();
@@ -185,7 +185,7 @@ const finalStr = `${fullDateStr} ${timeStr}`;
           Swal.fire({
             icon: "success",
             title: "Downloaded",
-            text: "Please check your downloads folder",
+            text: "File Downloaded Successfully",
             customClass: {
               popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
               title: 'dark:text-white',

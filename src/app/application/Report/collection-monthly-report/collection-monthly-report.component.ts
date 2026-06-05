@@ -150,16 +150,14 @@ export class CollectionMonthlyReportComponent implements OnInit {
   // Start date validation logic
   private validateStartDate(selectedDate: Date): boolean {
     const today = new Date();
-    today.setHours(23, 59, 59, 999); // Set to end of today for comparison
+    today.setHours(23, 59, 59, 999);
 
-    // Check if start date is in the future
     if (selectedDate > today) {
-      this.toastSrv.warning('<b>Start date</b> cannot be a future date.');
+      this.toastSrv.warning('<b>From Date</b> cannot be a future date.'); // ✅ changed
       this.startDate = this.formatDateToString(new Date());
       return false;
     }
 
-    // Check if end date is already selected and start date is after end date
     if (this.endDate && selectedDate > new Date(this.endDate)) {
       this.toastSrv.warning('<b>Start date</b> cannot be after the selected end date.');
       this.startDate = this.endDate;

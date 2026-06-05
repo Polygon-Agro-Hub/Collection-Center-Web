@@ -322,27 +322,11 @@ export class CollectionComponent implements OnInit {
           a.click();
           window.URL.revokeObjectURL(url);
 
-          Swal.fire({
-            icon: "success",
-            title: "Downloaded",
-            text: "File Downloaded Successfully",
-            customClass: {
-              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-              title: 'dark:text-white',
-            }
-          });
+          this.toastSrv.success('File Downloaded Successfully')
           this.isDownloading = false;
         },
         error: (error) => {
-          Swal.fire({
-            icon: "error",
-            title: "Download Failed",
-            text: error.message,
-            customClass: {
-              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-              title: 'dark:text-white',
-            }
-          });
+          this.toastSrv.error('File Download Failed')
           this.isDownloading = false;
         }
       });

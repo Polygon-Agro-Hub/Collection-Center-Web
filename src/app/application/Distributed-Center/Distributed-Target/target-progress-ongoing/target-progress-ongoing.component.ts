@@ -8,6 +8,7 @@ import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/
 import { ComplaintsService } from '../../../../services/Complaints-Service/complaints.service';
 import { CustomDatepickerComponent } from "../../../../components/custom-datepicker/custom-datepicker.component";
 import Swal from 'sweetalert2';
+import { ToastAlertService } from '../../../../services/toast-alert/toast-alert.service';
 
 @Component({
   selector: 'app-target-progress-ongoing',
@@ -43,7 +44,8 @@ export class TargetProgressOngoingComponent implements OnInit {
   constructor(
     private router: Router,
     private ComplainSrv: ComplaintsService,
-    private DistributionSrv: DistributionServiceService
+    private DistributionSrv: DistributionServiceService,
+    private toastSrv: ToastAlertService
   ) { }
 
 
@@ -268,27 +270,12 @@ getDateColor(item: any): string {
           a.click();
           window.URL.revokeObjectURL(url);
 
-          Swal.fire({
-            icon: "success",
-            title: "Downloaded",
-            text: "File Downloaded Successfully",
-            customClass: {
-              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-              title: 'dark:text-white',
-            }
-          });
+          this.toastSrv.success('File Downloaded Successfully.');
           this.isDownloading = false;
         },
         error: (error) => {
-          Swal.fire({
-            icon: "error",
-            title: "Download Failed",
-            text: error.message,
-            customClass: {
-              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-              title: 'dark:text-white',
-            }
-          });
+        
+        this.toastSrv.error('File Download Failed.');
           this.isDownloading = false;
         }
       });

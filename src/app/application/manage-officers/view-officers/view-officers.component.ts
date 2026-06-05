@@ -271,7 +271,7 @@ export class ViewOfficersComponent implements OnInit {
     }
 
     const rejectButton = (item.status === 'Approved' || item.status === 'Not Approved')
-      ? `<button id="rejectButton" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg mr-2">
+      ? `<button id="rejectButton" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg mr-2 focus:outline-none">
        Reject
      </button>`
       : '';

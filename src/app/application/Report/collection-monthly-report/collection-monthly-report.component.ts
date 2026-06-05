@@ -179,14 +179,14 @@ export class CollectionMonthlyReportComponent implements OnInit {
     }
 
     if (selectedDate > today) {
-      this.toastSrv.error('<b>End date cannot be a future date.');
+      this.toastSrv.warning('<b>To date cannot be a future date.');
       this.endDate = this.formatDateToString(new Date());
       return false;
     }
 
     // Check if end date is before start date
     if (selectedDate < new Date(this.startDate)) {
-      this.toastSrv.warning('<b>End date</b> cannot be before the start date.');
+      this.toastSrv.warning('The To Date cannot be earlier than or same as the From Date.');
       return false;
     }
 

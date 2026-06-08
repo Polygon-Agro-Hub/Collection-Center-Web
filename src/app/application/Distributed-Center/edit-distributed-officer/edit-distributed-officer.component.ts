@@ -574,7 +574,7 @@ export class EditDistributedOfficerComponent implements OnInit {
             if (res && res.message) {
               // Success response from backend
               this.toastSrv.success(`${this.personalData.jobRole} Profile Updated Successfully`);
-              this.router.navigate(['/distribution-officers']);
+              this.redirectToPreviousPage();
             } else {
               // Handle unexpected format
               this.toastSrv.error('Something went wrong while updating.');
@@ -651,7 +651,7 @@ export class EditDistributedOfficerComponent implements OnInit {
             if (res && res.message) {
               // Success response from backend
               this.toastSrv.success(`${this.personalData.jobRole} Profile Updated Successfully`);
-              this.router.navigate(['/distribution-officers']);
+              this.redirectToPreviousPage();
             } else {
               // Handle unexpected format
               this.toastSrv.error('Something went wrong while updating.');
@@ -703,6 +703,26 @@ export class EditDistributedOfficerComponent implements OnInit {
           }
         );
       }
+    }
+  }
+
+  // Add this new method for redirecting based on URL
+  redirectToPreviousPage(): void {
+    const currentUrl = this.router.url;
+    
+    // Check if we came from center-dashboard or distribution-officers
+    if (currentUrl.includes('/distribution-center/center-dashboard')) {
+      // Navigate to center dashboard
+      this.router.navigate(['/distribution-center/center-dashboard', this.centerId]);
+    } else if (currentUrl.includes('/distribution-officers')) {
+      // Navigate to distribution officers page
+      this.router.navigate(['/distribution-officers']);
+    } else if (currentUrl.includes('/centers/center-dashboard')) {
+      // Alternative path for center dashboard
+      this.router.navigate(['/centers/center-dashboard', this.centerId]);
+    } else {
+      // Default fallback - go back in history
+      this.location.back();
     }
   }
 

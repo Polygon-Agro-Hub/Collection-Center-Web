@@ -10,14 +10,14 @@
 <div *ngIf="!isLoading" class="w-full overflow-x-auto px-10 py-7 bg-tileLight shadow-lg rounded-lg dark:bg-[#363636]">
     <div class="flex flex-row items-center justify-between min-w-max">
         <div class="h-[100px]"> <!-- Set a fixed height to prevent layout shifts -->
-            <ng-container *ngIf="hasData">
+            <ng-container >
                 <p class="font-semibold text-black text-base dark:text-white">
                     Centre: {{ centerName }}
                 </p>
                 <p class="font-semibold text-black text-base dark:text-white">
-                    Market price on {{ priceListArr[0].createdAt | date: 'yyyy/MM/dd' }}
+                    Market price on {{ today | date: 'yyyy/MM/dd' }}
                 </p>
-                <p class="font-semibol text-[#636D81] text-sm mt-1 dark:text-textDark">
+                <p *ngIf="hasData" class="font-semibol text-[#636D81] text-sm mt-1 dark:text-textDark">
                     Last upload at {{ priceListArr[0].createdAt | date: 'hh:mm a' }} on {{ priceListArr[0].createdAt |
                     date: 'yyyy/MM/dd' }}
                 </p>
@@ -109,33 +109,33 @@
 
     <div *ngIf="hasData" class=" min-w-max overflow-hidden mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
         <table class="w-full min-w-max divide-y-2 overflow-hidden">
-            <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
+            <thead class=" text-[#000000] text-base dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
                 <tr>
-                    <th class="px-6 py-3 text-left text-sm font-medium">No</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium">Crop Name</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium">Variety Name</th>
-                    <th class="px-8 py-3  text-center text-sm font-medium">Grade</th>
-                    <th class="px-6 w-44 py-3  text-left text-sm font-medium">Average Price (Rs.)</th>
-                    <th class="px-6 py-3  text-center text-sm font-medium">Price (Rs.)</th>
+                    <th class="px-6 py-3 text-left text-[#000000] text-base font-medium">No</th>
+                    <th class="px-6 py-3 text-left text-[#000000] text-base font-medium">Crop Name</th>
+                    <th class="px-6 py-3 text-left text-[#000000] text-base font-medium">Variety Name</th>
+                    <th class="px-8 py-3  text-center text-[#000000] text-base font-medium">Grade</th>
+                    <th class="px-6 w-44 py-3  text-left text-[#000000] text-base font-medium">Average Price (Rs.)</th>
+                    <th class="px-6 py-3  text-center text-[#000000] text-base font-medium">Price (Rs.)</th>
 
                 </tr>
             </thead>
             <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
                 <tr
                     *ngFor="let item of priceListArr | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index">
-                    <td class="px-6 py-3 text-sm text-gray-900 dark:text-[#C5C5C5]">
+                    <td class="px-6 py-3 text-[#000000] text-base dark:text-[#C5C5C5]">
                         {{
                           ((page - 1) * itemsPerPage + i + 1) < 10
                             ? '0' + ((page - 1) * itemsPerPage + i + 1)
                             : ((page - 1) * itemsPerPage + i + 1)
                         }}
                     </td>
-                    <td class="px-6 py-3 text-sm text-gray-900 dark:text-[#C5C5C5]">{{ item.cropNameEnglish }}</td>
-                    <td class="px-6 py-3 text-sm text-gray-900 dark:text-[#C5C5C5]">{{ item.varietyNameEnglish }}</td>
-                    <td class="px-8 py-3 text-center text-sm text-gray-900 dark:text-[#C5C5C5]">{{ item.grade }}</td>
-                    <td class="pl-6 w-44 py-3 text-sm text-gray-900 dark:text-[#C5C5C5]">{{ item.averagePrice | number:
+                    <td class="px-6 py-3 text-[#000000] text-base dark:text-[#C5C5C5]">{{ item.cropNameEnglish }}</td>
+                    <td class="px-6 py-3 text-[#000000] text-base dark:text-[#C5C5C5]">{{ item.varietyNameEnglish }}</td>
+                    <td class="px-8 py-3 text-center text-[#000000] text-base dark:text-[#C5C5C5]">{{ item.grade }}</td>
+                    <td class="pl-6 w-44 py-3 text-[#000000] text-base dark:text-[#C5C5C5]">{{ item.averagePrice | number:
                         '1.2-2' }}</td>
-                    <td class="px-6 py-3 text-center text-sm text-gray-900 dark:text-[#C5C5C5]">{{ item.updatedPrice | number:
+                    <td class="px-6 py-3 text-center text-[#000000] text-base dark:text-[#C5C5C5]">{{ item.updatedPrice | number:
                         '1.2-2' }}</td>
 
                 </tr>

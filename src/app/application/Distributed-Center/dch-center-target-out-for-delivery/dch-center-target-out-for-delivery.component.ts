@@ -171,7 +171,7 @@ export class DchCenterTargetOutForDeliveryComponent implements OnInit {
   const statusPart = this.selectStatus ? ` filtered by ${this.selectStatus}` : '';
 
   // Final filenameFV
-  const fileName = `${this.regCode} OFD Orders${datePart}${statusPart} Generated at ${generatedAt}.xlsx`;
+  const fileName = `${this.regCode} OFH Orders${datePart}${statusPart} Generated at ${generatedAt}.xlsx`;
 
   this.DistributionSrv
     .downloadDCHOutForDeliveryTargetProgressReport(this.selectStatus, this.date, this.searchText, this.centerId!)
@@ -183,31 +183,15 @@ export class DchCenterTargetOutForDeliveryComponent implements OnInit {
         a.download = fileName;
         a.click();
         window.URL.revokeObjectURL(url);
-        Swal.fire({
-          icon: 'success',
-          title: 'Downloaded',
-          text: 'Please check your downloads folder',
-          customClass: {
-            popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-            title: 'dark:text-white',
-          }
-        });
+        this.toastSrv.success('File Downloaded Successfully')
         this.isDownloading = false;
       },
       error: (error) => {
-        Swal.fire({
-          icon: 'error',
-          title: 'Download Failed',
-          text: error.message,
-          customClass: {
-            popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-            title: 'dark:text-white',
-          }
-        });
+        this.toastSrv.error('File Download Failed');
         this.isDownloading = false;
       }
     });
-}
+  }
 
   removeWithin(time: string): string {
     return time ? time.replace('Within ', '') : time;

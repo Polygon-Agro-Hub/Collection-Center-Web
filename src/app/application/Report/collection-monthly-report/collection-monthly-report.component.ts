@@ -150,16 +150,14 @@ export class CollectionMonthlyReportComponent implements OnInit {
   // Start date validation logic
   private validateStartDate(selectedDate: Date): boolean {
     const today = new Date();
-    today.setHours(23, 59, 59, 999); // Set to end of today for comparison
+    today.setHours(23, 59, 59, 999);
 
-    // Check if start date is in the future
     if (selectedDate > today) {
-      this.toastSrv.warning('<b>Start date</b> cannot be a future date.');
+      this.toastSrv.warning('<b>From Date</b> cannot be a future date.'); // ✅ changed
       this.startDate = this.formatDateToString(new Date());
       return false;
     }
 
-    // Check if end date is already selected and start date is after end date
     if (this.endDate && selectedDate > new Date(this.endDate)) {
       this.toastSrv.warning('<b>Start date</b> cannot be after the selected end date.');
       this.startDate = this.endDate;
@@ -181,14 +179,14 @@ export class CollectionMonthlyReportComponent implements OnInit {
     }
 
     if (selectedDate > today) {
-      this.toastSrv.error('<b>End date cannot be a future date.');
+      this.toastSrv.warning('<b>To date cannot be a future date.');
       this.endDate = this.formatDateToString(new Date());
       return false;
     }
 
     // Check if end date is before start date
     if (selectedDate < new Date(this.startDate)) {
-      this.toastSrv.warning('<b>End date</b> cannot be before the start date.');
+      this.toastSrv.warning('The To Date cannot be earlier than or same as the From Date.');
       return false;
     }
 
@@ -336,6 +334,7 @@ this.farmerDataArr.forEach(row => {
     // Save the PDF
     const fileName = `Monthly Report_${this.officerDataObj.empId}_From ${this.startDate} To ${this.endDate}.pdf`;
     doc.save(fileName);
+    this.toastSrv.success('File Downloaded Successfully')
 
   }
 

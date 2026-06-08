@@ -24,6 +24,8 @@ export class
   hasData: boolean = true;
   centerName: string = ''
 
+  today = new Date();
+
   selectGrade: string = '';
   searchText: string = '';
 
@@ -64,7 +66,7 @@ export class
     ).subscribe({
       next: (res) => {
         this.priceListArr = res.items || [];
-        this.centerName = res.centerName;
+        this.centerName = res.centerData[0].centerName;
         console.log('centerName', this.centerName);
         this.totalItems = res.total || 0;
   

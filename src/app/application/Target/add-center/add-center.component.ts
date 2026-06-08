@@ -8,11 +8,12 @@ import Swal from 'sweetalert2';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { Location } from '@angular/common';
 import { Country, COUNTRIES } from '../../../../assets/country-data';
+import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
 
 @Component({
   selector: 'app-add-center',
   standalone: true,
-  imports: [CommonModule, FormsModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent, SerchableDropdownComponent],
   templateUrl: './add-center.component.html',
   styleUrl: './add-center.component.css'
 })
@@ -28,16 +29,11 @@ export class AddCenterComponent implements OnInit {
 
 
   provinces: string[] = [
-    'Western',
-    'Central',
-    'Southern',
-    'Northern',
-    'Eastern',
-    'North Western',
-    'North Central',
-    'Uva',
-    'Sabaragamuwa'
+    'Western', 'Central', 'Southern', 'Northern', 'Eastern',
+    'North Western', 'North Central', 'Uva', 'Sabaragamuwa'
   ];
+
+  provinceItems = this.provinces.map(p => ({ value: p, label: p }));
 
   allowedPrefixes = ['70', '71', '72', '75', '76', '77', '78'];
   isPhoneInvalidMap: { [key: string]: boolean } = {
@@ -73,6 +69,9 @@ export class AddCenterComponent implements OnInit {
     { name: 'Trincomalee', province: 'Eastern' },
     { name: 'Vavuniya', province: 'Northern' },
   ];
+
+  districtItems = this.allDistricts.map(d => ({ value: d.name, label: d.name }));
+  filteredDistrictItems = [...this.districtItems];
 
   // Districts filtered by selected province
   filteredDistricts: { name: string, province: string }[] = [];
@@ -118,34 +117,20 @@ getFlagUrl(code: string): string {
   return `https://flagcdn.com/24x18/${code}.png`;
 }
 
-  // Update the filtered districts based on selected province
-  updateFilteredDistricts() {
-    if (this.centerData.province) {
-      this.filteredDistricts = this.allDistricts.filter(d => d.province === this.centerData.province);
+  updateFilteredDistricts(province?: string) {
+    if (province) {
+      this.filteredDistricts = this.allDistricts.filter(d => d.province === province);
     } else {
       this.filteredDistricts = this.allDistricts;
     }
-    this.centerData.district = ''; // Clear district selection when province changes
+    this.filteredDistrictItems = this.filteredDistricts.map(d => ({ value: d.name, label: d.name }));
+    this.centerData.district = '';
     this.updateRegCode();
   }
 
   
 
-  // When district is selected, automatically set the province
-  filterDistrict() {
-    if (this.centerData.district) {
-      const selectedDistrict = this.allDistricts.find(d => d.name === this.centerData.district);
-      if (selectedDistrict) {
-        // Update the province based on the selected district
-        this.centerData.province = selectedDistrict.province;
-
-        // Update filtered districts for the selected province
-        this.filteredDistricts = this.allDistricts.filter(d => d.province === this.centerData.province);
-      }
-    }
-  }
-
-  validateSriLankanPhone(input: string, key: string): void {
+validateSriLankanPhone(input: string, key: string): void {
     if (!input) {
       this.isPhoneInvalidMap[key] = false;
       return;
@@ -407,7 +392,16 @@ getFlagUrl(code: string): string {
   }
 
   onDistrictChange(newDistrict: string) {
-    console.log('District changed to:', newDistrict);
+    if (newDistrict) {
+      const found = this.allDistricts.find(d => d.name === newDistrict);
+      if (found) {
+        this.centerData.province = found.province;
+        setTimeout(() => {
+          this.filteredDistricts = this.allDistricts.filter(d => d.province === found.province);
+          this.filteredDistrictItems = this.filteredDistricts.map(d => ({ value: d.name, label: d.name }));
+        });
+      }
+    }
     this.updateRegCode();
   }
 

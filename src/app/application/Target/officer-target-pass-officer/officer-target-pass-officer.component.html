@@ -23,9 +23,9 @@
             </div>
 
             <div>
-                <label for="todo" class="block text-sm font-semibold text-[#534E4E] dark:text-textDark">The maximum
-                    amount
-                    you can pass (kg) :</label>
+                <label for="todo" class="block text-sm font-semibold text-[#534E4E] dark:text-textDark">The Maximum
+                    Amount
+                    You Can Pass (kg) :</label>
                 <input id="todo" [value]="targetObj.todo" disabled
                     class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
             </div>
@@ -39,10 +39,10 @@
                     Select Short Stock Assignee :
                 </label>
 
-                <app-searchable-dropdown [items]="officerDropdownItems" placeholder="Select Officer"
+                <app-searchable-dropdown [items]="officerDropdownItems" placeholder="--Select Officer--"
                     searchPlaceholder="Search Officers..." [(ngModel)]="selectedOfficerId"
                     (selectionChange)="onOfficerSelectionChange($event)" [clearable]="true" [showSelected]="true"
-                    [disabled]="false" class="block w-full mb-4"></app-searchable-dropdown>
+                    [disabled]="false" class="block w-full mb-4" borderClass="border-gray-300 border-[1px]"></app-searchable-dropdown>
 
 
             </div>

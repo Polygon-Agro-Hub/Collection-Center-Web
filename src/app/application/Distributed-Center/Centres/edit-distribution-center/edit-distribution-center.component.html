@@ -57,7 +57,7 @@
             <div *ngIf="dropdownOpen"
               class="absolute left-0 mt-1 w-full border border-gray-300 rounded-md bg-white dark:bg-[#1D1D1F] z-10 max-h-40 overflow-y-auto">
               <div *ngFor="let country of countries"
-                class="flex items-center gap-2 p-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
+                class="flex items-center gap-2 p-2  dark:hover:bg-gray-700 cursor-pointer"
                 (click)="selectCountry1(country)">
                 <img [src]="getFlagUrl(country.code)" width="24" height="18" alt="{{ country.name }}" />
                 <span class="dark:text-white">{{ country.dialCode }}</span>
@@ -65,7 +65,7 @@
             </div>
           </div>
           <input id="phoneNumber01" name="phoneNumber01" type="tell" [(ngModel)]="centerData.phoneNumber01"
-            class="block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-r-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+            class="block w-full p-2 border border-gray-300  rounded-r-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
             placeholder="Enter your contact number" #phoneNumber01Input="ngModel" required
             (ngModelChange)="validateSriLankanPhone($event, 'phone01')" pattern="^[0-9]{9}$" minlength="9" maxlength="9"
             (keypress)="($event.charCode >= 48 && $event.charCode <= 57) ? true : $event.preventDefault()" />
@@ -106,7 +106,7 @@
             <div *ngIf="dropdownOpen2"
               class="absolute left-0 mt-1 w-full border border-gray-300 rounded-md bg-white dark:bg-[#1D1D1F] z-10 max-h-40 overflow-y-auto">
               <div *ngFor="let country of countries"
-                class="flex items-center gap-2 p-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
+                class="flex items-center gap-2 p-2  dark:hover:bg-gray-700 cursor-pointer"
                 (click)="selectCountry2(country)">
                 <img [src]="getFlagUrl(country.code)" width="24" height="18" alt="{{ country.name }}" />
                 <span class="dark:text-white">{{ country.dialCode }}</span>
@@ -115,7 +115,7 @@
           </div>
           <input id="phoneNumber02" name="phoneNumber02" type="tell" #phoneNumber02Input="ngModel"
             [(ngModel)]="centerData.phoneNumber02"
-            class="block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-r-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+            class="block w-full p-2 border border-gray-300  rounded-r-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
             placeholder="Enter your contact number" pattern="^[0-9]{9}$" minlength="9" maxlength="9" maxlength="9"
             (ngModelChange)="validateSriLankanPhone($event, 'phone02')"
             (keypress)="($event.charCode >= 48 && $event.charCode <= 57) ? true : $event.preventDefault()" />
@@ -129,7 +129,7 @@
         <div
           *ngIf="centerData.phoneNumber02 && centerData.phoneNumber02 === centerData.phoneNumber01 && !isPhoneInvalidMap['phone02'] && !phoneNumber02Input.invalid"
           class="text-red-500 text-sm mt-1">
-          Contact Number - 02 should be different from Phone Number - 1.
+          Contact Number - 02 should be different from Contact Number - 01.
         </div>
 
         <div *ngIf="isPhoneInvalidMap['phone02'] && centerData.phoneNumber02" class="text-red-500 text-sm mt-1">
@@ -173,7 +173,7 @@
         <input type="email" id="email" name="email" [(ngModel)]="centerData.email" #email="ngModel" required
           pattern="^[a-zA-Z0-9](\.?[a-zA-Z0-9_%+-])*@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
           (input)="onTrimInput($event, centerData, 'email')"
-          class="mt-1 block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
+          class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
 
         <div *ngIf="email.touched && !centerData.email" class="text-red-500 text-sm mt-1">
           Email is required

@@ -273,11 +273,9 @@ getScheduleClass(item: any): string {
   // Case 2: Schedule date is today → check slot
   if (scheduleOnlyDate.getTime() === nowDate.getTime()) {
     let upperLimitHour = 0;
-    if (item.sheduleTime.includes('8-12')) {
-      upperLimitHour = 12;
-    } else if (item.sheduleTime.includes('12-4')) {
-      upperLimitHour = 16;
-    } else if (item.sheduleTime.includes('4-8')) {
+    if (item.sheduleTime.includes('8AM - 2PM')) {
+      upperLimitHour = 14;
+    } else if (item.sheduleTime.includes('2PM - 8PM')) {
       upperLimitHour = 20;
     }
     const upperLimit = new Date(now);

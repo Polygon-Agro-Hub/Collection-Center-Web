@@ -231,38 +231,55 @@ ngOnInit(): void {
 
   }
 
-  checkFromDate(date: string | Date | null) {
-    const selectedDate = date as string || '';
-    
-    this.OfficerObj.fromDate = selectedDate;
-    console.log('from date', this.OfficerObj.fromDate)
+  private isValidDate(dateStr: string): boolean {
+  const [year, month, day] = dateStr.split('-').map(Number);
+  const selected = new Date(year, month - 1, day); // local time, no timezone shift
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
+  return selected <= today;
 }
 
-  checkToDate(date: string | Date | null) {
 
-    const selectedDate = date as string || '';
-    this.OfficerObj.toDate = selectedDate;
+  checkFromDate(date: string | Date | null) {
+  const selectedDate = date as string || '';
 
-    if (!this.OfficerObj.fromDate) {
-      if (this.toDatePicker) {
-        this.toDatePicker.selectedDate = null;
-      }
-      this.toastSrv.warning('Please select the "From" date first.');
-      this.OfficerObj.toDate = '';
-      return;
-    }
-
-    const from = new Date(this.OfficerObj.fromDate);
-    const to = new Date(this.OfficerObj.toDate);
-
-    if (to < from) {
-      this.toastSrv.warning('"To" date cannot be earlier than "From" date.');
-      if (this.toDatePicker) {
-        this.toDatePicker.selectedDate = null;
-      }
-      this.OfficerObj.toDate = '';
-    }
+  if (selectedDate && !this.isValidDate(selectedDate)) {
+    this.toastSrv.warning('From Date cannot be a future date.');
+    if (this.fromDatePicker) this.fromDatePicker.selectedDate = null;
+    this.OfficerObj.fromDate = '';
+    return;
   }
+
+  this.OfficerObj.fromDate = selectedDate;
+}
+
+checkToDate(date: string | Date | null) {
+  const selectedDate = date as string || '';
+  this.OfficerObj.toDate = selectedDate;
+
+  if (!this.OfficerObj.fromDate) {
+    this.toastSrv.warning('Please select the "From" date first.');
+    if (this.toDatePicker) this.toDatePicker.selectedDate = null;
+    this.OfficerObj.toDate = '';
+    return;
+  }
+
+  if (selectedDate && !this.isValidDate(selectedDate)) {
+    this.toastSrv.warning('To Date cannot be a future date.');
+    if (this.toDatePicker) this.toDatePicker.selectedDate = null;
+    this.OfficerObj.toDate = '';
+    return;
+  }
+
+  const from = new Date(this.OfficerObj.fromDate);
+  const to = new Date(this.OfficerObj.toDate);
+
+  if (to < from) {
+    this.toastSrv.warning('"To" date cannot be earlier than "From" date.');
+    if (this.toDatePicker) this.toDatePicker.selectedDate = null;
+    this.OfficerObj.toDate = '';
+  }
+}
 
   editOfficerTarget(id: number, toDate: string, fromDate: string, officerId: string, empId: string) {
     console.log('officerObj', this.OfficerObj)
@@ -317,7 +334,7 @@ ngOnInit(): void {
           a.click();
           window.URL.revokeObjectURL(url);
 
-          this.toastSrv.success('Please check your downloads folder')
+          this.toastSrv.success('File Downloaded Successfully')
           this.isDownloading = false;
         },
         error: (error) => {

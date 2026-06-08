@@ -14,6 +14,7 @@ import { TokenServiceService } from '../../../services/Token/token-service.servi
 import { ProcurementsService } from '../../../services/Procurement-service/procurements.service';
 import { CustomDatepickerComponent } from '../../../components/custom-datepicker/custom-datepicker.component';
 import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
+import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 
 interface PurchaseReport {
   id: number;
@@ -79,7 +80,8 @@ export class RecievedOrdersComponent {
   constructor(
     private procumentService: ProcurementsService,
     private router: Router,
-    public tokenService: TokenServiceService
+    public tokenService: TokenServiceService,
+    private toastSrv: ToastAlertService
   ) { }
 
   ngOnInit() {
@@ -481,18 +483,10 @@ export class RecievedOrdersComponent {
       link.click();
       document.body.removeChild(link);
 
-      Swal.fire({
-        icon: 'success',
-        title: 'Downloaded',
-        text: 'Please check your downloads folder',
-        customClass: {
-          popup: 'bg-tileLight dark:bg-tileBlack text-black dark:text-white',
-          title: 'font-semibold',
-        }
-      });
+      this.toastSrv.success('File Downloaded Successfully.');
     } else {
       // Fallback for older browsers
-      window.open(URL.createObjectURL(data));
+      this.toastSrv.error('File Download Failed.');
     }
 
     this.isDownloading = false;

@@ -7,6 +7,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
 import { ComplaintsService } from '../../../../services/Complaints-Service/complaints.service';
 import Swal from 'sweetalert2';
+import { ToastAlertService } from '../../../../services/toast-alert/toast-alert.service';
 
 
 @Component({
@@ -47,7 +48,8 @@ export class TargetOutForDeliveryComponent implements OnInit {
   constructor(
     private router: Router,
     private ComplainSrv: ComplaintsService,
-    private DistributionSrv: DistributionServiceService
+    private DistributionSrv: DistributionServiceService,
+    private toastSrv: ToastAlertService
   ) { }
 
 
@@ -174,35 +176,20 @@ const finalStr = `${fullDateStr} ${timeStr}`;
           a.href = url;
   
           if (this.selectStatus) {
-            a.download = `${this.centerName} OFD Orders on ${dateStr} filtered by ${this.selectStatus} Generated at ${day}/${monthNumber}/${year} ${timeStr}.xlsx`;
+            a.download = `${this.centerName} OFH Orders on ${dateStr} filtered by ${this.selectStatus} Generated at ${day}/${monthNumber}/${year} ${timeStr}.xlsx`;
           } else {
-            a.download = `${this.centerName} OFD Orders on ${dateStr} Generated at ${day}/${monthNumber}/${year} ${timeStr}.xlsx`;
+            a.download = `${this.centerName} OFH Orders on ${dateStr} Generated at ${day}/${monthNumber}/${year} ${timeStr}.xlsx`;
           }
   
           a.click();
           window.URL.revokeObjectURL(url);
   
-          Swal.fire({
-            icon: "success",
-            title: "Downloaded",
-            text: "Please check your downloads folder",
-            customClass: {
-              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-              title: 'dark:text-white',
-            }
-          });
+          this.toastSrv.success('File Downloaded Successfully.');
           this.isDownloading = false;
         },
         error: (error) => {
-          Swal.fire({
-            icon: "error",
-            title: "Download Failed",
-            text: error.message,
-            customClass: {
-              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-              title: 'dark:text-white',
-            }
-          });
+        
+        this.toastSrv.error('File Download Failed.');
           this.isDownloading = false;
         }
       });

@@ -327,7 +327,7 @@ passTargetToBackEnd() {
         const orderLabel = this.selectedOrderIds.length === 1 ? 'order' : 'orders';
         // Get the empId if officer exists
         const empId = selectedOfficer ? selectedOfficer.empId : 'Unknown';
-        this.toastSrv.success(`${orderCount} ${orderLabel} successfully passed to ${empId}!`, 'Success');
+        this.toastSrv.success(`${orderCount} ${orderLabel} successfully passed to ${empId}`, 'Success');
         this.fetchSelectedOfficerTargets()
         this.isPass = false;
         this.isPassTarget = false;

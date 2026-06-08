@@ -149,6 +149,18 @@ export class DownloadTargetComponent {
     dateString = newDate;
   }
 
+  const today = new Date();
+today.setHours(0, 0, 0, 0);
+
+const [y, m, d] = dateString.split('-').map(Number);
+const selectedFrom = new Date(y, m - 1, d);
+
+if (selectedFrom > today) {
+  this.fromDate = '';
+  this.toastSrv.warning("From Date cannot be a future date.");
+  return;
+}
+
   // ✅ Save fromDate FIRST, before any early returns
   this.fromDate = dateString;
 
@@ -167,44 +179,51 @@ export class DownloadTargetComponent {
   }
 }
 
-  onDateToDateChange(newDate: string | Date | null) {
-    let dateString: string;
-  
-    if (!newDate) {
-      
-      return
-    } 
-    else if (newDate instanceof Date) {
-      
-      dateString = newDate.toISOString().split('T')[0];
-    } 
-    else {
-      
-      dateString = newDate;
-    }
+onDateToDateChange(newDate: string | Date | null) {
+  let dateString: string;
 
-    this.toDate = dateString;
-
-    if (!this.fromDate) {
-      this.toDate = ''; // Reset toDate
-      newDate = ''
-      this.toastSrv.warning("Please select the 'From' date first.");
-      return;
-    }
-
-    // Case 2: toDate is earlier than fromDate
-    if (this.toDate) {
-      const from = new Date(this.fromDate);
-      const to = new Date(this.toDate);
-
-      if (to <= from) {
-        this.toDate = ''; // Reset toDate
-        newDate = ''
-        this.toastSrv.warning("The 'To' date cannot be earlier than or same to the 'From' date.");
-      }
-    }
-
+  if (!newDate) {
+    return;
+  } else if (newDate instanceof Date) {
+    dateString = newDate.toISOString().split('T')[0];
+  } else {
+    dateString = newDate;
   }
+
+  // ✅ Validate: To Date cannot be a future date
+  const today = new Date();
+today.setHours(0, 0, 0, 0);
+
+const [y, m, d] = dateString.split('-').map(Number);
+const selectedTo = new Date(y, m - 1, d);
+
+if (selectedTo > today) {
+  this.toDate = '';
+  this.toastSrv.warning("To Date cannot be a future date.");
+  return;
+}
+
+  this.toDate = dateString;
+
+  if (!this.fromDate) {
+    this.toDate = '';
+    newDate = '';
+    this.toastSrv.warning("Please select the 'From' date first.");
+    return;
+  }
+
+  // Case 2: toDate is earlier than fromDate
+  if (this.toDate) {
+    const from = new Date(this.fromDate);
+    const to = new Date(this.toDate);
+
+    if (to <= from) {
+      this.toDate = '';
+      newDate = '';
+      this.toastSrv.warning("The 'To' date cannot be earlier than or same to the 'From' date.");
+    }
+  }
+}
 
 
   goBtn() {
@@ -276,7 +295,7 @@ export class DownloadTargetComponent {
 
     const data: Blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
     saveAs(data, `Target-Report (${this.fromDate} - ${this.toDate}).xlsx`);
-    this.toastSrv.success(`Downloaded Successfully`);
+    this.toastSrv.success(`File Downloaded Successfully`);
   }
 
 }

@@ -26,23 +26,23 @@
       </p>
     </div>
 
-    <!-- Registration Code -->
     <div>
-      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Collection Centre Reg Code</label>
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Country *</label>
+      
       <input
         type="text"
         class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-        [(ngModel)]="centerData.regCode"
-        name="regCode"
-        placeholder=" ----- "
+        [(ngModel)]="centerData.country"
+        name="country"
         required
-        #regCode="ngModel"
+        #country="ngModel"
+        readonly
       />
-      <p *ngIf="regCode.invalid && regCode.touched" class="text-red-500 text-sm">
-        Registration Code is required.
+      
+      <p *ngIf="country.invalid && country.touched" class="text-red-500 text-sm">
+        Country is required.
       </p>
     </div>
-    
 
     <div>
       <label for="phoneNumber01" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
@@ -147,24 +147,6 @@
       </div>
 </div>
 
-<div>
-      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Country *</label>
-      
-      <input
-        type="text"
-        class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-        [(ngModel)]="centerData.country"
-        name="country"
-        required
-        #country="ngModel"
-        readonly
-      />
-      
-      <p *ngIf="country.invalid && country.touched" class="text-red-500 text-sm">
-        Country is required.
-      </p>
-    </div>
-
     <!-- Province -->
     <div>
       <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Province *</label>
@@ -173,13 +155,14 @@
       <div class="w-full">
         <app-searchable-dropdown
             [items]="provinceItems"
-            [placeholder]="'Province'"
+            [placeholder]="'--Select a Province--'"
             [searchPlaceholder]="'Search provinces...'"
             [clearable]="true"
             [showSelected]="true"
             id="province" name="province"
             [(ngModel)]="centerData.province"
             #provinceInput="ngModel"
+            borderClass="border border-gray-300"
             (selectionChange)="onProvinceChange($event)">
         </app-searchable-dropdown>
     </div>
@@ -195,13 +178,14 @@
       <div class="w-full">
                         <app-searchable-dropdown
                             [items]="districtItems"
-                            [placeholder]="'District'"
+                            [placeholder]="'--Select a District--'"
                             [searchPlaceholder]="'Search districts...'"
                             [clearable]="true"
                             [showSelected]="true"
                             id="district" name="district"
                             [(ngModel)]="centerData.district"
                             #districtInput="ngModel"
+                            borderClass="border border-gray-300"
                             (selectionChange)="onDistrictChange($event)">
                         </app-searchable-dropdown>
                     </div>
@@ -255,6 +239,23 @@
       />
       <p *ngIf="city.invalid && city.touched" class="text-red-500 text-sm">
         City is required.
+      </p>
+    </div>
+
+    <!-- Registration Code -->
+    <div>
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Collection Centre Reg Code</label>
+      <input
+        type="text"
+        class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+        [(ngModel)]="centerData.regCode"
+        name="regCode"
+        placeholder=" ----- "
+        required
+        #regCode="ngModel"
+      />
+      <p *ngIf="regCode.invalid && regCode.touched" class="text-red-500 text-sm">
+        Registration Code is required.
       </p>
     </div>
     

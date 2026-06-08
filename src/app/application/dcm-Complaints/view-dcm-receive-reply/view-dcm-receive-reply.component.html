@@ -64,17 +64,15 @@
         </div>
 
         <div class="flex justify-center gap-6 mt-6">
-            <button class="font-semibold border-[1px] shadow-lg px-4 py-2 rounded-lg"
-                [ngClass]="{
-                    'bg-[#F6F7F9] dark:bg-[#8b8b8b] text-[#414142] dark:text-white': compalintObj.reply === null,
-                    'bg-gray-300 dark:bg-gray-500 text-gray-500 dark:text-gray-300 cursor-not-allowed': compalintObj.reply !== null}" [disabled]="compalintObj.reply !== null"
-                (click)="forwordComplain()">
-                Forward
-            </button>
-            <button class="bg-[#415CFF] text-white font-semibold px-7 py-2 rounded-lg shadow-lg" (click)="replyBtn()">
-                Reply
-            </button>
-        </div>
+    <button *ngIf="compalintObj.reply === null" 
+            class="font-semibold border-[1px] shadow-lg px-4 py-2 rounded-lg bg-[#F6F7F9] dark:bg-[#8b8b8b] text-[#414142] dark:text-white"
+            (click)="forwordComplain()">
+        Forward
+    </button>
+    <button class="bg-[#415CFF] text-white font-semibold px-7 py-2 rounded-lg shadow-lg" (click)="replyBtn()">
+        Reply
+    </button>
+</div>
     </div>
 
     <div *ngIf="isReplyView" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">

@@ -67,7 +67,7 @@ export class DchComplaintsComponent implements OnInit {
     this.DistributionComplaintsSrv.submitDCHComplaint(formData).subscribe(
       (response) => {
         if (response.status) {
-          this.toastSrv.success('Your complaint has been submitted successfully!');
+          this.toastSrv.success('Your Complaint was submitted');
           this.isAddComplaintOpen = false;
           this.category = '';
           this.complaint = '';

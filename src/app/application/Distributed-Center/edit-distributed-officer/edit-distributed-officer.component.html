@@ -118,7 +118,7 @@
                       
                           <!-- List -->
                           <div *ngFor="let item of filteredCenterArr"
-                               class="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 bg-white dark:text-textDark cursor-pointer"
+                               class="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 bg-white dark:text-textDark cursor-pointer dark:bg-[#1D1D1F]"
                                (click)="selectCenter(item)">
                                {{item.regCode}} - {{ item.centerName }}
                           </div>
@@ -165,7 +165,7 @@
                         <div
                           *ngFor="let role of jobRoles"
                           (click)="getJobRole(role)"
-                          class="p-2 dark:text-textDark bg-white cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700"
+                          class="p-2 dark:text-textDark bg-white cursor-pointer dark:bg-[#1D1D1F] hover:bg-gray-200 dark:hover:bg-gray-700"
                         >
                           {{ role }}
                         </div>
@@ -230,7 +230,7 @@
                       
                           <!-- List -->
                           <div *ngFor="let item of filteredManagerArr"
-                               class="p-2 hover:bg-gray-200 bg-white dark:hover:bg-gray-700 dark:text-textDark cursor-pointer"
+                               class="p-2 hover:bg-gray-200 bg-white dark:hover:bg-gray-700 dark:bg-[#1D1D1F] dark:text-textDark cursor-pointer"
                                (click)="selectManager(item)">
                                {{item.empId}} - {{ item.firstNameEnglish }} {{item.lastNameEnglish}}
                           </div>
@@ -302,8 +302,8 @@
                             </div>
                         </div>
 
-                        <p *ngIf="languagesRequired" class="text-red-600 text-sm mt-2">
-                            Please select at least one preferred language.
+                        <p *ngIf="languagesRequired" class="text-red-500 text-sm mt-2">
+                            Please select at least one Preferred Language.
                         </p>
                     </div>
 
@@ -526,7 +526,7 @@
                         <label for="email"
                             class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Email *</label>
                         <input type="email" id="email" name="email" [(ngModel)]="personalData.email"
-                            class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-tileBlack"
+                            class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                             #emailInput="ngModel" required pattern="^[A-Za-z0-9](?!.*\.\.)([A-Za-z0-9._%+-]{0,62}[A-Za-z0-9])?@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"
                             (input)="onTrimInput($event, personalData, 'email')"/>
                         <div *ngIf="emailInput.touched && !personalData.email" class="text-red-500 text-sm mt-1">
@@ -805,14 +805,14 @@
                     </label>
                     <input id="licNo" #licNoInput="ngModel" type="text" name="licNo" [(ngModel)]="driverObj.licNo" pattern="^([A-Z]\d{7}|\d{10,12})$"
                       (keypress)="preventSpecialCharacters($event)" (paste)="preventSpecialCharactersPaste($event)"
-                      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
+                      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
             
                     <div>
-                      <span class="text-red-600 text-sm" *ngIf="licNoInput.touched && licNoInput.errors?.['pattern'] && driverObj.licNo">
+                      <span class="text-red-500 text-sm" *ngIf="licNoInput.touched && licNoInput.errors?.['pattern'] && driverObj.licNo">
                         Please enter a valid License ID number (1 capital letter + 7 digits or 10–12 digits).
                       </span>
             
-                      <span class="text-red-600 text-sm" *ngIf="licNoInput.touched && !driverObj.licNo">
+                      <span class="text-red-500 text-sm" *ngIf="licNoInput.touched && !driverObj.licNo">
                         Driving License ID number is Required.
                       </span>
                     </div>
@@ -824,14 +824,14 @@
                     </label>
                     <input id="confirmLicNo" #confirmLicNoInput="ngModel" type="text" name="confirmLicNo" [(ngModel)]="driverObj.confirmLicNo"
                       (keypress)="preventSpecialCharacters($event)" (paste)="preventSpecialCharactersPaste($event)"
-                      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
+                      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
             
                       <div>
-                        <span class="text-red-600 text-sm" *ngIf="confirmLicNoInput.touched && (driverObj.licNo !== driverObj.confirmLicNo) && driverObj.confirmLicNo">
+                        <span class="text-red-500 text-sm" *ngIf="confirmLicNoInput.touched && (driverObj.licNo !== driverObj.confirmLicNo) && driverObj.confirmLicNo">
                           Confirm Driving License ID number should match the Driving License ID number.
                         </span>
               
-                        <span class="text-red-600 text-sm" *ngIf="confirmLicNoInput.touched && !driverObj.confirmLicNo">
+                        <span class="text-red-500 text-sm" *ngIf="confirmLicNoInput.touched && !driverObj.confirmLicNo">
                           Confirm Driving License ID number is Required.
                         </span>
                       </div>
@@ -903,9 +903,9 @@
                       Insurance Number *
                     </label>
                     <input id="insNo" type="text" maxlength="13" (input)="onTrimInput($event, driverObj, 'insNo')" #insurenceNoInput="ngModel" name="insNo" [(ngModel)]="driverObj.insNo" 
-                      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
+                      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
                       <div>
-                        <span class="text-red-600 text-sm" *ngIf="insurenceNoInput.touched && !driverObj.insNo">
+                        <span class="text-red-500 text-sm" *ngIf="insurenceNoInput.touched && !driverObj.insNo">
                           Insurance Number Required.
                         </span>
                       </div>
@@ -916,14 +916,14 @@
                       Confirm Insurance Number *
                     </label>
                     <input id="insNo" type="text" maxlength="13" #confirmInsurenceNoInput="ngModel" name="insNo" [(ngModel)]="driverObj.confirmInsNo" 
-                      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
+                      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
             
                       <div>
-                        <span class="text-red-600 text-sm" *ngIf="confirmInsurenceNoInput.touched && (driverObj.insNo !== driverObj.confirmInsNo) && driverObj.confirmInsNo">
+                        <span class="text-red-500 text-sm" *ngIf="confirmInsurenceNoInput.touched && (driverObj.insNo !== driverObj.confirmInsNo) && driverObj.confirmInsNo">
                           Confirm Insurance Number should match the Insurance Number.
                         </span>
               
-                        <span class="text-red-600 text-sm" *ngIf="confirmInsurenceNoInput.touched && !driverObj.confirmInsNo">
+                        <span class="text-red-500 text-sm" *ngIf="confirmInsurenceNoInput.touched && !driverObj.confirmInsNo">
                           Confirm Insurance Number is Required.
                         </span>
                       </div>
@@ -1014,10 +1014,10 @@
                     </label>
                     <input id="vRegNo" type="text" #vRegNoInput="ngModel" name="vRegNo" [(ngModel)]="driverObj.vRegNo"
                       (keypress)="preventSpecialCharacters($event)" (paste)="preventSpecialCharactersPaste($event)"
-                      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
+                      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
                       
                       <div>
-                        <span class="text-red-600 text-sm" *ngIf="vRegNoInput.touched && !driverObj.vRegNo">
+                        <span class="text-red-500 text-sm" *ngIf="vRegNoInput.touched && !driverObj.vRegNo">
                           Vehicle Registration Number is Required.
                         </span>
                       </div>
@@ -1029,12 +1029,12 @@
                     </label>
                     <input id="confirmVRegNo" type="text" #confirmVRegNoInput="ngModel" name="confirmVRegNo" [(ngModel)]="driverObj.confirmVRegNo"
                       (keypress)="preventSpecialCharacters($event)" (paste)="preventSpecialCharactersPaste($event)"
-                      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
+                      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
                       <div>
-                        <span class="text-red-600 text-sm" *ngIf="confirmVRegNoInput.touched && (driverObj.vRegNo !== driverObj.confirmVRegNo) && driverObj.confirmVRegNo">
+                        <span class="text-red-500 text-sm" *ngIf="confirmVRegNoInput.touched && (driverObj.vRegNo !== driverObj.confirmVRegNo) && driverObj.confirmVRegNo">
                           Confirm Vehicle Registration Number should match the Vehicle Registration Number.
                         </span>
-                        <span class="text-red-600 text-sm" *ngIf="confirmVRegNoInput.touched && !driverObj.confirmVRegNo">
+                        <span class="text-red-500 text-sm" *ngIf="confirmVRegNoInput.touched && !driverObj.confirmVRegNo">
                           Confirm Vehicle Registration Number is Required.
                         </span>
                       </div>
@@ -1066,8 +1066,11 @@
                             <div
                                 *ngFor="let item of VehicleTypes"
                                 (click)="selectVehicleTypeItem(item)"
-                                class="p-2 text-gray-700 dark:text-textDark cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700">
-                                {{ item.name }}
+                                class="flex items-center justify-between p-2 text-gray-700 dark:text-textDark cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700"
+                                [class.bg-blue-100]="item.name === selectVehicletype?.name"
+                                [class.dark:bg-blue-900]="item.name === selectVehicletype?.name">
+                                <span>{{ item.name }}</span>
+                                <i *ngIf="item.name === selectVehicletype?.name" class="fa-solid fa-check text-blue-500"></i>
                             </div>
                         </div>
                     </div>

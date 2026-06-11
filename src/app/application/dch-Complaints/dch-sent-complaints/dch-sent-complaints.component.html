@@ -2,9 +2,9 @@
 
 <div *ngIf="!isLoading">
     <div class="flex flex-row items-center justify-end gap-8 dark:text-white">
-        <i class="fa-solid fa-list text-[#4A4A4A] text-xl"></i>
+        <i class="fa-solid fa-list text-[#4A4A4A] text-xl dark:text-white"></i>
 
-        <p class="text-[#4A4A4A]">Filter By</p>
+        <p class="text-[#4A4A4A] dark:text-white">Filter By</p>
         <div class="relative w-40 custom-employee-dropdown-container">
             <!-- Hidden native select -->
             <select [(ngModel)]="selectStatus" class="hidden" (change)="filterEmployee()">

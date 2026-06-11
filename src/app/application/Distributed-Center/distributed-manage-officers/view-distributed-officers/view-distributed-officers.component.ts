@@ -169,7 +169,7 @@ export class ViewDistributedOfficersComponent implements OnInit {
         popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
         title: 'dark:text-white',
         icon: '!border-gray-200 dark:!border-gray-500',
-        confirmButton: 'hover:!bg-[#3085d6] dark:hover:!bg[#3085d6]',
+        confirmButton: 'hover:!bg-[#0c77db] dark:hover:!bg-[#0c77db]',
         cancelButton: '',
         actions: 'gap-2'
       }
@@ -319,10 +319,12 @@ export class ViewDistributedOfficersComponent implements OnInit {
 
   // Keep your existing methods
   applyStatusFilters() {
+    this.page = 1;
     this.fetchByRole();
   }
 
   applyRoleFilters() {
+    this.page = 1;
     this.fetchByRole();
   }
 
@@ -335,6 +337,7 @@ export class ViewDistributedOfficersComponent implements OnInit {
   }
 
   onSearch() {
+    this.page = 1;
     this.searchText = this.searchText?.trim() || '';
     this.fetchByRole();
   }
@@ -350,6 +353,7 @@ export class ViewDistributedOfficersComponent implements OnInit {
   }
 
   applyCompanyFilters() {
+    this.page = 1;
     this.fetchByRole();
   }
 

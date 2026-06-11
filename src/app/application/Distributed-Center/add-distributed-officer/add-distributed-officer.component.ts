@@ -269,7 +269,7 @@ export class AddDistributedOfficerComponent implements OnInit {
   selectCenter(item: Center) {
 
     this.personalData.centerId = item.id;
-    this.selectedCenterName = item.centerName;
+    this.selectedCenterName = item.regCode + ' - ' + item.centerName;
     this.centreDropdownOpen = false; // close dropdown
     this.filteredCenterArr = [...this.centerArr]; // show full list next time
     const searchInput = document.querySelector<HTMLInputElement>('.dropdown-search-input');
@@ -674,6 +674,7 @@ export class AddDistributedOfficerComponent implements OnInit {
 
   onSubmitFormPage1(form: NgForm) {
     form.form.markAllAsTouched();
+    this.jobRoleInputTouched = true;
     this.validateLanguages();
     const missingFields: string[] = [];
     if (!this.personalData.centerId && this.logingRole === 'Distribution Centre Head') {
@@ -685,7 +686,7 @@ export class AddDistributedOfficerComponent implements OnInit {
     }
 
     if (this.languagesRequired) {
-      missingFields.push('Please select at least one preferred language');
+      missingFields.push('Please select at least one Preferred Language');
     }
 
     if (!this.personalData.employeeType) {

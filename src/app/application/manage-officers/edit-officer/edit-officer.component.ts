@@ -253,11 +253,12 @@ export class EditOfficerComponent implements OnInit {
     const value = input.value.toLowerCase();
     console.log('value', value);
 
-    this.filteredCenterArr = this.centerArr.filter(c =>
-      (c.centerName || '').toLowerCase().includes(value)
+    this.filteredCenterArr = this.centerArr.filter(c => {
+      const combined1 = `${c.regCode}-${c.centerName}`.toLowerCase();
+      const combined2 = `${c.regCode} - ${c.centerName}`.toLowerCase();
+      return combined1.includes(value) || combined2.includes(value);
+    }
     );
-
-    console.log('filtered centers', this.filteredCenterArr);
 
   }
 
@@ -275,7 +276,7 @@ export class EditOfficerComponent implements OnInit {
     console.log('center selected');
 
     this.personalData.centerId = item.id;
-    this.selectedCenterName = item.centerName;
+    this.selectedCenterName = item.regCode + ' - ' + item.centerName;
     this.centreDropdownOpen = false; // close dropdown
 
     // Reset search input and filtered array
@@ -301,11 +302,11 @@ export class EditOfficerComponent implements OnInit {
     console.log('search value', value);
 
     this.filteredManagerArr = this.managerArr.filter(m => {
-      const fullName = `${m.firstNameEnglish} ${m.lastNameEnglish}`.toLowerCase();
-      return fullName.includes(value);
-    });
-
-    console.log('filtered managers', this.filteredManagerArr);
+      const fullName = `${m.empId}-${m.firstNameEnglish} ${m.lastNameEnglish}`.toLowerCase();
+      const fullName2 = `${m.empId} - ${m.firstNameEnglish} ${m.lastNameEnglish}`.toLowerCase();
+      return fullName.includes(value) || fullName2.includes(value);
+    }
+    );
   }
 
 
@@ -313,7 +314,7 @@ export class EditOfficerComponent implements OnInit {
     console.log('Manager selected');
 
     this.personalData.irmId = item.id;
-    this.selectedManager = item.firstNameEnglish + ' ' + item.lastNameEnglish;
+    this.selectedManager = item.empId + ' - ' + item.firstNameEnglish + ' ' + item.lastNameEnglish;
     console.log('name', item.firstNameEnglish)
     this.managerDropdownOpen = false; // close dropdown
 
@@ -341,9 +342,9 @@ export class EditOfficerComponent implements OnInit {
         console.log(this.personalData);
         this.ExistirmId = res.officerData.irmId;
 
-        this.selectedCenterName = res.officerData.collectionOfficer.centerName
+        this.selectedCenterName = res.officerData.collectionOfficer.regCode + ' - ' + res.officerData.collectionOfficer.centerName
         if (res.officerData.collectionOfficer.irmId) {
-          this.selectedManager = res.managerName.firstNameEnglish + ' ' + res.managerName.lastNameEnglish
+          this.selectedManager = res.managerName.empId + ' - ' + res.managerName.firstNameEnglish + ' ' + res.managerName.lastNameEnglish
         } else {
           this.selectedManager = ''
         }
@@ -975,7 +976,7 @@ export class EditOfficerComponent implements OnInit {
 
     if (!this.personalData.email) {
       missingFields.push('Email is required');
-    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(this.personalData.email)) {
+    } else if (!/^[A-Za-z0-9](?!.*\.\.)([A-Za-z0-9._%+-]{0,62}[A-Za-z0-9])?@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(this.personalData.email)) {
       missingFields.push('Email - Must be in a valid format (format: example&#64;domain.com)');
     }
 
@@ -1951,10 +1952,12 @@ class Personal {
 class Center {
   id!: number
   centerName!: string
+  regCode!: string;
 }
 
 class Manager {
   id!: number;
+  empId!: string;
   firstNameEnglish!: string;
   lastNameEnglish!: string;
 }

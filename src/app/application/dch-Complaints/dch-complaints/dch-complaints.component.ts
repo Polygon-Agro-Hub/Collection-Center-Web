@@ -31,7 +31,6 @@ export class DchComplaintsComponent implements OnInit {
   isLoading: boolean = false;
 
   constructor(
-    private complaintsService: ComplaintsService,
     private toastSrv: ToastAlertService,
     private DistributionComplaintsSrv: DistributionComplaintsService
   ) { }
@@ -107,7 +106,7 @@ export class DchComplaintsComponent implements OnInit {
   }
 
   fetchAllCategory() {
-    this.complaintsService.getComplainCategory().subscribe(
+    this.DistributionComplaintsSrv.getComplainCategory().subscribe(
       (res) => {
         this.categoryArr = res;
       }

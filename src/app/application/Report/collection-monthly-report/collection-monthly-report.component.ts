@@ -173,7 +173,7 @@ export class CollectionMonthlyReportComponent implements OnInit {
     today.setHours(23, 59, 59, 999); // Set to end of today for comparison
 
     if (!this.startDate) {
-      this.toastSrv.success('Please select a <b>start date</b> before selecting an end date.');
+      this.toastSrv.warning('Please select a <b>From date</b> before selecting an <b>To</b> date.');
       this.endDate = null;
       return false;
     }

@@ -276,7 +276,7 @@ export class EditDistributedOfficerComponent implements OnInit {
 
   selectCenter(item: Center) {
     this.personalData.centerId = item.id;
-    this.selectedCenterName = item.centerName;
+    this.selectedCenterName = item.regCode + ' - ' + item.centerName;
     this.centreDropdownOpen = false; // close dropdown
     this.filteredCenterArr = [...this.centerArr]; // show full list next time
     const searchInput = document.querySelector<HTMLInputElement>('.dropdown-search-input');
@@ -341,7 +341,7 @@ export class EditDistributedOfficerComponent implements OnInit {
         this.personalData.jobRole = res.officerData.collectionOfficer.jobRole
         this.personalData.previousjobRole = res.officerData.collectionOfficer.jobRole;
         this.personalData.previousEmpId = res.officerData.collectionOfficer.empIdPrefix
-        this.selectedCenterName = res.officerData.collectionOfficer.centerName
+        this.selectedCenterName = res.officerData.collectionOfficer.regCode + ' - ' + res.officerData.collectionOfficer.centerName
 
         if (res.officerData.collectionOfficer.irmId != null) {
           this.selectedManager = res.managerName.empId + ' - ' + res.managerName.firstNameEnglish + ' ' + res.managerName.lastNameEnglish

@@ -260,36 +260,40 @@ cancelOutForDelivery() {
 }
 
 getScheduleClass(item: any): string {
-  const now = new Date();
+
+  if (!item.completeTime) {
+    return 'schedule-future';
+  }
+
+  const completeTimeUTC = new Date(item.completeTime);
+
+  // 👉 Convert to Sri Lanka local string (for display/debug only)
+  const completeTimeLocal = completeTimeUTC.toLocaleString('en-US', {
+    timeZone: 'Asia/Colombo'
+  });
+
+  console.log('Raw UTC:', item.completeTime);
+  console.log('Local:', completeTimeLocal);
+  console.log('Date obj:', completeTimeUTC);
+
   const scheduleDate = new Date(item.sheduleDate);
-  const nowDate = new Date(now.getFullYear(), now.getMonth(), now.getDate());
-  const scheduleOnlyDate = new Date(scheduleDate.getFullYear(), scheduleDate.getMonth(), scheduleDate.getDate());
 
-  // Case 1: Schedule date is before today → RED
-  if (scheduleOnlyDate < nowDate) {
-    return 'schedule-past'; // CSS class name
-  }
-  
-  // Case 2: Schedule date is today → check slot
-  if (scheduleOnlyDate.getTime() === nowDate.getTime()) {
-    let upperLimitHour = 0;
-    if (item.sheduleTime.includes('8AM - 2PM')) {
-      upperLimitHour = 14;
-    } else if (item.sheduleTime.includes('2PM - 8PM')) {
-      upperLimitHour = 20;
-    }
-    const upperLimit = new Date(now);
-    upperLimit.setHours(upperLimitHour, 0, 0, 0);
+  const slotEnd = new Date(scheduleDate);
 
-    if (now <= upperLimit) {
-      return 'schedule-active'; // CSS class name
-    } else {
-      return 'schedule-expired'; // CSS class name
-    }
+  if (item.sheduleTime.includes('8AM - 2PM')) {
+    slotEnd.setHours(14, 0, 0, 0);
+  } else if (item.sheduleTime.includes('2PM - 8PM')) {
+    slotEnd.setHours(20, 0, 0, 0);
+  } else {
+    return 'schedule-future';
   }
-  
-  // Case 3: Future date → no color
-  return 'schedule-future'; // CSS class name
+
+  // comparisons are STILL correct in UTC internally
+  if (completeTimeUTC > slotEnd) {
+    return 'schedule-expired';
+  }
+
+  return 'schedule-active';
 }
 
 onKeydown(event: KeyboardEvent) {
@@ -316,4 +320,5 @@ class orders {
   lastNameEnglish!: string
   outDlvrDateLocal!: string
   combinedStatus!: string
+  completeTime!: Date;
 }

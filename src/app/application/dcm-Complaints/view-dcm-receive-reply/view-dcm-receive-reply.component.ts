@@ -51,6 +51,7 @@ export class ViewDcmReceiveReplyComponent implements OnInit {
     this.DistributionComplaintsSrv.dcmGetComplainById(id).subscribe(
       (res) => {
         this.compalintObj = res.data;
+        this.replyObj.reply = res.data.reply;
         this.templateData = res.template
         this.officerName =
           (this.compalintObj?.firstNameEnglish || '') + ' ' +

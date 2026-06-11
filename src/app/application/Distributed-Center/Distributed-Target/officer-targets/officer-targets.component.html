@@ -51,16 +51,16 @@
                     <td class="px-6 py-4 text-base font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.empId}}</td>
                     <td class="px-6 py-4 text-base font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.name}}</td>
                     <td class="px-6 py-4 text-base font-medium text-gray-900 dark:text-[#C5C5C5] text-center">
-                        {{ item.total === 0 ? '0' : (item.total < 10 ? ('0' + item.total) : item.total) }}
+                        {{ item.total < 10 ? '0' + item.total : item.total }}
                       </td>
                       <td class="px-6 py-4 text-base font-medium text-gray-900 dark:text-[#C5C5C5] text-center">
-                        {{ item.pending === 0 ? '0' : (item.pending < 10 ? ('0' + item.pending) : item.pending) }}
+                        {{ item.pending < 10 ? '0' + item.pending : item.pending }}
                       </td>
                       <td class="px-6 py-4 text-base font-medium text-gray-900 dark:text-[#C5C5C5] text-center">
-                        {{ item.opened === 0 ? '0' : (item.opened < 10 ? ('0' + item.opened) : item.opened) }}
+                        {{ item.opened < 10 ? '0' + item.opened : item.opened }}
                       </td>
                       <td class="px-6 py-4 text-base font-medium text-gray-900 dark:text-[#C5C5C5] text-center">
-                        {{ item.completed === 0 ? '0' : (item.completed < 10 ? ('0' + item.completed) : item.completed) }}
+                        {{ item.completed < 10 ? '0' + item.completed : item.completed }}
                       </td>
 
                       <td class="px-6 py-4 text-base font-medium text-gray-900 dark:text-[#C5C5C5] cursor-pointer">

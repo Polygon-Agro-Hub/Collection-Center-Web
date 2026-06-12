@@ -567,7 +567,7 @@ export class EditDistributedOfficerComponent implements OnInit {
           this.driverObj.vSideBName = this.vehicleSideBImageFileName
         }
 
-        this.DistributedManageOfficerSrv.updateDistributionOfficerDIO(this.personalData, this.editOfficerId, this.selectedFile, this.driverObj, this.licenseFrontImagePreview, this.licenseBackImagePreview, this.insurenceFrontImagePreview, this.insurenceBackImagePreview, this.vehicleFrontImagePreview, this.vehicleBackImagePreview, this.vehicleSideAImagePreview, this.vehicleSideBImagePreview).subscribe(
+        this.DistributedManageOfficerSrv.updateDistributionOfficerDIO(this.personalData, this.editOfficerId, this.selectedFile, this.driverObj, this.licenseFrontImageFile, this.licenseBackImageFile, this.insurenceFrontImageFile, this.insurenceBackImageFile, this.vehicleFrontImageFile, this.vehicleBackImageFile, this.vehicleSideAImageFile, this.vehicleSideBImageFile).subscribe(
           (res: any) => {
             this.officerId = res.officerId;
             this.isLoading = false;
@@ -644,7 +644,7 @@ export class EditDistributedOfficerComponent implements OnInit {
           this.driverObj.vSideBName = this.vehicleSideBImageFileName
         }
 
-        this.DistributedManageOfficerSrv.updateDistributionOfficer(this.personalData, this.editOfficerId, this.selectedFile, this.driverObj, this.licenseFrontImagePreview, this.licenseBackImagePreview, this.insurenceFrontImagePreview, this.insurenceBackImagePreview, this.vehicleFrontImagePreview, this.vehicleBackImagePreview, this.vehicleSideAImagePreview, this.vehicleSideBImagePreview).subscribe(
+        this.DistributedManageOfficerSrv.updateDistributionOfficer(this.personalData, this.editOfficerId, this.selectedFile, this.driverObj, this.licenseFrontImageFile, this.licenseBackImageFile, this.insurenceFrontImageFile, this.insurenceBackImageFile, this.vehicleFrontImageFile, this.vehicleBackImageFile, this.vehicleSideAImageFile, this.vehicleSideBImageFile).subscribe(
           (res: any) => {
             this.isLoading = false;
 

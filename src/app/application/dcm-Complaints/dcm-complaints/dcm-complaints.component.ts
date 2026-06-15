@@ -90,7 +90,7 @@ export class DcmComplaintsComponent implements OnInit {
     this.DistributionComplaintsSrv.dcmSubmitComplaint(formData).subscribe(
       (response) => {
         if (response.status) {
-          this.toastSrv.success('Your Complaint was submiited');
+          this.toastSrv.success('Your Complaint was submitted');
           // Reset the form fields
           this.isAddComplaintOpen = false;
           this.category = '';

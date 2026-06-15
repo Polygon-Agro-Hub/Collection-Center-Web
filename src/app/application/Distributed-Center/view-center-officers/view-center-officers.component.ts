@@ -172,7 +172,7 @@ export class ViewCenterOfficersComponent implements OnInit {
         popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
         title: 'dark:text-white',
         icon: '!border-gray-200 dark:!border-gray-500',
-        confirmButton: 'hover:!bg-[#3085d6] dark:hover:!bg[#3085d6]',
+        confirmButton: 'hover:!bg-[#0c77db] dark:hover:!bg-[#0c77db]',
         cancelButton: '',
         actions: 'gap-2'
       }

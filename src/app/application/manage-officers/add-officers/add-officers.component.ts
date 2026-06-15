@@ -744,7 +744,7 @@ export class AddOfficersComponent implements OnInit {
     }
 
     if (this.languagesRequired) {
-      missingFields.push('Please select at least one preferred language');
+      missingFields.push('Please select at least one Preferred Language');
     }
 
     if (!this.personalData.employeeType) {

@@ -82,12 +82,13 @@
 
                                 <!-- List -->
                                 <div *ngFor="let item of filteredCenterArr"
-                                    class="flex items-center justify-between p-2 hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-textDark cursor-pointer"
+                                    class="flex items-center justify-between p-2 hover:bg-gray-200 dark:hover:bg-gray-700 bg-white dark:text-textDark cursor-pointer"
                                     [class.bg-blue-100]="item.id === personalData.centerId"
                                     [class.dark:bg-blue-900]="item.id === personalData.centerId"
                                     (click)="selectCenter(item)">
                                     <span>{{item.regCode}} - {{ item.centerName }}</span>
-                                    <i *ngIf="item.id === personalData.centerId" class="fa-solid fa-check text-blue-500"></i>
+                                    <i *ngIf="item.id === personalData.centerId"
+                                        class="fa-solid fa-check text-blue-500"></i>
                                 </div>
                             </div>
                         </div>
@@ -181,12 +182,13 @@
 
                                 <!-- List -->
                                 <div *ngFor="let item of filteredManagerArr"
-                                    class="flex items-center justify-between p-2 hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-textDark cursor-pointer"
+                                    class="flex items-center justify-between p-2 bg-white hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-textDark cursor-pointer"
                                     [class.bg-blue-100]="item.id === personalData.irmId"
                                     [class.dark:bg-blue-900]="item.id === personalData.irmId"
                                     (click)="selectManager(item)">
                                     <span>{{item.empId}} - {{ item.firstNameEnglish }} {{item.lastNameEnglish}}</span>
-                                    <i *ngIf="item.id === personalData.irmId" class="fa-solid fa-check text-blue-500"></i>
+                                    <i *ngIf="item.id === personalData.irmId"
+                                        class="fa-solid fa-check text-blue-500"></i>
                                 </div>
                             </div>
                         </div>
@@ -261,7 +263,7 @@
                         </div>
                         <!-- Error Message -->
                         <p *ngIf="languagesRequired" class="text-red-500 text-sm mt-2">
-                            Please select at least one preferred language.
+                            Please select at least one Preferred Language.
                         </p>
                     </div>
 
@@ -483,7 +485,8 @@
                         <label for="email" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Email
                             *</label>
                         <input type="email" id="email" name="email" [(ngModel)]="personalData.email"
-                            #emailInput="ngModel" required pattern="^[A-Za-z0-9](?!.*\.\.)([A-Za-z0-9._%+-]{0,62}[A-Za-z0-9])?@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"
+                            #emailInput="ngModel" required
+                            pattern="^[A-Za-z0-9](?!.*\.\.)([A-Za-z0-9._%+-]{0,62}[A-Za-z0-9])?@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"
                             (input)="onTrimInput($event, personalData, 'email')"
                             class="mt-1 block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
 
@@ -573,8 +576,7 @@
                     <app-searchable-dropdown id="district" name="district" [items]="districtItems"
                         [placeholder]="'Select a district'" [searchPlaceholder]="'Search districts...'"
                         [(ngModel)]="personalData.district" #districtInput="ngModel"
-                        (ngModelChange)="onDistrictChange($event)"
-                        borderClass="border border-gray-300"
+                        (ngModelChange)="onDistrictChange($event)" borderClass="border border-gray-300"
                         placeholderClass="text-gray-400"></app-searchable-dropdown>
 
                     <div *ngIf="districtInput.touched && !personalData.district" class="text-red-500 text-sm mt-1">
@@ -676,8 +678,7 @@
                     <app-searchable-dropdown id="bankDropdown" name="bankDropdown" [items]="bankItems"
                         [placeholder]="'Select a bank'" [searchPlaceholder]="'Search banks...'"
                         [(ngModel)]="selectedBankId" #selectedBank="ngModel" (ngModelChange)="onBankChange($event)"
-                        borderClass="border border-gray-300"
-                        placeholderClass="text-gray-400">
+                        borderClass="border border-gray-300" placeholderClass="text-gray-400">
                     </app-searchable-dropdown>
 
                     <div *ngIf="!selectedBankId && selectedBank.touched" class="text-red-500 text-sm mt-1">
@@ -694,8 +695,7 @@
                         [placeholder]="'Select a branch'" [searchPlaceholder]="'Search branches...'"
                         [(ngModel)]="selectedBranchId" #selectedBranch="ngModel"
                         (ngModelChange)="onBranchChange($event)" [disabled]="!selectedBankId"
-                        borderClass="border border-gray-300"
-                        placeholderClass="text-gray-400">
+                        borderClass="border border-gray-300" placeholderClass="text-gray-400">
                     </app-searchable-dropdown>
 
                     <div *ngIf="!selectedBranchId && selectedBranch.touched" class="text-red-500 text-sm mt-1">

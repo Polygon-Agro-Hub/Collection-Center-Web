@@ -106,10 +106,12 @@ export class ViewOfficersComponent implements OnInit {
   // 5. Update your methods
   onCenterSelectionChange(selectedValue: string) {
     this.selectCenters = selectedValue || '';
+    this.page = 1;
     this.applyCompanyFilters();
   }
 
   applyCompanyFilters() {
+    this.page = 1;
     this.fetchByRole();
   }
 
@@ -370,6 +372,7 @@ export class ViewOfficersComponent implements OnInit {
 
   // Keep your existing methods
   applyStatusFilters() {
+    this.page = 1;
     this.fetchByRole();
   }
 
@@ -384,6 +387,7 @@ export class ViewOfficersComponent implements OnInit {
 
   applyRoleFilters() {
     console.log('selectRole', this.selectRole)
+    this.page = 1;
     this.fetchByRole();
   }
 

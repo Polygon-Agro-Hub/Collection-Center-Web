@@ -42,7 +42,7 @@
 
                         <span (click)="triggerFileInput($event)"
                             class="absolute bottom-5 right-5 transform translate-x-1/4 translate-y-1/4 px-3 py-2 bg-[#3980C0] rounded-full cursor-pointer">
-                            <i class="fa-solid fa-pen text-3xl text-white"></i>
+                            <i class="fa-solid fa-pen text-xl text-white"></i>
                         </span>
                     </div>
                 </div>
@@ -66,7 +66,7 @@
                                 <input type="text" id="centerId" name="centerId" [(ngModel)]="selectedCenterName"
                                     #centerIdInput="ngModel" required placeholder="-- select centre--" readonly
                                     (click)="toggleDropdown()"
-                                    class="form-control mt-1 block w-full p-2 pr-10 border border-gray-300 rounded-md bg-gray-100 dark:bg-[#1D1D1F] dark:text-textDark cursor-pointer" />
+                                    class="form-control mt-1 block w-full p-2 bg-white pr-10 border border-gray-300 rounded-md bg-gray-100 dark:bg-[#1D1D1F] dark:text-textDark cursor-pointer" />
 
                                 <!-- Arrow icon -->
                                 <i *ngIf="!centreDropdownOpen"
@@ -91,7 +91,7 @@
                                 </div>
 
                                 <!-- List -->
-                                <div *ngFor="let item of filteredCenterArr" (click)="selectCenter(item)" class="flex items-center justify-between p-2 cursor-pointer transition
+                                <div *ngFor="let item of filteredCenterArr" (click)="selectCenter(item)" class="flex bg-white items-center justify-between p-2 cursor-pointer transition
                hover:bg-gray-200 dark:hover:bg-gray-700" [ngClass]="
           selectedCenterName === (item.regCode + ' - ' + item.centerName)
             ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 font-medium'
@@ -120,7 +120,7 @@
                         </label>
 
                         <!-- Dropdown button -->
-                        <div class="flex justify-between items-center w-full p-2 border border-gray-300 rounded-md bg-gray-100 dark:bg-[#1D1D1F] dark:text-textDark cursor-pointer"
+                        <div class="flex justify-between bg-white items-center w-full p-2 border border-gray-300 rounded-md bg-gray-100 dark:bg-[#1D1D1F] dark:text-textDark cursor-pointer"
                             (click)="toggleJobRoleDropdown()">
                             <span class="dark:text-textDark">
                                 {{ personalData.jobRole || '-- select --' }}
@@ -132,7 +132,7 @@
                         <!-- Options -->
                         <div *ngIf="isJobRoleOpen"
                             class="absolute mt-1 w-full bg-white dark:bg-[#1D1D1F] border border-gray-300 rounded-md shadow-lg z-10 overflow-hidden">
-                            <div *ngFor="let role of jobRoles" (click)="getJobRole(role)" class="flex items-center justify-between px-4 py-2 cursor-pointer transition
+                            <div *ngFor="let role of jobRoles" (click)="getJobRole(role)" class="flex items-center bg-white justify-between px-4 py-2 cursor-pointer transition
              hover:bg-gray-200 dark:hover:bg-[#333]" [ngClass]="
         personalData.jobRole === role
           ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 font-medium'
@@ -166,7 +166,7 @@
                                 <input type="text" id="irmId" name="irmId" [(ngModel)]="selectedManager"
                                     #irmIdInput="ngModel" required placeholder="-- select manager--" readonly
                                     (click)="toggleManagerDropdown()"
-                                    class="form-control mt-1 block w-full p-2 pr-10 border border-gray-300 rounded-md bg-gray-100 dark:bg-[#1D1D1F] dark:text-textDark cursor-pointer" />
+                                    class="form-control mt-1 block w-full p-2 pr-10 bg-white border border-gray-300 rounded-md bg-gray-100 dark:bg-[#1D1D1F] dark:text-textDark cursor-pointer" />
 
                                 <!-- Arrow icon -->
                                 <i *ngIf="!managerDropdownOpen"
@@ -192,7 +192,7 @@
                                 </div>
 
                                 <!-- List -->
-                                <div *ngFor="let item of filteredManagerArr" (click)="selectManager(item)" class="flex items-center justify-between p-2 cursor-pointer transition
+                                <div *ngFor="let item of filteredManagerArr" (click)="selectManager(item)" class="flex items-center bg-white justify-between p-2 cursor-pointer transition
                hover:bg-gray-200 dark:hover:bg-gray-700" [ngClass]="
           selectedManager === (item.empId + ' - ' + item.firstNameEnglish + ' ' + item.lastNameEnglish)
             ? 'bg-blue-100 dark:bg-blue-900 text-blue-700 dark:text-blue-200 font-medium'
@@ -276,7 +276,7 @@
                         </div>
 
                         <p *ngIf="languagesRequired" class="text-red-600 text-sm mt-2">
-                            Please select at least one preferred language.
+                            Please select at least one Preferred Language.
                         </p>
                     </div>
 

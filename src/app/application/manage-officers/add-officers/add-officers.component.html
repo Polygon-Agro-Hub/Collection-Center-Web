@@ -82,7 +82,7 @@
 
                                 <!-- List -->
                                 <div *ngFor="let item of filteredCenterArr"
-                                    class="flex items-center justify-between p-2 hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-textDark cursor-pointer"
+                                    class="flex items-center justify-between p-2 hover:bg-gray-200 dark:hover:bg-gray-700 bg-white dark:text-textDark cursor-pointer"
                                     [class.bg-blue-100]="item.id === personalData.centerId"
                                     [class.dark:bg-blue-900]="item.id === personalData.centerId"
                                     (click)="selectCenter(item)">
@@ -182,7 +182,7 @@
 
                                 <!-- List -->
                                 <div *ngFor="let item of filteredManagerArr"
-                                    class="flex items-center justify-between p-2 hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-textDark cursor-pointer"
+                                    class="flex items-center justify-between p-2 bg-white hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-textDark cursor-pointer"
                                     [class.bg-blue-100]="item.id === personalData.irmId"
                                     [class.dark:bg-blue-900]="item.id === personalData.irmId"
                                     (click)="selectManager(item)">
@@ -263,7 +263,7 @@
                         </div>
                         <!-- Error Message -->
                         <p *ngIf="languagesRequired" class="text-red-500 text-sm mt-2">
-                            Please select at least one preferred language.
+                            Please select at least one Preferred Language.
                         </p>
                     </div>
 

@@ -260,7 +260,9 @@ export class EditDistributedOfficerComponent implements OnInit {
     );
   }
 
-
+isSelected(item: any): boolean {
+    return this.selectedCenterName === `${item.regCode} - ${item.centerName}`;
+}
 
   toggleDropdown() {
     this.isJobRoleOpen = false;

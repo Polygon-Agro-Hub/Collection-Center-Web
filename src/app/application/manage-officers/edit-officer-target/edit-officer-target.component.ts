@@ -93,7 +93,8 @@ export class EditOfficerTargetComponent {
         if (res.status) {
           this.isLoading = false;
           this.toastSrv.success(res.message);
-          this.router.navigate([`/manage-officers/view-officer-target/${this.targetItemId}`])
+          // this.router.navigate([`/manage-officers/view-officer-target/${this.targetItemId}`])
+          this.location.back();
         } else {
           this.isLoading = false;
           this.toastSrv.error(res.message);

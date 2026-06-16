@@ -6,15 +6,13 @@
     </div>
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">
         <div>
-            <label for="varietyNameEnglish" class="block text-sm font-medium text-gray-700 dark:text-textDark">Variety
-                Name :</label>
+            <label for="varietyNameEnglish" class="block text-sm font-medium text-gray-700 dark:text-textDark">Variety Name :</label>
             <input id="varietyNameEnglish" [value]="targetObj.varietyNameEnglish" disabled
                 class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
         </div>
 
         <div>
-            <label for="todo" class="block text-sm font-medium text-gray-700 dark:text-textDark">The maximum amount
-                you can pass (kg) :</label>
+            <label for="todo" class="block text-sm font-medium text-gray-700 dark:text-textDark">The maximum amount you can pass (kg) :</label>
             <input id="todo" [value]="targetObj.todo" disabled
                 class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
         </div>
@@ -25,7 +23,7 @@
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4 mt-5">
         <div>
             <label for="variety" class="block text-sm font-medium text-gray-700 dark:text-textDark my-1">
-                The maximum amount you can pass (kg):
+                TSelect Short Stock Assignee :
             </label>
             <div class="relative">
                 <input 
@@ -51,8 +49,7 @@
         
 
         <div>
-            <label for="passAmount" class="block text-sm font-medium text-gray-700 dark:text-textDark">The maximum amount
-                you can pass (kg) :</label>
+            <label for="passAmount" class="block text-sm font-medium text-gray-700 dark:text-textDark">The Amount (kg) :</label>
             <input id="passAmount" name="passAmount" type="number" [(ngModel)]="passAmount" 
                 class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
         </div>

@@ -82,6 +82,12 @@ export class EditOfficerTargetComponent {
     }
     this.isLoading = true;
 
+    if (this.passAmount < 0) {
+      this.isLoading = false;
+      this.toastSrv.warning(`The amount cannot be negative!`)
+      return;
+    }
+
     if (this.passAmount > this.amount) {
       this.isLoading = false;
       this.toastSrv.warning(`The maximum amount you can pass <b>${this.amount}</b>Kg`)
@@ -103,10 +109,30 @@ export class EditOfficerTargetComponent {
     )
   }
 
+  onAmountInput(event: any) {
+    let value = event.target.value;
+    
+    // Block negative values
+    if (value.startsWith('-')) {
+        event.target.value = value.substring(1);
+        this.passAmount = parseFloat(event.target.value) || 0;
+        return;
+    }
+    
+    // Block more than 3 decimal places
+    if (value.includes('.')) {
+        const parts = value.split('.');
+        if (parts[1].length > 3) {
+            event.target.value = parts[0] + '.' + parts[1].substring(0, 3);
+            this.passAmount = parseFloat(event.target.value);
+        }
+    }
+}
+
   onCancel() {
     this.searchTerm = '';
     this.fetchTargetDetalis();
-    this.toastSrv.warning("Cancel this process")
+    this.toastSrv.warning("Target passing canceled.")
     this.location.back();
   }
 }

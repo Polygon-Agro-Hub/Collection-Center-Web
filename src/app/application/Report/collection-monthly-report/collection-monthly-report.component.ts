@@ -153,13 +153,13 @@ export class CollectionMonthlyReportComponent implements OnInit {
     today.setHours(23, 59, 59, 999);
 
     if (selectedDate > today) {
-      this.toastSrv.warning('<b>From Date</b> cannot be a future date.'); // ✅ changed
+      this.toastSrv.warning('From Date cannot be a future date.'); // ✅ changed
       this.startDate = this.formatDateToString(new Date());
       return false;
     }
 
     if (this.endDate && selectedDate > new Date(this.endDate)) {
-      this.toastSrv.warning('<b>Start date</b> cannot be after the selected end date.');
+      this.toastSrv.warning('Start date cannot be after the selected end date.');
       this.startDate = this.endDate;
       return false;
     }
@@ -173,13 +173,13 @@ export class CollectionMonthlyReportComponent implements OnInit {
     today.setHours(23, 59, 59, 999); // Set to end of today for comparison
 
     if (!this.startDate) {
-      this.toastSrv.warning('Please select a <b>From date</b> before selecting an <b>To</b> date.');
+      this.toastSrv.warning('Please select a From date before selecting an To date.');
       this.endDate = null;
       return false;
     }
 
     if (selectedDate > today) {
-      this.toastSrv.warning('<b>To date cannot be a future date.');
+      this.toastSrv.warning('To date cannot be a future date.');
       this.endDate = this.formatDateToString(new Date());
       return false;
     }

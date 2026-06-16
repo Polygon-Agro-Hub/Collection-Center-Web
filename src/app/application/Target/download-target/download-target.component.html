@@ -16,20 +16,22 @@
             <div class="relative w-56 mr-10">
 
             <app-custom-datepicker
-              [placeholder]="'--Select Start Date--'"
-              [selectedDate]="fromDate"
-              (dateChange)="onDateFromDateChange($event)"
-            ></app-custom-datepicker>
+      #fromDatePicker
+      [placeholder]="'--Select Start Date--'"
+      [selectedDate]="fromDate"
+      (dateChange)="onDateFromDateChange($event)"
+    ></app-custom-datepicker>
             </div>
 
             <p class="text-base font-semibold text-[#534E4E] mx-3 dark:text-white">To :</p>
 
             <div class="relative w-56 mr-6">
                 <app-custom-datepicker
-              [placeholder]="'--Select End Date--'"
-              [selectedDate]="toDate"
-              (dateChange)="onDateToDateChange($event)"
-            ></app-custom-datepicker>
+      #toDatePicker
+      [placeholder]="'--Select End Date--'"
+      [selectedDate]="toDate"
+      (dateChange)="onDateToDateChange($event)"
+    ></app-custom-datepicker>
             </div>
 
             <button (click)="goBtn()"

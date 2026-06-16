@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TargetService } from '../../../services/Target-service/target.service';
@@ -21,6 +21,9 @@ import { CustomDatepickerComponent } from '../../../components/custom-datepicker
   providers: [DatePipe]
 })
 export class DownloadTargetComponent {
+  @ViewChild('fromDatePicker') fromDatePicker!: any;
+  @ViewChild('toDatePicker') toDatePicker!: any;
+
   targetArr!: DailyTargets[];
 
   fromDate: Date | string = '';
@@ -138,92 +141,109 @@ export class DownloadTargetComponent {
   
   // }
 
-  onDateFromDateChange(newDate: string | Date | null) {
-  let dateString: string;
+onDateFromDateChange(newDate: string | Date | null) {
+    let dateString: string;
 
-  if (!newDate) {
-    return;
-  } else if (newDate instanceof Date) {
-    dateString = newDate.toISOString().split('T')[0];
-  } else {
-    dateString = newDate;
-  }
+    if (!newDate) {
+      this.fromDate = '';
+      return;
+    } else if (newDate instanceof Date) {
+      dateString = newDate.toISOString().split('T')[0];
+    } else {
+      dateString = newDate;
+    }
 
-  const today = new Date();
-today.setHours(0, 0, 0, 0);
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
 
-const [y, m, d] = dateString.split('-').map(Number);
-const selectedFrom = new Date(y, m - 1, d);
+    const [y, m, d] = dateString.split('-').map(Number);
+    const selectedFrom = new Date(y, m - 1, d);
 
-if (selectedFrom > today) {
-  this.fromDate = '';
-  this.toastSrv.warning("From Date cannot be a future date.");
-  return;
-}
+    if (selectedFrom > today) {
+      this.fromDate = '';
+      this.toastSrv.warning("From Date cannot be a future date.");
+      // Clear the datepicker by resetting the selected date
+      if (this.fromDatePicker) {
+        this.fromDatePicker.selectedDate = null;
+        this.fromDatePicker.writeValue(null);
+      }
+      return;
+    }
 
-  // ✅ Save fromDate FIRST, before any early returns
-  this.fromDate = dateString;
+    this.fromDate = dateString;
 
-  // If toDate isn't selected yet, nothing to cross-validate
-  if (!this.toDate) {
-    return;
-  }
+    if (!this.toDate) {
+      return;
+    }
 
-  // Cross-validate only when both dates are present
-  const from = new Date(this.fromDate);
-  const to = new Date(this.toDate);
-
-  if (to <= from) {
-    this.fromDate = '';
-    this.toastSrv.warning("The 'From' date cannot be later than or the same as the 'To' date.");
-  }
-}
-
-onDateToDateChange(newDate: string | Date | null) {
-  let dateString: string;
-
-  if (!newDate) {
-    return;
-  } else if (newDate instanceof Date) {
-    dateString = newDate.toISOString().split('T')[0];
-  } else {
-    dateString = newDate;
-  }
-
-  // ✅ Validate: To Date cannot be a future date
-  const today = new Date();
-today.setHours(0, 0, 0, 0);
-
-const [y, m, d] = dateString.split('-').map(Number);
-const selectedTo = new Date(y, m - 1, d);
-
-if (selectedTo > today) {
-  this.toDate = '';
-  this.toastSrv.warning("To Date cannot be a future date.");
-  return;
-}
-
-  this.toDate = dateString;
-
-  if (!this.fromDate) {
-    this.toDate = '';
-    newDate = '';
-    this.toastSrv.warning("Please select the 'From' date first.");
-    return;
-  }
-
-  // Case 2: toDate is earlier than fromDate
-  if (this.toDate) {
     const from = new Date(this.fromDate);
     const to = new Date(this.toDate);
 
     if (to <= from) {
-      this.toDate = '';
-      newDate = '';
-      this.toastSrv.warning("The 'To' date cannot be earlier than or same to the 'From' date.");
+      this.fromDate = '';
+      this.toastSrv.warning("The 'From' date cannot be later than or the same as the 'To' date.");
+      // Clear the datepicker
+      if (this.fromDatePicker) {
+        this.fromDatePicker.selectedDate = null;
+        this.fromDatePicker.writeValue(null);
+      }
     }
   }
-}
+
+  onDateToDateChange(newDate: string | Date | null) {
+    let dateString: string;
+
+    if (!newDate) {
+      this.toDate = '';
+      return;
+    } else if (newDate instanceof Date) {
+      dateString = newDate.toISOString().split('T')[0];
+    } else {
+      dateString = newDate;
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const [y, m, d] = dateString.split('-').map(Number);
+    const selectedTo = new Date(y, m - 1, d);
+
+    if (selectedTo > today) {
+      this.toDate = '';
+      this.toastSrv.warning("To Date cannot be a future date.");
+      if (this.toDatePicker) {
+        this.toDatePicker.selectedDate = null;
+        this.toDatePicker.writeValue(null);
+      }
+      return;
+    }
+
+    this.toDate = dateString;
+
+    if (!this.fromDate) {
+      this.toDate = '';
+      this.toastSrv.warning("Please select the 'From' date first.");
+      if (this.toDatePicker) {
+        this.toDatePicker.selectedDate = null;
+        this.toDatePicker.writeValue(null);
+      }
+      return;
+    }
+
+    if (this.toDate) {
+      const from = new Date(this.fromDate);
+      const to = new Date(this.toDate);
+
+      if (to <= from) {
+        this.toDate = '';
+        this.toastSrv.warning("The 'To' date cannot be earlier than or same to the 'From' date.");
+        if (this.toDatePicker) {
+          this.toDatePicker.selectedDate = null;
+          this.toDatePicker.writeValue(null);
+        }
+      }
+    }
+  }
 
 
   goBtn() {

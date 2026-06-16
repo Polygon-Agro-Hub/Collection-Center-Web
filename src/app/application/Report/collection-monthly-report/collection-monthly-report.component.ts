@@ -115,83 +115,89 @@ export class CollectionMonthlyReportComponent implements OnInit {
     this.router.navigate(['/reports']); // Change '/reports' to your desired route
   }
 
+  private clearDatePicker(pickerName: 'fromDatePicker' | 'toDatePicker') {
+  const picker = pickerName === 'fromDatePicker' ? this.fromDatePicker : this.toDatePicker;
+  if (picker) {
+    picker.selectedDate = null;
+  }
+}
 
   onStartDateChange(selectedDate: string | Date | null) {
-    if (!selectedDate) {
-      this.startDate = null;
-      return;
-    }
-
-    // Convert to Date if it's a string
-    const dateToValidate = typeof selectedDate === 'string' ? new Date(selectedDate) : selectedDate;
-    
-    // Validate the start date
-    if (this.validateStartDate(dateToValidate)) {
-      this.startDate = typeof selectedDate === 'string' ? selectedDate : this.formatDateToString(selectedDate);
-    }
+  if (!selectedDate) {
+    this.startDate = null;
+    return;
   }
+
+  const dateToValidate = typeof selectedDate === 'string' ? new Date(selectedDate) : selectedDate;
+  
+  if (this.validateStartDate(dateToValidate)) {
+    this.startDate = typeof selectedDate === 'string' ? selectedDate : this.formatDateToString(selectedDate);
+  } else {
+    this.clearDatePicker('fromDatePicker');
+  }
+}
 
   // Handle end date changes with validation
   onEndDateChange(selectedDate: string | Date | null) {
-    if (!selectedDate) {
-      this.endDate = null;
-      return;
-    }
-
-    // Convert to Date if it's a string
-    const dateToValidate = typeof selectedDate === 'string' ? new Date(selectedDate) : selectedDate;
-    
-    // Validate the end date
-    if (this.validateEndDate(dateToValidate)) {
-      this.endDate = typeof selectedDate === 'string' ? selectedDate : this.formatDateToString(selectedDate);
-    }
+  if (!selectedDate) {
+    this.endDate = null;
+    return;
   }
+
+  const dateToValidate = typeof selectedDate === 'string' ? new Date(selectedDate) : selectedDate;
+  
+  if (this.validateEndDate(dateToValidate)) {
+    this.endDate = typeof selectedDate === 'string' ? selectedDate : this.formatDateToString(selectedDate);
+  } else {
+    this.clearDatePicker('toDatePicker');
+  }
+}
 
   // Start date validation logic
   private validateStartDate(selectedDate: Date): boolean {
-    const today = new Date();
-    today.setHours(23, 59, 59, 999);
+  const today = new Date();
+  today.setHours(23, 59, 59, 999);
 
-    if (selectedDate > today) {
-      this.toastSrv.warning('From Date cannot be a future date.'); // ✅ changed
-      this.startDate = this.formatDateToString(new Date());
-      return false;
-    }
-
-    if (this.endDate && selectedDate > new Date(this.endDate)) {
-      this.toastSrv.warning('Start date cannot be after the selected end date.');
-      this.startDate = this.endDate;
-      return false;
-    }
-
-    return true;
+  if (selectedDate > today) {
+    this.toastSrv.warning('From Date cannot be a future date.');
+    this.startDate = null;
+    return false;
   }
+
+  if (this.endDate && selectedDate > new Date(this.endDate)) {
+    this.toastSrv.warning('Start date cannot be after the selected end date.');
+    this.startDate = null;
+    return false;
+  }
+
+  return true;
+}
 
   // End date validation logic
   private validateEndDate(selectedDate: Date): boolean {
-    const today = new Date();
-    today.setHours(23, 59, 59, 999); // Set to end of today for comparison
+  const today = new Date();
+  today.setHours(23, 59, 59, 999);
 
-    if (!this.startDate) {
-      this.toastSrv.warning('Please select a From date before selecting an To date.');
-      this.endDate = null;
-      return false;
-    }
-
-    if (selectedDate > today) {
-      this.toastSrv.warning('To date cannot be a future date.');
-      this.endDate = this.formatDateToString(new Date());
-      return false;
-    }
-
-    // Check if end date is before start date
-    if (selectedDate < new Date(this.startDate)) {
-      this.toastSrv.warning('The To Date cannot be earlier than or same as the From Date.');
-      return false;
-    }
-
-    return true;
+  if (selectedDate > today) {
+    this.toastSrv.warning('To date cannot be a future date.');
+    this.endDate = null;
+    return false;
   }
+
+  if (!this.startDate) {
+    this.toastSrv.warning('Please select a From date before selecting a To date.');
+    this.endDate = null;
+    return false;
+  }
+
+  if (selectedDate < new Date(this.startDate)) {
+    this.toastSrv.warning('The To Date cannot be earlier than or same as the From Date.');
+    this.endDate = null;
+    return false;
+  }
+
+  return true;
+}
 
   // Helper method to format Date to string
   private formatDateToString(date: Date): string {

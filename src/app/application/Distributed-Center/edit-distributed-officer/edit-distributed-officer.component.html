@@ -99,7 +99,7 @@
     
     <!-- Dropdown panel -->
     <div *ngIf="centreDropdownOpen"
-         class="absolute z-50 mt-1 w-full border dark:bg-[#292929] dark:text-textDark border-gray-200 dark:border-[#828282] max-h-60 overflow-y-auto shadow-lg">
+         class="absolute z-50 mt-1 w-full bg-white border dark:bg-[#292929] dark:text-textDark border-gray-200 dark:border-[#828282] rounded-md max-h-60 overflow-y-auto shadow-lg">
         
         <!-- Sticky search input -->
         <div class="sticky top-0 bg-gray-100 dark:bg-[#1D1D1F] z-20">
@@ -118,13 +118,10 @@
         
         <!-- List with selected highlight (light blue background like the image) -->
         <div *ngFor="let item of filteredCenterArr"
-             class="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
-             [class.bg-blue-100]="isSelected(item)"
-             [class.dark:bg-blue-900]="isSelected(item)"
-             [class.text-blue-800]="isSelected(item)"
-             [class.dark:text-blue-200]="isSelected(item)"
+             class="flex items-center p-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
              (click)="selectCenter(item)">
-             {{item.regCode}} - {{ item.centerName }}
+             <span>{{item.regCode}} - {{ item.centerName }}</span>
+             <span *ngIf="isSelected(item)" class="ml-2 text-blue-600">✓</span>
         </div>
         <div *ngIf="filteredCenterArr.length === 0"
              class="p-2 text-gray-500 dark:text-gray-400 bg-white dark:bg-[#1D1D1F] text-sm text-center">
@@ -169,9 +166,10 @@
                         <div
                           *ngFor="let role of jobRoles"
                           (click)="getJobRole(role)"
-                          class="p-2 dark:text-textDark bg-white cursor-pointer dark:bg-[#1D1D1F] hover:bg-gray-200 dark:hover:bg-gray-700"
+                          class="flex items-center p-2 dark:text-textDark bg-white cursor-pointer dark:bg-[#1D1D1F] hover:bg-gray-200 dark:hover:bg-gray-700"
                         >
-                          {{ role }}
+                          <span>{{ role }}</span>
+                          <span *ngIf="role === personalData.jobRole" class="ml-2 text-blue-600">✓</span>
                         </div>
                       </div>
                     </div>
@@ -215,7 +213,7 @@
                       
                         <!-- Dropdown panel -->
                         <div *ngIf="managerDropdownOpen"
-                             class="absolute z-50 mt-1 w-full border dark:bg-[#292929] dark:text-textDark border-gray-200 dark:border-[#828282] max-h-60 overflow-y-auto shadow-lg">
+                             class="absolute z-50 mt-1 w-full bg-white border dark:bg-[#292929] dark:text-textDark border-gray-200 dark:border-[#828282] rounded-md max-h-60 overflow-y-auto shadow-lg">
                           
                           <!-- Sticky search input -->
                           <div class="sticky top-0 bg-gray-100 dark:bg-[#1D1D1F] z-20">
@@ -234,9 +232,10 @@
                       
                           <!-- List -->
                           <div *ngFor="let item of filteredManagerArr"
-                               class="p-2 hover:bg-gray-200 bg-white dark:hover:bg-gray-700 dark:bg-[#1D1D1F] dark:text-textDark cursor-pointer"
+                               class="flex items-center p-2 hover:bg-gray-200 bg-white dark:hover:bg-gray-700 dark:bg-[#1D1D1F] dark:text-textDark cursor-pointer"
                                (click)="selectManager(item)">
-                               {{item.empId}} - {{ item.firstNameEnglish }} {{item.lastNameEnglish}}
+                               <span>{{item.empId}} - {{ item.firstNameEnglish }} {{item.lastNameEnglish}}</span>
+                               <span *ngIf="item.id === personalData.irmId" class="ml-2 text-blue-600">✓</span>
                           </div>
                           <div *ngIf="filteredManagerArr.length === 0"
                                class="p-2 text-gray-500 dark:text-gray-400 bg-white dark:bg-[#1D1D1F] text-sm text-center">
@@ -1209,7 +1208,7 @@
                 <button (click)="nextForm('pageTwo')" type="button"
                     class="px-6 py-2 bg-[#F6F7F9] border-gray-400 border-[2px] text-[#6B7D8C] rounded-lg mr-2">Back</button>
                 <button type="submit" class="px-6 py-1 bg-[#415CFF] text-white rounded-lg"
-                    (click)="!PageThreeForm.invalid && (driverObj.licNo === driverObj.confirmLicNo) && (driverObj.insNo === driverObj.confirmInsNo) && (driverObj.vRegNo === driverObj.confirmVRegNo) ? onSubmit() : nextForm('pageThree')">Sent to
+                    >Sent to
                     Approve</button>
             </div>
         </div>

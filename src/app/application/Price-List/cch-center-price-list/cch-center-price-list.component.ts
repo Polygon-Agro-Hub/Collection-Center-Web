@@ -128,6 +128,7 @@ export class CchCenterPriceListComponent implements OnInit {
   }
 
   filterGrade() {
+    this.page = 1;
     this.fetchAllPriceList(this.userId, this.page, this.itemsPerPage, this.selectGrade, this.searchText);
   }
 
@@ -141,6 +142,7 @@ export class CchCenterPriceListComponent implements OnInit {
   }
 
   onSearch() {
+    this.page = 1;
     this.fetchAllPriceList(this.userId, this.page, this.itemsPerPage, this.selectGrade, this.searchText);
   }
 

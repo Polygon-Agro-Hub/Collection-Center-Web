@@ -106,6 +106,7 @@ export class ViewPriceListComponent implements OnInit {
   }
 
   filterGrade() {
+    this.page = 1;
     this.fetchAllPriceList(this.page, this.itemsPerPage, this.selectGrade, this.searchText);
   }
 
@@ -119,6 +120,7 @@ export class ViewPriceListComponent implements OnInit {
   }
 
   onSearch() {
+    this.page = 1;
     this.fetchAllPriceList(this.page, this.itemsPerPage, this.selectGrade, this.searchText);
   }
 

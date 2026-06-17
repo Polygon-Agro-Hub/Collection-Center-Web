@@ -55,7 +55,7 @@
                                 placeholder="-- Select a centre --"
                                 readonly
                                 (click)="toggleDropdown()"
-                                class="form-control mt-1 block w-full p-2 pr-10 border border-gray-300 rounded-md bg-white dark:bg-[#1D1D1F] dark:text-textDark cursor-pointer"
+                                class="form-control focus:outline-none focus:ring-0 focus:border-gray-300 mt-1 block w-full p-2 pr-10 border border-gray-300 rounded-md bg-white dark:bg-[#1D1D1F] dark:text-textDark cursor-pointer"
                               />
                           
                               <!-- Arrow icon -->
@@ -70,7 +70,7 @@
                           
                             <!-- Dropdown panel -->
                             <div *ngIf="centreDropdownOpen"
-                                 class="absolute z-50 mt-1 w-full border border-gray-300 rounded-md bg-gray-100 dark:bg-[#1D1D1F] max-h-60 overflow-y-auto shadow-lg">
+                                 class="absolute z-50 mt-1 w-full bg-white border dark:bg-[#292929] dark:text-textDark border-gray-200 dark:border-[#828282] rounded-md bg-gray-100 dark:bg-[#1D1D1F] max-h-60 overflow-y-auto shadow-lg">
                               
                               <!-- Sticky search input -->
                               <div class="sticky top-0 bg-gray-100 dark:bg-[#1D1D1F] z-20">
@@ -79,7 +79,7 @@
                                     type="text"
                                     placeholder="Search..."
                                     (input)="onSearchInput($event)"
-                                    class="dropdown-search-input form-control dark:text-textDark dark:bg-[#1D1D1F] w-full p-2 pr-10 border-b border-gray-300 rounded-t-md"
+                                    class="dropdown-search-input form-control dark:text-textDark dark:bg-[#1D1D1F] w-full p-2 pr-10 border-b dark:bg-[#292929] dark:text-textDark border-gray-200 dark:border-[#828282] rounded-t-md"
                                   />
                                   <i
                                     class="fa-solid fa-magnifying-glass absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
@@ -89,12 +89,11 @@
                           
                               <!-- List -->
                               <div *ngFor="let item of filteredCenterArr"
-                                   class="flex items-center justify-between p-2 hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-textDark cursor-pointer"
-                                   [class.bg-blue-100]="item.id === personalData.centerId"
-                                   [class.dark:bg-blue-900]="item.id === personalData.centerId"
+                                   class="flex items-center p-2 hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-textDark cursor-pointer"
                                    (click)="selectCenter(item)">
                                 <span>{{item.regCode}} - {{ item.centerName }}</span>
-                                <i *ngIf="item.id === personalData.centerId" class="fa-solid fa-check text-blue-500"></i>
+                                
+                                 <span *ngIf="item.id === personalData.centerId" class="ml-2 text-blue-600">✓</span>
                               </div>
                               <div *ngIf="filteredCenterArr.length === 0"
                                    class="p-2 text-gray-500 dark:text-gray-400 bg-white dark:bg-[#1D1D1F] text-sm text-center">
@@ -126,7 +125,7 @@
                               placeholder="-- Select a job role --"
                               readonly
                               (click)="toggleJobRoleDropdown()"
-                              class="form-control mt-1 block w-full p-2 pr-10 border border-gray-300 rounded-md bg-white dark:bg-[#1D1D1F] dark:text-textDark cursor-pointer"
+                              class="form-control focus:outline-none focus:ring-0 focus:border-gray-300 mt-1 block w-full p-2 pr-10 border border-gray-300 rounded-md bg-white dark:bg-[#1D1D1F] dark:text-textDark cursor-pointer"
                             />
                             <i *ngIf="!isJobRoleOpen"
                               class="fa-solid fa-angle-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"
@@ -138,17 +137,15 @@
 
                           <div
                             *ngIf="isJobRoleOpen"
-                            class="absolute z-50 mt-1 w-full bg-white dark:bg-[#1D1D1F] border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto"
+                            class="absolute z-50 mt-1 w-full bg-white border dark:bg-[#292929] dark:text-textDark border-gray-200 dark:border-[#828282] rounded-md shadow-lg max-h-60 overflow-y-auto"
                           >
                             <div
                               *ngFor="let role of jobRoles"
                               (click)="getJobRole(role)"
-                              class="flex items-center justify-between px-4 py-2 dark:text-textDark cursor-pointer hover:bg-gray-200 dark:hover:bg-[#333] transition"
-                              [class.bg-blue-100]="role === personalData.jobRole"
-                              [class.dark:bg-blue-900]="role === personalData.jobRole"
+                              class="flex items-center px-4 py-2 dark:text-textDark cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition"
                             >
                               <span>{{ role }}</span>
-                              <i *ngIf="role === personalData.jobRole" class="fa-solid fa-check text-blue-500"></i>
+                              <span *ngIf="role === personalData.jobRole" class="ml-2 text-blue-600">✓</span>
                             </div>
                           </div>
                         </div>
@@ -181,7 +178,7 @@
                                 placeholder="-- Select a manager --"
                                 readonly
                                 (click)="toggleManagerDropdown()"
-                                class="form-control mt-1 block w-full p-2 pr-10 border border-gray-300 rounded-md bg-white dark:bg-[#1D1D1F] dark:text-textDark cursor-pointer"
+                                class="form-control focus:outline-none focus:ring-0 focus:border-gray-300 mt-1 block w-full p-2 pr-10 border border-gray-300 rounded-md bg-white dark:bg-[#1D1D1F] dark:text-textDark cursor-pointer"
                               />
                           
                               <!-- Arrow icon -->
@@ -196,7 +193,7 @@
                           
                             <!-- Dropdown panel -->
                             <div *ngIf="managerDropdownOpen"
-                                 class="absolute z-50 mt-1 w-full border border-gray-300 rounded-md bg-gray-100 dark:bg-[#1D1D1F] max-h-60 overflow-y-auto shadow-lg">
+                                 class="absolute z-50 mt-1 w-full bg-white border dark:bg-[#292929] dark:text-textDark border-gray-200 dark:border-[#828282] max-h-60 overflow-y-auto shadow-lg">
                               
                               <!-- Sticky search input -->
                               <div class="sticky top-0 bg-gray-100 dark:bg-[#1D1D1F] z-20">
@@ -215,12 +212,10 @@
                           
                               <!-- List -->
                               <div *ngFor="let item of filteredManagerArr"
-                                   class="flex items-center justify-between p-2 hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-textDark cursor-pointer"
-                                   [class.bg-blue-100]="item.id === personalData.irmId"
-                                   [class.dark:bg-blue-900]="item.id === personalData.irmId"
+                                   class="flex items-center p-2 hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-textDark cursor-pointer"
                                    (click)="selectManager(item)">
                                 <span>{{item.empId}} - {{ item.firstNameEnglish }} {{item.lastNameEnglish}}</span>
-                                <i *ngIf="item.id === personalData.irmId" class="fa-solid fa-check text-blue-500"></i>
+                                <span *ngIf="item.id === personalData.irmId" class="ml-2 text-blue-600">✓</span>
                               </div>
                               <div *ngIf="filteredManagerArr.length === 0"
                                    class="p-2 text-gray-500 dark:text-gray-400 bg-white dark:bg-[#1D1D1F] text-sm text-center">

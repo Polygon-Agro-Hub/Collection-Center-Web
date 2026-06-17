@@ -8,27 +8,21 @@
         <div class="w-full dark:bg-[#363636]">
             <div class="flex flex-row items-center justify-center">
                 <p class="text-lg font-semibold text-[#292929] mx-3 dark:text-white">From :</p>
-        
+
                 <div class="relative w-56 mr-10">
-                    <app-custom-datepicker 
-                        #fromDatePicker
-                        [placeholder]="'--Select Date--'"
-                        [(selectedDate)]="fromDate"
+                    <app-custom-datepicker #fromDatePicker [placeholder]="'--Select Date--'" [(selectedDate)]="fromDate"
                         (dateChange)="onFromDateChange($event)">
                     </app-custom-datepicker>
                 </div>
-        
+
                 <p class="text-lg font-semibold text-[#292929] mx-3 dark:text-white">To :</p>
-        
+
                 <div class="relative w-56 mr-6">
-                    <app-custom-datepicker 
-                        #toDatePicker
-                        [placeholder]="'--Select Date--'" 
-                        [selectedDate]="toDate" 
+                    <app-custom-datepicker #toDatePicker [placeholder]="'--Select Date--'" [selectedDate]="toDate"
                         (dateChange)="onToDateChange($event)">
                     </app-custom-datepicker>
                 </div>
-        
+
                 <button (click)="goBtn()"
                     class="bg-[#415CFF] text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-lg ml-5 dark:text-white">
                     Go
@@ -53,33 +47,27 @@
                 <i *ngIf="logingRole === 'Collection Centre Head'"
                     class="fa-solid fa-list text-lg text-[#4A4A4A] dark:text-white ml-8"></i>
 
-                <p *ngIf="logingRole === 'Collection Centre Head'" 
-   class="font-normal text-[14px] text-[#4A4A4A] dark:text-white" 
-   style="font-family: 'Inter', sans-serif;">
-   Filter By
-</p>
+                <p *ngIf="logingRole === 'Collection Centre Head'"
+                    class="font-normal text-[14px] text-[#4A4A4A] dark:text-white"
+                    style="font-family: 'Inter', sans-serif;">
+                    Filter By
+                </p>
 
                 <div class="relative w-64 custom-center-dropdown-container"
                     *ngIf="logingRole === 'Collection Centre Head'">
 
-                    <app-searchable-dropdown
-                        [items]="centerDropdownItems"
-                        placeholder="Select Centre..."
-                        searchPlaceholder="Search centre..."
-                        [(ngModel)]="selectCenters"
-                        (selectionChange)="onCenterSelectionChange($event)"
-                        [clearable]="true"
-                        [showSelected]="true"
-                        [disabled]="false"
-                        class="w-full"
-                      ></app-searchable-dropdown>
-                    
+                    <app-searchable-dropdown [items]="centerDropdownItems" placeholder="Select Centre..."
+                        searchPlaceholder="Search centre..." [(ngModel)]="selectCenters"
+                        (selectionChange)="onCenterSelectionChange($event)" [clearable]="true" [showSelected]="true"
+                        [disabled]="false" class="w-full"></app-searchable-dropdown>
+
                 </div>
 
 
 
                 <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
-                    <input type="text" placeholder="Search by Crop, Variety Name..." [(ngModel)]="searchText" (keyup.enter)="onSearch()" (input)="checkLeadingSpace()"
+                    <input type="text" placeholder="Search by Crop, Variety Name..." [(ngModel)]="searchText"
+                        (keyup.enter)="onSearch()" (input)="checkLeadingSpace()"
                         class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
                     <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                         (click)="onSearch()">
@@ -120,61 +108,66 @@
             </button>
         </div>
 
-        <div *ngIf="hasData" class="min-w-max mt-4 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021] overflow-hidden">
-            <table class="w-full min-w-max divide-y-2">
-                <thead class=" dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] text-[#4B5563]">
-                    <tr>
-                        <th class="px-2 py-3 text-base text-center font-medium">No</th>
-                        <th class="px-3 py-3 text-left text-base font-medium"
-                            *ngIf="logingRole === 'Collection Centre Head'">Centre Code</th>
-                        <th class="px-3 py-3 text-left text-base font-medium"
-                            *ngIf="logingRole === 'Collection Centre Head'">Centre Name</th>
-                        <th class="px-3 py-3 text-left text-base font-medium">Crop</th>
-                        <th class="px-3 py-3 text-left text-base font-medium ">Variety</th>
-                        <th class="px-3 py-3 text-center text-base font-medium ">Quantity A (kg)</th>
-                        <th class="px-3 py-3 text-center text-base font-medium">Quantity B (kg)</th>
-                        <th class="px-3 py-3 text-center text-base font-medium">Quantity C (kg)</th>
-                        <th class="px-3 py-3 text-center text-base font-medium">Total (kg)</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white text-[#000000] font-semibold dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
-                    <tr *ngFor="let item of farmerPaymentsArr | paginate
+        <div *ngIf="hasData" class="min-w-max overflow-hidden  mt-5 mr-5">
+            <div class=" border-gray-100 border-[2px] dark:border-[#202021] rounded-lg">
+                <table class="w-full min-w-max divide-y-2">
+                    <thead class=" dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] text-[#4B5563]">
+                        <tr>
+                            <th class="px-2 py-3 text-base text-center font-medium">No</th>
+                            <th class="px-3 py-3 text-left text-base font-medium"
+                                *ngIf="logingRole === 'Collection Centre Head'">Centre Code</th>
+                            <th class="px-3 py-3 text-left text-base font-medium"
+                                *ngIf="logingRole === 'Collection Centre Head'">Centre Name</th>
+                            <th class="px-3 py-3 text-left text-base font-medium">Crop</th>
+                            <th class="px-3 py-3 text-left text-base font-medium ">Variety</th>
+                            <th class="px-3 py-3 text-center text-base font-medium ">Quantity A (kg)</th>
+                            <th class="px-3 py-3 text-center text-base font-medium">Quantity B (kg)</th>
+                            <th class="px-3 py-3 text-center text-base font-medium">Quantity C (kg)</th>
+                            <th class="px-3 py-3 text-center text-base font-medium">Total (kg)</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white text-[#000000] font-semibold dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
+                        <tr *ngFor="let item of farmerPaymentsArr | paginate
                 : {
                     itemsPerPage: itemsPerPage,
                     currentPage: page,
                     totalItems: totalItems
                   };  let i = index">
-                        <td class="px-2 py-4 text-center text-base text-gray-900 dark:text-gray-300 ">
-                            {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i + 1)
-                                : (((page - 1) * itemsPerPage) + i + 1) }} </td>
-                        <td class="px-3 py-4 text-base text-gray-900 dark:text-gray-300"
-                            *ngIf="logingRole === 'Collection Centre Head'">{{item.centerCode}}</td>
-                        <td class="px-3 py-4 text-base text-gray-900 dark:text-gray-300"
-                            *ngIf="logingRole === 'Collection Centre Head'">{{item.centerName}}</td>
-                        <td class="px-3 py-4 text-base text-gray-900 dark:text-gray-300">
-                            {{ item.cropNameEnglish || '-' }}
-                        </td>
-                        <td class="px-3 py-4 text-base text-left text-gray-900 dark:text-gray-300">
-                            {{ item.varietyNameEnglish || '-' }}
-                        </td>
-                        <td class="px-3 py-4 text-base text-center dark:text-gray-300">{{item.totalGradeAQuantity | number:
-                            '1.2-2' }}</td>
-                        <td class="px-3 py-4 text-base text-center dark:text-gray-300">{{item.totalGradeBQuantity | number:
-                            '1.2-2' }}</td>
-                        <td class="px-3 py-4 text-base text-center dark:text-gray-300">{{item.totalGradeCQuantity | number:
-                            '1.2-2' }}</td>
-                        <td class="px-3 py-4 text-base text-center dark:text-gray-300">
-                            {{ item.totalQuantity | number: '1.2-2' }}
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#1D1D1F] text-right">
-            <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
-                [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
-                [screenReaderCurrentLabel]="'Youre on page'">
-            </pagination-controls>
+                            <td class="px-2 py-4 text-center text-base text-gray-900 dark:text-gray-300 ">
+                                {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i +
+                                    1) : (((page - 1) * itemsPerPage) + i + 1) }} </td>
+                            <td class="px-3 py-4 text-base text-gray-900 dark:text-gray-300"
+                                *ngIf="logingRole === 'Collection Centre Head'">{{item.centerCode}}</td>
+                            <td class="px-3 py-4 text-base text-gray-900 dark:text-gray-300"
+                                *ngIf="logingRole === 'Collection Centre Head'">{{item.centerName}}</td>
+                            <td class="px-3 py-4 text-base text-gray-900 dark:text-gray-300">
+                                {{ item.cropNameEnglish || '-' }}
+                            </td>
+                            <td class="px-3 py-4 text-base text-left text-gray-900 dark:text-gray-300">
+                                {{ item.varietyNameEnglish || '-' }}
+                            </td>
+                            <td class="px-3 py-4 text-base text-center dark:text-gray-300">{{item.totalGradeAQuantity |
+                                number:
+                                '1.2-2' }}</td>
+                            <td class="px-3 py-4 text-base text-center dark:text-gray-300">{{item.totalGradeBQuantity |
+                                number:
+                                '1.2-2' }}</td>
+                            <td class="px-3 py-4 text-base text-center dark:text-gray-300">{{item.totalGradeCQuantity |
+                                number:
+                                '1.2-2' }}</td>
+                            <td class="px-3 py-4 text-base text-center dark:text-gray-300">
+                                {{ item.totalQuantity | number: '1.2-2' }}
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="flex justify-end items-center my-5 pt-3 dark:bg-[#1D1D1F] text-right">
+                <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true"
+                    [previousLabel]="'Previous'" [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'"
+                    [screenReaderPageLabel]="'page'" [screenReaderCurrentLabel]="'Youre on page'">
+                </pagination-controls>
+            </div>
         </div>
     </div>
 
@@ -203,24 +196,17 @@
 
 
                 <div class="relative w-64 custom-center-dropdown-container">
-                    <app-searchable-dropdown
-                        [items]="centerDropdownItems"
-                        placeholder="Select Centre..."
-                        searchPlaceholder="Search centre..."
-                        [(ngModel)]="selectCenters"
-                        (selectionChange)="onCenterSelectionChange($event)"
-                        [clearable]="true"
-                        [showSelected]="true"
-                        [disabled]="false"
-                        class="w-full"
-                      ></app-searchable-dropdown>
+                    <app-searchable-dropdown [items]="centerDropdownItems" placeholder="Select Centre..."
+                        searchPlaceholder="Search centre..." [(ngModel)]="selectCenters"
+                        (selectionChange)="onCenterSelectionChange($event)" [clearable]="true" [showSelected]="true"
+                        [disabled]="false" class="w-full"></app-searchable-dropdown>
                 </div>
 
 
 
                 <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
-                    <input type="text" placeholder="Search by Crop & Variety Name..." [(ngModel)]="searchText" (keyup.enter)="onSearch()"
-                        (keyup.esc)="offSearch()" (input)="checkLeadingSpace()"
+                    <input type="text" placeholder="Search by Crop & Variety Name..." [(ngModel)]="searchText"
+                        (keyup.enter)="onSearch()" (keyup.esc)="offSearch()" (input)="checkLeadingSpace()"
                         class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
                     <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                         (click)="onSearch()">

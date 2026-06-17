@@ -84,7 +84,7 @@
             placeholder="-- Select a centre --"
             readonly
             (click)="toggleDropdown()"
-            class="form-control mt-1 block w-full p-2 pr-10 border border-gray-300 rounded-md bg-white dark:bg-[#1D1D1F] dark:text-textDark cursor-pointer"
+            class="form-control focus:outline-none focus:ring-0 focus:border-gray-300 mt-1 block w-full p-2 pr-10 border border-gray-300 rounded-md bg-white dark:bg-[#1D1D1F] dark:text-textDark cursor-pointer"
         />
         
         <!-- Arrow icon -->
@@ -99,7 +99,7 @@
     
     <!-- Dropdown panel -->
     <div *ngIf="centreDropdownOpen"
-         class="absolute z-50 mt-1 w-full border border-gray-300 rounded-md bg-gray-100 dark:bg-[#1D1D1F] max-h-60 overflow-y-auto shadow-lg">
+         class="absolute z-50 mt-1 w-full border dark:bg-[#292929] dark:text-textDark border-gray-200 dark:border-[#828282] max-h-60 overflow-y-auto shadow-lg">
         
         <!-- Sticky search input -->
         <div class="sticky top-0 bg-gray-100 dark:bg-[#1D1D1F] z-20">
@@ -152,7 +152,7 @@
                           placeholder="-- Select a job role --"
                           readonly
                           (click)="toggleJobRoleDropdown()"
-                          class="form-control mt-1 block w-full p-2 pr-10 border border-gray-300 rounded-md bg-white dark:bg-[#1D1D1F] dark:text-textDark cursor-pointer"
+                          class="form-control focus:outline-none focus:ring-0 focus:border-gray-300 mt-1 block w-full p-2 pr-10 border border-gray-300 rounded-md bg-white dark:bg-[#1D1D1F] dark:text-textDark cursor-pointer"
                         />
                         <i *ngIf="!isJobRoleOpen"
                           class="fa-solid fa-angle-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"
@@ -164,7 +164,7 @@
 
                       <div
                         *ngIf="isJobRoleOpen"
-                        class="absolute z-50 mt-1 w-full bg-white dark:bg-[#1D1D1F] border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto"
+                        class="absolute z-50 mt-1 w-full bg-white border dark:bg-[#292929] dark:text-textDark border-gray-200 dark:border-[#828282] rounded-md shadow-lg max-h-60 overflow-y-auto"
                       >
                         <div
                           *ngFor="let role of jobRoles"
@@ -200,7 +200,7 @@
                             placeholder="-- Select a manager --"
                             readonly
                             (click)="toggleManagerDropdown()"
-                            class="form-control mt-1 block w-full p-2 pr-10 border border-gray-300 rounded-md bg-white dark:bg-[#1D1D1F] dark:text-textDark cursor-pointer"
+                            class="form-control focus:outline-none focus:ring-0 focus:border-gray-300 mt-1 block w-full p-2 pr-10 border border-gray-300 rounded-md bg-white dark:bg-[#1D1D1F] dark:text-textDark cursor-pointer"
                           />
                       
                           <!-- Arrow icon -->
@@ -215,7 +215,7 @@
                       
                         <!-- Dropdown panel -->
                         <div *ngIf="managerDropdownOpen"
-                             class="absolute z-50 mt-1 w-full border border-gray-300 rounded-md bg-gray-100 dark:bg-[#1D1D1F] max-h-60 overflow-y-auto shadow-lg">
+                             class="absolute z-50 mt-1 w-full border dark:bg-[#292929] dark:text-textDark border-gray-200 dark:border-[#828282] max-h-60 overflow-y-auto shadow-lg">
                           
                           <!-- Sticky search input -->
                           <div class="sticky top-0 bg-gray-100 dark:bg-[#1D1D1F] z-20">

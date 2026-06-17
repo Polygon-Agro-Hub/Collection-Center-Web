@@ -6,6 +6,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { TargetService } from '../../../services/Target-service/target.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import Swal from 'sweetalert2';
+import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 
 @Component({
   selector: 'app-view-center-target',
@@ -51,7 +52,8 @@ export class ViewCenterTargetComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private TargetSrv: TargetService
+    private TargetSrv: TargetService,
+    private toastSrv: ToastAlertService,
   ) { }
 
   ngOnInit(): void {
@@ -210,29 +212,16 @@ export class ViewCenterTargetComponent implements OnInit {
           a.download = `Current Centre Target Report For ${this.today}.xlsx`;
           a.click();
           window.URL.revokeObjectURL(url);
-          Swal.fire({
-            icon: "success",
-            title: "Downloaded",
-            text: "Please check your downloads folder",
-            customClass: {
-              popup: 'bg-white dark:bg-[#363636]', // Light mode: white, Dark mode: gray-800
-              title: 'text-gray-800 dark:text-textDark', // Title text (dark: almost white)
-              htmlContainer: 'text-gray-600 dark:text-white', // Body text (dark: light gray)
-            }
-          });
-
+          
+          this.toastSrv.success('File Downloaded Successfully');
           this.isDownloading = false;
         },
         error: (error) => {
-          Swal.fire({
-            icon: "error",
-            title: "Download Failed",
-            text: error.message,
-          });
+          this.toastSrv.error('File Download Failed');
           this.isDownloading = false;
         }
       });
-  }
+}
 
 }
 

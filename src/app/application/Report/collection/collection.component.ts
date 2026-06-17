@@ -314,23 +314,30 @@ export class CollectionComponent implements OnInit {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
+          
           const selectedCenter = this.centerArr.find(
-          center => center.id.toString() === this.selectCenters
-        );
-        const centrePrefix = selectedCenter ? `${selectedCenter.regCode} ` : '';
-          a.download = `${centrePrefix} Collection Report From ${this.fromDate} To ${this.toDate}.xlsx`;
+            center => center.id.toString() === this.selectCenters
+          );
+          
+          // Build filename without leading underscore
+          let fileName = `Collection Report From ${this.fromDate} To ${this.toDate}.xlsx`;
+          if (selectedCenter) {
+            fileName = `${selectedCenter.regCode} ${fileName}`;
+          }
+          
+          a.download = fileName;
           a.click();
           window.URL.revokeObjectURL(url);
 
-          this.toastSrv.success('File Downloaded Successfully')
+          this.toastSrv.success('File Downloaded Successfully');
           this.isDownloading = false;
         },
         error: (error) => {
-          this.toastSrv.error('File Download Failed')
+          this.toastSrv.error('File Download Failed');
           this.isDownloading = false;
         }
       });
-  }
+}
 
   checkLeadingSpace() {
     if (this.searchText && this.searchText.startsWith(' ')) {

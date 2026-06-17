@@ -14,6 +14,7 @@ import { TokenServiceService } from '../../../services/Token/token-service.servi
 import { ProcurementsService } from '../../../services/Procurement-service/procurements.service';
 import { CustomDatepickerComponent } from '../../../components/custom-datepicker/custom-datepicker.component';
 import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
+import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 
 interface PurchaseReport {
   id: number;
@@ -79,7 +80,8 @@ export class RecievedOrdersComponent {
   constructor(
     private procumentService: ProcurementsService,
     private router: Router,
-    public tokenService: TokenServiceService
+    public tokenService: TokenServiceService,
+    private toastSrv: ToastAlertService
   ) { }
 
   ngOnInit() {
@@ -323,6 +325,7 @@ export class RecievedOrdersComponent {
   }
 
   private downloadAggregatedReport(items: any[]) {
+    console.log('items', items)
   let queryParams = [];
 
   if (this.filterType) {
@@ -354,7 +357,7 @@ export class RecievedOrdersComponent {
     'Variety': item.varietyNameEnglish,
     'Quantity (kg)': item.quantity,
     'Ordered On': this.formatDateForExcel(item.createdAt),
-    'Scheduled Date': this.formatDateForExcel(item.scheduleDate), // fix typo here
+    'Scheduled Date': this.formatDateForExcel(item.sheduleDate), 
     'To Collection Centre': this.formatDateForExcel(item.toCollectionCentre),
     'To Dispatch Centre': this.formatDateForExcel(item.toDispatchCenter)
   })));
@@ -365,7 +368,7 @@ export class RecievedOrdersComponent {
   const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
 
   // Keep your original naming (with query params if you plan to use it)
-  this.saveAsExcelFile(excelBuffer, `Procument_Items_Report${queryString}`);
+  this.saveAsExcelFile(excelBuffer, `Procument_Items_Report`);
 }
 
 
@@ -480,18 +483,10 @@ export class RecievedOrdersComponent {
       link.click();
       document.body.removeChild(link);
 
-      Swal.fire({
-        icon: 'success',
-        title: 'Downloaded',
-        text: 'Please check your downloads folder',
-        customClass: {
-          popup: 'bg-tileLight dark:bg-tileBlack text-black dark:text-white',
-          title: 'font-semibold',
-        }
-      });
+      this.toastSrv.success('File Downloaded Successfully.');
     } else {
       // Fallback for older browsers
-      window.open(URL.createObjectURL(data));
+      this.toastSrv.error('File Download Failed.');
     }
 
     this.isDownloading = false;

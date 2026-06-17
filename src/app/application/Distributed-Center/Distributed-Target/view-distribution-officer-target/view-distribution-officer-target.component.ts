@@ -42,6 +42,8 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Pending', 'Completed', 'Opened'];
 
+  today = new Date();
+
   toggleStatusDropdown() {
     this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
   }
@@ -279,7 +281,7 @@ changeStatusAndTime(data: { orderIds: any[]; time: string }) {
       if (res && res.success) {
         const orderCount = data.orderIds.length < 10 ? ('0' + data.orderIds.length) : (data.orderIds.length);
         const orderLabel = orderCount === 1 ? 'order' : 'orders';
-        this.toastSrv.success(`${orderCount} ${orderLabel} successfully passed to ${this.selectedEmpId}!`, 'Success');
+        this.toastSrv.success(`${orderCount} ${orderLabel} successfully passed to ${this.selectedEmpId}`, 'Success');
         this.isPassTarget = false;
       } else {
         this.toastSrv.error('Failed to pass the target to selected officer!', 'Error');
@@ -325,7 +327,7 @@ passTargetToBackEnd() {
         const orderLabel = this.selectedOrderIds.length === 1 ? 'order' : 'orders';
         // Get the empId if officer exists
         const empId = selectedOfficer ? selectedOfficer.empId : 'Unknown';
-        this.toastSrv.success(`${orderCount} ${orderLabel} successfully passed to ${empId}!`, 'Success');
+        this.toastSrv.success(`${orderCount} ${orderLabel} successfully passed to ${empId}`, 'Success');
         this.fetchSelectedOfficerTargets()
         this.isPass = false;
         this.isPassTarget = false;
@@ -395,6 +397,10 @@ goBack() {
   this.location.back();
 }
 
+formatSelectedCount(count: number): string {
+  return count < 10 ? `0${count}` : `${count}`;
+}
+
 getStatus(item: orders): string {
   // Convert both into Date objects
   const scheduleDate = new Date(item.sheduleDate);
@@ -459,6 +465,7 @@ class orders {
   completeTime!: Date
   lockStatus!: number
   isComplete!: number
+  deliveryStatus!: string;
 }
 
 class Officer {

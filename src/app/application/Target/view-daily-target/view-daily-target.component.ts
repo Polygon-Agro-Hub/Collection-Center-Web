@@ -76,10 +76,6 @@ export class ViewDailyTargetComponent implements OnInit {
 
   ngOnInit(): void {
 
-    
-
-
-
     const date = new Date();
     const year = date.getFullYear();
     const month = ('0' + (date.getMonth() + 1)).slice(-2);
@@ -195,6 +191,7 @@ export class ViewDailyTargetComponent implements OnInit {
     this.TargetSrv.AssignAllDailyTarget(page, limit, search).subscribe(
       (res) => {
         this.assignTargetArr = res;
+        console.log('assignTargetArr', this.assignTargetArr.length)
         if (res.length > 0) {
           this.assignHasData = true;
         } else {

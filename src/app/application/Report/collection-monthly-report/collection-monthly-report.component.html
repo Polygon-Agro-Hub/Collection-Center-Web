@@ -17,7 +17,7 @@
                     #fromDatePicker
                     [selectedDate]="startDate" 
                     (dateChange)="onStartDateChange($event)"
-                    placeholder="Start Date">
+                    placeholder="--Select Date--">
                 </app-custom-datepicker>
             </div>
         
@@ -28,7 +28,7 @@
                     #toDatePicker
                     [selectedDate]="endDate" 
                     (dateChange)="onEndDateChange($event)"
-                    placeholder="End Date">
+                    placeholder="--Select Date--">
                 </app-custom-datepicker>
             </div>
         
@@ -142,7 +142,7 @@
                 </span>
                 <span
                     class="rounded-none rounded-e-lg border border-s-0 bg-gray-50 border-[#D9D9D9] font-semibold focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full p-2.5 dark:text-white dark:bg-[#1D1D1F] dark:border-gray-600">
-                    {{totFarmers}}
+                    {{totalFarmersSum}}
                 </span>
             </div>
         </div>

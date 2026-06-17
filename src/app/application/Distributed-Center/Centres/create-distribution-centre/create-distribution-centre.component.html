@@ -35,7 +35,7 @@
 
         <div>
             <label for="phoneNumber01" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
-                Mobile Number - 1 *
+                Contact Number - 01 *
             </label>
             <div class="mt-1 flex">
                 <div class="dropdown-wrapper-1 relative inline-block w-36 mr-2">
@@ -66,27 +66,27 @@
                 <input id="phoneNumber01" name="phoneNumber01" type="tell"
                     [(ngModel)]="centerData.phoneNumber01"
                     class="block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-r-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                    placeholder="Enter your mobile number" #phoneNumber01Input="ngModel" required (ngModelChange)="validateSriLankanPhone($event, 'phone01')"
+                    placeholder="Enter your contact number" #phoneNumber01Input="ngModel" required (ngModelChange)="validateSriLankanPhone($event, 'phone01')"
                     pattern="^[0-9]{9}$" minlength="9" maxlength="9"
                     (keypress)="($event.charCode >= 48 && $event.charCode <= 57) ? true : $event.preventDefault()" />
             </div>
             <div *ngIf="phoneNumber01Input.touched && !centerData.phoneNumber01"
                 class="text-red-500 text-sm mt-1">
-                <div> Mobile Number - 1 is required</div>
+                <div> Contact Number - 01 is required</div>
             </div>
             <div *ngIf="centerData.phoneNumber01 && phoneNumber01Input.invalid && !isPhoneInvalidMap['phone01']"
                 class="text-red-500 text-sm mt-1">
-                Mobile Number must be exactly 9 digits.
+                Contact Number must be exactly 9 digits.
             </div>
 
             <div *ngIf="isPhoneInvalidMap['phone01'] && centerData.phoneNumber01" class="text-red-500 text-sm mt-1">
-                Please enter a valid mobile number (format: +947XXXXXXXX)
+                Please enter a valid Contact number (format: +947XXXXXXXX)
               </div>
         </div>
 
         <div>
             <label for="phoNumTwo" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
-                Mobile Number - 2
+                Contact Number - 02
             </label>
             <div class="mt-1 flex">
                 <div class="dropdown-wrapper-2 relative inline-block w-36 mr-2">
@@ -117,22 +117,22 @@
                 <input id="phoneNumber02" name="phoneNumber02" type="tell" #phoneNumber02Input="ngModel"
                     [(ngModel)]="centerData.phoneNumber02"
                     class="block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-r-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                    placeholder="Enter your mobile number" pattern="^[0-9]{9}$" minlength="9" maxlength="9"
+                    placeholder="Enter your contact number" pattern="^[0-9]{9}$" minlength="9" maxlength="9"
                     maxlength="9" (ngModelChange)="validateSriLankanPhone($event, 'phone02')"
                     (keypress)="($event.charCode >= 48 && $event.charCode <= 57) ? true : $event.preventDefault()"/>
 
             </div>
             <div *ngIf="centerData.phoneNumber02 && phoneNumber02Input.invalid && !isPhoneInvalidMap['phone02']"
                 class="text-red-500 text-sm mt-1">
-                Mobile Number must be exactly 9 digits.
+                Contact Number must be exactly 9 digits.
             </div>
 
             <div *ngIf="centerData.phoneNumber02 && centerData.phoneNumber02 === centerData.phoneNumber01 && !isPhoneInvalidMap['phone02'] && !phoneNumber02Input.invalid" class="text-red-500 text-sm mt-1">
-                Mobile Number - 2 should be different from Mobile Number - 1.
+                Contact Number - 02 should be different from Contact Number - 01.
               </div>
 
               <div *ngIf="isPhoneInvalidMap['phone02'] && centerData.phoneNumber02" class="text-red-500 text-sm mt-1">
-                Please enter a valid mobile number (format: +947XXXXXXXX)
+                Please enter a valid Contact number (format: +947XXXXXXXX)
               </div>
         </div>
 
@@ -194,17 +194,7 @@
             </p>
         </div>
         
-        <!-- Building Number -->
-        <div>
-            <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Building Number *</label>
-            <input type="text"
-                class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                [(ngModel)]="centerData.buildingNo" name="buildingNo" required #buildingNo="ngModel"
-                (input)="onTrimInput($event, centerData, 'buildingNo')" />
-            <p *ngIf="buildingNo.invalid && buildingNo.touched" class="text-red-500 text-sm">
-                Building Number is required.
-            </p>
-        </div>
+
         <!-- Street Name -->
         <div>
             <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Street Name *</label>
@@ -232,7 +222,7 @@
             <label for="email"
                 class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Email *</label>
             <input type="email" id="email" name="email" [(ngModel)]="centerData.email"
-                #email="ngModel" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$"
+                #email="ngModel" required pattern="^[A-Za-z0-9](?!.*\.\.)([A-Za-z0-9._%+-]{0,62}[A-Za-z0-9])?@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"
                 (input)="onTrimInput($event, centerData, 'email')"
                 class="mt-1 block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
 

@@ -278,6 +278,7 @@ export class ProcurementsService {
   }
 
   getAllRequestedItemsForDCH(center: string = '', date: string = '', search: string = ''): Observable<any> {
+    console.log('called')
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`

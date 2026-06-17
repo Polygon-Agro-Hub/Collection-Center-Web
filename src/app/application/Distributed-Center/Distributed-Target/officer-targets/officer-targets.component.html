@@ -31,39 +31,39 @@
         <table class="w-full divide-y-2 overflow-hidden">
             <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
                 <tr>
-                    <th class="px-6 py-3 text-left text-sm font-medium text-[#FFFFFFF] dark:text-white">No</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">EMP ID</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium text-[#4B5563] dark:text-white">Full Name</th>
-                    <th class="px-6 py-3 text-center text-sm font-medium text-[#4B5563] dark:text-white">All Orders</th>
-                    <th class="px-6 py-3 text-center text-sm font-medium text-[#4B5563] dark:text-white">Pending</th>
-                    <th class="px-6 py-3 text-center text-sm font-medium text-[#4B5563] dark:text-white">Opened</th>
-                    <th class="px-6 py-3 text-center text-sm font-medium text-[#4B5563] dark:text-white">Completed</th>
-                    <th class="px-6 py-3 text-center text-sm font-medium text-[#4B5563] dark:text-white"></th>
+                    <th class="px-6 py-3 text-left text-base font-medium text-[#FFFFFFF] dark:text-white">No</th>
+                    <th class="px-6 py-3 text-left text-base font-medium text-[#4B5563] dark:text-white">EMP ID</th>
+                    <th class="px-6 py-3 text-left text-base font-medium text-[#4B5563] dark:text-white">Full Name</th>
+                    <th class="px-6 py-3 text-center text-base font-medium text-[#4B5563] dark:text-white">All Orders</th>
+                    <th class="px-6 py-3 text-center text-base font-medium text-[#4B5563] dark:text-white">Pending</th>
+                    <th class="px-6 py-3 text-center text-base font-medium text-[#4B5563] dark:text-white">Opened</th>
+                    <th class="px-6 py-3 text-center text-base font-medium text-[#4B5563] dark:text-white">Completed</th>
+                    <th class="px-6 py-3 text-center text-base font-medium text-[#4B5563] dark:text-white"></th>
 
                 </tr>
             </thead>
             <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
                 <tr
                     *ngFor="let item of officersArr let i = index">
-                    <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
+                    <td class="px-6 py-4 text-base font-medium text-gray-900 dark:text-[#C5C5C5]">
                         {{ (i + 1) < 10 ? ('0' + (i + 1)) : (i + 1) }}
                       </td>
-                    <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.empId}}</td>
-                    <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.name}}</td>
-                    <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5] text-center">
-                        {{ item.total === 0 ? '0' : (item.total < 10 ? ('0' + item.total) : item.total) }}
+                    <td class="px-6 py-4 text-base font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.empId}}</td>
+                    <td class="px-6 py-4 text-base font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.name}}</td>
+                    <td class="px-6 py-4 text-base font-medium text-gray-900 dark:text-[#C5C5C5] text-center">
+                        {{ item.total < 10 ? '0' + item.total : item.total }}
                       </td>
-                      <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5] text-center">
-                        {{ item.pending === 0 ? '0' : (item.pending < 10 ? ('0' + item.pending) : item.pending) }}
+                      <td class="px-6 py-4 text-base font-medium text-gray-900 dark:text-[#C5C5C5] text-center">
+                        {{ item.pending < 10 ? '0' + item.pending : item.pending }}
                       </td>
-                      <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5] text-center">
-                        {{ item.opened === 0 ? '0' : (item.opened < 10 ? ('0' + item.opened) : item.opened) }}
+                      <td class="px-6 py-4 text-base font-medium text-gray-900 dark:text-[#C5C5C5] text-center">
+                        {{ item.opened < 10 ? '0' + item.opened : item.opened }}
                       </td>
-                      <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5] text-center">
-                        {{ item.completed === 0 ? '0' : (item.completed < 10 ? ('0' + item.completed) : item.completed) }}
+                      <td class="px-6 py-4 text-base font-medium text-gray-900 dark:text-[#C5C5C5] text-center">
+                        {{ item.completed < 10 ? '0' + item.completed : item.completed }}
                       </td>
 
-                      <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5] cursor-pointer">
+                      <td class="px-6 py-4 text-base font-medium text-gray-900 dark:text-[#C5C5C5] cursor-pointer">
                         <div class="flex items-center justify-center h-full" (click)="viewSelectedOfficerTarget(item.officerId, selectedDate)">
                             <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none"
                                 xmlns="http://www.w3.org/2000/svg">

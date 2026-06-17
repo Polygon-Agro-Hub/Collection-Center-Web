@@ -138,19 +138,19 @@ export class DistributedManageOfficersService {
     });
   }
 
-  createDistributionOfficer(person: any, selectedFile: File | null, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
+  createDistributionOfficer(person: any, selectedFile: File | null, driver: any, licFront: File | null, licBack: File | null, insFront: File | null, insBack: File | null, vehiFront: File | null, vehiBack: File | null, vehiSideA: File | null, vehiSideB: File | null): Observable<any> {
     const formData = new FormData();
 
     if (person.jobRole === 'Driver') {
       formData.append('driverData', JSON.stringify(driver));
-      formData.append('licFront', licFront);
-      formData.append('licBack', licBack);
-      formData.append('insFront', insFront);
-      formData.append('insBack', insBack);
-      formData.append('vehiFront', vehiFront);
-      formData.append('vehiBack', vehiBack);
-      formData.append('vehiSideA', vehiSideA);
-      formData.append('vehiSideB', vehiSideB);
+      if (licFront) formData.append('licFront', licFront);
+      if (licBack) formData.append('licBack', licBack);
+      if (insFront) formData.append('insFront', insFront);
+      if (insBack) formData.append('insBack', insBack);
+      if (vehiFront) formData.append('vehiFront', vehiFront);
+      if (vehiBack) formData.append('vehiBack', vehiBack);
+      if (vehiSideA) formData.append('vehiSideA', vehiSideA);
+      if (vehiSideB) formData.append('vehiSideB', vehiSideB);
     }
     
     formData.append('officerData', JSON.stringify(person));
@@ -165,19 +165,19 @@ export class DistributedManageOfficersService {
     });
   }
 
-  createDistributionOfficerDIO(person: any, selectedFile: File | null, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
+  createDistributionOfficerDIO(person: any, selectedFile: File | null, driver: any, licFront: File | null, licBack: File | null, insFront: File | null, insBack: File | null, vehiFront: File | null, vehiBack: File | null, vehiSideA: File | null, vehiSideB: File | null): Observable<any> {
     const formData = new FormData();
 
     if (person.jobRole === 'Driver') {
       formData.append('driverData', JSON.stringify(driver));
-      formData.append('licFront', licFront);
-      formData.append('licBack', licBack);
-      formData.append('insFront', insFront);
-      formData.append('insBack', insBack);
-      formData.append('vehiFront', vehiFront);
-      formData.append('vehiBack', vehiBack);
-      formData.append('vehiSideA', vehiSideA);
-      formData.append('vehiSideB', vehiSideB);
+      if (licFront) formData.append('licFront', licFront);
+      if (licBack) formData.append('licBack', licBack);
+      if (insFront) formData.append('insFront', insFront);
+      if (insBack) formData.append('insBack', insBack);
+      if (vehiFront) formData.append('vehiFront', vehiFront);
+      if (vehiBack) formData.append('vehiBack', vehiBack);
+      if (vehiSideA) formData.append('vehiSideA', vehiSideA);
+      if (vehiSideB) formData.append('vehiSideB', vehiSideB);
     }
     
     formData.append('officerData', JSON.stringify(person));
@@ -201,19 +201,19 @@ export class DistributedManageOfficersService {
     });
   }
 
-  updateDistributionOfficer(person: any, id: number, selectedFile: File | null, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
+  updateDistributionOfficer(person: any, id: number, selectedFile: File | null, driver: any, licFront: File | null, licBack: File | null, insFront: File | null, insBack: File | null, vehiFront: File | null, vehiBack: File | null, vehiSideA: File | null, vehiSideB: File | null): Observable<any> {
     const formData = new FormData();
 
     if (person.jobRole === 'Driver') {
       formData.append('driverData', JSON.stringify(driver));
-      formData.append('licFront', licFront);
-      formData.append('licBack', licBack);
-      formData.append('insFront', insFront);
-      formData.append('insBack', insBack);
-      formData.append('vehiFront', vehiFront);
-      formData.append('vehiBack', vehiBack);
-      formData.append('vehiSideA', vehiSideA);
-      formData.append('vehiSideB', vehiSideB);
+      if (licFront) formData.append('licFront', licFront);
+      if (licBack) formData.append('licBack', licBack);
+      if (insFront) formData.append('insFront', insFront);
+      if (insBack) formData.append('insBack', insBack);
+      if (vehiFront) formData.append('vehiFront', vehiFront);
+      if (vehiBack) formData.append('vehiBack', vehiBack);
+      if (vehiSideA) formData.append('vehiSideA', vehiSideA);
+      if (vehiSideB) formData.append('vehiSideB', vehiSideB);
     }
 
     formData.append('officerData', JSON.stringify(person));
@@ -228,19 +228,19 @@ export class DistributedManageOfficersService {
     });
   }
 
-  updateDistributionOfficerDIO(person: any, id: number, selectedFile: File | null, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
+  updateDistributionOfficerDIO(person: any, id: number, selectedFile: File | null, driver: any, licFront: File | null, licBack: File | null, insFront: File | null, insBack: File | null, vehiFront: File | null, vehiBack: File | null, vehiSideA: File | null, vehiSideB: File | null): Observable<any> {
     const formData = new FormData();
 
     if (person.jobRole === 'Driver') {
       formData.append('driverData', JSON.stringify(driver));
-      formData.append('licFront', licFront);
-      formData.append('licBack', licBack);
-      formData.append('insFront', insFront);
-      formData.append('insBack', insBack);
-      formData.append('vehiFront', vehiFront);
-      formData.append('vehiBack', vehiBack);
-      formData.append('vehiSideA', vehiSideA);
-      formData.append('vehiSideB', vehiSideB);
+      if (licFront) formData.append('licFront', licFront);
+      if (licBack) formData.append('licBack', licBack);
+      if (insFront) formData.append('insFront', insFront);
+      if (insBack) formData.append('insBack', insBack);
+      if (vehiFront) formData.append('vehiFront', vehiFront);
+      if (vehiBack) formData.append('vehiBack', vehiBack);
+      if (vehiSideA) formData.append('vehiSideA', vehiSideA);
+      if (vehiSideB) formData.append('vehiSideB', vehiSideB);
     }
     
     formData.append('officerData', JSON.stringify(person));

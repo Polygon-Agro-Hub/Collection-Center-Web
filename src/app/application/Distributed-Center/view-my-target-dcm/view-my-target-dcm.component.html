@@ -59,8 +59,6 @@
                         </div>
                     </div>
 
-
-
                     <!-- Custom dropdown options -->
                     <div *ngIf="isStatusDropdownOpen"
                         class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282] overflow-hidden">
@@ -236,11 +234,11 @@
                         </td>
                         <td class="px-6 py-4 text-sm text-left font-medium text-gray-900 dark:text-[#C5C5C5]">
                             <span [ngClass]="{
-                            'text-red-500': getStatus(item) === 'Late',
-                            'text-blue-500': getStatus(item) === 'On Time',
-                            'text-[#AC0003]': (getStatus(item) === 'Not Completed' && isLateAndNotCompleted )
+                            'text-red-500': item.deliveryStatus === 'Late',
+                            'text-blue-500': item.deliveryStatus === 'On Time',
+                            'text-[#AC0003]': (item.deliveryStatus === 'Late - Not Completed' )
                           }">
-                                {{ getStatus(item) }}
+                                {{ item.deliveryStatus }}
                             </span>
                         </td>
                     </tr>
@@ -262,7 +260,7 @@
                     <input
                         [value]="selectedOrderIds.length < 10 ? '0' + selectedOrderIds.length : selectedOrderIds.length"
                         readonly
-                        class="text-[#030308] w-full px-2 py-2 dark:text-textDark border border-gray-300 rounded-md appearance-none focus:ring-indigo-500 focus:border-indigo-500">
+                        class="text-[#030308] dark:bg-[#1D1D1F] w-full px-2 py-2 dark:text-textDark border border-gray-300 rounded-md appearance-none focus:ring-indigo-500 focus:border-indigo-500">
                 </div>
             </div>
 
@@ -357,12 +355,12 @@
                             </td>
                             <td class="px-6 py-4 text-sm text-left font-medium text-gray-900 dark:text-[#C5C5C5]">
                                 <span [ngClass]="{
-                            'text-red-500': getStatus(item) === 'Late',
-                            'text-blue-500': getStatus(item) === 'On Time',
-                            'text-[#AC0003]': (getStatus(item) === 'Not Completed' && isLateAndNotCompleted )
+                            'text-red-500': item.deliveryStatus === 'Late',
+                            'text-blue-500': item.deliveryStatus === 'On Time',
+                            'text-[#AC0003]': (item.deliveryStatus === 'Late - Not Completed' )
                           }">
-                                    {{ getStatus(item) }}
-                                </span>
+                                {{ item.deliveryStatus }}
+                            </span>
                             </td>
                         </tr>
                     </tbody>

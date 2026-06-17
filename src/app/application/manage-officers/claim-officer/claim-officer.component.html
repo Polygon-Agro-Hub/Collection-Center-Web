@@ -101,7 +101,7 @@
   </div>
 
   <div *ngIf="isOfficerExist && officerObj.claimStatus === 1"
-    class="flex flex-col items-center w-full h-screen px-10 py-7 dark:bg-[#363636] bg-tileLight shadow-lg rounded-lg mt-6">
+    class="flex flex-col items-center w-full h-screen px-10 py-7 dark:bg-[#363636] bg-tileLight mt-6">
     <p *ngIf="logingRole === 'Distribution Centre Manager'" class="text-[#494949] my-6 dark:text-white">
       --The user already claimed By {{ officerObj.distributedCenterRegCode }} Centre.--
     </p>

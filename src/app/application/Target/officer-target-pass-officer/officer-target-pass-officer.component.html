@@ -7,6 +7,7 @@
     </div>
 
 
+    <form novalidate (submit)="$event.preventDefault()">
     <div class="w-full px-10 py-7 bg-tileLight dark:bg-tileBlack shadow-lg rounded-lg">
         <div class="flex flex-col items-center justify-center my-4">
             <p class="text-lg text-black dark:text-textDark font-bold my-2">EMP ID : {{targetObj.empId}}</p>
@@ -22,9 +23,9 @@
             </div>
 
             <div>
-                <label for="todo" class="block text-sm font-semibold text-[#534E4E] dark:text-textDark">The maximum
-                    amount
-                    you can pass (kg) :</label>
+                <label for="todo" class="block text-sm font-semibold text-[#534E4E] dark:text-textDark">The Maximum
+                    Amount
+                    You Can Pass (kg) :</label>
                 <input id="todo" [value]="targetObj.todo" disabled
                     class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
             </div>
@@ -38,10 +39,10 @@
                     Select Short Stock Assignee :
                 </label>
 
-                <app-searchable-dropdown [items]="officerDropdownItems" placeholder="Select Officer"
+                <app-searchable-dropdown [items]="officerDropdownItems" placeholder="--Select Officer--"
                     searchPlaceholder="Search Officers..." [(ngModel)]="selectedOfficerId"
                     (selectionChange)="onOfficerSelectionChange($event)" [clearable]="true" [showSelected]="true"
-                    [disabled]="false" class="block w-full mb-4"></app-searchable-dropdown>
+                    [disabled]="false" class="block w-full mb-4" borderClass="border-gray-300 border-[1px]"></app-searchable-dropdown>
 
 
             </div>
@@ -74,4 +75,5 @@
             <button class="bg-[#415CFF] text-white rounded-lg shadow-md px-6 py-2" (click)="onSubmit()">Save</button>
         </div>
     </div>
+    </form>
 </div>

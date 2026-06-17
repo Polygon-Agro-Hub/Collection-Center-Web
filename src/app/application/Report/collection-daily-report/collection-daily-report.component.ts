@@ -6,9 +6,9 @@ import { ReportServiceService } from '../../../services/Report-service/report-se
 import { CanvasJSAngularChartsModule } from '@canvasjs/angular-charts';
 import { jsPDF } from 'jspdf';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
-import html2canvas from 'html2canvas';
 import { ThemeService } from '../../../theme.service';
 import { CustomDatepickerComponent } from '../../../components/custom-datepicker/custom-datepicker.component';
+import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 
 @Component({
   selector: 'app-collection-daily-report',
@@ -25,6 +25,7 @@ import { CustomDatepickerComponent } from '../../../components/custom-datepicker
   providers: [DatePipe],
 })
 export class CollectionDailyReportComponent implements OnInit {
+  @ViewChild(CustomDatepickerComponent) datePicker!: CustomDatepickerComponent;
   dailyReportArr: DailyReport[] = [];
   officerId!: number;
   officerName!: string;
@@ -45,6 +46,7 @@ export class CollectionDailyReportComponent implements OnInit {
     private route: ActivatedRoute,
     private datePipe: DatePipe,
     private themeService: ThemeService,
+    private toastSrv: ToastAlertService
   ) {
     this.isDarkTheam =
       this.themeService.getActiveTheme() === 'dark' ? true : false;
@@ -111,10 +113,22 @@ export class CollectionDailyReportComponent implements OnInit {
   // }
 
   onDateChange(newDate: string | Date | null) {
-    this.dailyReportArr = [];
+  this.dailyReportArr = [];
+
+  if (!newDate) {
+    const today = new Date().toISOString().split('T')[0];
+    this.selectDate = today;
+
+    // ✅ Also reset the datepicker UI to show today's date
+    if (this.datePicker) {
+      this.datePicker.selectedDate = today;
+    }
+  } else {
     this.selectDate = newDate;
-    this.fetchDailyReport();
   }
+
+  this.fetchDailyReport();
+}
 
   updateChart() {
     this.isLoading = true;
@@ -216,51 +230,131 @@ export class CollectionDailyReportComponent implements OnInit {
     this.isLoading = false;
   }
 
-  async downloadPdf() {
+  downloadPdf() {
     const doc = new jsPDF();
+    const margin = 14;
+    const pageWidth = doc.internal.pageSize.getWidth();
+    const pageHeight = doc.internal.pageSize.getHeight();
+    const contentWidth = pageWidth - margin * 2;
 
-    // Add title and header information;
     doc.setFontSize(14);
-    doc.text(`${this.officerName} - ${this.empId}`, 14, 20);
-    doc.setFontSize(12);
-    doc.setTextColor(64, 64, 64); // Dark gray
-    doc.text(`On ${this.selectDate}`, 14, 30);
+    doc.setTextColor(0, 0, 0);
+    doc.text(`${this.officerName} - ${this.empId}`, margin, 20);
+    doc.setFontSize(11);
+    doc.setTextColor(64, 64, 64);
+    doc.text(`On ${this.selectDate}`, margin, 30);
 
-    // Capture the chart as an image with reduced size
-    try {
-      const chartElement = document.querySelector(
-        'canvasjs-chart',
-      ) as HTMLElement;
-      if (chartElement) {
-        // Reduce the scale to make the captured image smaller
-        const scale = 0.7; // Adjust this value (0.5-1.0) to change size
+    const chartEndY = this.drawBarChart(doc, margin, 38, contentWidth);
 
-        const canvas = await html2canvas(chartElement, {
-          scale: scale,
-          logging: false,
-          useCORS: true,
-        });
-
-        const imgData = canvas.toDataURL('image/png');
-
-        // Set reduced dimensions for the PDF image
-        const pdfImageWidth = 150; // mm (reduced from 180)
-        const imgHeight = (canvas.height * pdfImageWidth) / canvas.width;
-
-        // Add chart image to PDF
-        doc.addImage(imgData, 'PNG', 15, 40, pdfImageWidth, imgHeight);
-
-        // Start table after the chart with some margin
-        const startY = 40 + imgHeight + 10;
-        this.addTableToPdf(doc, startY);
-      }
-    } catch (error) {
-      console.error('Error capturing chart:', error);
-      // Fallback to table only if chart capture fails
-      this.addTableToPdf(doc, 40);
+    let tableY = chartEndY + 8;
+    if (tableY + this.dailyReportArr.length * 10 + 20 > pageHeight - 10) {
+      doc.addPage();
+      tableY = 15;
     }
 
+    this.addTableToPdf(doc, tableY);
     doc.save(`Daily_Report_${this.officerName}_${this.selectDate}.pdf`);
+    this.toastSrv.success('File Downloaded Successfully');
+  }
+
+  private drawBarChart(doc: jsPDF, x: number, y: number, width: number): number {
+    const items = this.dailyReportArr;
+    if (items.length === 0) return y;
+
+    const labelColW = 44;
+    const valueColW = 22;
+    const barAreaX = x + labelColW;
+    const barAreaW = width - labelColW - valueColW;
+    const barH = 9;
+    const rowH = barH + 5;
+
+    const maxTotal = Math.max(...items.map(i => i.gradeA + i.gradeB + i.gradeC), 1);
+    const scaledMax = maxTotal * 1.1;
+
+    const dataStartY = y + 2;
+    const gridSteps = 5;
+    const gridBottom = dataStartY + items.length * rowH;
+
+    // Grid lines
+    doc.setLineWidth(0.1);
+    doc.setDrawColor(200, 200, 200);
+    for (let i = 1; i <= gridSteps; i++) {
+      const gx = barAreaX + (i / gridSteps) * barAreaW;
+      doc.line(gx, dataStartY, gx, gridBottom);
+    }
+
+    // Bars
+    items.forEach((item, idx) => {
+      const by = dataStartY + idx * rowH;
+
+      doc.setFontSize(8);
+      doc.setTextColor(50, 50, 50);
+      const label = item.varietyNameEnglish.length > 17
+        ? item.varietyNameEnglish.substring(0, 15) + '..'
+        : item.varietyNameEnglish;
+      doc.text(label, barAreaX - 2, by + barH / 2 + 2.5, { align: 'right' });
+
+      const aW = (item.gradeA / scaledMax) * barAreaW;
+      if (aW > 0) {
+        doc.setFillColor(43, 136, 217);
+        doc.rect(barAreaX, by, aW, barH, 'F');
+      }
+
+      const bW = (item.gradeB / scaledMax) * barAreaW;
+      if (bW > 0) {
+        doc.setFillColor(121, 186, 242);
+        doc.rect(barAreaX + aW, by, bW, barH, 'F');
+      }
+
+      const cW = (item.gradeC / scaledMax) * barAreaW;
+      if (cW > 0) {
+        doc.setFillColor(167, 213, 242);
+        doc.rect(barAreaX + aW + bW, by, cW, barH, 'F');
+      }
+
+      doc.setFontSize(7);
+      doc.setTextColor(80, 80, 80);
+      doc.text(`${item.total.toFixed(1)}kg`, barAreaX + aW + bW + cW + 2, by + barH / 2 + 2);
+    });
+
+    // Axes
+    doc.setDrawColor(100, 100, 100);
+    doc.setLineWidth(0.4);
+    doc.line(barAreaX, dataStartY, barAreaX, gridBottom);
+    doc.line(barAreaX, gridBottom, barAreaX + barAreaW, gridBottom);
+
+    // X-axis tick labels
+    doc.setFontSize(7);
+    doc.setTextColor(100, 100, 100);
+    for (let i = 0; i <= gridSteps; i++) {
+      const val = (scaledMax * i) / gridSteps;
+      const gx = barAreaX + (i / gridSteps) * barAreaW;
+      doc.text(`${val.toFixed(0)}`, gx, gridBottom + 5, { align: 'center' });
+    }
+
+    doc.setFontSize(8);
+    doc.setTextColor(80, 80, 80);
+    doc.text('Weight (kg)', barAreaX + barAreaW / 2, gridBottom + 11, { align: 'center' });
+
+    // Legend
+    const legendY = gridBottom + 20;
+    const legendSpacing = 45;
+    const legendEntries = [
+      { label: 'Grade A', r: 43, g: 136, b: 217 },
+      { label: 'Grade B', r: 121, g: 186, b: 242 },
+      { label: 'Grade C', r: 167, g: 213, b: 242 },
+    ];
+    let lx = x + (width - legendEntries.length * legendSpacing) / 2;
+    legendEntries.forEach(entry => {
+      doc.setFillColor(entry.r, entry.g, entry.b);
+      doc.rect(lx, legendY - 4, 7, 5, 'F');
+      doc.setFontSize(8);
+      doc.setTextColor(50, 50, 50);
+      doc.text(entry.label, lx + 9, legendY);
+      lx += legendSpacing;
+    });
+
+    return legendY + 8;
   }
 
   // Helper method to add table to PDF

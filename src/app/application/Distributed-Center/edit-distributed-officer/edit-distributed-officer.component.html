@@ -29,7 +29,7 @@
 <div #scrollTarget *ngIf="!isLoading" class="mx-auto p-6 bg-white dark:bg-[#363636] rounded-lg shadow-mg">
     <form #PageOneForm="ngForm" (ngSubmit)="onSubmitFormPage1(PageOneForm)">
         <div *ngIf="selectedPage === 'pageOne'">
-            <h2 class="text-xl mb-6 text-[#292929] dark:text-textDark">Edit Personal Details</h2>
+            <h2 class="text-xl mb-6 text-[#292929] dark:text-textDark font-semibold">Edit Personal Details</h2>
             <div>
                 <div class="flex justify-center pt-3 pb-9">
                     <div class="relative">
@@ -60,7 +60,7 @@
                 </div>
 
                 <div *ngIf="personalData.status === 'Approved' " class="w-40 mb-4" (click)="openPopup(personalData)">
-                    <button class="w-full text-normal bg-[#FF0000] py-3 px-1 text-white rounded-xl shadow-lg">
+                    <button class="w-full text-normal font-bold bg-[#FF0000] hover:bg-red-700 py-3 px-1 text-white rounded-xl shadow-lg">
                       Reset Password   
                     </button>
               </div>
@@ -72,58 +72,66 @@
                     </label>
                     
                     <div class="relative w-full">
-                        <!-- Input acting as dropdown -->
-                        <div class="relative">
-                          <input
-                            type="text"
-                            id="centerId"
-                            name="centerId"
-                            [(ngModel)]="selectedCenterName"
-                            #centerIdInput="ngModel"
-                            required
-                            placeholder="-- select centre--"
-                            readonly
-                            (click)="toggleDropdown()"
-                            class="form-control mt-1 block w-full p-2 pr-10 border border-gray-300 rounded-md bg-gray-100 dark:bg-[#1D1D1F] dark:text-textDark cursor-pointer"
-                          />
-                      
-                          <!-- Arrow icon -->
-                          <i *ngIf="!centreDropdownOpen"
-                            class="fa-solid fa-angle-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"
-                          ></i>
+    <!-- Input acting as dropdown -->
+    <div class="relative">
+        <input
+            type="text"
+            id="centerId"
+            name="centerId"
+            [(ngModel)]="selectedCenterName"
+            #centerIdInput="ngModel"
+            required
+            placeholder="-- Select a centre --"
+            readonly
+            (click)="toggleDropdown()"
+            class="form-control mt-1 block w-full p-2 pr-10 border border-gray-300 rounded-md bg-white dark:bg-[#1D1D1F] dark:text-textDark cursor-pointer"
+        />
+        
+        <!-- Arrow icon -->
+        <i *ngIf="!centreDropdownOpen"
+            class="fa-solid fa-angle-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"
+        ></i>
 
-                          <i *ngIf="centreDropdownOpen"
-                            class="fa-solid fa-angle-up absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"
-                          ></i>
-                        </div>
-                      
-                        <!-- Dropdown panel -->
-                        <div *ngIf="centreDropdownOpen"
-                             class="absolute z-50 mt-1 w-full border border-gray-300 rounded-md bg-gray-100 dark:bg-[#1D1D1F] max-h-60 overflow-y-auto shadow-lg">
-                          
-                          <!-- Sticky search input -->
-                          <div class="sticky top-0 bg-gray-100 dark:bg-[#1D1D1F] z-20">
-                            <div class="relative">
-                              <input
-                                type="text"
-                                placeholder="Search..."
-                                (input)="onSearchInput($event)"
-                                class="dropdown-search-input form-control dark:text-textDark dark:bg-[#1D1D1F] w-full p-2 pr-10 border-b border-gray-300 rounded-t-md"
-                              />
-                              <i
-                                class="fa-solid fa-magnifying-glass absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
-                              ></i>
-                            </div>
-                          </div>
-                      
-                          <!-- List -->
-                          <div *ngFor="let item of filteredCenterArr"
-                               class="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-textDark cursor-pointer"
-                               (click)="selectCenter(item)">
-                               {{item.regCode}} - {{ item.centerName }}
-                          </div>
-                        </div>
-                      </div>
+        <i *ngIf="centreDropdownOpen"
+            class="fa-solid fa-angle-up absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"
+        ></i>
+    </div>
+    
+    <!-- Dropdown panel -->
+    <div *ngIf="centreDropdownOpen"
+         class="absolute z-50 mt-1 w-full border border-gray-300 rounded-md bg-gray-100 dark:bg-[#1D1D1F] max-h-60 overflow-y-auto shadow-lg">
+        
+        <!-- Sticky search input -->
+        <div class="sticky top-0 bg-gray-100 dark:bg-[#1D1D1F] z-20">
+            <div class="relative">
+                <input
+                    type="text"
+                    placeholder="Search..."
+                    (input)="onSearchInput($event)"
+                    class="dropdown-search-input form-control dark:text-textDark dark:bg-[#1D1D1F] w-full p-2 pr-10 border-b border-gray-300 rounded-t-md"
+                />
+                <i
+                    class="fa-solid fa-magnifying-glass absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500"
+                ></i>
+            </div>
+        </div>
+        
+        <!-- List with selected highlight (light blue background like the image) -->
+        <div *ngFor="let item of filteredCenterArr"
+             class="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 cursor-pointer"
+             [class.bg-blue-100]="isSelected(item)"
+             [class.dark:bg-blue-900]="isSelected(item)"
+             [class.text-blue-800]="isSelected(item)"
+             [class.dark:text-blue-200]="isSelected(item)"
+             (click)="selectCenter(item)">
+             {{item.regCode}} - {{ item.centerName }}
+        </div>
+        <div *ngIf="filteredCenterArr.length === 0"
+             class="p-2 text-gray-500 dark:text-gray-400 bg-white dark:bg-[#1D1D1F] text-sm text-center">
+            No options found
+        </div>
+    </div>
+</div>
                     <div *ngIf="centerIdInput.touched && !personalData.centerId && logingRole === 'Distribution Centre Head'"
                         class="text-red-500 text-sm mt-1">
                         <div>Distribution Centre Name is required</div>
@@ -134,34 +142,43 @@
                     <label for="jobRole" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">
                       Job Role *
                     </label>
-                  
-                    <!-- Dropdown button -->
-                    <div
-                      class="flex justify-between items-center w-full p-2 border border-gray-300 rounded-md bg-gray-100 dark:bg-[#1D1D1F] dark:text-textDark cursor-pointer"
-                      (click)="toggleJobRoleDropdown()"
-                    >
-                      <span class="dark:text-textDark">{{ personalData.jobRole || '-- select --' }}</span>
-                      <i class="fa-solid" [ngClass]="isJobRoleOpen ? 'fa-chevron-up' : 'fa-chevron-down'"></i>
-                    </div>
-                  
-                    <!-- Options -->
-                    <div
-                      *ngIf="isJobRoleOpen"
-                      class="absolute mt-1 w-full bg-white dark:bg-[#1D1D1F] border border-gray-300 rounded-md shadow-lg z-10"
-                    >
+
+                    <div class="relative w-full">
+                      <div class="relative">
+                        <input
+                          type="text"
+                          id="jobRole"
+                          [value]="personalData.jobRole"
+                          placeholder="-- Select a job role --"
+                          readonly
+                          (click)="toggleJobRoleDropdown()"
+                          class="form-control mt-1 block w-full p-2 pr-10 border border-gray-300 rounded-md bg-white dark:bg-[#1D1D1F] dark:text-textDark cursor-pointer"
+                        />
+                        <i *ngIf="!isJobRoleOpen"
+                          class="fa-solid fa-angle-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"
+                        ></i>
+                        <i *ngIf="isJobRoleOpen"
+                          class="fa-solid fa-angle-up absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"
+                        ></i>
+                      </div>
+
                       <div
-                        *ngFor="let role of jobRoles"
-                        (click)="getJobRole(role)"
-                        class="flex dark:text-textDark items-center justify-between px-4 py-2 cursor-pointer hover:bg-gray-200 dark:hover:bg-[#333] transition"
+                        *ngIf="isJobRoleOpen"
+                        class="absolute z-50 mt-1 w-full bg-white dark:bg-[#1D1D1F] border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto"
                       >
-                        <span>{{ role }}</span>
-                        <i class="fa-solid fa-hand-pointer text-gray-500 opacity-0 group-hover:opacity-100 transition"></i>
+                        <div
+                          *ngFor="let role of jobRoles"
+                          (click)="getJobRole(role)"
+                          class="p-2 dark:text-textDark bg-white cursor-pointer dark:bg-[#1D1D1F] hover:bg-gray-200 dark:hover:bg-gray-700"
+                        >
+                          {{ role }}
+                        </div>
                       </div>
                     </div>
-                  
+
                     <div *ngIf="jobRoleInputTouched && !personalData.jobRole" class="text-red-500 text-sm mt-1">
-                        Job Role is required
-                      </div>
+                      Job Role is required
+                    </div>
                   </div>
                 
                 <div
@@ -180,10 +197,10 @@
                             [(ngModel)]="selectedManager"
                             #irmIdInput="ngModel"
                             required
-                            placeholder="-- select manager--"
+                            placeholder="-- Select a manager --"
                             readonly
                             (click)="toggleManagerDropdown()"
-                            class="form-control mt-1 block w-full p-2 pr-10 border border-gray-300 rounded-md bg-gray-100 dark:bg-[#1D1D1F] dark:text-textDark cursor-pointer"
+                            class="form-control mt-1 block w-full p-2 pr-10 border border-gray-300 rounded-md bg-white dark:bg-[#1D1D1F] dark:text-textDark cursor-pointer"
                           />
                       
                           <!-- Arrow icon -->
@@ -217,9 +234,13 @@
                       
                           <!-- List -->
                           <div *ngFor="let item of filteredManagerArr"
-                               class="p-2 hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-textDark cursor-pointer"
+                               class="p-2 hover:bg-gray-200 bg-white dark:hover:bg-gray-700 dark:bg-[#1D1D1F] dark:text-textDark cursor-pointer"
                                (click)="selectManager(item)">
                                {{item.empId}} - {{ item.firstNameEnglish }} {{item.lastNameEnglish}}
+                          </div>
+                          <div *ngIf="filteredManagerArr.length === 0"
+                               class="p-2 text-gray-500 dark:text-gray-400 bg-white dark:bg-[#1D1D1F] text-sm text-center">
+                            No options found
                           </div>
                         </div>
                       </div>
@@ -285,8 +306,8 @@
                             </div>
                         </div>
 
-                        <p *ngIf="languagesRequired" class="text-red-600 text-sm mt-2">
-                            Please select at least one preferred language.
+                        <p *ngIf="languagesRequired" class="text-red-500 text-sm mt-2">
+                            Please select at least one Preferred Language.
                         </p>
                     </div>
 
@@ -501,7 +522,7 @@
                             <div> NIC is required</div>
                         </div>
                         <div *ngIf="nicInput.touched && nicInput.errors?.['pattern']" class="text-red-500 text-sm mt-1">
-                            <div>"Please enter a valid NIC number (12 digits or 10 digits followed by 'V').</div>
+                            <div>Please enter a valid NIC number (12 digits or 10 digits followed by 'V').</div>
                         </div>
                     </div>
 
@@ -509,8 +530,8 @@
                         <label for="email"
                             class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Email *</label>
                         <input type="email" id="email" name="email" [(ngModel)]="personalData.email"
-                            class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-tileBlack"
-                            #emailInput="ngModel" required pattern="^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.com$"
+                            class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+                            #emailInput="ngModel" required pattern="^[A-Za-z0-9](?!.*\.\.)([A-Za-z0-9._%+-]{0,62}[A-Za-z0-9])?@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$"
                             (input)="onTrimInput($event, personalData, 'email')"/>
                         <div *ngIf="emailInput.touched && !personalData.email" class="text-red-500 text-sm mt-1">
                             Email is required
@@ -600,7 +621,9 @@
                     <app-searchable-dropdown id="district" name="district" [items]="districtItems"
                         [placeholder]="'Select a district'" [searchPlaceholder]="'Search districts...'"
                         [(ngModel)]="personalData.district" #districtInput="ngModel"
-                        (ngModelChange)="onDistrictChange($event)"></app-searchable-dropdown>
+                        (ngModelChange)="onDistrictChange($event)"
+                        borderClass="border border-gray-300"
+                        placeholderClass="text-gray-400"></app-searchable-dropdown>
 
                     <!-- validation message (same logic you already use) -->
                     <div *ngIf="districtInput.touched && !personalData.district" class="text-red-500 text-sm mt-1">
@@ -657,7 +680,7 @@
                     <label for="accNumber"
                         class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Account
                         Number *</label>
-                    <input id="accNumber" name="accNumber" [(ngModel)]="personalData.accNumber"
+                    <input type="text" inputmode="numeric" id="accNumber" name="accNumber" [(ngModel)]="personalData.accNumber"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                         #accNumberInput="ngModel" required pattern="^[a-zA-Z0-9\s]+$"
                         (input)="onTrimInputAccountNumber($event, personalData, 'accNumber')"/>
@@ -676,7 +699,7 @@
                     <label for="conformAccNumber"
                         class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Confirm Account
                         Number *</label>
-                    <input id="conformAccNumber" name="conformAccNumber" [(ngModel)]="personalData.conformAccNumber"
+                    <input type="text" inputmode="numeric" id="conformAccNumber" name="conformAccNumber" [(ngModel)]="personalData.conformAccNumber"
                         class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                         #confirmAccNumberInput="ngModel" required pattern="^[a-zA-Z0-9\s]+$"
                         (input)="onTrimInputAccountNumber($event, personalData, 'conformAccNumber')" />
@@ -707,7 +730,9 @@
                       name="bankDropdown"
                       #selectedBank="ngModel"
                       (selectionChange)="onBankChange($event)"
-                      [clearable]="true">
+                      [clearable]="true"
+                      borderClass="border border-gray-300"
+                      placeholderClass="text-gray-400">
                     </app-searchable-dropdown>
                     
                     <div *ngIf="!selectedBankId && selectedBank.touched" class="text-red-500 text-sm mt-1">
@@ -728,7 +753,9 @@
                       #selectedBranch="ngModel"
                       (selectionChange)="onBranchChange($event)"
                       [disabled]="!selectedBankId"
-                      [clearable]="true">
+                      [clearable]="true"
+                      borderClass="border border-gray-300"
+                      placeholderClass="text-gray-400">
                     </app-searchable-dropdown>
                     
                     <div *ngIf="!selectedBranchId && selectedBranch.touched" class="text-red-500 text-sm mt-1">
@@ -782,14 +809,14 @@
                     </label>
                     <input id="licNo" #licNoInput="ngModel" type="text" name="licNo" [(ngModel)]="driverObj.licNo" pattern="^([A-Z]\d{7}|\d{10,12})$"
                       (keypress)="preventSpecialCharacters($event)" (paste)="preventSpecialCharactersPaste($event)"
-                      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
+                      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
             
                     <div>
-                      <span class="text-red-600 text-sm" *ngIf="licNoInput.touched && licNoInput.errors?.['pattern'] && driverObj.licNo">
+                      <span class="text-red-500 text-sm" *ngIf="licNoInput.touched && licNoInput.errors?.['pattern'] && driverObj.licNo">
                         Please enter a valid License ID number (1 capital letter + 7 digits or 10–12 digits).
                       </span>
             
-                      <span class="text-red-600 text-sm" *ngIf="licNoInput.touched && !driverObj.licNo">
+                      <span class="text-red-500 text-sm" *ngIf="licNoInput.touched && !driverObj.licNo">
                         Driving License ID number is Required.
                       </span>
                     </div>
@@ -801,14 +828,14 @@
                     </label>
                     <input id="confirmLicNo" #confirmLicNoInput="ngModel" type="text" name="confirmLicNo" [(ngModel)]="driverObj.confirmLicNo"
                       (keypress)="preventSpecialCharacters($event)" (paste)="preventSpecialCharactersPaste($event)"
-                      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
+                      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
             
                       <div>
-                        <span class="text-red-600 text-sm" *ngIf="confirmLicNoInput.touched && (driverObj.licNo !== driverObj.confirmLicNo) && driverObj.confirmLicNo">
+                        <span class="text-red-500 text-sm" *ngIf="confirmLicNoInput.touched && (driverObj.licNo !== driverObj.confirmLicNo) && driverObj.confirmLicNo">
                           Confirm Driving License ID number should match the Driving License ID number.
                         </span>
               
-                        <span class="text-red-600 text-sm" *ngIf="confirmLicNoInput.touched && !driverObj.confirmLicNo">
+                        <span class="text-red-500 text-sm" *ngIf="confirmLicNoInput.touched && !driverObj.confirmLicNo">
                           Confirm Driving License ID number is Required.
                         </span>
                       </div>
@@ -879,10 +906,10 @@
                     <label for="insNo" class="block text-sm font-medium text-gray-700 dark:text-textDark">
                       Insurance Number *
                     </label>
-                    <input id="insNo" type="text" #insurenceNoInput="ngModel" name="insNo" [(ngModel)]="driverObj.insNo" 
-                      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
+                    <input id="insNo" type="text" maxlength="13" (input)="onTrimInput($event, driverObj, 'insNo')" #insurenceNoInput="ngModel" name="insNo" [(ngModel)]="driverObj.insNo" 
+                      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
                       <div>
-                        <span class="text-red-600 text-sm" *ngIf="insurenceNoInput.touched && !driverObj.insNo">
+                        <span class="text-red-500 text-sm" *ngIf="insurenceNoInput.touched && !driverObj.insNo">
                           Insurance Number Required.
                         </span>
                       </div>
@@ -892,15 +919,15 @@
                     <label for="insNo" class="block text-sm font-medium text-gray-700 dark:text-textDark">
                       Confirm Insurance Number *
                     </label>
-                    <input id="insNo" type="text" #confirmInsurenceNoInput="ngModel" name="insNo" [(ngModel)]="driverObj.confirmInsNo" 
-                      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
+                    <input id="insNo" type="text" maxlength="13" #confirmInsurenceNoInput="ngModel" name="insNo" [(ngModel)]="driverObj.confirmInsNo" 
+                      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
             
                       <div>
-                        <span class="text-red-600 text-sm" *ngIf="confirmInsurenceNoInput.touched && (driverObj.insNo !== driverObj.confirmInsNo) && driverObj.confirmInsNo">
+                        <span class="text-red-500 text-sm" *ngIf="confirmInsurenceNoInput.touched && (driverObj.insNo !== driverObj.confirmInsNo) && driverObj.confirmInsNo">
                           Confirm Insurance Number should match the Insurance Number.
                         </span>
               
-                        <span class="text-red-600 text-sm" *ngIf="confirmInsurenceNoInput.touched && !driverObj.confirmInsNo">
+                        <span class="text-red-500 text-sm" *ngIf="confirmInsurenceNoInput.touched && !driverObj.confirmInsNo">
                           Confirm Insurance Number is Required.
                         </span>
                       </div>
@@ -965,9 +992,11 @@
                         Expire Date</label>
                     <app-custom-datepicker
                         name="insExpDate"
+                        [minDate]="today"
                         [(selectedDate)]="driverObj.insExpDate"
                         placeholder="mm/dd/yyyy"
                         (dateChange)="onInsuranceDateChange($event)"
+                        triggerClass="w-full h-12 border-[1.8px] border-gray-300 rounded-xl flex items-center px-3 py-2 cursor-pointer dark:bg-[#292929]"
                         (pickerOpened)="onDatePickerClicked()"
                    ></app-custom-datepicker>
                    
@@ -989,10 +1018,10 @@
                     </label>
                     <input id="vRegNo" type="text" #vRegNoInput="ngModel" name="vRegNo" [(ngModel)]="driverObj.vRegNo"
                       (keypress)="preventSpecialCharacters($event)" (paste)="preventSpecialCharactersPaste($event)"
-                      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
+                      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
                       
                       <div>
-                        <span class="text-red-600 text-sm" *ngIf="vRegNoInput.touched && !driverObj.vRegNo">
+                        <span class="text-red-500 text-sm" *ngIf="vRegNoInput.touched && !driverObj.vRegNo">
                           Vehicle Registration Number is Required.
                         </span>
                       </div>
@@ -1004,12 +1033,12 @@
                     </label>
                     <input id="confirmVRegNo" type="text" #confirmVRegNoInput="ngModel" name="confirmVRegNo" [(ngModel)]="driverObj.confirmVRegNo"
                       (keypress)="preventSpecialCharacters($event)" (paste)="preventSpecialCharactersPaste($event)"
-                      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-tileBlack" />
+                      class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
                       <div>
-                        <span class="text-red-600 text-sm" *ngIf="confirmVRegNoInput.touched && (driverObj.vRegNo !== driverObj.confirmVRegNo) && driverObj.confirmVRegNo">
+                        <span class="text-red-500 text-sm" *ngIf="confirmVRegNoInput.touched && (driverObj.vRegNo !== driverObj.confirmVRegNo) && driverObj.confirmVRegNo">
                           Confirm Vehicle Registration Number should match the Vehicle Registration Number.
                         </span>
-                        <span class="text-red-600 text-sm" *ngIf="confirmVRegNoInput.touched && !driverObj.confirmVRegNo">
+                        <span class="text-red-500 text-sm" *ngIf="confirmVRegNoInput.touched && !driverObj.confirmVRegNo">
                           Confirm Vehicle Registration Number is Required.
                         </span>
                       </div>
@@ -1018,20 +1047,38 @@
                 <div>
                     <label for="selectVehicletype"
                         class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Vehicle Type</label>
-                    <select id="selectVehicletype" [(ngModel)]="selectVehicletype" name="selectVehicletype"
-                        placeholder="select" (change)="vehicleChange()" required #selectVehicletypeInput="ngModel"
-                        class="cursor-pointer form-control mt-1 block w-full p-2 text-gray-700 dark:text-textDark border border-gray-300  rounded-md bg-gray-100 dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500">
-                        <option disabled selected
-                            class="p-2 text-gray-700 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]"
-                            [value]="{name: '', capacity: ''}">
-                            -- select Vehicle Type--
-                        </option>
-                        <option *ngFor="let item of VehicleTypes" [ngValue]="item"
-                            class="p-2 text-gray-700 dark:text-textDark bg-gray-100 dark:bg-[#1D1D1F]">
-                            {{item.name}}
-                        </option>
-                    </select>
-                    <div *ngIf="selectVehicletypeInput.touched && !driverObj.vType" class="text-red-500 text-sm mt-1">
+                    <div class="relative w-full">
+                        <div class="relative">
+                            <input
+                                type="text"
+                                id="selectVehicletype"
+                                [value]="selectVehicletype?.name || ''"
+                                placeholder="-- Select a Vehicle Type --"
+                                readonly
+                                (click)="toggleVehicleTypeDropdown()"
+                                class="form-control mt-1 block w-full p-2 pr-10 border border-gray-300 rounded-md bg-white dark:bg-[#1D1D1F] text-gray-700 dark:text-textDark cursor-pointer hover:bg-gray-200"
+                            />
+                            <i *ngIf="!vehicleTypeDropdownOpen"
+                                class="fa-solid fa-angle-down absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"
+                            ></i>
+                            <i *ngIf="vehicleTypeDropdownOpen"
+                                class="fa-solid fa-angle-up absolute right-3 top-1/2 transform -translate-y-1/2 text-gray-500 pointer-events-none"
+                            ></i>
+                        </div>
+                        <div *ngIf="vehicleTypeDropdownOpen"
+                             class="absolute z-50 mt-1 w-full bg-white dark:bg-[#1D1D1F] border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto">
+                            <div
+                                *ngFor="let item of VehicleTypes"
+                                (click)="selectVehicleTypeItem(item)"
+                                class="flex items-center justify-between p-2 text-gray-700 dark:text-textDark cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700"
+                                [class.bg-blue-100]="item.name === selectVehicletype?.name"
+                                [class.dark:bg-blue-900]="item.name === selectVehicletype?.name">
+                                <span>{{ item.name }}</span>
+                                <i *ngIf="item.name === selectVehicletype?.name" class="fa-solid fa-check text-blue-500"></i>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="vehicleTypeTouched && !driverObj.vType" class="text-red-500 text-sm mt-1">
                         <div>Vehicle Type is required</div>
                     </div>
                 </div>
@@ -1158,7 +1205,7 @@
 
 
 
-            <div class="flex justify-end m-10">
+            <div class="flex justify-end mt-10">
                 <button (click)="nextForm('pageTwo')" type="button"
                     class="px-6 py-2 bg-[#F6F7F9] border-gray-400 border-[2px] text-[#6B7D8C] rounded-lg mr-2">Back</button>
                 <button type="submit" class="px-6 py-1 bg-[#415CFF] text-white rounded-lg"

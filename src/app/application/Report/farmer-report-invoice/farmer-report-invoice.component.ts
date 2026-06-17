@@ -64,7 +64,7 @@ export class FarmerReportInvoiceComponent implements OnInit {
   }
 
   navigateToCollectionReports() {
-    this.router.navigate(['/reports/collection-reports']); // Change '/reports' to your desired route
+    this.router.navigate(['/reports']); // Change '/reports' to your desired route
   }
 
   navigateToOfficerReports() {
@@ -324,7 +324,7 @@ export class FarmerReportInvoiceComponent implements OnInit {
     ) + yIncrement;
 
     // Add Full Total
-    doc.setFontSize(10);
+    doc.setFontSize(11);
     y += yIncrement
     doc.text('Full Total(Rs.) : '  + formatValueForAmounts(this.calculateOverallTotalforReport().toFixed(2)) , x, y);
     y += yIncrement * 2.5;
@@ -407,7 +407,7 @@ export class FarmerReportInvoiceComponent implements OnInit {
       doc.text('Available', farmerQrX + 10, qrY + 23);
     }
     doc.setTextColor('#000000');
-    doc.setFontSize(12);
+    doc.setFontSize(11);
     doc.text('Farmer’s QR Code', farmerQrX + 3, labelY);
 
     // Add officer QR code
@@ -420,7 +420,7 @@ export class FarmerReportInvoiceComponent implements OnInit {
       doc.text('Available', officerQrX + 10, qrY + 23);
     }
     doc.setTextColor('#000000');
-    doc.setFontSize(12);
+    doc.setFontSize(11);
     doc.text('Officer’s QR Code', officerQrX + 3, labelY);
 
     // Save the PDF

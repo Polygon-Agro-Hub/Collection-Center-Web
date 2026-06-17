@@ -314,31 +314,19 @@ export class CollectionComponent implements OnInit {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
-          a.download = `Collection Report From ${this.fromDate} To ${this.toDate}.xlsx`;
+          const selectedCenter = this.centerArr.find(
+          center => center.id.toString() === this.selectCenters
+        );
+        const centrePrefix = selectedCenter ? `${selectedCenter.regCode} ` : '';
+          a.download = `${centrePrefix} Collection Report From ${this.fromDate} To ${this.toDate}.xlsx`;
           a.click();
           window.URL.revokeObjectURL(url);
 
-          Swal.fire({
-            icon: "success",
-            title: "Downloaded",
-            text: "Please check your downloads folder",
-            customClass: {
-              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-              title: 'dark:text-white',
-            }
-          });
+          this.toastSrv.success('File Downloaded Successfully')
           this.isDownloading = false;
         },
         error: (error) => {
-          Swal.fire({
-            icon: "error",
-            title: "Download Failed",
-            text: error.message,
-            customClass: {
-              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-              title: 'dark:text-white',
-            }
-          });
+          this.toastSrv.error('File Download Failed')
           this.isDownloading = false;
         }
       });

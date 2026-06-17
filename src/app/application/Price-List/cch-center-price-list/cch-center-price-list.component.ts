@@ -183,36 +183,41 @@ export class CchCenterPriceListComponent implements OnInit {
 
   // Modified saveRow method to reset the editing state
   saveRow(id: number, crop: string, variety: string, grade: string) {
-    if (this.editValue != null) {
-      this.isLoading = true; // Show loading while saving
-      this.PriceListSrv.updatePrice(id, this.editValue).subscribe(
-        (res) => {
-          if (res.status) {
-            this.isLoading = false;
-            this.toastSrv.success(
-              `Successfully changed price of <b style="color:black;">${crop}-${variety}-${grade}</b><br>
-               from <b style="color:black;">Rs.${this.originalValue}</b> to 
-               <b style="color:black;">Rs.${this.editValue}</b>`,
-              { enableHtml: true }
-            );
-          } else {
-            this.isLoading = false;
-            this.toastSrv.error('Failed to assign the target!');
-          }
-          this.editingIndex = null; // Reset editing state after successful save
-          console.log('fetching')
-          this.fetchAllPriceList(this.userId, this.page, this.itemsPerPage);
-        },
-        (error) => {
-          console.error('Error updating price:', error);
-          Swal.fire('Error', 'Failed to update price', 'error');
+  if (this.editValue != null) {
+    this.isLoading = true; // Show loading while saving
+    this.PriceListSrv.updatePrice(id, this.editValue).subscribe(
+      (res) => {
+        if (res.status) {
           this.isLoading = false;
+          
+          // Format numbers with 2 decimal places
+          const formattedOriginal = Number(this.originalValue).toFixed(2);
+          const formattedEdit = Number(this.editValue).toFixed(2);
+          
+          this.toastSrv.success(
+            `Successfully changed price of <b style="color:black;">${crop} - ${grade} - Grade ${variety}</b><br>
+             from <b style="color:black;">Rs.${formattedOriginal}</b> to 
+             <b style="color:black;">Rs.${formattedEdit}</b>`,
+            { enableHtml: true }
+          );
+        } else {
+          this.isLoading = false;
+          this.toastSrv.error('Failed to assign the target!');
         }
-      );
-    } else {
-      this.editingIndex = null;
-    }
+        this.editingIndex = null; // Reset editing state after successful save
+        console.log('fetching')
+        this.fetchAllPriceList(this.userId, this.page, this.itemsPerPage);
+      },
+      (error) => {
+        console.error('Error updating price:', error);
+        Swal.fire('Error', 'Failed to update price', 'error');
+        this.isLoading = false;
+      }
+    );
+  } else {
+    this.editingIndex = null;
   }
+}
 
   cancelEdit() {
     this.editingIndex = null;

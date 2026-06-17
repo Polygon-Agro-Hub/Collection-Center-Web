@@ -5,8 +5,8 @@
         > -->
           <div class="flex justify-between items-center mb-8">
             <div class="flex items-center">
-              <h2 class="text-lg font-normal text-[#000000] dark:text-textDark">
-                All Orders ({{
+              <h2 class="text-[16px] font-semibold text-[#000000] dark:text-textDark">
+                All ({{
                   totalItems === 0
                     ? "0"
                     : totalItems < 10
@@ -17,12 +17,18 @@
             </div>
     
             <div class="flex items-center flex-wrap gap-4">
+              <div class="flex justify-center items-center gap-2">
+                <i class="fa-solid fa-list text-[#4A4A4A] text-lg dark:text-white ml-8"></i>
+
+                <p class="text-[#4A4A4A] text-[14px] dark:text-white">Filter By</p>
+              </div>
 
             <div class="w-56">
               <app-custom-datepicker
               [placeholder]="'Ordered Date'"
               [selectedDate]="dateFilter1"
               (dateChange)="onDateChange($event)"
+              placeholderClass="italic text-[14px]"
             ></app-custom-datepicker>
             </div>
 
@@ -31,6 +37,7 @@
             [placeholder]="'Delivery Date'"
               [selectedDate]="dateFilter"
               (dateChange)="onDateChange2($event)"
+              placeholderClass="italic text-[14px]"
             ></app-custom-datepicker>
           </div>
 

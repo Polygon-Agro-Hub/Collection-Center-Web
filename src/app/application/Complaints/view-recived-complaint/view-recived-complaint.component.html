@@ -65,7 +65,7 @@
         </div>
 
         <div class="flex justify-center gap-6 mt-6">
-            <button class="font-semibold border-[1px] shadow-lg px-4 py-2 rounded-lg"
+            <button *ngIf="compalintObj.reply === null" class="font-semibold border-[1px] shadow-lg px-4 py-2 rounded-lg"
                 [ngClass]="{
                     'bg-[#F6F7F9] dark:bg-gray-600 text-[#6B7D8C] dark:text-white': compalintObj.reply === null,
                     'bg-gray-300 dark:bg-gray-500 text-gray-500 dark:text-gray-300 cursor-not-allowed': compalintObj.reply !== null}" [disabled]="compalintObj.reply !== null"
@@ -157,7 +157,7 @@
 
 
                 <div class="flex flex-row justify-center items-center gap-8">
-                    <button class="text-[#6B7D8C] border-[2px] font-semibold rounded-lg shadow-lg px-6 py-2"
+                    <button class="text-[#6B7D8C] dark:text-white border-[2px] font-semibold rounded-lg shadow-lg px-6 py-2"
                         (click)="cancelViewReply()">
                         Go Back
                     </button>

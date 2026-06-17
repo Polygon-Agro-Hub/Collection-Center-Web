@@ -26,10 +26,10 @@
             <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20 dark:text-textDark" />
         </div>
 
- <div *ngIf="hasData" class="w-full px-10 py-7 bg-tileLight rounded-lg mt-0 dark:bg-[#363636] mb-8 border-gray-100 dark:border-[#202021] border-[2px]">
-        <div class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]" >
-            <table class="w-full divide-y-2 overflow-hidden divide-gray-200 dark:divide-[#202021] border-[1px] border-gray-300 dark:border-[#202021]">
-                <thead class="  text-[#4B5563] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
+ <div *ngIf="hasData" class="w-full px-10 py-7 bg-tileLight rounded-xl mt-0 dark:bg-[#363636] mb-8 border border-[#E5E7EB] dark:border-[#202021]">
+        <div class="overflow-x-auto mt-8 mr-5 border-[2px] border-[#E5E7EB] rounded-xl dark:border-[#202021]">
+            <table class="w-full border-collapse rounded-xl overflow-hidden border-[#E5E7EB] dark:border-[#202021]">
+                <thead class="text-[#4B5563] border-b-2 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
                     <tr>
                         <th class="px-6 py-3 text-left font-medium">No</th>
                         <th class="px-6 py-3 text-left font-medium">EMP ID</th>
@@ -107,9 +107,9 @@
       </div>
 
       <div class="flex flex-col items-center justify-center text-center">
-          <p class="text-[#4B5563] text-lg">You have unsaved changes.</p>
-          <p class="text-[#4B5563] text-lg">If you leave this page now, your changes will be lost.</p>
-          <p class="text-[#4B5563] text-lg">Do you want to continue without saving?</p>
+          <p class="text-[#4B5563] dark:text-[#C4C4C4] text-lg">You have unsaved changes.</p>
+          <p class="text-[#4B5563] dark:text-[#C4C4C4] text-lg">If you leave this page now, your changes will be lost.</p>
+          <p class="text-[#4B5563] dark:text-[#C4C4C4] text-lg">Do you want to continue without saving?</p>
       </div>
 
       <div class="flex flex-row items-center justify-center gap-x-4">

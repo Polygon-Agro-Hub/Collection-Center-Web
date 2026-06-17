@@ -65,7 +65,7 @@ export class CchViewComplaintComponent implements OnInit {
     this.complaintsService.submitCCHComplaint(formData).subscribe(
       (response) => {
         if (response.status) {
-          this.toastSrv.success('Your complaint has been submitted successfully!');
+          this.toastSrv.success('Your complaint was submitted');
           this.isAddComplaintOpen = false;
           this.category = '';
           this.complaint = '';

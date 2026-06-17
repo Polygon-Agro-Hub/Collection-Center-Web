@@ -8,6 +8,7 @@ import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/
 import { ComplaintsService } from '../../../../services/Complaints-Service/complaints.service';
 import { CustomDatepickerComponent } from "../../../../components/custom-datepicker/custom-datepicker.component";
 import Swal from 'sweetalert2';
+import { ToastAlertService } from '../../../../services/toast-alert/toast-alert.service';
 
 @Component({
   selector: 'app-target-progress-ongoing',
@@ -43,7 +44,8 @@ export class TargetProgressOngoingComponent implements OnInit {
   constructor(
     private router: Router,
     private ComplainSrv: ComplaintsService,
-    private DistributionSrv: DistributionServiceService
+    private DistributionSrv: DistributionServiceService,
+    private toastSrv: ToastAlertService
   ) { }
 
 
@@ -183,32 +185,36 @@ export class TargetProgressOngoingComponent implements OnInit {
     }
   }
 
-  getDateColor(item: any): string {
-    const today = new Date();
-    const schedule = new Date(item.sheduleDate);
-  
-    // Normalize both to midnight
-    today.setHours(0, 0, 0, 0);
-    schedule.setHours(0, 0, 0, 0);
-  
-    const diffDays = Math.floor((schedule.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-  
-    if (item.combinedStatus === 'Pending' || item.combinedStatus === 'Opened') {
-      if (diffDays > 0) {
-        // Future date
-        return '#606060';
-      } else if (diffDays < 0) {
-        // Past date
-        return '#AC0003';
-      } else {
-        // Today
-        return '#FF0000';
-      }
-    }
-  
-    // Default color for Completed or other statuses
-    return '#415CFF';
+getDateColor(item: any): string {
+  const today = new Date();
+  const schedule = new Date(item.sheduleDate);
+
+  // Normalize both dates to midnight
+  today.setHours(0, 0, 0, 0);
+  schedule.setHours(0, 0, 0, 0);
+
+  const diffDays = Math.floor(
+    (schedule.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+  );
+
+  // Past dates
+  if (diffDays < 0) {
+    return '#800000'; // Maroon
   }
+
+  // Today
+  if (diffDays === 0) {
+    return '#FF0000'; // Red
+  }
+
+  // Tomorrow
+  if (diffDays === 1) {
+    return '#415CFF'; // Blue
+  }
+
+  // Day after tomorrow and beyond
+  return '#606060'; // Grey
+}
   
   removeWithin(time: string): string {
     return time ? time.replace('Within ', '') : time;
@@ -264,27 +270,12 @@ export class TargetProgressOngoingComponent implements OnInit {
           a.click();
           window.URL.revokeObjectURL(url);
 
-          Swal.fire({
-            icon: "success",
-            title: "Downloaded",
-            text: "Please check your downloads folder",
-            customClass: {
-              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-              title: 'dark:text-white',
-            }
-          });
+          this.toastSrv.success('File Downloaded Successfully.');
           this.isDownloading = false;
         },
         error: (error) => {
-          Swal.fire({
-            icon: "error",
-            title: "Download Failed",
-            text: error.message,
-            customClass: {
-              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-              title: 'dark:text-white',
-            }
-          });
+        
+        this.toastSrv.error('File Download Failed.');
           this.isDownloading = false;
         }
       });

@@ -208,17 +208,17 @@ getFlagUrl(code: string): string {
     }
 
     if (!this.centerData.phoneNumber01) {
-      missingFields.push('Mobile Number - 1 is required');
+      missingFields.push('Contact Number - 01 is required');
     } else if (!/^[0-9]{9}$/.test(this.centerData.phoneNumber01) || this.isPhoneInvalidMap['phone01']) {
-      missingFields.push('Mobile Number - 1 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+      missingFields.push('Contact Number - 01 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
     }
   
     if (this.centerData.phoneNumber02) {
       if (!/^[0-9]{9}$/.test(this.centerData.phoneNumber02) || this.isPhoneInvalidMap['phone02']) {
-        missingFields.push('Mobile Number - 2 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+        missingFields.push('Contact Number - 02 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
       }
       if (this.centerData.phoneNumber01 === this.centerData.phoneNumber02) {
-        missingFields.push('Mobile Number - 2 - Must be different from Mobile Number - 1');
+        missingFields.push('Contact Number - 02 - Must be different from Contact Number - 01');
       }
     }
 
@@ -238,10 +238,6 @@ getFlagUrl(code: string): string {
       missingFields.push('District is required');
     }
 
-    if (!this.centerData.buildingNo) {
-      missingFields.push('Building Number is required');
-    }
-
     if (!this.centerData.streetName) {
       missingFields.push('Street Name is required');
     }
@@ -252,7 +248,7 @@ getFlagUrl(code: string): string {
 
     if (!this.centerData.email) {
       missingFields.push('Email is required');
-    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(this.centerData.email)) {
+    } else if (!/^[A-Za-z0-9](?!.*\.\.)([A-Za-z0-9._%+-]{0,62}[A-Za-z0-9])?@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(this.centerData.email)) {
       missingFields.push('Email - Must be in a valid format (format: example&#64;domain.com)');
     }
 
@@ -404,12 +400,12 @@ this.isLoading = true;
     const input = event.target as HTMLInputElement;
     let value = parseFloat(input.value);
   
-    if (value > 90) {
+    if (value > 180) {
       input.value = '180';
       this.centerData.longitude = 180;
       Swal.fire({
         icon: 'warning',
-        title: 'Invalid Latitude',
+        title: 'Invalid Longitude',
         text: 'Longitude cannot be greater than 180.',
         confirmButtonColor: '#3085d6',
         customClass: {
@@ -418,12 +414,12 @@ this.isLoading = true;
           htmlContainer: 'text-center',
         },
       });
-    } else if (value < -90) {
+    } else if (value < -180) {
       input.value = '-180';
       this.centerData.longitude = -180;
       Swal.fire({
         icon: 'warning',
-        title: 'Invalid Latitude',
+        title: 'Invalid Longitude',
         text: 'Longitude cannot be less than -180.',
         confirmButtonColor: '#3085d6',
         customClass: {
@@ -481,7 +477,6 @@ class CenterData {
   phoneNumber01!: string;
   phoneNumber02Code: string = '+94';
   phoneNumber02!: string;
-  buildingNo!: string;
   streetName!: string;
   email!: string
 

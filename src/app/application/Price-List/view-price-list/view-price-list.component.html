@@ -13,9 +13,9 @@
                 </p>
             </div>
             <div class="flex flex-row items-center gap-8 ">
-                <i class="fa-solid fa-list text-2xl dark:text-white"></i>
+                <i class="fa-solid fa-list text-[#4A4A4A] text-lg dark:text-white"></i>
 
-                <p class="text-lg dark:text-white">Filter By</p>
+                <p class="text-[#4A4A4A] dark:text-white">Filter By</p>
                 <div class="relative w-36 custom-grade-dropdown-container">
                     <!-- Hidden native select -->
                     <select [(ngModel)]="selectGrade" class="hidden" (change)="filterGrade()">
@@ -146,7 +146,7 @@
                             </button>
                             <button *ngIf="editingIndex === i" 
                                 [ngClass]="{
-                                'bg-[#415CFF] text-white hover:text-blue-500': !isInvalidInput() && isUpdateAllowed,
+                                'bg-[#415CFF] text-white hover:text-blue-100': !isInvalidInput() && isUpdateAllowed,
                                 'bg-gray-400 text-gray-200 cursor-not-allowed': isInvalidInput() || !isUpdateAllowed
                                 }" 
                                 class="px-2 py-1 rounded-lg" [disabled]="isInvalidInput() || !isUpdateAllowed"

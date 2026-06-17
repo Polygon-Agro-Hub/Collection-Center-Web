@@ -1,10 +1,10 @@
 <div class="relative w-full">
   <!-- Input box -->
   <div
-    class="w-full h-12 border-[1.8px] border-[#828282] rounded-xl flex items-center px-3 py-2 cursor-pointer dark:bg-[#292929]"
+    [ngClass]="triggerClass"
     (click)="toggleCalendar()"
   >
-    <span class="flex-1 text-textLight dark:text-textDark">
+    <span class="flex-1 text-[16px] text-[#5C5C5C] dark:text-textDark" [ngClass]=" placeholderClass">
       {{ selectedDate ? selectedDate : placeholder }}
     </span>
 
@@ -90,19 +90,25 @@
 
       <!-- Days -->
       <div class="grid grid-cols-7 gap-1 text-center mt-2 dark:text-white">
-        <div
-          *ngFor="let day of calendarDays"
-          (click)="selectDate(day)"
-          class="h-8 w-8 flex items-center justify-center rounded cursor-pointer hover:bg-blue-300 dark:hover:bg-blue-600 border border-[#b0baf3] dark:border-gray-600"
-          [class.text-gray-400]="!day.currentMonth"
-          [class.dark:text-gray-500]="!day.currentMonth"
-          [class.bg-blue-500]="isSelected(day)"
-          [class.text-white]="isSelected(day)"
-          [class.border-blue-500]="isSelected(day)"
-        >
-          {{ day.date }}
-        </div>
-      </div>
+  <div
+    *ngFor="let day of calendarDays"
+    (click)="selectDate(day)"
+    class="h-8 w-8 flex items-center justify-center rounded border border-[#b0baf3] dark:border-gray-600"
+    [class.cursor-pointer]="!isDisabled(day)"
+    [class.cursor-not-allowed]="isDisabled(day)"
+    [class.text-gray-300]="isDisabled(day)"
+    [class.dark:text-gray-600]="isDisabled(day)"
+    [class.hover:bg-blue-300]="!isDisabled(day)"
+    [class.dark:hover:bg-blue-600]="!isDisabled(day)"
+    [class.text-gray-400]="!day.currentMonth && !isDisabled(day)"
+    [class.dark:text-gray-500]="!day.currentMonth && !isDisabled(day)"
+    [class.bg-blue-500]="isSelected(day)"
+    [class.text-white]="isSelected(day)"
+    [class.border-blue-500]="isSelected(day)"
+  >
+    {{ day.date }}
+  </div>
+</div>
     </div>
   </div>
 </div>

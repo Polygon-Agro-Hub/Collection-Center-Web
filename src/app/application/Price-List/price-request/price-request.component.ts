@@ -215,6 +215,8 @@ export class PriceRequestComponent implements OnInit {
     console.log('crop selected:', this.priceRequestObject.cropVarietyId);
     this.priceRequestObject.requstPrice = null;
     this.priceRequestObject.currentPrice = null;
+
+    console.log('priceRequestObject', this.priceRequestObject)
     this.fetchCurrentPrice(this.priceRequestObject.cropGroupId!, this.priceRequestObject.cropVarietyId!, this.priceRequestObject.grade!);
   }
 

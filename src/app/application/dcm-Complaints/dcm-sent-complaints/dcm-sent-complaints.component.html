@@ -2,7 +2,7 @@
 
 <div *ngIf="!isLoading">
     <div class="flex flex-row items-center justify-end gap-8 ">
-        <i class="fa-solid fa-list text-2xl dark:text-white"></i>
+       <i class="fa-solid fa-list text-lg text-[#4A4A4A] dark:text-white"></i>
 
         <p class="text-[#4A4A4A] dark:text-white">Filter By</p>
 
@@ -130,7 +130,7 @@
                     <th class="px-6 py-3 text-left text-sm font-medium">EMP ID</th>
                     <th class="px-6 py-3 text-left text-sm font-medium">Category</th>
                     <th class="px-6 py-3 text-left text-sm font-medium">Description</th>
-                    <th class="px-6 py-3 text-center text-sm font-medium">Submitted At</th>
+                    <th class="px-6 py-3 text-center text-sm font-medium whitespace-nowrap">Submitted At</th>
                     <th class="px-6 py-3 text-center text-sm font-medium">Status</th>
                     <th class="px-6 py-3 text-left text-sm font-medium">Action</th>
                 </tr>
@@ -140,7 +140,7 @@
                     *ngFor="let item of complainArr | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index" class="align-top">
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.refNo}}</td>
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
-                        <span *ngIf="item.officerId === officerId" class="text-[#415CFF] italic">Own Complaint</span>
+                        <span *ngIf="item.officerId === officerId" class="text-[#415CFF] italic whitespace-nowrap">Own Complaint</span>
                         <span *ngIf="item.officerId !== officerId">{{item.empId}}</span>
                     </td>
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.complainCategory}}</td>
@@ -201,12 +201,12 @@
     <div class="bg-white dark:bg-[#363636] shadow-lg rounded-lg p-6 w-2/5">
         <div class="flex flex-col items-center gap-4">
             <!-- Envelope Icon -->
-            <div class="bg-[#F6F6F6] rounded-full shadow-md p-4 flex items-center justify-center">
-                <i class="fa-regular fa-envelope text-3xl text-gray-700"></i>
+            <div class="bg-[#F6F6F6] rounded-full shadow-md py-2 px-3 flex items-center justify-center">
+                <i class="fa-regular fa-envelope text-xl text-gray-700"></i>
             </div>
 
             <!-- Title -->
-            <p class="text-2xl font-semibold text-gray-900 dark:text-white">Reply from Centre Head</p>
+            <p class="text-[18px] font-semibold text-gray-900 dark:text-white">Reply from Centre Head</p>
 
             <!-- Message Container -->
            <div class="flex flex-col w-full border-[1px] border-[#D9D9D9] dark:text-white py-4 px-5 rounded-lg">

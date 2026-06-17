@@ -32,7 +32,7 @@
     <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
         (click)="toggleRoleDropdown()">
         <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
-            <span class="text-sm">{{ selectRole || 'Role' }}</span>
+            <span class="text-[16px]">{{ selectRole || 'Role' }}</span>
             <div class="flex items-center">
                 <i *ngIf="selectRole" (click)="clearRoleFilter($event)"
                     class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
@@ -49,7 +49,7 @@
         class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282] overflow-hidden">
         <div *ngFor="let option of roleDropdownOptions" (click)="selectRoleOption(option)"
             class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
-            <span class="flex-grow text-sm">{{ option }}</span>
+            <span class="flex-grow text-[16px]">{{ option }}</span>
         </div>
     </div>
 </div>
@@ -98,7 +98,7 @@
     <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
         (click)="toggleStatusDropdown()">
         <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
-            <span class="text-sm">{{ selectStatus || 'Status' }}</span>
+            <span class="text-[16px]">{{ selectStatus || 'Status' }}</span>
             <div class="flex items-center">
                 <i *ngIf="selectStatus" (click)="clearStatusFilter($event)"
                     class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>

@@ -318,7 +318,7 @@ export class CollectionComponent implements OnInit {
           center => center.id.toString() === this.selectCenters
         );
         const centrePrefix = selectedCenter ? `${selectedCenter.regCode} ` : '';
-          a.download = `${centrePrefix} Collection Report From ${this.fromDate} To ${this.toDate}.xlsx`;
+          a.download = `Collection Report From ${this.fromDate} To ${this.toDate}.xlsx`;
           a.click();
           window.URL.revokeObjectURL(url);
 

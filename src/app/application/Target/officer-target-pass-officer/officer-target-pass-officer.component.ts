@@ -71,6 +71,8 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
         this.filteredOfficers = [...this.officerArr];
 
         this.isLoading = false;
+        this.officerDropdownItems
+
       }
     );
   }

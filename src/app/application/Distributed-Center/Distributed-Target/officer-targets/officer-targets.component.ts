@@ -51,8 +51,10 @@ export class OfficerTargetsComponent implements OnInit {
     )
   }
 
-  viewSelectedOfficerTarget(officerId: number, date: string) {
-    this.router.navigate(['/officer-targets/view-officer-target', officerId, date])
+  viewSelectedOfficerTarget(officerId: number, date: string, empId: string) {
+    this.router.navigate(['/officer-targets/view-officer-target', officerId, date], {
+      queryParams: { empId },
+    })
   }
 
   onDateChange(newDate: string | Date | null) {

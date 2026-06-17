@@ -331,6 +331,24 @@ export class ExpensesComponent implements OnInit {
     }
   }
 
+  formatDateLine(s: string): string {
+  if (!s) return '';
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const year  = s.substring(0, 4);              // '2026'
+  const month = months[Number(s.substring(5, 7)) - 1];  // '06' -> 'Jun'
+  const day   = Number(s.substring(8, 10));     // 4  (no leading zero)
+  return `${month} ${day}, ${year}`;            // 'Jun 4, 2026'
+}
+
+formatTimeLine(s: string): string {
+  if (!s) return '';
+  let h = Number(s.substring(11, 13));          // 13
+  const m = s.substring(14, 16);                // '34'
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;                             // 13 -> 1
+  return `${h}:${m} ${ampm}`;                   // '1:34 PM'
+}
+
 
 }
 
@@ -349,7 +367,7 @@ class FarmerPayments {
   gradeBquan!: number;
   gradeCquan!: number;
   status!: string;
-  createdAt!: Date;
+  createdAt!: string;
   companyId!: number;
 }
 

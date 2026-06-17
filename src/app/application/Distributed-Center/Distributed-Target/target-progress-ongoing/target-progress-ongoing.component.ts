@@ -144,7 +144,7 @@ export class TargetProgressOngoingComponent implements OnInit {
   
     if (!newDate) {
       
-      dateString = new Date().toISOString().split('T')[0];
+      dateString = '';
     } 
     else if (newDate instanceof Date) {
       
@@ -244,9 +244,7 @@ getDateColor(item: any): string {
     const monthNumber = String(selectedDateObj.getMonth() + 1).padStart(2, '0');
     
     const dateStr = `${String(day).padStart(2, '0')}${getOrdinal(day)} ${month} ${year}`;
-    
-    console.log(dateStr); // 04th August 2026
-    // Example: "11-10" (MM-DD format)
+  
     const fullDateStr = `${String(selectedDateObj.getMonth() + 1).padStart(2, '0')}-${String(selectedDateObj.getDate()).padStart(2, '0')}`;
     const now = new Date();
     const timeStr = now

@@ -78,7 +78,7 @@
       </div>
           <input id="phoneNumber01" name="phoneNumber01" type="tell"
               [(ngModel)]="centerData.phoneNumber01"
-              class="block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-r-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+              class="block w-full p-2 border border-gray-300 rounded-r-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
               placeholder="Enter your contact number" #phoneNumber01Input="ngModel" required (ngModelChange)="validateSriLankanPhone($event, 'phone01')"
               pattern="^[0-9]{9}$" minlength="9" maxlength="9"
               (keypress)="($event.charCode >= 48 && $event.charCode <= 57) ? true : $event.preventDefault()" />
@@ -129,7 +129,7 @@
     </div>
         <input id="phoneNumber02" name="phoneNumber02" type="tell" #phoneNumber02Input="ngModel"
             [(ngModel)]="centerData.phoneNumber02"
-            class="block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-r-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+            class="block w-full p-2 border border-gray-300 rounded-r-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
             placeholder="Enter your contact number" pattern="^[0-9]{9}$" minlength="9" maxlength="9"
             maxlength="9" (ngModelChange)="validateSriLankanPhone($event, 'phone02')"
             (keypress)="($event.charCode >= 48 && $event.charCode <= 57) ? true : $event.preventDefault()"/>

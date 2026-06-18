@@ -125,6 +125,7 @@ export class
   }
 
   filterGrade() {
+    this.page = 1;
     this.fetchAllPriceList(this.centerId, this.page, this.itemsPerPage, this.selectGrade, this.searchText);
   }
 
@@ -143,6 +144,7 @@ export class
   // }
 
   onSearch() {
+    this.page = 1;
     this.searchText = this.searchText.trimStart();
     this.fetchAllPriceList(this.centerId, this.page, this.itemsPerPage, this.selectGrade, this.searchText);
   }

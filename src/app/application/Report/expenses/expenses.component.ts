@@ -163,8 +163,11 @@ export class ExpensesComponent implements OnInit {
 
   onSearch() {
     this.searchText = this.searchText.trimStart();
-    this.fetchFilteredPayments();
-  }
+    // Reset to page 1 when searching
+    this.page = 1;
+    this.fetchFilteredPayments(this.page, this.itemsPerPage);
+}
+
 
   offSearch() {
     this.searchText = '';

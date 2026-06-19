@@ -175,7 +175,8 @@ export class CollectionComponent implements OnInit {
 
   onSearch() {
     this.searchText = this.searchText.trimStart();
-    this.fetchFilteredPayments();
+    this.page = 1;
+    this.fetchFilteredPayments(this.page, this.itemsPerPage);
   }
 
   offSearch() {

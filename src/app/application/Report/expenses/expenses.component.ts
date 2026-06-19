@@ -98,11 +98,13 @@ export class ExpensesComponent implements OnInit {
 
   // 5. Update your methods
   onCenterSelectionChange(selectedValue: string) {
+
     this.selectCenters = selectedValue || '';
     this.applyCompanyFilters();
   }
 
   applyCompanyFilters() {
+    this.page = 1;
     this.fetchFilteredPayments();
   }
 
@@ -162,6 +164,7 @@ export class ExpensesComponent implements OnInit {
   }
 
   onSearch() {
+    this.page = 1;
     this.searchText = this.searchText.trimStart();
     this.fetchFilteredPayments();
   }

@@ -137,6 +137,10 @@
             </div>
         </div>
 
+                <div class="text-[#030308] dark:text-[#ffff] font-medium text-[16px] mt-2">
+            Scheduled Date : {{ today | date: 'MMM dd, yyyy' }}
+        </div>
+
         <div class="flex mt-2 flex-row gap-2" *ngIf="selectedOrderIds.length !== 0">
             <button (click)="deSelectAll()"
                 class="border border-[#95A1AC] font-medium rounded-lg bg-[#F6F7F9] text-[#6B7D8C] px-3 py-1">Cancel</button>
@@ -150,9 +154,7 @@
             <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
         </div>
 
-        <div class="text-[#030308] dark:text-[#ffff] font-medium text-[16px] mt-2">
-            Scheduled Date : {{ today | date: 'MMM dd, yyyy' }}
-        </div>
+
 
         <div *ngIf="hasData"
             class="min-w-max mt-4 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021] overflow-hidden">
@@ -160,7 +162,7 @@
                 <thead class="text-[#4B5563] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
                     <tr>
                         <th class="px-6 py-3 text-left text-base font-medium text-[#4B5563] dark:text-white">
-                            <input type="checkbox" class="scale-150 cursor-pointer" [checked]="allChecked"
+                            <input type="checkbox" class="scale-150 opacity-40 cursor-pointer" [checked]="allChecked"
                                 (change)="toggleAllOrders($event)" [disabled]="
                                selectableOrders.length === 0
                              ">
@@ -179,7 +181,7 @@
                 <tbody class="bg-white dark:bg-[#1D1D1F] text-[#000000] dark:border-[#1D1D1F] cursor-default">
                     <tr *ngFor="let item of ordersArr let i = index">
                         <td class="px-6 py-4 text-base font-medium text-gray-900 dark:text-[#C5C5C5]">
-                            <input type="checkbox" class="scale-150 cursor-pointer"
+                            <input type="checkbox" class="scale-150 opacity-40 cursor-pointer"
                                 [checked]="isChecked(item.processOrderId)"
                                 (change)="toggleOrder(item.processOrderId, $event)" [disabled]="
                             item.combinedStatus === 'Opened' || 

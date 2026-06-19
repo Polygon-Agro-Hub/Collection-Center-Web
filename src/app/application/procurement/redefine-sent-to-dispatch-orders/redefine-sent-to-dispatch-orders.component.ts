@@ -171,6 +171,28 @@ export class RedefineSentToDispatchOrdersComponent implements OnInit {
       this.searchTerm = this.searchTerm.trimStart();
     }
   }
+
+  getDatePart(dateStr: string): string {
+  const months = ['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+
+  const date = dateStr.split(' ')[0];
+  const [y, m, d] = date.split('-');
+
+  return `${d} ${months[+m - 1]}, ${y}`;
+}
+
+getTimePart(dateStr: string): string {
+  const time = dateStr.split(' ')[1];
+
+  let [hh, mm] = time.split(':');
+
+  let hour = +hh;
+  const ampm = hour >= 12 ? 'PM' : 'AM';
+  hour = hour % 12 || 12;
+
+  return `${hour.toString().padStart(2, '0')}:${mm} ${ampm}`;
+}
+
 }
 
 class ExcludeItems {

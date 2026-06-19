@@ -131,11 +131,10 @@
               <td
                 class="px-4 py-3 text-center text-[#000000] dark:text-textDark"
               >
-                {{ order.processCreatedAt | date : "d MMM, y" }}<br />
-                {{ order.processCreatedAt | date : "hh:mm a" }}
+                <p>{{ getDatePart(order.processCreatedAt)}}</p>
+                <p>{{ getTimePart(order.processCreatedAt)}}</p>
               </td>
 
-              
             </tr>
           </tbody>
         </table>

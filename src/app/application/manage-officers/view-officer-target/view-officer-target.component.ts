@@ -36,6 +36,8 @@ export class ViewOfficerTargetComponent implements OnInit {
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Pending', 'Completed', 'Exceeded', 'Extra'];
 
+  empId!: string;
+
   toggleStatusDropdown() {
     this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
   }
@@ -80,6 +82,8 @@ export class ViewOfficerTargetComponent implements OnInit {
     this.TargetSrv.getSelectedOfficerTargetData(officerId, status, search).subscribe(
       (res) => {
         this.selectedOfficerDataArr = res.items;
+        this.empId = res.empId
+        console.log('empId', this.empId)
         if (res.items.length === 0) {
           this.hasData = false;
         } else {

@@ -1053,15 +1053,20 @@
                             ></i>
                         </div>
                         <div *ngIf="vehicleTypeDropdownOpen"
-                             class="absolute z-50 mt-1 w-full bg-white dark:bg-[#1D1D1F] border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto">
+                             class="absolute z-50 mt-1 w-full bg-white dark:bg-[#292929] border border-gray-300 rounded-md shadow-lg max-h-60 overflow-y-auto">
                             <div
                                 *ngFor="let item of VehicleTypes"
                                 (click)="selectVehicleTypeItem(item)"
-                                class="flex items-center justify-between p-2 text-gray-700 dark:text-textDark cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700"
-                                [class.bg-blue-100]="item.name === selectVehicletype?.name"
-                                [class.dark:bg-blue-900]="item.name === selectVehicletype?.name">
-                                <span>{{ item.name }}</span>
-                                <i *ngIf="item.name === selectVehicletype?.name" class="fa-solid fa-check text-blue-500"></i>
+                                class="flex items-center p-2 text-gray-700 dark:text-textDark cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700">
+                                <span [ngClass]="{
+          'text-blue-600 dark:text-blue-400 font-medium': item.name === selectVehicletype?.name,
+          'text-blue-600 dark:text-blue-400': item.name === selectVehicletype?.name
+        }">
+
+    {{ item.name }}
+
+  </span>
+                                <span *ngIf="item.name === selectVehicletype?.name" class="ml-2 text-blue-600">✓</span>
                             </div>
                         </div>
                     </div>

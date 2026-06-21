@@ -326,6 +326,7 @@ class DailyTargets {
   toDate!: string;
   toTime!: string;
   grade!: string;
+  date!: Date;
   target!: string;
   complete!: string;
   status!: string;

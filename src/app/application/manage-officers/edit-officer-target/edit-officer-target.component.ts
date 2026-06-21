@@ -6,11 +6,12 @@ import { ManageOfficersService } from '../../../services/manage-officers-service
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { TargetService } from '../../../services/Target-service/target.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
+import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
 
 @Component({
   selector: 'app-edit-officer-target',
   standalone: true,
-  imports: [FormsModule, CommonModule, LoadingSpinnerComponent],
+  imports: [FormsModule, CommonModule, LoadingSpinnerComponent, SerchableDropdownComponent],
   templateUrl: './edit-officer-target.component.html',
   styleUrl: './edit-officer-target.component.css'
 })
@@ -24,7 +25,7 @@ export class EditOfficerTargetComponent {
   amount: number = 0.00;
 
   searchTerm: string = '';
-  selectedOfficerId!: number | null;
+  selectedOfficerId!: number | string | null;
   isLoading: boolean = true;
 
   constructor(
@@ -54,6 +55,23 @@ export class EditOfficerTargetComponent {
 
       }
     );
+  }
+
+  get officerDropdownItems() {
+    return this.officerArr.map(officer => ({
+      value: officer.id.toString(),
+      label: officer.firstNameEnglish + ' ' + officer.lastNameEnglish + ' - ' + officer.empId,
+      disabled: false
+    }));
+  }
+
+  // 5. Add selection change handler
+  onOfficerSelectionChange(selectedValue: string) {
+    this.selectedOfficerId = selectedValue || '';
+    // Add any additional logic you need when category changes
+    console.log('Category selected:', selectedValue);
+
+    console.log('officer', this.selectedOfficerId)
   }
 
   filterOfficer() {
@@ -152,5 +170,6 @@ class Officers {
   id!: number;
   firstNameEnglish!: string;
   lastNameEnglish!: string;
+  empId!: string;
 }
 

@@ -167,7 +167,7 @@ export class ManageOfficersService {
   }
 
 
-  editOfficerTarget(id: number | null, targetItemId: number, amount: number): Observable<any> {
+  editOfficerTarget(id: number | string | null, targetItemId: number, amount: number): Observable<any> {
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`

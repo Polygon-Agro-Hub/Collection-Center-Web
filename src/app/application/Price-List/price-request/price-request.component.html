@@ -143,17 +143,16 @@
         <button class="bg-[#415CFF] text-white font-semibold px-4 py-2 rounded-lg shadow-lg"
             (click)="openAddRequest()">Add
             Request</button>
-        <div>
             <div *ngIf="!hasData" class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6 ">
                 <p class="text-[#494949] my-6 dark:text-textDark">--No Data Availabale--</p>
                 <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
             </div>
 
-<div *ngIf="hasData" class="min-w-max overflow-hidden  mt-5 mr-5">
-                <div class=" border-gray-100 border-[2px] dark:border-[#202021] rounded-lg">
-                    <table class="w-full min-w-max divide-y-2 overflow-hidden">
+            <div *ngIf="hasData" class="min-w-max overflow-hidden  mt-5 mr-5">
+        <div  class=" border-gray-100 border-[2px] dark:border-[#202021] rounded-lg">
+                    <table class="w-full min-w-max divide-y-2 border-collapse">
                         <thead
-                            class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
+                            class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default text-[14px]">
                             <tr>
                                 <th class="px-6 py-3 text-left font-medium">No</th>
                                 <th class="px-6 py-3 text-left font-medium">Crop Name</th>
@@ -167,7 +166,7 @@
                                 <th class="px-6 py-3 text-left font-medium">Forward</th>
                             </tr>
                         </thead>
-                        <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F] cursor-default">
+                       <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F] cursor-default">
                             <tr *ngFor="let item of reqPriceArr | paginate: {
                         itemsPerPage: itemsPerPage,
                         currentPage: page,
@@ -260,7 +259,10 @@
                 </div>
             </div>
 
-        </div>
+            
+
+
+
     </div>
 </div>
 

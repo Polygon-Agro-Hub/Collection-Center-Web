@@ -421,7 +421,7 @@ export class AddDistributedOfficerComponent implements OnInit {
 
     if (!this.personalData.accHolderName || !this.personalData.accNumber || !this.personalData.bankName || !this.personalData.branchName) {
       this.isLoading = false;
-      this.toastSrv.warning('Pleace fill all required bank details feilds')
+      // this.toastSrv.warning('Pleace fill all required bank details feilds')
       return;
 
     } else {

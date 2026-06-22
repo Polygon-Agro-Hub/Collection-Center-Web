@@ -153,6 +153,51 @@ export class EditOfficerTargetComponent {
     this.toastSrv.warning("Target passing canceled.")
     this.location.back();
   }
+
+  preventZeroAndNegative(event: KeyboardEvent) {
+    const inputChar = event.key;
+
+    // Block minus sign entirely
+    if (inputChar === '-') {
+      event.preventDefault();
+    }
+  }
+
+  validatePassAmount() {
+    const input = document.getElementById('passAmount') as HTMLInputElement;
+    const raw = input?.value ?? '';
+
+    // Block negative
+    if (this.passAmount < 0) {
+      this.passAmount = 0.1;
+      return;
+    }
+
+    // If it looks like "0", "00", "0.0", "0.00" etc. (all zeros, no non-zero digit)
+    const allZeros = /^0*\.?0*$/.test(raw) && raw !== '' && !raw.includes('e');
+    if (allZeros) {
+      this.passAmount = 0.1;
+    }
+  }
+
+  onBlurPassAmount() {
+    const input = document.getElementById('passAmount') as HTMLInputElement;
+    const raw = input?.value ?? '';
+
+    // On blur: if last digit makes it 0.00...0, force last digit to 1
+    // e.g. "0.000" → "0.001", "0.00" → "0.01", "0" → "0.1"
+    if (/^0\.0*$/.test(raw)) {
+      // Replace trailing zero with 1 → e.g. "0.00" → "0.01"
+      const fixed = raw.replace(/0$/, '1');
+      this.passAmount = parseFloat(fixed);
+      return;
+    }
+
+    // Catch any remaining <= 0 edge cases
+    if (!this.passAmount || this.passAmount <= 0) {
+      this.passAmount = 0.1;
+    }
+  }
 }
 
 class TargetDetalis {

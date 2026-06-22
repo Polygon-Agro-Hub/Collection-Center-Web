@@ -2,7 +2,7 @@
 
 <div *ngIf="!isLoading">
     <div class="flex gap-3 mb-4 mr-5 ml-0">
-        <p class="font-semibold text-[#424242] mb-4 mr-5 ml-0 dark:text-[#FFFFFF] dark:bg-black cursor-pointer">Manage
+        <p class="font-semibold text-[#424242] mb-4 mr-5 ml-0 dark:text-[#FFFFFF] cursor-pointer">Manage
         Officers</p>
     </div>
 
@@ -16,7 +16,8 @@
                 </button>
 
                 <span *ngIf="logingRole === 'Distribution Centre Manager'">
-                    <button class="bg-[#415CFF] whitespace-nowrap text-white text-center rounded-lg shadow-lg px-4 py-2 w-32"
+                    <button
+                        class="bg-[#415CFF] whitespace-nowrap text-white text-center rounded-lg shadow-lg px-4 py-2 w-32"
                         (click)="navigate('/distribution-officers/claim-officer')">
                         Claim Officer
                     </button>
@@ -30,7 +31,7 @@
                         <option value="Distribution Centre Manager">Distribution Centre Manager</option>
                         <option value="Distribution Officer">Distribution Officer</option>
                         <option value="Distribution Officer">Driver</option>
-                        
+
                     </select>
 
                     <!-- Custom dropdown trigger -->
@@ -53,7 +54,8 @@
                     <div *ngIf="isRoleDropdownOpen"
                         class="absolute z-10 overflow-hidden w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
                         <div class="">
-                            <div *ngFor="let option of roleDropdownOptions; let i = index" (click)="selectRoleOption(option)"
+                            <div *ngFor="let option of roleDropdownOptions; let i = index"
+                                (click)="selectRoleOption(option)"
                                 class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center"
                                 [ngClass]="{
                                     'rounded-t-xl': i === 0,
@@ -99,7 +101,8 @@
                     <div *ngIf="isStatusDropdownOpen"
                         class="absolute z-10 w-full overflow-hidden mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
                         <div class="">
-                            <div *ngFor="let option of statusDropdownOptions; let i = index" (click)="selectStatusOption(option)"
+                            <div *ngFor="let option of statusDropdownOptions; let i = index"
+                                (click)="selectStatusOption(option)"
                                 class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center"
                                 [ngClass]="{
                                     'rounded-t-xl': i === 0,
@@ -113,7 +116,8 @@
                     </div>
                 </div>
 
-                <div class="relative w-52 custom-center-dropdown-container" *ngIf="logingRole === 'Distribution Centre Head'">
+                <div class="relative w-52 custom-center-dropdown-container"
+                    *ngIf="logingRole === 'Distribution Centre Head'">
                     <!-- Hidden native select -->
                     <select [(ngModel)]="selectCenters" class="hidden" (change)="applyCompanyFilters()">
                         <option value=""></option>
@@ -151,11 +155,11 @@
                         </div>
                     </div>
                 </div>
-                
+
                 <div
                     class="flex mr-5 items-center text-[#95A1AC] text-normal rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
-                    <input type="text" placeholder="Search by EMP ID, First / Last name,NIC" [(ngModel)]="searchText" (keyup.enter)="onSearch()"
-                        (keyup.esc)="offSearch()"
+                    <input type="text" placeholder="Search by EMP ID, First / Last name,NIC" [(ngModel)]="searchText"
+                        (keyup.enter)="onSearch()" (keyup.esc)="offSearch()"
                         class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
                     <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                         (click)="onSearch()">
@@ -185,101 +189,105 @@
             <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20 dark:text-textDark" />
         </div>
 
-        <div *ngIf="hasData" class="min-w-max mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
-            <table class="w-full min-w-max divide-y-2 border-[1px] border-gray-300 rounded-lg overflow-hidden">
-                <thead class=" text-[#4B5563] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
-                    <tr>
-                        <th class="px-2 py-3 text-left text-sm font-medium">No</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium">EMP ID</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium">First Name</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium">Last Name</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium"
-                            *ngIf="logingRole ==='Distribution Centre Head'">
-                            Centre</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium ">Role</th>
-                        <th class="px-3 py-3 text-center text-sm font-medium ">Status</th>
-                        <th class="px-3 py-3 text-center text-sm font-medium">Mobile Number-1</th>
-                        <th class="px-3 py-3 text-center text-sm font-medium">NIC</th>
-                        <th class="px-3 py-3 text-center text-sm font-medium"></th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white text-[#000000] dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
-                    <tr *ngFor="let item of OfficerArr | paginate
+        <div *ngIf="hasData" class="min-w-max overflow-hidden  mt-5 mr-5">
+            <div class=" border-gray-100 border-[2px] dark:border-[#202021] rounded-lg">
+                <table class="w-full min-w-max divide-y-2 border-[1px] border-gray-300 rounded-lg overflow-hidden">
+                    <thead class=" text-[#4B5563] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
+                        <tr>
+                            <th class="px-2 py-3 text-left text-sm font-medium">No</th>
+                            <th class="px-3 py-3 text-left text-sm font-medium">EMP ID</th>
+                            <th class="px-3 py-3 text-left text-sm font-medium">First Name</th>
+                            <th class="px-3 py-3 text-left text-sm font-medium">Last Name</th>
+                            <th class="px-3 py-3 text-left text-sm font-medium"
+                                *ngIf="logingRole ==='Distribution Centre Head'">
+                                Centre</th>
+                            <th class="px-3 py-3 text-left text-sm font-medium ">Role</th>
+                            <th class="px-3 py-3 text-center text-sm font-medium ">Status</th>
+                            <th class="px-3 py-3 text-center text-sm font-medium">Mobile Number-1</th>
+                            <th class="px-3 py-3 text-center text-sm font-medium">NIC</th>
+                            <th class="px-3 py-3 text-center text-sm font-medium"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white text-[#000000] dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
+                        <tr *ngFor="let item of OfficerArr | paginate
                 : {
                     itemsPerPage: itemsPerPage,
                     currentPage: page,
                     totalItems: totalItems
                   };  let i = index">
-                        <td class="px-2 py-4 text-sm text-gray-900 dark:text-gray-300 ">
-                            {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i + 1)
-                                : (((page - 1) * itemsPerPage) + i + 1) }} </td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.empId}}</td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.firstNameEnglish}}</td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.lastNameEnglish}}</td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300"
-                            *ngIf="logingRole ==='Distribution Centre Head'">{{ item.centerName ? item.centerName : '—' }}</td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.jobRole}}</td>
-                        <td class="px-3 py-4 text-center">
-                            <div class="flex justify-center items-center"
-                                [ngClass]="{
+                            <td class="px-2 py-4 text-sm text-gray-900 dark:text-gray-300 ">
+                                {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i +
+                                    1) : (((page - 1) * itemsPerPage) + i + 1) }} </td>
+                            <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.empId}}</td>
+                            <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.firstNameEnglish}}
+                            </td>
+                            <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.lastNameEnglish}}</td>
+                            <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300"
+                                *ngIf="logingRole ==='Distribution Centre Head'">{{ item.centerName ? item.centerName :
+                                '—' }}</td>
+                            <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.jobRole}}</td>
+                            <td class="px-3 py-4 text-center">
+                                <div class="flex justify-center items-center" [ngClass]="{
                                   'cursor-pointer': logingRole === 'Distribution Centre Head',
                                   'cursor-default': logingRole !== 'Distribution Centre Head'
-                                }"
-                                (click)="logingRole === 'Distribution Centre Head' && openPopup(item)">
-                          
-                              <span *ngIf="item.status === 'Approved'"
-                                class="inline-block px-6 py-1 bg-[#C8E0FF] text-[#415CFF] text-sm font-medium rounded-md"
-                                [ngClass]="{ 'shadow-md': logingRole === 'Distribution Centre Head' }">
-                                Approved
-                              </span>
-                          
-                              <span *ngIf="item.status === 'Not Approved'"
-                                class="inline-block px-3 py-1 bg-[#F8FFA6] text-[#A8A100] text-sm font-medium rounded-md"
-                                [ngClass]="{ 'shadow-md': logingRole === 'Distribution Centre Head' }">
-                                Not Approved
-                              </span>
-                          
-                              <span *ngIf="item.status === 'Rejected'"
-                                class="inline-block px-8 py-1 bg-[#FFB9B7] text-[#D16D6A] text-sm font-medium rounded-md"
-                                [ngClass]="{ 'shadow-md': logingRole === 'Distribution Centre Head' }">
-                                Rejected
-                              </span>
-                          
-                            </div>
-                        </td>
+                                }" (click)="logingRole === 'Distribution Centre Head' && openPopup(item)">
 
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300 text-center">
-                            {{ item.phoneNumber01 ? item.phoneCode01 + item.phoneNumber01 : 'N/A' }}
-                        </td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300 text-center">{{item.nic}}</td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300 text-center">
-                            <button class="text-gray-400 hover:text-gray-600 px-2" (click)="navigateToProfile(item.id)">
-                                <i class="fa-regular fa-file text-lg text-gray-600"></i>
-                            </button>
+                                    <span *ngIf="item.status === 'Approved'"
+                                        class="inline-block px-6 py-1 bg-[#C8E0FF] text-[#415CFF] text-sm font-medium rounded-md"
+                                        [ngClass]="{ 'shadow-md': logingRole === 'Distribution Centre Head' }">
+                                        Approved
+                                    </span>
 
-                            <button class="text-[#415CFF] hover:text-blue-500 px-2" [ngClass]="{
+                                    <span *ngIf="item.status === 'Not Approved'"
+                                        class="inline-block px-3 py-1 bg-[#F8FFA6] text-[#A8A100] text-sm font-medium rounded-md"
+                                        [ngClass]="{ 'shadow-md': logingRole === 'Distribution Centre Head' }">
+                                        Not Approved
+                                    </span>
+
+                                    <span *ngIf="item.status === 'Rejected'"
+                                        class="inline-block px-8 py-1 bg-[#FFB9B7] text-[#D16D6A] text-sm font-medium rounded-md"
+                                        [ngClass]="{ 'shadow-md': logingRole === 'Distribution Centre Head' }">
+                                        Rejected
+                                    </span>
+
+                                </div>
+                            </td>
+
+                            <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300 text-center">
+                                {{ item.phoneNumber01 ? item.phoneCode01 + item.phoneNumber01 : 'N/A' }}
+                            </td>
+                            <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300 text-center">{{item.nic}}</td>
+                            <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300 text-center">
+                                <button class="text-gray-400 hover:text-gray-600 px-2"
+                                    (click)="navigateToProfile(item.id)">
+                                    <i class="fa-regular fa-file text-lg text-gray-600"></i>
+                                </button>
+
+                                <button class="text-[#415CFF] hover:text-blue-500 px-2" [ngClass]="{
                                 'text-gray-400 hover:text-gray-600': (logingRole ==='Distribution Centre Manager' && (item.jobRole === 'Distribution Centre Manager'))
                               }"
-                            (click)="(logingRole ==='Distribution Centre Manager' && (item.jobRole === 'Distribution Centre Manager')) ? '' : navigateToEdit(item.id)">
-                            <i class="fa-solid fa-pen-to-square text-lg"></i>
-                            </button>
-                            <button class="text-[#FF415C] px-2" [ngClass]="{
+                                    (click)="(logingRole ==='Distribution Centre Manager' && (item.jobRole === 'Distribution Centre Manager')) ? '' : navigateToEdit(item.id)">
+                                    <i class="fa-solid fa-pen-to-square text-lg"></i>
+                                </button>
+                                <button class="text-[#FF415C] px-2" [ngClass]="{
                                 'text-gray-400 hover:text-gray-600': (logingRole ==='Distribution Centre Manager' && (item.jobRole === 'Distribution Centre Manager'))
                               }"
-                                (click)="(logingRole ==='Distribution Centre Manager' && item.jobRole === 'Distribution Centre Manager') ? '' : deleteCollectionOfficer(item.id, item.jobRole)">
-                                <i class="fa-solid fa-trash text-lg"></i>
-                            </button>
+                                    (click)="(logingRole ==='Distribution Centre Manager' && item.jobRole === 'Distribution Centre Manager') ? '' : deleteCollectionOfficer(item.id, item.jobRole)">
+                                    <i class="fa-solid fa-trash text-lg"></i>
+                                </button>
 
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-        <div *ngIf="hasData" class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#1D1D1F] text-right">
-            <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
-                [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
-                [screenReaderCurrentLabel]="'Youre on page'">
-            </pagination-controls>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div *ngIf="hasData" class="flex justify-end items-center my-5 pt-3 dark:bg-[#1D1D1F] text-right">
+                <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true"
+                    [previousLabel]="'Previous'" [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'"
+                    [screenReaderPageLabel]="'page'" [screenReaderCurrentLabel]="'Youre on page'">
+                </pagination-controls>
+            </div>
+            </div>
+            
         </div>
     </div>
-</div>

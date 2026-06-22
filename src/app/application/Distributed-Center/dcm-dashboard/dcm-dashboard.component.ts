@@ -20,6 +20,7 @@ import { Chart, registerables } from 'chart.js';
 export class DcmDashboardComponent implements OnInit {
   isLoading: boolean = false;
   myChart: any;
+  dioCount!: number;
 
   // Use 24-hour format labels for X-axis
   hours: string[] = [
@@ -51,8 +52,9 @@ export class DcmDashboardComponent implements OnInit {
   loadChartData(): void {
   this.isLoading = true;
   this.DistributionSrv.getDispatchChartData().subscribe({
-    next: (data: any[]) => {
-      this.processChartData(data);
+    next: (data: any) => {
+      this.dioCount = data.dioCount;
+      this.processChartData(data.chartData);
       this.isLoading = false;
       
       // Use setTimeout to ensure DOM is ready

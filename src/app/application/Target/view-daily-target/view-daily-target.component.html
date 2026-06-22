@@ -93,9 +93,6 @@
                     </div>
                 </div>
 
-
-
-
                 <div class="flex mr-5 items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
                     <input type="text" placeholder="Search by Crop / Variety Name" [(ngModel)]="searchText"
                         (keyup.enter)="onSearch()" (keyup.esc)="offSearch()" (input)="checkLeadingSpace()"
@@ -150,10 +147,10 @@
                         <td class="px-6 py-4 text-[#000000] font-[500] text-center  dark:text-gray-300">{{item.grade}}
                         </td>
                         <td class="px-6 py-4 text-[#000000] font-[500] dark:text-gray-300">
-                            {{ item.target === 0.00 ? 'Not Set' : item.target | number: '1.2-2' }}
+                            {{ item.target === 0.00 ? 'Not Set' : item.target }}
                         </td>
                         <td class="px-6 py-4 text-left text-[#000000] font-[500] dark:text-gray-300">
-                            {{ item.complete === 0.00 ? 'Empty' : item.complete | number: '1.2-2' }}
+                            {{ item.complete === 0.00 ? 'Empty' : item.complete }}
                         </td>
 
                         <td class="px-6 py-4 text-[#000000] font-[500] dark:text-gray-300">
@@ -322,15 +319,15 @@
                         </td>
 
                         <td class="px-6 py-4 text-black dark:text-gray-300">
-                            {{ item.qtyA | number:'1.2-2' }}
+                            {{ item.qtyA }}
                         </td>
 
                         <td class="px-6 py-4 text-black dark:text-gray-300">
-                            {{ item.qtyB | number:'1.2-2' }}
+                            {{ item.qtyB }}
                         </td>
 
                         <td class="px-6 py-4 text-black dark:text-gray-300">
-                            {{ item.qtyC | number:'1.2-2' }}
+                            {{ item.qtyC }}
                         </td>
 
                         <!--

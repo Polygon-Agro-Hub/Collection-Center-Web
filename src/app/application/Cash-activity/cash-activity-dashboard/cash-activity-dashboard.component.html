@@ -9,8 +9,8 @@
     <!-- Header Section -->
     <div class="flex justify-center items-center pb-5 pr-12 pl-12 border-b border-[#4B5563]">
         <p class="font-semibold text-[#030308] dark:text-white text-center">
-          Cash Activity on {{ receivedDate | date:'MMMM d, y' }} ({{ (totPickOrders + totDeliveryOrders) === 0 ? '0' :
-          (totPickOrders + totDeliveryOrders) | number:'2.0' }})
+          Cash Activity on {{ receivedDate | date:'MMMM d, y' }} ({{ (totPickOrders + totDeliveryOrders) < 10 ? '0' + (totPickOrders + totDeliveryOrders) :
+          (totPickOrders + totDeliveryOrders) }})
         </p>
     </div>
 

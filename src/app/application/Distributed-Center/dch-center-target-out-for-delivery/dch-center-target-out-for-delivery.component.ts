@@ -214,6 +214,15 @@ export class DchCenterTargetOutForDeliveryComponent implements OnInit {
     this.location.back();
   }
 
+  formatTime(s: string): string {
+  if (!s) return '';
+  const time = s.substring(11, 16);            // '15:46'
+  let [h, m] = time.split(':').map(Number);    // 15, 46
+  const ampm = h >= 12 ? 'PM' : 'AM';
+  h = h % 12 || 12;                            // 15 -> 3, 0 -> 12
+  return `${h}:${m.toString().padStart(2, '0')} ${ampm}`;  // '3:46 PM'
+}
+
 }
 
 class orders {
@@ -231,6 +240,6 @@ class orders {
   lastNameEnglish!: string
   outDlvrDateLocal!: Date
   deliveryPeriod!: string
-  outDlvrDate!: Date
+  outDlvrDate!: string
 }
 

@@ -2,7 +2,7 @@
 
 
 <div *ngIf="!isLoading">
-  <p class="font-semibold text[#424242] mb-4 mr-5 ml-0 dark:text-[#FFFFFF] dark:bg-black">Requests</p>
+  <p class="font-semibold text[#424242] mb-4 mr-5 ml-0 dark:text-[#FFFFFF]">Requests</p>
 
 
   <div class="w-full min-h-screen px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg overflow-x-auto">
@@ -134,15 +134,15 @@
 
             <td class="px-6 py-4  dark:text-gray-300 flex justify-center items-center ">
               <span *ngIf="item.status === 'Not Approved'"
-                class="w-40 bg-[#F8FFA6] text-[#A8A100] font-normal text-center rounded-lg px-6 py-1 ">
+                class="min-w-36 bg-[#F8FFA6] text-[#A8A100] font-normal text-center rounded-lg px-2 py-1 ">
                 Not Approved
               </span>
               <span *ngIf="item.status === 'Approved'"
-                class="w-40 bg-[#C8E0FF] text-[#415CFF] font-normal text-center rounded-lg px-4 py-1 ">
+                class="min-w-36 bg-[#C8E0FF] text-[#415CFF] font-normal text-center rounded-lg px-4 py-1 ">
                 Approved
               </span>
               <span *ngIf="item.status === 'Rejected'"
-                class="w-40 bg-[#FFB9B7] text-[#D16D6A] font-normal text-center rounded-lg px-5 py-1 ">
+                class="min-w-36 bg-[#FFB9B7] text-[#D16D6A] font-normal text-center rounded-lg px-5 py-1 ">
                 Rejected
               </span>
             </td>

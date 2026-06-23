@@ -247,12 +247,19 @@ getDateColor(item: any): string {
   
     const fullDateStr = `${String(selectedDateObj.getMonth() + 1).padStart(2, '0')}-${String(selectedDateObj.getDate()).padStart(2, '0')}`;
     const now = new Date();
-    const timeStr = now
-      .toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
-      .replace(':', '.')
-      .replace(' ', '');
 
-    const finalStr = `${fullDateStr} ${timeStr}`;
+// use TODAY for "Generated at"
+const genDay = now.getDate();
+const genMonthNumber = String(now.getMonth() + 1).padStart(2, '0');
+const genYear = now.getFullYear();
+
+const timeStr = now
+  .toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
+  .replace(':', '.')
+  .replace(' ', '');
+
+const generatedAtStr = `${genDay}/${genMonthNumber}/${genYear} ${timeStr}`;
+
     this.DistributionSrv
       .downloadAllTargetProgressReport(this.selectStatus, this.selectedDate, this.searchText )
       .subscribe({
@@ -261,9 +268,9 @@ getDateColor(item: any): string {
           const a = document.createElement("a");
           a.href = url;
           if (this.selectStatus) {
-            a.download = `${this.centerName} All Orders on ${dateStr} filtered by ${this.selectStatus} Generated at ${day}/${monthNumber}/${year} ${timeStr}.xlsx`;
+            a.download = `${this.centerName} All Orders on ${dateStr} filtered by ${this.selectStatus} Generated at ${generatedAtStr}.xlsx`;
           } else {
-            a.download = `${this.centerName} All Orders on ${dateStr}  Generated at ${day}/${monthNumber}/${year} ${timeStr}.xlsx`;
+            a.download = `${this.centerName} All Orders on ${dateStr}  Generated at ${generatedAtStr}.xlsx`;
           }
           a.click();
           window.URL.revokeObjectURL(url);

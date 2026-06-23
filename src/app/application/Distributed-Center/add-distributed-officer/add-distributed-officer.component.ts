@@ -13,6 +13,7 @@ import { DistributedManageOfficersService } from '../../../services/Distributed-
 import { Country, COUNTRIES } from '../../../../assets/country-data';
 import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
 import { CustomDatepickerComponent } from '../../../components/custom-datepicker/custom-datepicker.component';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-add-distributed-officer',
@@ -413,11 +414,57 @@ export class AddDistributedOfficerComponent implements OnInit {
     this.personalData.province = selected ? selected.province : '';
   }
 
-  onSubmit() {
+  // Uploads every selected image to the backend (which forwards it to R2)
+  // and stores the resulting public URLs on personalData/driverObj before
+  // the officer payload is sent.
+  private async uploadSelectedImages(): Promise<void> {
+    const uploads: Promise<void>[] = [];
+
+    if (this.selectedFile) {
+      uploads.push(
+        firstValueFrom(this.DistributedManageOfficerSrv.uploadOfficerImage(this.selectedFile, 'profile'))
+          .then(res => { this.personalData.image = res.url; })
+      );
+    }
+
+    if (this.personalData.jobRole === 'Driver') {
+      const driverUploads: [File | null, keyof Drivers, string][] = [
+        [this.licenseFrontImageFile, 'licFrontImg', 'licFront'],
+        [this.licenseBackImageFile, 'licBackImg', 'licBack'],
+        [this.insurenceFrontImageFile, 'insFrontImg', 'insFront'],
+        [this.insurenceBackImageFile, 'insBackImg', 'insBack'],
+        [this.vehicleFrontImageFile, 'vehFrontImg', 'vehFront'],
+        [this.vehicleBackImageFile, 'vehBackImg', 'vehBack'],
+        [this.vehicleSideAImageFile, 'vehSideImgA', 'vehSideA'],
+        [this.vehicleSideBImageFile, 'vehSideImgB', 'vehSideB'],
+      ];
+
+      for (const [file, field, type] of driverUploads) {
+        if (file) {
+          uploads.push(
+            firstValueFrom(this.DistributedManageOfficerSrv.uploadOfficerImage(file, type))
+              .then(res => { (this.driverObj as any)[field] = res.url; })
+          );
+        }
+      }
+    }
+
+    await Promise.all(uploads);
+  }
+
+  async onSubmit() {
     if (this.personalData.accNumber !== this.personalData.conformAccNumber) {
       return;
     }
     this.isLoading = true;
+
+    try {
+      await this.uploadSelectedImages();
+    } catch (error) {
+      this.isLoading = false;
+      this.toastSrv.error('Failed to upload one or more images. Please try again.');
+      return;
+    }
 
     if (!this.personalData.accHolderName || !this.personalData.accNumber || !this.personalData.bankName || !this.personalData.branchName) {
       this.isLoading = false;
@@ -442,7 +489,7 @@ export class AddDistributedOfficerComponent implements OnInit {
           this.driverObj.vSideBName = this.vehicleSideBImageFileName
         }
 
-        this.DistributedManageOfficerSrv.createDistributionOfficerDIO(this.personalData, this.selectedFile, this.driverObj, this.licenseFrontImageFile, this.licenseBackImageFile, this.insurenceFrontImageFile, this.insurenceBackImageFile, this.vehicleFrontImageFile, this.vehicleBackImageFile, this.vehicleSideAImageFile, this.vehicleSideBImageFile).subscribe({
+        this.DistributedManageOfficerSrv.createDistributionOfficerDIO(this.personalData, this.driverObj).subscribe({
           next: (res: any) => {
             if (res.status) {
               this.officerId = res.officerId;
@@ -515,7 +562,7 @@ export class AddDistributedOfficerComponent implements OnInit {
           this.driverObj.vSideBName = this.vehicleSideBImageFileName
         }
 
-        this.DistributedManageOfficerSrv.createDistributionOfficer(this.personalData, this.selectedFile, this.driverObj, this.licenseFrontImageFile, this.licenseBackImageFile, this.insurenceFrontImageFile, this.insurenceBackImageFile, this.vehicleFrontImageFile, this.vehicleBackImageFile, this.vehicleSideAImageFile, this.vehicleSideBImageFile).subscribe({
+        this.DistributedManageOfficerSrv.createDistributionOfficer(this.personalData, this.driverObj).subscribe({
           next: (res: any) => {
             if (res.status) {
               this.officerId = res.officerId;
@@ -836,6 +883,7 @@ export class AddDistributedOfficerComponent implements OnInit {
       });
       return;
     }
+    
   }
 
   onSubmitFormPage3(form: NgForm) {
@@ -941,6 +989,8 @@ export class AddDistributedOfficerComponent implements OnInit {
       });
       return;
     }
+
+    this.onSubmit();
   }
 
 
@@ -1819,6 +1869,15 @@ class Drivers {
   vBackName!: string;
   vSideAName!: string;
   vSideBName!: string;
+
+  licFrontImg!: string;
+  licBackImg!: string;
+  insFrontImg!: string;
+  insBackImg!: string;
+  vehFrontImg!: string;
+  vehBackImg!: string;
+  vehSideImgA!: string;
+  vehSideImgB!: string;
 }
 
 

@@ -53,7 +53,7 @@ export class ClaimOfficerComponent implements OnInit {
 
   fetchOfficer() {
     if (!this.inputId) {
-      return this.toastSrv.warning('Please enter a valid Employee ID!');
+      return this.toastSrv.warning('Please fill in all fields');
     }
 
     this.inputId = this.inputId?.trim();

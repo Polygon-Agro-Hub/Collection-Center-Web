@@ -42,14 +42,19 @@ export class ClaimOfficerComponent implements OnInit {
     this.logingRole = tokenSrv.getUserDetails().role
   }
 
-  ngOnInit(): void {
+  // ngOnInit(): void {
 
-    if (this.logingRole === 'Distribution Centre Manager') {
-      this.selectJobRole = 'Distribution Officer';
-    } else if (this.logingRole === 'Collection Centre Manager') {
-      this.selectJobRole = 'Collection Officer'
-    }
-  }
+  //   if (this.logingRole === 'Distribution Centre Manager') {
+  //     this.selectJobRole = 'Distribution Officer';
+  //   } else if (this.logingRole === 'Collection Centre Manager') {
+  //     this.selectJobRole = 'Collection Officer'
+  //   }
+  // }
+
+  ngOnInit(): void {
+  // Don't pre-select Job Role for either role — leave it empty so the user must choose
+  this.selectJobRole = '';
+}
 
   fetchOfficer() {
     if (!this.inputId) {

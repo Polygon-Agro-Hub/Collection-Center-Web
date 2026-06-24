@@ -309,7 +309,6 @@ interface RevenueItem {
   collectTime: Date
   holdTime: Date
   onTheWayTime: Date
-  restartedTime: Date
   returnTime: Date
   returnRecivedTime: Date
   completeTime: Date

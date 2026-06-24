@@ -78,9 +78,9 @@
                 <td class="px-6 py-4 text-gray-900 dark:text-gray-300 truncate">{{item.cropNameEnglish}}</td>
                 <td class="px-6 py-4 text-gray-900 dark:text-gray-300 truncate">{{item.varietyNameEnglish}}</td>
                 <td class="px-6 py-4 text-gray-900 dark:text-gray-300 text-center">{{item.grade}}</td>
-                <td class="px-6 py-4 text-gray-900 dark:text-gray-300 text-left">{{item.target | number: '1.2-2'}}</td>
+                <td class="px-6 py-4 text-gray-900 dark:text-gray-300 text-left">{{item.target}}</td>
                 <td class="px-6 py-4 text-gray-900 dark:text-gray-300 text-left">
-                    {{ item.complete != null ? (item.complete | number: '1.2-2') : '-' }}
+                    {{ item.complete != null ? (item.complete) : '-' }}
                 </td>
                 <td class="px-6 py-4 font-semibold dark:text-gray-300">
                     <div class="flex justify-center">

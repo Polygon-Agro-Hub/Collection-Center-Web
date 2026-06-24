@@ -44,10 +44,10 @@
             </div>
 
             <div class="flex flex-row items-center gap-5 ">
-                <i *ngIf="logingRole === 'Collection Centre Head' || logingRole === 'Collection Centre Manager'"
+                <i *ngIf="logingRole === 'Collection Centre Head'"
                     class="fa-solid fa-list text-lg text-[#4A4A4A] dark:text-white ml-8"></i>
 
-                <p *ngIf="logingRole === 'Collection Centre Head' || logingRole === 'Collection Centre Manager'"
+                <p *ngIf="logingRole === 'Collection Centre Head'"
                     class="font-normal text-[16px] text-[#4A4A4A] dark:text-white"
                     >
                     Filter By
@@ -150,8 +150,8 @@
                                 *ngIf="logingRole === 'Collection Centre Head'">{{item.centerName}}</td>
                             <td class="px-3 py-4  text-left text-gray-900 dark:text-gray-300">{{item.nic}}</td>
                             <td class="px-3 py-4 text-center text-[#646464] dark:text-gray-300">
-                                <span class="block">{{ formatDateLine(item.createdAt) }}</span>
-                                <span class="block">{{ formatTimeLine(item.createdAt) }}</span>
+                                <span class="block">{{ item.createdAt | date: 'MMMM d, y'}}</span>
+                                <span class="block">{{ item.createdAt | date: 'hh:mm a' }}</span>
                             </td>
                             <td class="px-3 py-4 text-center dark:text-gray-300">
                                 <i (click)="navigateToFarmerReport(item.invNo)"
@@ -191,9 +191,9 @@
             </div>
 
             <div class="flex flex-row items-center gap-5 ">
-                <i class="fa-solid fa-list text-lg text-[#4A4A4A] dark:text-white ml-8"></i>
+                <i *ngIf="logingRole === 'Collection Centre Head'" class="fa-solid fa-list text-lg text-[#4A4A4A] dark:text-white ml-8"></i>
 
-                <p class="font-normal dark:text-white">Filter By</p>
+                <p *ngIf="logingRole === 'Collection Centre Head'" class="font-normal dark:text-white">Filter By</p>
 
 
                 <!-- <div class="relative w-46">

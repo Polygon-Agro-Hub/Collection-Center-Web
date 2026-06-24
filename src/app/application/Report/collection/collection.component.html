@@ -44,10 +44,10 @@
             </div>
 
             <div class="flex flex-row items-center gap-5 ">
-                <i *ngIf="logingRole === 'Collection Centre Head' || logingRole === 'Collection Centre Manager'"
+                <i *ngIf="logingRole === 'Collection Centre Head'"
                     class="fa-solid fa-list text-lg text-[#4A4A4A] dark:text-white ml-8"></i>
 
-                <p *ngIf="logingRole === 'Collection Centre Head' || logingRole === 'Collection Centre Manager'"
+                <p *ngIf="logingRole === 'Collection Centre Head'"
                     class="font-normal text-[16px] text-[#4A4A4A] dark:text-white"
                     >
                     Filter By
@@ -190,9 +190,9 @@
             </div>
 
             <div class="flex flex-row items-center gap-5 ">
-                <i class="fa-solid fa-list text-[#4A4A4A] text-lg dark:text-white ml-8"></i>
+                <i *ngIf="logingRole === 'Collection Centre Head'" class="fa-solid fa-list text-[#4A4A4A] text-lg dark:text-white ml-8"></i>
 
-                <p class="font-normal dark:text-white">Filter By</p>
+                <p *ngIf="logingRole === 'Collection Centre Head'" class="font-normal dark:text-white">Filter By</p>
 
 
                 <div class="relative w-64 custom-center-dropdown-container">

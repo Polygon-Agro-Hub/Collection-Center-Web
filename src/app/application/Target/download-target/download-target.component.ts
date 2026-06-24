@@ -282,8 +282,8 @@ onDateFromDateChange(newDate: string | Date | null) {
       'Crop Name': item.cropNameEnglish,
       'Variety Name': item.varietyNameEnglish,
       Grade: item.grade,
-      'Target (kg)': item.target ? Number(item.target).toFixed(2) : '-',
-      'Completed (kg)': item.complete ? Number(item.complete).toFixed(2) : '-',
+      'Target (kg)': item.target ? Number(item.target) : '-',
+      'Completed (kg)': item.complete ? Number(item.complete) : '-',
       Status: item.status,
       Validity: item.validity,
     }));

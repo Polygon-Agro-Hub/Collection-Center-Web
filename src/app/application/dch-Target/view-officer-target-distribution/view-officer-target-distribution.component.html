@@ -141,7 +141,13 @@
                         {{ (i + 1) < 10 ? ('0' + (i + 1)) : (i + 1) }}
                     </td>
                     <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.invNo}}</td>
-                    <td class="px-6 py-4 text-sm dark:text-textDark text-center font-medium">{{ removeWithin(item.sheduleTime) }}</td>
+                    <td class="px-6 py-4 text-sm dark:text-textDark text-center font-medium">
+                        <div class="font-medium">
+                            <span [style.color]="getDateColor(item)">
+                              {{ removeWithin(item.sheduleTime) }}
+                            </span>
+                          </div>
+                    </td>
 
                     <td class="px-6 py-4 text-sm text-left text-gray-900 dark:text-[#C5C5C5] cursor-default">
 

@@ -452,11 +452,62 @@ export class AddDistributedOfficerComponent implements OnInit {
     await Promise.all(uploads);
   }
 
+  // Builds and shows the "Duplicate Information" dialog from a list of
+  // backend error codes (NIC/Email/PhoneNumber01/PhoneNumber02).
+  private showDuplicateErrorDialog(errors: string[]): void {
+    const messages = errors.map((err: string) => {
+      switch (err) {
+        case 'NIC':
+          return 'The NIC number is already registered.';
+        case 'Email':
+          return 'Email already exists.';
+        case 'PhoneNumber01':
+          return 'Mobile Number 1 already exists.';
+        case 'PhoneNumber02':
+          return 'Mobile Number 2 already exists.';
+        default:
+          return 'Validation error: ' + err;
+      }
+    });
+
+    let errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following Duplicate field issues:</p><ul class="list-disc pl-5">';
+    messages.forEach(m => {
+      errorMessage += `<li>${m}</li>`;
+    });
+    errorMessage += '</ul></div>';
+
+    Swal.fire({
+      icon: 'error',
+      title: 'Duplicate Information',
+      html: errorMessage,
+      confirmButtonText: 'OK',
+      customClass: {
+        popup: 'bg-tileLight dark:bg-[#363636] text-black dark:text-white',
+        title: 'font-semibold text-lg',
+        htmlContainer: 'text-left',
+        confirmButton: 'bg-red-500 dark:bg-red-500 hover:bg-red-600 dark:hover:bg-red-700',
+      },
+    });
+  }
+
   async onSubmit() {
     if (this.personalData.accNumber !== this.personalData.conformAccNumber) {
       return;
     }
     this.isLoading = true;
+
+    try {
+      await firstValueFrom(this.DistributedManageOfficerSrv.checkDuplicateOfficer(this.personalData));
+    } catch (error: any) {
+      this.isLoading = false;
+      const duplicateErrors = error?.error?.errors;
+      if (Array.isArray(duplicateErrors) && duplicateErrors.length > 0) {
+        this.showDuplicateErrorDialog(duplicateErrors);
+      } else {
+        this.toastSrv.error('Failed to verify officer details. Please try again.');
+      }
+      return;
+    }
 
     try {
       await this.uploadSelectedImages();

@@ -230,6 +230,31 @@ export class DistributedManageOfficersService {
     });
   }
 
+  /**
+   * Checks NIC/email/phone duplicates before any images are uploaded.
+   * Pass `id` for an edit (excludes the officer's own row); omit it for create.
+   */
+  checkDuplicateOfficer(person: any, id?: number): Observable<{ status: boolean; errors?: string[] }> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    const body: any = {
+      nic: person.nic,
+      email: person.email,
+      phoneNumber01: person.phoneNumber01,
+      phoneNumber02: person.phoneNumber02,
+    };
+    if (id) {
+      body.id = id;
+    }
+
+    return this.http.post<{ status: boolean; errors?: string[] }>(`${this.apiUrl}/manage-officers/check-duplicate`, body, {
+      headers,
+    });
+  }
+
   ResetPassword(id: number): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`

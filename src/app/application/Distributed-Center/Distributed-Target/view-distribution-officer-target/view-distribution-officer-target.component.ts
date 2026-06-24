@@ -312,6 +312,10 @@ cancelPass() {
 
 cancell() {
   this.isPass = false;
+  // Reset the select field
+  this.selectedOfficer = '';
+  this.selectedOfficerId = '';
+  this.selectedEmpId = '';
 }
 
 passTargetToBackEnd() {

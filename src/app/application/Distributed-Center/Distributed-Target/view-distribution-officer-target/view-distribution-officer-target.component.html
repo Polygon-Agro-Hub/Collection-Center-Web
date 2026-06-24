@@ -181,7 +181,7 @@
                 <tbody class="bg-white dark:bg-[#1D1D1F] text-[#000000] dark:border-[#1D1D1F] cursor-default">
                     <tr *ngFor="let item of ordersArr let i = index">
                         <td class="px-6 py-4 text-base font-medium text-gray-900 dark:text-[#C5C5C5]">
-                            <input type="checkbox" class="scale-150 opacity-40 cursor-pointer"
+                            <input type="checkbox" class="scale-150 cursor-pointer"
                                 [checked]="isChecked(item.processOrderId)"
                                 (change)="toggleOrder(item.processOrderId, $event)" [disabled]="
                             item.combinedStatus === 'Opened' || 
@@ -219,7 +219,7 @@
                             <span [ngClass]="{
     'text-red-500': item.deliveryStatus === 'Late',
     'text-blue-500': item.deliveryStatus === 'On Time',
-    'text-[#AC0003]': item.deliveryStatus === 'Late - Not Completed'
+    'text-[#000]': item.deliveryStatus === 'Late - Not Completed'
   }">
 
                                 {{ item.deliveryStatus === 'Late - Not Completed'

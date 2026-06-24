@@ -52,14 +52,13 @@
                     Filter By
                 </p>
 
-                <div class="relative w-52 custom-center-dropdown-container">
-                    <div *ngIf="logingRole === 'Collection Centre Head'">
-                        <app-searchable-dropdown [items]="centerDropdownItems" placeholder="Select Centre..."
-                            searchPlaceholder="Search centre..." [(ngModel)]="selectCenters"
-                            (selectionChange)="onCenterSelectionChange($event)" [clearable]="true" [showSelected]="true"
-                            [disabled]="false" class="w-full"></app-searchable-dropdown>
+                <div class="relative w-64 custom-center-dropdown-container"
+                    *ngIf="logingRole === 'Collection Centre Head'">
+                    <app-searchable-dropdown [items]="centerDropdownItems" placeholder="Select Centre..."
+                        searchPlaceholder="Search centre..." [(ngModel)]="selectCenters"
+                        (selectionChange)="onCenterSelectionChange($event)" [clearable]="true" [showSelected]="true"
+                        [disabled]="false" class="w-full"></app-searchable-dropdown>
 
-                    </div>
                 </div>
 
 

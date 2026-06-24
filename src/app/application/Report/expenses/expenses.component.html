@@ -35,8 +35,8 @@
     <hr />
 
     <div *ngIf="hasData && isDateFilterSet">
-        <div class="flex flex-row items-center justify-between mt-6 mr-5">
-            <div class="flex flex-row gap-4">
+        <div class="grid grid-cols-3 items-center mt-6 mr-5">
+            <div class="flex flex-row gap-4 justify-self-start">
                 <div class="flex flex-col justify-between flex-shrink-0">
                     <p class="font-semibold mb-1 text-lg dark:text-white whitespace-nowrap">All Transactions
                         ( {{totalItems | number:'2.0-0'}} )</p>
@@ -53,24 +53,23 @@
                     Filter By
                 </p>
 
-                <div class="relative w-52 custom-center-dropdown-container">
-                    <div *ngIf="logingRole === 'Collection Centre Head'">
-                        <app-searchable-dropdown [items]="centerDropdownItems" placeholder="Select Centre..."
-                            searchPlaceholder="Search centre..." [(ngModel)]="selectCenters"
-                            (selectionChange)="onCenterSelectionChange($event)" [clearable]="true" [showSelected]="true"
-                            [disabled]="false" class="w-full"></app-searchable-dropdown>
+                <div class="relative w-64 custom-center-dropdown-container"
+                    *ngIf="logingRole === 'Collection Centre Head'">
+                    <app-searchable-dropdown [items]="centerDropdownItems" placeholder="Select Centre..."
+                        searchPlaceholder="Search centre..." [(ngModel)]="selectCenters"
+                        (selectionChange)="onCenterSelectionChange($event)" [clearable]="true" [showSelected]="true"
+                        [disabled]="false" class="w-full"></app-searchable-dropdown>
 
-                    </div>
                 </div>
 
 
 
-                <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+                <div class="flex items-center rounded-full px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929] gap-2">
                     <input type="text" placeholder="Search by GRN No, NIC..." [(ngModel)]="searchText"
                         (keyup.enter)="onSearch()" (input)="checkLeadingSpace()" (keyup.esc)="offSearch()"
                         (ngModelChange)="searchText = $event.trimStart()"
-                        class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
-                    <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
+                        class="bg-transparent outline-none w-full min-w-0 text-textLight dark:text-textDark" />
+                    <button type="button" class="flex-shrink-0 text-gray-500 hover:text-gray-700 focus:outline-none"
                         (click)="onSearch()">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
@@ -78,7 +77,7 @@
                                 d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
                         </svg>
                     </button>
-                    <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none"
+                    <button type="button" class="flex-shrink-0 text-gray-500 hover:text-gray-700 focus:outline-none"
                         (click)="offSearch()">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
@@ -181,12 +180,11 @@
     </div>
 
     <div *ngIf="!hasData && isDateFilterSet" class="h-[500px]">
-        <div class="flex flex-row items-center justify-between mt-6">
-            <div class="flex flex-row gap-4">
+        <div class="grid grid-cols-3 items-center mt-6 mr-5">
+            <div class="flex flex-row gap-4 justify-self-start">
                 <div class="flex flex-col justify-between flex-shrink-0">
                     <p class="font-semibold mb-1 text-lg dark:text-white whitespace-nowrap">All Transactions
                         ( {{totalItems < 10 ? '0' + totalItems : totalItems }} )</p>
-                </div>
                 </div>
             </div>
 
@@ -229,14 +227,12 @@
                         [disabled]="false" class="w-full"></app-searchable-dropdown>
                 </div>
 
-
-
-                <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+                <div class="flex items-center rounded-full px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929] gap-2">
                     <input type="text" placeholder="Search by GRN No & NIC..." [(ngModel)]="searchText"
                         (keyup.enter)="onSearch()" (keyup.esc)="offSearch()"
                         (ngModelChange)="searchText = $event.trimStart()"
-                        class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
-                    <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
+                        class="bg-transparent outline-none w-full min-w-0 text-textLight dark:text-textDark" />
+                    <button type="button" class="flex-shrink-0 text-gray-500 hover:text-gray-700 focus:outline-none"
                         (click)="onSearch()">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
@@ -244,7 +240,7 @@
                                 d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
                         </svg>
                     </button>
-                    <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none"
+                    <button type="button" class="flex-shrink-0 text-gray-500 hover:text-gray-700 focus:outline-none"
                         (click)="offSearch()">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
@@ -253,6 +249,7 @@
                         </svg>
                     </button>
                 </div>
+            </div>
         </div>
 
         <div class="flex flex-col items-center w-full px-10 py-7 mt-6 ">

@@ -184,7 +184,7 @@
         <div class="flex flex-row items-center justify-between mt-6">
             <div class="flex flex-row gap-4">
                 <div class="flex flex-col justify-between flex-shrink-0">
-                    <p class="font-semibold mb-1 text-lg dark:text-white whitespace-nowrap">All Transactions
+                    <p class="font-semibold mb-1 text-lg dark:text-white whitespace-nowrap">All 
                         ( {{totalItems | number:'2.0-0'}} )</p>
                 </div>
             </div>
@@ -195,7 +195,7 @@
                 <p *ngIf="logingRole === 'Collection Centre Head'" class="font-normal dark:text-white">Filter By</p>
 
 
-                <div class="relative w-64 custom-center-dropdown-container">
+                <div class="relative w-64 custom-center-dropdown-container"  *ngIf="logingRole === 'Collection Centre Head'">
                     <app-searchable-dropdown [items]="centerDropdownItems" placeholder="Select Centre..."
                         searchPlaceholder="Search centre..." [(ngModel)]="selectCenters"
                         (selectionChange)="onCenterSelectionChange($event)" [clearable]="true" [showSelected]="true"

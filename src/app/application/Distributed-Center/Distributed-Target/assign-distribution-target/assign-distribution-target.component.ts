@@ -174,16 +174,11 @@ export class AssignDistributionTargetComponent implements OnInit {
   }
 
   leaveWithoutSaving() {
-  // Clear the changed flag
+  this.isLeaveWithOutSaving = false;
+  this.isExitAssignTarget = false;
   this.hasDataChanged = false;
-  
-  // Reset the data
-  this.fetchData();
-  
-  // Navigate away
-  this.router.navigate([`/assign-targets`]).then(() => {
-    this.isExitAssignTarget = false;
-    // Show the toast message only when leaving without saving
+
+  this.router.navigate(['/assign-targets']).then(() => {
     this.toastSrv.warning('Distribution Centre Targets Assign Cancelled');
   });
 }

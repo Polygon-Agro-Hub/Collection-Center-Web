@@ -63,6 +63,7 @@
                 <th class="px-6 py-3 text-center font-medium w-1/6">Grade</th>
                 <th class="px-6 py-3 text-left font-medium whitespace-nowrap w-1/6">Target (kg)</th>
                 <th class="px-6 py-3 text-left font-medium whitespace-nowrap w-1/6">Completed (kg)</th>
+                <th class="px-6 py-3 text-left font-medium whitespace-nowrap w-1/6">Target Date</th>
                 <th class="px-6 py-3 text-center font-medium w-24">Status</th>
                 <th class="px-6 py-3 text-center font-medium w-24">Validity</th>
             </tr>
@@ -79,6 +80,7 @@
                 <td class="px-6 py-4 text-gray-900 dark:text-gray-300 text-left">
                     {{ item.complete != null ? (item.complete) : '-' }}
                 </td>
+                <td class="px-6 py-4 text-gray-900 dark:text-gray-300 text-left">{{ item.date | date:'YYYY/MM/dd' }}</td>
                 <td class="px-6 py-4 font-semibold dark:text-gray-300">
                     <div class="flex justify-center">
                         <span *ngIf="item.status === 'Pending'"

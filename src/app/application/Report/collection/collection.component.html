@@ -44,10 +44,10 @@
             </div>
 
             <div class="flex flex-row items-center gap-5 ">
-                <i *ngIf="logingRole === 'Collection Centre Head' || logingRole === 'Collection Centre Manager'"
+                <i *ngIf="logingRole === 'Collection Centre Head'"
                     class="fa-solid fa-list text-lg text-[#4A4A4A] dark:text-white ml-8"></i>
 
-                <p *ngIf="logingRole === 'Collection Centre Head' || logingRole === 'Collection Centre Manager'"
+                <p *ngIf="logingRole === 'Collection Centre Head'"
                     class="font-normal text-[16px] text-[#4A4A4A] dark:text-white"
                     >
                     Filter By
@@ -184,18 +184,18 @@
         <div class="flex flex-row items-center justify-between mt-6">
             <div class="flex flex-row gap-4">
                 <div class="flex flex-col justify-between flex-shrink-0">
-                    <p class="font-semibold mb-1 text-lg dark:text-white whitespace-nowrap">All Transactions
+                    <p class="font-semibold mb-1 text-lg dark:text-white whitespace-nowrap">All 
                         ( {{totalItems | number:'2.0-0'}} )</p>
                 </div>
             </div>
 
             <div class="flex flex-row items-center gap-5 ">
-                <i class="fa-solid fa-list text-[#4A4A4A] text-lg dark:text-white ml-8"></i>
+                <i *ngIf="logingRole === 'Collection Centre Head'" class="fa-solid fa-list text-[#4A4A4A] text-lg dark:text-white ml-8"></i>
 
-                <p class="font-normal dark:text-white">Filter By</p>
+                <p *ngIf="logingRole === 'Collection Centre Head'" class="font-normal dark:text-white">Filter By</p>
 
 
-                <div class="relative w-64 custom-center-dropdown-container">
+                <div class="relative w-64 custom-center-dropdown-container"  *ngIf="logingRole === 'Collection Centre Head'">
                     <app-searchable-dropdown [items]="centerDropdownItems" placeholder="Select Centre..."
                         searchPlaceholder="Search centre..." [(ngModel)]="selectCenters"
                         (selectionChange)="onCenterSelectionChange($event)" [clearable]="true" [showSelected]="true"

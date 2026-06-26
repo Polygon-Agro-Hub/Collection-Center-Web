@@ -191,6 +191,23 @@ export class AssignCenterTargetComponent implements OnInit {
     }
   }
 
+  restrictDecimal(event: any, item: AssignCrops, grade: string) {
+    let value = event.target.value;
+
+    if (value.includes('.')) {
+      const parts = value.split('.');
+      if (parts[1].length > 3) {
+        value = parts[0] + '.' + parts[1].substring(0, 3);
+        event.target.value = value;
+
+        const parsed = parseFloat(value);
+        if (grade === 'A') item.targetA = parsed;
+        if (grade === 'B') item.targetB = parsed;
+        if (grade === 'C') item.targetC = parsed;
+      }
+    }
+  }
+
 }
 
 class CenterDetails {

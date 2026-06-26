@@ -373,7 +373,7 @@ class FarmerPayments {
   gradeBquan!: number;
   gradeCquan!: number;
   status!: string;
-  createdAt!: string;
+  createdAt!: Date;
   companyId!: number;
 }
 

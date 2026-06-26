@@ -221,6 +221,34 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
     return time ? time.replace('Within ', '') : time;
   }
 
+
+  getDateColor(item: any): string {
+  const schedule = item.sheduleTime;
+
+  if (!schedule) return '#606060';
+
+  const now = new Date();
+  const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+  let upperLimitMinutes: number | null = null;
+
+  if (schedule === 'Within 8AM - 2PM') {
+    upperLimitMinutes = 14 * 60; // 2:00 PM
+  } else if (schedule === 'Within 2PM - 8PM') {
+    upperLimitMinutes = 20 * 60; // 8:00 PM
+  }
+
+  if (upperLimitMinutes === null) return '#606060';
+
+  // RED if current time is past limit
+  if (currentMinutes > upperLimitMinutes) {
+    return '#FF0000';
+  }
+
+  // BLUE if still within limit
+  return '#415CFF';
+}
+
   filterStatus() {
     this.fetchSelectedOfficerTargets();
   }

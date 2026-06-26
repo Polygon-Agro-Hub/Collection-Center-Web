@@ -13,6 +13,7 @@ import { DistributedManageOfficersService } from '../../../services/Distributed-
 import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
 import { Country, COUNTRIES } from '../../../../assets/country-data';
 import { CustomDatepickerComponent } from '../../../components/custom-datepicker/custom-datepicker.component';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-edit-distributed-officer',
@@ -540,9 +541,107 @@ isSelected(item: any): boolean {
     this.personalData.province = selected ? selected.province : '';
   }
 
-  onSubmit() {
+  // Uploads any newly selected images to the backend (which forwards them to
+  // R2) and swaps the local File references for the resulting public URLs
+  // before the officer payload is sent. Fields left untouched keep whatever
+  // URL was already loaded from the server.
+  private async uploadChangedImages(): Promise<void> {
+    const uploads: Promise<void>[] = [];
+
+    if (this.selectedFile) {
+      uploads.push(
+        firstValueFrom(this.DistributedManageOfficerSrv.uploadOfficerImage(this.selectedFile, 'profile'))
+          .then(res => { this.personalData.image = res.url; })
+      );
+    }
+
+    if (this.personalData.jobRole === 'Driver') {
+      const driverUploads: [File | null, keyof Drivers, string][] = [
+        [this.licenseFrontImageFile, 'licFrontImg', 'licFront'],
+        [this.licenseBackImageFile, 'licBackImg', 'licBack'],
+        [this.insurenceFrontImageFile, 'insFrontImg', 'insFront'],
+        [this.insurenceBackImageFile, 'insBackImg', 'insBack'],
+        [this.vehicleFrontImageFile, 'vehFrontImg', 'vehFront'],
+        [this.vehicleBackImageFile, 'vehBackImg', 'vehBack'],
+        [this.vehicleSideAImageFile, 'vehSideImgA', 'vehSideA'],
+        [this.vehicleSideBImageFile, 'vehSideImgB', 'vehSideB'],
+      ];
+
+      for (const [file, field, type] of driverUploads) {
+        if (file) {
+          uploads.push(
+            firstValueFrom(this.DistributedManageOfficerSrv.uploadOfficerImage(file, type))
+              .then(res => { (this.driverObj as any)[field] = res.url; })
+          );
+        }
+      }
+    }
+
+    await Promise.all(uploads);
+  }
+
+  // Builds and shows the "Duplicate Information" dialog from a list of
+  // backend error codes (NIC/Email/PhoneNumber01/PhoneNumber02).
+  private showDuplicateErrorDialog(errors: string[]): void {
+    const messages = errors.map((err: string) => {
+      switch (err) {
+        case 'NIC':
+          return 'The NIC number is already registered.';
+        case 'Email':
+          return 'Email already exists.';
+        case 'PhoneNumber01':
+          return 'Mobile Number 1 already exists.';
+        case 'PhoneNumber02':
+          return 'Mobile Number 2 already exists.';
+        default:
+          return 'Validation error: ' + err;
+      }
+    });
+
+    let errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following Duplicate field issues:</p><ul class="list-disc pl-5">';
+    messages.forEach(m => {
+      errorMessage += `<li>${m}</li>`;
+    });
+    errorMessage += '</ul></div>';
+
+    Swal.fire({
+      icon: 'error',
+      title: 'Duplicate Information',
+      html: errorMessage,
+      confirmButtonText: 'OK',
+      customClass: {
+        popup: 'bg-tileLight dark:bg-[#363636] text-black dark:text-white',
+        title: 'font-semibold text-lg',
+        htmlContainer: 'text-left',
+        confirmButton: 'bg-red-500 dark:bg-red-500 hover:bg-red-600 dark:hover:bg-red-700',
+      },
+    });
+  }
+
+  async onSubmit() {
 
       this.isLoading = true;
+
+      try {
+        await firstValueFrom(this.DistributedManageOfficerSrv.checkDuplicateOfficer(this.personalData, this.editOfficerId));
+      } catch (error: any) {
+        this.isLoading = false;
+        const duplicateErrors = error?.error?.errors;
+        if (Array.isArray(duplicateErrors) && duplicateErrors.length > 0) {
+          this.showDuplicateErrorDialog(duplicateErrors);
+        } else {
+          this.toastSrv.error('Failed to verify officer details. Please try again.');
+        }
+        return;
+      }
+
+      try {
+        await this.uploadChangedImages();
+      } catch (error) {
+        this.isLoading = false;
+        this.toastSrv.error('Failed to upload one or more images. Please try again.');
+        return;
+      }
 
       if (this.logingRole === 'Distribution Centre Manager') {
 
@@ -558,7 +657,7 @@ isSelected(item: any): boolean {
           this.driverObj.vSideBName = this.vehicleSideBImageFileName
         }
 
-        this.DistributedManageOfficerSrv.updateDistributionOfficerDIO(this.personalData, this.editOfficerId, this.selectedFile, this.driverObj, this.licenseFrontImageFile, this.licenseBackImageFile, this.insurenceFrontImageFile, this.insurenceBackImageFile, this.vehicleFrontImageFile, this.vehicleBackImageFile, this.vehicleSideAImageFile, this.vehicleSideBImageFile).subscribe(
+        this.DistributedManageOfficerSrv.updateDistributionOfficerDIO(this.personalData, this.editOfficerId, this.driverObj).subscribe(
           (res: any) => {
             this.officerId = res.officerId;
             this.isLoading = false;
@@ -635,7 +734,7 @@ isSelected(item: any): boolean {
           this.driverObj.vSideBName = this.vehicleSideBImageFileName
         }
 
-        this.DistributedManageOfficerSrv.updateDistributionOfficer(this.personalData, this.editOfficerId, this.selectedFile, this.driverObj, this.licenseFrontImageFile, this.licenseBackImageFile, this.insurenceFrontImageFile, this.insurenceBackImageFile, this.vehicleFrontImageFile, this.vehicleBackImageFile, this.vehicleSideAImageFile, this.vehicleSideBImageFile).subscribe(
+        this.DistributedManageOfficerSrv.updateDistributionOfficer(this.personalData, this.editOfficerId, this.driverObj).subscribe(
           (res: any) => {
             this.isLoading = false;
 

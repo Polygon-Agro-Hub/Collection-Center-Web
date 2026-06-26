@@ -278,15 +278,18 @@ onDateFromDateChange(newDate: string | Date | null) {
     }
 
     const worksheetData = this.targetArr.map((item, index) => ({
-      No: index + 1,
-      'Crop Name': item.cropNameEnglish,
-      'Variety Name': item.varietyNameEnglish,
-      Grade: item.grade,
-      'Target (kg)': item.target ? Number(item.target).toFixed(2) : '-',
-      'Completed (kg)': item.complete ? Number(item.complete).toFixed(2) : '-',
-      Status: item.status,
-      Validity: item.validity,
-    }));
+  No: index + 1,
+  'Crop Name': item.cropNameEnglish,
+  'Variety Name': item.varietyNameEnglish,
+  Grade: item.grade,
+  'Target (kg)': item.target ? Number(item.target) : '-',
+  'Completed (kg)': item.complete ? Number(item.complete) : '-',
+  'Target Date': item.date
+    ? new Date(item.date).toISOString().split('T')[0].replace(/-/g, '/')
+    : '',
+  Status: item.status,
+  Validity: item.validity,
+}));
 
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(worksheetData);
 

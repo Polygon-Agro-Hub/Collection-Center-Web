@@ -106,6 +106,7 @@ export class SelectVarietyListComponent implements OnInit {
   }
 
   onSearchVarity() {
+    this.page = 1;
     this.fetchCenterCrops();
   }
 

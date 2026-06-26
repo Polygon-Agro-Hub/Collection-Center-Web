@@ -74,19 +74,19 @@
                         <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
                             <input step="0.01" type="number" [(ngModel)]="officerArr[i].targetA" name="targetA"
                                 (ngModelChange)="updateTotals(i, 'A')"
-                                class="border-[#415CFF] border-[2px] border-dotted dark:bg-slate-500 rounded-lg w-16 px-2 py-1" />
+                                class="border-[#415CFF] border-[2px] border-dotted dark:bg-slate-500 rounded-lg w-28 px-2 py-1" />
 
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
                             <input step="0.01" type="number" [(ngModel)]="officerArr[i].targetB" name="targetB"
                                 (ngModelChange)="updateTotals(i, 'B')"
-                                class="border-[#415CFF] border-[2px] border-dotted dark:bg-slate-500 rounded-lg w-16 px-2 py-1" />
+                                class="border-[#415CFF] border-[2px] border-dotted dark:bg-slate-500 rounded-lg w-28 px-2 py-1" />
 
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
                             <input step="0.01" type="number" [(ngModel)]="officerArr[i].targetC" name="targetC"
                                 (ngModelChange)="updateTotals(i, 'C')"
-                                class="border-[#415CFF] border-[2px] border-dotted dark:bg-slate-500 rounded-lg w-16 px-2 py-1" />
+                                class="border-[#415CFF] border-[2px] border-dotted dark:bg-slate-500 rounded-lg w-28 px-2 py-1" />
                         </td>
                     </tr>
                     <tr class="border-t-2 border-[#E5E7EB]">
@@ -96,7 +96,7 @@
                         <td class="px-6 py-3 text-gray-900 dark:text-gray-300">
                             <div class="flex flex-row gap-2">
                                 <input type="number" [value]="totTargetA" disabled
-                                    class="border-[#415CFF] dark:bg-slate-500 border-[2px] border-dotted rounded-lg w-16 px-2 py-1" />
+                                    class="border-[#415CFF] dark:bg-slate-500 border-[2px] border-dotted rounded-lg w-28 px-2 py-1" />
                                 <div *ngIf="+totTargetA === +targetVerity.qtyA"
                                     class="bg-[#415CFF] text-[#FFFFFF] flex justify-center items-center px-3 py-1 rounded-full">
                                     <i class="fa-solid fa-check text-sm"></i>
@@ -106,7 +106,7 @@
                         <td class="px-6 py-3  text-gray-900 dark:text-gray-300">
                             <div class="flex flex-row gap-2">
                                 <input type="number" [value]="totTargetB" disabled
-                                    class="border-[#415CFF] dark:bg-slate-500 border-[2px] border-dotted rounded-lg w-16 px-2 py-1" />
+                                    class="border-[#415CFF] dark:bg-slate-500 border-[2px] border-dotted rounded-lg w-28 px-2 py-1" />
                                 <div *ngIf="+totTargetB === +targetVerity.qtyB"
                                     class="bg-[#415CFF] text-[#FFFFFF] flex justify-center items-center px-3 py-1 rounded-full">
                                     <i class="fa-solid fa-check text-sm"></i>
@@ -117,7 +117,7 @@
                         <td class="px-6 py-3 text-gray-900 dark:text-gray-300">
                             <div class="flex flex-row gap-2">
                                 <input type="number" [value]="totTargetC" disabled
-                                    class="border-[#415CFF] dark:bg-slate-500 border-[2px] border-dotted rounded-lg w-16 px-2 py-1" />
+                                    class="border-[#415CFF] dark:bg-slate-500 border-[2px] border-dotted rounded-lg w-28 px-2 py-1" />
                                 <div *ngIf="+totTargetC == +targetVerity.qtyC"
                                     class="bg-[#415CFF] text-[#FFFFFF] flex justify-center items-center px-3 py-1 rounded-full">
                                     <i class="fa-solid fa-check text-sm"></i>

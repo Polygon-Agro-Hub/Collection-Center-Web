@@ -94,13 +94,17 @@ export class ClaimOfficerComponent implements OnInit {
   // }
 
   fetchOfficer() {
-  if (!this.selectJobRole) {
-    return this.toastSrv.warning('Please select a Job Role');
-  }
+  if (!this.selectJobRole && !this.inputId) {
+  return this.toastSrv.warning('Please fill in all fields');
+}
 
-  if (!this.inputId) {
-    return this.toastSrv.warning('Please fill in all fields');
-  }
+if (!this.selectJobRole) {
+  return this.toastSrv.warning('Please select a Job Role');
+}
+
+if (!this.inputId) {
+  return this.toastSrv.warning('Please enter a valid Employee ID');
+}
 
   this.inputId = this.inputId?.trim();
   this.isLoading = true;

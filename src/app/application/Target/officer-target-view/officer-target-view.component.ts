@@ -135,11 +135,11 @@ ngOnInit(): void {
       
       (res) => {
         if (res.status) {
-          this.responseTitle = res.message;
           this.targetArr = res.result;
           this.totalItems = res.total;
           if (res.total === 0) {
             this.hasData = false;
+            this.responseTitle = '--No data available--';
           } else {
             this.hasData = true;
           }
@@ -152,7 +152,7 @@ ngOnInit(): void {
         }
 
         console.log(this.responseTitle, this.hasData);
-        
+
       }
     )
   }

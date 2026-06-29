@@ -1,15 +1,5 @@
-/* Whole input */
-.quantity-input {
-  cursor: pointer;
-}
-
-/* Chrome, Edge, Safari spinner buttons */
+/* Chrome, Edge, Safari spinner buttons only */
 .quantity-input::-webkit-inner-spin-button,
 .quantity-input::-webkit-outer-spin-button {
   cursor: pointer;
-}
-
-/* Firefox */
-.quantity-input {
-  -moz-appearance: textfield; /* optional if you want to remove arrows */
 }

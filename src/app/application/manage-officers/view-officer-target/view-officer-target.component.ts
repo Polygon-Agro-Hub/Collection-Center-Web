@@ -109,7 +109,7 @@ export class ViewOfficerTargetComponent implements OnInit {
           a.click();
           window.URL.revokeObjectURL(url);
 
-          this.toastSrv.success('Please check your downloads folder', 'Downloaded!');
+          this.toastSrv.success('File Downloaded Successfully', 'Downloaded!');
           this.isDownloading = false;
         },
         error: (error) => {

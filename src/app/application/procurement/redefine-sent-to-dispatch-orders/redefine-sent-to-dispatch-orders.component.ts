@@ -81,7 +81,9 @@ export class RedefineSentToDispatchOrdersComponent implements OnInit {
           this.hasData = response.total === 0 ? false : true;
 
           if (response && response.data) {
+            console.log('response.data', response.data)
             this.orders = response.data
+            console.log('orders', this.orders)
             this.totalItems = response.total || 0;
           } else {
             this.orders = response.data

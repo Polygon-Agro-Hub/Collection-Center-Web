@@ -1,0 +1,8 @@
+#requstPrice {
+  cursor: text;
+}
+
+#requstPrice::-webkit-inner-spin-button,
+#requstPrice::-webkit-outer-spin-button {
+  cursor: pointer;
+}

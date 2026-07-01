@@ -265,21 +265,26 @@ getScheduleClass(item: any): string {
     return 'schedule-future';
   }
 
-  const completeTimeUTC = new Date(item.completeTime);
-
-  // 👉 Convert to Sri Lanka local string (for display/debug only)
-  const completeTimeLocal = completeTimeUTC.toLocaleString('en-US', {
-    timeZone: 'Asia/Colombo'
-  });
-
-  console.log('Raw UTC:', item.completeTime);
-  console.log('Local:', completeTimeLocal);
-  console.log('Date obj:', completeTimeUTC);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
   const scheduleDate = new Date(item.sheduleDate);
+  scheduleDate.setHours(0, 0, 0, 0);
+
+  const diffMs = scheduleDate.getTime() - today.getTime();
+
+  if (diffMs > 0) {
+    return 'schedule-future'; // Grey — future/tomorrow schedule date
+  }
+
+  if (diffMs < 0) {
+    return 'schedule-past'; // Maroon — past schedule date
+  }
+
+  // Schedule date is today — check if completed within the time slot
+  const completeTimeUTC = new Date(item.completeTime);
 
   const slotEnd = new Date(scheduleDate);
-
   if (item.sheduleTime.includes('8AM - 2PM')) {
     slotEnd.setHours(14, 0, 0, 0);
   } else if (item.sheduleTime.includes('2PM - 8PM')) {
@@ -288,12 +293,11 @@ getScheduleClass(item: any): string {
     return 'schedule-future';
   }
 
-  // comparisons are STILL correct in UTC internally
   if (completeTimeUTC > slotEnd) {
-    return 'schedule-expired';
+    return 'schedule-expired'; // Red — completed after time slot
   }
 
-  return 'schedule-active';
+  return 'schedule-active'; // Blue — completed within time slot
 }
 
 onKeydown(event: KeyboardEvent) {

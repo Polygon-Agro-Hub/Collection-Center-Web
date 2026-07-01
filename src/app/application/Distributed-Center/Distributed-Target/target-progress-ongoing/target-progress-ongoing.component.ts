@@ -267,10 +267,14 @@ const generatedAtStr = `${genDay}/${genMonthNumber}/${genYear} ${timeStr}`;
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
-          if (this.selectStatus) {
+          if (this.selectedDate && this.selectStatus) {
             a.download = `${this.centerName} All Orders on ${dateStr} filtered by ${this.selectStatus} Generated at ${generatedAtStr}.xlsx`;
+          } else if (this.selectedDate && !this.selectStatus) {
+            a.download = `${this.centerName} All Orders on ${dateStr} Generated at ${generatedAtStr}.xlsx`;
+          } else if (!this.selectedDate && this.selectStatus) {
+            a.download = `${this.centerName} All Orders filtered by ${this.selectStatus} Generated at ${generatedAtStr}.xlsx`;
           } else {
-            a.download = `${this.centerName} All Orders on ${dateStr}  Generated at ${generatedAtStr}.xlsx`;
+            a.download = `${this.centerName} All Orders Generated at ${generatedAtStr}.xlsx`;
           }
           a.click();
           window.URL.revokeObjectURL(url);

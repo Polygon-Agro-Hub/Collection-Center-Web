@@ -1279,7 +1279,7 @@ export class AddDistributedOfficerComponent implements OnInit {
 
       // Validate file size (5MB max)
       if (file.size > 3 * 1024 * 1024) {
-        this.toastSrv.error('License image size should not exceed 3MB');
+        this.toastSrv.error(`License's Front Image size should not exceed 3MB`);
         this.licenseFrontImageFile = null;
         this.licenseFrontImageFileName = '';
         event.target.value = '';
@@ -1289,7 +1289,7 @@ export class AddDistributedOfficerComponent implements OnInit {
       // Validate file type
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
-        this.toastSrv.error('License image must be JPEG, JPG or PNG format');
+        this.toastSrv.error(`License's Front Image must be JPEG, JPG or PNG format`);
         this.licenseFrontImageFile = null;
         this.licenseFrontImageFileName = '';
         event.target.value = '';
@@ -1340,7 +1340,7 @@ export class AddDistributedOfficerComponent implements OnInit {
 
       // Validate file size (5MB max)
       if (file.size > 3 * 1024 * 1024) {
-        this.toastSrv.error('License image size should not exceed 3MB');
+        this.toastSrv.error(`License's Back Image size should not exceed 3MB`);
         this.licenseBackImageFile = null;
         this.licenseBackImageFileName = '';
         event.target.value = '';
@@ -1350,7 +1350,7 @@ export class AddDistributedOfficerComponent implements OnInit {
       // Validate file type
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
-        this.toastSrv.error('License image must be JPEG, JPG or PNG format');
+        this.toastSrv.error(`License's Back Image must be JPEG, JPG or PNG format`);
         this.licenseBackImageFile = null;
         this.licenseBackImageFileName = '';
         event.target.value = '';
@@ -1394,7 +1394,7 @@ export class AddDistributedOfficerComponent implements OnInit {
       }
       // Validate file size (5MB max)
       if (file.size > 3 * 1024 * 1024) {
-        this.toastSrv.error('Insurence image size should not exceed 3MB');
+        this.toastSrv.error(`Insurance's Front Image size should not exceed 3MB`);
         this.insurenceFrontImageFile = null;
         this.insurenceFrontImageFileName = '';
         event.target.value = '';
@@ -1404,7 +1404,7 @@ export class AddDistributedOfficerComponent implements OnInit {
       // Validate file type
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
-        this.toastSrv.error('Insurence image must be JPEG, JPG or PNG format');
+        this.toastSrv.error(`Insurance's Front Image must be JPEG, JPG or PNG format`);
         this.insurenceFrontImageFile = null;
         this.insurenceFrontImageFileName = '';
         event.target.value = '';
@@ -1450,7 +1450,7 @@ export class AddDistributedOfficerComponent implements OnInit {
 
       // Validate file size (5MB max)
       if (file.size > 3 * 1024 * 1024) {
-        this.toastSrv.error('Insurence image size should not exceed 3MB');
+        this.toastSrv.error(`Insurance's Back Image size should not exceed 3MB`);
         this.insurenceBackImageFile = null;
         this.insurenceBackImageFileName = '';
         event.target.value = '';
@@ -1460,7 +1460,7 @@ export class AddDistributedOfficerComponent implements OnInit {
       // Validate file type
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
-        this.toastSrv.error('Insurence image must be JPEG, JPG or PNG format');
+        this.toastSrv.error(`Insurance's Back Image must be JPEG, JPG or PNG format`);
         this.insurenceBackImageFile = null;
         this.insurenceBackImageFileName = '';
         event.target.value = '';
@@ -1505,7 +1505,7 @@ export class AddDistributedOfficerComponent implements OnInit {
 
       // Validate file size (5MB max)
       if (file.size > 3 * 1024 * 1024) {
-        this.toastSrv.error('License image size should not exceed 3MB');
+        this.toastSrv.error(`Vehicle's Front Image size should not exceed 3MB`);
         this.vehicleFrontImageFile = null;
         this.vehicleFrontImageFileName = '';
         event.target.value = '';
@@ -1515,7 +1515,7 @@ export class AddDistributedOfficerComponent implements OnInit {
       // Validate file type
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
-        this.toastSrv.error('License image must be JPEG, JPG or PNG format');
+        this.toastSrv.error(`Vehicle's Front Image must be JPEG, JPG or PNG format`);
         this.vehicleFrontImageFile = null;
         this.vehicleFrontImageFileName = '';
         event.target.value = '';
@@ -1561,7 +1561,7 @@ export class AddDistributedOfficerComponent implements OnInit {
 
       // Validate file size (5MB max)
       if (file.size > 3 * 1024 * 1024) {
-        this.toastSrv.error('Vehicle Back image size should not exceed 3MB');
+        this.toastSrv.error(`Vehicle's Back image size should not exceed 3MB`);
         this.vehicleBackImageFile = null;
         this.vehicleBackImageFileName = '';
         event.target.value = '';
@@ -1571,7 +1571,7 @@ export class AddDistributedOfficerComponent implements OnInit {
       // Validate file type
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
-        this.toastSrv.error('Vehicle Back image must be JPEG, JPG or PNG format');
+        this.toastSrv.error(`Vehicle's Back image must be JPEG, JPG or PNG format`);
         this.vehicleBackImageFile = null;
         this.vehicleBackImageFileName = '';
         event.target.value = '';
@@ -1616,7 +1616,7 @@ export class AddDistributedOfficerComponent implements OnInit {
 
       // Validate file size (5MB max)
       if (file.size > 3 * 1024 * 1024) {
-        this.toastSrv.error('Vehicle Back image size should not exceed 3MB');
+        this.toastSrv.error(`Vehicle's Side Image - 1 size should not exceed 3MB`);
         this.vehicleSideAImageFile = null;
         this.vehicleSideAImageFileName = '';
         event.target.value = '';
@@ -1626,7 +1626,7 @@ export class AddDistributedOfficerComponent implements OnInit {
       // Validate file type
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
-        this.toastSrv.error('Vehicle Back image must be JPEG, JPG or PNG format');
+        this.toastSrv.error(`Vehicle's Side Image - 1 must be JPEG, JPG or PNG format`);
         this.vehicleSideAImageFile = null;
         this.vehicleSideAImageFileName = '';
         event.target.value = '';
@@ -1673,7 +1673,7 @@ export class AddDistributedOfficerComponent implements OnInit {
 
       // Validate file size (5MB max)
       if (file.size > 3 * 1024 * 1024) {
-        this.toastSrv.error('Vehicle Back image size should not exceed 3MB');
+        this.toastSrv.error(`Vehicle's Side Image - 2 size should not exceed 3MB`);
         this.vehicleSideBImageFile = null;
         this.vehicleSideBImageFileName = '';
         event.target.value = '';
@@ -1683,7 +1683,7 @@ export class AddDistributedOfficerComponent implements OnInit {
       // Validate file type
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
-        this.toastSrv.error('Vehicle Back image must be JPEG, JPG or PNG format');
+        this.toastSrv.error(`Vehicle's Side Image - 2 must be JPEG, JPG or PNG format`);
         this.vehicleSideBImageFile = null;
         this.vehicleSideBImageFileName = '';
         event.target.value = '';

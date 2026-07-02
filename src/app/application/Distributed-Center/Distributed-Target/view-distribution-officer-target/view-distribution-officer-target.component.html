@@ -138,7 +138,7 @@
         </div>
 
                 <div class="text-[#030308] dark:text-[#ffff] font-medium text-[16px] mt-2">
-            Scheduled Date : {{ today | date: 'MMM dd, yyyy' }}
+            Scheduled Date : {{ selectedDate | date: 'MMM dd, yyyy' }}
         </div>
 
         <div class="flex mt-2 flex-row gap-2" *ngIf="selectedOrderIds.length !== 0">

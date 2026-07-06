@@ -279,10 +279,10 @@ export class RequestsComponent implements OnInit {
         label: product.displayName,
         disabled: isExcluded,
         iconClass: isPreferred
-          ? 'fa-solid fa-heart text-green'
+          ? 'fa-solid fa-heart text-green-500'
           : isExcluded
-            ? 'fa-solid fa-ban text-red'
-            : 'fa-solid fa-check text-blue'
+            ? 'fa-solid fa-ban text-red-500'
+            : 'fa-solid fa-check text-blue-500'
       };
     };
 

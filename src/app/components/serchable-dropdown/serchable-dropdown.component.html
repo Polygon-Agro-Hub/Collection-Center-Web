@@ -52,9 +52,14 @@
       <button type="button"
         class="w-full text-left px-3 py-2 text-md hover:bg-gray-100 dark:hover:bg-[#474747] focus:outline-none focus:bg-gray-100 transition-colors duration-150"
         [class.text-gray-400.cursor-not-allowed]="item.disabled"
+        [class.opacity-50]="item.disabled && item.iconClass"
+        [class.cursor-not-allowed]="item.disabled && item.iconClass"
         [class.text-blue-700]="selectedItem?.value === item.value && showSelected"
         [class.hover:bg-blue-100]="selectedItem?.value === item.value && showSelected" (click)="selectItem(item)"
         [disabled]="item.disabled">
+        @if (item.iconClass) {
+        <i class="{{ item.iconClass }} mr-2"></i>
+        }
         {{ item.label }}
         @if (selectedItem?.value === item.value && showSelected) {
         <span class="ml-2 text-blue-600">✓</span>

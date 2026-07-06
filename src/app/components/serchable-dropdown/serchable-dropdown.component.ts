@@ -5,6 +5,7 @@ interface DropdownItem {
   value: any;
   label: string;
   disabled?: boolean;
+  iconClass?: string;
 }
 
 @Component({

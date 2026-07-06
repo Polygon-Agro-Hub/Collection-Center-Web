@@ -118,7 +118,7 @@ export class CashActivityDashboardComponent implements OnInit {
       { label: 'Overdue Ready to Pickups', count: (data.total_today - data.scheduled_today), color: '#FF3D3D' },
       { label: 'All Pickups Completed Today', count: data.all_pickup, color: '#7ED100' },
       { label: "Today's Scheduled Pickups", count: data.today_pickup, color: '#00BCFB' },
-      { label: 'Overdue Pickups - Today', count: (data.all_pickup - data.today_pickup), color: '#FFA202' }
+      { label: 'Overdue Pickups - Today', count: (data.overdue_pickup_today), color: '#FFA202' }
     ]
 
     this.totalPickupIncome = data.order_price
@@ -132,7 +132,7 @@ export class CashActivityDashboardComponent implements OnInit {
       { label: 'Overdue Out For Delivery Orders', count: (data.total_today - data.scheduled_today), color: '#FF3D3D' },
       { label: 'All Deliveries Completed Today', count: data.all_delivary, color: '#7ED100' },
       { label: "Today's Scheduled Deliveries", count: data.today_delivary, color: '#00BCFB' },
-      { label: 'Overdue Deliveries - Today', count: (data.all_delivary - data.today_delivary), color: '#FFA202' },
+      { label: 'Overdue Deliveries - Today', count: (data.overdue_delivery_today), color: '#FFA202' },
       { label: "Returned Orders Today", count: data.returned_today, color: '#A50000' }
     ]
     this.totalDeliveryIncome = data.order_price
@@ -160,6 +160,7 @@ interface IPickUp {
   all_pickup: number;
   today_pickup: number;
   order_price: number;
+  overdue_pickup_today: number
 }
 
 interface IDelivary {
@@ -169,5 +170,6 @@ interface IDelivary {
   today_delivary: number;
   order_price: number;
   returned_today: number;
+  overdue_delivery_today: number
 
 }

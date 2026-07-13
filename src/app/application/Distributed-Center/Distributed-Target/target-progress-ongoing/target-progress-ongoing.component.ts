@@ -186,34 +186,76 @@ export class TargetProgressOngoingComponent implements OnInit {
   }
 
 getDateColor(item: any): string {
-  const today = new Date();
-  const schedule = new Date(item.sheduleDate);
+  const now = new Date();
+  const today = new Date(now);
 
-  // Normalize both dates to midnight
+  const scheduleDate = new Date(item.sheduleDate);
+
+  // Normalize dates for comparison
   today.setHours(0, 0, 0, 0);
-  schedule.setHours(0, 0, 0, 0);
+  scheduleDate.setHours(0, 0, 0, 0);
 
-  const diffDays = Math.floor(
-    (schedule.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
-  );
+  const diffDays =
+    (scheduleDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24);
+
+  const status = (item.combinedStatus || '').toLowerCase();
+
+  // Completed is always black
+  if (status === 'completed') {
+    return '#000000';
+  }
 
   // Past dates
   if (diffDays < 0) {
-    return '#800000'; // Maroon
+    return '#AC0003';
   }
 
-  // Today
-  if (diffDays === 0) {
-    return '#FF0000'; // Red
+  // Future dates
+  if (diffDays > 0) {
+    return '#000000';
   }
 
-  // Tomorrow
-  if (diffDays === 1) {
-    return '#415CFF'; // Blue
+  // --------------------------
+  // Today's orders
+  // --------------------------
+
+  const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+  let alertStart = 0;
+  let slotEnd = 0;
+
+  switch (item.sheduleTime) {
+    case '8AM - 12PM':
+      alertStart = 7 * 60 + 15;   // 7:15 AM
+      slotEnd = 12 * 60;          // 12:00 PM
+      break;
+
+    case '12PM - 4PM':
+      alertStart = 11 * 60 + 15;  // 11:15 AM
+      slotEnd = 16 * 60;          // 4:00 PM
+      break;
+
+    case '4PM - 9PM':
+      alertStart = 15 * 60 + 15;  // 3:15 PM
+      slotEnd = 21 * 60;          // 9:00 PM
+      break;
+
+    default:
+      return '#000000';
   }
 
-  // Day after tomorrow and beyond
-  return '#606060'; // Grey
+  // Before alert window
+  if (currentMinutes < alertStart) {
+    return '#000000';
+  }
+
+  // During alert window
+  if (currentMinutes >= alertStart && currentMinutes <= slotEnd) {
+    return '#FF0000';
+  }
+
+  // After slot has ended
+  return '#AC0003';
 }
   
   removeWithin(time: string): string {

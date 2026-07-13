@@ -151,11 +151,13 @@ export class TargetProgressTodoComponent implements OnInit {
     this.router.navigate([`/cch-complaints/view-recive-reply/${id}`])
   }
 
-  getDateColor(item: any): string {
-  const today = new Date();
+getDateColor(item: any): string {
+  const now = new Date();
+
+  const today = new Date(now);
   const schedule = new Date(item.sheduleDate);
 
-  // Normalize both to midnight
+  // Normalize dates
   today.setHours(0, 0, 0, 0);
   schedule.setHours(0, 0, 0, 0);
 
@@ -163,19 +165,57 @@ export class TargetProgressTodoComponent implements OnInit {
     (schedule.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
   );
 
+  // Past dates
   if (diffDays < 0) {
-    // Past dates
-    return '#800000'; // Maroon
-  } else if (diffDays === 0) {
-    // Today
-    return '#FF0000'; // Red
-  } else if (diffDays === 1) {
-    // Tomorrow
-    return '#415CFF'; // Blue
-  } else {
-    // Day after tomorrow and beyond
-    return '#606060'; // Grey
+    return '#AC0003';
   }
+
+  // Future dates (tomorrow and beyond)
+  if (diffDays > 0) {
+    return '#000000';
+  }
+
+  // ----------------------
+  // Today's orders
+  // ----------------------
+
+  const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+  let alertStart = 0;
+  let slotEnd = 0;
+
+  switch (item.sheduleTime) {
+    case '8AM - 12PM':
+      alertStart = 7 * 60 + 15;   
+      slotEnd = 12 * 60;          
+      break;
+
+    case '12PM - 4PM':
+      alertStart = 11 * 60 + 15;  
+      slotEnd = 16 * 60;          
+      break;
+
+    case '4PM - 9PM':
+      alertStart = 15 * 60 + 15;  
+      slotEnd = 21 * 60;          
+      break;
+
+    default:
+      return '#000000';
+  }
+
+  // Before alert window
+  if (currentMinutes < alertStart) {
+    return '#000000';
+  }
+
+  // During alert window
+  if (currentMinutes <= slotEnd) {
+    return '#FF0000';
+  }
+
+  // After the slot has ended
+  return '#AC0003';
 }
 
   getDisplayDate(sheduleDate: string | Date): string {

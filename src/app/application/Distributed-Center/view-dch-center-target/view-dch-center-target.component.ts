@@ -1,4 +1,4 @@
-import { CommonModule, DatePipe, Location  } from '@angular/common';
+import { CommonModule, DatePipe, Location } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -16,7 +16,7 @@ import { CustomDatepickerComponent } from "../../../components/custom-datepicker
   templateUrl: './view-dch-center-target.component.html',
   styleUrl: './view-dch-center-target.component.css'
 })
-export class ViewDchCenterTargetComponent implements OnInit{
+export class ViewDchCenterTargetComponent implements OnInit {
 
   ordersArr!: orders[];
   searchText: string = '';
@@ -28,7 +28,7 @@ export class ViewDchCenterTargetComponent implements OnInit{
 
   officerId!: number;
 
-  date:  string | Date | null = null;
+  date: string | Date | null = null;
   totalItems: number = 0;
   hasData: boolean = true;
 
@@ -36,7 +36,7 @@ export class ViewDchCenterTargetComponent implements OnInit{
   centerName: string | null = null;
   regCode: string | null = null;
 
-  isLoading:boolean = true;
+  isLoading: boolean = true;
 
   isTarget: boolean = false;
 
@@ -74,14 +74,14 @@ export class ViewDchCenterTargetComponent implements OnInit{
 
   fetchCenterTarget(centerId: number = this.centerId!, search: string = this.searchText, status: string = this.selectStatus, selectDate: string | Date | null = this.date) {
     this.isLoading = true;
-    this.DistributionSrv.getCenterTarget(centerId, search, status, selectDate ).subscribe(
+    this.DistributionSrv.getCenterTarget(centerId, search, status, selectDate).subscribe(
       (res) => {
         this.ordersArr = res.items.map((item: any) => {
           let status = '';
-          
+
           const pkgStatus = item.packageStatus;
           const addStatus = item.additionalItemsStatus;
-          
+
           // Priority 1: If either is Pending, combinedStatus is Pending
           if (pkgStatus === 'Pending' || addStatus === 'Pending') {
             status = 'Pending';
@@ -105,7 +105,7 @@ export class ViewDchCenterTargetComponent implements OnInit{
           else {
             status = 'Unknown';
           }
-        
+
           return {
             ...item,
             combinedStatus: status
@@ -115,7 +115,7 @@ export class ViewDchCenterTargetComponent implements OnInit{
         this.hasData = this.ordersArr.length > 0;
         if (this.selectStatus === '' && this.hasData) {
           this.isTarget = true;
-        } 
+        }
         this.isLoading = false;
       }
     )
@@ -155,13 +155,13 @@ export class ViewDchCenterTargetComponent implements OnInit{
   getDisplayDate(scheduleDate: string | Date): string {
     const today = new Date();
     const schedule = new Date(scheduleDate);
-  
+
     // Normalize times to midnight for accurate date-only comparison
     today.setHours(0, 0, 0, 0);
     schedule.setHours(0, 0, 0, 0);
-  
+
     const diffDays = Math.floor((schedule.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-  
+
     if (diffDays === 0) {
       return 'Today';
     } else if (diffDays === 1) {
@@ -170,10 +170,10 @@ export class ViewDchCenterTargetComponent implements OnInit{
       return 'Day after tomorrow';
     } else {
       const day = schedule.getDate();
-      const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
-                          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
       const month = monthNames[schedule.getMonth()];
-  
+
       // Get ordinal for the day
       const ordinal = (n: number) => {
         if (n > 3 && n < 21) return 'th';
@@ -184,22 +184,87 @@ export class ViewDchCenterTargetComponent implements OnInit{
           default: return 'th';
         }
       }
-  
+
       return `${day}${ordinal(day)} ${month}`;
     }
   }
-  
-  
 
-  getScheduleDateColor(scheduleDate: string | Date): string {
-    const today = new Date();
+
+
+  getScheduleDateColor(
+    scheduleDate: string | Date,
+    sheduleTime: string,
+    combinedStatus: string
+  ): string {
+
+    // Completed is always black/default
+    if (combinedStatus?.toLowerCase() === 'completed') {
+      return 'text-gray-900 dark:text-[#C5C5C5]';
+    }
+
+    const now = new Date();
+
+    const today = new Date(now);
     const schedule = new Date(scheduleDate);
+
     today.setHours(0, 0, 0, 0);
     schedule.setHours(0, 0, 0, 0);
-    const diffDays = Math.floor((schedule.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-    if (diffDays === 0) return 'text-[#FF0000]';
-    if (diffDays === 1) return 'text-[#415CFF]';
-    return 'text-gray-900 dark:text-[#C5C5C5]';
+
+    const diffDays = Math.floor(
+      (schedule.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+    );
+
+    // Past dates
+    if (diffDays < 0) {
+      return 'text-[#AC0003]';
+    }
+
+    // Future dates
+    if (diffDays > 0) {
+      return 'text-gray-900 dark:text-[#C5C5C5]';
+    }
+
+    // ----------------------
+    // Today's orders
+    // ----------------------
+
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+    let alertStart = 0;
+    let slotEnd = 0;
+
+    switch (sheduleTime) {
+      case '8AM - 12PM':
+        alertStart = 7 * 60 + 15;
+        slotEnd = 12 * 60;
+        break;
+
+      case '12PM - 4PM':
+        alertStart = 11 * 60 + 15;
+        slotEnd = 16 * 60;
+        break;
+
+      case '4PM - 9PM':
+        alertStart = 15 * 60 + 15;
+        slotEnd = 21 * 60;
+        break;
+
+      default:
+        return 'text-gray-900 dark:text-[#C5C5C5]';
+    }
+
+    // Before alert window
+    if (currentMinutes < alertStart) {
+      return 'text-gray-900 dark:text-[#C5C5C5]';
+    }
+
+    // During alert window
+    if (currentMinutes <= slotEnd) {
+      return 'text-[#FF0000]';
+    }
+
+    // After slot
+    return 'text-[#AC0003]';
   }
 
   removeWithin(time: string): string {
@@ -207,22 +272,22 @@ export class ViewDchCenterTargetComponent implements OnInit{
   }
 
 
-filterStatus() {
-  this.fetchCenterTarget();
-}
-
-cancelStatus(event?: MouseEvent) {
-  if (event) {
-    event.stopPropagation(); // Prevent triggering the dropdown toggle
+  filterStatus() {
+    this.fetchCenterTarget();
   }
-  this.selectStatus = '';
-  this.fetchCenterTarget();
-}
+
+  cancelStatus(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
+    this.selectStatus = '';
+    this.fetchCenterTarget();
+  }
 
 
-goBack() {
-  this.location.back();
-}
+  goBack() {
+    this.location.back();
+  }
 
 }
 

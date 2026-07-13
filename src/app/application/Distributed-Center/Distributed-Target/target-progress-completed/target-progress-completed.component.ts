@@ -273,31 +273,50 @@ getScheduleClass(item: any): string {
 
   const diffMs = scheduleDate.getTime() - today.getTime();
 
+  // Future schedule date
   if (diffMs > 0) {
-    return 'schedule-future'; // Grey — future/tomorrow schedule date
-  }
-
-  if (diffMs < 0) {
-    return 'schedule-past'; // Maroon — past schedule date
-  }
-
-  // Schedule date is today — check if completed within the time slot
-  const completeTimeUTC = new Date(item.completeTime);
-
-  const slotEnd = new Date(scheduleDate);
-  if (item.sheduleTime.includes('8AM - 2PM')) {
-    slotEnd.setHours(14, 0, 0, 0);
-  } else if (item.sheduleTime.includes('2PM - 8PM')) {
-    slotEnd.setHours(20, 0, 0, 0);
-  } else {
     return 'schedule-future';
   }
 
-  if (completeTimeUTC > slotEnd) {
-    return 'schedule-expired'; // Red — completed after time slot
+  // Past schedule date
+  if (diffMs < 0) {
+    return 'schedule-past';
   }
 
-  return 'schedule-active'; // Blue — completed within time slot
+  // Today's schedule - compare completion time with the slot
+  const completeTime = new Date(item.completeTime);
+  console.log('completeTime', completeTime)
+
+  const slotStart = new Date(scheduleDate);
+  const slotEnd = new Date(scheduleDate);
+
+  switch (item.sheduleTime) {
+    case '8AM - 12PM':
+      slotStart.setHours(7, 15, 0, 0);
+      slotEnd.setHours(12, 0, 0, 0);
+      break;
+
+    case '12PM - 4PM':
+      slotStart.setHours(11, 15, 0, 0);
+      slotEnd.setHours(16, 0, 0, 0);
+      break;
+
+    case '4PM - 9PM':
+      slotStart.setHours(15, 15, 0, 0);
+      slotEnd.setHours(21, 0, 0, 0);
+      break;
+
+    default:
+      return 'schedule-future';
+  }
+
+  // Completed outside the allowed window
+  if (completeTime < slotStart || completeTime > slotEnd) {
+    return 'schedule-expired';
+  }
+
+  // Completed within the allowed window
+  return 'schedule-active';
 }
 
 onKeydown(event: KeyboardEvent) {

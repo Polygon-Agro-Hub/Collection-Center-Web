@@ -44,7 +44,7 @@ export class AssignCenterTargetComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const today = new Date();
+    const today = new Date('2026-07-22');
     this.selectDate = today.toISOString().split('T')[0];
     this.selectDatePickerDate = this.selectDate;
     this.fetchSavedCenterCrops()
@@ -66,12 +66,12 @@ export class AssignCenterTargetComponent implements OnInit {
     // this.validateSelectDate()
     this.TargetSrv.getSavedCenterCrops(this.centerDetails.centerId, this.selectDate, this.searchText).subscribe(
       (res) => {
-        this.assignCropsArr = res.result.data
-        this.countCrops = res.result.data.length
-        this.isNew = res.result.isNew
+        this.assignCropsArr = res.products
+        this.countCrops = res.products.length
+        this.isNew = res.isNew
         this.companyCenterId = res.companyCenterId
         this.isLoading = false;
-        this.hasData = res.result.data.length > 0 ? true : false;
+        this.hasData = res.products.length > 0 ? true : false;
         console.log('hasData', this.hasData)
 
       }

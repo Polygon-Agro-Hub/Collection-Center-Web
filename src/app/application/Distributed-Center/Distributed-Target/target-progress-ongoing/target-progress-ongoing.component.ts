@@ -225,17 +225,17 @@ getDateColor(item: any): string {
   let slotEnd = 0;
 
   switch (item.sheduleTime) {
-    case '8AM - 12PM':
+    case '08:00 AM - 12:00 PM':
       alertStart = 7 * 60 + 15;   // 7:15 AM
       slotEnd = 12 * 60;          // 12:00 PM
       break;
 
-    case '12PM - 4PM':
+    case '12:00 PM - 04:00 PM':
       alertStart = 11 * 60 + 15;  // 11:15 AM
       slotEnd = 16 * 60;          // 4:00 PM
       break;
 
-    case '4PM - 9PM':
+    case '04:00 PM - 09:00 PM':
       alertStart = 15 * 60 + 15;  // 3:15 PM
       slotEnd = 21 * 60;          // 9:00 PM
       break;

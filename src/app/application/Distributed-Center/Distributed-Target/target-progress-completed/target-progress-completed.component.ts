@@ -291,17 +291,17 @@ getScheduleClass(item: any): string {
   const slotEnd = new Date(scheduleDate);
 
   switch (item.sheduleTime) {
-    case '8AM - 12PM':
+    case '08:00 AM - 12:00 PM':
       slotStart.setHours(7, 15, 0, 0);
       slotEnd.setHours(12, 0, 0, 0);
       break;
 
-    case '12PM - 4PM':
+    case '12:00 PM - 04:00 PM':
       slotStart.setHours(11, 15, 0, 0);
       slotEnd.setHours(16, 0, 0, 0);
       break;
 
-    case '4PM - 9PM':
+    case '04:00 PM - 09:00 PM':
       slotStart.setHours(15, 15, 0, 0);
       slotEnd.setHours(21, 0, 0, 0);
       break;

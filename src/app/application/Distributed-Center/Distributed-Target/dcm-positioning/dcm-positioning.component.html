@@ -29,27 +29,27 @@
 <!-- ===== PLACEMENT VIEW ===== -->
 <div class="max-w-full p-5" *ngIf="view === 'placement'">
   <button
-    class="flex items-center gap-1 text-[13px] text-gray-500 dark:text-gray-400 mb-5 hover:underline"
+    class="flex items-center gap-1 text-[13px] text-[#5A5874] dark:text-gray-400 mb-5 font-normal"
     (click)="goBack()">
-    <span aria-hidden="true">&#8592;</span>
+    <i class="fa-solid fa-arrow-left"></i>
     <span class="underline">Go Back</span>
   </button>
 
-  <div class="text-[15px] text-gray-900 dark:text-gray-100 mb-4">
-    Selected Row : <span class="font-bold">{{ formatSelectedRowLabel(selectedRow!.rowNumber) }}</span>
+  <div class="text-[16px] font-normal text-gray-900 dark:text-gray-100 mb-4">
+    Selected Row : <span class="font-semibold">{{ formatSelectedRowLabel(selectedRow!.rowNumber) }}</span>
   </div>
 
   <div
-    class="flex items-stretch rounded-md overflow-hidden border border-indigo-400 dark:border-indigo-500 mb-3.5 min-h-16"
+    class="flex items-stretch rounded-md overflow-hidden border border-[#415CFF] dark:border-[#415CFF] mb-3.5 min-h-16"
     *ngFor="let slot of positions">
 
-    <div class="bg-[#F3F4FF] dark:bg-[#F3F4FF] px-4 flex items-center text-[15px] font-medium text-indigo-600 dark:text-indigo-400 w-[70px] shrink-0">
+    <div class="bg-[#F3F4FF] dark:bg-[#F3F4FF] flex justify-center items-center text-[16px] font-medium text-[#415CFF] dark:text-indigo-400 w-[70px] shrink-0">
       {{ slot.code }}
     </div>
 
     <div class="flex-1 bg-white dark:bg-gray-800 flex items-center flex-wrap gap-2 px-3 py-2">
       <span
-        class="flex items-center gap-1.5 bg-[#F3F4F6] dark:bg-gray-700 text-gray-800 dark:text-gray-200 text-[14px] px-3 py-1.5 rounded-md"
+        class="flex items-center gap-1.5 bg-[#F8F8F8] border font-normal border-[#4A4C59] dark:bg-gray-700 text-[#4A4C59] dark:text-gray-200 text-[16px] px-3 py-1.5 rounded-md"
         *ngFor="let item of slot.items; let i = index">
         {{ item }}
         <button
@@ -63,21 +63,21 @@
 
     <div class="flex items-center pr-3">
       <button
-        class="w-9 h-9 flex items-center justify-center rounded-md bg-black dark:bg-gray-900 text-white text-lg font-medium hover:bg-gray-800 transition-colors"
+        class="w-9 h-9 flex items-center justify-center rounded-md bg-black dark:bg-gray-900 text-white  font-medium hover:bg-gray-800 transition-colors"
         (click)="onAddSlot(slot)">
-        +
+        <i class="fa-solid fa-plus"></i>
       </button>
     </div>
   </div>
 
   <div class="border-t border-gray-200 dark:border-gray-700 pt-5 mt-6 flex justify-center gap-4">
     <button
-      class="rounded-lg px-8 py-2 text-[15px] font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+      class="rounded-lg px-8 py-2 text-[18px] font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors min-w-16"
       (click)="onCancel()">
       Cancel
     </button>
     <button
-      class="rounded-lg px-8 py-2 text-[15px] font-medium bg-[#415CFF] text-white hover:bg-indigo-700 transition-colors"
+      class="rounded-lg px-8 py-2 text-[18px] font-medium bg-[#415CFF] text-white hover:bg-[#415CFF] transition-colors min-w-16"
       (click)="onSave()">
       Save
     </button>

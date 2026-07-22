@@ -41,7 +41,7 @@
 
   <div
     class="flex items-stretch rounded-md overflow-hidden border border-[#415CFF] dark:border-[#415CFF] mb-3.5 min-h-16"
-    *ngFor="let slot of positions">
+    *ngFor="let slot of positions; let i = index">
 
     <div class="bg-[#F3F4FF] dark:bg-[#F3F4FF] flex justify-center items-center text-[16px] font-medium text-[#415CFF] dark:text-indigo-400 w-[70px] shrink-0">
       {{ slot.code }}
@@ -50,12 +50,12 @@
     <div class="flex-1 bg-white dark:bg-gray-800 flex items-center flex-wrap gap-2 px-3 py-2">
       <span
         class="flex items-center gap-1.5 bg-[#F8F8F8] border font-normal border-[#4A4C59] dark:bg-gray-700 text-[#4A4C59] dark:text-gray-200 text-[16px] px-3 py-1.5 rounded-md"
-        *ngFor="let item of slot.items; let i = index">
+        *ngFor="let item of slot.items; let j = index">
         {{ item }}
         <button
           type="button"
           class="text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 leading-none"
-          (click)="removeItem(slot, i)">
+          (click)="removeItem(slot, j)">
           &times;
         </button>
       </span>
@@ -64,7 +64,7 @@
     <div class="flex items-center pr-3">
       <button
         class="w-9 h-9 flex items-center justify-center rounded-md bg-black dark:bg-gray-900 text-white  font-medium hover:bg-gray-800 transition-colors"
-        (click)="onAddSlot(slot)">
+        (click)="onAddSlot(slot, i)">
         <i class="fa-solid fa-plus"></i>
       </button>
     </div>
@@ -81,5 +81,51 @@
       (click)="onSave()">
       Save
     </button>
+  </div>
+</div>
+
+<!-- ===== PLACE PRODUCT MODAL ===== -->
+<div
+  class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+  *ngIf="isModalOpen">
+  <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-[520px] p-8 shadow-xl">
+
+    <h2 class="text-center text-[20px] font-semibold text-gray-900 dark:text-gray-100 mb-4">
+      Place a Product to Position {{ activeSlotIndex }} from {{ formatSelectedRowLabel(selectedRow!.rowNumber) }}
+    </h2>
+
+    <p class="text-[16px] text-center text-[#4F6396] font-normal dark:text-[#4F6396] mb-4">
+      Please select the product you need to place for Position {{ activeSlotIndex }}.
+    </p>
+
+    <div class="relative mb-8">
+      <select
+        class="w-full appearance-none border border-[#666666] dark:border-gray-600 rounded-xl px-4 py-3 text-[16px] text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 outline-none focus:border-[#415CFF] pr-10"
+        [(ngModel)]="selectedProductId"
+        name="productSelect">
+        <option [ngValue]="null" disabled>--Select Product--</option>
+        <option *ngFor="let product of productOptions" [ngValue]="product.id">
+          {{ product.name }} - {{ product.variant }}
+        </option>
+      </select>
+      <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 pointer-events-none"></i>
+    </div>
+
+    <div class="flex justify-between gap-36">
+      <button
+        class="flex-1 rounded-lg py-3 text-[16px] font-medium border border-gray-300 dark:border-gray-600 text-gray-500 dark:text-gray-300 bg-[#F7F7F7] dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors min-w-28"
+        (click)="closeModal()">
+        Cancel
+      </button>
+      <button
+        class="flex-1 rounded-lg py-3 text-[16px] font-medium transition-colors"
+        [ngClass]="selectedProductId
+          ? 'bg-[#415CFF] text-white hover:bg-indigo-700 cursor-pointer'
+          : 'bg-[#F0F0F0] dark:bg-gray-700 text-[#B3B3B3] dark:text-gray-500 cursor-not-allowed'"
+        [disabled]="!selectedProductId"
+        (click)="confirmPlaceProduct()">
+        Place
+      </button>
+    </div>
   </div>
 </div>

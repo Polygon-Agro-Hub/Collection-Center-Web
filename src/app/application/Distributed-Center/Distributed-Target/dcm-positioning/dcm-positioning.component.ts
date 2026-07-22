@@ -12,6 +12,12 @@ interface PositionSlot {
   items: string[];
 }
 
+interface ProductOption {
+  id: string;
+  name: string;
+  variant: string; // e.g. 'Wholesale', 'Retail'
+}
+
 @Component({
   selector: 'app-dcm-positioning',
   standalone: true,
@@ -31,6 +37,19 @@ export class DcmPositioningComponent {
 
   positions: PositionSlot[] = [];
 
+  // ===== Modal state =====
+  isModalOpen = false;
+  activeSlot: PositionSlot | null = null;
+  activeSlotIndex: number | null = null; // position number, e.g. 1 for P01
+  selectedProductId: string | null = null;
+
+  productOptions: ProductOption[] = [
+    { id: 'beans-wholesale', name: 'Beans', variant: 'Wholesale' },
+    { id: 'beans-retail', name: 'Beans', variant: 'Retail' },
+    { id: 'rice-wholesale', name: 'Rice', variant: 'Wholesale' },
+    { id: 'rice-retail', name: 'Rice', variant: 'Retail' }
+  ];
+
   onPlace(row: RowData): void {
     if (row.positionsAvailable <= 0) {
       return;
@@ -48,12 +67,31 @@ export class DcmPositioningComponent {
     }));
   }
 
-  onAddSlot(slot: PositionSlot): void {
-    // TODO: replace with actual picker/modal to select an item to add
-    const newItem = prompt('Enter item to add (e.g. Beans (R)):');
-    if (newItem) {
-      slot.items.push(newItem);
+  // ===== Modal handlers =====
+  onAddSlot(slot: PositionSlot, index: number): void {
+    this.activeSlot = slot;
+    this.activeSlotIndex = index + 1;
+    this.selectedProductId = null;
+    this.isModalOpen = true;
+  }
+
+  closeModal(): void {
+    this.isModalOpen = false;
+    this.activeSlot = null;
+    this.activeSlotIndex = null;
+    this.selectedProductId = null;
+  }
+
+  confirmPlaceProduct(): void {
+    if (!this.selectedProductId || !this.activeSlot) {
+      return;
     }
+    const product = this.productOptions.find(p => p.id === this.selectedProductId);
+    if (product) {
+      const label = product.variant ? `${product.name} (${product.variant.charAt(0)})` : product.name;
+      this.activeSlot.items.push(label);
+    }
+    this.closeModal();
   }
 
   removeItem(slot: PositionSlot, index: number): void {

@@ -687,8 +687,59 @@ getDriverCashRevenue(
   );
 }
 
+  getDCHCenterRows(centerId: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/get-dch-center-row?centerId=${centerId}`;
+  
+    return this.http.get<any>(url, { headers });
+  }
+
+  createDCHCenterRow(centerId: number, nextRow: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/create-dch-center-row?centerId=${centerId}&nextRow=${nextRow}`;
+  
+    return this.http.put<any>(url, {}, { headers });
+  }
+
+  createDCHCenterPos(centerId: number, nextPos: number, rowId: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/create-dch-center-pos?centerId=${centerId}&nextPos=${nextPos}&rowId=${rowId}`;
+  
+    return this.http.put<any>(url, {}, { headers });
+  }
+
+  toggleRow(enableStatus: number, id: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/dch-center-enable-row?enableStatus=${enableStatus}&id=${id}`;
+
+    return this.http.put<any>(url, {}, { headers });
+  }
+
+  deleteDCHCenterPos(rowId: number, pIndex: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/delete-dch-center-pos/${rowId}/${pIndex}`;
+
+    return this.http.delete<any>(url, { headers });
+  }
 
 }
+
+
 
 
 

@@ -39,36 +39,53 @@
     Selected Row : <span class="font-semibold">{{ formatSelectedRowLabel(selectedRow!.rowNumber) }}</span>
   </div>
 
-  <div
-    class="flex items-stretch rounded-md overflow-hidden border border-[#415CFF] dark:border-[#415CFF] mb-3.5 min-h-16"
-    *ngFor="let slot of positions; let i = index">
+  <ng-container *ngFor="let slot of positions; let i = index">
+    <div
+      class="flex items-stretch rounded-md overflow-hidden border min-h-16"
+      [ngClass]="isSlotInvalid(slot)
+        ? 'border-red-500 dark:border-red-500'
+        : 'border-[#415CFF] dark:border-[#415CFF]'">
 
-    <div class="bg-[#F3F4FF] dark:bg-[#F3F4FF] flex justify-center items-center text-[16px] font-medium text-[#415CFF] dark:text-indigo-400 w-[70px] shrink-0">
-      {{ slot.code }}
-    </div>
+      <div
+        class="flex justify-center items-center text-[16px] font-medium w-[70px] shrink-0"
+        [ngClass]="isSlotInvalid(slot)
+          ? 'bg-red-50 text-red-600 dark:bg-red-950 dark:text-red-400'
+          : 'bg-[#F3F4FF] dark:bg-[#F3F4FF] text-[#415CFF] dark:text-indigo-400'">
+        {{ slot.code }}
+      </div>
 
-    <div class="flex-1 bg-white dark:bg-gray-800 flex items-center flex-wrap gap-2 px-3 py-2">
-      <span
-        class="flex items-center gap-1.5 bg-[#F8F8F8] border font-normal border-[#4A4C59] dark:bg-gray-700 text-[#4A4C59] dark:text-gray-200 text-[16px] px-3 py-1.5 rounded-md"
-        *ngFor="let item of slot.items; let j = index">
-        {{ item }}
+      <div class="flex-1 bg-white dark:bg-gray-800 flex items-center flex-wrap gap-2 px-3 py-2">
+        <span
+          class="flex items-center gap-1.5 border font-normal text-[16px] px-3 py-1.5 rounded-md"
+          [ngClass]="isDuplicateItem(item)
+            ? 'bg-red-100 border-red-300 text-red-700 dark:bg-red-900 dark:border-red-700 dark:text-red-200'
+            : 'bg-[#F8F8F8] border-[#4A4C59] dark:bg-gray-700 text-[#4A4C59] dark:text-gray-200'"
+          *ngFor="let item of slot.items; let j = index">
+          {{ item.label }}
+          <button
+            type="button"
+            class="text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 leading-none"
+            (click)="requestRemoveItem(slot, item, j, i + 1)">
+            &times;
+          </button>
+        </span>
+      </div>
+
+      <div class="flex items-center pr-3">
         <button
-          type="button"
-          class="text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 leading-none"
-          (click)="removeItem(slot, j)">
-          &times;
+          class="w-9 h-9 flex items-center justify-center rounded-md bg-black dark:bg-gray-900 text-white  font-medium hover:bg-gray-800 transition-colors"
+          (click)="onAddSlot(slot, i)">
+          <i class="fa-solid fa-plus"></i>
         </button>
-      </span>
+      </div>
     </div>
 
-    <div class="flex items-center pr-3">
-      <button
-        class="w-9 h-9 flex items-center justify-center rounded-md bg-black dark:bg-gray-900 text-white  font-medium hover:bg-gray-800 transition-colors"
-        (click)="onAddSlot(slot, i)">
-        <i class="fa-solid fa-plus"></i>
-      </button>
+    <div class="flex items-center gap-1.5 mt-1 mb-3.5" *ngIf="isSlotInvalid(slot)">
+      <i class="fa-solid fa-triangle-exclamation text-red-600 text-[12px]"></i>
+      <span class="text-red-600 text-[13px]">{{ slotErrorMessage(slot) }}</span>
     </div>
-  </div>
+    <div class="mb-3.5" *ngIf="!isSlotInvalid(slot)"></div>
+  </ng-container>
 
   <div class="border-t border-gray-200 dark:border-gray-700 pt-5 mt-6 flex justify-center gap-4">
     <button
@@ -127,5 +144,65 @@
         Place
       </button>
     </div>
+  </div>
+</div>
+
+<!-- ===== CONFIRM REMOVE MODAL ===== -->
+<div
+  class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+  *ngIf="isRemoveConfirmOpen">
+  <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-[460px] p-8 shadow-xl text-center">
+
+    <div class="w-9 h-9 rounded-full bg-gray-100 dark:bg-gray-700 flex items-center justify-center mx-auto mb-4">
+      <i class="fa-solid fa-info text-gray-500 dark:text-gray-300 text-[14px]"></i>
+    </div>
+
+    <h2 class="text-[18px] font-bold text-gray-900 dark:text-gray-100 mb-2">
+      Confirm Product Remove
+    </h2>
+
+    <p class="text-[14px] text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+      Are you sure you want to remove {{ pendingRemovalItemLabel }} from Position {{ pendingRemovalPosition }}?
+      This action cannot be undone.
+    </p>
+
+    <div class="flex justify-center gap-4">
+      <button
+        class="rounded-lg px-8 py-2 text-[15px] font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+        (click)="closeRemoveConfirm()">
+        Cancel
+      </button>
+      <button
+        class="rounded-lg px-8 py-2 text-[15px] font-medium bg-red-600 text-white hover:bg-red-700 transition-colors"
+        (click)="confirmRemove()">
+        Remove
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- ===== ACTION NOT ALLOWED MODAL ===== -->
+<div
+  class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+  *ngIf="isActionNotAllowedOpen">
+  <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-[460px] p-8 shadow-xl text-center">
+
+    <div class="w-6 h-6 rounded-full bg-red-600 text-white text-[12px] font-bold flex items-center justify-center mx-auto mb-4">
+      1
+    </div>
+
+    <h2 class="text-[18px] font-bold text-gray-900 dark:text-gray-100 mb-2">
+      Action Not Allowed
+    </h2>
+
+    <p class="text-[14px] text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
+      {{ actionNotAllowedMessage }}
+    </p>
+
+    <button
+      class="rounded-lg px-8 py-2 text-[15px] font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
+      (click)="closeActionNotAllowed()">
+      Close
+    </button>
   </div>
 </div>

@@ -7,9 +7,14 @@ interface RowData {
   positionsAvailable: number;
 }
 
+interface PositionItem {
+  label: string;
+  locked?: boolean; // true when item has an assigned target and cannot be removed
+}
+
 interface PositionSlot {
   code: string;
-  items: string[];
+  items: PositionItem[];
 }
 
 interface ProductOption {
@@ -37,7 +42,10 @@ export class DcmPositioningComponent {
 
   positions: PositionSlot[] = [];
 
-  // ===== Modal state =====
+  // ===== Save validation state =====
+  attemptedSave = false;
+
+  // ===== Add-product modal state =====
   isModalOpen = false;
   activeSlot: PositionSlot | null = null;
   activeSlotIndex: number | null = null; // position number, e.g. 1 for P01
@@ -50,12 +58,21 @@ export class DcmPositioningComponent {
     { id: 'rice-retail', name: 'Rice', variant: 'Retail' }
   ];
 
+  // ===== Remove confirm modal state =====
+  isRemoveConfirmOpen = false;
+  private pendingRemoval: { slot: PositionSlot; index: number; slotPosition: number } | null = null;
+
+  // ===== Action-not-allowed modal state =====
+  isActionNotAllowedOpen = false;
+  actionNotAllowedMessage = '';
+
   onPlace(row: RowData): void {
     if (row.positionsAvailable <= 0) {
       return;
     }
     this.selectedRow = row;
     this.positions = this.buildPositionSlots(row);
+    this.attemptedSave = false;
     this.view = 'placement';
   }
 
@@ -67,7 +84,7 @@ export class DcmPositioningComponent {
     }));
   }
 
-  // ===== Modal handlers =====
+  // ===== Add product modal handlers =====
   onAddSlot(slot: PositionSlot, index: number): void {
     this.activeSlot = slot;
     this.activeSlotIndex = index + 1;
@@ -89,18 +106,108 @@ export class DcmPositioningComponent {
     const product = this.productOptions.find(p => p.id === this.selectedProductId);
     if (product) {
       const label = product.variant ? `${product.name} (${product.variant.charAt(0)})` : product.name;
-      this.activeSlot.items.push(label);
+      this.activeSlot.items.push({ label });
     }
     this.closeModal();
   }
 
-  removeItem(slot: PositionSlot, index: number): void {
-    slot.items.splice(index, 1);
+  // ===== Remove item flow =====
+  requestRemoveItem(slot: PositionSlot, item: PositionItem, index: number, slotPosition: number): void {
+    if (item.locked) {
+      this.actionNotAllowedMessage =
+        `${item.label} from Position ${slotPosition} cannot be removed because ` +
+        `${this.formatSelectedRowLabel(this.selectedRow!.rowNumber)} has assigned target.`;
+      this.isActionNotAllowedOpen = true;
+      return;
+    }
+    this.pendingRemoval = { slot, index, slotPosition };
+    this.isRemoveConfirmOpen = true;
   }
 
+  get pendingRemovalItemLabel(): string {
+    if (!this.pendingRemoval) {
+      return '';
+    }
+    return this.pendingRemoval.slot.items[this.pendingRemoval.index]?.label ?? '';
+  }
+
+  get pendingRemovalPosition(): number {
+    return this.pendingRemoval?.slotPosition ?? 0;
+  }
+
+  closeRemoveConfirm(): void {
+    this.isRemoveConfirmOpen = false;
+    this.pendingRemoval = null;
+  }
+
+  confirmRemove(): void {
+    if (this.pendingRemoval) {
+      this.pendingRemoval.slot.items.splice(this.pendingRemoval.index, 1);
+    }
+    this.closeRemoveConfirm();
+  }
+
+  closeActionNotAllowed(): void {
+    this.isActionNotAllowedOpen = false;
+    this.actionNotAllowedMessage = '';
+  }
+
+  // ===== Validation =====
+  isSlotEmpty(slot: PositionSlot): boolean {
+    return slot.items.length === 0;
+  }
+
+  private getDuplicateLabels(): Set<string> {
+    const counts = new Map<string, number>();
+    this.positions.forEach(slot =>
+      slot.items.forEach(item => {
+        counts.set(item.label, (counts.get(item.label) || 0) + 1);
+      })
+    );
+    const duplicates = new Set<string>();
+    counts.forEach((count, label) => {
+      if (count > 1) {
+        duplicates.add(label);
+      }
+    });
+    return duplicates;
+  }
+
+  isDuplicateItem(item: PositionItem): boolean {
+    return this.getDuplicateLabels().has(item.label);
+  }
+
+  hasDuplicateInSlot(slot: PositionSlot): boolean {
+    const duplicates = this.getDuplicateLabels();
+    return slot.items.some(item => duplicates.has(item.label));
+  }
+
+  isSlotInvalid(slot: PositionSlot): boolean {
+    if (!this.attemptedSave) {
+      return false;
+    }
+    return this.isSlotEmpty(slot) || this.hasDuplicateInSlot(slot);
+  }
+
+  slotErrorMessage(slot: PositionSlot): string {
+    if (this.isSlotEmpty(slot)) {
+      return 'At least one product is required.';
+    }
+    if (this.hasDuplicateInSlot(slot)) {
+      return 'Duplicate products detected.';
+    }
+    return '';
+  }
+
+  private isFormValid(): boolean {
+    return this.positions.every(slot => !this.isSlotEmpty(slot) && !this.hasDuplicateInSlot(slot));
+  }
+
+  // ===== Navigation / save =====
   goBack(): void {
     this.view = 'list';
     this.selectedRow = null;
+    this.attemptedSave = false;
   }
 
   onCancel(): void {
@@ -108,7 +215,8 @@ export class DcmPositioningComponent {
   }
 
   onSave(): void {
-    if (!this.selectedRow) {
+    this.attemptedSave = true;
+    if (!this.isFormValid()) {
       return;
     }
     console.log('Saving positions for', this.selectedRow, this.positions);

@@ -1,1 +1,30 @@
-<p>dcm-positioning works!</p>
+<div class="max-w-[500px] p-5">
+  <div class="text-[16px] font-medium text-gray-900 dark:text-gray-100 mb-3.5">
+    All Rows ({{ rows.length.toString().padStart(2, '0') }})
+  </div>
+
+  <div
+    class="relative flex items-center bg-white dark:bg-gray-800 border border-[#75798F] dark:border-gray-700 rounded-xl px-4 py-3 mb-3.5 "
+    *ngFor="let row of rows">
+
+    <div class="text-[16px] font-medium text-[#030308] dark:text-gray-100 pr-8 shrink-0 whitespace-nowrap">
+      {{ formatRowLabel(row.rowNumber) }}
+    </div>
+
+    <div class="absolute top-0 bottom-0 left-[90px] w-px bg-[#75798F] dark:bg-gray-600"></div>
+
+    <div class="flex-1 font-normal text-[16px] text-[#4F6396] dark:text-[#4F6396] pl-9">
+      --{{ row.positionsAvailable }} Positions Available--
+    </div>
+
+    <button
+      class="rounded-lg px-7 py-1 text-[18px] transition-colors font-medium"
+      [ngClass]="row.positionsAvailable > 0
+        ? 'bg-[#415CFF] dark:bg-[#415CFF] text-white cursor-pointer'
+        : 'bg-[#F7F7F7] dark:bg-gray-700 text-[#6B7D8C] dark:text-gray-500 cursor-not-allowed'"
+      [disabled]="row.positionsAvailable <= 0"
+      (click)="onPlace(row)">
+      Place
+    </button>
+  </div>
+</div>

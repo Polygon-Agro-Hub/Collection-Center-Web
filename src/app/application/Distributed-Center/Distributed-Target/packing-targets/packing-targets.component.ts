@@ -16,8 +16,8 @@ import { DcmPositioningComponent } from "../dcm-positioning/dcm-positioning.comp
 })
 export class PackingTargetsComponent implements OnInit {
 
-  isSelectPackingLIne: boolean = true;
-  isSelectPositioning: boolean = false;
+  isSelectPackingLIne: boolean = false;
+  isSelectPositioning: boolean = true;
   isSelectAssign: boolean = false;
 
   constructor() { }

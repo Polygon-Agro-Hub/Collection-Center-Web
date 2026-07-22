@@ -1,0 +1,215 @@
+
+
+<app-loading-spinner *ngIf="isLoading" />
+
+<div *ngIf="!isLoading" class="w-full min-h-screen overflow-x-auto">
+
+    <div class="text-[#030308] font-[500] dark:text-white whitespace-nowrap">{{regCode}} {{centerName}}</div>
+
+    <p class="text-[#030308] font-[500] dark:text-white whitespace-nowrap mt-1">
+        All Rows ({{ rows.length }})
+    </p>
+
+    <button type="button"
+        class="flex items-center gap-2 bg-[#090909] text-white font-[500] px-4 py-2 rounded-lg mt-4 hover:bg-black dark:bg-white dark:text-[#1A1A1A]"
+        (click)="openCreateRowModal()">
+        <i class="fa-solid fa-plus text-xs"></i>
+        Create New Row
+    </button>
+
+    <!-- Row list -->
+    <div *ngIf="rows.length > 0" class="flex flex-col gap-3 mt-6 w-full">
+        <div *ngFor="let row of rows"
+    class="flex items-start justify-between gap-4 border-2 border-[#C3CEDA] dark:border-[#2A2A2A] rounded-lg px-4 py-3">
+
+    <div class="flex items-center gap-6 flex-1 min-w-0">
+
+        <!-- Row Number -->
+        <div class="flex flex-col items-center self-center shrink-0">
+            <p class="font-[500] text-center text-[#030308] dark:text-white">
+                Row {{ formatRowNo(row.rowIndex) }}
+            </p>
+
+            <p class="text-xs text-center font-[400]"
+                [ngClass]="row.isEnabled
+                ? 'text-green-600'
+                : 'text-[#57687B] px-1.5 rounded-lg bg-[#E3E9EF] dark:text-gray-500'">
+                {{ row.isEnabled ? 'Enabled' : 'Disabled' }}
+            </p>
+        </div>
+
+
+        <!-- Separator + QR/QC -->
+        <div class="border-l-2 border-[#C3CEDA] dark:border-[#819BBA] h-10 self-center shrink-0"></div>
+
+        <div class="flex flex-wrap gap-2 flex-1 min-w-0">
+            <span *ngFor="let pos of getOrderedPositions(row)"
+                class="font-[500] rounded-md border-2 flex items-center justify-center w-10 h-9 shrink-0"
+                [ngClass]="getPositionClass(pos.pType)"
+                [class.group]="pos.pType === 'NOR'"
+                [class.cursor-pointer]="pos.pType === 'NOR'"
+                (click)="pos.pType === 'NOR' && openDeletePositionModal(row, pos)">
+                <ng-container *ngIf="pos.pType === 'NOR'; else plainLabel">
+                    <span class="group-hover:hidden">{{ getPositionLabel(pos) }}</span>
+                    <i class="fa-solid fa-square hidden group-hover:inline-block"></i>
+                </ng-container>
+                <ng-template #plainLabel>{{ getPositionLabel(pos) }}</ng-template>
+            </span>
+        </div>
+
+    </div>
+
+
+    <div class="flex items-center gap-5 self-center">
+
+        <!-- Plus Button -->
+        <button type="button"
+            class="flex items-center justify-center w-7 h-7 bg-[#415CFF] text-white rounded-md hover:bg-[#324ae0]"
+            (click)="openCreatePositionModal(row)">
+            <i class="fa-solid fa-plus text-xs"></i>
+        </button>
+
+
+        <!-- Separator + Toggle -->
+        <div class="border-l-2 border-[#C3CEDA] dark:border-[#819BBA] h-10"></div>
+
+
+        <!-- Toggle -->
+        <label class="inline-flex items-center cursor-pointer">
+            <input type="checkbox" class="sr-only peer" [checked]="row.isEnabled"
+                (change)="toggleRow(row)">
+
+            <div
+                class="relative w-11 h-6 bg-gray-200 peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#415CFF]">
+            </div>
+        </label>
+
+    </div>
+
+</div>
+    </div>
+
+    <!-- Empty state -->
+    <div *ngIf="rows.length === 0" class="flex flex-col items-center justify-center w-full mt-24">
+        <span class="relative inline-block w-20 h-20 mb-6">
+            <i class="fa-regular fa-file text-7xl text-indigo-100 dark:text-[#2A2A3A]"></i>
+            <i class="fa-solid fa-magnifying-glass text-2xl text-indigo-300 dark:text-[#4A4A6A] absolute bottom-1 right-0"></i>
+        </span>
+        <p class="text-[#A0A0A0] dark:text-gray-500">--No Rows Available--</p>
+    </div>
+
+</div>
+
+<!-- Create Row confirmation modal -->
+<div *ngIf="showCreateRowModal"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+
+    <div class="relative bg-white dark:bg-[#363636] shadow-lg rounded-xl p-6 pt-12 w-2/7 text-center">
+
+        <div
+            class="absolute top-4 left-1/2 -translate-x-1/2 flex items-center justify-center w-9 h-9 rounded-full bg-[#BDCCDD33]">
+            <div class="flex items-center justify-center w-6 h-6 rounded-full bg-[#57687B]">
+                <i class="fa-solid fa-info text-white text-xs"></i>
+            </div>
+        </div>
+
+        <p class="text-lg font-[600] text-[#000000] dark:text-white mt-4">
+            Create Row Confirmation
+        </p>
+
+        <p class="font-[400] text-[#4B5563] dark:text-gray-300 mt-3">
+            Do you want to add Row {{ nextRowNo }}?<br>
+            The row will be added in a disabled state initially.
+        </p>
+
+        <div class="flex justify-center gap-3 mt-6">
+            <button type="button"
+                class="bg-[#F6F7F9] border min-w-36 border-[#95A1AC] text-[#6B7D8C] font-[600] px-6 py-2 rounded-lg hover:bg-[#dcdcdc]"
+                (click)="cancelCreateRow()">
+                Cancel
+            </button>
+
+            <button type="button"
+                class="bg-[#415CFF] min-w-36 text-white font-[600] px-6 py-2 rounded-lg hover:bg-[#324ae0]"
+                (click)="confirmCreateRow()">
+                Create Row
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<!-- Create position confirmation modal -->
+<div *ngIf="showCreatePositionModal"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+
+    <div class="relative bg-white dark:bg-[#363636] shadow-lg rounded-xl p-6 pt-12 w-2/7 text-center">
+
+        <div
+            class="absolute top-4 left-1/2 -translate-x-1/2 flex items-center justify-center w-9 h-9 rounded-full bg-[#BDCCDD33]">
+            <div class="flex items-center justify-center w-6 h-6 rounded-full bg-[#57687B]">
+                <i class="fa-solid fa-info text-white text-xs"></i>
+            </div>
+        </div>
+
+        <p class="text-lg font-[600] text-[#000000] dark:text-white mt-4">
+            Create Position Confirmation
+        </p>
+
+        <p class="font-[400] text-[#4B5563] dark:text-gray-300 mt-3">
+            Do you want to add packing Position {{ (this.currentRow.positions.length - 2) + 1 }} to Row {{ this.currentRow.rowIndex }}?
+        </p>
+
+        <div class="flex justify-center gap-3 mt-6">
+            <button type="button"
+                class="bg-[#F6F7F9] border min-w-36 border-[#95A1AC] text-[#6B7D8C] font-[600] px-6 py-2 rounded-lg hover:bg-[#dcdcdc]"
+                (click)="cancelCreatePos()">
+                Cancel
+            </button>
+
+            <button type="button"
+                class="bg-[#415CFF] min-w-36 text-white font-[600] px-6 py-2 rounded-lg hover:bg-[#324ae0]"
+                (click)="createNextPosNo()">
+                Enable
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- Delete position confirmation modal -->
+<div *ngIf="showDeletePositionModal"
+    class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
+
+    <div class="relative bg-white dark:bg-[#363636] shadow-lg rounded-xl p-6 pt-12 w-2/7 text-center">
+
+        <div
+            class="absolute top-4 left-1/2 -translate-x-1/2 flex items-center justify-center w-9 h-9 rounded-full bg-[#BDCCDD33]">
+            <div class="flex items-center justify-center w-6 h-6 rounded-full bg-[#57687B]">
+                <i class="fa-solid fa-info text-white text-xs"></i>
+            </div>
+        </div>
+
+        <p class="text-lg font-[600] text-[#000000] dark:text-white mt-4">
+            Confirm Position Deletion
+        </p>
+
+        <p class="font-[400] text-[#4B5563] dark:text-gray-300 mt-3">
+            Are you sure you want to delete {{ getPositionLabel(positionToDelete) }}? <BR>
+                This action can not be undone.
+        </p>
+
+        <div class="flex justify-center gap-3 mt-6">
+            <button type="button"
+                class="bg-[#F6F7F9] border min-w-36 border-[#95A1AC] text-[#6B7D8C] font-[600] px-6 py-2 rounded-lg hover:bg-[#dcdcdc]"
+                (click)="cancelDeletePosition()">
+                Cancel
+            </button>
+
+            <button type="button"
+                class="bg-[#415CFF] min-w-36 text-white font-[600] px-6 py-2 rounded-lg hover:bg-[#324ae0]"
+                (click)="confirmDeletePosition()">
+                Delete
+            </button>
+        </div>
+    </div>
+</div>

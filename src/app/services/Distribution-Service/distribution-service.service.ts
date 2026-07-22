@@ -737,6 +737,47 @@ getDriverCashRevenue(
     return this.http.delete<any>(url, { headers });
   }
 
+  getDCMCenterId(): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/get-dcm-center-id`;
+  
+    return this.http.get<any>(url, { headers });
+  }
+
+  getDCMPositioningRows(): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/get-dcm-positioning-rows`;
+  
+    return this.http.get<any>(url, { headers });
+  }
+
+  getDcmPositionsForRows(rowId: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/get-dcm-positions-for-row/${rowId}`;
+  
+    return this.http.get<any>(url, { headers });
+  }
+
+  saveDcmPoositionItems(rowId: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/get-dcm-positions-for-row/${rowId}`;
+  
+    return this.http.get<any>(url, { headers });
+  }
+
+
 }
 
 

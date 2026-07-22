@@ -31,7 +31,7 @@ interface ProductOption {
   styleUrl: './dcm-positioning.component.css'
 })
 export class DcmPositioningComponent {
-  view: 'list' | 'placement' = 'list';
+view: 'list' | 'placement' = 'list';
   selectedRow: RowData | null = null;
 
   rows: RowData[] = [

@@ -8,7 +8,8 @@ import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loa
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { CustomDatepickerComponent } from "../../../components/custom-datepicker/custom-datepicker.component";
 import Swal from 'sweetalert2';
-
+import { TokenServiceService } from '../../../services/Token/token-service.service';
+import { of } from 'rxjs';
 export interface PackingLineRow {
   id: number;
   companyCenterId: number;
@@ -51,21 +52,58 @@ export class DchPackingLineComponent {
   showDeletePositionModal: boolean = false;
   positionToDelete!: Positions;
 
+  logingRole: string | null = null;
+
   constructor(
     private router: Router,
     private DistributionSrv: DistributionServiceService,
     private location: Location,
     private toastSrv: ToastAlertService,
-    private route: ActivatedRoute
-  ) { }
+    private route: ActivatedRoute,
+    private tokenSrv: TokenServiceService
+  ) { 
+    this.logingRole = tokenSrv.getUserDetails().role
+  }
 
 
   ngOnInit(): void {
+  let center$;
+
+  if (this.logingRole === 'Distribution Centre Head') {
     this.centerId = Number(this.route.snapshot.paramMap.get('id'));
     this.centerName = String(this.route.snapshot.paramMap.get('centerName'));
     this.regCode = String(this.route.snapshot.paramMap.get('regCode'));
 
-    this.fetchDCHCenterRows();
+    center$ = of(null); // Completes immediately
+  } else {
+    center$ = this.DistributionSrv.getDCMCenterId();
+  }
+
+  center$.subscribe({
+    next: (res) => {
+      if (res !== null) {
+        this.centerId = res;
+      }
+
+      this.fetchDCHCenterRows();
+    },
+    error: (err) => {
+      console.error(err);
+    }
+  });
+}
+
+  fetchDcmCenterId() {
+    this.isLoading = true;
+    console.log('sdsds1')
+    this.DistributionSrv.getDCMCenterId().subscribe(
+      
+      (res) => {
+        this.centerId = res;
+        console.log('center', this.centerId)
+        this.isLoading = false;
+      }
+    )
   }
 
   fetchDCHCenterRows() {

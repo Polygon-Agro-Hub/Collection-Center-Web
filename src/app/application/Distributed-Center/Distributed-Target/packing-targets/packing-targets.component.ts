@@ -6,11 +6,11 @@ import { TargetProgressTodoComponent } from "../target-progress-todo/target-prog
 import { TargetProgressCompletedComponent } from "../target-progress-completed/target-progress-completed.component";
 import { TargetOutForDeliveryComponent } from "../target-out-for-delivery/target-out-for-delivery.component";
 import { DcmPositioningComponent } from "../dcm-positioning/dcm-positioning.component"
-
+import { DchPackingLineComponent } from "./../../dch-packing-line/dch-packing-line.component";
 @Component({
   selector: 'app-packing-targets',
   standalone: true,
-    imports: [CommonModule, FormsModule, TargetProgressOngoingComponent, TargetProgressTodoComponent, TargetProgressCompletedComponent, TargetOutForDeliveryComponent, DcmPositioningComponent],
+    imports: [CommonModule, FormsModule, TargetProgressOngoingComponent, TargetProgressTodoComponent, TargetProgressCompletedComponent, TargetOutForDeliveryComponent, DcmPositioningComponent, DchPackingLineComponent],
   templateUrl: './packing-targets.component.html',
   styleUrl: './packing-targets.component.css'
 })

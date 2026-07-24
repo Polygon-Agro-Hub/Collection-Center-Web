@@ -727,12 +727,12 @@ getDriverCashRevenue(
     return this.http.put<any>(url, {}, { headers });
   }
 
-  deleteDCHCenterPos(rowId: number, pIndex: number): Observable<any> {
+  deleteDCHCenterPos(posId: number, rowId: number, pIndex: number): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
 
-    let url = `${this.apiUrl}/delete-dch-center-pos/${rowId}/${pIndex}`;
+    let url = `${this.apiUrl}/delete-dch-center-pos/${posId}/${rowId}/${pIndex}`;
 
     return this.http.delete<any>(url, { headers });
   }
@@ -767,14 +767,21 @@ getDriverCashRevenue(
     return this.http.get<any>(url, { headers });
   }
 
-  saveDcmPoositionItems(rowId: number): Observable<any> {
+  saveDcmPositionItems(rowId: number, addedItems: any[], deletedItems: any[]): Observable<any> {
     const headers = new HttpHeaders({
-      Authorization: `Bearer ${this.token}`
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json'
     });
 
-    let url = `${this.apiUrl}/get-dcm-positions-for-row/${rowId}`;
-  
-    return this.http.get<any>(url, { headers });
+    const url = `${this.apiUrl}/save-dcm-position-products`;
+
+    const data = {
+      rowId,
+      addedItems,
+      deletedItems
+    };
+
+    return this.http.post<any>(url, data, { headers });
   }
 
 

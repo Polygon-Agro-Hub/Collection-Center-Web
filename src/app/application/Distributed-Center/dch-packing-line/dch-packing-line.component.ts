@@ -10,6 +10,7 @@ import { CustomDatepickerComponent } from "../../../components/custom-datepicker
 import Swal from 'sweetalert2';
 import { TokenServiceService } from '../../../services/Token/token-service.service';
 import { of } from 'rxjs';
+
 export interface PackingLineRow {
   id: number;
   companyCenterId: number;
@@ -50,9 +51,18 @@ export class DchPackingLineComponent {
   showCreateRowModal: boolean = false;
   showCreatePositionModal: boolean = false;
   showDeletePositionModal: boolean = false;
+  openPositionDeleteErrorPopUp: boolean = false;
   positionToDelete!: Positions;
 
   logingRole: string | null = null;
+  hasData: boolean = false;
+
+  openErrorEnableRow: boolean = false;
+  openErrorDisableRow: boolean = false;
+  openToggleRowPopUpEnable: boolean = false;
+  openToggleRowPopUpDisable: boolean = false;
+  removeRowIndex!: number;
+  rowToToggle!: PackingLineRow;
 
   constructor(
     private router: Router,
@@ -113,10 +123,7 @@ export class DchPackingLineComponent {
         this.rows = res.items;
         this.total = res.items.length || 0;
         console.log('total', this.total)
-        // this.hasData = this.ordersArr.length > 0;
-        // if (this.selectStatus === '' && this.hasData) {
-        //   this.isTarget = true;
-        // } 
+        this.hasData = this.rows.length > 0;
         this.isLoading = false;
       }
     )
@@ -181,31 +188,9 @@ export class DchPackingLineComponent {
     this.DistributionSrv.createDCHCenterRow(this.centerId, nextRow).subscribe(
       (res) => {
 if (res.success) {
-    Swal.fire({
-      icon: 'success',
-      title: 'success',
-      html: 'success fully added a new row',
-      confirmButtonText: 'OK',
-      customClass: {
-        popup: 'bg-tileLight dark:bg-[#363636] text-black dark:text-white',
-        title: 'font-semibold text-lg',
-        htmlContainer: 'text-left',
-        confirmButton: 'bg-red-500 dark:bg-red-500 hover:bg-red-600 dark:hover:bg-red-700',
-      },
-    });
+    this.toastSrv.success(`Row addition successfull.`);
 } else {
-  Swal.fire({
-      icon: 'error',
-      title: 'error',
-      html: 'error adding a new row',
-      confirmButtonText: 'OK',
-      customClass: {
-        popup: 'bg-tileLight dark:bg-[#363636] text-black dark:text-white',
-        title: 'font-semibold text-lg',
-        htmlContainer: 'text-left',
-        confirmButton: 'bg-red-500 dark:bg-red-500 hover:bg-red-600 dark:hover:bg-red-700',
-      },
-    });
+    this.toastSrv.error(`Row addition failed.`);
 }
         
         this.isLoading = false;
@@ -214,19 +199,62 @@ if (res.success) {
     )
   }
 
+  onToggleRowClick(event: Event, row: PackingLineRow): void {
+    this.rowToToggle = row
+    if (this.rowToToggle.isEnabled === 0) {
+      this.openToggleRowPopUpEnable = true;
+    } else {
+      this.openToggleRowPopUpDisable = true;
+    }
+
+    event.preventDefault();
+    
+  }
+
+  confirmToggleRow() {
+      this.toggleRow(this.rowToToggle);
+      this.openToggleRowPopUpEnable = false;
+      this.openToggleRowPopUpEnable = false;
+  }
+
   toggleRow(row: PackingLineRow): void {
+    this.isLoading = true;
     const enableStatus = row.isEnabled === 0 ? 1 : 0;
+    console.log('enable', row.positions.length);
+    this.removeRowIndex = row.rowIndex;
+    if (row.positions.length <= 2) {
+      this.openErrorEnableRow = true;
+      return;
+    }
     console.log('isEnabled', row.isEnabled)
-    this.DistributionSrv.toggleRow(enableStatus, row.id).subscribe(
-      (res) => {
-        row.isEnabled = res.isEnabled
-        
-        this.isLoading = false;
-        this.showCreatePositionModal = false;
-        console.log('rows', this.rows)
-        // this.fetchDCHCenterRows();
-      }
-    )
+    this.DistributionSrv.toggleRow(enableStatus, row.id).subscribe({
+  next: (res) => {
+    console.log('Success:', res);
+    if (row.isEnabled === 0) {
+        this.toastSrv.success(`Packing row ${this.rowToToggle.rowIndex} enabled successfully.`);
+    } else if (row.isEnabled === 1) {
+        this.toastSrv.success(`Packing row ${this.rowToToggle.rowIndex} disabled successfully.`);
+    }
+    
+
+    this.fetchDCHCenterRows();
+    this.isLoading = false;
+    this.openToggleRowPopUpEnable = false;
+    this.openToggleRowPopUpDisable = false;
+  },
+  error: (err) => {
+    if (err.status === 401) {
+      console.log('401 Unauthorized');
+      this.openErrorDisableRow = true;
+    } else {
+      console.error('Other error:', err);
+    }
+
+    this.openToggleRowPopUpEnable = false;
+    this.openToggleRowPopUpDisable = false;
+    this.isLoading = false;
+  }
+});
 
   }
 
@@ -253,31 +281,9 @@ if (res.success) {
     this.DistributionSrv.createDCHCenterPos(this.centerId, nextPos, this.currentRow.positions[0].rowId).subscribe(
       (res) => {
 if (res.success) {
-    Swal.fire({
-      icon: 'success',
-      title: 'success',
-      html: 'successfully added a new position',
-      confirmButtonText: 'OK',
-      customClass: {
-        popup: 'bg-tileLight dark:bg-[#363636] text-black dark:text-white',
-        title: 'font-semibold text-lg',
-        htmlContainer: 'text-left',
-        confirmButton: 'bg-red-500 dark:bg-red-500 hover:bg-red-600 dark:hover:bg-red-700',
-      },
-    });
+    this.toastSrv.success(`Position addition successfull.`);
 } else {
-  Swal.fire({
-      icon: 'error',
-      title: 'error',
-      html: 'error adding a new position',
-      confirmButtonText: 'OK',
-      customClass: {
-        popup: 'bg-tileLight dark:bg-[#363636] text-black dark:text-white',
-        title: 'font-semibold text-lg',
-        htmlContainer: 'text-left',
-        confirmButton: 'bg-red-500 dark:bg-red-500 hover:bg-red-600 dark:hover:bg-red-700',
-      },
-    });
+  this.toastSrv.error(`Position addition failed.`);
 }
         
         this.isLoading = false;
@@ -302,43 +308,57 @@ if (res.success) {
   }
 
   confirmDeletePosition(): void {
-    this.isLoading = true;
-    this.DistributionSrv.deleteDCHCenterPos(this.positionToDelete.rowId, this.positionToDelete.pIndex!).subscribe(
-      (res) => {
-        if (res.success) {
-          Swal.fire({
-            icon: 'success',
-            title: 'success',
-            html: 'successfully deleted the position',
-            confirmButtonText: 'OK',
-            customClass: {
-              popup: 'bg-tileLight dark:bg-[#363636] text-black dark:text-white',
-              title: 'font-semibold text-lg',
-              htmlContainer: 'text-left',
-              confirmButton: 'bg-red-500 dark:bg-red-500 hover:bg-red-600 dark:hover:bg-red-700',
-            },
-          });
-        } else {
-          Swal.fire({
-            icon: 'error',
-            title: 'error',
-            html: 'error deleting the position',
-            confirmButtonText: 'OK',
-            customClass: {
-              popup: 'bg-tileLight dark:bg-[#363636] text-black dark:text-white',
-              title: 'font-semibold text-lg',
-              htmlContainer: 'text-left',
-              confirmButton: 'bg-red-500 dark:bg-red-500 hover:bg-red-600 dark:hover:bg-red-700',
-            },
-          });
-        }
+  this.isLoading = true;
 
-        this.isLoading = false;
+  this.DistributionSrv.deleteDCHCenterPos(
+    this.positionToDelete.id,
+    this.positionToDelete.rowId,
+    this.positionToDelete.pIndex!
+  ).subscribe({
+    next: (res) => {
+      console.log('Success:', res);
+
+      this.toastSrv.success('Position deletion successful.');
+
+      this.isLoading = false;
+      this.fetchDCHCenterRows();
+      this.showDeletePositionModal = false;
+    },
+
+    error: (err) => {
+      if (err.status === 409) {
         this.showDeletePositionModal = false;
-        this.fetchDCHCenterRows();
+        this.openPositionDeleteErrorPopUp = true;
+      } else {
+        console.error('Other error:', err);
+        this.toastSrv.error('An error occurred while deleting position.');
       }
-    )
+      this.showDeletePositionModal = false;
+      this.isLoading = false;
+    }
+  });
+}
+
+  cancelErrorEnableRow(): void {
+    this.openErrorEnableRow = false;
   }
+
+  cancelErrorDisableRow(): void {
+    this.openErrorDisableRow = false;
+  }
+
+  cancelOpenTogglePopupDisable(): void {
+    this.openToggleRowPopUpDisable = false;
+  }
+
+  cancelOpenTogglePopupEnable(): void {
+    this.openToggleRowPopUpEnable= false;
+  }
+
+  cancelPoisitonDeleteErrorPopup(): void {
+    this.openPositionDeleteErrorPopUp = false;
+  }
+
 
 }
 

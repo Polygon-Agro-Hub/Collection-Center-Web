@@ -1,93 +1,174 @@
-import { Component } from '@angular/core';
-import { CommonModule } from '@angular/common';
+import { CommonModule, DatePipe, Location  } from '@angular/common';
+import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { DistributionServiceService } from '../../../../services/Distribution-Service/distribution-service.service'
+import { NgxPaginationModule } from 'ngx-pagination';
+import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
+import { ToastAlertService } from '../../../../services/toast-alert/toast-alert.service';
+import { CustomDatepickerComponent } from "../../../../components/custom-datepicker/custom-datepicker.component";
+import Swal from 'sweetalert2';
+import { TokenServiceService } from '../../../../services/Token/token-service.service';
+import { SerchableDropdownComponent } from '../../../../components/serchable-dropdown/serchable-dropdown.component';
 
-interface RowData {
-  rowNumber: number;
-  positionsAvailable: number;
+
+export interface PackingLineRow {
+  id: number;
+  companyCenterId: number;
+  rowIndex: number;
+  isEnabled: number;
+  norCount:number;
 }
 
-interface PositionItem {
-  label: string;
-  locked?: boolean; // true when item has an assigned target and cannot be removed
+export interface Positions {
+  id: number;
+  rowId: number;
+  pIndex: number;
+  pType: string;
+  items: PositionsCrops[];
 }
 
-interface PositionSlot {
-  code: string;
-  items: PositionItem[];
+export interface PositionsCrops {
+  positionCropId: number;
+  mpiId: number;
+  varietyId: number;
+  category: string;
+  displayName:string;
 }
 
-interface ProductOption {
-  id: string;
-  name: string;
-  variant: string; // e.g. 'Wholesale', 'Retail'
+export interface ChangeItems {
+  positionCropId: number;
+  posId: number;
+  rowId: number;
+  pIndex: number;
+  mpiId: number;
+  varietyId: number;
+  category: string;
+  displayName:string;
+}
+
+export interface Products {
+  id: number;
+  varietyId: number;
+  displayName: string;
+  category: string;
+
 }
 
 @Component({
   selector: 'app-dcm-positioning',
   standalone: true,
-  imports: [CommonModule, FormsModule],
+  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent, CustomDatepickerComponent, SerchableDropdownComponent],
   templateUrl: './dcm-positioning.component.html',
   styleUrl: './dcm-positioning.component.css'
 })
-export class DcmPositioningComponent {
-view: 'list' | 'placement' = 'list';
-  selectedRow: RowData | null = null;
+export class DcmPositioningComponent implements OnInit {
 
-  rows: RowData[] = [
-    { rowNumber: 1, positionsAvailable: 5 },
-    { rowNumber: 2, positionsAvailable: 5 },
-    { rowNumber: 3, positionsAvailable: 0 }
-  ];
+  isLoading: boolean = false;
 
-  positions: PositionSlot[] = [];
+  regCode!: string;
+  centerName!: string;
+  centerId!: number;
 
-  // ===== Save validation state =====
-  attemptedSave = false;
+  rows: PackingLineRow[] = [];
+  positions: Positions[] = [];
+  productsArr: Products[] = [];
+  total!: number;
+  hasData: boolean = false;
+  hasPositionsData: boolean = false;
+  selectedRow!: PackingLineRow;
+
+  view: string = "rows";
+
+  // ===== Pending changes to send on save =====
+  addedItems: ChangeItems[] = [];
+  deletedItems: ChangeItems[] = [];
 
   // ===== Add-product modal state =====
-  isModalOpen = false;
-  activeSlot: PositionSlot | null = null;
-  activeSlotIndex: number | null = null; // position number, e.g. 1 for P01
-  selectedProductId: string | null = null;
+  isModalOpen: boolean = false;
+  activeSlot: Positions | null = null;
+  activeSlotIndex: number | null = null;
+  selectedProductId: number | null = null;
 
-  productOptions: ProductOption[] = [
-    { id: 'beans-wholesale', name: 'Beans', variant: 'Wholesale' },
-    { id: 'beans-retail', name: 'Beans', variant: 'Retail' },
-    { id: 'rice-wholesale', name: 'Rice', variant: 'Wholesale' },
-    { id: 'rice-retail', name: 'Rice', variant: 'Retail' }
-  ];
+  // ===== Remove-confirm modal state =====
+  isRemoveConfirmOpen: boolean = false;
+  private pendingRemoval: { slot: Positions; item: PositionsCrops; index: number } | null = null;
 
-  // ===== Remove confirm modal state =====
-  isRemoveConfirmOpen = false;
-  private pendingRemoval: { slot: PositionSlot; index: number; slotPosition: number } | null = null;
+  constructor(
+    private router: Router,
+    private DistributionSrv: DistributionServiceService,
+    private location: Location,
+    private toastSrv: ToastAlertService,
+    private route: ActivatedRoute,
+    private tokenSrv: TokenServiceService
+  ) {}
 
-  // ===== Action-not-allowed modal state =====
-  isActionNotAllowedOpen = false;
-  actionNotAllowedMessage = '';
+  ngOnInit(): void {
+  this.fetchDcmPostitioningRows()
+}
 
-  onPlace(row: RowData): void {
-    if (row.positionsAvailable <= 0) {
+  fetchDcmPostitioningRows() {
+    this.isLoading = true;
+    this.DistributionSrv.getDCMPositioningRows().subscribe(
+      (res) => {
+        this.rows = res.items;
+        console.log('rows', this.rows)
+        this.total = res.items.length || 0;
+        console.log('total', this.total)
+        this.hasData = res.items.length > 0;
+        this.isLoading = false;
+      }
+    )
+  }
+
+  onPlace(row: PackingLineRow): void {
+    if (row.norCount <= 0) {
       return;
     }
     this.selectedRow = row;
-    this.positions = this.buildPositionSlots(row);
-    this.attemptedSave = false;
+    // this.positions = this.buildPositionSlots(row);
+    // this.attemptedSave = false;
     this.view = 'placement';
+    console.log('view', this.view)
+    this.fetchDcmPositionsForRows(this.selectedRow.id);
   }
 
-  private buildPositionSlots(row: RowData): PositionSlot[] {
-    const slotCount = 5; // adjust based on actual layout/capacity per row
-    return Array.from({ length: slotCount }, (_, i) => ({
-      code: 'P' + (i + 1).toString().padStart(2, '0'),
-      items: []
+  fetchDcmPositionsForRows(id: number) {
+    this.isLoading = true;
+    this.DistributionSrv.getDcmPositionsForRows(id).subscribe(
+      (res) => {
+        this.positions = res.items.items;
+        this.productsArr = res.mpItems.mpiItems;
+        console.log('productsArr', this.productsArr)
+        this.total = this.positions.length || 0;
+        console.log('positions', this.positions)
+        this.hasPositionsData = this.positions.length > 0;
+       
+        this.isLoading = false;
+      }
+    )
+  }
+
+
+  formatRowLabel(rowNumber: number): string {
+    return 'Row ' + rowNumber.toString().padStart(2, '0');
+  }
+
+  formatSelectedRowLabel(rowNumber: number): string {
+    return 'Row ' + rowNumber;
+  }
+
+  get productDropdownItems() {
+    return this.productsArr.map(product => ({
+      value: product.id,
+      label: `${product.displayName} - ${product.category}`
     }));
   }
 
   // ===== Add product modal handlers =====
-  onAddSlot(slot: PositionSlot, index: number): void {
+  openAddModal(slot: Positions): void {
     this.activeSlot = slot;
-    this.activeSlotIndex = index + 1;
+    this.activeSlotIndex = slot.pIndex;
     this.selectedProductId = null;
     this.isModalOpen = true;
   }
@@ -100,27 +181,42 @@ view: 'list' | 'placement' = 'list';
   }
 
   confirmPlaceProduct(): void {
-    if (!this.selectedProductId || !this.activeSlot) {
+    if (!this.activeSlot || !this.selectedProductId) {
       return;
     }
-    const product = this.productOptions.find(p => p.id === this.selectedProductId);
-    if (product) {
-      const label = product.variant ? `${product.name} (${product.variant.charAt(0)})` : product.name;
-      this.activeSlot.items.push({ label });
+
+    const product = this.productsArr.find(p => p.id === this.selectedProductId);
+    if (!product) {
+      return;
     }
+
+    const newCrop: PositionsCrops = {
+      positionCropId: null as any,
+      mpiId: product.id,
+      varietyId: product.varietyId,
+      category: product.category,
+      displayName: product.displayName
+    };
+
+    this.activeSlot.items.push(newCrop);
+
+    this.addedItems.push({
+      positionCropId: null as any,
+      posId: this.activeSlot.id,
+      rowId: this.activeSlot.rowId,
+      pIndex: this.activeSlot.pIndex,
+      mpiId: product.id,
+      varietyId: product.varietyId,
+      category: product.category,
+      displayName: product.displayName
+    });
+
     this.closeModal();
   }
 
   // ===== Remove item flow =====
-  requestRemoveItem(slot: PositionSlot, item: PositionItem, index: number, slotPosition: number): void {
-    if (item.locked) {
-      this.actionNotAllowedMessage =
-        `${item.label} from Position ${slotPosition} cannot be removed because ` +
-        `${this.formatSelectedRowLabel(this.selectedRow!.rowNumber)} has assigned target.`;
-      this.isActionNotAllowedOpen = true;
-      return;
-    }
-    this.pendingRemoval = { slot, index, slotPosition };
+  requestRemoveItem(slot: Positions, item: PositionsCrops, index: number): void {
+    this.pendingRemoval = { slot, item, index };
     this.isRemoveConfirmOpen = true;
   }
 
@@ -128,11 +224,11 @@ view: 'list' | 'placement' = 'list';
     if (!this.pendingRemoval) {
       return '';
     }
-    return this.pendingRemoval.slot.items[this.pendingRemoval.index]?.label ?? '';
+    return `${this.pendingRemoval.item.displayName} - ${this.pendingRemoval.item.category}`;
   }
 
   get pendingRemovalPosition(): number {
-    return this.pendingRemoval?.slotPosition ?? 0;
+    return this.pendingRemoval?.slot.pIndex ?? 0;
   }
 
   closeRemoveConfirm(): void {
@@ -141,73 +237,79 @@ view: 'list' | 'placement' = 'list';
   }
 
   confirmRemove(): void {
-    if (this.pendingRemoval) {
-      this.pendingRemoval.slot.items.splice(this.pendingRemoval.index, 1);
+    if (!this.pendingRemoval) {
+      return;
     }
+
+    const { slot, item, index } = this.pendingRemoval;
+    slot.items.splice(index, 1);
+
+    if (!item.positionCropId) {
+      // Item was added in this session and never saved - discard it silently.
+      const pendingIndex = this.addedItems.findIndex(a =>
+        a.rowId === slot.rowId && a.pIndex === slot.pIndex && a.mpiId === item.mpiId && a.varietyId === item.varietyId
+      );
+      if (pendingIndex > -1) {
+        this.addedItems.splice(pendingIndex, 1);
+      }
+    } else {
+      this.deletedItems.push({
+        positionCropId: item.positionCropId,
+        posId: slot.id,
+        rowId: slot.rowId,
+        pIndex: slot.pIndex,
+        mpiId: item.mpiId,
+        varietyId: item.varietyId,
+        category: item.category,
+        displayName: item.displayName
+      });
+    }
+
     this.closeRemoveConfirm();
   }
 
-  closeActionNotAllowed(): void {
-    this.isActionNotAllowedOpen = false;
-    this.actionNotAllowedMessage = '';
-  }
-
-  // ===== Validation =====
-  isSlotEmpty(slot: PositionSlot): boolean {
-    return slot.items.length === 0;
-  }
-
-  private getDuplicateLabels(): Set<string> {
-    const counts = new Map<string, number>();
-    this.positions.forEach(slot =>
-      slot.items.forEach(item => {
-        counts.set(item.label, (counts.get(item.label) || 0) + 1);
+  // ===== Validation: same varietyId cannot appear in more than one position =====
+  private getDuplicateVarietyIds(): Set<number> {
+    const counts = new Map<number, number>();
+    this.positions.forEach(p =>
+      p.items.forEach(item => {
+        counts.set(item.varietyId, (counts.get(item.varietyId) || 0) + 1);
       })
     );
-    const duplicates = new Set<string>();
-    counts.forEach((count, label) => {
+
+    const duplicates = new Set<number>();
+    counts.forEach((count, varietyId) => {
       if (count > 1) {
-        duplicates.add(label);
+        duplicates.add(varietyId);
       }
     });
     return duplicates;
   }
 
-  isDuplicateItem(item: PositionItem): boolean {
-    return this.getDuplicateLabels().has(item.label);
+  isItemDuplicate(item: PositionsCrops): boolean {
+    return this.getDuplicateVarietyIds().has(item.varietyId);
   }
 
-  hasDuplicateInSlot(slot: PositionSlot): boolean {
-    const duplicates = this.getDuplicateLabels();
-    return slot.items.some(item => duplicates.has(item.label));
+  isPositionInvalid(slot: Positions): boolean {
+    const duplicates = this.getDuplicateVarietyIds();
+    return slot.items.some(item => duplicates.has(item.varietyId));
   }
 
-  isSlotInvalid(slot: PositionSlot): boolean {
-    if (!this.attemptedSave) {
-      return false;
-    }
-    return this.isSlotEmpty(slot) || this.hasDuplicateInSlot(slot);
+  isPositionEmpty(slot: Positions): boolean {
+    return slot.items.length === 0;
   }
 
-  slotErrorMessage(slot: PositionSlot): string {
-    if (this.isSlotEmpty(slot)) {
-      return 'At least one product is required.';
-    }
-    if (this.hasDuplicateInSlot(slot)) {
-      return 'Duplicate products detected.';
-    }
-    return '';
+  hasValidationErrors(): boolean {
+    return this.getDuplicateVarietyIds().size > 0 || this.positions.some(slot => this.isPositionEmpty(slot));
   }
 
-  private isFormValid(): boolean {
-    return this.positions.every(slot => !this.isSlotEmpty(slot) && !this.hasDuplicateInSlot(slot));
-  }
-
-  // ===== Navigation / save =====
+    // ===== Navigation / save =====
   goBack(): void {
-    this.view = 'list';
-    this.selectedRow = null;
-    this.attemptedSave = false;
+    this.view = 'rows';
+    this.positions = [];
+    this.addedItems = [];
+    this.deletedItems = [];
+    this.fetchDcmPostitioningRows();
   }
 
   onCancel(): void {
@@ -215,19 +317,33 @@ view: 'list' | 'placement' = 'list';
   }
 
   onSave(): void {
-    this.attemptedSave = true;
-    if (!this.isFormValid()) {
-      return;
-    }
-    console.log('Saving positions for', this.selectedRow, this.positions);
-    this.goBack();
+    // if (this.positions.some(slot => this.isPositionEmpty(slot))) {
+    //   this.toastSrv.error('every position must have at least one product.');
+    //   return;
+    // }
+
+    // if (this.hasValidationErrors()) {
+    //   this.toastSrv.error('Please remove duplicate products.');
+    //   return;
+    // }
+
+    // if (this.addedItems.length === 0 && this.deletedItems.length === 0) {
+    //   this.goBack();
+    //   return;
+    // }
+
+    this.isLoading = true;
+    this.DistributionSrv.saveDcmPositionItems(this.selectedRow.id, this.addedItems, this.deletedItems).subscribe({
+      next: () => {
+        this.isLoading = false;
+        this.toastSrv.success('Positions saved successfully.');
+        this.goBack();
+      },
+      error: () => {
+        this.isLoading = false;
+        this.toastSrv.error('Failed to save positions. Please try again.');
+      }
+    });
   }
 
-  formatRowLabel(rowNumber: number): string {
-    return 'Row ' + rowNumber.toString().padStart(2, '0');
-  }
-
-  formatSelectedRowLabel(rowNumber: number): string {
-    return 'Row ' + rowNumber;
-  }
 }

@@ -16,8 +16,8 @@ import { DchPackingLineComponent } from "./../../dch-packing-line/dch-packing-li
 })
 export class PackingTargetsComponent implements OnInit {
 
-  isSelectPackingLIne: boolean = false;
-  isSelectPositioning: boolean = true;
+  isSelectPackingLIne: boolean = true;
+  isSelectPositioning: boolean = false;
   isSelectAssign: boolean = false;
 
   constructor() { }

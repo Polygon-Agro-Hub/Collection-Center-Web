@@ -1,5 +1,7 @@
 <!-- ===== ROWS LIST VIEW ===== -->
-<div class="max-w-[500px] p-5" *ngIf="view === 'list'">
+<app-loading-spinner *ngIf="isLoading" />
+
+<div *ngIf="!isLoading && view === 'rows'" class="max-w-[500px] p-5">
   <div class="text-[16px] font-medium text-gray-900 dark:text-gray-100 mb-3.5">
     All Rows ({{ rows.length.toString().padStart(2, '0') }})
   </div>
@@ -8,18 +10,18 @@
     class="relative flex items-center bg-white dark:bg-gray-800 border border-[#75798F] dark:border-gray-700 rounded-xl px-4 py-3 mb-3.5 "
     *ngFor="let row of rows">
     <div class="text-[16px] font-medium text-[#030308] dark:text-gray-100 pr-8 shrink-0 whitespace-nowrap">
-      {{ formatRowLabel(row.rowNumber) }}
+      {{ formatRowLabel(row.rowIndex) }}
     </div>
     <div class="absolute top-0 bottom-0 left-[90px] w-px bg-[#75798F] dark:bg-gray-600"></div>
     <div class="flex-1 font-normal text-[16px] text-[#4F6396] dark:text-[#4F6396] pl-9">
-      --{{ row.positionsAvailable }} Positions Available--
+      --{{ row.norCount === 0 ? '0' : row.norCount }} Positions Available--
     </div>
     <button
       class="rounded-lg px-7 py-1 text-[18px] transition-colors font-medium"
-      [ngClass]="row.positionsAvailable > 0
+      [ngClass]="row.norCount > 0
         ? 'bg-[#415CFF] dark:bg-[#415CFF] text-white cursor-pointer'
         : 'bg-[#F7F7F7] dark:bg-gray-700 text-[#6B7D8C] dark:text-gray-500 cursor-not-allowed'"
-      [disabled]="row.positionsAvailable <= 0"
+      [disabled]="row.norCount <= 0"
       (click)="onPlace(row)">
       Place
     </button>
@@ -27,7 +29,7 @@
 </div>
 
 <!-- ===== PLACEMENT VIEW ===== -->
-<div class="max-w-full p-5" *ngIf="view === 'placement'">
+<div class="max-w-full p-5" *ngIf="!isLoading && view === 'placement'">
   <button
     class="flex items-center gap-1 text-[13px] text-[#5A5874] dark:text-gray-400 mb-5 font-normal"
     (click)="goBack()">
@@ -36,55 +38,50 @@
   </button>
 
   <div class="text-[16px] font-normal text-gray-900 dark:text-gray-100 mb-4">
-    Selected Row : <span class="font-semibold">{{ formatSelectedRowLabel(selectedRow!.rowNumber) }}</span>
+    Selected Row : <span class="font-semibold">{{ formatSelectedRowLabel(selectedRow!.rowIndex) }}</span>
   </div>
 
   <ng-container *ngFor="let slot of positions; let i = index">
-    <div
-      class="flex items-stretch rounded-md overflow-hidden border min-h-16"
-      [ngClass]="isSlotInvalid(slot)
-        ? 'border-red-500 dark:border-red-500'
-        : 'border-[#415CFF] dark:border-[#415CFF]'">
-
+    <div class="mb-4">
       <div
-        class="flex justify-center items-center text-[16px] font-medium w-[70px] shrink-0"
-        [ngClass]="isSlotInvalid(slot)
-          ? 'bg-red-50 text-red-600 dark:bg-red-950 dark:text-red-400'
-          : 'bg-[#F3F4FF] dark:bg-[#F3F4FF] text-[#415CFF] dark:text-indigo-400'">
-        {{ slot.code }}
-      </div>
+        class="flex items-stretch rounded-md overflow-hidden border-2 min-h-16"
+        [ngClass]="isPositionInvalid(slot) || isPositionEmpty(slot) ? 'border-red-500' : 'border-[#415CFF]'">
 
-      <div class="flex-1 bg-white dark:bg-gray-800 flex items-center flex-wrap gap-2 px-3 py-2">
-        <span
-          class="flex items-center gap-1.5 border font-normal text-[16px] px-3 py-1.5 rounded-md"
-          [ngClass]="isDuplicateItem(item)
-            ? 'bg-red-100 border-red-300 text-red-700 dark:bg-red-900 dark:border-red-700 dark:text-red-200'
-            : 'bg-[#F8F8F8] border-[#4A4C59] dark:bg-gray-700 text-[#4A4C59] dark:text-gray-200'"
-          *ngFor="let item of slot.items; let j = index">
-          {{ item.label }}
+        <div
+          class="flex justify-center items-center text-[16px] font-medium w-[70px] shrink-0 bg-[#F3F4FF] dark:bg-indigo-950/40">
+          PO{{ slot.pIndex }}
+        </div>
+
+        <div class="flex-1 bg-white dark:bg-gray-800 flex items-center flex-wrap gap-2 px-3 py-2">
+          <span
+            class="flex items-center gap-1.5 border font-normal text-[16px] px-3 py-1.5 rounded-md"
+            [ngClass]="isItemDuplicate(item) ? 'bg-[#FFE8E8] dark:bg-red-950/60 border-red-500 text-red-600 dark:text-red-400' : ''"
+            *ngFor="let item of slot.items; let j = index">
+            {{ item.displayName }} - {{ item.category }}
+            <button
+              type="button"
+              class="text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 leading-none"
+              (click)="requestRemoveItem(slot, item, j)">
+              <i class="fa-solid fa-xmark"></i>
+            </button>
+          </span>
+        </div>
+
+        <div class="flex items-center pr-3">
           <button
-            type="button"
-            class="text-gray-500 dark:text-gray-400 hover:text-gray-800 dark:hover:text-gray-200 leading-none"
-            (click)="requestRemoveItem(slot, item, j, i + 1)">
-            &times;
+            class="w-9 h-9 flex items-center justify-center rounded-md bg-black dark:bg-gray-900 text-white  font-medium hover:bg-gray-800 transition-colors"
+            (click)="openAddModal(slot)">
+            <i class="fa-solid fa-plus"></i>
           </button>
-        </span>
+        </div>
       </div>
 
-      <div class="flex items-center pr-3">
-        <button
-          class="w-9 h-9 flex items-center justify-center rounded-md bg-black dark:bg-gray-900 text-white  font-medium hover:bg-gray-800 transition-colors"
-          (click)="onAddSlot(slot, i)">
-          <i class="fa-solid fa-plus"></i>
-        </button>
+      <div class="flex items-center gap-1.5 text-[13px] text-red-600 dark:text-red-400 mt-1" *ngIf="isPositionInvalid(slot) || isPositionEmpty(slot)">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <span *ngIf="isPositionEmpty(slot)">At least one product is required.</span>
+        <span *ngIf="isPositionInvalid(slot)">Duplicate products detected.</span>
       </div>
     </div>
-
-    <div class="flex items-center gap-1.5 mt-1 mb-3.5" *ngIf="isSlotInvalid(slot)">
-      <i class="fa-solid fa-triangle-exclamation text-red-600 text-[12px]"></i>
-      <span class="text-red-600 text-[13px]">{{ slotErrorMessage(slot) }}</span>
-    </div>
-    <div class="mb-3.5" *ngIf="!isSlotInvalid(slot)"></div>
   </ng-container>
 
   <div class="border-t border-gray-200 dark:border-gray-700 pt-5 mt-6 flex justify-center gap-4">
@@ -108,24 +105,25 @@
   <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-[520px] p-8 shadow-xl">
 
     <h2 class="text-center text-[20px] font-semibold text-gray-900 dark:text-gray-100 mb-4">
-      Place a Product to Position {{ activeSlotIndex }} from {{ formatSelectedRowLabel(selectedRow!.rowNumber) }}
+      Place a Product to Position {{ activeSlotIndex }} from {{ formatSelectedRowLabel(selectedRow!.rowIndex) }}
     </h2>
 
     <p class="text-[16px] text-center text-[#4F6396] font-normal dark:text-[#4F6396] mb-4">
       Please select the product you need to place for Position {{ activeSlotIndex }}.
     </p>
 
-    <div class="relative mb-8">
-      <select
-        class="w-full appearance-none border border-[#666666] dark:border-gray-600 rounded-xl px-4 py-3 text-[16px] text-gray-900 dark:text-gray-100 bg-white dark:bg-gray-800 outline-none focus:border-[#415CFF] pr-10"
+    <div class="mb-8">
+      <app-searchable-dropdown
+        [items]="productDropdownItems"
+        placeholder="--Select Product--"
+        searchPlaceholder="Search Products..."
         [(ngModel)]="selectedProductId"
-        name="productSelect">
-        <option [ngValue]="null" disabled>--Select Product--</option>
-        <option *ngFor="let product of productOptions" [ngValue]="product.id">
-          {{ product.name }} - {{ product.variant }}
-        </option>
-      </select>
-      <i class="fa-solid fa-chevron-down absolute right-4 top-1/2 -translate-y-1/2 text-gray-500 dark:text-gray-400 pointer-events-none"></i>
+        name="productSelect"
+        [clearable]="true"
+        [showSelected]="true"
+        borderClass="border border-[#666666] dark:border-gray-600 rounded-xl"
+        class="block w-full">
+      </app-searchable-dropdown>
     </div>
 
     <div class="flex justify-between gap-36">
@@ -178,31 +176,5 @@
         Remove
       </button>
     </div>
-  </div>
-</div>
-
-<!-- ===== ACTION NOT ALLOWED MODAL ===== -->
-<div
-  class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
-  *ngIf="isActionNotAllowedOpen">
-  <div class="bg-white dark:bg-gray-800 rounded-2xl w-full max-w-[460px] p-8 shadow-xl text-center">
-
-    <div class="w-6 h-6 rounded-full bg-red-600 text-white text-[12px] font-bold flex items-center justify-center mx-auto mb-4">
-      1
-    </div>
-
-    <h2 class="text-[18px] font-bold text-gray-900 dark:text-gray-100 mb-2">
-      Action Not Allowed
-    </h2>
-
-    <p class="text-[14px] text-gray-600 dark:text-gray-300 mb-6 leading-relaxed">
-      {{ actionNotAllowedMessage }}
-    </p>
-
-    <button
-      class="rounded-lg px-8 py-2 text-[15px] font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors"
-      (click)="closeActionNotAllowed()">
-      Close
-    </button>
   </div>
 </div>

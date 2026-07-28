@@ -550,6 +550,7 @@ class Officer {
   vehBackImg!: string;
   vehSideImgA!: string;
   vehSideImgB!: string;
+  slvCatName!: string;
 
 }
 

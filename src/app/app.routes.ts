@@ -84,7 +84,7 @@ import { DispatchedDashboardComponent } from './application/Dispatched/dispatche
 import { CashActivityDashboardComponent } from './application/Cash-activity/cash-activity-dashboard/cash-activity-dashboard.component';
 import { ViewPickupCashRevenueComponent } from './application/Cash-activity/view-pickup-cash-revenue/view-pickup-cash-revenue.component';
 import { ViewDeliveryRevenueComponent } from './application/Cash-activity/view-delivery-revenue/view-delivery-revenue.component';
-
+import { PackingTargetsComponent } from './application/Distributed-Center/Distributed-Target/packing-targets/packing-targets.component';
 
 
 export const routes: Routes = [
@@ -527,9 +527,10 @@ export const routes: Routes = [
                 canActivate:[RoleGuardService],
                 data: { roles: ['Distribution Centre Manager'] },
                 children: [
+
                     {
                         path: '',
-                        component: ViewDistributionCenterTargetComponent,
+                        component: PackingTargetsComponent,
                     },
                     {
                         path: 'Assign',

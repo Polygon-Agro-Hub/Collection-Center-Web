@@ -45,6 +45,7 @@ interface MarketplaceItem {
   changeby: string;
   discount: string;
   isExcluded: boolean;
+  isEnabled: number;
   startValue: string;
   unitType: string;
   varietyId: number;
@@ -68,6 +69,7 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
 
   orderdetailsArr: OrderDetails[] = [];
   excludeItemsArr: ExcludeItems[] = [];
+  preferItemsArr: PreferedItems[] = [];
   orderDetails: OrderDetailItem[] = [];
   marketplaceItems: MarketplaceItem[] = [];
   additionalItems: AdditionalItem[] = [];
@@ -83,6 +85,7 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
   showExcludedItemsModal = false;
   isNewAddPopUp: boolean = false
   excludedItemsCount!: number;
+  preferItemsCount!: number;
   additionalItemsCount!: number;
 
 
@@ -176,6 +179,7 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
           normalPrice: item.normalPrice,
           discountedPrice: item.discountedPrice,
           isExcluded: item.isExcluded,
+          isEnabled: item.isEnabled,
 
         }));
         console.log('Fetched marketplace items:', this.marketplaceItems);
@@ -204,7 +208,9 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
         this.orderdetailsArr = response.data;
         this.additionalItems = response.additionalItems;
         this.excludeItemsArr = response.excludeList;
+        this.preferItemsArr = response.preferedList;
         this.excludedItemsCount = response.excludeList.length;
+        this.preferItemsCount = response.preferedList.length;
         this.categories = response.category;
         this.additionalItemsCount = response.additionalItems.length || 0;
 
@@ -227,6 +233,7 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
               product => +product.id === +item.productId
             );
             item.isExcluded = selectedProduct?.isExcluded ?? false;
+            item.isEnabled = selectedProduct?.isEnabled ?? 1;
 
             const qty = item.qty ?? 0;
             const discountedPrice = selectedProduct?.discountedPrice ?? 0;
@@ -255,11 +262,43 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
 
   // Transform marketplace items to dropdown format
   getMarketplaceDropdownItems() {
-    return this.marketplaceItems.map(item => ({
-      value: item.id.toString(),
-      label: item.displayName,
-      disabled: item.isExcluded || false
-    }));
+    const prfIds = this.preferItemsArr.map(p => p.id);
+    const exlIds = this.excludeItemsArr.map(e => e.id);
+
+    const isExcludedItem = (item: MarketplaceItem) => item.isExcluded || exlIds.includes(item.id);
+    const isDisabledItem = (item: MarketplaceItem) => !isExcludedItem(item) && item.isEnabled === 0;
+    const isPreferredItem = (item: MarketplaceItem) => !isExcludedItem(item) && !isDisabledItem(item) && prfIds.includes(item.id);
+
+    const toItem = (item: MarketplaceItem) => {
+      const isExcluded = isExcludedItem(item);
+      const isDisabled = isDisabledItem(item);
+      const isPreferred = isPreferredItem(item);
+
+      let iconClass = 'fa-solid fa-check text-blue-500';
+      if (isExcluded) {
+        iconClass = 'fa-solid fa-ban text-red-500';
+      } else if (isDisabled) {
+        iconClass = 'fa-solid fa-triangle-exclamation text-orange-500';
+      } else if (isPreferred) {
+        iconClass = 'fa-solid fa-heart text-green-500';
+      }
+
+      return {
+        value: item.id.toString(),
+        label: item.displayName,
+        disabled: isExcluded || isDisabled,
+        iconClass
+      };
+    };
+
+    const preferredItems = this.marketplaceItems.filter(isPreferredItem).map(toItem);
+    const normalItems = this.marketplaceItems
+      .filter(item => !isPreferredItem(item) && !isExcludedItem(item) && !isDisabledItem(item))
+      .map(toItem);
+    const excludedItems = this.marketplaceItems.filter(isExcludedItem).map(toItem);
+    const disabledItems = this.marketplaceItems.filter(isDisabledItem).map(toItem);
+
+    return [...preferredItems, ...normalItems, ...excludedItems, ...disabledItems];
   }
   
   // Get the string value for the dropdown
@@ -297,9 +336,11 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
 
 
       item.isExcluded = selectedProduct.isExcluded;
+      item.isEnabled = selectedProduct.isEnabled;
     } else {
       item.price = 0;
       item.isExcluded = false; // fallback
+      item.isEnabled = 1; // fallback
     }
 
     console.log('price', item.price);
@@ -451,6 +492,12 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
       });
     });
 
+    const hasDisabledProduct = this.orderdetailsArr.some((pkg, pkgIndex) => {
+      return pkg.items.some((item, itemIndex) => {
+        return item.isEnabled === 0;
+      });
+    });
+
     if (hasInvalidProduct) {
       this.loading = false;
       // Swal.fire('Missing Product', 'Please select products for all inputs before submitting.', 'warning');
@@ -494,6 +541,18 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
       Swal.fire({
         title: 'Invalid Product',
         text: 'Please, do not select excluded products.',
+        icon: 'warning',
+        customClass: {
+          popup: 'bg-tileLight dark:bg-tileBlack text-black dark:text-white',
+          title: 'font-semibold',
+        }
+      });
+      return;
+    } else if (hasDisabledProduct) {
+      this.loading = false;
+      Swal.fire({
+        title: 'Invalid Product',
+        text: 'Please, do not select disabled products.',
         icon: 'warning',
         customClass: {
           popup: 'bg-tileLight dark:bg-tileBlack text-black dark:text-white',
@@ -800,9 +859,15 @@ class OrderItem {
   qty!: number;
   price!: number;
   isExcluded: boolean = false;
+  isEnabled!: number;
 }
 
 class ExcludeItems {
+  id!: number;
+  displayName!: string;
+}
+
+class PreferedItems {
   id!: number;
   displayName!: string;
 }

@@ -8,19 +8,21 @@ import { ViewCenterOfficersComponent } from "../view-center-officers/view-center
 import { ActivatedRoute, Router } from '@angular/router';
 import { ViewDchCenterTargetComponent } from '../view-dch-center-target/view-dch-center-target.component';
 import { DchCenterTargetOutForDeliveryComponent } from "../dch-center-target-out-for-delivery/dch-center-target-out-for-delivery.component";
+import { DchPackingLineComponent } from "../dch-packing-line/dch-packing-line.component";
 
 @Component({
   selector: 'app-center-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, LoadingSpinnerComponent, ViewCenterOfficersComponent, ViewDchCenterTargetComponent, DchCenterTargetOutForDeliveryComponent],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent, ViewCenterOfficersComponent, DchPackingLineComponent, ViewDchCenterTargetComponent, DchCenterTargetOutForDeliveryComponent],
   templateUrl: './center-dashboard.component.html',
   styleUrl: './center-dashboard.component.css'
 })
 export class CenterDashboardComponent implements OnInit {
 
-  isSelectProgress: boolean = true;
+  isSelectProgress: boolean = false;
   isSelectViewOfficers: boolean = false;
   isSelectViewOutForDelivery: boolean =  false;
+  isSelectPackingLine: boolean =  true;
   isAddComplaintOpen: boolean = false;
   categoryArr: Category[] = [];
   category: string = '';
@@ -43,18 +45,30 @@ export class CenterDashboardComponent implements OnInit {
     this.isSelectProgress = true;
     this.isSelectViewOfficers = false;
     this.isSelectViewOutForDelivery = false;
+    this.isSelectPackingLine = false;
   }
 
   selectViewOfficers() {
     this.isSelectProgress = false;
     this.isSelectViewOfficers = true;
     this.isSelectViewOutForDelivery = false;
+    this.isSelectPackingLine = false;
   }
 
   selectViewOutForDelivery() {
     this.isSelectProgress = false;
     this.isSelectViewOfficers = false;
     this.isSelectViewOutForDelivery = true;
+    this.isSelectPackingLine = false;
+  }
+
+
+  selectPackingLine() {
+    console.log('clicked')
+    this.isSelectPackingLine = true;
+    this.isSelectProgress = false;
+    this.isSelectViewOfficers = false;
+    this.isSelectViewOutForDelivery = false;
   }
 
   editCentre() {

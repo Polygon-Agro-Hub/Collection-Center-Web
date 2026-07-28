@@ -687,8 +687,107 @@ getDriverCashRevenue(
   );
 }
 
+  getDCHCenterRows(centerId: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/get-dch-center-row?centerId=${centerId}`;
+  
+    return this.http.get<any>(url, { headers });
+  }
+
+  createDCHCenterRow(centerId: number, nextRow: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/create-dch-center-row?centerId=${centerId}&nextRow=${nextRow}`;
+  
+    return this.http.put<any>(url, {}, { headers });
+  }
+
+  createDCHCenterPos(centerId: number, nextPos: number, rowId: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/create-dch-center-pos?centerId=${centerId}&nextPos=${nextPos}&rowId=${rowId}`;
+  
+    return this.http.put<any>(url, {}, { headers });
+  }
+
+  toggleRow(enableStatus: number, id: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/dch-center-enable-row?enableStatus=${enableStatus}&id=${id}`;
+
+    return this.http.put<any>(url, {}, { headers });
+  }
+
+  deleteDCHCenterPos(posId: number, rowId: number, pIndex: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/delete-dch-center-pos/${posId}/${rowId}/${pIndex}`;
+
+    return this.http.delete<any>(url, { headers });
+  }
+
+  getDCMCenterId(): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/get-dcm-center-id`;
+  
+    return this.http.get<any>(url, { headers });
+  }
+
+  getDCMPositioningRows(): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/get-dcm-positioning-rows`;
+  
+    return this.http.get<any>(url, { headers });
+  }
+
+  getDcmPositionsForRows(rowId: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/get-dcm-positions-for-row/${rowId}`;
+  
+    return this.http.get<any>(url, { headers });
+  }
+
+  saveDcmPositionItems(rowId: number, addedItems: any[], deletedItems: any[]): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json'
+    });
+
+    const url = `${this.apiUrl}/save-dcm-position-products`;
+
+    const data = {
+      rowId,
+      addedItems,
+      deletedItems
+    };
+
+    return this.http.post<any>(url, data, { headers });
+  }
+
 
 }
+
+
 
 
 

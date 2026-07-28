@@ -317,20 +317,20 @@ export class DcmPositioningComponent implements OnInit {
   }
 
   onSave(): void {
-    // if (this.positions.some(slot => this.isPositionEmpty(slot))) {
-    //   this.toastSrv.error('every position must have at least one product.');
-    //   return;
-    // }
+    if (this.positions.some(slot => this.isPositionEmpty(slot))) {
+      this.toastSrv.error('every position must have at least one product.');
+      return;
+    }
 
-    // if (this.hasValidationErrors()) {
-    //   this.toastSrv.error('Please remove duplicate products.');
-    //   return;
-    // }
+    if (this.hasValidationErrors()) {
+      this.toastSrv.error('Please remove duplicate products.');
+      return;
+    }
 
-    // if (this.addedItems.length === 0 && this.deletedItems.length === 0) {
-    //   this.goBack();
-    //   return;
-    // }
+    if (this.addedItems.length === 0 && this.deletedItems.length === 0) {
+      this.goBack();
+      return;
+    }
 
     this.isLoading = true;
     this.DistributionSrv.saveDcmPositionItems(this.selectedRow.id, this.addedItems, this.deletedItems).subscribe({

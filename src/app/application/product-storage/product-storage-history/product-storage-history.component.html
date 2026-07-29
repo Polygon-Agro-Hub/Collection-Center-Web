@@ -1,0 +1,94 @@
+<app-loading-spinner *ngIf="isLoading" />
+
+
+<div *ngIf="!isLoading">
+
+    <div class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
+    <p (click)="goBack()" >Product Shortage</p>
+    <p>Product Shortage History</p>
+</div>
+
+
+  <div class="w-full min-h-screen px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg overflow-x-auto">
+    <div class="flex flex-row items-center justify-between">
+      <div class="flex flex-col justify-between">
+        <p class="font-semibold text-lg mb-1 dark:text-white">Product Shortage History</p>
+      </div>
+      <div class="flex flex-row items-center gap-5 ">
+        <i class="fa-solid fa-list text-[#4A4A4A] text-lg dark:text-white ml-8"></i>
+
+        <p class="text-[#4A4A4A] whitespace-nowrap dark:text-white">Filter By</p>
+
+
+        <div class="relative w-36">
+
+          <app-custom-datepicker [placeholder]="'Date'" [selectedDate]="date"
+            (dateChange)="onDateChange($event)"></app-custom-datepicker>
+
+        </div>
+
+
+        <div class="flex items-center rounded-full  px-4 py-2 w-72 bg-[#F1F1F1] dark:bg-[#292929]">
+          <input type="text" placeholder="Search by Product & Assignee..sssss" [(ngModel)]="searchText" (keyup.enter)="onSearch()"
+            (keyup.esc)="offSearch()" class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
+          <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2" (click)="onSearch()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
+            </svg>
+          </button>
+          <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none" (click)="offSearch()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
+
+      </div>
+
+    </div>
+
+    <div *ngIf="!hasData" class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6 ">
+      <p class="text-[#494949] my-6 dark:text-textDark">--No Data Availabale--</p>
+      <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
+    </div>
+
+    <div *ngIf="hasData"
+      class="min-w-max mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021] overflow-hidden">
+      <table class="w-full min-w-max divide-y-2 overflow-hidden">
+        <thead class=" text-[#4B5563] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
+          <tr>
+                                <th class="px-6 py-3 text-[#4B5563] text-left font-medium">No</th>
+                    <th class="px-6 py-3 text-[#4B5563] text-left font-medium">Image</th>
+                    <th class="px-6 py-3 text-[#4B5563] text-left font-medium">Product Name</th>
+                    <th class="px-6 py-3 text-[#4B5563] text-center font-medium">Shortage (kg)</th>
+                    <th class="px-6 py-3 text-[#4B5563] text-center font-medium">Price per kg (Rs.)</th>
+                    <th class="px-6 py-3 text-[#4B5563] text-left font-medium">Assignee</th>
+                    <th class="px-6 py-3 text-[#4B5563] text-center font-medium">Purchased (kg)</th>
+                    <th class="px-6 py-3 text-[#4B5563] text-center font-medium">Purchase Price Per kg (Rs.)</th>
+                    <th class="px-6 py-3 text-[#4B5563] text-center font-medium">Purchase Time</th>
+          </tr>
+        </thead>
+        <tbody class="bg-white dark:bg-[#1D1D1F] text-[#000000] font-medium dark:border-[#1D1D1F] cursor-default">
+                <tr
+                    *ngFor="let item of dummyData; let i = index">
+                    <!-- <tr *ngFor="let item of complainArr"> -->
+                    <td class="px-6 py-4  text-[#000000] font-500 dark:text-gray-300">{{item.id}}</td>
+                    <td class="px-6 py-4  text-[#000000] font-500 dark:text-gray-300">{{item.image}}</td>
+                    <td class="px-6 py-4  text-[#000000] font-500 dark:text-gray-300">{{item.name}}</td>
+                    <td class="px-6 py-4  text-[#000000] text-center font-500 dark:text-gray-300">{{item.shortage}}</td>
+                    <td class="px-6 py-4  text-[#000000] text-center font-500 dark:text-gray-300">{{item.price}}</td>
+                    <td class="px-6 py-4 text-[#000000] text-center font-500 dark:text-gray-300">{{item.assignee || "----"}}</td>
+                    <td class="px-6 py-4 text-[#000000] text-center font-500 dark:text-gray-300">{{item.purchased || "----"}}</td>
+                    <td class="px-6 py-4 text-[#000000] text-center font-500 dark:text-gray-300">{{item.perchasedPerKg || "----"}}</td>
+                    <td class="px-6 py-4 text-[#000000] text-center font-500 dark:text-gray-300">{{item.perchasedPerKg || "----"}}</td>
+                </tr>
+        </tbody>
+
+      </table>
+    </div>
+
+  </div>
+</div>

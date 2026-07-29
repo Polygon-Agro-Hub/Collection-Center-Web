@@ -224,6 +224,15 @@ export const MENU_ITEMS = [
     permission: ['Distribution Centre Manager'],
   },
 
+  {
+    id: 24,
+    key: 'product-shortage',
+    path: '/product-shortage',
+    label: 'Product-Shortage',
+    icon: 'a-solid fa-question',
+    permission: ['Distribution Centre Manager'],
+  },
+
 ];
 
 @Component({

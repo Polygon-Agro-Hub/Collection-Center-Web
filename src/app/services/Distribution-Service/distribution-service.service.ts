@@ -792,13 +792,67 @@ getDriverCashRevenue(
     'Content-Type': 'application/json',
   });
 
-  let url = `${this.apiUrl}/get-shortage-products-today-todo`;
+  const page  = 1;
+
+  let url = `${this.apiUrl}/get-shortage-products-today-todo?page=${page}`;
   if (searchText) {
     url += `&searchText=${encodeURIComponent(searchText)}`;
   }
 
   if (status) {
     url += `&status=${status}`;
+  }
+
+  return this.http.get<any>(
+    url, { headers }
+  );
+}
+
+fetchAllShortageTodayCompleted( searchText: string = ''
+): Observable<any> {
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${this.token}`,
+    'Content-Type': 'application/json',
+  });
+
+  const page  = 1;
+
+  let url = `${this.apiUrl}/get-shortage-products-today-completed?page=${page}`;
+  if (searchText) {
+    url += `&searchText=${encodeURIComponent(searchText)}`;
+  }
+
+  return this.http.get<any>(
+    url, { headers }
+  );
+}
+
+ assignOfficerToProduct(shortageId: number, shortageAssignId: number, officerId: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/assign-officer-to-shortage?shortageId=${shortageId}&shortageAssignId=${shortageAssignId}&officerId=${officerId}`;
+
+    return this.http.put<any>(url, {}, { headers });
+  }
+
+  fetchAllShortageHistory(date: string | Date | null = '',  searchText: string = ''
+): Observable<any> {
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${this.token}`,
+    'Content-Type': 'application/json',
+  });
+
+  const page  = 1;
+
+  let url = `${this.apiUrl}/get-shortage-products-histroy?page=${page}`;
+  if (searchText) {
+    url += `&searchText=${encodeURIComponent(searchText)}`;
+  }
+
+  if (date) {
+    url += `&date=${date}`;
   }
 
   return this.http.get<any>(

@@ -1,9 +1,9 @@
 <app-loading-spinner *ngIf="isLoading" />
 
 <div *ngIf="!isLoading">
-    <div class="flex flex-row items-center justify-between gap-8 ">
+    <div class="flex flex-row items-center justify-end gap-8 ">
 
-        <p class="class-[#030308] font-500">Product Shortage Today - To Do</p>
+        <p class="class-[#030308] dark:text-white font-500">Product Shortage Today - To Do</p>
 
         <div class="flex flex-row items-center justify-end gap-8">
             <i class="fa-solid fa-list text-lg text-[#4A4A4A] dark:text-white"></i>
@@ -11,67 +11,72 @@
             <p class="text-[#4A4A4A] dark:text-white">Filter By</p>
 
 
-        <div class="relative w-36 custom-status-dropdown-container">
-            <!-- Hidden native select -->
-            <select [(ngModel)]="selectStatus" class="hidden" (change)="filterStatus()">
-                <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300" value="Assigned">
-                    Assigned</option>
-                <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300" value="Closed">
-                    Not Assigned</option>
-            </select>
+            <div class="relative w-36 custom-status-dropdown-container">
+                <!-- Hidden native select -->
+                <select [(ngModel)]="selectStatus" class="hidden" (change)="filterStatus()">
+                    <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                        value="Assigned">
+                        Assigned</option>
+                    <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                        value="Closed">
+                        Not Assigned</option>
+                </select>
 
-            <!-- Custom dropdown trigger -->
-            <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
-                (click)="toggleStatusDropdown()">
-                <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer ">
-                    <span>{{ selectStatus || 'Status' }}</span>
-                    <div class="flex items-center ">
-                        <!-- X icon (shown ONLY when option is selected) -->
-                        <i *ngIf="selectStatus" (click)="cancelStatus($event)"
-                            class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
+                <!-- Custom dropdown trigger -->
+                <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
+                    (click)="toggleStatusDropdown()">
+                    <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer ">
+                        <span>{{ selectStatus || 'Status' }}</span>
+                        <div class="flex items-center ">
+                            <!-- X icon (shown ONLY when option is selected) -->
+                            <i *ngIf="selectStatus" (click)="cancelStatus($event)"
+                                class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
 
-                        <!-- Arrow icon (shown when EITHER: dropdown is open OR no selection exists) -->
-                        <i *ngIf="isStatusDropdownOpen || !selectStatus"
-                            class="fa-solid text-lg text-[#828282] transition-transform duration-200"
-                            [class.fa-angle-down]="!isStatusDropdownOpen"
-                            [class.fa-angle-up]="isStatusDropdownOpen"></i>
+                            <!-- Arrow icon (shown when EITHER: dropdown is open OR no selection exists) -->
+                            <i *ngIf="isStatusDropdownOpen || !selectStatus"
+                                class="fa-solid text-lg text-[#828282] transition-transform duration-200"
+                                [class.fa-angle-down]="!isStatusDropdownOpen"
+                                [class.fa-angle-up]="isStatusDropdownOpen"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Custom dropdown options -->
+                <div *ngIf="isStatusDropdownOpen"
+                    class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282] overflow-hidden">
+                    <div class="">
+                        <div *ngFor="let option of statusDropdownOptions" (click)="selectStatusOption(option)"
+                            class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
+                            <span class="flex-grow">{{ option }}</span>
+                            <i
+                                class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
+                        </div>
                     </div>
                 </div>
             </div>
 
-            <!-- Custom dropdown options -->
-            <div *ngIf="isStatusDropdownOpen"
-                class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282] overflow-hidden">
-                <div class="">
-                    <div *ngFor="let option of statusDropdownOptions" (click)="selectStatusOption(option)"
-                        class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
-                        <span class="flex-grow">{{ option }}</span>
-                        <i class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
-                    </div>
-                </div>
+
+            <div class="flex mr-5 items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+                <input type="text" placeholder="Search By Product & Assignee.." [(ngModel)]="searchText"
+                    class="bg-transparent outline-none w-full text-textLight dark:text-textDark"
+                    (keyup.enter)="onSearch()" (keyup.esc)="offSearch()" />
+                <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
+                    (click)="onSearch()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
+                    </svg>
+                </button>
+                <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none"
+                    (click)="offSearch()">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                        stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                            d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                </button>
             </div>
-        </div>
-
-
-        <div class="flex mr-5 items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
-            <input type="text" placeholder="Search By Product & Assignee.." [(ngModel)]="searchText"
-                class="bg-transparent outline-none w-full text-textLight dark:text-textDark" (keyup.enter)="onSearch()"
-                (keyup.esc)="offSearch()" />
-            <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
-                (click)="onSearch()">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
-                </svg>
-            </button>
-            <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none" (click)="offSearch()">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-        </div>
         </div>
 
     </div>
@@ -82,39 +87,41 @@
         <table class="w-full divide-y-2 overflow-hidden">
             <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
                 <tr>
-                    <th class="px-6 py-3 text-[#4B5563] text-left font-medium">No</th>
-                    <th class="px-6 py-3 text-[#4B5563] text-left font-medium">Image</th>
-                    <th class="px-6 py-3 text-[#4B5563] text-left font-medium">Product Name</th>
-                    <th class="px-6 py-3 text-[#4B5563] text-center font-medium">Shortage (kg)</th>
-                    <th class="px-6 py-3 text-[#4B5563] text-left font-medium">Price per kg (Rs.)</th>
-                    <th class="px-6 py-3 text-[#4B5563] text-center font-medium">Assignee</th>
-                    <th class="px-6 py-3 text-[#4B5563] text-center font-medium">Assign</th>
-                    <th class="px-6 py-3 text-[#4B5563] text-center font-medium"></th>
+                    <th class="px-6 py-3 whitespace-nowrap text-[#4B5563] text-left font-medium">No</th>
+                    <th class="px-6 py-3 whitespace-nowrap text-[#4B5563] text-left font-medium">Image</th>
+                    <th class="px-6 py-3 whitespace-nowrap text-[#4B5563] text-left font-medium">Product Name</th>
+                    <th class="px-6 py-3 whitespace-nowrap text-[#4B5563] text-left font-medium">Shortage (kg)</th>
+                    <th class="px-6 py-3 whitespace-nowrap text-[#4B5563] text-left font-medium">Price per kg (Rs.)</th>
+                    <th class="px-6 py-3 whitespace-nowrap text-[#4B5563] text-center font-medium">Assignee</th>
+                    <th class="px-6 py-3 whitespace-nowrap text-[#4B5563] text-center font-medium">Assign</th>
+                    <th class="px-6 py-3 whitespace-nowrap text-[#4B5563] text-left font-medium"></th>
                 </tr>
             </thead>
             <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F] cursor-default">
-                <tr
-                    *ngFor="let item of dummyData; let i = index">
-                    <!-- <tr *ngFor="let item of complainArr"> -->
-                    <td class="px-6 py-4  text-[#000000] font-500 dark:text-gray-300">{{item.id}}</td>
-                    <td class="px-6 py-4  text-[#000000] font-500 dark:text-gray-300">{{item.image}}</td>
-                    <td class="px-6 py-4  text-[#000000] font-500 dark:text-gray-300">{{item.name}}</td>
-                    <td class="px-6 py-4  text-[#000000] font-500 dark:text-gray-300">{{item.price}}</td>
-                    <td class="px-6 py-4  text-[#000000] text-left font-500 dark:text-gray-300">{{item.shortage}}</td>
-                    <td class="px-6 py-4 text-[#000000] text-center font-500 dark:text-gray-300">{{item.assignee || "----"}}</td>
+                <tr *ngFor="let item of itemsArr; let i = index">
+                    <td class="px-6 py-4 text-[#000000] font-500 text-left dark:text-gray-300">
+                        {{ i + 1 | number:'2.0' }}
+                    </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-[#000000] text-left font-500 dark:text-gray-300"> <img [src]="item.image"
+                            alt="Image" class="w-10 h-10 rounded-full object-cover" /> </td>
+                    <td class="px-6 py-4 whitespace-nowrap text-[#000000] text-left font-500 dark:text-gray-300">{{item.displayName}}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-[#000000] text-left font-500 dark:text-gray-300">{{item.qty}}</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-[#000000] text-left font-500 dark:text-gray-300">{{item.price}}</td>
+                    <td class="px-1 py-4 whitespace-nowrap text-[#000000] text-center font-500 dark:text-gray-300">{{item.empId ||
+                        "----"}}</td>
 
-<td
-  class="px-6 py-4 text-[#000000] text-center font-500 dark:text-gray-300 cursor-pointer"
->
-  @if (item.Assign === 0) {
-    <i class="fa-solid fa-user-plus text-blue-600 text-lg"></i>
-  } @else if (item.Assign === 1) {
-    <div class="flex items-center justify-center gap-3">
-      <i class="fa-solid fa-pen-to-square text-blue-600 text-lg"></i>
-      <i class="fa-solid fa-circle-check text-blue-600 text-lg"></i>
-    </div>
-  }
-</td>
+                    <td class="px-6 py-4 whitespace-nowrap text-[#000000] text-center font-500 dark:text-gray-300 cursor-pointer">
+                        @if (item.assignOfficerId === null) {
+                        <i (click)="openAssignOfficerModel(item)" class="fa-solid fa-user-plus text-blue-600 text-lg"></i>
+                        } @else {
+                        <i (click)="openAssignOfficerModel(item)" class="fa-solid fa-pen-to-square text-blue-600 text-lg"></i>
+                        }
+                    </td>
+                    <td class="px-1 py-4 text-[#000000] text-left font-500 dark:text-gray-300 cursor-pointer">
+                        @if (item.assignOfficerId !== null) {
+                        <i class="fa-solid fa-circle-check text-blue-600 text-lg"></i>
+                        }
+                    </td>
 
                 </tr>
             </tbody>
@@ -127,4 +134,50 @@
         <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
     </div>
 
+</div>
+
+<div
+  class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4"
+  *ngIf="isModalOpen">
+  <div class="bg-white dark:bg-[#363636] rounded-2xl w-full max-w-[520px] p-8 shadow-xl">
+
+    <h2 class="text-center text-[20px] font-semibold text-gray-900 dark:text-white mb-4">
+      Assign Shortage
+    </h2>
+
+    <p class="text-[16px] text-center text-[#4F6396] font-normal dark:text-white mb-4">
+      Please select the employee you need to assign.
+    </p>
+
+    <div class="mb-8">
+      <app-searchable-dropdown
+        [items]="officerDropdownItems"
+        placeholder="--Select Employee--"
+        searchPlaceholder="Search employees..."
+        [(ngModel)]="selectedOfficerId"
+        name="officerSelect"
+        [clearable]="true"
+        [showSelected]="true"
+        borderClass="border border-[#666666] dark:border-gray-600 rounded-xl"
+        class="block w-full">
+      </app-searchable-dropdown>
+    </div>
+
+    <div class="flex justify-between gap-16 px-10">
+      <button
+        class="flex-1 rounded-lg py-3 text-[16px] font-medium border border-[#95A1AC] dark:border-[#95A1AC] text-[#6B7D8C] dark:text-[#6B7D8C] bg-[#F6F7F9] dark:bg-gray-700 hover:bg-gray-100 dark:hover:bg-gray-600 transition-colors min-w-28"
+        (click)="closeModal()">
+        Cancel
+      </button>
+      <button
+        class="flex-1 rounded-lg py-3 text-[16px] font-medium transition-colors"
+        [ngClass]="selectedOfficerId
+          ? 'bg-[#415CFF] text-[#FFFFFF] cursor-pointer'
+          : 'bg-[#F7F7F7] dark:bg-[#F7F7F7] text-[#6B7D8C] dark:text-[#6B7D8C] cursor-not-allowed'"
+        [disabled]="!selectedOfficerId"
+        (click)="assignOfficer()">
+        Assign
+      </button>
+    </div>
+  </div>
 </div>

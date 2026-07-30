@@ -1,4 +1,4 @@
-import { CommonModule } from '@angular/common';
+import { CommonModule, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ComplaintsService } from '../../../services/Complaints-Service/complaints.service';
@@ -28,7 +28,8 @@ export class ProductShortageTodayComponent implements OnInit {
   constructor(
     private complaintsService: ComplaintsService,
     private toastSrv: ToastAlertService,
-    private DistributionComplaintsSrv: DistributionComplaintsService
+    private DistributionComplaintsSrv: DistributionComplaintsService,
+    private location: Location
   ) { }
 
   ngOnInit(): void {
@@ -43,6 +44,10 @@ export class ProductShortageTodayComponent implements OnInit {
   selectCompleted() {
     this.isSelectToDo = false;
     this.isSelectCompleted = true;
+  }
+
+    goBack() {
+    this.location.back();
   }
 
 }

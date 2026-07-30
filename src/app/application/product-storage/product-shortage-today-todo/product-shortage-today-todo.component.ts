@@ -5,7 +5,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
-import { DistributionComplaintsService } from '../../../services/distribution-complaints-service/distribution-complaints.service';
+import { DistributionServiceService } from '../../../services/Distribution-Service/distribution-service.service';
 
 
 @Component({
@@ -17,19 +17,11 @@ import { DistributionComplaintsService } from '../../../services/distribution-co
 })
 export class ProductShortageTodayTodoComponent implements OnInit {
 
-  complainArr!: RecivedComplaint[];
-  replyObj: Reply = new Reply();
-  managerDataObj: Manager = new Manager();
-  replyDataObj: ReplyData = new ReplyData();
+  itemsArr!: ShortageProducts[];
 
   searchText: string = '';
   selectStatus: string = '';
-  isReplyView: boolean = false;
-  complainId!: number;
-
-  page: number = 1;
-  totalItems: number = 0;
-  itemsPerPage: number = 10;
+  
   hasData: boolean = true;
   isLoading: boolean = true;
 
@@ -89,20 +81,20 @@ export class ProductShortageTodayTodoComponent implements OnInit {
   constructor(
     private router: Router,
     private ComplainSrv: ComplaintsService,
-    private DistributionComplaintsSrv: DistributionComplaintsService
+    private DistributionSrv: DistributionServiceService
   ) { }
 
 
   ngOnInit(): void {
-    this.fetchAllreciveComplaint();
+    this.getAllShortageTodayToDo();
   }
 
-  fetchAllreciveComplaint(page: number = 1, limit: number = this.itemsPerPage, status: string = this.selectStatus, search: string = this.searchText) {
+  getAllShortageTodayToDo(status: string = this.selectStatus, search: string = this.searchText) {
     this.isLoading = true;
-    this.DistributionComplaintsSrv.dcmGetAllReciveComplaints(page, limit, status, search).subscribe(
+    this.DistributionSrv.fetchAllShortageTodayToDo(status, search).subscribe(
       (res) => {
-        this.complainArr = res.items
-        this.totalItems = res.total;
+        this.itemsArr = res.items
+        console.log('itemsArr', this.itemsArr)
         if (res.items.length === 0) {
           this.hasData = false;
         } else {
@@ -115,41 +107,22 @@ export class ProductShortageTodayTodoComponent implements OnInit {
     )
   }
 
-  fetchGetReply(id: number) {
-    this.isLoading = true;
-    this.DistributionComplaintsSrv.dcmGetReplyByComplaintId(id).subscribe(
-      (res) => {
-        this.replyDataObj = res.data;
-        this.replyObj = res.data;
-        this.managerDataObj = res.dcmData;
-        this.isLoading = false;
-      }
-    )
-  }
-
-  viewReply(id: number) {
-    this.isReplyView = true;
-    this.fetchGetReply(id);
-  }
-
-  cancelViewReply() {
-    this.isReplyView = false;
-  }
+  assign(item: ShortageProducts) {}
 
   onSearch() {
     this.searchText = this.searchText.trimStart();
-    this.fetchAllreciveComplaint();
+    this.getAllShortageTodayToDo();
 
   }
 
   offSearch() {
     this.searchText = '';
-    this.fetchAllreciveComplaint();
+    this.getAllShortageTodayToDo();
 
   }
 
   filterStatus() {
-    this.fetchAllreciveComplaint();
+    this.getAllShortageTodayToDo();
   }
 
   cancelStatus(event?: MouseEvent) {
@@ -158,109 +131,14 @@ export class ProductShortageTodayTodoComponent implements OnInit {
     }
     this.selectStatus = '';
     this.isStatusDropdownOpen = false;
-    this.fetchAllreciveComplaint();
+    this.getAllShortageTodayToDo();
   }
 
-
-  onPageChange(event: number) {
-    this.page = event;
-    this.fetchAllreciveComplaint(this.page, this.itemsPerPage);
-  }
-
-  navigateViewComplaint(id: number) {
-    this.router.navigate([`/dcm-complaints/view-dcm-recive-complaint/${id}`])
-  }
-
-  createTemplate(replyDataObj: ReplyData, managerDataObj: Manager): string {
-    if (replyDataObj.language === 'Sinhala') {
-      return `
-  හිතවත් ${replyDataObj.firstNameSinhala} ${replyDataObj.lastNameSinhala},
-
-  ${replyDataObj.reply}
-
-  ඔබට තවත් ගැටළු හෝ ප්‍රශ්න තිබේ නම්, කරුණාකර අප හා සම්බන්ධ වන්න.
-  ඔබේ ඉවසීම සහ අවබෝධය වෙනුවෙන් ස්තූතියි.
-  
-  මෙයට,
-  ${managerDataObj.manageFirstNameSinhala} ${managerDataObj.manageLastNameSinhala},
-  Collection Centre Manager of ${managerDataObj.centerName},
-  ${managerDataObj.companyNameSinhala}.
-      `;
-    } else if (replyDataObj.language === 'Tamil') {
-      return `
-  அன்புள்ள ${replyDataObj.firstNameTamil} ${replyDataObj.lastNameTamil},
-
-  ${replyDataObj.reply}
-  
-  உங்களுக்கு மேலும் ஏதேனும் சிக்கல்கள் அல்லது கேள்விகள் இருந்தால், தயவுசெய்து எங்களைத் தொடர்பு கொள்ளவும். உங்கள் பொறுமைக்கும் புரிதலுக்கும் நன்றி.
-  
-  இதற்கு,
-  ${managerDataObj.manageFirstNameTamil}  ${managerDataObj.manageLastNameTamil},
-  Collection Centre Manager of ${managerDataObj.centerName},
-  ${managerDataObj.companyNameTamil}.
-        `;
-    } else {
-      return `
-  Dear ${replyDataObj.firstNameEnglish} ${replyDataObj.lastNameEnglish},
-
-  ${replyDataObj.reply}
-  
-  If you have any further concerns or questions, feel free to reach out.
-  Thank you for your patience and understanding.
-  
-  Sincerely, 
-  ${managerDataObj.manageFirstNameEnglish} ${managerDataObj.manageLastNameEnglish},
-  Collection Centre Manager of ${managerDataObj.centerName},
-  ${managerDataObj.companyNameEnglish}.
-      `;
-    }
-  }
-  
 
 }
 
-class RecivedComplaint {
-  id!: number
-  refNo!: string
-  complainCategory!: string
-  complain!: string
-  status!: string
-  empId!: string
-  reply: string | null = null
-  createdAt!: Date
-}
 
-class ReplyData {
-  id!: number;
-  refNo!: string;
-  complain!: string;
-  firstNameEnglish!: string;
-  firstNameSinhala!: string;
-  firstNameTamil!: string;
-  lastNameEnglish!: string;
-  lastNameSinhala!: string;
-  lastNameTamil!: string;
-  reply!: string;
-  manageFirstNameEnglish!: string;
-  manageFirstNameSinhala!: string;
-  manageFirstNameTamil!: string;
-  manageLastNameEnglish!: string;
-  manageLastNameSinhala!: string;
-  manageLastNameTamil!: string;
-  companyNameEnglish!: string;
-  companyNameSinhala!: string
-  companyNameTamil!: string;
-  centerName!: string;
-  language!: string;
-
-}
-
-class Reply {
-  id!: number;
-  reply!: string;
-} 
-
-class Manager {
+class ShortageProducts {
   companyNameEnglish!: string;
   companyNameSinhala!: string;
   companyNameTamil!: string;

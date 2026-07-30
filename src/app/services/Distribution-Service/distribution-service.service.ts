@@ -784,6 +784,28 @@ getDriverCashRevenue(
     return this.http.post<any>(url, data, { headers });
   }
 
+  fetchAllShortageTodayToDo(
+  status: string ='', searchText: string = ''
+): Observable<any> {
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${this.token}`,
+    'Content-Type': 'application/json',
+  });
+
+  let url = `${this.apiUrl}/get-shortage-products-today-todo`;
+  if (searchText) {
+    url += `&searchText=${encodeURIComponent(searchText)}`;
+  }
+
+  if (status) {
+    url += `&status=${status}`;
+  }
+
+  return this.http.get<any>(
+    url, { headers }
+  );
+}
+
 
 }
 

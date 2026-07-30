@@ -16,9 +16,8 @@ import { DchPackingLineComponent } from "./../../dch-packing-line/dch-packing-li
 })
 export class PackingTargetsComponent implements OnInit {
 
-  isSelectPackingLIne: boolean = true;
-  isSelectPositioning: boolean = false;
-  isSelectAssign: boolean = false;
+  isSelectPackingLIne: boolean = false;
+  isSelectPositioning: boolean = true;
 
   constructor() { }
 
@@ -31,19 +30,11 @@ export class PackingTargetsComponent implements OnInit {
   selectPackingLIne() {
     this.isSelectPackingLIne = true;
     this.isSelectPositioning = false;
-    this.isSelectAssign = false;
   }
 
   selectPositioning() {
     this.isSelectPackingLIne = false;
     this.isSelectPositioning = true;
-    this.isSelectAssign = false;
-  }
-
-  selectAssign() {
-    this.isSelectPackingLIne = false;
-    this.isSelectPositioning = false;
-    this.isSelectAssign = true;
   }
 
 

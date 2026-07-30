@@ -281,7 +281,7 @@ if (res.success) {
     this.DistributionSrv.createDCHCenterPos(this.centerId, nextPos, this.currentRow.positions[0].rowId).subscribe(
       (res) => {
 if (res.success) {
-    this.toastSrv.success(`Position addition successfull.`);
+    this.toastSrv.success(`Position addition successful.`);
 } else {
   this.toastSrv.error(`Position addition failed.`);
 }
@@ -293,7 +293,7 @@ if (res.success) {
     )
   }
 
-   cancelCreatePos(): void {
+  cancelCreatePos(): void {
     this.showCreatePositionModal = false;
   }
 

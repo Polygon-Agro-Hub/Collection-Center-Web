@@ -6,9 +6,9 @@
 
     <div *ngIf="this.logingRole === 'Distribution Centre Head'" class="text-[#030308] font-[500] dark:text-white whitespace-nowrap">{{regCode}} {{centerName}}</div>
 
-    <p class="text-[#030308] font-[500] dark:text-white whitespace-nowrap mt-1">
-        All Rows ({{ rows.length }})
-    </p>
+<p class="text-[#030308] font-[500] dark:text-white whitespace-nowrap mt-1">
+    All Rows ({{ rows.length === 0 ? '0' : (rows.length < 10 ? '0' + rows.length : rows.length) }})
+</p>
 
     <button type="button"
         class="flex items-center gap-2 bg-[#090909] text-white font-[500] px-4 py-2 rounded-lg mt-4 hover:bg-black dark:bg-white dark:text-[#1A1A1A]"
@@ -44,7 +44,7 @@
 
         <div class="flex flex-nowrap gap-2 flex-1">
             <span *ngFor="let pos of getOrderedPositions(row)"
-                class="relative font-[500] rounded-md border-2 flex items-center justify-center w-10 h-9 shrink-0"
+                class="relative font-[500] rounded-md border-2 flex items-center justify-center w-12 h-9 shrink-0"
                 [ngClass]="[getPositionClass(pos.pType), pos.pType === 'NOR' ? 'group cursor-pointer hover:bg-red-500 hover:border-red-500 hover:text-white' : '']"
                 (click)="pos.pType === 'NOR' && openDeletePositionModal(row, pos)">
                 <span class="group-hover:opacity-60">{{ getPositionLabel(pos) }}</span>
@@ -191,7 +191,7 @@
         </p>
 
         <p class="font-[400] text-[#4B5563] dark:text-gray-300 mt-3">
-            Are you sure you want to delete {{ getPositionLabel(positionToDelete) }}? <BR>
+            Are you sure you want to delete position {{ positionToDelete.pIndex }} of row {{ currentRow.rowIndex }}? <BR>
                 This action can not be undone.
         </p>
 
@@ -203,7 +203,7 @@
             </button>
 
             <button type="button"
-                class="bg-[#415CFF] min-w-36 text-white font-[600] px-6 py-2 rounded-lg hover:bg-[#324ae0]"
+                class="bg-[#FF0000] min-w-36 text-white font-[600] px-6 py-2 rounded-lg "
                 (click)="confirmDeletePosition()">
                 Delete
             </button>

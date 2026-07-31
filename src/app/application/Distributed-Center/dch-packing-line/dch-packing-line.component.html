@@ -2,7 +2,7 @@
 
 <app-loading-spinner *ngIf="isLoading" />
 
-<div *ngIf="!isLoading" class="w-full min-h-screen overflow-x-auto">
+<div class="w-full min-h-screen overflow-x-auto">
 
     <div *ngIf="this.logingRole === 'Distribution Centre Head'" class="text-[#030308] font-[500] dark:text-white whitespace-nowrap">{{regCode}} {{centerName}}</div>
 
@@ -18,7 +18,7 @@
     </button>
 
     <!-- Row list -->
-    <div *ngIf="rows.length > 0" class="flex flex-col gap-3 mt-6 w-full">
+    <div *ngIf="hasData" class="flex flex-col gap-3 mt-6 w-full">
         <div *ngFor="let row of rows"
     class="flex items-start justify-between gap-4 border-2 border-[#C3CEDA] dark:border-[#2A2A2A] rounded-lg px-4 py-3">
 
@@ -30,10 +30,10 @@
                 Row {{ formatRowNo(row.rowIndex) }}
             </p>
 
-            <p class="text-xs text-center font-[400]"
+            <p class="text-xs text-center font-[400] px-1.5 rounded-lg bg-[#E3E9EF]"
                 [ngClass]="row.isEnabled
-                ? 'text-green-600'
-                : 'text-[#57687B] px-1.5 rounded-lg bg-[#E3E9EF] dark:text-gray-500'">
+                ? 'text-[#415CFF]'
+                : 'text-[#57687B] dark:text-gray-500'">
                 {{ row.isEnabled ? 'Enabled' : 'Disabled' }}
             </p>
         </div>
@@ -42,7 +42,7 @@
         <!-- Separator + QR/QC -->
         <div class="border-l-2 border-[#C3CEDA] dark:border-[#819BBA] h-10 self-center shrink-0"></div>
 
-        <div class="flex flex-nowrap gap-2 flex-1">
+        <div class="flex flex-wrap gap-2 max-w-[776px]">
             <span *ngFor="let pos of getOrderedPositions(row)"
                 class="relative font-[500] rounded-md border-2 flex items-center justify-center w-12 h-9 shrink-0"
                 [ngClass]="[getPositionClass(pos.pType), pos.pType === 'NOR' ? 'group cursor-pointer hover:bg-red-500 hover:border-red-500 hover:text-white' : '']"
@@ -72,28 +72,22 @@
 
 
         <!-- Toggle -->
-        <label class="inline-flex items-center cursor-pointer">
-            <input type="checkbox" class="sr-only peer" [checked]="row.isEnabled"
-                (click)="onToggleRowClick($event, row)">
-
-            <div
-                class="relative w-11 h-6 bg-gray-200 peer-focus:ring-4 peer-focus:ring-blue-300 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all peer-checked:bg-[#415CFF]">
-            </div>
-        </label>
+        <button type="button"
+            class="relative w-11 h-6 rounded-full cursor-pointer transition-colors after:content-[''] after:absolute after:top-[2px] after:start-[2px] after:bg-white after:border after:border-gray-300 after:rounded-full after:h-5 after:w-5 after:transition-all"
+            [ngClass]="row.isEnabled ? 'bg-[#415CFF] after:translate-x-full after:border-white' : 'bg-gray-200 dark:bg-gray-700'"
+            (click)="onToggleRowClick(row)">
+        </button>
 
     </div>
 
 </div>
     </div>
 
-    <!-- Empty state -->
-    <div *ngIf="!hasData" class="flex flex-col items-center justify-center w-full mt-24">
-        <span class="relative inline-block w-20 h-20 mb-6">
-            <i class="fa-regular fa-file text-7xl text-indigo-100 dark:text-[#2A2A3A]"></i>
-            <i class="fa-solid fa-magnifying-glass text-2xl text-indigo-300 dark:text-[#4A4A6A] absolute bottom-1 right-0"></i>
-        </span>
-        <p class="text-[#A0A0A0] dark:text-gray-500">--No Rows Available--</p>
+    <div *ngIf="!hasData" class="flex flex-col items-center w-full h-screen mt-6">
+        <img src="assets/images/search.png" alt="No Data" class="w-24 h-28" />
+        <p class="text-[#494949] my-6 dark:text-white">--No Rows Available--</p>
     </div>
+
 
 </div>
 

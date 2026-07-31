@@ -51,7 +51,7 @@
     <div class="mb-4">
       <div
         class="flex items-stretch rounded-md overflow-hidden border-2 min-h-16"
-        [ngClass]="isPositionInvalid(slot) || isPositionEmpty(slot) ? 'border-red-500' : 'border-[#415CFF]'">
+        [ngClass]="attemptedSave && (isPositionInvalid(slot) || isPositionEmpty(slot)) ? 'border-red-500' : 'border-[#415CFF]'">
 
         <div
           class="flex justify-center items-center text-[16px] font-medium w-[70px] shrink-0 bg-[#F3F4FF] dark:bg-indigo-950/40">
@@ -82,7 +82,7 @@
         </div>
       </div>
 
-      <div class="flex items-center gap-1.5 text-[13px] text-red-600 dark:text-red-400 mt-1" *ngIf="isPositionInvalid(slot) || isPositionEmpty(slot)">
+      <div class="flex items-center gap-1.5 text-[13px] text-red-600 dark:text-red-400 mt-1" *ngIf="attemptedSave && (isPositionInvalid(slot) || isPositionEmpty(slot))">
         <i class="fa-solid fa-triangle-exclamation"></i>
         <span *ngIf="isPositionEmpty(slot)">At least one product is required.</span>
         <span *ngIf="isPositionInvalid(slot)">Duplicate products detected.</span>
@@ -90,7 +90,7 @@
     </div>
   </ng-container>
 
-  <div class="border-t border-gray-200 dark:border-gray-700 pt-5 mt-6 flex justify-center gap-4">
+  <div class="sticky bottom-0 z-20 -mx-5 px-5 bg-white dark:bg-gray-900 py-5 mt-6 flex justify-center gap-4">
     <button
       class="rounded-lg px-8 py-2 text-[18px] font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors min-w-16"
       (click)="onCancel()">

@@ -94,6 +94,9 @@ export class DcmPositioningComponent implements OnInit {
   isRemoveConfirmOpen: boolean = false;
   private pendingRemoval: { slot: Positions; item: PositionsCrops; index: number } | null = null;
 
+  // ===== Validation display state: only show messages after a user-triggered change or a save attempt =====
+  attemptedSave: boolean = false;
+
   constructor(
     private router: Router,
     private DistributionSrv: DistributionServiceService,
@@ -126,8 +129,7 @@ export class DcmPositioningComponent implements OnInit {
       return;
     }
     this.selectedRow = row;
-    // this.positions = this.buildPositionSlots(row);
-    // this.attemptedSave = false;
+    this.attemptedSave = false;
     this.view = 'placement';
     console.log('view', this.view)
     this.fetchDcmPositionsForRows(this.selectedRow.id);
@@ -199,6 +201,7 @@ export class DcmPositioningComponent implements OnInit {
     };
 
     this.activeSlot.items.push(newCrop);
+    this.attemptedSave = true;
 
     this.addedItems.push({
       positionCropId: null as any,
@@ -243,6 +246,7 @@ export class DcmPositioningComponent implements OnInit {
 
     const { slot, item, index } = this.pendingRemoval;
     slot.items.splice(index, 1);
+    this.attemptedSave = true;
 
     if (!item.positionCropId) {
       // Item was added in this session and never saved - discard it silently.
@@ -317,6 +321,8 @@ export class DcmPositioningComponent implements OnInit {
   }
 
   onSave(): void {
+    this.attemptedSave = true;
+
     if (this.positions.some(slot => this.isPositionEmpty(slot))) {
       this.toastSrv.error('every position must have at least one product.');
       return;

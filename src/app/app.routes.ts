@@ -85,6 +85,9 @@ import { CashActivityDashboardComponent } from './application/Cash-activity/cash
 import { ViewPickupCashRevenueComponent } from './application/Cash-activity/view-pickup-cash-revenue/view-pickup-cash-revenue.component';
 import { ViewDeliveryRevenueComponent } from './application/Cash-activity/view-delivery-revenue/view-delivery-revenue.component';
 import { PackingTargetsComponent } from './application/Distributed-Center/Distributed-Target/packing-targets/packing-targets.component';
+import { ProductStorageDashboardComponent } from './application/product-storage/product-storage-dashboard/product-storage-dashboard.component';
+import { ProductShortageTodayComponent } from './application/product-storage/product-shortage-today/product-shortage-today.component';
+import { ProductStorageHistoryComponent } from './application/product-storage/product-storage-history/product-storage-history.component'
 
 
 export const routes: Routes = [
@@ -519,6 +522,28 @@ export const routes: Routes = [
                         component: RequestedItemsComponent
                     },
                     
+                ]
+            },
+
+            {
+                path: 'product-shortage',
+                canActivate:[RoleGuardService],
+                data: { roles: ['Distribution Centre Manager'] },
+                children: [
+                    {
+                        path: '',
+                        component: ProductStorageDashboardComponent,
+                    },
+
+                    {
+                        path: 'product-shortage-today',
+                        component: ProductShortageTodayComponent,
+                    },
+
+                    {
+                        path: 'product-shortage-history',
+                        component: ProductStorageHistoryComponent,
+                    }
                 ]
             },
 

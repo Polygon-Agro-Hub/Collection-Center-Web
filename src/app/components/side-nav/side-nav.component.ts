@@ -141,6 +141,15 @@ export const MENU_ITEMS = [
     permission: ['Distribution Centre Head', 'Distribution Centre Manager'],
   },
 
+  {
+    id: 24,
+    key: 'product-shortage',
+    path: '/product-shortage',
+    label: 'Product Shortage',
+    icon: 'fa-solid fa-question',
+    permission: ['Distribution Centre Manager'],
+  },
+
 
   {
     id: 13,
@@ -223,6 +232,8 @@ export const MENU_ITEMS = [
     icon: 'fas fa-th-large',
     permission: ['Distribution Centre Manager'],
   },
+
+  
 
 ];
 

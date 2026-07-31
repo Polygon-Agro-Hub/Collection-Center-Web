@@ -124,6 +124,7 @@ export class DchPackingLineComponent {
         this.total = res.items.length || 0;
         console.log('total', this.total)
         this.hasData = this.rows.length > 0;
+        console.log('hasData', this.hasData)
         this.isLoading = false;
       }
     )
@@ -199,15 +200,25 @@ if (res.success) {
     )
   }
 
-  onToggleRowClick(event: Event, row: PackingLineRow): void {
+  // onToggleRowClick(event: Event, row: PackingLineRow): void {
+  //   this.rowToToggle = row
+  //   if (this.rowToToggle.isEnabled === 0) {
+  //     this.openToggleRowPopUpEnable = true;
+  //   } else {
+  //     this.openToggleRowPopUpDisable = true;
+  //   }
+
+  //   event.preventDefault();
+    
+  // }
+
+  onToggleRowClick(row: PackingLineRow): void {
     this.rowToToggle = row
     if (this.rowToToggle.isEnabled === 0) {
       this.openToggleRowPopUpEnable = true;
     } else {
       this.openToggleRowPopUpDisable = true;
     }
-
-    event.preventDefault();
     
   }
 
@@ -218,15 +229,13 @@ if (res.success) {
   }
 
   toggleRow(row: PackingLineRow): void {
-    this.isLoading = true;
     const enableStatus = row.isEnabled === 0 ? 1 : 0;
-    console.log('enable', row.positions.length);
     this.removeRowIndex = row.rowIndex;
     if (row.positions.length <= 2) {
       this.openErrorEnableRow = true;
       return;
     }
-    console.log('isEnabled', row.isEnabled)
+    this.isLoading = true;
     this.DistributionSrv.toggleRow(enableStatus, row.id).subscribe({
   next: (res) => {
     console.log('Success:', res);
@@ -281,7 +290,7 @@ if (res.success) {
     this.DistributionSrv.createDCHCenterPos(this.centerId, nextPos, this.currentRow.positions[0].rowId).subscribe(
       (res) => {
 if (res.success) {
-    this.toastSrv.success(`Position addition successfull.`);
+    this.toastSrv.success(`Position addition successful.`);
 } else {
   this.toastSrv.error(`Position addition failed.`);
 }
@@ -293,7 +302,7 @@ if (res.success) {
     )
   }
 
-   cancelCreatePos(): void {
+  cancelCreatePos(): void {
     this.showCreatePositionModal = false;
   }
 

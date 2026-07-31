@@ -18,7 +18,6 @@ export class PackingTargetsComponent implements OnInit {
 
   isSelectPackingLIne: boolean = true;
   isSelectPositioning: boolean = false;
-  isSelectAssign: boolean = false;
 
   constructor() { }
 
@@ -31,19 +30,11 @@ export class PackingTargetsComponent implements OnInit {
   selectPackingLIne() {
     this.isSelectPackingLIne = true;
     this.isSelectPositioning = false;
-    this.isSelectAssign = false;
   }
 
   selectPositioning() {
     this.isSelectPackingLIne = false;
     this.isSelectPositioning = true;
-    this.isSelectAssign = false;
-  }
-
-  selectAssign() {
-    this.isSelectPackingLIne = false;
-    this.isSelectPositioning = false;
-    this.isSelectAssign = true;
   }
 
 

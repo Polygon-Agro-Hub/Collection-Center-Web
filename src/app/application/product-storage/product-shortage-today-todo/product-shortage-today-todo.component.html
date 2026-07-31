@@ -1,11 +1,11 @@
 <app-loading-spinner *ngIf="isLoading" />
 
 <div *ngIf="!isLoading">
-    <div class="flex flex-row items-center justify-end gap-8 ">
+    <div class="flex flex-row items-center justify-between gap-8 ">
 
         <p class="class-[#030308] dark:text-white font-500">Product Shortage Today - To Do</p>
 
-        <div class="flex flex-row items-center justify-end gap-8">
+        <div *ngIf="hasData || afterSixPm" class="flex flex-row items-center justify-end gap-8">
             <i class="fa-solid fa-list text-lg text-[#4A4A4A] dark:text-white"></i>
 
             <p class="text-[#4A4A4A] dark:text-white">Filter By</p>
@@ -129,9 +129,17 @@
 
     </div>
 
-    <div *ngIf="!hasData" class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6 ">
+    <div *ngIf="!hasData && afterSixPm" class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6 ">
         <p class="text-[#494949] my-6 dark:text-textDark">--No Product Shortages for today yet--</p>
         <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
+    </div>
+
+    <div *ngIf="!hasData && !afterSixPm" class="flex flex-col items-center w-full h-screen px-10 py-7 mt-12 ">
+                <img src="assets/images/ShortageNoData.png" alt="No Data" class="w-24 h-28" />
+        <p class="text-[#000000] my-6 dark:text-textDark text-[20px] font-[600]">--No assigned product shortages yet!--</p>
+        <p class="text-center font-[400]">--If there are any shortages, you will be able to view them <span class="text-[#494949] font-[700]">after 6:00 PM</span> on {{ currentTime | date:'d MMMM y' }},<br>
+once they have been assigned by the Procurement Officer.--</p>
+
     </div>
 
 </div>

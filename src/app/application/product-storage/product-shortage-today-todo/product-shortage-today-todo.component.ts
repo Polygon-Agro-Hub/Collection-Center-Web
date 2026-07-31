@@ -43,7 +43,8 @@ export class ProductShortageTodayTodoComponent implements OnInit {
 
   isModalOpen: boolean = false;
   selectedOfficerId!: number;
-
+currentTime!: Date;
+afterSixPm!: boolean;
 
   constructor(
     private router: Router,
@@ -55,6 +56,8 @@ export class ProductShortageTodayTodoComponent implements OnInit {
 
 
   ngOnInit(): void {
+    this.currentTime = new Date();
+    this.afterSixPm = this.currentTime.getHours() >= 18;
     this.getAllShortageTodayToDo();
   }
 

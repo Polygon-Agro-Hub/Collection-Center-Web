@@ -26,8 +26,7 @@ export class AssignCenterTargetComponent implements OnInit {
   isFormValid: boolean = false;
   countCrops: number = 0;
   searchText: string = '';
-  selectDate!: string; 
-  isNew: boolean = true;
+  selectDate!: string;
   companyCenterId!: number;
   isLoading: boolean = true;
   isDateValid: boolean = true;
@@ -44,7 +43,7 @@ export class AssignCenterTargetComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const today = new Date('2026-07-22');
+    const today = new Date('2026-08-20');
     this.selectDate = today.toISOString().split('T')[0];
     this.selectDatePickerDate = this.selectDate;
     this.fetchSavedCenterCrops()
@@ -68,7 +67,6 @@ export class AssignCenterTargetComponent implements OnInit {
       (res) => {
         this.assignCropsArr = res.products
         this.countCrops = res.products.length
-        this.isNew = res.isNew
         this.companyCenterId = res.companyCenterId
         this.isLoading = false;
         this.hasData = res.products.length > 0 ? true : false;
@@ -82,7 +80,8 @@ export class AssignCenterTargetComponent implements OnInit {
     this.isLoading = true;
     this.newTargetObj.companyCenterId = this.companyCenterId
     this.newTargetObj.date = this.selectDate
-    this.newTargetObj.crop = this.assignCropsArr
+    this.newTargetObj.crop = this.assignCropsArr.filter(crop => crop.isNew)
+    console.log('newTargetObj', this.newTargetObj)
 
 
     this.TargetSrv.addNewCenterTarget(this.newTargetObj).subscribe(
@@ -169,8 +168,17 @@ export class AssignCenterTargetComponent implements OnInit {
 
   validateForm() {
     this.isFormValid = this.assignCropsArr.some(crop =>
-      crop.targetA > 0 || crop.targetB > 0 || crop.targetC > 0
-    );
+      crop.isNew && (crop.targetA > 0 || crop.targetB > 0 || crop.targetC > 0)
+    ) && !this.assignCropsArr.some(crop => crop.isNew && this.isQtyExceeded(crop));
+  }
+
+  get hasNewItems(): boolean {
+    return this.assignCropsArr.some(crop => crop.isNew);
+  }
+
+  isQtyExceeded(item: AssignCrops): boolean {
+    const total = (item.targetA || 0) + (item.targetB || 0) + (item.targetC || 0);
+    return total > item.qty * 1.02;
   }
 
   pressEditIcon(item: AssignCrops, grade: string) {
@@ -180,7 +188,7 @@ export class AssignCenterTargetComponent implements OnInit {
   }
 
   checkNegativeValue(item: AssignCrops, grade: string) {
-    if (this.isNew && this.isDateValid) {
+    if (item.isNew && this.isDateValid) {
       if (item.targetA < 0 || item.targetB < 0 || item.targetC < 0) {
         if (grade === 'A') item.targetA = 0;
         if (grade === 'B') item.targetB = 0;
@@ -219,6 +227,9 @@ class CenterDetails {
 class AssignCrops {
   cropNameEnglish!: string
   varietyNameEnglish!: string
+  isNew: boolean = true;
+  qty: number = 0;
+  unitType: string = '';
   targetA: number = 0.00
   targetB: number = 0.00
   targetC: number = 0.00

@@ -58,7 +58,8 @@
                     </tr>
                 </thead>
                 <tbody class="bg-white dark:bg-[#292929]">
-                    <tr class="whitespace-nowrap" *ngFor="let item of assignCropsArr; let i = index">
+                    <ng-container *ngFor="let item of assignCropsArr; let i = index">
+                    <tr class="whitespace-nowrap">
                         <td class="whitespace-nowrap px-6 py-3 text-center text-base text-[#000000] dark:text-gray-300">
                             {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }} </td>
                         <td class="px-6 py-3 text-base text-[#000000] dark:text-gray-300">{{item.cropNameEnglish}}</td>
@@ -69,12 +70,12 @@
                             <input type="number" [(ngModel)]="item.targetA" step="any" name="targetA" min="0" (change)="checkNegativeValue(item, 'A')"
                                 (input)="restrictDecimal($event, item, 'A')"
                                 class="border-[#415CFF] dark:bg-[#363636] border-[2px] border-dotted rounded-lg w-28 px-2 py-1 mr-4"
-                                [disabled]="!isNew && !item.editingA" (change)="validateForm()" />
-                            <button *ngIf="!isNew && !item.editingA && isDateValid"
+                                [disabled]="!item.isNew && !item.editingA" (change)="validateForm()" />
+                            <button *ngIf="!item.isNew && !item.editingA && isDateValid"
                                 (click)="(item.editingA = true) && pressEditIcon(item,'A')">
                                 <i class="fa-solid fa-pen-to-square text-[#415CFF] text-xl"></i>
                             </button>
-                            <button *ngIf="!isNew && item.editingA && isDateValid"
+                            <button *ngIf="!item.isNew && item.editingA && isDateValid"
                                 class="px-3 py-2 text-white rounded-lg" [ngClass]="{
                                     'bg-[#415CFF]': item.preValueA !== item.targetA,
                                     'bg-[#6B7D8C]': item.preValueA === item.targetA || item.targetA < 0 || item.targetA < item.preValueA
@@ -89,12 +90,12 @@
                             <input type="number" [(ngModel)]="item.targetB" step="any" name="targetB" min="0" (change)="checkNegativeValue(item, 'B')"
                                 (input)="restrictDecimal($event, item, 'B')"
                                 class="border-[#415CFF] dark:bg-[#363636] border-[2px] border-dotted rounded-lg w-28 px-2 py-1 mr-4"
-                                [disabled]="!isNew && !item.editingB" (change)="validateForm()" />
-                            <button *ngIf="!isNew && !item.editingB && isDateValid"
+                                [disabled]="!item.isNew && !item.editingB" (change)="validateForm()" />
+                            <button *ngIf="!item.isNew && !item.editingB && isDateValid"
                                 (click)="(item.editingB = true) && pressEditIcon(item,'B')">
                                 <i class="fa-solid fa-pen-to-square text-[#415CFF] text-xl"></i>
                             </button>
-                            <button *ngIf="!isNew && item.editingB && isDateValid" [ngClass]="{
+                            <button *ngIf="!item.isNew && item.editingB && isDateValid" [ngClass]="{
                                 'bg-[#415CFF]': item.preValueB !== item.targetB,
                                 'bg-[#6B7D8C]': item.preValueB === item.targetB || item.targetB < 0 || item.targetB < item.preValueB
                               }" class="px-3 py-2 text-white rounded-lg"
@@ -108,12 +109,12 @@
                             <input type="number" [(ngModel)]="item.targetC" step="any" name="targetC" min="0" (change)="checkNegativeValue(item, 'C')"
                                 (input)="restrictDecimal($event, item, 'C')"
                                 class="border-[#415CFF] dark:bg-[#363636] border-[2px] border-dotted rounded-lg w-28 px-2 py-1 mr-4"
-                                [disabled]="!isNew && !item.editingC" (change)="validateForm()" />
-                            <button *ngIf="!isNew && !item.editingC && isDateValid"
+                                [disabled]="!item.isNew && !item.editingC" (change)="validateForm()" />
+                            <button *ngIf="!item.isNew && !item.editingC && isDateValid"
                                 (click)="(item.editingC = true) && pressEditIcon(item,'C')">
                                 <i class="fa-solid fa-pen-to-square text-[#415CFF] text-xl"></i>
                             </button>
-                            <button *ngIf="!isNew && item.editingC && isDateValid" [ngClass]="{
+                            <button *ngIf="!item.isNew && item.editingC && isDateValid" [ngClass]="{
                                 'bg-[#415CFF]': item.preValueC !== item.targetC,
                                 'bg-[#6B7D8C]': (item.preValueC === item.targetC) || item.targetC < 0 || item.targetC < item.preValueC
                               }" class="px-3 py-2 text-white rounded-lg"
@@ -122,12 +123,17 @@
                             </button>
                         </td>
                     </tr>
+                    <tr *ngIf="item.isNew && isQtyExceeded(item)">
+                        <td colspan="6" class="px-6 pb-3 text-center text-sm text-red-600">
+                            Total for Grade A + B + C ({{ item.targetA + item.targetB + item.targetC }}) cannot exceed 102% of available qty ({{ item.qty }} {{item.unitType}}).
+                        </td>
+                    </tr>
+                    </ng-container>
                 </tbody>
             </table>
         </div>
 
-        <div *ngIf="isNew && isDateValid" class="flex flex-row justify-center items-center my-7 gap-8">
-        <div *ngIf="isNew && isDateValid" class="flex flex-row justify-center items-center my-7 gap-8">
+        <div *ngIf="hasNewItems && isDateValid" class="flex flex-row justify-center items-center my-7 gap-8">
     <button class="w-32 bg-[#FFFFFF] text-[#6B7D8C] border-[1px] border-[#95A1AC]  rounded-lg px-7 py-2"
         (click)="onCancel()">
         Cancel
@@ -138,8 +144,6 @@
         Save
     </button>
 </div>
-
-    </div>
 
 </div>
 

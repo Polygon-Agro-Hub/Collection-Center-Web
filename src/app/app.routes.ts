@@ -88,7 +88,10 @@ import { PackingTargetsComponent } from './application/Distributed-Center/Distri
 import { ProductStorageDashboardComponent } from './application/product-storage/product-storage-dashboard/product-storage-dashboard.component';
 import { ProductShortageTodayComponent } from './application/product-storage/product-shortage-today/product-shortage-today.component';
 import { ProductStorageHistoryComponent } from './application/product-storage/product-storage-history/product-storage-history.component'
-
+import { DistributionProcurementDashboardComponent } from './application/distribution-procurement/distribution-procurement-dashboard/distribution-procurement-dashboard.component'
+import { ShortageHistoryComponent } from './application/distribution-procurement/shortage-history/shortage-history.component'
+import { ShortageTodayComponent } from './application/distribution-procurement/shortage-today/shortage-today.component'
+import { ShortageTodayFinalizationComponent } from './application/distribution-procurement/shortage-today-finalization/shortage-today-finalization.component'
 
 export const routes: Routes = [
     {
@@ -546,6 +549,7 @@ export const routes: Routes = [
                     }
                 ]
             },
+            
 
             {
                 path: 'assign-targets',
@@ -563,6 +567,33 @@ export const routes: Routes = [
                         canDeactivate: [PendingTargetAssignGuard]
                     },
                     
+                ]
+            },
+
+            {
+                path: 'distribution-procurement',
+                canActivate:[RoleGuardService],
+                data: { roles: ['Distribution Centre Head'] },
+                children: [
+                    {
+                        path: '',
+                        component: DistributionProcurementDashboardComponent,
+                    },
+
+                    {
+                        path: 'shortage-today',
+                        component: ShortageTodayComponent,
+                    },
+
+                    {
+                        path: 'shortage-finalization-today',
+                        component: ShortageTodayFinalizationComponent,
+                    },
+
+                    {
+                        path: 'shortage-history',
+                        component: ShortageHistoryComponent,
+                    }
                 ]
             },
 

@@ -138,7 +138,7 @@ afterSixPm!: boolean;
 
         if (res.success) {
           this.isModalOpen = false;
-          this.toastSrv.success('Officer assign Successful.');
+          this.toastSrv.success('Officer assigned Successfully.');
           this.getAllShortageTodayToDo();
         }
       },

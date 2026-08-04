@@ -10,12 +10,6 @@
     All Rows ({{ rows.length === 0 ? '0' : (rows.length < 10 ? '0' + rows.length : rows.length) }})
 </p>
 
-    <button type="button"
-        class="flex items-center gap-2 bg-[#090909] text-white font-[500] px-4 py-2 rounded-lg mt-4 hover:bg-black dark:bg-white dark:text-[#1A1A1A]"
-        (click)="openCreateRowModal()">
-        <i class="fa-solid fa-plus text-xs"></i>
-        Create New Row
-    </button>
 
     <!-- Row list -->
     <div *ngIf="hasData" class="flex flex-col gap-3 mt-6 w-full">
@@ -82,6 +76,13 @@
 
 </div>
     </div>
+
+    <button type="button"
+        class="flex items-center gap-2 bg-[#090909] text-white font-[500] px-4 py-2 rounded-lg mt-4 hover:bg-black dark:bg-white dark:text-[#1A1A1A]"
+        (click)="openCreateRowModal()">
+        <i class="fa-solid fa-plus text-xs"></i>
+        Create New Row
+    </button>
 
     <div *ngIf="!hasData" class="flex flex-col items-center w-full h-screen mt-6">
         <img src="assets/images/search.png" alt="No Data" class="w-24 h-28" />

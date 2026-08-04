@@ -216,6 +216,16 @@ export const MENU_ITEMS = [
   },
 
   {
+    id: 25,
+    key: 'distribution-procurement',
+    path: '/distribution-procurement',
+    label: 'Procurement',
+    icon: 'fa-solid fa-question',
+    permission: ['Distribution Centre Head'],
+  },
+
+
+  {
     id: 20,
     key: 'dcm-complaints',
     path: '/dcm-complaints',

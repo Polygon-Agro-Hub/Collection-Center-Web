@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ElementRef, HostListener, ViewChild  } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -49,6 +49,10 @@ export class ShortageAssignComponent implements OnInit {
   ceilingPercent: number = 0;
 
   showConfirmModal = false;
+
+  isCentreDropdownOpen = false;
+
+  @ViewChild('centreDropdownRef') centreDropdownRef!: ElementRef;
 
   constructor(
     private route: ActivatedRoute,
@@ -240,4 +244,25 @@ onCeilingInput(event: Event): void {
     // Convert to string and remove trailing zeros
     return value.toString().replace(/\.?0+$/, '');
   }
+
+  toggleCentreDropdown(): void {
+    this.isCentreDropdownOpen = !this.isCentreDropdownOpen;
+  }
+
+  selectCentreOption(option: Centre): void {
+    this.selectedCentreId = option.id;
+    this.isCentreDropdownOpen = false;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (
+      this.isCentreDropdownOpen &&
+      this.centreDropdownRef &&
+      !this.centreDropdownRef.nativeElement.contains(event.target)
+    ) {
+      this.isCentreDropdownOpen = false;
+    }
+  }
+
 }

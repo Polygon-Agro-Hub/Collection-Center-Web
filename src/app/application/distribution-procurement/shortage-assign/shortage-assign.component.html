@@ -47,11 +47,39 @@
 
         <div class="flex flex-col justify-center">
           <label class="text-[12px] font-normal text-textLight dark:text-textDark mb-1">Select Centre</label>
-          <p-dropdown [options]="centres" [(ngModel)]="selectedCentreId" optionLabel="label" optionValue="id"
-  placeholder="--Select Centre--"
-  styleClass="w-full h-10 shortage-centre-dropdown text-sm font-semibold text-textLight dark:text-textDark"
-  [panelStyleClass]="'shortage-centre-panel'">
-</p-dropdown>
+          <div class="relative w-full" #centreDropdownRef>
+  <!-- Trigger -->
+  <div (click)="toggleCentreDropdown()"
+    class="w-full h-10 px-3 flex items-center justify-between rounded-lg border border-[#828282] cursor-pointer text-sm font-semibold text-textLight dark:text-textDark bg-white dark:bg-[#292929]">
+    <span [ngClass]="{'text-[#828282] font-normal': !selectedCentre}">
+      {{ selectedCentre ? selectedCentre.label : '--Select Centre--' }}
+    </span>
+    <i class="fa-solid fa-chevron-down text-xs text-[#828282] transition-transform"
+      [ngClass]="{ 'rotate-180': isCentreDropdownOpen }"></i>
+  </div>
+
+  <!-- Panel -->
+  <div *ngIf="isCentreDropdownOpen"
+    class="absolute z-10 overflow-hidden w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
+    <div class="max-h-60 overflow-y-auto">
+      <div *ngFor="let option of centres; let i = index"
+        (click)="selectCentreOption(option)"
+        class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center"
+        [ngClass]="{
+          'rounded-t-xl': i === 0,
+          'rounded-b-xl': i === centres.length - 1,
+          'bg-gray-200 dark:bg-gray-700': selectedCentreId === option.id
+        }">
+        <span class="flex-grow">{{ option.label }}</span>
+        <i class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
+      </div>
+
+      <div *ngIf="centres.length === 0" class="px-3 py-2 text-sm text-[#828282]">
+        No centres available
+      </div>
+    </div>
+  </div>
+</div>
         </div>
 
         <div class="flex flex-col justify-center">

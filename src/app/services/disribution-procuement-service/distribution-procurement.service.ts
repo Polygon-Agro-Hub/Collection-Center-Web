@@ -9,7 +9,7 @@ import { environment } from '../../environments/environment';
 })
 export class DistributionProcurementService {
 
-  private apiUrl = `${environment.API_BASE_URL}/distribution`;
+  private apiUrl = `${environment.API_BASE_URL}/distribution-procurements`;
   private token!: string | null;
 
   constructor(private http: HttpClient, private tokenSrv: TokenServiceService) {
@@ -38,4 +38,48 @@ export class DistributionProcurementService {
 
     return this.http.get(url, { headers });
   }
+
+    getShortageDetails(): Observable<any> {
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${this.token}`,
+    'Content-Type': 'application/json',
+  });
+
+  const url = `${this.apiUrl}/shortage-details`;
+
+  return this.http.get<any>(url, { headers });
+}
+
+getShortageDetailsById(id: number | string): Observable<any> {
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${this.token}`,
+    'Content-Type': 'application/json',
+  });
+
+  const url = `${this.apiUrl}/shortage-details/${id}`;
+
+  return this.http.get<any>(url, { headers });
+}
+
+getShortageAssignedDetails(id: number | string): Observable<any> {
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${this.token}`,
+    'Content-Type': 'application/json',
+  });
+
+  const url = `${this.apiUrl}/shortage-assigned-details/${id}`;
+
+  return this.http.get<any>(url, { headers });
+}
+
+assignShortage(id: number | string, data: { comCenId: number; qty: number; ceilling: number }): Observable<any> {
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${this.token}`,
+    'Content-Type': 'application/json',
+  });
+
+  const url = `${this.apiUrl}/assign-shortage/${id}`;
+
+  return this.http.post<any>(url, data, { headers });
+}
 }

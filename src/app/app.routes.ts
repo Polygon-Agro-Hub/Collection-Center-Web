@@ -92,6 +92,7 @@ import { DistributionProcurementDashboardComponent } from './application/distrib
 import { ShortageHistoryComponent } from './application/distribution-procurement/shortage-history/shortage-history.component'
 import { ShortageTodayComponent } from './application/distribution-procurement/shortage-today/shortage-today.component'
 import { ShortageTodayFinalizationComponent } from './application/distribution-procurement/shortage-today-finalization/shortage-today-finalization.component'
+import { ShortageAssignComponent } from './application/distribution-procurement/shortage-assign/shortage-assign.component';
 
 export const routes: Routes = [
     {
@@ -583,6 +584,10 @@ export const routes: Routes = [
                     {
                         path: 'shortage-today',
                         component: ShortageTodayComponent,
+                    },
+
+                    { path: 'shortage-assign/:id', 
+                      component: ShortageAssignComponent 
                     },
 
                     {

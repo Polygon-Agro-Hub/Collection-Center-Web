@@ -9,7 +9,7 @@ import {
 import { CommonModule, Location } from '@angular/common';
 import { Router } from '@angular/router';
 import lottie, { AnimationItem } from 'lottie-web';
-import { ProcurementsService } from '../../../services/Procurement-service/procurements.service';
+import { DistributionProcurementService } from '../../../services/disribution-procuement-service/distribution-procurement.service';
 import { LoadingSpinnerComponent } from "../../../components/loading-spinner/loading-spinner.component"; // adjust path/name as needed
  // adjust path/name as needed
 
@@ -58,7 +58,7 @@ export class ShortageTodayComponent
   constructor(
     private location: Location,
     private router: Router,
-    private procurementsService: ProcurementsService,
+    private procurementsService: DistributionProcurementService,
   ) {}
 
   get shortageCount(): number {
@@ -130,7 +130,7 @@ export class ShortageTodayComponent
   }
 
   onView(item: ShortageItem): void {
-    this.router.navigate(['procurement/shortage-assign', item.id]);
+    this.router.navigate(['distribution-procurement/shortage-assign', item.id]);
   }
 
   get formattedTime(): string {

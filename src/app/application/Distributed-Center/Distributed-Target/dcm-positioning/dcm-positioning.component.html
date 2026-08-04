@@ -13,9 +13,7 @@
       {{ formatRowLabel(row.rowIndex) }}
     </div>
     <div class="absolute top-0 bottom-0 left-[90px] w-px bg-[#75798F] dark:bg-gray-600"></div>
-    <div class="flex-1 font-normal text-[16px] text-[#4F6396] dark:text-[#4F6396] pl-9">
-      --{{ row.norCount === 0 ? '0' : row.norCount }} Positions Available--
-    </div>
+<div class="flex-1 font-normal text-[16px] text-[#4F6396] dark:text-[#4F6396] pl-9"> --{{ row.norCount === 0 ? '0' : row.norCount }} {{ row.norCount === 1 ? 'Position Available' : 'Positions Available' }}-- </div>
     <button
       class="rounded-lg px-7 py-1 text-[18px] transition-colors font-medium"
       [ngClass]="row.norCount > 0

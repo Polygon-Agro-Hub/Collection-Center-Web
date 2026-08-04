@@ -131,4 +131,19 @@ assignShortage(id: number | string, data: { comCenId: number; qty: number; ceill
       { headers },
     );
   }
+
+  getAllShortageAssignedDetails(date?: string): Observable<any> {
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${this.token}`,
+    'Content-Type': 'application/json',
+  });
+
+  let url = `${this.apiUrl}/get-all-shortage-details`;
+
+  if (date) {
+    url += `?date=${date}`;
+  }
+
+  return this.http.get<any>(url, { headers });
+}
 }

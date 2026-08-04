@@ -5,21 +5,29 @@ import { TokenServiceService } from '../Token/token-service.service';
 import { environment } from '../../environments/environment';
 
 @Injectable({
-  providedIn: 'root'
+  providedIn: 'root',
 })
 export class DistributionProcurementService {
 
   private apiUrl = `${environment.API_BASE_URL}/distribution-procurements`;
   private token!: string | null;
 
-  constructor(private http: HttpClient, private tokenSrv: TokenServiceService) {
-    this.token = this.tokenSrv.getToken()
+  constructor(
+    private http: HttpClient,
+    private tokenSrv: TokenServiceService,
+  ) {
+    this.token = this.tokenSrv.getToken();
   }
 
-
-  getDistributionCenterDetails(page: number = 1, limit: number = 10, province: string = '', district: string = '', search: string = ''): Observable<any> {
+  getDistributionCenterDetails(
+    page: number = 1,
+    limit: number = 10,
+    province: string = '',
+    district: string = '',
+    search: string = '',
+  ): Observable<any> {
     const headers = new HttpHeaders({
-      Authorization: `Bearer ${this.token}`
+      Authorization: `Bearer ${this.token}`,
     });
 
     let url = `${this.apiUrl}/get-all-distribution-centers?page=${page}&limit=${limit}`;
@@ -82,4 +90,45 @@ assignShortage(id: number | string, data: { comCenId: number; qty: number; ceill
 
   return this.http.post<any>(url, data, { headers });
 }
+
+  getShortageToFinalizeList(): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    let url = `${this.apiUrl}/shortage/to-finalize`;
+
+    return this.http.get<any>(url, { headers });
+  }
+
+  getShortageFinalizedList(): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    let url = `${this.apiUrl}/shortage/finalized`;
+
+    return this.http.get<any>(url, { headers });
+  }
+
+  finalizeShortageAssigned(
+    shortageAssignedId: number,
+    comCenId: number,
+    ceilingPercent: number,
+  ): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    let url = `${this.apiUrl}/shortage/finalize`;
+
+    return this.http.put<any>(
+      url,
+      { shortageAssignedId, comCenId, ceilingPercent },
+      { headers },
+    );
+  }
 }

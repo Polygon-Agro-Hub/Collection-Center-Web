@@ -345,6 +345,17 @@ export class ProcurementsService {
     return this.http.get(url, { headers, responseType: 'blob' });
   }
 
+  getShortageDetails(): Observable<any> {
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${this.token}`,
+    'Content-Type': 'application/json',
+  });
+
+  const url = `${this.apiUrl}/shortage-details`;
+
+  return this.http.get<any>(url, { headers });
+}
+
 }
 
 

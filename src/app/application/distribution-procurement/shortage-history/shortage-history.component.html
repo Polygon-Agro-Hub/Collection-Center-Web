@@ -33,25 +33,11 @@
           Filter By
         </p>
         <div class="flex items-center">
-          <p-calendar
-            [(ngModel)]="selectedDate"
-            (onSelect)="onDateChange($event)"
-            (onClear)="clearDate()"
-            [showIcon]="true"
-            [showButtonBar]="false"
-            dateFormat="dd/mm/yy"
-            placeholder="Select Date"
-            [readonlyInput]="true"
-            [showClear]="true"
-            [maxDate]="maxSelectableDate"
-            [style]="{ width: '12rem', height: '2rem' }"
-            inputStyleClass="p-2 border cursor-pointer rounded-xl bg-[#FFFFFF] dark:bg-[#272F45]"
-            panelStyleClass="custom-calendar-panel"
-          >
-            <ng-template pTemplate="clearicon">
-              <i class="pi pi-times"></i>
-            </ng-template>
-          </p-calendar>
+          <app-custom-datepicker
+  [selectedDate]="selectedDate"
+  (dateChange)="onDateChange($event)"
+  triggerClass="w-full h-11 border-[1.8px] border-[#828282] rounded-xl flex items-center px-3 py-2 cursor-pointer dark:bg-[#292929]"
+></app-custom-datepicker>
         </div>
       </div>
     </div>

@@ -1,15 +1,15 @@
 import { CommonModule, Location } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
-import { CalendarModule } from 'primeng/calendar';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
-import { DistributionProcurementService } from '../../../services/disribution-procuement-service/distribution-procurement.service'; // adjust path/name as needed
+import { DistributionProcurementService } from '../../../services/disribution-procuement-service/distribution-procurement.service';
+import { CustomDatepickerComponent } from '../../../components/custom-datepicker/custom-datepicker.component';
 
 interface ShortageItem {
   id: number;
-   shortageId: number;
-   assignedQty: number;
+  shortageId: number;
+  assignedQty: number;
   itemName: string;
   imageUrl: string;
   shortageQty: number;
@@ -26,7 +26,12 @@ interface ShortageItem {
 @Component({
   selector: 'app-shortage-history',
   standalone: true,
-  imports: [CommonModule, CalendarModule, FormsModule, LoadingSpinnerComponent],
+  imports: [
+    CommonModule, 
+    FormsModule, 
+    LoadingSpinnerComponent,
+    CustomDatepickerComponent
+  ],
   templateUrl: './shortage-history.component.html',
   styleUrl: './shortage-history.component.css'
 })
@@ -38,8 +43,8 @@ export class ShortageHistoryComponent implements OnInit {
   notAssignedItems: ShortageItem[] = [];
   assignedItems: ShortageItem[] = [];
 
-  selectedDate: Date | null = new Date();
-  maxSelectableDate!: Date;
+  selectedDate: string = '';
+  maxSelectableDate: string = '';
 
   // Fallback images for known items — update the paths to match your assets folder
   private readonly itemImageMap: { [key: string]: string } = {
@@ -56,26 +61,37 @@ export class ShortageHistoryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
+    // Set yesterday's date in YYYY-MM-DD format
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
-    yesterday.setHours(0, 0, 0, 0);
+    this.selectedDate = this.formatDateToYYYYMMDD(yesterday);
 
+    // Set max date (yesterday) in YYYY-MM-DD format
     const maxDate = new Date();
     maxDate.setDate(maxDate.getDate() - 1);
-    maxDate.setHours(23, 59, 59, 999);
-    this.maxSelectableDate = maxDate;
-
-    this.selectedDate = yesterday;
+    this.maxSelectableDate = this.formatDateToYYYYMMDD(maxDate);
 
     this.loadShortageHistory();
   }
 
+  /**
+   * Helper method to format Date to YYYY-MM-DD
+   */
+  private formatDateToYYYYMMDD(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
+  /**
+   * Load shortage history for the selected date
+   */
   loadShortageHistory(): void {
     this.isLoading = true;
 
-    const dateParam = this.selectedDate
-      ? this.formatDateForApi(this.selectedDate)
-      : undefined;
+    // Use the selectedDate directly since it's already in YYYY-MM-DD format
+    const dateParam = this.selectedDate || undefined;
 
     this.procurementService.getAllShortageAssignedDetails(dateParam).subscribe({
       next: (response: any[]) => {
@@ -105,91 +121,137 @@ export class ShortageHistoryComponent implements OnInit {
     const centreParts = [row.regCode, row.centerName].filter(Boolean);
 
     return {
-    id: isAssigned ? row.id : row.shortageId,
-    shortageId: row.shortageId,
-    assignedQty: Number(row.assignedQty) || 0,
-    itemName: row.displayName || '',
-    imageUrl: row.image || this.getItemImage(row.displayName),
-    shortageQty: Number(row.shortageQty) || 0, // backend already returns the REMAINING qty
-    unit: row.unit || 'kg',
-    marketPricePerKg: row.buyPrice,
-    isAssigned,
-    assignedCentre: isAssigned ? centreParts.join(' ') : undefined,
-    ceilingPercentage: isAssigned ? row.ceilling : undefined,
-    firstAssignedBy: isAssigned ? row.assignedByName : undefined,
-    finalizedBy: isAssigned ? row.finalizedByName : undefined,
-    createdAt: row.shortageCreatedAt,
-  };
+      id: isAssigned ? row.id : row.shortageId,
+      shortageId: row.shortageId,
+      assignedQty: Number(row.assignedQty) || 0,
+      itemName: row.displayName || '',
+      imageUrl: row.image || this.getItemImage(row.displayName),
+      shortageQty: Number(row.shortageQty) || 0, // backend already returns the REMAINING qty
+      unit: row.unit || 'kg',
+      marketPricePerKg: row.buyPrice,
+      isAssigned,
+      assignedCentre: isAssigned ? centreParts.join(' ') : undefined,
+      ceilingPercentage: isAssigned ? row.ceilling : undefined,
+      firstAssignedBy: isAssigned ? row.assignedByName : undefined,
+      finalizedBy: isAssigned ? row.finalizedByName : undefined,
+      createdAt: row.shortageCreatedAt,
+    };
   }
 
+  /**
+   * Split items into assigned and not-assigned lists
+   */
   private splitByAssignment(): void {
-  // Assigned table: unchanged — every real assignment record still shows here.
-  this.assignedItems = this.shortageItems.filter((item) => item.isAssigned);
+    // Assigned table: unchanged — every real assignment record still shows here.
+    this.assignedItems = this.shortageItems.filter((item) => item.isAssigned);
 
-  // Not-assigned table: one entry per shortage that STILL has qty left
-  // to assign, even if it already has partial assignment(s). A shortage
-  // with multiple assignments produces multiple rows in shortageItems,
-  // so dedupe by shortageId.
-  const seen = new Set<number>();
-  this.notAssignedItems = [];
+    // Not-assigned table: one entry per shortage that STILL has qty left
+    // to assign, even if it already has partial assignment(s). A shortage
+    // with multiple assignments produces multiple rows in shortageItems,
+    // so dedupe by shortageId.
+    const seen = new Set<number>();
+    this.notAssignedItems = [];
 
-  for (const item of this.shortageItems) {
-    if (item.shortageQty <= 0) continue; // fully covered — nothing outstanding
-    if (seen.has(item.shortageId)) continue;
-    seen.add(item.shortageId);
+    for (const item of this.shortageItems) {
+      if (item.shortageQty <= 0) continue; // fully covered — nothing outstanding
+      if (seen.has(item.shortageId)) continue;
+      seen.add(item.shortageId);
 
-    this.notAssignedItems.push({
-      ...item,
-      id: item.shortageId,
-      isAssigned: false,
-      assignedCentre: undefined,
-      ceilingPercentage: undefined,
-      firstAssignedBy: undefined,
-      finalizedBy: undefined,
-    });
+      this.notAssignedItems.push({
+        ...item,
+        id: item.shortageId,
+        isAssigned: false,
+        assignedCentre: undefined,
+        ceilingPercentage: undefined,
+        firstAssignedBy: undefined,
+        finalizedBy: undefined,
+      });
+    }
   }
-}
 
-  onDateChange(event: any): void {
-    this.selectedDate = event;
+  /**
+   * Handle date change from the custom datepicker
+   */
+  onDateChange(newDate: string | Date | null): void {
+    if (!newDate) {
+      // If null, set to yesterday's date
+      const yesterday = new Date();
+      yesterday.setDate(yesterday.getDate() - 1);
+      this.selectedDate = this.formatDateToYYYYMMDD(yesterday);
+    } 
+    else if (newDate instanceof Date) {
+      // If it's a Date object, format it
+      this.selectedDate = this.formatDateToYYYYMMDD(newDate);
+    } 
+    else if (typeof newDate === 'string') {
+      // If it's already a string, check if it's in YYYY-MM-DD format
+      // If the custom datepicker returns a Date object as string, parse it
+      const parsedDate = new Date(newDate);
+      if (!isNaN(parsedDate.getTime())) {
+        this.selectedDate = this.formatDateToYYYYMMDD(parsedDate);
+      } else {
+        // If invalid, use yesterday
+        const yesterday = new Date();
+        yesterday.setDate(yesterday.getDate() - 1);
+        this.selectedDate = this.formatDateToYYYYMMDD(yesterday);
+      }
+    }
+    
     this.loadShortageHistory();
   }
 
+  /**
+   * Clear the selected date and load data
+   */
   clearDate(): void {
-    this.selectedDate = null;
+    // Set to yesterday's date instead of null
+    const yesterday = new Date();
+    yesterday.setDate(yesterday.getDate() - 1);
+    this.selectedDate = this.formatDateToYYYYMMDD(yesterday);
     this.loadShortageHistory();
   }
 
+  /**
+   * Get image URL for an item based on its name
+   */
   getItemImage(itemName: string): string {
     const key = (itemName || '').trim().toLowerCase();
     return this.itemImageMap[key] || 'assets/images/items/default-item.png';
   }
 
+  /**
+   * Format currency amount
+   */
   formatCurrency(amount: number): string {
     return new Intl.NumberFormat('en-LK', {
       minimumFractionDigits: 2,
     }).format(amount || 0);
   }
 
+  /**
+   * Get total records count as padded string
+   */
   getTotalRecords(): string {
     return this.shortageItems.length.toString().padStart(2, '0');
   }
 
+  /**
+   * Get not assigned count as padded string
+   */
   getNotAssignedCount(): string {
     return this.notAssignedItems.length.toString().padStart(2, '0');
   }
 
+  /**
+   * Get assigned count as padded string
+   */
   getAssignedCount(): string {
     return this.assignedItems.length.toString().padStart(2, '0');
   }
 
-  private formatDateForApi(date: Date): string {
-    const year = date.getFullYear();
-    const month = String(date.getMonth() + 1).padStart(2, '0');
-    const day = String(date.getDate()).padStart(2, '0');
-    return `${year}-${month}-${day}`;
-  }
-
+  /**
+   * Navigate back to previous page
+   */
   goBack(): void {
     this.location.back();
   }

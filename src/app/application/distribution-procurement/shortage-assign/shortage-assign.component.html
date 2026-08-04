@@ -147,31 +147,40 @@
   </div>
 
   <!-- ===================== ASSIGN CONFIRMATION MODAL ===================== -->
-  <div *ngIf="showConfirmModal"
-    class="fixed inset-0 bg-black/50 flex items-center justify-center z-50 p-4 min-h-[80vh]">
-    <div class="bg-white dark:bg-tileBlack rounded-3xl w-full max-w-lg p-10 text-center">
+  <div *ngIf="showConfirmModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+  <div class="bg-white dark:bg-[#1E263B] rounded-2xl shadow-2xl w-[480px] max-w-[90vw] p-8 text-center">
 
-      <h2 class="text-2xl font-bold text-textLight dark:text-textDark mb-6">
-        Assign Confirmation
-      </h2>
-
-      <p class="text-lg text-textLight dark:text-textDark mb-8 leading-relaxed">
-        Are you sure you want to assign {{ formatNumber(assignQty) }} {{ selectedItem?.unit }} of {{ selectedItem?.name
-        }}
-        to {{ selectedCentre?.code }} ({{ selectedCentre?.name }})?
-      </p>
-
-      <div class="flex items-center justify-center gap-4">
-        <button (click)="cancelAssign()"
-          class="bg-[#6B7280] hover:bg-[#5b6472] text-white font-semibold text-lg px-8 py-4 rounded-xl transition-colors">
-          No, Go Back
-        </button>
-        <button (click)="confirmAssign()"
-          class="bg-[#3980C0] hover:bg-[#316ba8] text-white font-semibold text-lg px-8 py-4 rounded-xl transition-colors">
-          Yes, Assign
-        </button>
+    <!-- Warning Icon -->
+    <div class="flex justify-center mb-5">
+      <div class="w-12 h-12 rounded-xl bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+        <i class="fa-solid fa-triangle-exclamation text-gray-500 dark:text-gray-300 text-xl"></i>
       </div>
+    </div>
 
+    <p class="text-[#4B5563] dark:text-textDark text-base leading-relaxed mb-7">
+      Are you sure you want to assign {{ formatNumber(assignQty) }} {{ selectedItem?.unit }} of {{ selectedItem?.name }}
+      to {{ selectedCentre?.code }} ({{ selectedCentre?.name }})?
+    </p>
+
+    <div class="flex justify-center gap-4">
+      <button
+        class="bg-[#F6F7F9] hover:bg-[#e5e7eb] text-[#6B7D8C] font-semibold py-2 px-10 rounded-xl shadow-md border border-[#95A1AC] transition-colors leading-tight"
+        [disabled]="isLoading" (click)="cancelAssign()">
+        No<br>
+        <span class="font-normal text-sm">Go Back</span>
+      </button>
+      <button
+        class="bg-[#415CFF] hover:bg-[#3549e0] text-white font-semibold py-2 px-10 rounded-xl shadow-md transition-colors disabled:opacity-60 leading-tight"
+        [disabled]="isLoading" (click)="confirmAssign()">
+        <ng-container *ngIf="!isLoading">
+          Yes<br>
+          <span class="font-normal text-sm">Assign</span>
+        </ng-container>
+        <ng-container *ngIf="isLoading">
+          Assigning...
+        </ng-container>
+      </button>
     </div>
   </div>
+</div>
 </div>

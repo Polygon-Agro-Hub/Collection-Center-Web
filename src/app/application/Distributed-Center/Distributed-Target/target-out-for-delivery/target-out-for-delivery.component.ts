@@ -8,12 +8,13 @@ import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/
 import { ComplaintsService } from '../../../../services/Complaints-Service/complaints.service';
 import Swal from 'sweetalert2';
 import { ToastAlertService } from '../../../../services/toast-alert/toast-alert.service';
+import { CustomDatepickerComponent } from "../../../../components/custom-datepicker/custom-datepicker.component";
 
 
 @Component({
   selector: 'app-target-out-for-delivery',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent, CustomDatepickerComponent],
   templateUrl: './target-out-for-delivery.component.html',
   styleUrl: './target-out-for-delivery.component.css'
 })
@@ -21,6 +22,13 @@ export class TargetOutForDeliveryComponent implements OnInit {
   ordersArr!: orders[];
   searchText: string = '';
   selectStatus: string = '';
+  selectType: string = '';
+  selectTimeSlot: string = '';
+  selectRow!: number | null;
+    selectedDate: string | Date | null = null;
+
+    rowDropdownOptions: number[] = [];
+  rowIndexes: number[] = [];
 
   page: number = 1;
   totalItems: number = 0;
@@ -32,6 +40,11 @@ export class TargetOutForDeliveryComponent implements OnInit {
 
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Late', 'On Time'];
+  isTypeDropdownOpen = false;
+  isTimeSlotDropdownOpen = false;
+  isRowDropdownOpen = false;
+  typeDropdownOptions = ['Pickup', 'Delivery'];
+  timeSlotDropdownOptions = ['08:00 AM - 12:00 PM', '12:00 PM - 04:00 PM', '04:00 PM - 09:00 PM'];
 
   isDownloading = false;
 
@@ -43,6 +56,37 @@ export class TargetOutForDeliveryComponent implements OnInit {
     this.selectStatus = option;
     this.isStatusDropdownOpen = false;
     this.filterStatus();
+  }
+
+  toggleTypeDropdown() {
+    this.isTypeDropdownOpen = !this.isTypeDropdownOpen;
+  }
+
+  selectTypeOption(option: string) {
+    this.selectType = option;
+    this.isTypeDropdownOpen = false;
+    this.filterType();
+  }
+
+
+  toggleTimeSlotDropdown() {
+    this.isTimeSlotDropdownOpen = !this.isTimeSlotDropdownOpen;
+  }
+
+  selectTimeSlotOption(option: string) {
+    this.selectTimeSlot = option;
+    this.isTimeSlotDropdownOpen = false;
+    this.filterTimeSlot();
+  }
+
+  toggleRowDropdown() {
+    this.isRowDropdownOpen = !this.isRowDropdownOpen;
+  }
+
+  selectRowOption(option: number) {
+    this.selectRow = option;
+    this.isRowDropdownOpen = false;
+    this.filterRow();
   }
 
   constructor(
@@ -57,12 +101,15 @@ export class TargetOutForDeliveryComponent implements OnInit {
     this.fetchOutForDeliveryOrders();
   }
 
-  fetchOutForDeliveryOrders(status: string = this.selectStatus, search: string = this.searchText) {
+  fetchOutForDeliveryOrders(status: string = this.selectStatus, search: string = this.searchText, type: string = this.selectType, timeSlot: string = this.selectTimeSlot, row: number | null = this.selectRow, selectDate: string | Date | null = this.selectedDate) {
     this.isLoading = true;
-    this.DistributionSrv.getOutForDeliveryOrders(status, search).subscribe(
+    this.DistributionSrv.getOutForDeliveryOrders(status, search, type, timeSlot, row, selectDate).subscribe(
       (res) => {
         this.ordersArr = res.items
         console.log('ordersArr', this.ordersArr)
+        this.rowIndexes = res.rowIndexes;
+        this.rowDropdownOptions = this.rowIndexes
+        console.log('rowIndexes', this.rowIndexes)
         this.centerName = res.centerName;
         this.totalItems = res.items.length | 0;
         if (res.items.length === 0) {
@@ -99,7 +146,60 @@ export class TargetOutForDeliveryComponent implements OnInit {
     this.fetchOutForDeliveryOrders();
   }
 
-  onDateChange() {
+  filterType() {
+    this.fetchOutForDeliveryOrders();
+  }
+
+  cancelType(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
+    this.selectType = '';
+    this.fetchOutForDeliveryOrders();
+  }
+
+  filterTimeSlot() {
+    this.fetchOutForDeliveryOrders();
+  }
+
+  cancelTimeSlot(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
+    this.selectTimeSlot = '';
+    this.fetchOutForDeliveryOrders();
+  }
+
+
+  filterRow() {
+    this.fetchOutForDeliveryOrders();
+  }
+
+  cancelRow(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
+    this.selectRow = null;
+    this.fetchOutForDeliveryOrders();
+  }
+
+  onDateChange(newDate: string | Date | null) {
+    let dateString: string;
+  
+    if (!newDate) {
+      
+      dateString = '';
+    } 
+    else if (newDate instanceof Date) {
+      
+      dateString = newDate.toISOString().split('T')[0];
+    } 
+    else {
+      
+      dateString = newDate;
+    }
+  
+    this.selectedDate = dateString;
     this.fetchOutForDeliveryOrders();
   }
 
@@ -283,5 +383,7 @@ class orders {
   deliveryPeriod!: string
   scheduleDateStatus!: string
   outDlvrDate!: Date;
+  rowIndex!: number;
+  delivaryMethod!: string;
 }
 

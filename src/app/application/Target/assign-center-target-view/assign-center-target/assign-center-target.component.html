@@ -82,13 +82,13 @@
                             </button>
                             <button *ngIf="!item.isNew && item.editingA && isDateValid"
                                 class="px-3 py-2 text-white rounded-lg" [ngClass]="{
-                                    'bg-[#415CFF]': item.preValueA !== item.targetA,
-                                    'bg-[#6B7D8C]': item.preValueA === item.targetA || item.targetA < 0 || item.targetA < item.preValueA
+                                    'bg-[#415CFF]': item.preValueA !== item.targetA && !isQtyExceeded(item),
+                                    'bg-[#6B7D8C]': item.preValueA === item.targetA || item.targetA < 0 || item.targetA < item.preValueA || isQtyExceeded(item)
                                   }"
-                                (click)="item.preValueA !== item.targetA && item.targetA >= 0 && saveGrade('A', item, item.targetA, item.idA)">
+                                (click)="item.preValueA !== item.targetA && item.targetA >= 0 && !isQtyExceeded(item) && saveGrade('A', item, item.targetA, item.idA)">
                                 Save
                             </button>
-                            <div *ngIf="item.isNew && isQtyExceeded(item) && item.lastEditedGrade === 'A'" class="flex items-center gap-1 mt-1 text-xs text-red-600 dark:text-red-400">
+                            <div *ngIf="(item.isNew || item.editingA) && isQtyExceeded(item) && item.lastEditedGrade === 'A'" class="flex items-center gap-1 mt-1 text-xs text-red-600 dark:text-red-400">
                                 <i class="fa-solid fa-triangle-exclamation text-[#FF0000]"></i>
                                 <span class="text-[#FF0000] font-[400] ">You can only set target up to {{ maxQty(item) }} {{ item.unitType }}</span>
                             </div>
@@ -105,13 +105,13 @@
                                 <i class="fa-solid fa-pen-to-square text-[#415CFF] text-xl"></i>
                             </button>
                             <button *ngIf="!item.isNew && item.editingB && isDateValid" [ngClass]="{
-                                'bg-[#415CFF]': item.preValueB !== item.targetB,
-                                'bg-[#6B7D8C]': item.preValueB === item.targetB || item.targetB < 0 || item.targetB < item.preValueB
+                                'bg-[#415CFF]': item.preValueB !== item.targetB && !isQtyExceeded(item),
+                                'bg-[#6B7D8C]': item.preValueB === item.targetB || item.targetB < 0 || item.targetB < item.preValueB || isQtyExceeded(item)
                               }" class="px-3 py-2 text-white rounded-lg"
-                                (click)="item.preValueB !== item.targetB && item.targetB >= 0 && saveGrade('B', item, item.targetB, item.idB)">
+                                (click)="item.preValueB !== item.targetB && item.targetB >= 0 && !isQtyExceeded(item) && saveGrade('B', item, item.targetB, item.idB)">
                                 Save
                             </button>
-                            <div *ngIf="item.isNew && isQtyExceeded(item) && item.lastEditedGrade === 'B'" class="flex items-center gap-1 mt-1 text-xs text-red-600 dark:text-red-400">
+                            <div *ngIf="(item.isNew || item.editingB) && isQtyExceeded(item) && item.lastEditedGrade === 'B'" class="flex items-center gap-1 mt-1 text-xs text-red-600 dark:text-red-400">
                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                 <span>You can only set target up to {{ maxQty(item) }} {{ item.unitType }}</span>
                             </div>
@@ -128,13 +128,13 @@
                                 <i class="fa-solid fa-pen-to-square text-[#415CFF] text-xl"></i>
                             </button>
                             <button *ngIf="!item.isNew && item.editingC && isDateValid" [ngClass]="{
-                                'bg-[#415CFF]': item.preValueC !== item.targetC,
-                                'bg-[#6B7D8C]': (item.preValueC === item.targetC) || item.targetC < 0 || item.targetC < item.preValueC
+                                'bg-[#415CFF]': item.preValueC !== item.targetC && !isQtyExceeded(item),
+                                'bg-[#6B7D8C]': (item.preValueC === item.targetC) || item.targetC < 0 || item.targetC < item.preValueC || isQtyExceeded(item)
                               }" class="px-3 py-2 text-white rounded-lg"
-                                (click)="item.preValueC !== item.targetC && item.targetC >= 0 && saveGrade('C', item, item.targetC, item.idC)">
+                                (click)="item.preValueC !== item.targetC && item.targetC >= 0 && !isQtyExceeded(item) && saveGrade('C', item, item.targetC, item.idC)">
                                 Save
                             </button>
-                            <div *ngIf="item.isNew && isQtyExceeded(item) && item.lastEditedGrade === 'C'" class="flex items-center gap-1 mt-1 text-xs text-red-600 dark:text-red-400">
+                            <div *ngIf="(item.isNew || item.editingC) && isQtyExceeded(item) && item.lastEditedGrade === 'C'" class="flex items-center gap-1 mt-1 text-xs text-red-600 dark:text-red-400">
                                 <i class="fa-solid fa-triangle-exclamation"></i>
                                 <span>You can only set target up to {{ maxQty(item) }} {{ item.unitType }}</span>
                             </div>

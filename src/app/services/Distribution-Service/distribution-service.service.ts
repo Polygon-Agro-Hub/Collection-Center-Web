@@ -177,7 +177,7 @@ export class DistributionServiceService {
     return this.http.post(url, requestObj, { headers });
   }
 
-  getAllAssignOrders(status: string = '', searchText: string = '', selectDate: string | Date | null = '', type: string = '', timeSlot: string = '',): Observable<any> {
+  getAllAssignOrders(status: string = '', searchText: string = '', selectDate: string | Date | null = '', type: string = '', timeSlot: string = '', row: number | null): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
@@ -203,6 +203,10 @@ export class DistributionServiceService {
 
     if (timeSlot) {
       url += `&timeSlot=${timeSlot}`
+    }
+
+    if (row) {
+      url += `&row=${row}`
     }
 
     return this.http.get<any>(url, { headers });
@@ -258,7 +262,7 @@ export class DistributionServiceService {
     return this.http.get<any>(url, { headers });
   }
 
-  getOutForDeliveryOrders(status: string = '', searchText: string = ''): Observable<any> {
+  getOutForDeliveryOrders(status: string = '', searchText: string = '', type: string = '', timeSlot: string = '', row: number | null, selectDate: string | Date | null = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
@@ -272,6 +276,23 @@ export class DistributionServiceService {
     if (searchText) {
       url += `&searchText=${searchText}`
     }
+
+    if (type) {
+      url += `&type=${type}`
+    }
+
+    if (timeSlot) {
+      url += `&timeSlot=${timeSlot}`
+    }
+
+    if (row) {
+      url += `&row=${row}`
+    }
+
+        if (selectDate) {
+      url += `&date=${selectDate}`
+    }
+
 
     return this.http.get<any>(url, { headers });
   }

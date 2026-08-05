@@ -66,7 +66,7 @@
                     <th class="px-6 py-3 whitespace-nowrap text-[#4B5563] text-left font-medium">Assignee</th>
                     <th class="px-6 py-3 whitespace-nowrap text-[#4B5563] text-center font-medium">Purchased (kg)</th>
                     <th class="px-6 py-3 whitespace-nowrap text-[#4B5563] text-center font-medium">Purchase Price Per kg (Rs.)</th>
-                    <th class="px-6 py-3 whitespace-nowrap text-[#4B5563] text-center font-medium">Purchase Time</th>
+                    <th class="px-6 py-3 whitespace-nowrap text-[#4B5563] text-left font-medium">Purchase Time</th>
                 </tr>
             </thead>
             <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F] cursor-default">
@@ -96,7 +96,7 @@
 </td>
                 <td class="px-6 py-4 whitespace-nowrap text-[#415CFF] text-left font-600 dark:text-gray-300">{{item.prchPrice ? (item.prchPrice | number:'1.2-2') :
                     "----"}}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-[#000000] text-center font-500 dark:text-gray-300">{{item.createdAt | date:
+                <td class="px-6 py-4 whitespace-nowrap text-[#000000] text-left font-500 dark:text-gray-300">{{item.createdAt | date:
                     'hh:mm a on yyyy/MM/dd'}}</td>
                 </tr>
             </tbody>

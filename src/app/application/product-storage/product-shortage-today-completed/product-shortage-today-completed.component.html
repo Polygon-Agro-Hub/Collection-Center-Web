@@ -63,22 +63,24 @@
 <td class="px-6 py-4 whitespace-nowrap text-center">
   <div class="inline-flex items-center justify-center rounded-md bg-[#FEF7EF] px-3 py-1">
     <span class="text-[#9D6C00] font-semibold">
-      {{ item.qty }}
+      {{ item.qty | number:'1.2-2' }}
     </span>
   </div>
 </td>
+
             <td class="px-6 py-4  whitespace-nowrap text-[#9D6C00] text-left font-600 dark:text-[#9D6C00]">{{item.price}}</td>
                 <td class="px-6 py-4 text-[#000000] text-left font-500 dark:text-gray-300">{{item.empId || "----"}}
                 </td>
 <td class="px-6 py-4 whitespace-nowrap text-center">
   <div class="inline-flex items-center justify-center rounded-md bg-[#EDF5FC] px-3 py-1 min-w-[48px]">
     <span class="text-[#415CFF] font-semibold">
-      {{ item.prchQty || '----' }}
+      {{ item.prchQty ? (item.prchQty | number:'1.2-2') : '----' }}
     </span>
   </div>
 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-[#415CFF] text-left font-600 dark:text-gray-300">{{item.prchPrice ||
-                    "----"}}</td>
+                <td class="px-6 py-4 whitespace-nowrap text-[#415CFF] text-left font-600 dark:text-gray-300">
+  {{ item.prchPrice ? (item.prchPrice | number:'1.2-2') : "----" }}
+</td>
                 <td class="px-6 py-4 whitespace-nowrap text-[#000000] text-left font-500 dark:text-gray-300">{{item.createdAt | date:
                     'hh:mm a on yyyy/MM/dd'}}</td>
                 </tr>

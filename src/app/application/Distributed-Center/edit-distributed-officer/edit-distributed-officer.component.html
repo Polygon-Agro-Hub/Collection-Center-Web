@@ -698,46 +698,48 @@
                 </div>
 
                 <div class="pb-6">
-                    <label for="accNumber"
-                        class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Account
-                        Number *</label>
-                    <input type="text" inputmode="numeric" id="accNumber" name="accNumber" [(ngModel)]="personalData.accNumber"
-                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                        #accNumberInput="ngModel" required pattern="^[a-zA-Z0-9\s]+$"
-                        (input)="onTrimInputAccountNumber($event, personalData, 'accNumber')"/>
-                    <div *ngIf="accNumberInput.touched && !personalData.accNumber" class="text-red-500 text-sm mt-1">
-                        <div>Account Number is required</div>
-                    </div>
-                    <div
-                      *ngIf="accNumberInput.touched && personalData.accNumber && accNumberInput.errors?.['pattern']"
-                      class="text-red-500 text-sm mt-1"
-                    >
-                      <div>Account Number cannot contain special characters</div>
-                    </div>
-                </div>
+    <label for="accNumber"
+        class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Account
+        Number *</label>
+    <input type="text" inputmode="numeric" id="accNumber" name="accNumber" [(ngModel)]="personalData.accNumber"
+        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+        #accNumberInput="ngModel" required pattern="^[0-9]+$"
+        (keydown)="blockNonNumbers($event)"
+        (input)="onTrimInputAccountNumber($event, personalData, 'accNumber')"/>
+    <div *ngIf="accNumberInput.touched && !personalData.accNumber" class="text-red-500 text-sm mt-1">
+        <div>Account Number is required</div>
+    </div>
+    <div
+      *ngIf="accNumberInput.touched && personalData.accNumber && accNumberInput.errors?.['pattern']"
+      class="text-red-500 text-sm mt-1"
+    >
+      <div>Account Number should only contain numbers</div>
+    </div>
+</div>
 
-                <div class="pb-6">
-                    <label for="conformAccNumber"
-                        class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Confirm Account
-                        Number *</label>
-                    <input type="text" inputmode="numeric" id="conformAccNumber" name="conformAccNumber" [(ngModel)]="personalData.conformAccNumber"
-                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-                        #confirmAccNumberInput="ngModel" required pattern="^[a-zA-Z0-9\s]+$"
-                        (input)="onTrimInputAccountNumber($event, personalData, 'conformAccNumber')" />
-                    <div *ngIf="confirmAccNumberInput.touched && !personalData.conformAccNumber" class="text-red-500 text-sm mt-1">
-                        <div>Confirm Account Number is required</div>
-                    </div>
-                    <div *ngIf="personalData.conformAccNumber && (personalData.accNumber !== personalData.conformAccNumber) && !confirmAccNumberInput.errors?.['pattern']"
-                        class="text-red-500 text-sm mt-1">
-                        <div>Confirm Account Number should be the same as Account Number.</div>
-                    </div>
-                    <div
-                      *ngIf="confirmAccNumberInput.touched && personalData.conformAccNumber && confirmAccNumberInput.errors?.['pattern']"
-                      class="text-red-500 text-sm mt-1"
-                    >
-                      <div>Account Number cannot contain special characters</div>
-                    </div>
-                </div>
+<div class="pb-6">
+    <label for="conformAccNumber"
+        class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Confirm Account
+        Number *</label>
+    <input type="text" inputmode="numeric" id="conformAccNumber" name="conformAccNumber" [(ngModel)]="personalData.conformAccNumber"
+        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-[#292929] dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+        #confirmAccNumberInput="ngModel" required pattern="^[0-9]+$"
+        (keydown)="blockNonNumbers($event)"
+        (input)="onTrimInputAccountNumber($event, personalData, 'conformAccNumber')" />
+    <div *ngIf="confirmAccNumberInput.touched && !personalData.conformAccNumber" class="text-red-500 text-sm mt-1">
+        <div>Confirm Account Number is required</div>
+    </div>
+    <div *ngIf="personalData.conformAccNumber && (personalData.accNumber !== personalData.conformAccNumber) && !confirmAccNumberInput.errors?.['pattern']"
+        class="text-red-500 text-sm mt-1">
+        <div>Confirm Account Number should be the same as Account Number.</div>
+    </div>
+    <div
+      *ngIf="confirmAccNumberInput.touched && personalData.conformAccNumber && confirmAccNumberInput.errors?.['pattern']"
+      class="text-red-500 text-sm mt-1"
+    >
+      <div>Confirm Account Number should only contain numbers</div>
+    </div>
+</div>
 
                 <div class="pb-6">
                     <label for="bankDropdown" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">

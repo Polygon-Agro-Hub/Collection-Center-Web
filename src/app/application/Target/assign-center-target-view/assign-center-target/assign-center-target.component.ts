@@ -26,8 +26,7 @@ export class AssignCenterTargetComponent implements OnInit {
   isFormValid: boolean = false;
   countCrops: number = 0;
   searchText: string = '';
-  selectDate!: string; 
-  isNew: boolean = true;
+  selectDate!: string;
   companyCenterId!: number;
   isLoading: boolean = true;
   isDateValid: boolean = true;
@@ -44,7 +43,7 @@ export class AssignCenterTargetComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const today = new Date();
+    const today = new Date('2026-08-20');
     this.selectDate = today.toISOString().split('T')[0];
     this.selectDatePickerDate = this.selectDate;
     this.fetchSavedCenterCrops()
@@ -66,12 +65,11 @@ export class AssignCenterTargetComponent implements OnInit {
     // this.validateSelectDate()
     this.TargetSrv.getSavedCenterCrops(this.centerDetails.centerId, this.selectDate, this.searchText).subscribe(
       (res) => {
-        this.assignCropsArr = res.result.data
-        this.countCrops = res.result.data.length
-        this.isNew = res.result.isNew
+        this.assignCropsArr = res.products
+        this.countCrops = res.products.length
         this.companyCenterId = res.companyCenterId
         this.isLoading = false;
-        this.hasData = res.result.data.length > 0 ? true : false;
+        this.hasData = res.products.length > 0 ? true : false;
         console.log('hasData', this.hasData)
 
       }
@@ -82,7 +80,8 @@ export class AssignCenterTargetComponent implements OnInit {
     this.isLoading = true;
     this.newTargetObj.companyCenterId = this.companyCenterId
     this.newTargetObj.date = this.selectDate
-    this.newTargetObj.crop = this.assignCropsArr
+    this.newTargetObj.crop = this.assignCropsArr.filter(crop => crop.isNew)
+    console.log('newTargetObj', this.newTargetObj)
 
 
     this.TargetSrv.addNewCenterTarget(this.newTargetObj).subscribe(
@@ -169,8 +168,55 @@ export class AssignCenterTargetComponent implements OnInit {
 
   validateForm() {
     this.isFormValid = this.assignCropsArr.some(crop =>
-      crop.targetA > 0 || crop.targetB > 0 || crop.targetC > 0
-    );
+      crop.isNew && (crop.targetA > 0 || crop.targetB > 0 || crop.targetC > 0)
+    ) && !this.assignCropsArr.some(crop => crop.isNew && this.isQtyExceeded(crop));
+  }
+
+  get hasNewItems(): boolean {
+    return this.assignCropsArr.some(crop => crop.isNew);
+  }
+
+  isQtyExceeded(item: AssignCrops): boolean {
+    const total = (item.targetA || 0) + (item.targetB || 0) + (item.targetC || 0);
+    return total > this.maxQty(item);
+  }
+
+  maxQty(item: AssignCrops): number {
+    return Math.round(item.qty * 1.02 * 100) / 100;
+  }
+
+  // selectDate is the default-fetched "must complete by" date; the notice's other
+  // two dates are always exactly one day before/after it.
+  get systemAppearDate(): string {
+    return this.formatDayMonth(this.offsetSelectDate(-1));
+  }
+
+  get mustCompleteDate(): string {
+    return this.formatDayMonth(this.offsetSelectDate(0));
+  }
+
+  get scheduledDeliveryDate(): string {
+    return this.formatDayMonth(this.offsetSelectDate(1));
+  }
+
+  private offsetSelectDate(offsetDays: number): Date {
+    const d = new Date(this.selectDate);
+    d.setDate(d.getDate() + offsetDays);
+    return d;
+  }
+
+  private formatDayMonth(d: Date): string {
+    const day = d.getDate();
+    const rem10 = day % 10;
+    const rem100 = day % 100;
+    let suffix = 'th';
+    if (rem100 < 11 || rem100 > 13) {
+      if (rem10 === 1) suffix = 'st';
+      else if (rem10 === 2) suffix = 'nd';
+      else if (rem10 === 3) suffix = 'rd';
+    }
+    const month = d.toLocaleString('en-US', { month: 'long' });
+    return `${day}${suffix} ${month}`;
   }
 
   pressEditIcon(item: AssignCrops, grade: string) {
@@ -180,7 +226,7 @@ export class AssignCenterTargetComponent implements OnInit {
   }
 
   checkNegativeValue(item: AssignCrops, grade: string) {
-    if (this.isNew && this.isDateValid) {
+    if (item.isNew && this.isDateValid) {
       if (item.targetA < 0 || item.targetB < 0 || item.targetC < 0) {
         if (grade === 'A') item.targetA = 0;
         if (grade === 'B') item.targetB = 0;
@@ -192,6 +238,7 @@ export class AssignCenterTargetComponent implements OnInit {
   }
 
   restrictDecimal(event: any, item: AssignCrops, grade: string) {
+    item.lastEditedGrade = grade;
     let value = event.target.value;
 
     if (value.includes('.')) {
@@ -219,6 +266,10 @@ class CenterDetails {
 class AssignCrops {
   cropNameEnglish!: string
   varietyNameEnglish!: string
+  isNew: boolean = true;
+  qty: number = 0;
+  unitType: string = '';
+  lastEditedGrade: string | null = null;
   targetA: number = 0.00
   targetB: number = 0.00
   targetC: number = 0.00
@@ -239,4 +290,3 @@ class NewTarget {
   crop!: AssignCrops[]
 
 }
-

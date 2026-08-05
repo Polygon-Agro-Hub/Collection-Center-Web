@@ -189,7 +189,7 @@ export class DchPackingLineComponent {
     this.DistributionSrv.createDCHCenterRow(this.centerId, nextRow).subscribe(
       (res) => {
 if (res.success) {
-    this.toastSrv.success(`Row addition successfull.`);
+    this.toastSrv.success(`Row addition successful.`);
 } else {
     this.toastSrv.error(`Row addition failed.`);
 }

@@ -20,6 +20,8 @@ export class TargetProgressTodoComponent implements OnInit {
   ordersArr!: orders[];
   searchText: string = '';
   selectStatus: string = '';
+  selectType: string = '';
+  selectTimeSlot: string = '';
 
   date:  string = '';
 
@@ -31,6 +33,10 @@ export class TargetProgressTodoComponent implements OnInit {
   isLoading:boolean = true;
 
   isStatusDropdownOpen = false;
+  isTypeDropdownOpen = false;
+  isTimeSlotDropdownOpen = false;
+  typeDropdownOptions = ['Pickup', 'Delivery'];
+  timeSlotDropdownOptions = ['08:00 AM - 12:00 PM', '12:00 PM - 04:00 PM', '04:00 PM - 09:00 PM'];
   statusDropdownOptions = ['Pending', 'Opened'];
 
   toggleStatusDropdown() {
@@ -41,6 +47,27 @@ export class TargetProgressTodoComponent implements OnInit {
     this.selectStatus = option;
     this.isStatusDropdownOpen = false;
     this.filterStatus();
+  }
+
+  toggleTypeDropdown() {
+    this.isTypeDropdownOpen = !this.isTypeDropdownOpen;
+  }
+
+  selectTypeOption(option: string) {
+    this.selectType = option;
+    this.isTypeDropdownOpen = false;
+    this.filterType();
+  }
+
+
+  toggleTimeSlotDropdown() {
+    this.isTimeSlotDropdownOpen = !this.isTimeSlotDropdownOpen;
+  }
+
+  selectTimeSlotOption(option: string) {
+    this.selectTimeSlot = option;
+    this.isTimeSlotDropdownOpen = false;
+    this.filterTimeSlot();
   }
 
   constructor(
@@ -56,47 +83,13 @@ export class TargetProgressTodoComponent implements OnInit {
     this.fetchToDoAssignOrders();
   }
 
-  fetchToDoAssignOrders(status: string = this.selectStatus, search: string = this.searchText, selectDate: string = this.date) {
+  fetchToDoAssignOrders(status: string = this.selectStatus, search: string = this.searchText, selectDate: string = this.date, type: string = this.selectType, timeSlot: string = this.selectTimeSlot) {
     this.isLoading = true;
-    this.DistributionSrv.getToDoAssignOrders(status, search, selectDate).subscribe(
+    this.DistributionSrv.getToDoAssignOrders(status, search, selectDate, type, timeSlot).subscribe(
       (res) => {
 
         this.totalItems = res.items.length;
-        this.ordersArr = res.items.map((item: any) => {
-          let status = '';
-          
-          const pkgStatus = item.packageStatus;
-          const addStatus = item.additionalItemsStatus;
-          
-          // Priority 1: If either is Pending, combinedStatus is Pending
-          if (pkgStatus === 'Pending' || addStatus === 'Pending') {
-            status = 'Pending';
-          }
-          // Priority 2: If either is Opened (and none are Pending), combinedStatus is Opened
-          else if (pkgStatus === 'Opened' || addStatus === 'Opened') {
-            status = 'Opened';
-          }
-          // Priority 3: If both are Completed, combinedStatus is Completed
-          else if (pkgStatus === 'Completed' && addStatus === 'Completed') {
-            status = 'Completed';
-          }
-          // Priority 4: If one is Completed and other is Unknown, use the non-Unknown status
-          else if (pkgStatus === 'Completed' && addStatus === 'Unknown') {
-            status = 'Completed';
-          }
-          else if (pkgStatus === 'Unknown' && addStatus === 'Completed') {
-            status = 'Completed';
-          }
-          // Default: Both are Unknown
-          else {
-            status = 'Unknown';
-          }
-        
-          return {
-            ...item,
-            combinedStatus: status
-          };
-        });
+        this.ordersArr = res.items
 
         if (res.items.length === 0) {
           this.hasData = false;
@@ -130,6 +123,30 @@ export class TargetProgressTodoComponent implements OnInit {
       event.stopPropagation(); // Prevent triggering the dropdown toggle
     }
     this.selectStatus = '';
+    this.fetchToDoAssignOrders();
+  }
+
+  filterType() {
+    this.fetchToDoAssignOrders();
+  }
+
+  cancelType(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
+    this.selectType = '';
+    this.fetchToDoAssignOrders();
+  }
+
+  filterTimeSlot() {
+    this.fetchToDoAssignOrders();
+  }
+
+  cancelTimeSlot(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
+    this.selectTimeSlot = '';
     this.fetchToDoAssignOrders();
   }
 
@@ -257,15 +274,10 @@ getDateColor(item: any): string {
 class orders {
   processOrderId!: number
   orderId!: number
+  rowIndex!: number
   invNo!: string
-  isTargetAssigned!: boolean
-  complainCategory!: string
   sheduleDate!: Date
   sheduleTime!: string
-  packagePackStatus!: string
-  status!: string
-  officerId!: number
-  firstNameEnglish!: string
-  lastNameEnglish!: string
+    delivaryMethod!: string;
   combinedStatus!: string
 }

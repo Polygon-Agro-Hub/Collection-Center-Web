@@ -177,7 +177,7 @@ export class DistributionServiceService {
     return this.http.post(url, requestObj, { headers });
   }
 
-  getAllAssignOrders(status: string = '', searchText: string = '', selectDate: string | Date | null = ''): Observable<any> {
+  getAllAssignOrders(status: string = '', searchText: string = '', selectDate: string | Date | null = '', type: string = '', timeSlot: string = '',): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
@@ -197,10 +197,18 @@ export class DistributionServiceService {
       url += `&date=${selectDate}`
     }
 
+    if (type) {
+      url += `&type=${type}`
+    }
+
+    if (timeSlot) {
+      url += `&timeSlot=${timeSlot}`
+    }
+
     return this.http.get<any>(url, { headers });
   }
 
-  getToDoAssignOrders(status: string = '', searchText: string = '', selectDate: string = ''): Observable<any> {
+  getToDoAssignOrders(status: string = '', searchText: string = '', selectDate: string = '', type: string = '', timeSlot: string = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
@@ -217,6 +225,14 @@ export class DistributionServiceService {
 
     if (selectDate) {
       url += `&date=${selectDate}`
+    }
+
+    if (type) {
+      url += `&type=${type}`
+    }
+
+    if (timeSlot) {
+      url += `&timeSlot=${timeSlot}`
     }
 
     return this.http.get<any>(url, { headers });

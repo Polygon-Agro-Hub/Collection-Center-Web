@@ -14,10 +14,6 @@
     <div class="flex flex-row items-center justify-between gap-4 mt-2">
         <div><p class="text-lg dark:text-white whitespace-nowrap">All ({{ totalItems < 10 ? ('0' + totalItems) : totalItems }})</p></div>
     <div class="flex flex-row items-center justify-end gap-5 ">
-        
-        <i class="fa-solid fa-list text-xl text-[#4A4A4A] dark:text-white"></i>
-
-        <p class=" text-[#4A4A4A] dark:text-white">Filter By</p>
 
         <div class="relative w-40 custom-status-dropdown-container">
             <!-- Hidden native select -->
@@ -202,11 +198,15 @@
             </div>
         </div>
 
-        <app-custom-datepicker
-        [placeholder]="'Delivery Date'"
+                <div class="w-40">
+            <app-custom-datepicker
+        [placeholder]="'Date'"
   [selectedDate]="selectedDate"
   (dateChange)="onDateChange($event)"
 ></app-custom-datepicker>
+        </div>
+
+        
           
        <div class="flex items-center rounded-full mr-5 px-4 py-2 w-96 sm:w-64 md:w-80 bg-[#F1F1F1] dark:bg-[#292929]">
             
@@ -252,7 +252,7 @@
                     <th class="px-6 py-3 text-left font-medium text-[#4B5563] dark:text-white">Order ID</th>
                     <th class="px-6 py-3 text-left font-medium text-[#4B5563] dark:text-white">Type</th>
                     <th class="px-6 py-3 text-left font-medium text-[#4B5563] dark:text-white">Assigned Row</th>
-                    <th class="px-6 py-3 text-center font-medium text-[#4B5563] dark:text-white">Delivery Time Slot</th>
+                    <th class="px-6 py-3 text-left font-medium text-[#4B5563] dark:text-white">Delivery Time Slot</th>
                     <th class="px-6 py-3 text-center font-medium text-[#4B5563] dark:text-white">Status</th>
 
                 </tr>
@@ -268,7 +268,7 @@
                     <td class="px-6 py-4 font-medium  text-left  text-gray-900 dark:text-[#C5C5C5]">Row {{item.rowIndex}}</td>
                     
 
-                      <td class="px-6 py-4 text-gray-900 text-center dark:text-[#C5C5C5] cursor-default">
+                      <td class="px-6 py-4 text-gray-900 text-left dark:text-[#C5C5C5] cursor-default">
 
                         <div class="font-medium">
                             <span [style.color]="getDateColor(item)">

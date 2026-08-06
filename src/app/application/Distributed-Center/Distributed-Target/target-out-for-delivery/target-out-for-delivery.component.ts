@@ -29,6 +29,7 @@ export class TargetOutForDeliveryComponent implements OnInit {
 
     rowDropdownOptions: number[] = [];
   rowIndexes: number[] = [];
+  processOrder = new ProcessOrder();
 
   page: number = 1;
   totalItems: number = 0;
@@ -47,6 +48,7 @@ export class TargetOutForDeliveryComponent implements OnInit {
   timeSlotDropdownOptions = ['08:00 AM - 12:00 PM', '12:00 PM - 04:00 PM', '04:00 PM - 09:00 PM'];
 
   isDownloading = false;
+    listView: boolean = true;
 
   toggleStatusDropdown() {
     this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
@@ -112,6 +114,7 @@ export class TargetOutForDeliveryComponent implements OnInit {
         console.log('rowIndexes', this.rowIndexes)
         this.centerName = res.centerName;
         this.totalItems = res.items.length | 0;
+                this.listView = true;
         if (res.items.length === 0) {
           this.hasData = false;
         } else {
@@ -231,17 +234,26 @@ export class TargetOutForDeliveryComponent implements OnInit {
     return time ? time.replace('Within ', '') : time;
   }
 
+  getOrdinalDay(date: Date | string | null | undefined): string {
+    if (!date) return '';
+    const day = new Date(date).getDate();
+    if (day > 3 && day < 21) return `${day}th`;
+    switch (day % 10) {
+      case 1: return `${day}st`;
+      case 2: return `${day}nd`;
+      case 3: return `${day}rd`;
+      default: return `${day}th`;
+    }
+  }
+
   downloadTemplate1() {
     this.isDownloading = true;
-  
+
     const now = new Date();
-    const selectedDateStr = String(now); 
-    // Convert safely to Date
-    const selectedDateObj = new Date(selectedDateStr);
-    // Example: "10 Nov"
+
     function getOrdinal(day: number): string {
       if (day > 3 && day < 21) return 'th';
-    
+
       switch (day % 10) {
         case 1: return 'st';
         case 2: return 'nd';
@@ -250,37 +262,41 @@ export class TargetOutForDeliveryComponent implements OnInit {
       }
     }
 
-    const day = selectedDateObj.getDate();
-    console.log('dau', day)
-    const month = selectedDateObj.toLocaleString('en-GB', { month: 'long' });
-    const year = selectedDateObj.getFullYear();
-    const monthNumber = String(selectedDateObj.getMonth() + 1).padStart(2, '0');
+    const day = now.getDate();
+    const year = now.getFullYear();
+    const monthNumber = String(now.getMonth() + 1).padStart(2, '0');
 
-    const dateStr = `${String(day).padStart(2, '0')}${getOrdinal(day)} ${month} ${year}`;
+    let dateStr = '';
+    if (this.selectedDate) {
+      const filterDate = new Date(this.selectedDate);
+      const filterDay = filterDate.getDate();
+      const filterMonth = filterDate.toLocaleString('en-GB', { month: 'long' });
+      const filterYear = filterDate.getFullYear();
+      dateStr = ` on ${String(filterDay).padStart(2, '0')}${getOrdinal(filterDay)} ${filterMonth} ${filterYear}`;
+    }
 
-// Example: "10/11" → convert to "10-11" (safe for filenames)
-const fullDateStr = `${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-// Example: "12.41PM"
-const timeStr = now
-  .toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
-  .replace(':', '.')
-  .replace(' ', '');
+    const timeStr = now
+      .toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
+      .replace(':', '.')
+      .replace(' ', '');
 
-// Combine → "10-11 12.41PM"
-const finalStr = `${fullDateStr} ${timeStr}`;
     this.DistributionSrv
-      .downloadOutForDeliveryTargetProgressReport(this.selectStatus, this.searchText)
+      .downloadOutForDeliveryTargetProgressReport(this.selectStatus, this.searchText, this.selectType, this.selectRow, this.selectTimeSlot, this.selectedDate)
       .subscribe({
         next: (blob) => {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
   
-          if (this.selectStatus) {
-            a.download = `${this.centerName} OFH Orders on ${dateStr} filtered by ${this.selectStatus} Generated at ${String(day).padStart(2, '0')}/${monthNumber}/${year} ${timeStr}.xlsx`;
-          } else {
-            a.download = `${this.centerName} OFH Orders on ${dateStr} Generated at ${String(day).padStart(2, '0')}/${monthNumber}/${year} ${timeStr}.xlsx`;
-          }
+          const activeFilters: string[] = [];
+          if (this.selectStatus) activeFilters.push(this.selectStatus);
+          if (this.selectType) activeFilters.push(this.selectType);
+          if (this.selectTimeSlot) activeFilters.push(this.selectTimeSlot);
+          if (this.selectRow) activeFilters.push(`Row ${this.selectRow}`);
+
+          const filterStr = activeFilters.length ? ` filtered by ${activeFilters.join(', ')}` : '';
+
+          a.download = `${this.centerName} OFH Orders${dateStr}${filterStr} Generated at ${String(day).padStart(2, '0')}/${monthNumber}/${year} ${timeStr}.xlsx`;
   
           a.click();
           window.URL.revokeObjectURL(url);
@@ -363,6 +379,24 @@ const finalStr = `${fullDateStr} ${timeStr}`;
       return 'Not Passed';
     }
   }
+
+  navigateViewReply(poId: number) {
+    this.DistributionSrv.getOutForDeliveryOrderDeatils(poId).subscribe(
+      (res) => {
+        this.processOrder = res.items
+        console.log('processOrder', this.processOrder)
+        this.isLoading = false;
+        this.listView = false;
+
+        console.log('listView', this.listView, 'isLoading', this.isLoading)
+      }
+    )
+    
+  }
+
+  goBack() {
+    // this.location.back();
+  }
   
 }
 
@@ -385,5 +419,54 @@ class orders {
   outDlvrDate!: Date;
   rowIndex!: number;
   delivaryMethod!: string;
+  packBy!: string;
+  packTime!: Date;
+}
+
+
+export class ProcessOrder {
+  processOrderId!: number;
+  orderId!: number;
+  invNo!: string;
+  status!: string;
+  delivaryMethod!: string;
+  isPackage!: boolean;
+  sheduleTime!: string;
+  sheduleDate!: Date;
+  packTime!: Date;
+  qcDoneBy!: string;
+    qrPrintTime!: Date;
+
+  packages: OrderPackage[] = [];
+  additionalItems: AdditionalItem[] = [];
+}
+
+export class OrderPackage {
+  orderPackageId!: number;
+  packageId!: number;
+  packageName!: string;
+
+  items: PackageItem[] = [];
+}
+
+export class PackageItem {
+  productId!: number;
+  productName!: string;
+  image!: string;
+  qty!: number;
+  isPacked!: boolean;
+  packingTime!: string | null;
+  packedByOfficer!: string;
+}
+
+export class AdditionalItem {
+  productId!: number;
+  productName!: string;
+  image!: string;
+  qty!: number;
+  unit!: string;
+  isPacked!: boolean;
+  packingTime!: string | null;
+  packedByOfficer!: string;
 }
 

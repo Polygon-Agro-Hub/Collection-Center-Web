@@ -93,10 +93,10 @@ export class TargetProgressOngoingComponent implements OnInit {
 
 
   ngOnInit(): void {
-    const today = new Date();
-    this.selectedDate = today.toISOString().split('T')[0];
+    // const today = new Date();
+    // this.selectedDate = today.toISOString().split('T')[0];
     this.fetchAllAssignOrders();
-    this.fetchCenterData();
+    // this.fetchCenterData();
   }
 
   fetchAllAssignOrders(status: string = this.selectStatus, search: string = this.searchText, selectDate: string | Date | null = this.selectedDate, type: string = this.selectType, timeSlot: string = this.selectTimeSlot, row: number | null = this.selectRow) {
@@ -108,6 +108,7 @@ export class TargetProgressOngoingComponent implements OnInit {
         this.rowIndexes = res.rowIndexes;
         this.rowDropdownOptions = this.rowIndexes
         console.log('rowIndexes', this.rowIndexes)
+
         this.hasData = res.items.length > 0;
         this.isLoading = false;
       }
@@ -350,21 +351,22 @@ const timeStr = now
 const generatedAtStr = `${genDay}/${genMonthNumber}/${genYear} ${timeStr}`;
 
     this.DistributionSrv
-      .downloadAllTargetProgressReport(this.selectStatus, this.selectedDate, this.searchText )
+      .downloadAllTargetProgressReport(this.selectStatus, this.selectedDate, this.searchText, this.selectType, this.selectRow, this.selectTimeSlot )
       .subscribe({
         next: (blob) => {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
-          if (this.selectedDate && this.selectStatus) {
-            a.download = `${this.centerName} All Orders on ${dateStr} filtered by ${this.selectStatus} Generated at ${generatedAtStr}.xlsx`;
-          } else if (this.selectedDate && !this.selectStatus) {
-            a.download = `${this.centerName} All Orders on ${dateStr} Generated at ${generatedAtStr}.xlsx`;
-          } else if (!this.selectedDate && this.selectStatus) {
-            a.download = `${this.centerName} All Orders filtered by ${this.selectStatus} Generated at ${generatedAtStr}.xlsx`;
-          } else {
-            a.download = `${this.centerName} All Orders Generated at ${generatedAtStr}.xlsx`;
-          }
+          const activeFilters: string[] = [];
+          if (this.selectStatus) activeFilters.push(this.selectStatus);
+          if (this.selectType) activeFilters.push(this.selectType);
+          if (this.selectTimeSlot) activeFilters.push(this.selectTimeSlot);
+          if (this.selectRow) activeFilters.push(`Row ${this.selectRow}`);
+
+          const filterStr = activeFilters.length ? ` filtered by ${activeFilters.join(', ')}` : '';
+          const dateSegment = this.selectedDate ? ` on ${dateStr}` : '';
+
+          a.download = `${this.centerName} All Orders${dateSegment}${filterStr} Generated at ${generatedAtStr}.xlsx`;
           a.click();
           window.URL.revokeObjectURL(url);
 

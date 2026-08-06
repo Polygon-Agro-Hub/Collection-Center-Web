@@ -43,6 +43,8 @@ export class ShortageAssignComponent implements OnInit {
   itemId!: number;
   selectedItem: ShortageItem | null = null;
   centres: Centre[] = [];
+  filteredCentres: Centre[] = [];   // new
+centreSearchTerm: string = '';    // new
 
   assignQty: number = 0;
   selectedCentreId: number | null = null;
@@ -78,11 +80,12 @@ export class ShortageAssignComponent implements OnInit {
     this.procumentService.getShortageDetailsById(this.itemId).subscribe({
       next: (res: any) => {
         this.centres = (res.centers || []).map((c: any) => ({
-          id: c.id,
-          code: c.regCode,
-          name: c.centerName,
-          label: `${c.regCode} ${c.centerName}`,
-        }));
+  id: c.id,
+  code: c.regCode,
+  name: c.centerName,
+  label: `${c.regCode} ${c.centerName}`,
+}));
+this.filteredCentres = this.centres; // new
 
         this.selectedItem = {
           id: this.itemId,
@@ -104,6 +107,19 @@ export class ShortageAssignComponent implements OnInit {
       },
     });
   }
+
+  onCentreSearch(): void {
+  const term = this.centreSearchTerm.trim().toLowerCase();
+
+  if (!term) {
+    this.filteredCentres = this.centres;
+    return;
+  }
+
+  this.filteredCentres = this.centres.filter((c) =>
+    c.label.toLowerCase().includes(term)
+  );
+}
 
   loadAssignedDetails(): void {
     this.procumentService.getShortageAssignedDetails(this.itemId).subscribe({
@@ -226,11 +242,11 @@ onCeilingInput(event: Event): void {
   // Strip anything that isn't a digit
   let digitsOnly = value.replace(/\D/g, '');
 
-  // Clamp to max 100
+  // Clamp to max 99 (allow typing to continue below min while in progress)
   let num = digitsOnly === '' ? 0 : Number(digitsOnly);
-  if (num > 100) {
-    num = 100;
-    digitsOnly = '100';
+  if (num > 99) {
+    num = 99;
+    digitsOnly = '99';
   }
 
   if (digitsOnly !== value) {
@@ -240,19 +256,35 @@ onCeilingInput(event: Event): void {
   this.ceilingPercent = num;
 }
 
+onCeilingBlur(event: Event): void {
+  const input = event.target as HTMLInputElement;
+
+  // Enforce min 1 once the user is done typing (covers 0, empty, and leading zeros)
+  if (!this.ceilingPercent || this.ceilingPercent < 1) {
+    this.ceilingPercent = 1;
+    input.value = '1';
+  }
+}
+
   formatNumber(value: number): string {
     // Convert to string and remove trailing zeros
     return value.toString().replace(/\.?0+$/, '');
   }
 
   toggleCentreDropdown(): void {
-    this.isCentreDropdownOpen = !this.isCentreDropdownOpen;
+  this.isCentreDropdownOpen = !this.isCentreDropdownOpen;
+  if (this.isCentreDropdownOpen) {
+    this.centreSearchTerm = '';
+    this.filteredCentres = this.centres;
   }
+}
 
   selectCentreOption(option: Centre): void {
-    this.selectedCentreId = option.id;
-    this.isCentreDropdownOpen = false;
-  }
+  this.selectedCentreId = option.id;
+  this.isCentreDropdownOpen = false;
+  this.centreSearchTerm = '';
+  this.filteredCentres = this.centres;
+}
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
@@ -264,5 +296,27 @@ onCeilingInput(event: Event): void {
       this.isCentreDropdownOpen = false;
     }
   }
+
+blockInvalidKey(event: KeyboardEvent): void {
+  // Keys that must always be allowed through (navigation/editing)
+  const allowedKeys = [
+    'Backspace', 'Delete', 'Tab', 'Escape', 'Enter',
+    'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End',
+  ];
+
+  if (allowedKeys.includes(event.key)) {
+    return;
+  }
+
+  // Allow copy/paste/select-all/cut shortcuts (Ctrl/Cmd + A/C/V/X)
+  if ((event.ctrlKey || event.metaKey) && ['a', 'c', 'v', 'x'].includes(event.key.toLowerCase())) {
+    return;
+  }
+
+  // Only allow digits 0-9; block everything else (e, E, +, -, ., ,, etc.)
+  if (!/^[0-9]$/.test(event.key)) {
+    event.preventDefault();
+  }
+}
 
 }

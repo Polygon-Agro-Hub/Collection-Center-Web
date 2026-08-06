@@ -74,8 +74,9 @@
                         <td class="px-6 py-3 text-base text-[#000000] dark:text-gray-300 align-top">
                             <input type="number" [(ngModel)]="item.targetA" step="any" name="targetA" min="0" (change)="checkNegativeValue(item, 'A')"
                                 (input)="restrictDecimal($event, item, 'A')"
-                                class="border-[#415CFF] dark:bg-[#363636] border-[2px] border-dotted rounded-lg w-28 px-2 py-1 mr-4"
-                                [disabled]="!item.isNew && !item.editingA" (change)="validateForm()" />
+                                class="dark:bg-[#363636] border-[2px] border-dotted rounded-lg w-28 px-2 py-1 mr-4 focus:outline-none"
+                                [ngClass]="isGradeInvalid(item, 'A') ? 'border-[#FF0000]' : 'border-[#415CFF]'"
+                                [disabled]="!item.isNew && !item.editingA" />
                             <button *ngIf="!item.isNew && !item.editingA && isDateValid"
                                 (click)="(item.editingA = true) && pressEditIcon(item,'A')">
                                 <i class="fa-solid fa-pen-to-square text-[#415CFF] text-xl"></i>
@@ -85,12 +86,13 @@
                                     'bg-[#415CFF]': item.preValueA !== item.targetA && !isQtyExceeded(item),
                                     'bg-[#6B7D8C]': item.preValueA === item.targetA || item.targetA < 0 || item.targetA < item.preValueA || isQtyExceeded(item)
                                   }"
-                                (click)="item.preValueA !== item.targetA && item.targetA >= 0 && !isQtyExceeded(item) && saveGrade('A', item, item.targetA, item.idA)">
+                                [disabled]="item.preValueA === item.targetA || item.targetA < 0 || item.targetA < item.preValueA || isQtyExceeded(item)"
+                                (click)="saveGrade('A', item, item.targetA, item.idA)">
                                 Save
                             </button>
                             <div *ngIf="(item.isNew || item.editingA) && isQtyExceeded(item) && item.lastEditedGrade === 'A'" class="flex items-center gap-1 mt-1 text-xs text-red-600 dark:text-red-400">
                                 <i class="fa-solid fa-triangle-exclamation text-[#FF0000]"></i>
-                                <span class="text-[#FF0000] font-[400] ">You can only set target up to {{ maxQty(item) }} {{ item.unitType }}</span>
+                                <span class="text-[#FF0000] font-[400] ">You can only set target up to {{ maxQty(item) }} {{ item.unitType.toLowerCase() }}</span>
                             </div>
                         </td>
 
@@ -98,8 +100,9 @@
                         <td class="px-6 py-4 text-base text-[#000000] dark:text-gray-300 align-top">
                             <input type="number" [(ngModel)]="item.targetB" step="any" name="targetB" min="0" (change)="checkNegativeValue(item, 'B')"
                                 (input)="restrictDecimal($event, item, 'B')"
-                                class="border-[#415CFF] dark:bg-[#363636] border-[2px] border-dotted rounded-lg w-28 px-2 py-1 mr-4"
-                                [disabled]="!item.isNew && !item.editingB" (change)="validateForm()" />
+                                class="dark:bg-[#363636] border-[2px] border-dotted rounded-lg w-28 px-2 py-1 mr-4 focus:outline-none"
+                                [ngClass]="isGradeInvalid(item, 'B') ? 'border-[#FF0000]' : 'border-[#415CFF]'"
+                                [disabled]="!item.isNew && !item.editingB" />
                             <button *ngIf="!item.isNew && !item.editingB && isDateValid"
                                 (click)="(item.editingB = true) && pressEditIcon(item,'B')">
                                 <i class="fa-solid fa-pen-to-square text-[#415CFF] text-xl"></i>
@@ -108,12 +111,13 @@
                                 'bg-[#415CFF]': item.preValueB !== item.targetB && !isQtyExceeded(item),
                                 'bg-[#6B7D8C]': item.preValueB === item.targetB || item.targetB < 0 || item.targetB < item.preValueB || isQtyExceeded(item)
                               }" class="px-3 py-2 text-white rounded-lg"
-                                (click)="item.preValueB !== item.targetB && item.targetB >= 0 && !isQtyExceeded(item) && saveGrade('B', item, item.targetB, item.idB)">
+                                [disabled]="item.preValueB === item.targetB || item.targetB < 0 || item.targetB < item.preValueB || isQtyExceeded(item)"
+                                (click)="saveGrade('B', item, item.targetB, item.idB)">
                                 Save
                             </button>
                             <div *ngIf="(item.isNew || item.editingB) && isQtyExceeded(item) && item.lastEditedGrade === 'B'" class="flex items-center gap-1 mt-1 text-xs text-red-600 dark:text-red-400">
                                 <i class="fa-solid fa-triangle-exclamation"></i>
-                                <span>You can only set target up to {{ maxQty(item) }} {{ item.unitType }}</span>
+                                <span>You can only set target up to {{ maxQty(item) }} {{ item.unitType.toLowerCase() }}</span>
                             </div>
                         </td>
 
@@ -121,8 +125,9 @@
                         <td class="px-6 py-4 text-base text-[#000000] dark:text-gray-300 align-top">
                             <input type="number" [(ngModel)]="item.targetC" step="any" name="targetC" min="0" (change)="checkNegativeValue(item, 'C')"
                                 (input)="restrictDecimal($event, item, 'C')"
-                                class="border-[#415CFF] dark:bg-[#363636] border-[2px] border-dotted rounded-lg w-28 px-2 py-1 mr-4"
-                                [disabled]="!item.isNew && !item.editingC" (change)="validateForm()" />
+                                class="dark:bg-[#363636] border-[2px] border-dotted rounded-lg w-28 px-2 py-1 mr-4 focus:outline-none"
+                                [ngClass]="isGradeInvalid(item, 'C') ? 'border-[#FF0000]' : 'border-[#415CFF]'"
+                                [disabled]="!item.isNew && !item.editingC" />
                             <button *ngIf="!item.isNew && !item.editingC && isDateValid"
                                 (click)="(item.editingC = true) && pressEditIcon(item,'C')">
                                 <i class="fa-solid fa-pen-to-square text-[#415CFF] text-xl"></i>
@@ -131,13 +136,17 @@
                                 'bg-[#415CFF]': item.preValueC !== item.targetC && !isQtyExceeded(item),
                                 'bg-[#6B7D8C]': (item.preValueC === item.targetC) || item.targetC < 0 || item.targetC < item.preValueC || isQtyExceeded(item)
                               }" class="px-3 py-2 text-white rounded-lg"
-                                (click)="item.preValueC !== item.targetC && item.targetC >= 0 && !isQtyExceeded(item) && saveGrade('C', item, item.targetC, item.idC)">
+                                [disabled]="item.preValueC === item.targetC || item.targetC < 0 || item.targetC < item.preValueC || isQtyExceeded(item)"
+                                (click)="saveGrade('C', item, item.targetC, item.idC)">
                                 Save
                             </button>
                             <div *ngIf="(item.isNew || item.editingC) && isQtyExceeded(item) && item.lastEditedGrade === 'C'" class="flex items-center gap-1 mt-1 text-xs text-red-600 dark:text-red-400">
                                 <i class="fa-solid fa-triangle-exclamation"></i>
-                                <span>You can only set target up to {{ maxQty(item) }} {{ item.unitType }}</span>
+<span>
+  You can only set target up to {{ maxQty(item) }} {{ item.unitType.toLowerCase() }}
+</span>
                             </div>
+                            
                         </td>
                     </tr>
                     </ng-container>
@@ -152,7 +161,8 @@
     </button>
     <button class="w-32 rounded-lg px-7 py-2 "
         [ngClass]="isFormValid ? 'bg-[hsl(231,100%,63%)] text-[#FFFFFF] shadow-md' : 'bg-[#95A1AC] text-[#6B7D8C]'"
-        (click)="isFormValid && onSubmit()">
+        [disabled]="!isFormValid"
+        (click)="onSubmit()">
         Save
     </button>
 </div>

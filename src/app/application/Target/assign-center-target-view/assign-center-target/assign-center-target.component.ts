@@ -66,7 +66,7 @@ this.selectDate = tomorrow.toISOString().split('T')[0];
 
   fetchSavedCenterCrops() {
     this.isLoading = true;
-    // this.validateSelectDate()
+    this.validateSelectDate()
     this.TargetSrv.getSavedCenterCrops(this.centerDetails.centerId, this.selectDate, this.searchText).subscribe(
       (res) => {
         this.assignCropsArr = res.products.map((p: AssignCrops) => ({
@@ -203,11 +203,7 @@ onSubmit() {
     today.setHours(0, 0, 0, 0);
     selectedDate.setHours(0, 0, 0, 0);
 
-    if (selectedDate < today) {
-      this.isDateValid = false;
-    } else {
-      this.isDateValid = true;
-    }
+    this.isDateValid = selectedDate >= today;
   }
 
   validateForm() {

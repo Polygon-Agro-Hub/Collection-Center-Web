@@ -43,6 +43,8 @@ export class ShortageAssignComponent implements OnInit {
   itemId!: number;
   selectedItem: ShortageItem | null = null;
   centres: Centre[] = [];
+  filteredCentres: Centre[] = [];   // new
+centreSearchTerm: string = '';    // new
 
   assignQty: number = 0;
   selectedCentreId: number | null = null;
@@ -78,11 +80,12 @@ export class ShortageAssignComponent implements OnInit {
     this.procumentService.getShortageDetailsById(this.itemId).subscribe({
       next: (res: any) => {
         this.centres = (res.centers || []).map((c: any) => ({
-          id: c.id,
-          code: c.regCode,
-          name: c.centerName,
-          label: `${c.regCode} ${c.centerName}`,
-        }));
+  id: c.id,
+  code: c.regCode,
+  name: c.centerName,
+  label: `${c.regCode} ${c.centerName}`,
+}));
+this.filteredCentres = this.centres; // new
 
         this.selectedItem = {
           id: this.itemId,
@@ -104,6 +107,19 @@ export class ShortageAssignComponent implements OnInit {
       },
     });
   }
+
+  onCentreSearch(): void {
+  const term = this.centreSearchTerm.trim().toLowerCase();
+
+  if (!term) {
+    this.filteredCentres = this.centres;
+    return;
+  }
+
+  this.filteredCentres = this.centres.filter((c) =>
+    c.label.toLowerCase().includes(term)
+  );
+}
 
   loadAssignedDetails(): void {
     this.procumentService.getShortageAssignedDetails(this.itemId).subscribe({
@@ -256,13 +272,19 @@ onCeilingBlur(event: Event): void {
   }
 
   toggleCentreDropdown(): void {
-    this.isCentreDropdownOpen = !this.isCentreDropdownOpen;
+  this.isCentreDropdownOpen = !this.isCentreDropdownOpen;
+  if (this.isCentreDropdownOpen) {
+    this.centreSearchTerm = '';
+    this.filteredCentres = this.centres;
   }
+}
 
   selectCentreOption(option: Centre): void {
-    this.selectedCentreId = option.id;
-    this.isCentreDropdownOpen = false;
-  }
+  this.selectedCentreId = option.id;
+  this.isCentreDropdownOpen = false;
+  this.centreSearchTerm = '';
+  this.filteredCentres = this.centres;
+}
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {

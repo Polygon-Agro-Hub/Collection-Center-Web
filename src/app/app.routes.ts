@@ -628,12 +628,7 @@ export const routes: Routes = [
                     {
                         path: '',
                         component: TargetProgressAllComponent,
-                    },
-
-                    {
-                        path: 'view-out-for-delivery-order',
-                        component: ViewOutForDeiveryOrderDetailsComponent,
-                    },
+                    }
                    
                 ]
             },

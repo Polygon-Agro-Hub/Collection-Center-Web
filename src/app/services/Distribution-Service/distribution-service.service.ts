@@ -212,7 +212,7 @@ export class DistributionServiceService {
     return this.http.get<any>(url, { headers });
   }
 
-  getToDoAssignOrders(status: string = '', searchText: string = '', selectDate: string = '', type: string = '', timeSlot: string = ''): Observable<any> {
+  getToDoAssignOrders(status: string = '', searchText: string = '', selectDate: string = '', type: string = '', timeSlot: string = '', row: number | null): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
@@ -237,6 +237,10 @@ export class DistributionServiceService {
 
     if (timeSlot) {
       url += `&timeSlot=${timeSlot}`
+    }
+
+        if (row) {
+      url += `&row=${row}`
     }
 
     return this.http.get<any>(url, { headers });
@@ -433,7 +437,11 @@ export class DistributionServiceService {
   downloadAllTargetProgressReport(
     status: string,
     date: Date | string | null,
-    searchText: string = ''
+    searchText: string = '',
+    type: string = '',
+    row: number | null,
+    timeSlot: string = ''
+
   ): Observable<Blob> {
     let url = `${this.apiUrl}/download-all-target-progress?test=${1}`;
 
@@ -449,6 +457,17 @@ export class DistributionServiceService {
       url += `&searchText=${searchText}`;
     }
 
+    if (type) {
+      url += `&type=${type}`;
+    }
+    if (row) {
+      url += `&row=${row}`;
+    }
+
+    if (timeSlot) {
+      url += `&timeSlot=${timeSlot}`;
+    }
+
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
     });
@@ -458,7 +477,11 @@ export class DistributionServiceService {
 
   downloadOutForDeliveryTargetProgressReport(
     status: string,
-    searchText: string = ''
+    searchText: string = '',
+    type: string = '',
+    row: number | null,
+    timeSlot: string = '',
+    date: Date | string | null,
   ): Observable<Blob> {
     let url = `${this.apiUrl}/download-out-for-delivery-target-progress?test=${1}`;
 
@@ -469,6 +492,23 @@ export class DistributionServiceService {
     if (searchText) {
       url += `&searchText=${searchText}`;
     }
+
+     if (type) {
+      url += `&type=${type}`;
+    }
+    if (row) {
+      url += `&row=${row}`;
+    }
+
+    if (timeSlot) {
+      url += `&timeSlot=${timeSlot}`;
+    }
+
+
+    if (date) {
+      url += `&date=${date}`;
+    }
+
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
@@ -897,6 +937,18 @@ fetchAllShortageTodayCompleted( searchText: string = ''
   );
 }
 
+  getOutForDeliveryOrderDeatils(poId: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    let url = `${this.apiUrl}/get-order-details-for-out-for-delivery/${poId}`
+
+    return this.http.get(url, {
+      headers,
+    });
+  }
 
 }
 

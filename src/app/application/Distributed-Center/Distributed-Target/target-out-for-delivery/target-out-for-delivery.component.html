@@ -1,6 +1,6 @@
 <app-loading-spinner *ngIf="isLoading" />
 
-<div *ngIf="!isLoading" class="w-full min-h-screen overflow-x-auto">
+<div *ngIf="!isLoading && listView" class="w-full min-h-screen overflow-x-auto">
 
     <button *ngIf="hasData"
         class="bg-[#415CFF] text-white shadow-md font-medium rounded-lg py-2 px-5 mr-5 text-lg flex items-center"
@@ -12,11 +12,6 @@
     <div class="flex flex-row items-center justify-between gap-4 mt-2">
         <div><p class="text-lg dark:text-white whitespace-nowrap">All ({{ totalItems < 10 ? ('0' + totalItems) : totalItems }})</p></div>
     <div class="flex flex-row items-center justify-end gap-5 ">
-        
-        <i class="fa-solid fa-list text-xl dark:text-white text-[#4A4A4A]"></i>
-
-        <p class="text-[#4A4A4A] dark:text-white">Filter By</p>
-
                 <div class="relative w-40 custom-status-dropdown-container">
             <!-- Hidden native select -->
             <select [(ngModel)]="selectType" class="hidden" (change)="filterType()">
@@ -193,12 +188,13 @@
                 </div>
             </div>
         </div>
-
+        <div class="relative w-36">
                 <app-custom-datepicker
         [placeholder]="'Date'"
   [selectedDate]="selectedDate"
   (dateChange)="onDateChange($event)"
 ></app-custom-datepicker>
+</div>
 
         <div class="flex mr-5 items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
             <input type="text" placeholder="Search by Order ID.." [(ngModel)]="searchText" (keyup.enter)="onSearch()"
@@ -242,6 +238,7 @@
                     <th class="px-6 py-3 text-left font-medium text-[#4B5563] dark:text-white">Delivery Time Slot</th>
                     <th class="px-6 py-3 text-left font-medium text-[#4B5563] dark:text-white">Out Time</th>
                     <th class="px-6 py-3 text-left font-medium text-[#4B5563] dark:text-white">Status</th>
+                    <th class="px-6 py-3 text-left font-medium text-[#4B5563] dark:text-white">Details</th>
                     
                 </tr>
             </thead>
@@ -256,9 +253,7 @@
                                             <td class="px-6 py-4 font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.delivaryMethod}}</td>
                     <td class="px-6 py-4 font-medium  text-left  text-gray-900 dark:text-[#C5C5C5]">Row {{item.rowIndex}}</td>
 <td class="px-6 py-4 font-medium text-gray-900 dark:text-[#C5C5C5]">
-  {{ (item.firstNameEnglish && item.lastNameEnglish)
-      ? item.firstNameEnglish + ' ' + item.lastNameEnglish
-      : '----' }}
+  {{item.packBy || '----' }}
 </td>
                     <td class="px-6 py-4 font-medium"
                     [ngClass]="{
@@ -268,7 +263,7 @@
                     >{{ getDisplayDate(item.sheduleDate) }} {{ removeWithin(item.sheduleTime) }}</td>
 
                       <td class="px-6 py-4 font-medium text-gray-900 dark:text-[#C5C5C5]">
-                        {{ item.outDlvrDate | date: 'hh.mm a' }}
+                        {{ item.packTime | date: 'hh.mm a' }}
                       </td>
                       <td class="px-6 py-3">
 
@@ -291,10 +286,198 @@
                         </div>
                     </td>
 
+                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300 cursor-pointer" (click)="navigateViewReply(item.processOrderId)">
+                        <div class="flex items-center justify-center h-full ">
+                            <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none"
+                            xmlns="http://www.w3.org/2000/svg" stroke="">
+                            <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                            <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                            <g id="SVGRepo_iconCarrier">
+                                <path
+                                    d="M3 14C3 9.02944 7.02944 5 12 5C16.9706 5 21 9.02944 21 14M17 14C17 16.7614 14.7614 19 12 19C9.23858 19 7 16.7614 7 14C7 11.2386 9.23858 9 12 9C14.7614 9 17 11.2386 17 14Z"
+                                    stroke="#415CFF" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                </path>
+                            </g>
+                        </svg>
+                        </div>
+                    </td>
+
                 </tr>
             </tbody>
         </table>
 
     </div>
 
+</div>
+
+
+<div *ngIf="!isLoading && !listView" class="w-full min-h-screen">
+
+    <p (click)="goBack()"
+        class="flex items-center gap-2 w-fit text-sm text-[#5A5874] dark:text-gray-300 cursor-pointer mb-4 hover:text-[#292929] dark:hover:text-white">
+        <i class="fa-solid fa-arrow-left"></i>
+        <span class="underline">Go Back</span>
+    </p>
+
+    <div *ngIf="!hasData" class="flex flex-col items-center w-full h-screen mt-6">
+        <p class="text-[#494949] my-6 dark:text-white">---No order found--</p>
+        <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
+    </div>
+
+    <div *ngIf="hasData">
+
+        <!-- Order info bar -->
+        <div
+            class="flex items-center bg-white dark:bg-[#1D1D1F] border-[1px] border-[#828282] rounded-xl px-6 py-4 mb-6">
+            <div class="pr-6 flex-shrink-0">
+                <p class="text-s text-[#7F7F7F] dark:text-gray-400 mb-1">Order ID :</p>
+                <p class="font-medium text-lg text-[#000000] dark:text-textDark">{{ processOrder.orderId }}</p>
+            </div>
+
+            <div class="w-px self-stretch bg-[#828282] mx-6"></div>
+
+            <div class="flex-1 flex items-center justify-between gap-4">
+                <div>
+                    <p class="text-sm text-[#7F7F7F] dark:text-gray-400 mb-1">Type :</p>
+                    <p class="font-medium text-lg text-[#000000] dark:text-textDark">{{ processOrder.delivaryMethod }}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-[#7F7F7F] dark:text-gray-400 mb-1">Scheduled Date :</p>
+                    <p class="font-medium text-lg text-[#000000] dark:text-textDark">{{ getOrdinalDay(processOrder.sheduleDate) }} {{ processOrder.sheduleDate | date:'MMMM y' }}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-[#7F7F7F] dark:text-gray-400 mb-1">Time Slot :</p>
+                    <p class="font-medium text-lg text-[#000000] dark:text-textDark">{{ processOrder.sheduleTime }}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-[#7F7F7F] dark:text-gray-400 mb-1">QC Done By :</p>
+                    <p class="font-medium text-lg text-[#000000] dark:text-textDark">{{ processOrder.qcDoneBy }}</p>
+                </div>
+                <div>
+                    <p class="text-sm text-[#7F7F7F] dark:text-gray-400 mb-1">Out Time :</p>
+                    <p class="font-medium text-lg text-[#000000] dark:text-textDark">{{ processOrder.packTime | date:'hh:mm a' }} on {{ getOrdinalDay(processOrder.packTime) }} {{ processOrder.packTime | date:'MMMM y' }}</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Item packs + Order journey -->
+        <div class="flex flex-col lg:flex-row items-start gap-6">
+
+            <div class="flex-1 w-full min-w-0 flex flex-col gap-6 lg:max-h-[calc(100vh-260px)] lg:overflow-y-auto lg:pr-2">
+                <div *ngFor="let pack of processOrder.packages">
+                    <p class="text-[#415CFF] text-sm font-medium mb-2">
+                        {{ pack.packageName }}
+                        ({{ pack.items.length < 10 ? ('0' + pack.items.length) : pack.items.length }})
+                    </p>
+
+                    <div class="overflow-hidden border border-gray-100 dark:border-[#202021] rounded-lg">
+                        <table class="w-full divide-y-2">
+                            <thead
+                                class="text-gray-700 bg-[#F7F8FB] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
+                                <tr>
+                                    <th class="px-4 py-2 text-left text-sm font-[400] text-[#4B5563] dark:text-white">Item
+                                        Name</th>
+                                    <th class="px-4 py-2 text-left text-sm font-[400] text-[#4B5563] dark:text-white">Qty
+                                    </th>
+                                    <th class="px-4 py-2 text-left text-sm font-[400] text-[#4B5563] dark:text-white">
+                                        Packed By</th>
+                                    <th class="px-4 py-2 text-left text-sm font-[400] text-[#4B5563] dark:text-white">Time
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
+                                <tr *ngFor="let item of pack.items">
+                                    <td class="px-4 py-3">
+                                        <div class="flex items-center gap-3">
+                                            <img [src]="item.image" [alt]="item.productName"
+                                                class="w-8 h-8 rounded-full object-cover flex-shrink-0" />
+                                            <span
+                                                class="text-[#000000] font-[400]  dark:text-[#C5C5C5]">{{ item.productName }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-3 text-[#000000] font-[400] dark:text-[#C5C5C5]">
+                                        {{ item.qty }}kg
+                                    </td>
+                                    <td class="px-4 py-3 text-[#000000] font-[400] dark:text-[#C5C5C5]">
+                                        {{ item.packedByOfficer || "----" }}
+                                    </td>
+                                    <td class="px-4 py-3 text-[#000000] font-[400] dark:text-[#C5C5C5]">
+                                        {{ item.packingTime | date:'hh:mm a' }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div *ngIf="processOrder.additionalItems.length">
+                    <p class="text-[#415CFF] text-sm font-medium mb-2">
+                        Additional Items
+                        ({{ processOrder.additionalItems.length < 10 ? ('0' + processOrder.additionalItems.length) : processOrder.additionalItems.length }})
+                    </p>
+
+                    <div class="overflow-hidden border border-gray-100 dark:border-[#202021] rounded-lg">
+                        <table class="w-full divide-y-2">
+                            <thead
+                                class="text-gray-700 bg-[#F7F8FB] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
+                                <tr>
+                                    <th class="px-4 py-2 text-left text-sm font-[400] text-[#4B5563] dark:text-white">Item
+                                        Name</th>
+                                    <th class="px-4 py-2 text-left text-sm font-[400] text-[#4B5563] dark:text-white">Qty
+                                    </th>
+                                    <th class="px-4 py-2 text-left text-sm font-[400] text-[#4B5563] dark:text-white">
+                                        Packed By</th>
+                                    <th class="px-4 py-2 text-left text-sm font-[400] text-[#4B5563] dark:text-white">Time
+                                    </th>
+                                </tr>
+                            </thead>
+                            <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
+                                <tr *ngFor="let item of processOrder.additionalItems">
+                                    <td class="px-4 py-3">
+                                        <div class="flex items-center gap-3">
+                                            <img [src]="item.image" [alt]="item.productName"
+                                                class="w-8 h-8 rounded-full object-cover flex-shrink-0" />
+                                            <span
+                                                class="text-[#000000] font-[400]  dark:text-[#C5C5C5]">{{ item.productName }}</span>
+                                        </div>
+                                    </td>
+                                    <td class="px-4 py-3 text-[#000000] font-[400] dark:text-[#C5C5C5]">
+                                        {{ item.qty }}{{ item.unit }}
+                                    </td>
+                                    <td class="px-4 py-3 text-[#000000] font-[400] dark:text-[#C5C5C5]">
+                                        {{ item.packedByOfficer || "----" }}
+                                    </td>
+                                    <td class="px-4 py-3 text-[#000000] font-[400] dark:text-[#C5C5C5]">
+                                        {{ item.packingTime | date:'hh:mm a' }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+            <div class="w-full lg:w-80 flex-shrink-0 lg:mt-7 lg:sticky lg:top-4">
+                <div class="border-[1px] border-[#828282] rounded-xl px-5 py-4 dark:bg-[#1D1D1F]">
+                    <p class="text-[#000000] font-[600] mb-4">Order Journey</p>
+
+                    <div class="flex flex-col gap-4">
+                        <div>
+                            <p class="text-sm font-[400] text-[#7F7F7F] dark:text-gray-400 mb-1">QR Printed :</p>
+                            <p class="font-[500] text-[#000000] dark:text-textDark">
+                                ---- by {{ processOrder.qrPrintTime | date:'hh:mm a' }} on {{ getOrdinalDay(processOrder.qrPrintTime) }} {{ processOrder.packTime | date:'MMMM y' }}
+                            </p>
+                        </div>
+                        <div>
+                            <p class="text-sm font-[400] text-[#7F7F7F] dark:text-gray-400 mb-1">QC Done :</p>
+                            <p class="font-[500] text-[#000000] dark:text-textDark">
+                                {{ processOrder.qcDoneBy }} by {{ processOrder.packTime | date:'hh:mm a' }} on {{ getOrdinalDay(processOrder.packTime) }} {{ processOrder.packTime | date:'MMMM y' }}
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
 </div>

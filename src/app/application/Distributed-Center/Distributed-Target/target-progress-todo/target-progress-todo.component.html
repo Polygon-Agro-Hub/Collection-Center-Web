@@ -4,10 +4,6 @@
     <div class="flex flex-row items-center justify-between gap-4">
         <div><p class="text-lg dark:text-white whitespace-nowrap">All ({{ totalItems < 10 ? ('0' + totalItems) : totalItems }})</p></div>
     <div class="flex flex-row items-center justify-end gap-5 ">
-        
-        <i class="fa-solid fa-list text-xl text-[#4A4A4A] dark:text-white"></i>
-
-        <p class="text-[#4A4A4A] dark:text-white">Filter By</p>
 
                 <div class="relative w-40 custom-status-dropdown-container">
             <!-- Hidden native select -->
@@ -99,6 +95,51 @@
             </div>
         </div>
 
+                        <div class="relative w-40 custom-status-dropdown-container">
+            <!-- Hidden native select -->
+            <select [(ngModel)]="selectRow" class="hidden" (change)="filterRow()">
+                <option value="" selected disabled>Type</option>
+                <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300" value="Pickup">
+                    Pickup</option>
+                <option class="dark:bg-[#272F45] text-textLight dark:text-textDark hover:bg-gray-300" value="Delivery">
+                    Delivery</option>
+                
+            </select>
+
+            <!-- Custom dropdown trigger -->
+            <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
+                (click)="toggleRowDropdown()">
+                <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
+                    <span>{{ selectRow || 'Row' }}</span>
+                    <div class="flex items-center">
+                        <!-- X icon (shown ONLY when option is selected) -->
+                        <i *ngIf="selectRow" (click)="cancelRow($event)"
+                            class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
+
+                        <!-- Arrow icon (shown when EITHER: dropdown is open OR no selection exists) -->
+                        <i *ngIf="isRowDropdownOpen || !selectRow"
+                            class="fa-solid text-lg text-[#828282] transition-transform duration-200"
+                            [class.fa-angle-down]="!isRowDropdownOpen"
+                            [class.fa-angle-up]="isRowDropdownOpen"></i>
+                    </div>
+                </div>
+            </div>
+
+            
+
+            <!-- Custom dropdown options -->
+            <div *ngIf="isRowDropdownOpen"
+                class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282] overflow-hidden">
+                <div class="">
+                    <div *ngFor="let option of rowDropdownOptions" (click)="selectRowOption(option)"
+                        class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
+                        <span class="flex-grow">Row {{ option }}</span>
+                        <i class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+
         <div class="relative w-40 custom-status-dropdown-container">
             <!-- Hidden native select -->
             <select [(ngModel)]="selectStatus" class="hidden" (change)="filterStatus()">
@@ -141,7 +182,7 @@
         <div class="relative w-36">
 
             <app-custom-datepicker
-              [placeholder]="'Delivery Date'"
+              [placeholder]="'Date'"
               [selectedDate]="date"
               (dateChange)="onDateChange($event)"
             ></app-custom-datepicker>
@@ -200,10 +241,10 @@
                           </td>
                         <td class="px-6 py-4 font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.invNo}}</td>
                     <td class="px-6 py-4 font-medium text-left text-gray-900 dark:text-[#C5C5C5]">{{item.delivaryMethod}}</td>
-                    <td class="px-6 py-4 font-medium text-left text-gray-900 dark:text-[#C5C5C5]">{{item.rowIndex}}</td>
+                    <td class="px-6 py-4 font-medium text-left text-gray-900 dark:text-[#C5C5C5]">Row {{item.rowIndex}}</td>
                     
 
-                    <td class="px-6 py-4 text-gray-900 dark:text-[#C5C5C5] cursor-default">
+                    <td class="px-6 py-4 text-left text-gray-900 dark:text-[#C5C5C5] cursor-default">
 
                         <div class="font-medium">
                             <span [style.color]="getDateColor(item)">

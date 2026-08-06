@@ -22,6 +22,11 @@ export class TargetProgressTodoComponent implements OnInit {
   selectStatus: string = '';
   selectType: string = '';
   selectTimeSlot: string = '';
+    selectRow!: number | null;
+      rowDropdownOptions: number[] = [];
+  rowIndexes: number[] = [];
+
+  
 
   date:  string = '';
 
@@ -38,6 +43,8 @@ export class TargetProgressTodoComponent implements OnInit {
   typeDropdownOptions = ['Pickup', 'Delivery'];
   timeSlotDropdownOptions = ['08:00 AM - 12:00 PM', '12:00 PM - 04:00 PM', '04:00 PM - 09:00 PM'];
   statusDropdownOptions = ['Pending', 'Opened'];
+
+    isRowDropdownOpen = false;
 
   toggleStatusDropdown() {
     this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
@@ -70,6 +77,16 @@ export class TargetProgressTodoComponent implements OnInit {
     this.filterTimeSlot();
   }
 
+    toggleRowDropdown() {
+    this.isRowDropdownOpen = !this.isRowDropdownOpen;
+  }
+
+  selectRowOption(option: number) {
+    this.selectRow = option;
+    this.isRowDropdownOpen = false;
+    this.filterRow();
+  }
+
   constructor(
     private router: Router,
     private ComplainSrv: ComplaintsService,
@@ -78,18 +95,19 @@ export class TargetProgressTodoComponent implements OnInit {
 
 
   ngOnInit(): void {
-    const today = new Date();
-    this.date = today.toISOString().split('T')[0]; // format: YYYY-MM-DD
     this.fetchToDoAssignOrders();
   }
 
-  fetchToDoAssignOrders(status: string = this.selectStatus, search: string = this.searchText, selectDate: string = this.date, type: string = this.selectType, timeSlot: string = this.selectTimeSlot) {
+  fetchToDoAssignOrders(status: string = this.selectStatus, search: string = this.searchText, selectDate: string = this.date, type: string = this.selectType, timeSlot: string = this.selectTimeSlot, row: number | null = this.selectRow) {
     this.isLoading = true;
-    this.DistributionSrv.getToDoAssignOrders(status, search, selectDate, type, timeSlot).subscribe(
+    this.DistributionSrv.getToDoAssignOrders(status, search, selectDate, type, timeSlot, row).subscribe(
       (res) => {
 
         this.totalItems = res.items.length;
         this.ordersArr = res.items
+        this.rowIndexes = res.rowIndexes;
+        this.rowDropdownOptions = this.rowIndexes
+        console.log('rowIndexes', this.rowIndexes)
 
         if (res.items.length === 0) {
           this.hasData = false;
@@ -147,6 +165,18 @@ export class TargetProgressTodoComponent implements OnInit {
       event.stopPropagation(); // Prevent triggering the dropdown toggle
     }
     this.selectTimeSlot = '';
+    this.fetchToDoAssignOrders();
+  }
+
+  filterRow() {
+    this.fetchToDoAssignOrders();
+  }
+
+  cancelRow(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
+    this.selectRow = null;
     this.fetchToDoAssignOrders();
   }
 

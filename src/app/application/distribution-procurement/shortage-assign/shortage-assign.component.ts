@@ -275,6 +275,26 @@ onCeilingBlur(event: Event): void {
     }
   }
 
+blockInvalidKey(event: KeyboardEvent): void {
+  // Keys that must always be allowed through (navigation/editing)
+  const allowedKeys = [
+    'Backspace', 'Delete', 'Tab', 'Escape', 'Enter',
+    'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End',
+  ];
 
+  if (allowedKeys.includes(event.key)) {
+    return;
+  }
+
+  // Allow copy/paste/select-all/cut shortcuts (Ctrl/Cmd + A/C/V/X)
+  if ((event.ctrlKey || event.metaKey) && ['a', 'c', 'v', 'x'].includes(event.key.toLowerCase())) {
+    return;
+  }
+
+  // Only allow digits 0-9; block everything else (e, E, +, -, ., ,, etc.)
+  if (!/^[0-9]$/.test(event.key)) {
+    event.preventDefault();
+  }
+}
 
 }

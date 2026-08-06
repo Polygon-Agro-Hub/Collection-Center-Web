@@ -24,6 +24,7 @@ export class TargetProgressOngoingComponent implements OnInit {
   selectStatus: string = '';
   selectType: string = '';
   selectTimeSlot: string = '';
+  selectRow!: number | null;
   centerName!: string;
   selectedDate: string | Date | null = null;
   totalItems: number = 0;
@@ -32,10 +33,13 @@ export class TargetProgressOngoingComponent implements OnInit {
   isStatusDropdownOpen = false;
   isTypeDropdownOpen = false;
   isTimeSlotDropdownOpen = false;
+  isRowDropdownOpen = false;
   statusDropdownOptions = ['Pending', 'Completed', 'Opened'];
   typeDropdownOptions = ['Pickup', 'Delivery'];
   timeSlotDropdownOptions = ['08:00 AM - 12:00 PM', '12:00 PM - 04:00 PM', '04:00 PM - 09:00 PM'];
   isDownloading = false;
+  rowDropdownOptions: number[] = [];
+  rowIndexes: number[] = [];
 
   toggleStatusDropdown() {
     this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
@@ -68,6 +72,17 @@ export class TargetProgressOngoingComponent implements OnInit {
     this.filterTimeSlot();
   }
 
+  toggleRowDropdown() {
+    this.isRowDropdownOpen = !this.isRowDropdownOpen;
+  }
+
+  selectRowOption(option: number) {
+    this.selectRow = option;
+    this.isRowDropdownOpen = false;
+    this.filterRow();
+  }
+
+
 
   constructor(
     private router: Router,
@@ -78,18 +93,22 @@ export class TargetProgressOngoingComponent implements OnInit {
 
 
   ngOnInit(): void {
-    const today = new Date();
-    this.selectedDate = today.toISOString().split('T')[0];
+    // const today = new Date();
+    // this.selectedDate = today.toISOString().split('T')[0];
     this.fetchAllAssignOrders();
-    this.fetchCenterData();
+    // this.fetchCenterData();
   }
 
-  fetchAllAssignOrders(status: string = this.selectStatus, search: string = this.searchText, selectDate: string | Date | null = this.selectedDate, type: string = this.selectType, timeSlot: string = this.selectTimeSlot) {
+  fetchAllAssignOrders(status: string = this.selectStatus, search: string = this.searchText, selectDate: string | Date | null = this.selectedDate, type: string = this.selectType, timeSlot: string = this.selectTimeSlot, row: number | null = this.selectRow) {
     this.isLoading = true;
-    this.DistributionSrv.getAllAssignOrders(status, search, selectDate, type, timeSlot).subscribe(
+    this.DistributionSrv.getAllAssignOrders(status, search, selectDate, type, timeSlot, row).subscribe(
       (res) => {
         this.totalItems = res.items.length;
         this.ordersArr = res.items;
+        this.rowIndexes = res.rowIndexes;
+        this.rowDropdownOptions = this.rowIndexes
+        console.log('rowIndexes', this.rowIndexes)
+
         this.hasData = res.items.length > 0;
         this.isLoading = false;
       }
@@ -156,6 +175,18 @@ export class TargetProgressOngoingComponent implements OnInit {
     this.fetchAllAssignOrders();
   }
 
+
+  filterRow() {
+    this.fetchAllAssignOrders();
+  }
+
+  cancelRow(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
+    this.selectRow = null;
+    this.fetchAllAssignOrders();
+  }
   onDateChange(newDate: string | Date | null) {
     let dateString: string;
   
@@ -320,21 +351,22 @@ const timeStr = now
 const generatedAtStr = `${genDay}/${genMonthNumber}/${genYear} ${timeStr}`;
 
     this.DistributionSrv
-      .downloadAllTargetProgressReport(this.selectStatus, this.selectedDate, this.searchText )
+      .downloadAllTargetProgressReport(this.selectStatus, this.selectedDate, this.searchText, this.selectType, this.selectRow, this.selectTimeSlot )
       .subscribe({
         next: (blob) => {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
-          if (this.selectedDate && this.selectStatus) {
-            a.download = `${this.centerName} All Orders on ${dateStr} filtered by ${this.selectStatus} Generated at ${generatedAtStr}.xlsx`;
-          } else if (this.selectedDate && !this.selectStatus) {
-            a.download = `${this.centerName} All Orders on ${dateStr} Generated at ${generatedAtStr}.xlsx`;
-          } else if (!this.selectedDate && this.selectStatus) {
-            a.download = `${this.centerName} All Orders filtered by ${this.selectStatus} Generated at ${generatedAtStr}.xlsx`;
-          } else {
-            a.download = `${this.centerName} All Orders Generated at ${generatedAtStr}.xlsx`;
-          }
+          const activeFilters: string[] = [];
+          if (this.selectStatus) activeFilters.push(this.selectStatus);
+          if (this.selectType) activeFilters.push(this.selectType);
+          if (this.selectTimeSlot) activeFilters.push(this.selectTimeSlot);
+          if (this.selectRow) activeFilters.push(`Row ${this.selectRow}`);
+
+          const filterStr = activeFilters.length ? ` filtered by ${activeFilters.join(', ')}` : '';
+          const dateSegment = this.selectedDate ? ` on ${dateStr}` : '';
+
+          a.download = `${this.centerName} All Orders${dateSegment}${filterStr} Generated at ${generatedAtStr}.xlsx`;
           a.click();
           window.URL.revokeObjectURL(url);
 

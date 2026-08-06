@@ -12,7 +12,7 @@
   <div class="w-full min-h-screen px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg overflow-x-auto">
     <div class="flex flex-row items-center justify-between gap-8 ">
 
-        <p class="class-[#030308] dark:text-white font-500">Product Shortage Today - Completed</p>
+        <p class="class-[#030308] dark:text-white font-500">Product Shortage History</p>
 
         <div class="flex flex-row items-center justify-end gap-8">
             <i class="fa-solid fa-list text-lg text-[#4A4A4A] dark:text-white"></i>
@@ -66,7 +66,7 @@
                     <th class="px-6 py-3 whitespace-nowrap text-[#4B5563] text-left font-medium">Assignee</th>
                     <th class="px-6 py-3 whitespace-nowrap text-[#4B5563] text-center font-medium">Purchased (kg)</th>
                     <th class="px-6 py-3 whitespace-nowrap text-[#4B5563] text-center font-medium">Purchase Price Per kg (Rs.)</th>
-                    <th class="px-6 py-3 whitespace-nowrap text-[#4B5563] text-center font-medium">Purchase Time</th>
+                    <th class="px-6 py-3 whitespace-nowrap text-[#4B5563] text-left font-medium">Purchase Time</th>
                 </tr>
             </thead>
             <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F] cursor-default">
@@ -80,7 +80,7 @@
                 <td class="px-6 py-4 whitespace-nowrap text-center">
   <div class="inline-flex items-center justify-center rounded-md bg-[#FEF7EF] px-3 py-1">
     <span class="text-[#9D6C00] font-semibold">
-      {{ item.qty }}
+      {{ item.qty | number:'1.2-2' }}
     </span>
   </div>
 </td>
@@ -90,13 +90,13 @@
                 <td class="px-6 py-4 whitespace-nowrap text-center">
   <div class="inline-flex items-center justify-center rounded-md bg-[#EDF5FC] px-3 py-1 min-w-[48px]">
     <span class="text-[#415CFF] font-semibold">
-      {{ item.prchQty || '----' }}
+      {{ item.prchQty ? (item.prchQty | number:'1.2-2') : '----' }}
     </span>
   </div>
 </td>
-                <td class="px-6 py-4 whitespace-nowrap text-[#415CFF] text-left font-600 dark:text-gray-300">{{item.prchPrice ||
+                <td class="px-6 py-4 whitespace-nowrap text-[#415CFF] text-left font-600 dark:text-gray-300">{{item.prchPrice ? (item.prchPrice | number:'1.2-2') :
                     "----"}}</td>
-                <td class="px-6 py-4 whitespace-nowrap text-[#000000] text-center font-500 dark:text-gray-300">{{item.createdAt | date:
+                <td class="px-6 py-4 whitespace-nowrap text-[#000000] text-left font-500 dark:text-gray-300">{{item.createdAt | date:
                     'hh:mm a on yyyy/MM/dd'}}</td>
                 </tr>
             </tbody>
@@ -105,7 +105,7 @@
     </div>
 
     <div *ngIf="!hasData" class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6 ">
-        <p class="text-[#494949] my-6 dark:text-textDark">--No Product Shortages for today yet--</p>
+        <p class="text-[#494949] my-6 dark:text-textDark">--No Data Available--</p>
         <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
     </div>
 

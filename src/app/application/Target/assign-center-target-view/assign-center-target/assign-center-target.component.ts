@@ -43,8 +43,12 @@ export class AssignCenterTargetComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    const today = new Date('2026-08-20');
-    this.selectDate = today.toISOString().split('T')[0];
+const today = new Date();
+const tomorrow = new Date(today);
+
+tomorrow.setDate(today.getDate() + 1);
+
+this.selectDate = tomorrow.toISOString().split('T')[0];
     this.selectDatePickerDate = this.selectDate;
     this.fetchSavedCenterCrops()
   }
@@ -65,7 +69,10 @@ export class AssignCenterTargetComponent implements OnInit {
     // this.validateSelectDate()
     this.TargetSrv.getSavedCenterCrops(this.centerDetails.centerId, this.selectDate, this.searchText).subscribe(
       (res) => {
-        this.assignCropsArr = res.products
+        this.assignCropsArr = res.products.map((p: AssignCrops) => ({
+          ...p,
+          originalTotal: (p.targetA || 0) + (p.targetB || 0) + (p.targetC || 0)
+        }));
         this.countCrops = res.products.length
         this.companyCenterId = res.companyCenterId
         this.isLoading = false;
@@ -126,6 +133,9 @@ export class AssignCenterTargetComponent implements OnInit {
       }
     }
 
+    if (this.isQtyExceeded(item)) {
+      return this.toastSrv.warning(`Total target across grades cannot exceed ${this.maxQty(item)} ${item.unitType}`)
+    }
 
     let data = {
       id: editId,
@@ -182,7 +192,7 @@ export class AssignCenterTargetComponent implements OnInit {
   }
 
   maxQty(item: AssignCrops): number {
-    return Math.round(item.qty * 1.02 * 100) / 100;
+    return Math.round((item.originalTotal + item.remaining * 1.02) * 100) / 100;
   }
 
   // selectDate is the default-fetched "must complete by" date; the notice's other
@@ -282,6 +292,8 @@ class AssignCrops {
   preValueA!: number;
   preValueB!: number;
   preValueC!: number;
+  remaining!: number;
+  originalTotal: number = 0;
 }
 
 class NewTarget {

@@ -93,6 +93,7 @@ import { ShortageHistoryComponent } from './application/distribution-procurement
 import { ShortageTodayComponent } from './application/distribution-procurement/shortage-today/shortage-today.component'
 import { ShortageTodayFinalizationComponent } from './application/distribution-procurement/shortage-today-finalization/shortage-today-finalization.component'
 import { ShortageAssignComponent } from './application/distribution-procurement/shortage-assign/shortage-assign.component';
+import { ViewOutForDeiveryOrderDetailsComponent } from './application/Distributed-Center/Distributed-Target/view-out-for-deivery-order-details/view-out-for-deivery-order-details.component'
 
 export const routes: Routes = [
     {
@@ -627,7 +628,7 @@ export const routes: Routes = [
                     {
                         path: '',
                         component: TargetProgressAllComponent,
-                    },
+                    }
                    
                 ]
             },

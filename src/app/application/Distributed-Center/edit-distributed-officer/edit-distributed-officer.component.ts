@@ -1364,14 +1364,14 @@ isSelected(item: any): boolean {
     const inputElement = event.target as HTMLInputElement;
 
     if (inputElement) {
-      // Remove **all spaces** (not just trim)
-      const noSpaceValue = inputElement.value.replace(/\s+/g, '');
+      // Remove everything except digits (no letters, spaces, or special characters)
+      const numericValue = inputElement.value.replace(/[^0-9]/g, '');
 
       // Update model and input
-      modelRef[fieldName] = noSpaceValue;
-      inputElement.value = noSpaceValue;
+      modelRef[fieldName] = numericValue;
+      inputElement.value = numericValue;
     }
-  }
+}
 
 
 

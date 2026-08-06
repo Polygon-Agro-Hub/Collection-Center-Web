@@ -42,7 +42,7 @@ export class ProductShortageTodayTodoComponent implements OnInit {
   }
 
   isModalOpen: boolean = false;
-  selectedOfficerId!: number;
+  selectedOfficerId!: number | null;
 currentTime!: Date;
 afterSixPm!: boolean;
 
@@ -121,6 +121,7 @@ afterSixPm!: boolean;
   }
 
   closeModal() {
+    this.selectedOfficerId = null;
      this.isModalOpen = false;
   }
 
@@ -140,6 +141,7 @@ afterSixPm!: boolean;
           this.isModalOpen = false;
           this.toastSrv.success('Officer assigned Successfully.');
           this.getAllShortageTodayToDo();
+              this.selectedOfficerId = null;
         }
       },
       error: (err) => {

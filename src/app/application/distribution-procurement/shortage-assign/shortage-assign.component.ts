@@ -226,11 +226,11 @@ onCeilingInput(event: Event): void {
   // Strip anything that isn't a digit
   let digitsOnly = value.replace(/\D/g, '');
 
-  // Clamp to max 100
+  // Clamp to max 99 (allow typing to continue below min while in progress)
   let num = digitsOnly === '' ? 0 : Number(digitsOnly);
-  if (num > 100) {
-    num = 100;
-    digitsOnly = '100';
+  if (num > 99) {
+    num = 99;
+    digitsOnly = '99';
   }
 
   if (digitsOnly !== value) {
@@ -238,6 +238,16 @@ onCeilingInput(event: Event): void {
   }
 
   this.ceilingPercent = num;
+}
+
+onCeilingBlur(event: Event): void {
+  const input = event.target as HTMLInputElement;
+
+  // Enforce min 1 once the user is done typing (covers 0, empty, and leading zeros)
+  if (!this.ceilingPercent || this.ceilingPercent < 1) {
+    this.ceilingPercent = 1;
+    input.value = '1';
+  }
 }
 
   formatNumber(value: number): string {
@@ -264,5 +274,7 @@ onCeilingInput(event: Event): void {
       this.isCentreDropdownOpen = false;
     }
   }
+
+
 
 }

@@ -91,7 +91,7 @@
                 {{ item.productTypeShortCode }}
               </div>
 
-              <app-searchable-dropdown [items]="getMarketplaceDropdownItems()"
+              <app-searchable-dropdown [items]="getMarketplaceDropdownItems(item.productTypeId)"
                 [customStyles]="item.isExcluded === true ? 'border-red-500 text-red-600 bg-red-50' : ''"
                 placeholder="--Select Product--" searchPlaceholder="Search products..."
                 [ngModel]="getProductValue(item)" (ngModelChange)="onProductSelectionChange($event, item)"

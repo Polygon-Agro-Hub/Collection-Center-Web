@@ -904,7 +904,7 @@ fetchAllShortageTodayCompleted( searchText: string = ''
   );
 }
 
- assignOfficerToProduct(shortageId: number, shortageAssignId: number, officerId: number): Observable<any> {
+ assignOfficerToProduct(shortageId: number | null, shortageAssignId: number | null, officerId: number | null): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });

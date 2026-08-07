@@ -324,7 +324,7 @@ export class DcmPositioningComponent implements OnInit {
     this.attemptedSave = true;
 
     if (this.positions.some(slot => this.isPositionEmpty(slot))) {
-      this.toastSrv.error('every position must have at least one product.');
+      this.toastSrv.error('Every position must have at least one product.');
       return;
     }
 

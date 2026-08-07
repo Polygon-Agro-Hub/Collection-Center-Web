@@ -220,7 +220,7 @@ export const MENU_ITEMS = [
     key: 'distribution-procurement',
     path: '/distribution-procurement',
     label: 'Procurement',
-    icon: 'fa-solid fa-question',
+    icon: 'fa-solid fa-box-open',
     permission: ['Distribution Centre Head'],
   },
 

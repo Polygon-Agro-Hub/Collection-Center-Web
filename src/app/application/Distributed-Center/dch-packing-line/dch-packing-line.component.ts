@@ -78,6 +78,7 @@ export class DchPackingLineComponent {
 
   ngOnInit(): void {
   let center$;
+  this.isLoading = true;
 
   if (this.logingRole === 'Distribution Centre Head') {
     this.centerId = Number(this.route.snapshot.paramMap.get('id'));

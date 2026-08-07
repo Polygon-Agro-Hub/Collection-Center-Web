@@ -194,14 +194,18 @@ export class EditDistributedOfficerComponent implements OnInit {
   ]
 
   ngOnInit(): void {
-    // this.getAllCollectionCetnter();
-        this.getAllDriverCategory();
     this.loadBanks();
     this.loadBranches();
     this.getAllCenters();
     this.editOfficerId = this.route.snapshot.params['id'];
     this.centerId = this.route.snapshot.params['centerId'];
-    this.fetchOffierById(this.editOfficerId);
+
+    // Driver categories must be loaded before the officer is fetched, otherwise
+    // the searchable dropdown's writeValue() runs against an empty items list
+    // and personalData.drvCategory never gets matched to an item.
+    this.getAllDriverCategory().then(() => {
+      this.fetchOffierById(this.editOfficerId);
+    });
 
     this.setJobRoles();
     this.setActiveTabFromRoute()
@@ -245,15 +249,16 @@ export class EditDistributedOfficerComponent implements OnInit {
     this.jobRoleInputTouched = true;
   }
 
-  getAllDriverCategory() {
+  getAllDriverCategory(): Promise<void> {
     this.isLoading = true;
-    this.DistributedManageOfficerSrv.getDriverCategory().subscribe(
-      (res) => {
-        this.drvCatArr = res
-        console.log('drvCatArr', this.drvCatArr)
-        this.isLoading = false;
-      }
-    )
+    return new Promise((resolve) => {
+      this.DistributedManageOfficerSrv.getDriverCategory().subscribe(
+        (res) => {
+          this.drvCatArr = res
+          resolve();
+        }
+      )
+    });
   }
 
   get driverCategoryDropdownItems() {
@@ -395,6 +400,12 @@ isSelected(item: any): boolean {
           this.personalData.languages = this.personalData.languages.join(',');
         } else if (!this.personalData.languages) {
           this.personalData.languages = '';
+        }
+
+        // driverCategoryDropdownItems values are stringified ids; coerce so the
+        // searchable dropdown's writeValue() strict-equality match succeeds.
+        if (this.personalData.drvCategory != null) {
+          this.personalData.drvCategory = this.personalData.drvCategory.toString();
         }
 
         this.selectJobRole = res.officerData.collectionOfficer.jobRole;

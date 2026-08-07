@@ -305,6 +305,7 @@ const approveButton = (item.status === 'Rejected' || item.status === 'Not Approv
 
   onSearch() {
     this.searchText = this.searchText.trimStart();
+    this.page = 1;
     this.getAllOfficers(this.centerId, this.page, this.itemsPerPage, this.selectRole, this.selectStatus, this.searchText)
 
   }

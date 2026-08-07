@@ -332,7 +332,7 @@ export const routes: Routes = [
                         component: ViewCentersComponent
                     },
                     {
-                        path: 'center-shashbord/:id',
+                        path: 'center-dashboard/:id',
                         component: CentersDashbordComponent
                     },
                     {

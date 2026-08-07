@@ -172,6 +172,25 @@
 
                     <div *ngIf="logingRole === 'Distribution Centre Manager'"></div>
 
+
+                    <div *ngIf="personalData.jobRole === 'Driver'">
+                    <label for="drvCategory" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
+                        Driver Category *
+                    </label>
+
+                    <app-searchable-dropdown id="drvCategory" name="drvCategory" [items]="driverCategoryDropdownItems"
+                        [placeholder]="'Select a category'" [searchPlaceholder]="'Search categories...'"
+                        [(ngModel)]="personalData.drvCategory" #drvCategoryInput="ngModel"
+                        (ngModelChange)="onDriverCategorySelectionChange($event)"
+                        borderClass="border border-gray-300"
+                        placeholderClass="text-gray-400"></app-searchable-dropdown>
+
+                    <!-- validation message (same logic you already use) -->
+                    <div *ngIf="drvCategoryInput.touched && !personalData.drvCategory" class="text-red-500 text-sm mt-1">
+                        <div>Driver Category is required</div>
+                    </div>
+                </div>
+
                     <div
                         *ngIf="(logingRole === 'Distribution Centre Head' && (personalData.jobRole === 'Distribution Officer')) 
                         || (logingRole === 'Distribution Centre Head' && (personalData.jobRole === 'Driver'))">
@@ -560,6 +579,7 @@
                           && !this.languagesRequired
                           && personalData.phoneNumber02 !== personalData.phoneNumber01 
                           && personalData.jobRole 
+                          && personalData.drvCategory
                           && !isPhoneInvalidMap['phone01'] 
                           && ((personalData.phoneNumber02 && !isPhoneInvalidMap['phone02']) || !personalData.phoneNumber02)
                             ? nextForm('pageTwo') 

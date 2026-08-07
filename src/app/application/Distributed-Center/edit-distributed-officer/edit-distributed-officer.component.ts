@@ -99,6 +99,8 @@ export class EditDistributedOfficerComponent implements OnInit {
   vehicleTypeDropdownOpen = false;
   vehicleTypeTouched = false;
 
+    drvCatArr: DriverCategory[] = [];
+
   selectVehicletype: any = { name: '', capacity: '' };
 
   licenseFrontImageFileName!: string;
@@ -193,6 +195,7 @@ export class EditDistributedOfficerComponent implements OnInit {
 
   ngOnInit(): void {
     // this.getAllCollectionCetnter();
+        this.getAllDriverCategory();
     this.loadBanks();
     this.loadBranches();
     this.getAllCenters();
@@ -240,6 +243,30 @@ export class EditDistributedOfficerComponent implements OnInit {
     }
     this.isJobRoleOpen = false;
     this.jobRoleInputTouched = true;
+  }
+
+  getAllDriverCategory() {
+    this.isLoading = true;
+    this.DistributedManageOfficerSrv.getDriverCategory().subscribe(
+      (res) => {
+        this.drvCatArr = res
+        console.log('drvCatArr', this.drvCatArr)
+        this.isLoading = false;
+      }
+    )
+  }
+
+  get driverCategoryDropdownItems() {
+    return this.drvCatArr.map(cat => ({
+      value: cat.id.toString(),
+      label: cat.catName,
+      disabled: false
+    }));
+  }
+
+  onDriverCategorySelectionChange(selectedValue: string) {
+    this.personalData.drvCategory = selectedValue || '';
+    console.log('drvCa', this.personalData.drvCategory)
   }
 
   @HostListener('document:click', ['$event'])
@@ -379,6 +406,7 @@ isSelected(item: any): boolean {
         });
 
         this.isLoading = false;
+        console.log('personalData', this.personalData.drvCategory)
       }
     );
   }
@@ -1028,6 +1056,11 @@ isSelected(item: any): boolean {
 
     if (!this.personalData.jobRole) {
       missingFields.push('Job Role is required');
+    }
+
+
+    if (!this.personalData.drvCategory) {
+      missingFields.push('Driver Category is required');
     }
 
     if (!this.personalData.employeeType) {
@@ -2144,7 +2177,13 @@ class Personal {
   empIdPrefix!: string;
   previousEmpId!: string;
   myJobRole!: string;
+  drvCategory!: number | string;
 
+}
+
+class DriverCategory {
+  id!: number
+  catName!: string
 }
 
 

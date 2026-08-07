@@ -27,9 +27,13 @@ export class CustomDatepickerComponent {
   @Input() showClearButton: boolean = true;
   @Output() pickerOpened = new EventEmitter<void>();
   @Input() placeholderClass: string = 'italic';
+  
 
   // ✅ NEW: optional min date (dates on or before this are disabled)
   @Input() minDate: string | Date | null = null;
+
+  // ✅ NEW: optional max date (dates after this are disabled)
+  @Input() maxDate: string | Date | null = null;
 
   @Input() triggerClass: string = 'w-full h-12 border-[1.8px] border-[#828282] rounded-xl flex items-center px-3 py-2 cursor-pointer dark:bg-[#292929]';
 
@@ -56,13 +60,22 @@ export class CustomDatepickerComponent {
 
   // ✅ NEW: checks whether a given calendar day should be disabled
   isDisabled(day: { fullDate: Date }): boolean {
-    if (!this.minDate) return false;
-    const min = new Date(this.minDate);
-    // Normalize both to midnight for a clean date-only comparison
-    min.setHours(0, 0, 0, 0);
     const d = new Date(day.fullDate);
     d.setHours(0, 0, 0, 0);
-    return d <= min;
+
+    if (this.minDate) {
+      const min = new Date(this.minDate);
+      min.setHours(0, 0, 0, 0);
+      if (d <= min) return true;
+    }
+
+    if (this.maxDate) {
+      const max = new Date(this.maxDate);
+      max.setHours(0, 0, 0, 0);
+      if (d > max) return true;
+    }
+
+    return false;
   }
 
   toggleCalendar() {

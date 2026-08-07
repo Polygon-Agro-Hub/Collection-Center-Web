@@ -117,15 +117,19 @@
                     <!-- Market Price -->
                     <div class="w-32 shrink-0">
                         <div class="text-xs text-[#000000] dark:text-textDark mb-1">Market Price per kg</div>
-                        <div class="text-[#000000] dark:text-textDark font-semibold">{{
-                            formatCurrency(item.marketPricePerKg) }}</div>
+                        <div class="text-[#000000] dark:text-textDark font-semibold">Rs. {{
+                            item.marketPricePerKg | number: '1.2-2' }}</div>
                     </div>
 
                     <!-- Ceiling % -->
                     <div class="w-24 shrink-0">
                         <div class="text-xs text-[#000000] dark:text-textDark mb-1">Ceiling (%)</div>
                         <input type="number" [(ngModel)]="item.ceilingPercent"
-                            class="inline-block w-20 text-center font-bold text-base border border-[#E9E9E9] bg-[#F8F9F9] dark:border-gray-600 dark:bg-[#2A3350] rounded-lg px-4 py-2 text-[#000000] dark:text-textDark outline-none" />
+       min="1" max="99" step="1"
+       (input)="onCeilingInput($event, item)"
+       (keydown)="onCeilingKeydown($event)"
+       (blur)="onCeilingBlur(item)"
+       class="inline-block w-20 text-center font-bold text-base border border-[#E9E9E9] bg-[#F8F9F9] dark:border-gray-600 dark:bg-[#2A3350] rounded-lg px-4 py-2 text-[#000000] dark:text-textDark outline-none" />
                     </div>
 
                     <!-- 1st Assigned By -->
@@ -180,8 +184,8 @@
 
                     <div class="w-32 shrink-0">
                         <div class="text-xs text-[#000000] dark:text-textDark mb-1">Market Price per kg</div>
-                        <div class="text-[#000000] dark:text-textDark font-semibold">{{
-                            formatCurrency(item.marketPricePerKg) }}</div>
+                        <div class="text-[#000000] dark:text-textDark font-semibold">Rs. {{
+                            item.marketPricePerKg | number: '1.2-2' }}</div>
                     </div>
 
                     <div class="w-24 shrink-0">

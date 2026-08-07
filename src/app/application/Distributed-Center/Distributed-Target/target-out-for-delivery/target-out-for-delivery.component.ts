@@ -1,7 +1,7 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DistributionServiceService } from '../../../../services/Distribution-Service/distribution-service.service'
 import { NgxPaginationModule } from 'ngx-pagination';
 import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
@@ -46,6 +46,11 @@ export class TargetOutForDeliveryComponent implements OnInit {
   isRowDropdownOpen = false;
   typeDropdownOptions = ['Pickup', 'Delivery'];
   timeSlotDropdownOptions = ['08:00 AM - 12:00 PM', '12:00 PM - 04:00 PM', '04:00 PM - 09:00 PM'];
+
+    centerId: number | null = null;
+  selectedCenterName: string | null = null;
+  regCode: string | null = null;
+  tab!: string;
 
   isDownloading = false;
     listView: boolean = true;
@@ -95,17 +100,34 @@ export class TargetOutForDeliveryComponent implements OnInit {
     private router: Router,
     private ComplainSrv: ComplaintsService,
     private DistributionSrv: DistributionServiceService,
-    private toastSrv: ToastAlertService
+    private toastSrv: ToastAlertService,
+    private route: ActivatedRoute
   ) { }
 
 
   ngOnInit(): void {
+            console.log('centerId1', this.centerId)
+
+const segments = this.router.url.split('/');
+this.tab = segments[1]
+console.log('segments', segments[1])
+
+if (segments[1] === 'distribution-center') {
+  this.centerId = Number(this.route.snapshot.paramMap.get('id'));
+  this.selectedCenterName = this.route.snapshot.paramMap.get('centerName');
+  this.regCode = this.route.snapshot.paramMap.get('regCode');
+} else {
+  this.centerId = null;
+  this.selectedCenterName = null;
+  this.regCode = null;
+}
+
     this.fetchOutForDeliveryOrders();
   }
 
-  fetchOutForDeliveryOrders(status: string = this.selectStatus, search: string = this.searchText, type: string = this.selectType, timeSlot: string = this.selectTimeSlot, row: number | null = this.selectRow, selectDate: string | Date | null = this.selectedDate) {
+  fetchOutForDeliveryOrders(status: string = this.selectStatus, search: string = this.searchText, type: string = this.selectType, timeSlot: string = this.selectTimeSlot, row: number | null = this.selectRow, selectDate: string | Date | null = this.selectedDate, centerId: number | null = this.centerId) {
     this.isLoading = true;
-    this.DistributionSrv.getOutForDeliveryOrders(status, search, type, timeSlot, row, selectDate).subscribe(
+    this.DistributionSrv.getOutForDeliveryOrders(status, search, type, timeSlot, row, selectDate, centerId).subscribe(
       (res) => {
         this.ordersArr = res.items
         console.log('ordersArr', this.ordersArr)

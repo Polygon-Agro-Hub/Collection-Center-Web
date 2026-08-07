@@ -90,9 +90,9 @@
                                 (click)="saveGrade('A', item, item.targetA, item.idA)">
                                 Save
                             </button>
-                            <div *ngIf="(item.isNew || item.editingA) && isQtyExceeded(item) && item.lastEditedGrade === 'A'" class="flex items-center gap-1 mt-1 text-xs text-red-600 dark:text-red-400">
+                            <div *ngIf="(item.isNew || item.editingA || item.editingB || item.editingC) && isQtyExceeded(item)" class="flex items-center gap-1 mt-1 text-xs text-red-600 dark:text-red-400">
                                 <i class="fa-solid fa-triangle-exclamation text-[#FF0000]"></i>
-                                <span class="text-[#FF0000] font-[400] ">You can only set target up to {{ maxQty(item) }} {{ item.unitType.toLowerCase() }}</span>
+                                <span class="text-[#FF0000] font-[400] ">You can only set target up to {{ item.remaining }} {{ item.unitType.toLowerCase() }}</span>
                             </div>
                         </td>
 
@@ -115,10 +115,6 @@
                                 (click)="saveGrade('B', item, item.targetB, item.idB)">
                                 Save
                             </button>
-                            <div *ngIf="(item.isNew || item.editingB) && isQtyExceeded(item) && item.lastEditedGrade === 'B'" class="flex items-center gap-1 mt-1 text-xs text-red-600 dark:text-red-400">
-                                <i class="fa-solid fa-triangle-exclamation"></i>
-                                <span>You can only set target up to {{ maxQty(item) }} {{ item.unitType.toLowerCase() }}</span>
-                            </div>
                         </td>
 
                         <!-- Grade C Column -->
@@ -140,13 +136,6 @@
                                 (click)="saveGrade('C', item, item.targetC, item.idC)">
                                 Save
                             </button>
-                            <div *ngIf="(item.isNew || item.editingC) && isQtyExceeded(item) && item.lastEditedGrade === 'C'" class="flex items-center gap-1 mt-1 text-xs text-red-600 dark:text-red-400">
-                                <i class="fa-solid fa-triangle-exclamation"></i>
-<span>
-  You can only set target up to {{ maxQty(item) }} {{ item.unitType.toLowerCase() }}
-</span>
-                            </div>
-                            
                         </td>
                     </tr>
                     </ng-container>

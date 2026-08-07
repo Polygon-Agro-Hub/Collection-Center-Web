@@ -99,6 +99,8 @@ export class EditDistributedOfficerComponent implements OnInit {
   vehicleTypeDropdownOpen = false;
   vehicleTypeTouched = false;
 
+    drvCatArr: DriverCategory[] = [];
+
   selectVehicletype: any = { name: '', capacity: '' };
 
   licenseFrontImageFileName!: string;
@@ -192,13 +194,18 @@ export class EditDistributedOfficerComponent implements OnInit {
   ]
 
   ngOnInit(): void {
-    // this.getAllCollectionCetnter();
     this.loadBanks();
     this.loadBranches();
     this.getAllCenters();
     this.editOfficerId = this.route.snapshot.params['id'];
     this.centerId = this.route.snapshot.params['centerId'];
-    this.fetchOffierById(this.editOfficerId);
+
+    // Driver categories must be loaded before the officer is fetched, otherwise
+    // the searchable dropdown's writeValue() runs against an empty items list
+    // and personalData.drvCategory never gets matched to an item.
+    this.getAllDriverCategory().then(() => {
+      this.fetchOffierById(this.editOfficerId);
+    });
 
     this.setJobRoles();
     this.setActiveTabFromRoute()
@@ -240,6 +247,31 @@ export class EditDistributedOfficerComponent implements OnInit {
     }
     this.isJobRoleOpen = false;
     this.jobRoleInputTouched = true;
+  }
+
+  getAllDriverCategory(): Promise<void> {
+    this.isLoading = true;
+    return new Promise((resolve) => {
+      this.DistributedManageOfficerSrv.getDriverCategory().subscribe(
+        (res) => {
+          this.drvCatArr = res
+          resolve();
+        }
+      )
+    });
+  }
+
+  get driverCategoryDropdownItems() {
+    return this.drvCatArr.map(cat => ({
+      value: cat.id.toString(),
+      label: cat.catName,
+      disabled: false
+    }));
+  }
+
+  onDriverCategorySelectionChange(selectedValue: string) {
+    this.personalData.drvCategory = selectedValue || '';
+    console.log('drvCa', this.personalData.drvCategory)
   }
 
   @HostListener('document:click', ['$event'])
@@ -370,6 +402,12 @@ isSelected(item: any): boolean {
           this.personalData.languages = '';
         }
 
+        // driverCategoryDropdownItems values are stringified ids; coerce so the
+        // searchable dropdown's writeValue() strict-equality match succeeds.
+        if (this.personalData.drvCategory != null) {
+          this.personalData.drvCategory = this.personalData.drvCategory.toString();
+        }
+
         this.selectJobRole = res.officerData.collectionOfficer.jobRole;
         this.getAllManagers();
 
@@ -379,6 +417,7 @@ isSelected(item: any): boolean {
         });
 
         this.isLoading = false;
+        console.log('personalData', this.personalData.drvCategory)
       }
     );
   }
@@ -1030,6 +1069,11 @@ isSelected(item: any): boolean {
       missingFields.push('Job Role is required');
     }
 
+
+    if (!this.personalData.drvCategory) {
+      missingFields.push('Driver Category is required');
+    }
+
     if (!this.personalData.employeeType) {
       missingFields.push('Employee Type is required');
     }
@@ -1442,7 +1486,7 @@ isSelected(item: any): boolean {
   }
 
   navigateToCenterDashboard() {
-    this.router.navigate(['/centers/center-shashbord', this.centerId]); // Change '/reports' to your desired route
+    this.router.navigate(['/centers/center-dashboard', this.centerId]); // Change '/reports' to your desired route
   }
 
 
@@ -2144,7 +2188,13 @@ class Personal {
   empIdPrefix!: string;
   previousEmpId!: string;
   myJobRole!: string;
+  drvCategory!: number | string;
 
+}
+
+class DriverCategory {
+  id!: number
+  catName!: string
 }
 
 

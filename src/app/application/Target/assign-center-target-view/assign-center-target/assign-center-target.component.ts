@@ -219,14 +219,14 @@ onSubmit() {
   isQtyExceeded(item: AssignCrops): boolean {
     if (item.isNew) {
       const total = (item.targetA || 0) + (item.targetB || 0) + (item.targetC || 0);
-      return total > this.maxQty(item);
+      return total > item.remaining;
     }
 
     const addedA = item.editingA ? (item.targetA || 0) - (item.preValueA || 0) : 0;
     const addedB = item.editingB ? (item.targetB || 0) - (item.preValueB || 0) : 0;
     const addedC = item.editingC ? (item.targetC || 0) - (item.preValueC || 0) : 0;
 
-    return (addedA + addedB + addedC) > this.maxQty(item);
+    return (addedA + addedB + addedC) > item.remaining;
   }
 
   maxQty(item: AssignCrops): number {
@@ -242,7 +242,7 @@ onSubmit() {
 
     if (!item.isNew && isEditingGrade && target < preValue) return true;
 
-    return (item.isNew || isEditingGrade) && this.isQtyExceeded(item) && item.lastEditedGrade === grade;
+    return (item.isNew || isEditingGrade) && this.isQtyExceeded(item);
   }
 
   // selectDate is the default-fetched "must complete by" date; the notice's other

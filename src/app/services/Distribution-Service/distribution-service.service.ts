@@ -177,7 +177,7 @@ export class DistributionServiceService {
     return this.http.post(url, requestObj, { headers });
   }
 
-  getAllAssignOrders(status: string = '', searchText: string = '', selectDate: string | Date | null = '', type: string = '', timeSlot: string = '', row: number | null): Observable<any> {
+  getAllAssignOrders(status: string = '', searchText: string = '', selectDate: string | Date | null = '', type: string = '', timeSlot: string = '', row: number | null, cenId: number | null): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
@@ -207,6 +207,10 @@ export class DistributionServiceService {
 
     if (row) {
       url += `&row=${row}`
+    }
+
+    if (cenId) {
+      url += `&cenId=${cenId}`
     }
 
     return this.http.get<any>(url, { headers });
@@ -266,7 +270,7 @@ export class DistributionServiceService {
     return this.http.get<any>(url, { headers });
   }
 
-  getOutForDeliveryOrders(status: string = '', searchText: string = '', type: string = '', timeSlot: string = '', row: number | null, selectDate: string | Date | null = ''): Observable<any> {
+  getOutForDeliveryOrders(status: string = '', searchText: string = '', type: string = '', timeSlot: string = '', row: number | null, selectDate: string | Date | null = '', cenId: number | null): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
@@ -295,6 +299,10 @@ export class DistributionServiceService {
 
         if (selectDate) {
       url += `&date=${selectDate}`
+    }
+
+        if (cenId) {
+      url += `&cenId=${cenId}`
     }
 
 

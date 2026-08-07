@@ -3,13 +3,15 @@
 
 <div *ngIf="!isLoading" class="w-full min-h-screen overflow-x-auto">
 
-    <button *ngIf="hasData"
+    <button *ngIf="hasData && tab !== 'distribution-center'"
                 class="bg-[#415CFF] text-white shadow-md font-medium rounded-lg py-2 px-5 mr-5 text-lg flex items-center"
                 (click)="downloadTemplate1()">
                 <i class="fa-solid fa-download px-2" *ngIf="!isDownloading"></i>
                 <i class="fa-solid fa-spinner fa-spin px-2" *ngIf="isDownloading"></i>
                 {{ isDownloading ? " Downloading..." : " Download" }}
             </button>
+
+    <div *ngIf="tab === 'distribution-center'"><p class="text-lg font-[500] text-[#030308] dark:text-white whitespace-nowrap">{{ regCode }} {{ selectedCenterName }}</p></div>
             
     <div class="flex flex-row items-center justify-between gap-4 mt-2">
         <div><p class="text-lg dark:text-white whitespace-nowrap">All ({{ totalItems < 10 ? ('0' + totalItems) : totalItems }})</p></div>

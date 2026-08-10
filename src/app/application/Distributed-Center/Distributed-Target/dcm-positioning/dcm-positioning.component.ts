@@ -1,5 +1,6 @@
 import { CommonModule, DatePipe, Location  } from '@angular/common';
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, ElementRef, ViewChild, AfterViewChecked } from '@angular/core';
+import lottie from 'lottie-web';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DistributionServiceService } from '../../../../services/Distribution-Service/distribution-service.service'
@@ -62,7 +63,7 @@ export interface Products {
   templateUrl: './dcm-positioning.component.html',
   styleUrl: './dcm-positioning.component.css'
 })
-export class DcmPositioningComponent implements OnInit {
+export class DcmPositioningComponent implements OnInit, AfterViewChecked {
 
   isLoading: boolean = false;
 
@@ -75,6 +76,9 @@ export class DcmPositioningComponent implements OnInit {
   productsArr: Products[] = [];
   total!: number;
   hasData: boolean = false;
+  @ViewChild('dcmNoRowsAnim') dcmNoRowsAnim!: ElementRef;
+  private noRowsAnimInstance: any = null;
+  private noRowsAnimLoaded: boolean = false;
   hasPositionsData: boolean = false;
   selectedRow!: PackingLineRow;
 
@@ -120,8 +124,36 @@ export class DcmPositioningComponent implements OnInit {
         console.log('total', this.total)
         this.hasData = res.items.length > 0;
         this.isLoading = false;
+        if (!this.hasData) {
+          // let AfterViewChecked load the animation when the view is ready
+          this.noRowsAnimLoaded = false;
+        } else if (this.noRowsAnimInstance) {
+          this.noRowsAnimInstance.destroy();
+          this.noRowsAnimInstance = null;
+          this.noRowsAnimLoaded = false;
+        }
       }
     )
+  }
+
+  private loadNoRowsAnimation() {
+    try {
+      if (this.noRowsAnimInstance) {
+        this.noRowsAnimInstance.destroy();
+        this.noRowsAnimInstance = null;
+      }
+      const container = this.dcmNoRowsAnim?.nativeElement;
+      if (!container) return;
+      this.noRowsAnimInstance = lottie.loadAnimation({
+        container,
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: 'assets/json/NoRowAvailable.json'
+      });
+    } catch (err) {
+      console.error('Failed to load Lottie animation', err);
+    }
   }
 
   onPlace(row: PackingLineRow): void {
@@ -149,6 +181,16 @@ export class DcmPositioningComponent implements OnInit {
         this.isLoading = false;
       }
     )
+  }
+
+  ngAfterViewChecked(): void {
+    if (!this.hasData && !this.noRowsAnimLoaded) {
+      const container = this.dcmNoRowsAnim?.nativeElement;
+      if (container) {
+        this.loadNoRowsAnimation();
+        this.noRowsAnimLoaded = true;
+      }
+    }
   }
 
 

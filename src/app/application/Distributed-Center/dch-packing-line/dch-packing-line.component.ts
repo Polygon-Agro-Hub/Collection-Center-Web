@@ -1,5 +1,6 @@
 import { CommonModule, DatePipe, Location  } from '@angular/common';
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, ElementRef, ViewChild } from '@angular/core';
+import lottie from 'lottie-web';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { DistributionServiceService } from '../../../services/Distribution-Service/distribution-service.service'
@@ -56,6 +57,8 @@ export class DchPackingLineComponent {
 
   logingRole: string | null = null;
   hasData: boolean = false;
+  @ViewChild('dchNoRowsAnim') dchNoRowsAnim!: ElementRef;
+  private noRowsAnimInstance: any = null;
 
   openErrorEnableRow: boolean = false;
   openErrorDisableRow: boolean = false;
@@ -127,8 +130,34 @@ export class DchPackingLineComponent {
         this.hasData = this.rows.length > 0;
         console.log('hasData', this.hasData)
         this.isLoading = false;
+        if (!this.hasData) {
+          setTimeout(() => this.loadNoRowsAnimation(), 0);
+        } else if (this.noRowsAnimInstance) {
+          this.noRowsAnimInstance.destroy();
+          this.noRowsAnimInstance = null;
+        }
       }
     )
+  }
+
+  private loadNoRowsAnimation() {
+    try {
+      if (this.noRowsAnimInstance) {
+        this.noRowsAnimInstance.destroy();
+        this.noRowsAnimInstance = null;
+      }
+      const container = this.dchNoRowsAnim?.nativeElement;
+      if (!container) return;
+      this.noRowsAnimInstance = lottie.loadAnimation({
+        container,
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: 'assets/json/NoRowAvailable.json'
+      });
+    } catch (err) {
+      console.error('Failed to load Lottie animation', err);
+    }
   }
 
   get nextRowNo(): number {

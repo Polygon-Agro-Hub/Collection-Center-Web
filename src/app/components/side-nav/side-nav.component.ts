@@ -280,7 +280,7 @@ export class SideNavComponent {
 
   ) {
     this.role = tokenSrv.getUserDetails().role;
-    console.log('role', this.role)
+    // console.log('role', this.role)
     this.companyLogo = tokenSrv.getUserDetails().logo;
     this.companyFavicon = tokenSrv.getUserDetails().favicon;
     this.setActiveTabFromRoute();

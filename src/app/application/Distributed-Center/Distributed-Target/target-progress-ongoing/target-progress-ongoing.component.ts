@@ -1,7 +1,7 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { DistributionServiceService } from '../../../../services/Distribution-Service/distribution-service.service'
 import { NgxPaginationModule } from 'ngx-pagination';
 import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
@@ -29,7 +29,7 @@ export class TargetProgressOngoingComponent implements OnInit {
   selectedDate: string | Date | null = null;
   totalItems: number = 0;
   hasData: boolean = true;
-  isLoading:boolean = true;
+  isLoading:boolean = false;
   isStatusDropdownOpen = false;
   isTypeDropdownOpen = false;
   isTimeSlotDropdownOpen = false;
@@ -40,6 +40,11 @@ export class TargetProgressOngoingComponent implements OnInit {
   isDownloading = false;
   rowDropdownOptions: number[] = [];
   rowIndexes: number[] = [];
+
+  centerId: number | null = null;
+  selectedCenterName: string | null = null;
+  regCode: string | null = null;
+  tab!: string;
 
   toggleStatusDropdown() {
     this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
@@ -88,20 +93,39 @@ export class TargetProgressOngoingComponent implements OnInit {
     private router: Router,
     private ComplainSrv: ComplaintsService,
     private DistributionSrv: DistributionServiceService,
-    private toastSrv: ToastAlertService
+    private toastSrv: ToastAlertService,
+    private route: ActivatedRoute
   ) { }
 
 
   ngOnInit(): void {
+
+        console.log('centerId1', this.centerId)
+
+const segments = this.router.url.split('/');
+this.tab = segments[1]
+console.log('segments', segments[1])
+
+if (segments[1] === 'distribution-center') {
+  this.centerId = Number(this.route.snapshot.paramMap.get('id'));
+  this.selectedCenterName = this.route.snapshot.paramMap.get('centerName');
+  this.regCode = this.route.snapshot.paramMap.get('regCode');
+} else {
+  this.centerId = null;
+  this.selectedCenterName = null;
+  this.regCode = null;
+}
+
+    console.log('centerId2', this.centerId)
     // const today = new Date();
     // this.selectedDate = today.toISOString().split('T')[0];
     this.fetchAllAssignOrders();
-    // this.fetchCenterData();
+    this.fetchCenterData();
   }
 
-  fetchAllAssignOrders(status: string = this.selectStatus, search: string = this.searchText, selectDate: string | Date | null = this.selectedDate, type: string = this.selectType, timeSlot: string = this.selectTimeSlot, row: number | null = this.selectRow) {
+  fetchAllAssignOrders(status: string = this.selectStatus, search: string = this.searchText, selectDate: string | Date | null = this.selectedDate, type: string = this.selectType, timeSlot: string = this.selectTimeSlot, row: number | null = this.selectRow, centerId: number | null = this.centerId) {
     this.isLoading = true;
-    this.DistributionSrv.getAllAssignOrders(status, search, selectDate, type, timeSlot, row).subscribe(
+    this.DistributionSrv.getAllAssignOrders(status, search, selectDate, type, timeSlot, row, centerId).subscribe(
       (res) => {
         this.totalItems = res.items.length;
         this.ordersArr = res.items;

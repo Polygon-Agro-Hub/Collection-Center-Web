@@ -61,18 +61,17 @@ export class ShortageHistoryComponent implements OnInit {
   ) {}
 
   ngOnInit(): void {
-    // Set yesterday's date in YYYY-MM-DD format
+    // Set yesterday's date in YYYY-MM-DD format (default selected date)
     const yesterday = new Date();
     yesterday.setDate(yesterday.getDate() - 1);
     this.selectedDate = this.formatDateToYYYYMMDD(yesterday);
 
-    // Set max date (yesterday) in YYYY-MM-DD format
-    const maxDate = new Date();
-    maxDate.setDate(maxDate.getDate() - 1);
-    this.maxSelectableDate = this.formatDateToYYYYMMDD(maxDate);
+    // Max date is TODAY — current date and past dates should be selectable
+    const today = new Date();
+    this.maxSelectableDate = this.formatDateToYYYYMMDD(today);
 
     this.loadShortageHistory();
-  }
+}
 
   /**
    * Helper method to format Date to YYYY-MM-DD

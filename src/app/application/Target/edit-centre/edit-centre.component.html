@@ -163,6 +163,7 @@
             [(ngModel)]="centerData.province"
             #provinceInput="ngModel"
             borderClass="border border-gray-300"
+            searchInputClass="text-textLight dark:text-textDark"
             (selectionChange)="onProvinceChange($event)">
         </app-searchable-dropdown>
     </div>
@@ -175,7 +176,7 @@
     <div>
       <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">District *</label>
       
-      <div class="w-full">
+      <div class="w-full text-textLight dark:text-textDark">
                         <app-searchable-dropdown
                             [items]="districtItems"
                             [placeholder]="'--Select a District--'"
@@ -186,6 +187,7 @@
                             [(ngModel)]="centerData.district"
                             #districtInput="ngModel"
                             borderClass="border border-gray-300"
+                            searchInputClass="text-textLight dark:text-textDark"
                             (selectionChange)="onDistrictChange($event)">
                         </app-searchable-dropdown>
                     </div>

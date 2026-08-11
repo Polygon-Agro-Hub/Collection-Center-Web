@@ -1,35 +1,39 @@
 <!-- ===== ROWS LIST VIEW ===== -->
 <app-loading-spinner *ngIf="isLoading" />
 
-<div *ngIf="!isLoading && view === 'rows' && hasData" class="max-w-[500px] p-5">
+<div *ngIf="!isLoading && view === 'rows'" class="w-full p-5">
   <div class="text-[16px] font-medium text-gray-900 dark:text-gray-100 mb-3.5">
     All Rows ({{ rows.length.toString().padStart(2, '0') }})
   </div>
 
-  <div
-    class="relative flex items-center bg-white dark:bg-gray-800 border border-[#75798F] dark:border-gray-700 rounded-xl px-4 py-3 mb-3.5 "
-    *ngFor="let row of rows">
-    <div class="text-[16px] font-medium text-[#030308] dark:text-gray-100 pr-8 shrink-0 whitespace-nowrap">
-      {{ formatRowLabel(row.rowIndex) }}
+  <ng-container *ngIf="hasData">
+    <div
+      class="relative flex items-center bg-white dark:bg-gray-800 border border-[#75798F] dark:border-gray-700 rounded-xl px-4 py-3 mb-3.5 "
+      *ngFor="let row of rows">
+      <div class="text-[16px] font-medium text-[#030308] dark:text-gray-100 pr-8 shrink-0 whitespace-nowrap">
+        {{ formatRowLabel(row.rowIndex) }}
+      </div>
+      <div class="absolute top-0 bottom-0 left-[90px] w-px bg-[#75798F] dark:bg-gray-600"></div>
+      <div class="flex-1 font-normal text-[16px] text-[#4F6396] dark:text-[#4F6396] pl-9"> --{{ row.norCount === 0 ? '0' : row.norCount }} {{ row.norCount === 1 ? 'Position Available' : 'Positions Available' }}-- </div>
+      <button
+        class="rounded-lg px-7 py-1 text-[18px] transition-colors font-medium"
+        [ngClass]="row.norCount > 0
+          ? 'bg-[#415CFF] dark:bg-[#415CFF] text-white cursor-pointer'
+          : 'bg-[#F7F7F7] dark:bg-gray-700 text-[#6B7D8C] dark:text-gray-500 cursor-not-allowed'"
+        [disabled]="row.norCount <= 0"
+        (click)="onPlace(row)">
+        Place
+      </button>
     </div>
-    <div class="absolute top-0 bottom-0 left-[90px] w-px bg-[#75798F] dark:bg-gray-600"></div>
-<div class="flex-1 font-normal text-[16px] text-[#4F6396] dark:text-[#4F6396] pl-9"> --{{ row.norCount === 0 ? '0' : row.norCount }} {{ row.norCount === 1 ? 'Position Available' : 'Positions Available' }}-- </div>
-    <button
-      class="rounded-lg px-7 py-1 text-[18px] transition-colors font-medium"
-      [ngClass]="row.norCount > 0
-        ? 'bg-[#415CFF] dark:bg-[#415CFF] text-white cursor-pointer'
-        : 'bg-[#F7F7F7] dark:bg-gray-700 text-[#6B7D8C] dark:text-gray-500 cursor-not-allowed'"
-      [disabled]="row.norCount <= 0"
-      (click)="onPlace(row)">
-      Place
-    </button>
+  </ng-container>
+
+  <div *ngIf="!hasData" class="flex flex-col items-center w-full mt-10 justify-center">
+    <div class="w-full flex items-center justify-center">
+      <div #dcmNoRowsAnim class="w-24 h-28"></div>
+    </div>
+    <p class="text-[#494949] my-4 dark:text-white text-center">--No Rows Available--</p>
   </div>
 </div>
-
-<div *ngIf="!hasData" class="flex flex-col items-center w-full h-screen mt-28">
-        <img src="assets/images/search.png" alt="No Data" class="w-24 h-28" />
-        <p class="text-[#494949] my-4 dark:text-white">--No Rows Available--</p>
-    </div>
 
 
 <!-- ===== PLACEMENT VIEW ===== -->

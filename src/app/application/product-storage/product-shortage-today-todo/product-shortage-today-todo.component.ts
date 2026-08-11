@@ -83,6 +83,10 @@ afterSixPm!: boolean;
 
   assign(item: ShortageProducts) {}
 
+  get isFiltering(): boolean {
+    return !!this.searchText || !!this.selectStatus;
+  }
+
   onSearch() {
     this.searchText = this.searchText.trimStart();
     this.getAllShortageTodayToDo();

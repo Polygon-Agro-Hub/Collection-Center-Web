@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { TargetService } from "../../../services/Target-service/target.service"
 import { ActivatedRoute, Router } from '@angular/router';
 import { CommonModule } from '@angular/common';
@@ -6,6 +6,7 @@ import { FormsModule } from "@angular/forms";
 import { DropdownModule } from "primeng/dropdown";
 import { NgxPaginationModule } from "ngx-pagination";
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
+import lottie, { AnimationItem } from 'lottie-web';
 
 @Component({
   selector: 'app-center-view-price-list',
@@ -15,7 +16,7 @@ import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loa
   styleUrl: './center-view-price-list.component.css'
 })
 export class
-  CenterViewPriceListComponent implements OnInit {
+  CenterViewPriceListComponent implements OnInit, OnDestroy {
   centerId!: number;
   priceListArr!: PriceList[];
   page: number = 1;
@@ -35,6 +36,21 @@ export class
 
   isGradeDropdownOpen = false;
   gradeDropdownOptions = ['A', 'B', 'C'];
+
+  private animationItem: AnimationItem | undefined;
+
+  @ViewChild('lottieContainer') set lottieContainerRef(ref: ElementRef | undefined) {
+    this.animationItem?.destroy();
+    if (ref) {
+      this.animationItem = lottie.loadAnimation({
+        container: ref.nativeElement,
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: '/assets/json/No%20Data.json',
+      });
+    }
+  }
 
   togglegradeDropdown() {
     this.isGradeDropdownOpen = !this.isGradeDropdownOpen;
@@ -161,6 +177,10 @@ export class
 
   navigateToCenters() {
     this.router.navigate(['/centers']); // Change '/reports' to your desired route
+  }
+
+  ngOnDestroy(): void {
+    this.animationItem?.destroy();
   }
 
 }

@@ -579,7 +579,7 @@
                           && !this.languagesRequired
                           && personalData.phoneNumber02 !== personalData.phoneNumber01 
                           && personalData.jobRole 
-                          && personalData.drvCategory
+                           && (personalData.jobRole !== 'Driver' || personalData.drvCategory)
                           && !isPhoneInvalidMap['phone01'] 
                           && ((personalData.phoneNumber02 && !isPhoneInvalidMap['phone02']) || !personalData.phoneNumber02)
                             ? nextForm('pageTwo') 

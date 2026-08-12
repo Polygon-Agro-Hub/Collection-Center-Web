@@ -1070,7 +1070,7 @@ isSelected(item: any): boolean {
     }
 
 
-    if (!this.personalData.drvCategory) {
+    if (this.personalData.jobRole === 'Driver' && !this.personalData.drvCategory) {
       missingFields.push('Driver Category is required');
     }
 

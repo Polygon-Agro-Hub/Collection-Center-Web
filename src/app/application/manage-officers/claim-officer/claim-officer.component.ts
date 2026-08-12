@@ -28,10 +28,7 @@ export class ClaimOfficerComponent implements OnInit {
   logingRole: string | null = null;
   isReset: boolean = false;
 
-  jobRoleItems = [
-    { value: 'Distribution Officer', label: 'Distribution Officer' },
-    { value: 'Driver', label: 'Driver' }
-  ]
+  jobRoleItems: { value: string; label: string }[] = []
 
   constructor(
     private ManageOficerSrv: ManageOfficersService,
@@ -42,19 +39,21 @@ export class ClaimOfficerComponent implements OnInit {
     this.logingRole = tokenSrv.getUserDetails().role
   }
 
-  // ngOnInit(): void {
-
-  //   if (this.logingRole === 'Distribution Centre Manager') {
-  //     this.selectJobRole = 'Distribution Officer';
-  //   } else if (this.logingRole === 'Collection Centre Manager') {
-  //     this.selectJobRole = 'Collection Officer'
-  //   }
-  // }
-
   ngOnInit(): void {
-  // Don't pre-select Job Role for either role — leave it empty so the user must choose
-  this.selectJobRole = '';
-}
+    if (this.logingRole === 'Distribution Centre Manager') {
+      // Distribution Centre Manager picks from an interactive dropdown, so leave it
+      // unselected and force a deliberate choice.
+      this.selectJobRole = '';
+      this.jobRoleItems = [
+        { value: 'Distribution Officer', label: 'Distribution Officer' },
+        { value: 'Driver', label: 'Driver' }
+      ];
+    } else if (this.logingRole === 'Collection Centre Manager') {
+      // Collection Centre Manager only sees a readonly field with no way to pick a value,
+      // so it must be pre-selected here or the search can never be run.
+      this.selectJobRole = 'Collection Officer';
+    }
+  }
 
   fetchOfficer() {
     if (!this.inputId) {

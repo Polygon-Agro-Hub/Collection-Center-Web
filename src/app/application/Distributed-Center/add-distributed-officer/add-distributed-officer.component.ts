@@ -805,7 +805,7 @@ export class AddDistributedOfficerComponent implements OnInit {
       missingFields.push('Job Role is required');
     }
 
-    if (!this.personalData.drvCategory) {
+    if (this.personalData.jobRole === 'Driver' && !this.personalData.drvCategory) {
       missingFields.push('Driver Category is required');
     }
 

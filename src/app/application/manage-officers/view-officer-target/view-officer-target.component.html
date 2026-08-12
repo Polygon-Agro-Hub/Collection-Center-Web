@@ -95,8 +95,8 @@
         <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
     </div>
 
-    <div *ngIf="hasData" class="flex-1 min-h-0 mt-5 mr-5 relative">
-        <div class="border-gray-100 border-[2px] rounded-lg dark:border-[#202021] overflow-auto h-full" #tableContainer>
+    <div *ngIf="hasData" class="mt-5 mr-5 relative">
+        <div class="border-gray-100 border-[2px] rounded-lg dark:border-[#202021] overflow-auto h-[calc(100vh-320px)]" #tableContainer>
             <table class="w-full min-w-max divide-y-2">
                 <thead class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default sticky top-0 bg-white dark:bg-[#0F0F0F] z-10">
                     <tr>

@@ -108,6 +108,7 @@ complainArr!: RecivedComplaint[];
   }
 
   onSearch() {
+    this.page = 1;
     this.searchText = this.searchText?.trim() || '';
     this.fetchAllreciveComplaint();
 
@@ -120,6 +121,7 @@ complainArr!: RecivedComplaint[];
   }
 
   filterStatus() {
+        this.page = 1;
     this.fetchAllreciveComplaint();
   }
 

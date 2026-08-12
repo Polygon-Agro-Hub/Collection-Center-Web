@@ -280,7 +280,7 @@ onDistrictChange(selectedDistrict: string | null): void {
     }
 
     navigateToDashboard(id: number) {
-        this.router.navigate([`/centers/center-shashbord/${id}`]);
+        this.router.navigate([`/centers/center-dashboard/${id}`]);
     }
 
 

@@ -1,19 +1,20 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Router } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 import { DistributionServiceService } from '../../../../services/Distribution-Service/distribution-service.service'
 import { NgxPaginationModule } from 'ngx-pagination';
 import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
 import { ComplaintsService } from '../../../../services/Complaints-Service/complaints.service';
 import Swal from 'sweetalert2';
 import { ToastAlertService } from '../../../../services/toast-alert/toast-alert.service';
+import { CustomDatepickerComponent } from "../../../../components/custom-datepicker/custom-datepicker.component";
 
 
 @Component({
   selector: 'app-target-out-for-delivery',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent, CustomDatepickerComponent],
   templateUrl: './target-out-for-delivery.component.html',
   styleUrl: './target-out-for-delivery.component.css'
 })
@@ -21,6 +22,14 @@ export class TargetOutForDeliveryComponent implements OnInit {
   ordersArr!: orders[];
   searchText: string = '';
   selectStatus: string = '';
+  selectType: string = '';
+  selectTimeSlot: string = '';
+  selectRow!: number | null;
+    selectedDate: string | Date | null = null;
+
+    rowDropdownOptions: number[] = [];
+  rowIndexes: number[] = [];
+  processOrder = new ProcessOrder();
 
   page: number = 1;
   totalItems: number = 0;
@@ -32,8 +41,19 @@ export class TargetOutForDeliveryComponent implements OnInit {
 
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Late', 'On Time'];
+  isTypeDropdownOpen = false;
+  isTimeSlotDropdownOpen = false;
+  isRowDropdownOpen = false;
+  typeDropdownOptions = ['Pickup', 'Delivery'];
+  timeSlotDropdownOptions = ['08:00 AM - 12:00 PM', '12:00 PM - 04:00 PM', '04:00 PM - 09:00 PM'];
+
+    centerId: number | null = null;
+  selectedCenterName: string | null = null;
+  regCode: string | null = null;
+  tab!: string;
 
   isDownloading = false;
+    listView: boolean = true;
 
   toggleStatusDropdown() {
     this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
@@ -45,26 +65,78 @@ export class TargetOutForDeliveryComponent implements OnInit {
     this.filterStatus();
   }
 
+  toggleTypeDropdown() {
+    this.isTypeDropdownOpen = !this.isTypeDropdownOpen;
+  }
+
+  selectTypeOption(option: string) {
+    this.selectType = option;
+    this.isTypeDropdownOpen = false;
+    this.filterType();
+  }
+
+
+  toggleTimeSlotDropdown() {
+    this.isTimeSlotDropdownOpen = !this.isTimeSlotDropdownOpen;
+  }
+
+  selectTimeSlotOption(option: string) {
+    this.selectTimeSlot = option;
+    this.isTimeSlotDropdownOpen = false;
+    this.filterTimeSlot();
+  }
+
+  toggleRowDropdown() {
+    this.isRowDropdownOpen = !this.isRowDropdownOpen;
+  }
+
+  selectRowOption(option: number) {
+    this.selectRow = option;
+    this.isRowDropdownOpen = false;
+    this.filterRow();
+  }
+
   constructor(
     private router: Router,
     private ComplainSrv: ComplaintsService,
     private DistributionSrv: DistributionServiceService,
-    private toastSrv: ToastAlertService
+    private toastSrv: ToastAlertService,
+    private route: ActivatedRoute
   ) { }
 
 
   ngOnInit(): void {
+            console.log('centerId1', this.centerId)
+
+const segments = this.router.url.split('/');
+this.tab = segments[1]
+console.log('segments', segments[1])
+
+if (segments[1] === 'distribution-center') {
+  this.centerId = Number(this.route.snapshot.paramMap.get('id'));
+  this.selectedCenterName = this.route.snapshot.paramMap.get('centerName');
+  this.regCode = this.route.snapshot.paramMap.get('regCode');
+} else {
+  this.centerId = null;
+  this.selectedCenterName = null;
+  this.regCode = null;
+}
+
     this.fetchOutForDeliveryOrders();
   }
 
-  fetchOutForDeliveryOrders(status: string = this.selectStatus, search: string = this.searchText) {
+  fetchOutForDeliveryOrders(status: string = this.selectStatus, search: string = this.searchText, type: string = this.selectType, timeSlot: string = this.selectTimeSlot, row: number | null = this.selectRow, selectDate: string | Date | null = this.selectedDate, centerId: number | null = this.centerId) {
     this.isLoading = true;
-    this.DistributionSrv.getOutForDeliveryOrders(status, search).subscribe(
+    this.DistributionSrv.getOutForDeliveryOrders(status, search, type, timeSlot, row, selectDate, centerId).subscribe(
       (res) => {
         this.ordersArr = res.items
         console.log('ordersArr', this.ordersArr)
+        this.rowIndexes = res.rowIndexes;
+        this.rowDropdownOptions = this.rowIndexes
+        console.log('rowIndexes', this.rowIndexes)
         this.centerName = res.centerName;
         this.totalItems = res.items.length | 0;
+                this.listView = true;
         if (res.items.length === 0) {
           this.hasData = false;
         } else {
@@ -99,7 +171,60 @@ export class TargetOutForDeliveryComponent implements OnInit {
     this.fetchOutForDeliveryOrders();
   }
 
-  onDateChange() {
+  filterType() {
+    this.fetchOutForDeliveryOrders();
+  }
+
+  cancelType(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
+    this.selectType = '';
+    this.fetchOutForDeliveryOrders();
+  }
+
+  filterTimeSlot() {
+    this.fetchOutForDeliveryOrders();
+  }
+
+  cancelTimeSlot(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
+    this.selectTimeSlot = '';
+    this.fetchOutForDeliveryOrders();
+  }
+
+
+  filterRow() {
+    this.fetchOutForDeliveryOrders();
+  }
+
+  cancelRow(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
+    this.selectRow = null;
+    this.fetchOutForDeliveryOrders();
+  }
+
+  onDateChange(newDate: string | Date | null) {
+    let dateString: string;
+  
+    if (!newDate) {
+      
+      dateString = '';
+    } 
+    else if (newDate instanceof Date) {
+      
+      dateString = newDate.toISOString().split('T')[0];
+    } 
+    else {
+      
+      dateString = newDate;
+    }
+  
+    this.selectedDate = dateString;
     this.fetchOutForDeliveryOrders();
   }
 
@@ -131,17 +256,26 @@ export class TargetOutForDeliveryComponent implements OnInit {
     return time ? time.replace('Within ', '') : time;
   }
 
+  getOrdinalDay(date: Date | string | null | undefined): string {
+    if (!date) return '';
+    const day = new Date(date).getDate();
+    if (day > 3 && day < 21) return `${day}th`;
+    switch (day % 10) {
+      case 1: return `${day}st`;
+      case 2: return `${day}nd`;
+      case 3: return `${day}rd`;
+      default: return `${day}th`;
+    }
+  }
+
   downloadTemplate1() {
     this.isDownloading = true;
-  
+
     const now = new Date();
-    const selectedDateStr = String(now); 
-    // Convert safely to Date
-    const selectedDateObj = new Date(selectedDateStr);
-    // Example: "10 Nov"
+
     function getOrdinal(day: number): string {
       if (day > 3 && day < 21) return 'th';
-    
+
       switch (day % 10) {
         case 1: return 'st';
         case 2: return 'nd';
@@ -150,36 +284,41 @@ export class TargetOutForDeliveryComponent implements OnInit {
       }
     }
 
-    const day = selectedDateObj.getDate();
-    const month = selectedDateObj.toLocaleString('en-GB', { month: 'long' });
-    const year = selectedDateObj.getFullYear();
-    const monthNumber = String(selectedDateObj.getMonth() + 1).padStart(2, '0');
+    const day = now.getDate();
+    const year = now.getFullYear();
+    const monthNumber = String(now.getMonth() + 1).padStart(2, '0');
 
-    const dateStr = `${String(day).padStart(2, '0')}${getOrdinal(day)} ${month} ${year}`;
+    let dateStr = '';
+    if (this.selectedDate) {
+      const filterDate = new Date(this.selectedDate);
+      const filterDay = filterDate.getDate();
+      const filterMonth = filterDate.toLocaleString('en-GB', { month: 'long' });
+      const filterYear = filterDate.getFullYear();
+      dateStr = ` on ${String(filterDay).padStart(2, '0')}${getOrdinal(filterDay)} ${filterMonth} ${filterYear}`;
+    }
 
-// Example: "10/11" → convert to "10-11" (safe for filenames)
-const fullDateStr = `${String(now.getMonth() + 1).padStart(2, '0')}-${String(now.getDate()).padStart(2, '0')}`;
-// Example: "12.41PM"
-const timeStr = now
-  .toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
-  .replace(':', '.')
-  .replace(' ', '');
+    const timeStr = now
+      .toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
+      .replace(':', '.')
+      .replace(' ', '');
 
-// Combine → "10-11 12.41PM"
-const finalStr = `${fullDateStr} ${timeStr}`;
     this.DistributionSrv
-      .downloadOutForDeliveryTargetProgressReport(this.selectStatus, this.searchText)
+      .downloadOutForDeliveryTargetProgressReport(this.selectStatus, this.searchText, this.selectType, this.selectRow, this.selectTimeSlot, this.selectedDate)
       .subscribe({
         next: (blob) => {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
   
-          if (this.selectStatus) {
-            a.download = `${this.centerName} OFH Orders on ${dateStr} filtered by ${this.selectStatus} Generated at ${day}/${monthNumber}/${year} ${timeStr}.xlsx`;
-          } else {
-            a.download = `${this.centerName} OFH Orders on ${dateStr} Generated at ${day}/${monthNumber}/${year} ${timeStr}.xlsx`;
-          }
+          const activeFilters: string[] = [];
+          if (this.selectStatus) activeFilters.push(this.selectStatus);
+          if (this.selectType) activeFilters.push(this.selectType);
+          if (this.selectTimeSlot) activeFilters.push(this.selectTimeSlot);
+          if (this.selectRow) activeFilters.push(`Row ${this.selectRow}`);
+
+          const filterStr = activeFilters.length ? ` filtered by ${activeFilters.join(', ')}` : '';
+
+          a.download = `${this.centerName} OFH Orders${dateStr}${filterStr} Generated at ${String(day).padStart(2, '0')}/${monthNumber}/${year} ${timeStr}.xlsx`;
   
           a.click();
           window.URL.revokeObjectURL(url);
@@ -262,6 +401,24 @@ const finalStr = `${fullDateStr} ${timeStr}`;
       return 'Not Passed';
     }
   }
+
+  navigateViewReply(poId: number) {
+    this.DistributionSrv.getOutForDeliveryOrderDeatils(poId).subscribe(
+      (res) => {
+        this.processOrder = res.items
+        console.log('processOrder', this.processOrder)
+        this.isLoading = false;
+        this.listView = false;
+
+        console.log('listView', this.listView, 'isLoading', this.isLoading)
+      }
+    )
+    
+  }
+
+  goBack() {
+    // this.location.back();
+  }
   
 }
 
@@ -282,5 +439,56 @@ class orders {
   deliveryPeriod!: string
   scheduleDateStatus!: string
   outDlvrDate!: Date;
+  rowIndex!: number;
+  delivaryMethod!: string;
+  packBy!: string;
+  packTime!: Date;
+}
+
+
+export class ProcessOrder {
+  processOrderId!: number;
+  orderId!: number;
+  invNo!: string;
+  status!: string;
+  delivaryMethod!: string;
+  isPackage!: boolean;
+  sheduleTime!: string;
+  sheduleDate!: Date;
+  packTime!: Date;
+  qcDoneBy!: string;
+    qrPrintTime!: Date;
+
+  packages: OrderPackage[] = [];
+  additionalItems: AdditionalItem[] = [];
+}
+
+export class OrderPackage {
+  orderPackageId!: number;
+  packageId!: number;
+  packageName!: string;
+
+  items: PackageItem[] = [];
+}
+
+export class PackageItem {
+  productId!: number;
+  productName!: string;
+  image!: string;
+  qty!: number;
+  isPacked!: boolean;
+  packingTime!: string | null;
+  packedByOfficer!: string;
+}
+
+export class AdditionalItem {
+  productId!: number;
+  productName!: string;
+  image!: string;
+  qty!: number;
+  unit!: string;
+  isPacked!: boolean;
+  packingTime!: string | null;
+  packedByOfficer!: string;
 }
 

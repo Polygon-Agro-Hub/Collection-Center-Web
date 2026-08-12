@@ -492,7 +492,7 @@ export class OfficerProfileComponent implements OnInit {
   }
 
   navigateToCenterDashboard() {
-    this.router.navigate(['/centers/center-shashbord', this.centerId]); // Change '/reports' to your desired route
+    this.router.navigate(['/centers/center-dashboard', this.centerId]); // Change '/reports' to your desired route
   }
 
   navigateToCenters() {
@@ -550,6 +550,7 @@ class Officer {
   vehBackImg!: string;
   vehSideImgA!: string;
   vehSideImgB!: string;
+  slvCatName!: string;
 
 }
 

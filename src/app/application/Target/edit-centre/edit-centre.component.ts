@@ -123,9 +123,10 @@ get districtItems() {
 
 
   @HostListener('document:click', ['$event.target'])
-onClick(targetElement: HTMLElement) {
-  const insideDropdown1 = targetElement.closest('.dropdown-wrapper-1');
-  const insideDropdown2 = targetElement.closest('.dropdown-wrapper-2');
+onClick(targetElement: EventTarget | null) {
+  const target = targetElement as HTMLElement | null;
+  const insideDropdown1 = target?.closest('.dropdown-wrapper-1');
+  const insideDropdown2 = target?.closest('.dropdown-wrapper-2');
 
   // Close dropdowns only if click is outside their wrapper
   if (!insideDropdown1) {

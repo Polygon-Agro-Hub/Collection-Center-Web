@@ -177,7 +177,7 @@ export class DistributionServiceService {
     return this.http.post(url, requestObj, { headers });
   }
 
-  getAllAssignOrders(status: string = '', searchText: string = '', selectDate: string | Date | null = ''): Observable<any> {
+  getAllAssignOrders(status: string = '', searchText: string = '', selectDate: string | Date | null = '', type: string = '', timeSlot: string = '', row: number | null, cenId: number | null): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
@@ -197,10 +197,26 @@ export class DistributionServiceService {
       url += `&date=${selectDate}`
     }
 
+    if (type) {
+      url += `&type=${type}`
+    }
+
+    if (timeSlot) {
+      url += `&timeSlot=${timeSlot}`
+    }
+
+    if (row) {
+      url += `&row=${row}`
+    }
+
+    if (cenId) {
+      url += `&cenId=${cenId}`
+    }
+
     return this.http.get<any>(url, { headers });
   }
 
-  getToDoAssignOrders(status: string = '', searchText: string = '', selectDate: string = ''): Observable<any> {
+  getToDoAssignOrders(status: string = '', searchText: string = '', selectDate: string = '', type: string = '', timeSlot: string = '', row: number | null): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
@@ -217,6 +233,18 @@ export class DistributionServiceService {
 
     if (selectDate) {
       url += `&date=${selectDate}`
+    }
+
+    if (type) {
+      url += `&type=${type}`
+    }
+
+    if (timeSlot) {
+      url += `&timeSlot=${timeSlot}`
+    }
+
+        if (row) {
+      url += `&row=${row}`
     }
 
     return this.http.get<any>(url, { headers });
@@ -242,7 +270,7 @@ export class DistributionServiceService {
     return this.http.get<any>(url, { headers });
   }
 
-  getOutForDeliveryOrders(status: string = '', searchText: string = ''): Observable<any> {
+  getOutForDeliveryOrders(status: string = '', searchText: string = '', type: string = '', timeSlot: string = '', row: number | null, selectDate: string | Date | null = '', cenId: number | null): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
@@ -256,6 +284,27 @@ export class DistributionServiceService {
     if (searchText) {
       url += `&searchText=${searchText}`
     }
+
+    if (type) {
+      url += `&type=${type}`
+    }
+
+    if (timeSlot) {
+      url += `&timeSlot=${timeSlot}`
+    }
+
+    if (row) {
+      url += `&row=${row}`
+    }
+
+        if (selectDate) {
+      url += `&date=${selectDate}`
+    }
+
+        if (cenId) {
+      url += `&cenId=${cenId}`
+    }
+
 
     return this.http.get<any>(url, { headers });
   }
@@ -396,7 +445,11 @@ export class DistributionServiceService {
   downloadAllTargetProgressReport(
     status: string,
     date: Date | string | null,
-    searchText: string = ''
+    searchText: string = '',
+    type: string = '',
+    row: number | null,
+    timeSlot: string = ''
+
   ): Observable<Blob> {
     let url = `${this.apiUrl}/download-all-target-progress?test=${1}`;
 
@@ -412,6 +465,17 @@ export class DistributionServiceService {
       url += `&searchText=${searchText}`;
     }
 
+    if (type) {
+      url += `&type=${type}`;
+    }
+    if (row) {
+      url += `&row=${row}`;
+    }
+
+    if (timeSlot) {
+      url += `&timeSlot=${timeSlot}`;
+    }
+
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
     });
@@ -421,7 +485,11 @@ export class DistributionServiceService {
 
   downloadOutForDeliveryTargetProgressReport(
     status: string,
-    searchText: string = ''
+    searchText: string = '',
+    type: string = '',
+    row: number | null,
+    timeSlot: string = '',
+    date: Date | string | null,
   ): Observable<Blob> {
     let url = `${this.apiUrl}/download-out-for-delivery-target-progress?test=${1}`;
 
@@ -432,6 +500,23 @@ export class DistributionServiceService {
     if (searchText) {
       url += `&searchText=${searchText}`;
     }
+
+     if (type) {
+      url += `&type=${type}`;
+    }
+    if (row) {
+      url += `&row=${row}`;
+    }
+
+    if (timeSlot) {
+      url += `&timeSlot=${timeSlot}`;
+    }
+
+
+    if (date) {
+      url += `&date=${date}`;
+    }
+
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
@@ -687,8 +772,195 @@ getDriverCashRevenue(
   );
 }
 
+  getDCHCenterRows(centerId: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/get-dch-center-row?centerId=${centerId}`;
+  
+    return this.http.get<any>(url, { headers });
+  }
+
+  createDCHCenterRow(centerId: number, nextRow: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/create-dch-center-row?centerId=${centerId}&nextRow=${nextRow}`;
+  
+    return this.http.put<any>(url, {}, { headers });
+  }
+
+  createDCHCenterPos(centerId: number, nextPos: number, rowId: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/create-dch-center-pos?centerId=${centerId}&nextPos=${nextPos}&rowId=${rowId}`;
+  
+    return this.http.put<any>(url, {}, { headers });
+  }
+
+  toggleRow(enableStatus: number, id: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/dch-center-enable-row?enableStatus=${enableStatus}&id=${id}`;
+
+    return this.http.put<any>(url, {}, { headers });
+  }
+
+  deleteDCHCenterPos(posId: number, rowId: number, pIndex: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/delete-dch-center-pos/${posId}/${rowId}/${pIndex}`;
+
+    return this.http.delete<any>(url, { headers });
+  }
+
+  getDCMCenterId(): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/get-dcm-center-id`;
+  
+    return this.http.get<any>(url, { headers });
+  }
+
+  getDCMPositioningRows(): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/get-dcm-positioning-rows`;
+  
+    return this.http.get<any>(url, { headers });
+  }
+
+  getDcmPositionsForRows(rowId: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/get-dcm-positions-for-row/${rowId}`;
+  
+    return this.http.get<any>(url, { headers });
+  }
+
+  saveDcmPositionItems(rowId: number, addedItems: any[], deletedItems: any[]): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json'
+    });
+
+    const url = `${this.apiUrl}/save-dcm-position-products`;
+
+    const data = {
+      rowId,
+      addedItems,
+      deletedItems
+    };
+
+    return this.http.post<any>(url, data, { headers });
+  }
+
+  fetchAllShortageTodayToDo(
+  status: string ='', searchText: string = ''
+): Observable<any> {
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${this.token}`,
+    'Content-Type': 'application/json',
+  });
+
+  const page  = 1;
+
+  let url = `${this.apiUrl}/get-shortage-products-today-todo?page=${page}`;
+  if (searchText) {
+    url += `&searchText=${encodeURIComponent(searchText)}`;
+  }
+
+  if (status) {
+    url += `&status=${status}`;
+  }
+
+  return this.http.get<any>(
+    url, { headers }
+  );
+}
+
+fetchAllShortageTodayCompleted( searchText: string = ''
+): Observable<any> {
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${this.token}`,
+    'Content-Type': 'application/json',
+  });
+
+  const page  = 1;
+
+  let url = `${this.apiUrl}/get-shortage-products-today-completed?page=${page}`;
+  if (searchText) {
+    url += `&searchText=${encodeURIComponent(searchText)}`;
+  }
+
+  return this.http.get<any>(
+    url, { headers }
+  );
+}
+
+ assignOfficerToProduct(shortageId: number | null, shortageAssignId: number | null, officerId: number | null): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/assign-officer-to-shortage?shortageId=${shortageId}&shortageAssignId=${shortageAssignId}&officerId=${officerId}`;
+
+    return this.http.put<any>(url, {}, { headers });
+  }
+
+  fetchAllShortageHistory(date: string | Date | null = '',  searchText: string = ''
+): Observable<any> {
+  const headers = new HttpHeaders({
+    Authorization: `Bearer ${this.token}`,
+    'Content-Type': 'application/json',
+  });
+
+  const page  = 1;
+
+  let url = `${this.apiUrl}/get-shortage-products-histroy?page=${page}`;
+  if (searchText) {
+    url += `&searchText=${encodeURIComponent(searchText)}`;
+  }
+
+  if (date) {
+    url += `&date=${date}`;
+  }
+
+  return this.http.get<any>(
+    url, { headers }
+  );
+}
+
+  getOutForDeliveryOrderDeatils(poId: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    let url = `${this.apiUrl}/get-order-details-for-out-for-delivery/${poId}`
+
+    return this.http.get(url, {
+      headers,
+    });
+  }
 
 }
+
+
 
 
 

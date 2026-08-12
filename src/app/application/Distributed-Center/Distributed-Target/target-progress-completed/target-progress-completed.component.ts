@@ -265,34 +265,57 @@ getScheduleClass(item: any): string {
     return 'schedule-future';
   }
 
-  const completeTimeUTC = new Date(item.completeTime);
-
-  // 👉 Convert to Sri Lanka local string (for display/debug only)
-  const completeTimeLocal = completeTimeUTC.toLocaleString('en-US', {
-    timeZone: 'Asia/Colombo'
-  });
-
-  console.log('Raw UTC:', item.completeTime);
-  console.log('Local:', completeTimeLocal);
-  console.log('Date obj:', completeTimeUTC);
+  const today = new Date();
+  today.setHours(0, 0, 0, 0);
 
   const scheduleDate = new Date(item.sheduleDate);
+  scheduleDate.setHours(0, 0, 0, 0);
 
-  const slotEnd = new Date(scheduleDate);
+  const diffMs = scheduleDate.getTime() - today.getTime();
 
-  if (item.sheduleTime.includes('8AM - 2PM')) {
-    slotEnd.setHours(14, 0, 0, 0);
-  } else if (item.sheduleTime.includes('2PM - 8PM')) {
-    slotEnd.setHours(20, 0, 0, 0);
-  } else {
+  // Future schedule date
+  if (diffMs > 0) {
     return 'schedule-future';
   }
 
-  // comparisons are STILL correct in UTC internally
-  if (completeTimeUTC > slotEnd) {
+  // Past schedule date
+  if (diffMs < 0) {
+    return 'schedule-past';
+  }
+
+  // Today's schedule - compare completion time with the slot
+  const completeTime = new Date(item.completeTime);
+  console.log('completeTime', completeTime)
+
+  const slotStart = new Date(scheduleDate);
+  const slotEnd = new Date(scheduleDate);
+
+  switch (item.sheduleTime) {
+    case '08:00 AM - 12:00 PM':
+      slotStart.setHours(7, 15, 0, 0);
+      slotEnd.setHours(12, 0, 0, 0);
+      break;
+
+    case '12:00 PM - 04:00 PM':
+      slotStart.setHours(11, 15, 0, 0);
+      slotEnd.setHours(16, 0, 0, 0);
+      break;
+
+    case '04:00 PM - 09:00 PM':
+      slotStart.setHours(15, 15, 0, 0);
+      slotEnd.setHours(21, 0, 0, 0);
+      break;
+
+    default:
+      return 'schedule-future';
+  }
+
+  // Completed outside the allowed window
+  if (completeTime < slotStart || completeTime > slotEnd) {
     return 'schedule-expired';
   }
 
+  // Completed within the allowed window
   return 'schedule-active';
 }
 

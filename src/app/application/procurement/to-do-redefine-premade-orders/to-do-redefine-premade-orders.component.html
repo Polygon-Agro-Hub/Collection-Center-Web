@@ -91,7 +91,7 @@
                 {{ item.productTypeShortCode }}
               </div>
 
-              <app-searchable-dropdown [items]="getMarketplaceDropdownItems()"
+              <app-searchable-dropdown [items]="getMarketplaceDropdownItems(item.productTypeId)"
                 [customStyles]="item.isExcluded === true ? 'border-red-500 text-red-600 bg-red-50' : ''"
                 placeholder="--Select Product--" searchPlaceholder="Search products..."
                 [ngModel]="getProductValue(item)" (ngModelChange)="onProductSelectionChange($event, item)"
@@ -148,7 +148,7 @@
 
 <div *ngIf="showAdditionalItemsModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
   (click)="closeAdditionalItemsModal()">
-  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-96 max-w-md mx-4 max-h-[90vh] flex flex-col"
+  <div class="bg-white dark:bg-gray-800 rounded-lg shadow-xl w-[500px] max-w-md mx-4 max-h-[90vh] flex flex-col"
     (click)="$event.stopPropagation()">
     <!-- Modal Header -->
     <div class="px-6 py-4 text-center shrink-0 dark:border-gray-700">

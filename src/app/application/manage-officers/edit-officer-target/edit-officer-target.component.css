@@ -1,0 +1,5 @@
+/* Chrome, Edge, Safari spinner buttons only */
+.quantity-input::-webkit-inner-spin-button,
+.quantity-input::-webkit-outer-spin-button {
+  cursor: pointer;
+}

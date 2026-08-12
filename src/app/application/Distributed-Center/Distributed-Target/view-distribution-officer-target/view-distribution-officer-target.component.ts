@@ -42,6 +42,8 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Pending', 'Completed', 'Opened'];
 
+  empId!: string | null;
+
   today = new Date();
 
   toggleStatusDropdown() {
@@ -80,6 +82,9 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
   ngOnInit(): void {
     this.officerId = Number(this.route.snapshot.paramMap.get('officerId'));
     this.selectedDate = String(this.route.snapshot.paramMap.get('date'));
+
+    this.empId = this.route.snapshot.queryParamMap.get('empId');
+
     this.fetchSelectedOfficerTargets();
     
   }
@@ -307,6 +312,10 @@ cancelPass() {
 
 cancell() {
   this.isPass = false;
+  // Reset the select field
+  this.selectedOfficer = '';
+  this.selectedOfficerId = '';
+  this.selectedEmpId = '';
 }
 
 passTargetToBackEnd() {

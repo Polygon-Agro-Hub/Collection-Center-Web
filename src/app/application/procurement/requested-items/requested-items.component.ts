@@ -69,7 +69,6 @@ export class RequestedItemsComponent implements OnInit {
   
 
   callMethodByRole() {
-    console.log('called')
     if (this.logingRole === 'Distribution Centre Manager') {
       this.fetchAllRequestedItemsForDCM();
     } else if (this.logingRole === 'Distribution Centre Head') {
@@ -81,7 +80,6 @@ export class RequestedItemsComponent implements OnInit {
   fetchDistributionCentre(): Observable<any> {
     return this.ProcurementsService.getDistributionCenter().pipe(
       tap((res) => {
-        console.log('res', res)
         this.centerId = String(res);
       })
     );
@@ -138,9 +136,7 @@ export class RequestedItemsComponent implements OnInit {
     this.isLoading = true;
       this.ProcurementsService.getAllRequestedItemsForDCH(center, date, search).subscribe(
           (res) => {
-            this.itemsArr = res.groupedProducts.sort((a: RequestedItems, b: RequestedItems) => 
-              a.productName.localeCompare(b.productName)
-            );
+            this.itemsArr = res.groupedProducts;
               this.totalItems = res.totalItems;
               this.isLoading = false;
 
@@ -158,9 +154,7 @@ export class RequestedItemsComponent implements OnInit {
     this.ProcurementsService.getAllRequestedItemsForDCH(center, date, search).subscribe(
       (res) => {
         // Sort grouped products alphabetically by productName
-        this.itemsArr = res.groupedProducts.sort((a: RequestedItems, b: RequestedItems) => 
-          a.productName.localeCompare(b.productName)
-        );
+        this.itemsArr = res.groupedProducts;
   
         this.totalItems = res.totalItems;
         this.isLoading = false;

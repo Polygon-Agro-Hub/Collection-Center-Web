@@ -85,9 +85,9 @@ export class CenterCollectionExpenseComponent implements OnInit {
       (res) => {
         this.farmerPaymentsArr = res.items;
         this.totalItems = res.total;
+        this.totalPaymentsAmount = res.grandTotal
         this.hasData = res.items.length > 0;
         this.isLoading = false;
-        this.calculateTotalPayments();
       },
       (error) => {
         this.isLoading = false;
@@ -101,17 +101,18 @@ export class CenterCollectionExpenseComponent implements OnInit {
   }
 
   // Update the calculateTotalPayments method
-  calculateTotalPayments(): void {
-    this.totalPaymentsAmount = this.farmerPaymentsArr.reduce((sum, payment) => {
-      const amount = this.formatNumberToTwoDecimals(payment.totalAmount);
-      return sum + (isNaN(amount) ? 0 : amount);
-    }, 0);
+  // calculateTotalPayments(): void {
+  //   this.totalPaymentsAmount = this.farmerPaymentsArr.reduce((sum, payment) => {
+  //     const amount = this.formatNumberToTwoDecimals(payment.totalAmount);
+  //     return sum + (isNaN(amount) ? 0 : amount);
+  //   }, 0);
 
-    // Ensure the final total is also formatted to 2 decimal places
-    this.totalPaymentsAmount = this.formatNumberToTwoDecimals(this.totalPaymentsAmount);
-  }
+  //   // Ensure the final total is also formatted to 2 decimal places
+  //   this.totalPaymentsAmount = this.formatNumberToTwoDecimals(this.totalPaymentsAmount);
+  // }
 
   onSearch() {
+    this.page = 1;
     this.fetchFilteredPayments();
   }
 

@@ -1,9 +1,6 @@
 <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
 <div class="w-full overflow-x-auto">
   <div>
-    <div
-      class="pt-5 px-12 pb-5 min-w-[1550px] bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg"
-    >
       <div class="flex justify-between items-center mb-8">
         <div class="flex items-center">
           <h2 class="text-[16px] font-semibold text-[#000000] dark:text-textDark">
@@ -131,11 +128,10 @@
               <td
                 class="px-4 py-3 text-center text-[#000000] dark:text-textDark"
               >
-                {{ order.processCreatedAt | date : "d MMM, y" }}<br />
-                {{ order.processCreatedAt | date : "hh:mm a" }}
+                <p>{{ getDatePart(order.processCreatedAt)}}</p>
+                <p>{{ getTimePart(order.processCreatedAt)}}</p>
               </td>
 
-              
             </tr>
           </tbody>
         </table>
@@ -164,6 +160,5 @@
         </pagination-controls>
       </div>
 
-    </div>
   </div>
 </div>

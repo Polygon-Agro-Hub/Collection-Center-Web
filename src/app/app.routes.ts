@@ -84,8 +84,16 @@ import { DispatchedDashboardComponent } from './application/Dispatched/dispatche
 import { CashActivityDashboardComponent } from './application/Cash-activity/cash-activity-dashboard/cash-activity-dashboard.component';
 import { ViewPickupCashRevenueComponent } from './application/Cash-activity/view-pickup-cash-revenue/view-pickup-cash-revenue.component';
 import { ViewDeliveryRevenueComponent } from './application/Cash-activity/view-delivery-revenue/view-delivery-revenue.component';
-
-
+import { PackingTargetsComponent } from './application/Distributed-Center/Distributed-Target/packing-targets/packing-targets.component';
+import { ProductStorageDashboardComponent } from './application/product-storage/product-storage-dashboard/product-storage-dashboard.component';
+import { ProductShortageTodayComponent } from './application/product-storage/product-shortage-today/product-shortage-today.component';
+import { ProductStorageHistoryComponent } from './application/product-storage/product-storage-history/product-storage-history.component'
+import { DistributionProcurementDashboardComponent } from './application/distribution-procurement/distribution-procurement-dashboard/distribution-procurement-dashboard.component'
+import { ShortageHistoryComponent } from './application/distribution-procurement/shortage-history/shortage-history.component'
+import { ShortageTodayComponent } from './application/distribution-procurement/shortage-today/shortage-today.component'
+import { ShortageTodayFinalizationComponent } from './application/distribution-procurement/shortage-today-finalization/shortage-today-finalization.component'
+import { ShortageAssignComponent } from './application/distribution-procurement/shortage-assign/shortage-assign.component';
+import { ViewOutForDeiveryOrderDetailsComponent } from './application/Distributed-Center/Distributed-Target/view-out-for-deivery-order-details/view-out-for-deivery-order-details.component'
 
 export const routes: Routes = [
     {
@@ -324,7 +332,7 @@ export const routes: Routes = [
                         component: ViewCentersComponent
                     },
                     {
-                        path: 'center-shashbord/:id',
+                        path: 'center-dashboard/:id',
                         component: CentersDashbordComponent
                     },
                     {
@@ -523,13 +531,37 @@ export const routes: Routes = [
             },
 
             {
-                path: 'assign-targets',
+                path: 'product-shortage',
                 canActivate:[RoleGuardService],
                 data: { roles: ['Distribution Centre Manager'] },
                 children: [
                     {
                         path: '',
-                        component: ViewDistributionCenterTargetComponent,
+                        component: ProductStorageDashboardComponent,
+                    },
+
+                    {
+                        path: 'product-shortage-today',
+                        component: ProductShortageTodayComponent,
+                    },
+
+                    {
+                        path: 'product-shortage-history',
+                        component: ProductStorageHistoryComponent,
+                    }
+                ]
+            },
+            
+
+            {
+                path: 'assign-targets',
+                canActivate:[RoleGuardService],
+                data: { roles: ['Distribution Centre Manager'] },
+                children: [
+
+                    {
+                        path: '',
+                        component: PackingTargetsComponent,
                     },
                     {
                         path: 'Assign',
@@ -537,6 +569,37 @@ export const routes: Routes = [
                         canDeactivate: [PendingTargetAssignGuard]
                     },
                     
+                ]
+            },
+
+            {
+                path: 'distribution-procurement',
+                canActivate:[RoleGuardService],
+                data: { roles: ['Distribution Centre Head'] },
+                children: [
+                    {
+                        path: '',
+                        component: DistributionProcurementDashboardComponent,
+                    },
+
+                    {
+                        path: 'shortage-today',
+                        component: ShortageTodayComponent,
+                    },
+
+                    { path: 'shortage-assign/:id', 
+                      component: ShortageAssignComponent 
+                    },
+
+                    {
+                        path: 'shortage-finalization-today',
+                        component: ShortageTodayFinalizationComponent,
+                    },
+
+                    {
+                        path: 'shortage-history',
+                        component: ShortageHistoryComponent,
+                    }
                 ]
             },
 
@@ -565,7 +628,7 @@ export const routes: Routes = [
                     {
                         path: '',
                         component: TargetProgressAllComponent,
-                    },
+                    }
                    
                 ]
             },

@@ -32,17 +32,17 @@
                     <tr>
                         <th class="px-8 py-4 text-[#4B5563] font-normal">
                             <div class="bg-[#F6F7F9] dark:bg-slate-500 border-[1px] border-[#415CFF] rounded-lg px-3 py-1">
-                                <p class="text-black dark:text-white font-semibold">{{targetVerity.qtyA | number:'1.2-2' }}</p>
+                                <p class="text-black dark:text-white font-semibold">{{targetVerity.qtyA }}</p>
                             </div>
                         </th>
                         <th class="px-8 py-4 text-[#4B5563] font-normal">
                             <div class="bg-[#F6F7F9] dark:bg-slate-500 border-[1px] border-[#415CFF] rounded-lg px-3 py-1">
-                                <p class="text-black dark:text-white font-semibold">{{targetVerity.qtyB | number:'1.2-2' }}</p>
+                                <p class="text-black dark:text-white font-semibold">{{targetVerity.qtyB }}</p>
                             </div>
                         </th>
                         <th class="px-8 py-4 text-[#4B5563] font-normal">
                             <div class="bg-[#F6F7F9] dark:bg-slate-500 border-[1px] border-[#415CFF] rounded-lg px-3 py-1">
-                                <p class="text-black dark:text-white font-semibold">{{targetVerity.qtyC | number:'1.2-2' }}</p>
+                                <p class="text-black dark:text-white font-semibold">{{targetVerity.qtyC }}</p>
                             </div>
                         </th>
                     </tr>
@@ -72,22 +72,23 @@
                         <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.firstNameEnglish}}
                             {{item.lastNameEnglish}}</td>
                         <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
-                            <input step="0.01" type="number" [(ngModel)]="officerArr[i].targetA" name="targetA"
-                                (ngModelChange)="updateTotals(i, 'A')"
-                                class="border-[#415CFF] border-[2px] border-dotted dark:bg-slate-500 rounded-lg w-16 px-2 py-1" />
-
-                        </td>
-                        <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
-                            <input step="0.01" type="number" [(ngModel)]="officerArr[i].targetB" name="targetB"
-                                (ngModelChange)="updateTotals(i, 'B')"
-                                class="border-[#415CFF] border-[2px] border-dotted dark:bg-slate-500 rounded-lg w-16 px-2 py-1" />
-
-                        </td>
-                        <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
-                            <input step="0.01" type="number" [(ngModel)]="officerArr[i].targetC" name="targetC"
-                                (ngModelChange)="updateTotals(i, 'C')"
-                                class="border-[#415CFF] border-[2px] border-dotted dark:bg-slate-500 rounded-lg w-16 px-2 py-1" />
-                        </td>
+    <input step="any" type="number" [(ngModel)]="officerArr[i].targetA" name="targetA"
+        (ngModelChange)="updateTotals(i, 'A')"
+        (input)="restrictDecimals($event, i, 'A')"
+        class="border-[#415CFF] border-[2px] border-dotted dark:bg-slate-500 rounded-lg w-28 px-2 py-1" />
+</td>
+<td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
+    <input step="any" type="number" [(ngModel)]="officerArr[i].targetB" name="targetB"
+        (ngModelChange)="updateTotals(i, 'B')"
+        (input)="restrictDecimals($event, i, 'B')"
+        class="border-[#415CFF] border-[2px] border-dotted dark:bg-slate-500 rounded-lg w-28 px-2 py-1" />
+</td>
+<td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
+    <input step="any" type="number" [(ngModel)]="officerArr[i].targetC" name="targetC"
+        (ngModelChange)="updateTotals(i, 'C')"
+        (input)="restrictDecimals($event, i, 'C')"
+        class="border-[#415CFF] border-[2px] border-dotted dark:bg-slate-500 rounded-lg w-28 px-2 py-1" />
+</td>
                     </tr>
                     <tr class="border-t-2 border-[#E5E7EB]">
                         <td class="px-6 py-3 text-gray-900 dark:text-gray-300"></td>
@@ -95,8 +96,8 @@
                         <td class="px-6 py-3 font-bold text-end text-gray-900 dark:text-gray-300">Total : </td>
                         <td class="px-6 py-3 text-gray-900 dark:text-gray-300">
                             <div class="flex flex-row gap-2">
-                                <input type="number" [value]="totTargetA" disabled
-                                    class="border-[#415CFF] dark:bg-slate-500 border-[2px] border-dotted rounded-lg w-16 px-2 py-1" />
+                                <input type="any" [value]="totTargetA" disabled
+                                    class="border-[#415CFF] dark:bg-slate-500 border-[2px] border-dotted rounded-lg w-28 px-2 py-1" />
                                 <div *ngIf="+totTargetA === +targetVerity.qtyA"
                                     class="bg-[#415CFF] text-[#FFFFFF] flex justify-center items-center px-3 py-1 rounded-full">
                                     <i class="fa-solid fa-check text-sm"></i>
@@ -105,8 +106,8 @@
                         </td>
                         <td class="px-6 py-3  text-gray-900 dark:text-gray-300">
                             <div class="flex flex-row gap-2">
-                                <input type="number" [value]="totTargetB" disabled
-                                    class="border-[#415CFF] dark:bg-slate-500 border-[2px] border-dotted rounded-lg w-16 px-2 py-1" />
+                                <input type="any" [value]="totTargetB" disabled
+                                    class="border-[#415CFF] dark:bg-slate-500 border-[2px] border-dotted rounded-lg w-28 px-2 py-1" />
                                 <div *ngIf="+totTargetB === +targetVerity.qtyB"
                                     class="bg-[#415CFF] text-[#FFFFFF] flex justify-center items-center px-3 py-1 rounded-full">
                                     <i class="fa-solid fa-check text-sm"></i>
@@ -116,8 +117,8 @@
                         </td>
                         <td class="px-6 py-3 text-gray-900 dark:text-gray-300">
                             <div class="flex flex-row gap-2">
-                                <input type="number" [value]="totTargetC" disabled
-                                    class="border-[#415CFF] dark:bg-slate-500 border-[2px] border-dotted rounded-lg w-16 px-2 py-1" />
+                                <input type="any" [value]="totTargetC" disabled
+                                    class="border-[#415CFF] dark:bg-slate-500 border-[2px] border-dotted rounded-lg w-28 px-2 py-1" />
                                 <div *ngIf="+totTargetC == +targetVerity.qtyC"
                                     class="bg-[#415CFF] text-[#FFFFFF] flex justify-center items-center px-3 py-1 rounded-full">
                                     <i class="fa-solid fa-check text-sm"></i>

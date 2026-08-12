@@ -141,6 +141,15 @@ export const MENU_ITEMS = [
     permission: ['Distribution Centre Head', 'Distribution Centre Manager'],
   },
 
+  {
+    id: 24,
+    key: 'product-shortage',
+    path: '/product-shortage',
+    label: 'Product Shortage',
+    icon: 'fa-solid fa-question',
+    permission: ['Distribution Centre Manager'],
+  },
+
 
   {
     id: 13,
@@ -207,6 +216,16 @@ export const MENU_ITEMS = [
   },
 
   {
+    id: 25,
+    key: 'distribution-procurement',
+    path: '/distribution-procurement',
+    label: 'Procurement',
+    icon: 'fa-solid fa-box-open',
+    permission: ['Distribution Centre Head'],
+  },
+
+
+  {
     id: 20,
     key: 'dcm-complaints',
     path: '/dcm-complaints',
@@ -223,6 +242,8 @@ export const MENU_ITEMS = [
     icon: 'fas fa-th-large',
     permission: ['Distribution Centre Manager'],
   },
+
+  
 
 ];
 
@@ -259,7 +280,7 @@ export class SideNavComponent {
 
   ) {
     this.role = tokenSrv.getUserDetails().role;
-    console.log('role', this.role)
+    // console.log('role', this.role)
     this.companyLogo = tokenSrv.getUserDetails().logo;
     this.companyFavicon = tokenSrv.getUserDetails().favicon;
     this.setActiveTabFromRoute();

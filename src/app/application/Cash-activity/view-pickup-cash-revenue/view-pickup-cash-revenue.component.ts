@@ -20,7 +20,7 @@ import { CustomDatepickerComponent } from "../../../components/custom-datepicker
 export class ViewPickupCashRevenueComponent implements OnInit, OnDestroy {
   isLoading = false;
   centerName: string = '';
-  centerRegCode: string = '';
+  centerRegCode: string = ''
   centerId: string = '';
   searchText: string = '';
   selectedStatus: string = '';

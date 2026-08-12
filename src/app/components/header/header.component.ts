@@ -19,9 +19,9 @@ export class HeaderComponent{
 
   ngOnInit(): void {
     const userDetails = this.tokenSrv.getUserDetails();
-    console.log('user details', userDetails)
+    // console.log('user details', userDetails)
     this.userImage = userDetails.image;
-    console.log('user image', this.userImage);
+    // console.log('user image', this.userImage);
   }
 
   navigate(route: string) {

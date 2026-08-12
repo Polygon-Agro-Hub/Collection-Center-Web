@@ -24,7 +24,7 @@
 
         <div class="flex flex-row items-center justify-between mt-5 ">
             <div class="flex flex-col justify-between" >
-                <p class="font-semibold text-lg mb-1" *ngIf="hasData">{{targetArr[0].regCode}} Centre Target on {{today}} </p>
+                <p class="font-semibold text-[16px] mb-1" *ngIf="hasData">{{targetArr[0].regCode}} Centre Target on {{today}} </p>
             </div>
             <div class="flex flex-row items-center gap-5 ">
                 <i class="fa-solid fa-list text-[#4A4A4A] text-lg ml-5 dark:text-white"></i>
@@ -126,10 +126,8 @@
                             {{item.varietyNameEnglish}}</td>
                         <td class="px-6 py-4 text-gray-[#000000] font-semibold text-center dark:text-gray-300">
                             {{item.grade}}</td>
-                        <td class="px-6 py-4 text-gray-[#000000] font-semibold dark:text-gray-300">{{item.target |
-                            number: '1.2-2' }}</td>
-                        <td class="px-6 py-4 text-gray-[#000000] font-semibold dark:text-gray-300">{{item.complete |
-                            number: '1.2-2'}}</td>
+                        <td class="px-6 py-4 text-gray-[#000000] font-semibold dark:text-gray-300">{{ item.target == 0 ? '0.00' : item.target }}</td>
+                        <td class="px-6 py-4 text-gray-[#000000] font-semibold dark:text-gray-300">{{item.complete == 0 ? '0.00' : item.complete }}</td>
                         <td class="px-6 py-4 text-gray-[#000000] font-semibold dark:text-gray-300">
                             <div class="flex justify-center">
                               <span *ngIf="item.status === 'Pending'"

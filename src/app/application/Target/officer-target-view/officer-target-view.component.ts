@@ -135,11 +135,11 @@ ngOnInit(): void {
       
       (res) => {
         if (res.status) {
-          this.responseTitle = res.message;
           this.targetArr = res.result;
           this.totalItems = res.total;
           if (res.total === 0) {
             this.hasData = false;
+            this.responseTitle = '--No data available--';
           } else {
             this.hasData = true;
           }
@@ -152,7 +152,7 @@ ngOnInit(): void {
         }
 
         console.log(this.responseTitle, this.hasData);
-        
+
       }
     )
   }
@@ -168,7 +168,7 @@ ngOnInit(): void {
     console.log('from', this.OfficerObj.fromDate, 'to', this.OfficerObj.toDate)
     if (!this.OfficerObj.jobRole || !this.OfficerObj.officerId || !this.OfficerObj.fromDate || !this.OfficerObj.toDate) {
       this.responseTitle = 'Fill input fields first'
-      this.toastSrv.warning('Fill All Input feilds')
+      this.toastSrv.warning('Fill All Input fields')
       this.isLoading = false;
       this.hasData = false;
       this.isInitialDataSet = false;

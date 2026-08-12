@@ -13,6 +13,7 @@ import { DistributedManageOfficersService } from '../../../services/Distributed-
 import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
 import { Country, COUNTRIES } from '../../../../assets/country-data';
 import { CustomDatepickerComponent } from '../../../components/custom-datepicker/custom-datepicker.component';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-edit-distributed-officer',
@@ -97,6 +98,8 @@ export class EditDistributedOfficerComponent implements OnInit {
   jobRoleInputTouched = false;
   vehicleTypeDropdownOpen = false;
   vehicleTypeTouched = false;
+
+    drvCatArr: DriverCategory[] = [];
 
   selectVehicletype: any = { name: '', capacity: '' };
 
@@ -191,13 +194,18 @@ export class EditDistributedOfficerComponent implements OnInit {
   ]
 
   ngOnInit(): void {
-    // this.getAllCollectionCetnter();
     this.loadBanks();
     this.loadBranches();
     this.getAllCenters();
     this.editOfficerId = this.route.snapshot.params['id'];
     this.centerId = this.route.snapshot.params['centerId'];
-    this.fetchOffierById(this.editOfficerId);
+
+    // Driver categories must be loaded before the officer is fetched, otherwise
+    // the searchable dropdown's writeValue() runs against an empty items list
+    // and personalData.drvCategory never gets matched to an item.
+    this.getAllDriverCategory().then(() => {
+      this.fetchOffierById(this.editOfficerId);
+    });
 
     this.setJobRoles();
     this.setActiveTabFromRoute()
@@ -239,6 +247,31 @@ export class EditDistributedOfficerComponent implements OnInit {
     }
     this.isJobRoleOpen = false;
     this.jobRoleInputTouched = true;
+  }
+
+  getAllDriverCategory(): Promise<void> {
+    this.isLoading = true;
+    return new Promise((resolve) => {
+      this.DistributedManageOfficerSrv.getDriverCategory().subscribe(
+        (res) => {
+          this.drvCatArr = res
+          resolve();
+        }
+      )
+    });
+  }
+
+  get driverCategoryDropdownItems() {
+    return this.drvCatArr.map(cat => ({
+      value: cat.id.toString(),
+      label: cat.catName,
+      disabled: false
+    }));
+  }
+
+  onDriverCategorySelectionChange(selectedValue: string) {
+    this.personalData.drvCategory = selectedValue || '';
+    console.log('drvCa', this.personalData.drvCategory)
   }
 
   @HostListener('document:click', ['$event'])
@@ -369,6 +402,12 @@ isSelected(item: any): boolean {
           this.personalData.languages = '';
         }
 
+        // driverCategoryDropdownItems values are stringified ids; coerce so the
+        // searchable dropdown's writeValue() strict-equality match succeeds.
+        if (this.personalData.drvCategory != null) {
+          this.personalData.drvCategory = this.personalData.drvCategory.toString();
+        }
+
         this.selectJobRole = res.officerData.collectionOfficer.jobRole;
         this.getAllManagers();
 
@@ -378,6 +417,7 @@ isSelected(item: any): boolean {
         });
 
         this.isLoading = false;
+        console.log('personalData', this.personalData.drvCategory)
       }
     );
   }
@@ -540,20 +580,107 @@ isSelected(item: any): boolean {
     this.personalData.province = selected ? selected.province : '';
   }
 
-  onSubmit() {
+  // Uploads any newly selected images to the backend (which forwards them to
+  // R2) and swaps the local File references for the resulting public URLs
+  // before the officer payload is sent. Fields left untouched keep whatever
+  // URL was already loaded from the server.
+  private async uploadChangedImages(): Promise<void> {
+    const uploads: Promise<void>[] = [];
 
-    if (this.personalData.accNumber !== this.personalData.conformAccNumber) {
-      return;
+    if (this.selectedFile) {
+      uploads.push(
+        firstValueFrom(this.DistributedManageOfficerSrv.uploadOfficerImage(this.selectedFile, 'profile'))
+          .then(res => { this.personalData.image = res.url; })
+      );
     }
-    if (this.personalData.phoneNumber01 == this.personalData.phoneNumber02) {
-      this.toastSrv.warning('Pleace enter 2 different Mobile numbers')
+
+    if (this.personalData.jobRole === 'Driver') {
+      const driverUploads: [File | null, keyof Drivers, string][] = [
+        [this.licenseFrontImageFile, 'licFrontImg', 'licFront'],
+        [this.licenseBackImageFile, 'licBackImg', 'licBack'],
+        [this.insurenceFrontImageFile, 'insFrontImg', 'insFront'],
+        [this.insurenceBackImageFile, 'insBackImg', 'insBack'],
+        [this.vehicleFrontImageFile, 'vehFrontImg', 'vehFront'],
+        [this.vehicleBackImageFile, 'vehBackImg', 'vehBack'],
+        [this.vehicleSideAImageFile, 'vehSideImgA', 'vehSideA'],
+        [this.vehicleSideBImageFile, 'vehSideImgB', 'vehSideB'],
+      ];
+
+      for (const [file, field, type] of driverUploads) {
+        if (file) {
+          uploads.push(
+            firstValueFrom(this.DistributedManageOfficerSrv.uploadOfficerImage(file, type))
+              .then(res => { (this.driverObj as any)[field] = res.url; })
+          );
+        }
+      }
     }
 
-    else if (!this.personalData.accHolderName || !this.personalData.accNumber || !this.personalData.bankName || !this.personalData.branchName || !this.personalData.city || !this.personalData.country || !this.personalData.district || !this.personalData.houseNumber) {
-      this.toastSrv.warning('Pleace fill all required feilds')
+    await Promise.all(uploads);
+  }
 
-    } else {
+  // Builds and shows the "Duplicate Information" dialog from a list of
+  // backend error codes (NIC/Email/PhoneNumber01/PhoneNumber02).
+  private showDuplicateErrorDialog(errors: string[]): void {
+    const messages = errors.map((err: string) => {
+      switch (err) {
+        case 'NIC':
+          return 'The NIC number is already registered.';
+        case 'Email':
+          return 'Email already exists.';
+        case 'PhoneNumber01':
+          return 'Mobile Number 1 already exists.';
+        case 'PhoneNumber02':
+          return 'Mobile Number 2 already exists.';
+        default:
+          return 'Validation error: ' + err;
+      }
+    });
+
+    let errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following Duplicate field issues:</p><ul class="list-disc pl-5">';
+    messages.forEach(m => {
+      errorMessage += `<li>${m}</li>`;
+    });
+    errorMessage += '</ul></div>';
+
+    Swal.fire({
+      icon: 'error',
+      title: 'Duplicate Information',
+      html: errorMessage,
+      confirmButtonText: 'OK',
+      customClass: {
+        popup: 'bg-tileLight dark:bg-[#363636] text-black dark:text-white',
+        title: 'font-semibold text-lg',
+        htmlContainer: 'text-left',
+        confirmButton: 'bg-red-500 dark:bg-red-500 hover:bg-red-600 dark:hover:bg-red-700',
+      },
+    });
+  }
+
+  async onSubmit() {
+
       this.isLoading = true;
+
+      try {
+        await firstValueFrom(this.DistributedManageOfficerSrv.checkDuplicateOfficer(this.personalData, this.editOfficerId));
+      } catch (error: any) {
+        this.isLoading = false;
+        const duplicateErrors = error?.error?.errors;
+        if (Array.isArray(duplicateErrors) && duplicateErrors.length > 0) {
+          this.showDuplicateErrorDialog(duplicateErrors);
+        } else {
+          this.toastSrv.error('Failed to verify officer details. Please try again.');
+        }
+        return;
+      }
+
+      try {
+        await this.uploadChangedImages();
+      } catch (error) {
+        this.isLoading = false;
+        this.toastSrv.error('Failed to upload one or more images. Please try again.');
+        return;
+      }
 
       if (this.logingRole === 'Distribution Centre Manager') {
 
@@ -569,7 +696,7 @@ isSelected(item: any): boolean {
           this.driverObj.vSideBName = this.vehicleSideBImageFileName
         }
 
-        this.DistributedManageOfficerSrv.updateDistributionOfficerDIO(this.personalData, this.editOfficerId, this.selectedFile, this.driverObj, this.licenseFrontImageFile, this.licenseBackImageFile, this.insurenceFrontImageFile, this.insurenceBackImageFile, this.vehicleFrontImageFile, this.vehicleBackImageFile, this.vehicleSideAImageFile, this.vehicleSideBImageFile).subscribe(
+        this.DistributedManageOfficerSrv.updateDistributionOfficerDIO(this.personalData, this.editOfficerId, this.driverObj).subscribe(
           (res: any) => {
             this.officerId = res.officerId;
             this.isLoading = false;
@@ -646,7 +773,7 @@ isSelected(item: any): boolean {
           this.driverObj.vSideBName = this.vehicleSideBImageFileName
         }
 
-        this.DistributedManageOfficerSrv.updateDistributionOfficer(this.personalData, this.editOfficerId, this.selectedFile, this.driverObj, this.licenseFrontImageFile, this.licenseBackImageFile, this.insurenceFrontImageFile, this.insurenceBackImageFile, this.vehicleFrontImageFile, this.vehicleBackImageFile, this.vehicleSideAImageFile, this.vehicleSideBImageFile).subscribe(
+        this.DistributedManageOfficerSrv.updateDistributionOfficer(this.personalData, this.editOfficerId, this.driverObj).subscribe(
           (res: any) => {
             this.isLoading = false;
 
@@ -705,7 +832,6 @@ isSelected(item: any): boolean {
           }
         );
       }
-    }
   }
 
   // Add this new method for redirecting based on URL
@@ -941,6 +1067,11 @@ isSelected(item: any): boolean {
 
     if (!this.personalData.jobRole) {
       missingFields.push('Job Role is required');
+    }
+
+
+    if (this.personalData.jobRole === 'Driver' && !this.personalData.drvCategory) {
+      missingFields.push('Driver Category is required');
     }
 
     if (!this.personalData.employeeType) {
@@ -1194,6 +1325,9 @@ isSelected(item: any): boolean {
       });
       return;
     }
+
+    this.onSubmit();
+
   }
 
 
@@ -1274,14 +1408,14 @@ isSelected(item: any): boolean {
     const inputElement = event.target as HTMLInputElement;
 
     if (inputElement) {
-      // Remove **all spaces** (not just trim)
-      const noSpaceValue = inputElement.value.replace(/\s+/g, '');
+      // Remove everything except digits (no letters, spaces, or special characters)
+      const numericValue = inputElement.value.replace(/[^0-9]/g, '');
 
       // Update model and input
-      modelRef[fieldName] = noSpaceValue;
-      inputElement.value = noSpaceValue;
+      modelRef[fieldName] = numericValue;
+      inputElement.value = numericValue;
     }
-  }
+}
 
 
 
@@ -1352,7 +1486,7 @@ isSelected(item: any): boolean {
   }
 
   navigateToCenterDashboard() {
-    this.router.navigate(['/centers/center-shashbord', this.centerId]); // Change '/reports' to your desired route
+    this.router.navigate(['/centers/center-dashboard', this.centerId]); // Change '/reports' to your desired route
   }
 
 
@@ -1468,7 +1602,7 @@ isSelected(item: any): boolean {
 
       // Validate file size (5MB max)
       if (file.size > 3 * 1024 * 1024) {
-        this.toastSrv.error('License image size should not exceed 3MB');
+        this.toastSrv.error(`License's Front Image size should not exceed 3MB`);
         this.licenseFrontImageFile = null;
         this.licenseFrontImageFileName = '';
         event.target.value = '';
@@ -1478,7 +1612,7 @@ isSelected(item: any): boolean {
       // Validate file type
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
-        this.toastSrv.error('License image must be JPEG, JPG or PNG format');
+        this.toastSrv.error(`License's Front Image must be JPEG, JPG or PNG format`);
         this.licenseFrontImageFile = null;
         this.licenseFrontImageFileName = '';
         event.target.value = '';
@@ -1527,7 +1661,7 @@ isSelected(item: any): boolean {
       }
       // Validate file size (5MB max)
       if (file.size > 3 * 1024 * 1024) {
-        this.toastSrv.error('License image size should not exceed 3MB');
+        this.toastSrv.error(`License's Back Image size should not exceed 3MB`);
         this.licenseBackImageFile = null;
         this.licenseBackImageFileName = '';
         event.target.value = '';
@@ -1537,7 +1671,7 @@ isSelected(item: any): boolean {
       // Validate file type
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
-        this.toastSrv.error('License image must be JPEG, JPG or PNG format');
+        this.toastSrv.error(`License's Back Image must be JPEG, JPG or PNG format`);
         this.licenseBackImageFile = null;
         this.licenseBackImageFileName = '';
         event.target.value = '';
@@ -1582,7 +1716,7 @@ isSelected(item: any): boolean {
 
       // Validate file size (5MB max)
       if (file.size > 3 * 1024 * 1024) {
-        this.toastSrv.error('Insurence image size should not exceed 3MB');
+        this.toastSrv.error(`Insurance's Front Image size should not exceed 3MB`);
         this.insurenceFrontImageFile = null;
         this.insurenceFrontImageFileName = '';
         event.target.value = '';
@@ -1592,7 +1726,7 @@ isSelected(item: any): boolean {
       // Validate file type
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
-        this.toastSrv.error('Insurence image must be JPEG, JPG or PNG format');
+        this.toastSrv.error(`Insurance's Front Image must be JPEG, JPG or PNG format`);
         this.insurenceFrontImageFile = null;
         this.insurenceFrontImageFileName = '';
         event.target.value = '';
@@ -1639,7 +1773,7 @@ isSelected(item: any): boolean {
 
       // Validate file size (5MB max)
       if (file.size > 3 * 1024 * 1024) {
-        this.toastSrv.error('Insurence image size should not exceed 3MB');
+        this.toastSrv.error(`Insurance's Back Image size should not exceed 3MB`);
         this.insurenceBackImageFile = null;
         this.insurenceBackImageFileName = '';
         event.target.value = '';
@@ -1649,7 +1783,7 @@ isSelected(item: any): boolean {
       // Validate file type
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
-        this.toastSrv.error('Insurence image must be JPEG, JPG or PNG format');
+        this.toastSrv.error(`Insurance's Back Image must be JPEG, JPG or PNG format`);
         this.insurenceBackImageFile = null;
         this.insurenceBackImageFileName = '';
         event.target.value = '';
@@ -1695,7 +1829,7 @@ isSelected(item: any): boolean {
 
       // Validate file size (5MB max)
       if (file.size > 3 * 1024 * 1024) {
-        this.toastSrv.error('License image size should not exceed 3MB');
+        this.toastSrv.error(`Vehicle's Front Image size should not exceed 3MB`);
         this.vehicleFrontImageFile = null;
         this.vehicleFrontImageFileName = '';
         event.target.value = '';
@@ -1705,7 +1839,7 @@ isSelected(item: any): boolean {
       // Validate file type
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
-        this.toastSrv.error('License image must be JPEG, JPG or PNG format');
+        this.toastSrv.error(`Vehicle's Front Image must be JPEG, JPG or PNG format`);
         this.vehicleFrontImageFile = null;
         this.vehicleFrontImageFileName = '';
         event.target.value = '';
@@ -1750,7 +1884,7 @@ isSelected(item: any): boolean {
 
       // Validate file size (5MB max)
       if (file.size > 3 * 1024 * 1024) {
-        this.toastSrv.error('Vehicle Back image size should not exceed 3MB');
+        this.toastSrv.error(`Vehicle's Back image size should not exceed 3MB`);
         this.vehicleBackImageFile = null;
         this.vehicleBackImageFileName = '';
         event.target.value = '';
@@ -1760,7 +1894,7 @@ isSelected(item: any): boolean {
       // Validate file type
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
-        this.toastSrv.error('Vehicle Back image must be JPEG, JPG or PNG format');
+        this.toastSrv.error(`Vehicle's Back image must be JPEG, JPG or PNG format`);
         this.vehicleBackImageFile = null;
         this.vehicleBackImageFileName = '';
         event.target.value = '';
@@ -1805,7 +1939,7 @@ isSelected(item: any): boolean {
 
       // Validate file size (5MB max)
       if (file.size > 3 * 1024 * 1024) {
-        this.toastSrv.error('Vehicle Back image size should not exceed 3MB');
+        this.toastSrv.error(`Vehicle's Side Image - 1 size should not exceed 3MB`);
         this.vehicleSideAImageFile = null;
         this.vehicleSideAImageFileName = '';
         event.target.value = '';
@@ -1815,7 +1949,7 @@ isSelected(item: any): boolean {
       // Validate file type
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
-        this.toastSrv.error('Vehicle Back image must be JPEG, JPG or PNG format');
+        this.toastSrv.error(`Vehicle's Side Image - 1 must be JPEG, JPG or PNG format`);
         this.vehicleSideAImageFile = null;
         this.vehicleSideAImageFileName = '';
         event.target.value = '';
@@ -1859,7 +1993,7 @@ isSelected(item: any): boolean {
       }
       // Validate file size (5MB max)
       if (file.size > 3 * 1024 * 1024) {
-        this.toastSrv.error('Vehicle Back image size should not exceed 3MB');
+        this.toastSrv.error(`Vehicle's Side Image - 2 size should not exceed 3MB`);
         this.vehicleSideBImageFile = null;
         this.vehicleSideBImageFileName = '';
         event.target.value = '';
@@ -1869,7 +2003,7 @@ isSelected(item: any): boolean {
       // Validate file type
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
-        this.toastSrv.error('Vehicle Back image must be JPEG, JPG or PNG format');
+        this.toastSrv.error(`Vehicle's Side Image - 2 must be JPEG, JPG or PNG format`);
         this.vehicleSideBImageFile = null;
         this.vehicleSideBImageFileName = '';
         event.target.value = '';
@@ -2054,7 +2188,13 @@ class Personal {
   empIdPrefix!: string;
   previousEmpId!: string;
   myJobRole!: string;
+  drvCategory!: number | string;
 
+}
+
+class DriverCategory {
+  id!: number
+  catName!: string
 }
 
 

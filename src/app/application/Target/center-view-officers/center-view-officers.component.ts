@@ -253,10 +253,10 @@ const approveButton = (item.status === 'Rejected' || item.status === 'Not Approv
         swalInstance.close();
         if (res.status) {
           const action = status === 'Approved' ? 'approved' : 'rejected';
-          this.toastSrv.success(`The ${this.selectedJobRole} was ${action} successfully.`);
+          this.toastSrv.success(`Officer ${action} successfully.`);
           this.getAllOfficers();
         } else {
-          this.toastSrv.error(res.message || `Failed to ${status.toLowerCase()} the ${this.selectedJobRole}.`);
+          this.toastSrv.error(`Failed to ${status.toLowerCase()} the ${this.selectedJobRole}.`);
         }
       },
       error: (err) => {
@@ -305,6 +305,7 @@ const approveButton = (item.status === 'Rejected' || item.status === 'Not Approv
 
   onSearch() {
     this.searchText = this.searchText.trimStart();
+    this.page = 1;
     this.getAllOfficers(this.centerId, this.page, this.itemsPerPage, this.selectRole, this.selectStatus, this.searchText)
 
   }

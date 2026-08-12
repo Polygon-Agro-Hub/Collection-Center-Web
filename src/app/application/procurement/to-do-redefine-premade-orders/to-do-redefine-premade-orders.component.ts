@@ -45,9 +45,11 @@ interface MarketplaceItem {
   changeby: string;
   discount: string;
   isExcluded: boolean;
+  isEnabled: number;
   startValue: string;
   unitType: string;
   varietyId: number;
+  productTypeId: number;
 }
 
 interface PackageItem {
@@ -68,6 +70,7 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
 
   orderdetailsArr: OrderDetails[] = [];
   excludeItemsArr: ExcludeItems[] = [];
+  preferItemsArr: PreferedItems[] = [];
   orderDetails: OrderDetailItem[] = [];
   marketplaceItems: MarketplaceItem[] = [];
   additionalItems: AdditionalItem[] = [];
@@ -83,6 +86,7 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
   showExcludedItemsModal = false;
   isNewAddPopUp: boolean = false
   excludedItemsCount!: number;
+  preferItemsCount!: number;
   additionalItemsCount!: number;
 
 
@@ -128,10 +132,8 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
 
   ngOnInit() {
     // this.recalculatePackageTotal();
-    console.log('is wothing limi', this.isWithinLimit);
     this.route.queryParamMap.subscribe((params) => {
       const id = params.get('id');
-      console.log('Query parameter ID:', id);
       if (!id) {
         this.error = 'No order ID provided in URL';
         this.loading = false;
@@ -169,16 +171,16 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
     this.loading = true;
     this.procurementService.getAllMarketplaceItems(this.orderId).subscribe({
       next: (data: any) => {
-        console.log('data', data);
         this.marketplaceItems = data.items.map((item: any) => ({
           id: item.id,
           displayName: item.displayName,
           normalPrice: item.normalPrice,
           discountedPrice: item.discountedPrice,
           isExcluded: item.isExcluded,
+          isEnabled: item.isEnabled,
+          productTypeId: item.productTypeId,
 
         }));
-        console.log('Fetched marketplace items:', this.marketplaceItems);
         if (callback) callback();
       },
 
@@ -192,25 +194,22 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
   }
 
   fetchOrderDetails(id: string) {
-    console.log('Fetching order details for ID:', id);
     this.loading = true;
     this.error = '';
     this.isLoading = true;
 
     this.procurementService.getOrderDetailsById(id).subscribe(
       (response) => {
-        console.log('response', response);
 
         this.orderdetailsArr = response.data;
         this.additionalItems = response.additionalItems;
         this.excludeItemsArr = response.excludeList;
+        this.preferItemsArr = response.preferedList;
         this.excludedItemsCount = response.excludeList.length;
+        this.preferItemsCount = response.preferedList.length;
         this.categories = response.category;
         this.additionalItemsCount = response.additionalItems.length || 0;
 
-
-        console.log('orderdetailsArr', this.orderdetailsArr);
-        console.log('sdfasd', this.excludeItemsArr);
 
         // ✅ Reset totals
         this.totalDefinePkgPrice = 0.00;
@@ -227,6 +226,7 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
               product => +product.id === +item.productId
             );
             item.isExcluded = selectedProduct?.isExcluded ?? false;
+            item.isEnabled = selectedProduct?.isEnabled ?? 1;
 
             const qty = item.qty ?? 0;
             const discountedPrice = selectedProduct?.discountedPrice ?? 0;
@@ -239,8 +239,6 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
           this.totalDefinePkgPrice += packageTotal;
         });
 
-        console.log('Total Define Package Price (discounted):', this.totalDefinePkgPrice);
-        console.log('Total Package Price (original from OrderDetails):', this.totalPackagePrice);
         this.calculateTotalPrice();
 
         this.loading = false;
@@ -254,40 +252,68 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
   }
 
   // Transform marketplace items to dropdown format
-  getMarketplaceDropdownItems() {
-    return this.marketplaceItems.map(item => ({
-      value: item.id.toString(),
-      label: item.displayName,
-      disabled: item.isExcluded || false
-    }));
+  getMarketplaceDropdownItems(typeId: number) {
+    
+    const prfIds = this.preferItemsArr.map(p => p.id);
+    const exlIds = this.excludeItemsArr.map(e => e.id);
+
+    const isExcludedItem = (item: MarketplaceItem) => (item.isExcluded || exlIds.includes(item.id));
+    const isDisabledItem = (item: MarketplaceItem) => !isExcludedItem(item) && item.isEnabled === 0;
+    const isPreferredItem = (item: MarketplaceItem) => !isExcludedItem(item) && !isDisabledItem(item) && prfIds.includes(item.id);
+
+    const toItem = (item: MarketplaceItem) => {
+      const isExcluded = isExcludedItem(item);
+      const isDisabled = isDisabledItem(item);
+      const isPreferred = isPreferredItem(item);
+
+      let iconClass = 'fa-solid fa-check text-blue-500';
+      if (isExcluded) {
+        iconClass = 'fa-solid fa-ban text-red-500';
+      } else if (isDisabled) {
+        iconClass = 'fa-solid fa-triangle-exclamation text-orange-500';
+      } else if (isPreferred) {
+        iconClass = 'fa-solid fa-heart text-green-500';
+      }
+
+      return {
+        value: item.id.toString(),
+        label: item.displayName,
+        disabled: isExcluded || isDisabled,
+        iconClass
+      };
+    };
+
+    const filteredMarketplaceItems = this.marketplaceItems.filter(item => item.productTypeId === typeId);
+
+    const preferredItems = filteredMarketplaceItems.filter(isPreferredItem).map(toItem);
+    const normalItems = filteredMarketplaceItems.filter(item => !isPreferredItem(item) && !isExcludedItem(item) && !isDisabledItem(item)).map(toItem);
+    const excludedItems = filteredMarketplaceItems.filter(isExcludedItem).map(toItem);
+    const disabledItems = filteredMarketplaceItems.filter(isDisabledItem).map(toItem);
+
+    return [...preferredItems, ...normalItems, ...excludedItems, ...disabledItems];
   }
-  
+
   // Get the string value for the dropdown
   getProductValue(item: any): string {
     return item.productId ? item.productId.toString() : '';
   }
-  
+
   // Handle product selection change
   onProductSelectionChange(selectedValue: string, item: any) {
     // Convert string back to number if needed
     item.productId = selectedValue ? parseInt(selectedValue, 10) : null;
-    
+
     // Call your existing calculatePrice method
     this.calculatePrice(item);
-    
-    console.log('Product selected:', selectedValue, 'for item:', item);
+
   }
 
 
 
   calculatePrice(item: OrderItem): void {
-    console.log('id', item.productId);
-    console.log('maitems', this.marketplaceItems);
-
     const selectedProduct = this.marketplaceItems.find(
       product => +product.id === +item.productId
     );
-    console.log('selectedProduct', selectedProduct);
 
     if (selectedProduct) {
       const price = selectedProduct.discountedPrice ?? 0;
@@ -297,12 +323,13 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
 
 
       item.isExcluded = selectedProduct.isExcluded;
+      item.isEnabled = selectedProduct.isEnabled;
     } else {
       item.price = 0;
       item.isExcluded = false; // fallback
+      item.isEnabled = 1; // fallback
     }
 
-    console.log('price', item.price);
 
     this.recalculatePackageTotal();
   }
@@ -310,11 +337,8 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
 
 
   recalculatePackageTotal(): void {
-    console.log('recalculating')
     this.totalDefinePkgPrice = 0.00;
     this.totalPackagePrice = 0.00;
-
-    console.log('orderdetailsArr', this.orderdetailsArr)
 
     this.orderdetailsArr.forEach((pkg: OrderDetails) => {
       // Sum up the definePkgPrice using item prices
@@ -328,14 +352,11 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
       this.totalPackagePrice += +pkg.productPrice || 0;
     });
 
-    console.log('Total Define Package Price:', this.totalDefinePkgPrice);
-    console.log('Total Package Price (Original):', this.totalPackagePrice);
 
     // Compare against 1.08 * totalPackagePrice
     const limit = 1.08 * this.totalPackagePrice;
     this.isWithinLimit = this.totalDefinePkgPrice <= limit;
 
-    console.log('Is Within Limit:', this.isWithinLimit);
   }
 
 
@@ -357,10 +378,10 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
       // Validate if current total is within the allowed limit
       this.isWithinLimit = currentTotal <= allowedLimit;
 
-      console.log('Calculated total price:', this.totalPrice);
-      console.log('Allowed limit:', allowedLimit);
-      console.log('Current total:', currentTotal);
-      console.log('Is within limit:', this.isWithinLimit);
+      // console.log('Calculated total price:', this.totalPrice);
+      // console.log('Allowed limit:', allowedLimit);
+      // console.log('Current total:', currentTotal);
+      // console.log('Is within limit:', this.isWithinLimit);
     } else {
       this.totalPrice = 0;
       this.isWithinLimit = true;
@@ -418,7 +439,6 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
   }
 
   onComplete() {
-    console.log('orderdetailsArr', this.orderdetailsArr);
     this.loading = true;
 
     const hasInvalidProduct = this.orderdetailsArr.some((pkg, pkgIndex) => {
@@ -448,6 +468,12 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
     const hasExcludeProduct = this.orderdetailsArr.some((pkg, pkgIndex) => {
       return pkg.items.some((item, itemIndex) => {
         return item.isExcluded === true;
+      });
+    });
+
+    const hasDisabledProduct = this.orderdetailsArr.some((pkg, pkgIndex) => {
+      return pkg.items.some((item, itemIndex) => {
+        return item.isEnabled === 0;
       });
     });
 
@@ -501,12 +527,23 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
         }
       });
       return;
+    } else if (hasDisabledProduct) {
+      this.loading = false;
+      Swal.fire({
+        title: 'Invalid Product',
+        text: 'Please, do not select disabled products.',
+        icon: 'warning',
+        customClass: {
+          popup: 'bg-tileLight dark:bg-tileBlack text-black dark:text-white',
+          title: 'font-semibold',
+        }
+      });
+      return;
     }
 
     this.procurementService.updateDefinePackageItemData(this.orderdetailsArr, this.orderId).subscribe(
       (res) => {
         this.loading = false;
-        console.log('Updated successfully:', res);
 
         // Show success message and redirect to sent tab
         Swal.fire({
@@ -768,10 +805,9 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
   onCategorySelectionChange(selectedValue: string) {
     this.selectCategoryId = selectedValue || '';
     // Add any additional logic you need when category changes
-    console.log('Category selected:', selectedValue);
   }
 
-  
+
 
 
 }
@@ -800,9 +836,15 @@ class OrderItem {
   qty!: number;
   price!: number;
   isExcluded: boolean = false;
+  isEnabled!: number;
 }
 
 class ExcludeItems {
+  id!: number;
+  displayName!: string;
+}
+
+class PreferedItems {
   id!: number;
   displayName!: string;
 }

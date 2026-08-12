@@ -13,6 +13,7 @@ import { DistributedManageOfficersService } from '../../../services/Distributed-
 import { Country, COUNTRIES } from '../../../../assets/country-data';
 import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
 import { CustomDatepickerComponent } from '../../../components/custom-datepicker/custom-datepicker.component';
+import { firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-add-distributed-officer',
@@ -69,6 +70,8 @@ export class AddDistributedOfficerComponent implements OnInit {
 
   dropdownOpen = false;
   dropdownOpen2 = false;
+
+  drvCatArr: DriverCategory[] = [];
 
   filteredCenterArr: Center[] = [];
   filteredManagerArr: Manager[] = [];
@@ -173,6 +176,7 @@ export class AddDistributedOfficerComponent implements OnInit {
   ]
 
   ngOnInit(): void {
+    this.getAllDriverCategory();
     this.loadBanks()
     this.loadBranches()
     this.getAllDistributionCenters();
@@ -413,15 +417,112 @@ export class AddDistributedOfficerComponent implements OnInit {
     this.personalData.province = selected ? selected.province : '';
   }
 
-  onSubmit() {
+  // Uploads every selected image to the backend (which forwards it to R2)
+  // and stores the resulting public URLs on personalData/driverObj before
+  // the officer payload is sent.
+  private async uploadSelectedImages(): Promise<void> {
+    const uploads: Promise<void>[] = [];
+
+    if (this.selectedFile) {
+      uploads.push(
+        firstValueFrom(this.DistributedManageOfficerSrv.uploadOfficerImage(this.selectedFile, 'profile'))
+          .then(res => { this.personalData.image = res.url; })
+      );
+    }
+
+    if (this.personalData.jobRole === 'Driver') {
+      const driverUploads: [File | null, keyof Drivers, string][] = [
+        [this.licenseFrontImageFile, 'licFrontImg', 'licFront'],
+        [this.licenseBackImageFile, 'licBackImg', 'licBack'],
+        [this.insurenceFrontImageFile, 'insFrontImg', 'insFront'],
+        [this.insurenceBackImageFile, 'insBackImg', 'insBack'],
+        [this.vehicleFrontImageFile, 'vehFrontImg', 'vehFront'],
+        [this.vehicleBackImageFile, 'vehBackImg', 'vehBack'],
+        [this.vehicleSideAImageFile, 'vehSideImgA', 'vehSideA'],
+        [this.vehicleSideBImageFile, 'vehSideImgB', 'vehSideB'],
+      ];
+
+      for (const [file, field, type] of driverUploads) {
+        if (file) {
+          uploads.push(
+            firstValueFrom(this.DistributedManageOfficerSrv.uploadOfficerImage(file, type))
+              .then(res => { (this.driverObj as any)[field] = res.url; })
+          );
+        }
+      }
+    }
+
+    await Promise.all(uploads);
+  }
+
+  // Builds and shows the "Duplicate Information" dialog from a list of
+  // backend error codes (NIC/Email/PhoneNumber01/PhoneNumber02).
+  private showDuplicateErrorDialog(errors: string[]): void {
+    const messages = errors.map((err: string) => {
+      switch (err) {
+        case 'NIC':
+          return 'The NIC number is already registered.';
+        case 'Email':
+          return 'Email already exists.';
+        case 'PhoneNumber01':
+          return 'Mobile Number 1 already exists.';
+        case 'PhoneNumber02':
+          return 'Mobile Number 2 already exists.';
+        default:
+          return 'Validation error: ' + err;
+      }
+    });
+
+    let errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following Duplicate field issues:</p><ul class="list-disc pl-5">';
+    messages.forEach(m => {
+      errorMessage += `<li>${m}</li>`;
+    });
+    errorMessage += '</ul></div>';
+
+    Swal.fire({
+      icon: 'error',
+      title: 'Duplicate Information',
+      html: errorMessage,
+      confirmButtonText: 'OK',
+      customClass: {
+        popup: 'bg-tileLight dark:bg-[#363636] text-black dark:text-white',
+        title: 'font-semibold text-lg',
+        htmlContainer: 'text-left',
+        confirmButton: 'bg-red-500 dark:bg-red-500 hover:bg-red-600 dark:hover:bg-red-700',
+      },
+    });
+  }
+
+  async onSubmit() {
     if (this.personalData.accNumber !== this.personalData.conformAccNumber) {
       return;
     }
     this.isLoading = true;
 
+    try {
+      await firstValueFrom(this.DistributedManageOfficerSrv.checkDuplicateOfficer(this.personalData));
+    } catch (error: any) {
+      this.isLoading = false;
+      const duplicateErrors = error?.error?.errors;
+      if (Array.isArray(duplicateErrors) && duplicateErrors.length > 0) {
+        this.showDuplicateErrorDialog(duplicateErrors);
+      } else {
+        this.toastSrv.error('Failed to verify officer details. Please try again.');
+      }
+      return;
+    }
+
+    try {
+      await this.uploadSelectedImages();
+    } catch (error) {
+      this.isLoading = false;
+      this.toastSrv.error('Failed to upload one or more images. Please try again.');
+      return;
+    }
+
     if (!this.personalData.accHolderName || !this.personalData.accNumber || !this.personalData.bankName || !this.personalData.branchName) {
       this.isLoading = false;
-      this.toastSrv.warning('Pleace fill all required bank details feilds')
+      // this.toastSrv.warning('Pleace fill all required bank details feilds')
       return;
 
     } else {
@@ -442,7 +543,7 @@ export class AddDistributedOfficerComponent implements OnInit {
           this.driverObj.vSideBName = this.vehicleSideBImageFileName
         }
 
-        this.DistributedManageOfficerSrv.createDistributionOfficerDIO(this.personalData, this.selectedFile, this.driverObj, this.licenseFrontImageFile, this.licenseBackImageFile, this.insurenceFrontImageFile, this.insurenceBackImageFile, this.vehicleFrontImageFile, this.vehicleBackImageFile, this.vehicleSideAImageFile, this.vehicleSideBImageFile).subscribe({
+        this.DistributedManageOfficerSrv.createDistributionOfficerDIO(this.personalData, this.driverObj).subscribe({
           next: (res: any) => {
             if (res.status) {
               this.officerId = res.officerId;
@@ -515,7 +616,7 @@ export class AddDistributedOfficerComponent implements OnInit {
           this.driverObj.vSideBName = this.vehicleSideBImageFileName
         }
 
-        this.DistributedManageOfficerSrv.createDistributionOfficer(this.personalData, this.selectedFile, this.driverObj, this.licenseFrontImageFile, this.licenseBackImageFile, this.insurenceFrontImageFile, this.insurenceBackImageFile, this.vehicleFrontImageFile, this.vehicleBackImageFile, this.vehicleSideAImageFile, this.vehicleSideBImageFile).subscribe({
+        this.DistributedManageOfficerSrv.createDistributionOfficer(this.personalData, this.driverObj).subscribe({
           next: (res: any) => {
             if (res.status) {
               this.officerId = res.officerId;
@@ -615,6 +716,17 @@ export class AddDistributedOfficerComponent implements OnInit {
     )
   }
 
+  getAllDriverCategory() {
+    this.isLoading = true;
+    this.DistributedManageOfficerSrv.getDriverCategory().subscribe(
+      (res) => {
+        this.drvCatArr = res
+        console.log('drvCatArr', this.drvCatArr)
+        this.isLoading = false;
+      }
+    )
+  }
+
   changeCenter() {
     this.personalData.jobRole = ''
     this.personalData.irmId = null
@@ -691,6 +803,10 @@ export class AddDistributedOfficerComponent implements OnInit {
 
     if (!this.personalData.jobRole) {
       missingFields.push('Job Role is required');
+    }
+
+    if (this.personalData.jobRole === 'Driver' && !this.personalData.drvCategory) {
+      missingFields.push('Driver Category is required');
     }
 
     if (!this.personalData.firstNameEnglish) {
@@ -797,15 +913,13 @@ export class AddDistributedOfficerComponent implements OnInit {
       missingFields.push('Account Holder’s Name is required');
     }
 
-    if (!this.personalData.accNumber) {
-      missingFields.push('Account Number is required');
-    }
+    if (this.personalData.accNumber && !/^[0-9]+$/.test(this.personalData.accNumber)) {
+  missingFields.push('Account Number should only contain numbers');
+}
 
-    if (!this.personalData.conformAccNumber) {
-      missingFields.push('Confirm Account Number is required');
-    } else if (this.personalData.accNumber !== this.personalData.conformAccNumber) {
-      missingFields.push('Confirm Account Number - Must match Account Number');
-    }
+if (this.personalData.conformAccNumber && !/^[0-9]+$/.test(this.personalData.conformAccNumber)) {
+  missingFields.push('Confirm Account Number should only contain numbers');
+}
 
     if (!this.selectedBankId) {
       missingFields.push('Bank Name is required');
@@ -836,6 +950,7 @@ export class AddDistributedOfficerComponent implements OnInit {
       });
       return;
     }
+    
   }
 
   onSubmitFormPage3(form: NgForm) {
@@ -941,6 +1056,8 @@ export class AddDistributedOfficerComponent implements OnInit {
       });
       return;
     }
+
+    this.onSubmit();
   }
 
 
@@ -1178,7 +1295,7 @@ export class AddDistributedOfficerComponent implements OnInit {
 
       // Validate file size (5MB max)
       if (file.size > 3 * 1024 * 1024) {
-        this.toastSrv.error('License image size should not exceed 3MB');
+        this.toastSrv.error(`License's Front Image size should not exceed 3MB`);
         this.licenseFrontImageFile = null;
         this.licenseFrontImageFileName = '';
         event.target.value = '';
@@ -1188,7 +1305,7 @@ export class AddDistributedOfficerComponent implements OnInit {
       // Validate file type
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
-        this.toastSrv.error('License image must be JPEG, JPG or PNG format');
+        this.toastSrv.error(`License's Front Image must be JPEG, JPG or PNG format`);
         this.licenseFrontImageFile = null;
         this.licenseFrontImageFileName = '';
         event.target.value = '';
@@ -1239,7 +1356,7 @@ export class AddDistributedOfficerComponent implements OnInit {
 
       // Validate file size (5MB max)
       if (file.size > 3 * 1024 * 1024) {
-        this.toastSrv.error('License image size should not exceed 3MB');
+        this.toastSrv.error(`License's Back Image size should not exceed 3MB`);
         this.licenseBackImageFile = null;
         this.licenseBackImageFileName = '';
         event.target.value = '';
@@ -1249,7 +1366,7 @@ export class AddDistributedOfficerComponent implements OnInit {
       // Validate file type
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
-        this.toastSrv.error('License image must be JPEG, JPG or PNG format');
+        this.toastSrv.error(`License's Back Image must be JPEG, JPG or PNG format`);
         this.licenseBackImageFile = null;
         this.licenseBackImageFileName = '';
         event.target.value = '';
@@ -1293,7 +1410,7 @@ export class AddDistributedOfficerComponent implements OnInit {
       }
       // Validate file size (5MB max)
       if (file.size > 3 * 1024 * 1024) {
-        this.toastSrv.error('Insurence image size should not exceed 3MB');
+        this.toastSrv.error(`Insurance's Front Image size should not exceed 3MB`);
         this.insurenceFrontImageFile = null;
         this.insurenceFrontImageFileName = '';
         event.target.value = '';
@@ -1303,7 +1420,7 @@ export class AddDistributedOfficerComponent implements OnInit {
       // Validate file type
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
-        this.toastSrv.error('Insurence image must be JPEG, JPG or PNG format');
+        this.toastSrv.error(`Insurance's Front Image must be JPEG, JPG or PNG format`);
         this.insurenceFrontImageFile = null;
         this.insurenceFrontImageFileName = '';
         event.target.value = '';
@@ -1349,7 +1466,7 @@ export class AddDistributedOfficerComponent implements OnInit {
 
       // Validate file size (5MB max)
       if (file.size > 3 * 1024 * 1024) {
-        this.toastSrv.error('Insurence image size should not exceed 3MB');
+        this.toastSrv.error(`Insurance's Back Image size should not exceed 3MB`);
         this.insurenceBackImageFile = null;
         this.insurenceBackImageFileName = '';
         event.target.value = '';
@@ -1359,7 +1476,7 @@ export class AddDistributedOfficerComponent implements OnInit {
       // Validate file type
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
-        this.toastSrv.error('Insurence image must be JPEG, JPG or PNG format');
+        this.toastSrv.error(`Insurance's Back Image must be JPEG, JPG or PNG format`);
         this.insurenceBackImageFile = null;
         this.insurenceBackImageFileName = '';
         event.target.value = '';
@@ -1404,7 +1521,7 @@ export class AddDistributedOfficerComponent implements OnInit {
 
       // Validate file size (5MB max)
       if (file.size > 3 * 1024 * 1024) {
-        this.toastSrv.error('License image size should not exceed 3MB');
+        this.toastSrv.error(`Vehicle's Front Image size should not exceed 3MB`);
         this.vehicleFrontImageFile = null;
         this.vehicleFrontImageFileName = '';
         event.target.value = '';
@@ -1414,7 +1531,7 @@ export class AddDistributedOfficerComponent implements OnInit {
       // Validate file type
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
-        this.toastSrv.error('License image must be JPEG, JPG or PNG format');
+        this.toastSrv.error(`Vehicle's Front Image must be JPEG, JPG or PNG format`);
         this.vehicleFrontImageFile = null;
         this.vehicleFrontImageFileName = '';
         event.target.value = '';
@@ -1460,7 +1577,7 @@ export class AddDistributedOfficerComponent implements OnInit {
 
       // Validate file size (5MB max)
       if (file.size > 3 * 1024 * 1024) {
-        this.toastSrv.error('Vehicle Back image size should not exceed 3MB');
+        this.toastSrv.error(`Vehicle's Back image size should not exceed 3MB`);
         this.vehicleBackImageFile = null;
         this.vehicleBackImageFileName = '';
         event.target.value = '';
@@ -1470,7 +1587,7 @@ export class AddDistributedOfficerComponent implements OnInit {
       // Validate file type
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
-        this.toastSrv.error('Vehicle Back image must be JPEG, JPG or PNG format');
+        this.toastSrv.error(`Vehicle's Back image must be JPEG, JPG or PNG format`);
         this.vehicleBackImageFile = null;
         this.vehicleBackImageFileName = '';
         event.target.value = '';
@@ -1515,7 +1632,7 @@ export class AddDistributedOfficerComponent implements OnInit {
 
       // Validate file size (5MB max)
       if (file.size > 3 * 1024 * 1024) {
-        this.toastSrv.error('Vehicle Back image size should not exceed 3MB');
+        this.toastSrv.error(`Vehicle's Side Image - 1 size should not exceed 3MB`);
         this.vehicleSideAImageFile = null;
         this.vehicleSideAImageFileName = '';
         event.target.value = '';
@@ -1525,7 +1642,7 @@ export class AddDistributedOfficerComponent implements OnInit {
       // Validate file type
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
-        this.toastSrv.error('Vehicle Back image must be JPEG, JPG or PNG format');
+        this.toastSrv.error(`Vehicle's Side Image - 1 must be JPEG, JPG or PNG format`);
         this.vehicleSideAImageFile = null;
         this.vehicleSideAImageFileName = '';
         event.target.value = '';
@@ -1572,7 +1689,7 @@ export class AddDistributedOfficerComponent implements OnInit {
 
       // Validate file size (5MB max)
       if (file.size > 3 * 1024 * 1024) {
-        this.toastSrv.error('Vehicle Back image size should not exceed 3MB');
+        this.toastSrv.error(`Vehicle's Side Image - 2 size should not exceed 3MB`);
         this.vehicleSideBImageFile = null;
         this.vehicleSideBImageFileName = '';
         event.target.value = '';
@@ -1582,7 +1699,7 @@ export class AddDistributedOfficerComponent implements OnInit {
       // Validate file type
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
-        this.toastSrv.error('Vehicle Back image must be JPEG, JPG or PNG format');
+        this.toastSrv.error(`Vehicle's Side Image - 2 must be JPEG, JPG or PNG format`);
         this.vehicleSideBImageFile = null;
         this.vehicleSideBImageFileName = '';
         event.target.value = '';
@@ -1721,6 +1838,18 @@ export class AddDistributedOfficerComponent implements OnInit {
     input.dispatchEvent(new Event('input'));
   }
 
+  get driverCategoryDropdownItems() {
+    return this.drvCatArr.map(cat => ({
+      value: cat.id.toString(),
+      label: cat.catName,
+      disabled: false
+    }));
+  }
+
+  onDriverCategorySelectionChange(selectedValue: string) {
+    this.personalData.drvCategory = selectedValue || '';
+    console.log('drvCa', this.personalData.drvCategory)
+  }
 
 }
 
@@ -1759,6 +1888,7 @@ class Personal {
 
   centerId: number | string = '';
   irmId: number | string | null = null;
+  drvCategory!: number | string;
 }
 
 
@@ -1779,6 +1909,11 @@ class Center {
   id!: number
   centerName!: string
   regCode!: string;
+}
+
+class DriverCategory {
+  id!: number
+  catName!: string
 }
 
 class Manager {
@@ -1819,6 +1954,15 @@ class Drivers {
   vBackName!: string;
   vSideAName!: string;
   vSideBName!: string;
+
+  licFrontImg!: string;
+  licBackImg!: string;
+  insFrontImg!: string;
+  insBackImg!: string;
+  vehFrontImg!: string;
+  vehBackImg!: string;
+  vehSideImgA!: string;
+  vehSideImgB!: string;
 }
 
 

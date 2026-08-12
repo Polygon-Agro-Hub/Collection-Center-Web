@@ -23,6 +23,8 @@ import { CustomDatepickerComponent } from '../../../components/custom-datepicker
 export class RequestsComponent implements OnInit {
 
   requestArr!: Request[];
+  exlItemsArr: number[] = [];
+  prfItemsArr: number[] = [];
   productsArr: Products[] = [];
   productReplacementObj!: ProductReplacement
   selectedRequestObj!: Request
@@ -187,8 +189,12 @@ export class RequestsComponent implements OnInit {
           console.log(res);
 
           this.productsArr = res?.products || [];
+          this.exlItemsArr = res?.exlItems || [];
+          this.prfItemsArr = res?.prfItems || [];
           this.hasData = this.productsArr.length > 0;
 
+          console.log('exlItemsArr', this.exlItemsArr)
+          console.log('prfItemsArr', this.prfItemsArr)
           this.productId = String(this.selectedRequestObj?.replaceProductId || '');
           console.log('productId', this.productId);
 
@@ -261,11 +267,32 @@ export class RequestsComponent implements OnInit {
   }
 
   get categoryDropdownItems() {
-    return this.productsArr.map(product => ({
-      value: product.id.toString(),
-      label: product.displayName,
-      disabled: false
-    }));
+    const prfIds = this.prfItemsArr || [];
+    const exlIds = this.exlItemsArr || [];
+
+    const toItem = (product: Products) => {
+      const isPreferred = prfIds.includes(product.id);
+      const isExcluded = exlIds.includes(product.id);
+
+      return {
+        value: product.id.toString(),
+        label: product.displayName,
+        disabled: isExcluded,
+        iconClass: isPreferred
+          ? 'fa-solid fa-heart text-green-500'
+          : isExcluded
+            ? 'fa-solid fa-ban text-red-500'
+            : 'fa-solid fa-check text-blue-500'
+      };
+    };
+
+    const preferredItems = this.productsArr.filter(p => prfIds.includes(p.id)).map(toItem);
+    const excludedItems = this.productsArr.filter(p => exlIds.includes(p.id)).map(toItem);
+    const normalItems = this.productsArr
+      .filter(p => !prfIds.includes(p.id) && !exlIds.includes(p.id))
+      .map(toItem);
+
+    return [...preferredItems, ...normalItems, ...excludedItems];
   }
 
   onProductChange(selectedValue: string) {

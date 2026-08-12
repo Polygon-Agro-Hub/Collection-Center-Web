@@ -20,6 +20,13 @@ export class TargetProgressTodoComponent implements OnInit {
   ordersArr!: orders[];
   searchText: string = '';
   selectStatus: string = '';
+  selectType: string = '';
+  selectTimeSlot: string = '';
+    selectRow!: number | null;
+      rowDropdownOptions: number[] = [];
+  rowIndexes: number[] = [];
+
+  
 
   date:  string = '';
 
@@ -31,7 +38,13 @@ export class TargetProgressTodoComponent implements OnInit {
   isLoading:boolean = true;
 
   isStatusDropdownOpen = false;
+  isTypeDropdownOpen = false;
+  isTimeSlotDropdownOpen = false;
+  typeDropdownOptions = ['Pickup', 'Delivery'];
+  timeSlotDropdownOptions = ['08:00 AM - 12:00 PM', '12:00 PM - 04:00 PM', '04:00 PM - 09:00 PM'];
   statusDropdownOptions = ['Pending', 'Opened'];
+
+    isRowDropdownOpen = false;
 
   toggleStatusDropdown() {
     this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
@@ -43,6 +56,37 @@ export class TargetProgressTodoComponent implements OnInit {
     this.filterStatus();
   }
 
+  toggleTypeDropdown() {
+    this.isTypeDropdownOpen = !this.isTypeDropdownOpen;
+  }
+
+  selectTypeOption(option: string) {
+    this.selectType = option;
+    this.isTypeDropdownOpen = false;
+    this.filterType();
+  }
+
+
+  toggleTimeSlotDropdown() {
+    this.isTimeSlotDropdownOpen = !this.isTimeSlotDropdownOpen;
+  }
+
+  selectTimeSlotOption(option: string) {
+    this.selectTimeSlot = option;
+    this.isTimeSlotDropdownOpen = false;
+    this.filterTimeSlot();
+  }
+
+    toggleRowDropdown() {
+    this.isRowDropdownOpen = !this.isRowDropdownOpen;
+  }
+
+  selectRowOption(option: number) {
+    this.selectRow = option;
+    this.isRowDropdownOpen = false;
+    this.filterRow();
+  }
+
   constructor(
     private router: Router,
     private ComplainSrv: ComplaintsService,
@@ -51,52 +95,19 @@ export class TargetProgressTodoComponent implements OnInit {
 
 
   ngOnInit(): void {
-    const today = new Date();
-    this.date = today.toISOString().split('T')[0]; // format: YYYY-MM-DD
     this.fetchToDoAssignOrders();
   }
 
-  fetchToDoAssignOrders(status: string = this.selectStatus, search: string = this.searchText, selectDate: string = this.date) {
+  fetchToDoAssignOrders(status: string = this.selectStatus, search: string = this.searchText, selectDate: string = this.date, type: string = this.selectType, timeSlot: string = this.selectTimeSlot, row: number | null = this.selectRow) {
     this.isLoading = true;
-    this.DistributionSrv.getToDoAssignOrders(status, search, selectDate).subscribe(
+    this.DistributionSrv.getToDoAssignOrders(status, search, selectDate, type, timeSlot, row).subscribe(
       (res) => {
 
         this.totalItems = res.items.length;
-        this.ordersArr = res.items.map((item: any) => {
-          let status = '';
-          
-          const pkgStatus = item.packageStatus;
-          const addStatus = item.additionalItemsStatus;
-          
-          // Priority 1: If either is Pending, combinedStatus is Pending
-          if (pkgStatus === 'Pending' || addStatus === 'Pending') {
-            status = 'Pending';
-          }
-          // Priority 2: If either is Opened (and none are Pending), combinedStatus is Opened
-          else if (pkgStatus === 'Opened' || addStatus === 'Opened') {
-            status = 'Opened';
-          }
-          // Priority 3: If both are Completed, combinedStatus is Completed
-          else if (pkgStatus === 'Completed' && addStatus === 'Completed') {
-            status = 'Completed';
-          }
-          // Priority 4: If one is Completed and other is Unknown, use the non-Unknown status
-          else if (pkgStatus === 'Completed' && addStatus === 'Unknown') {
-            status = 'Completed';
-          }
-          else if (pkgStatus === 'Unknown' && addStatus === 'Completed') {
-            status = 'Completed';
-          }
-          // Default: Both are Unknown
-          else {
-            status = 'Unknown';
-          }
-        
-          return {
-            ...item,
-            combinedStatus: status
-          };
-        });
+        this.ordersArr = res.items
+        this.rowIndexes = res.rowIndexes;
+        this.rowDropdownOptions = this.rowIndexes
+        console.log('rowIndexes', this.rowIndexes)
 
         if (res.items.length === 0) {
           this.hasData = false;
@@ -133,6 +144,42 @@ export class TargetProgressTodoComponent implements OnInit {
     this.fetchToDoAssignOrders();
   }
 
+  filterType() {
+    this.fetchToDoAssignOrders();
+  }
+
+  cancelType(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
+    this.selectType = '';
+    this.fetchToDoAssignOrders();
+  }
+
+  filterTimeSlot() {
+    this.fetchToDoAssignOrders();
+  }
+
+  cancelTimeSlot(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
+    this.selectTimeSlot = '';
+    this.fetchToDoAssignOrders();
+  }
+
+  filterRow() {
+    this.fetchToDoAssignOrders();
+  }
+
+  cancelRow(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
+    this.selectRow = null;
+    this.fetchToDoAssignOrders();
+  }
+
   onDateChange(newDate: string | Date | null) {
     let formattedDate: string = '';
   
@@ -151,11 +198,13 @@ export class TargetProgressTodoComponent implements OnInit {
     this.router.navigate([`/cch-complaints/view-recive-reply/${id}`])
   }
 
-  getDateColor(item: any): string {
-  const today = new Date();
+getDateColor(item: any): string {
+  const now = new Date();
+
+  const today = new Date(now);
   const schedule = new Date(item.sheduleDate);
 
-  // Normalize both to midnight
+  // Normalize dates
   today.setHours(0, 0, 0, 0);
   schedule.setHours(0, 0, 0, 0);
 
@@ -163,19 +212,57 @@ export class TargetProgressTodoComponent implements OnInit {
     (schedule.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
   );
 
+  // Past dates
   if (diffDays < 0) {
-    // Past dates
-    return '#800000'; // Maroon
-  } else if (diffDays === 0) {
-    // Today
-    return '#FF0000'; // Red
-  } else if (diffDays === 1) {
-    // Tomorrow
-    return '#415CFF'; // Blue
-  } else {
-    // Day after tomorrow and beyond
-    return '#606060'; // Grey
+    return '#AC0003';
   }
+
+  // Future dates (tomorrow and beyond)
+  if (diffDays > 0) {
+    return '#000000';
+  }
+
+  // ----------------------
+  // Today's orders
+  // ----------------------
+
+  const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+  let alertStart = 0;
+  let slotEnd = 0;
+
+  switch (item.sheduleTime) {
+    case '08:00 AM - 12:00 PM':
+      alertStart = 7 * 60 + 15;   
+      slotEnd = 12 * 60;          
+      break;
+
+    case '12:00 PM - 04:00 PM':
+      alertStart = 11 * 60 + 15;  
+      slotEnd = 16 * 60;          
+      break;
+
+    case '04:00 PM - 09:00 PM':
+      alertStart = 15 * 60 + 15;  
+      slotEnd = 21 * 60;          
+      break;
+
+    default:
+      return '#000000';
+  }
+
+  // Before alert window
+  if (currentMinutes < alertStart) {
+    return '#000000';
+  }
+
+  // During alert window
+  if (currentMinutes <= slotEnd) {
+    return '#FF0000';
+  }
+
+  // After the slot has ended
+  return '#AC0003';
 }
 
   getDisplayDate(sheduleDate: string | Date): string {
@@ -217,15 +304,10 @@ export class TargetProgressTodoComponent implements OnInit {
 class orders {
   processOrderId!: number
   orderId!: number
+  rowIndex!: number
   invNo!: string
-  isTargetAssigned!: boolean
-  complainCategory!: string
   sheduleDate!: Date
   sheduleTime!: string
-  packagePackStatus!: string
-  status!: string
-  officerId!: number
-  firstNameEnglish!: string
-  lastNameEnglish!: string
+    delivaryMethod!: string;
   combinedStatus!: string
 }

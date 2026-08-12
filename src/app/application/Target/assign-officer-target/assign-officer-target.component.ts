@@ -180,6 +180,29 @@ export class AssignOfficerTargetComponent implements OnInit {
       this.totTargetC = this.officerArr.reduce((sum, officer) => sum + (officer.targetC || 0), 0);
     }, 10);
   }
+
+  restrictDecimals(event: Event, index: number, grade: 'A' | 'B' | 'C') {
+  const input = event.target as HTMLInputElement;
+  let value = input.value;
+
+  // Allow empty, digits, and up to 3 decimal places only
+  const regex = /^\d*\.?\d{0,3}$/;
+
+  if (!regex.test(value)) {
+    // strip extra decimals beyond 3
+    const match = value.match(/^\d*\.?\d{0,3}/);
+    value = match ? match[0] : '';
+    input.value = value;
+
+    // keep ngModel in sync since we're mutating the DOM value directly
+    const numericValue = value === '' ? 0 : parseFloat(value);
+    if (grade === 'A') this.officerArr[index].targetA = numericValue;
+    if (grade === 'B') this.officerArr[index].targetB = numericValue;
+    if (grade === 'C') this.officerArr[index].targetC = numericValue;
+
+    this.updateTotals(index, grade);
+  }
+}
 }
 
 class TargetVerity {

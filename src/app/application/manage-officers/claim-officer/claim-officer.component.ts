@@ -28,10 +28,7 @@ export class ClaimOfficerComponent implements OnInit {
   logingRole: string | null = null;
   isReset: boolean = false;
 
-  jobRoleItems = [
-    { value: 'Distribution Officer', label: 'Distribution Officer' },
-    { value: 'Driver', label: 'Driver' }
-  ]
+  jobRoleItems: { value: string; label: string }[] = []
 
   constructor(
     private ManageOficerSrv: ManageOfficersService,
@@ -43,17 +40,24 @@ export class ClaimOfficerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-
     if (this.logingRole === 'Distribution Centre Manager') {
-      this.selectJobRole = 'Distribution Officer';
+      // Distribution Centre Manager picks from an interactive dropdown, so leave it
+      // unselected and force a deliberate choice.
+      this.selectJobRole = '';
+      this.jobRoleItems = [
+        { value: 'Distribution Officer', label: 'Distribution Officer' },
+        { value: 'Driver', label: 'Driver' }
+      ];
     } else if (this.logingRole === 'Collection Centre Manager') {
-      this.selectJobRole = 'Collection Officer'
+      // Collection Centre Manager only sees a readonly field with no way to pick a value,
+      // so it must be pre-selected here or the search can never be run.
+      this.selectJobRole = 'Collection Officer';
     }
   }
 
   fetchOfficer() {
     if (!this.inputId) {
-      return this.toastSrv.warning('Please enter a valid Employee ID!');
+      return this.toastSrv.warning('Please fill in all fields');
     }
 
     this.inputId = this.inputId?.trim();
@@ -87,6 +91,57 @@ export class ClaimOfficerComponent implements OnInit {
       }
     )
   }
+
+//   fetchOfficer() {
+//   if (!this.selectJobRole && !this.inputId) {
+//   return this.toastSrv.warning('Please fill in all fields');
+// }
+
+// if (!this.selectJobRole) {
+//   return this.toastSrv.warning('Please select a Job Role');
+// }
+
+// if (!this.inputId) {
+//   return this.toastSrv.warning('Please enter a valid Employee ID');
+// }
+
+//   this.inputId = this.inputId?.trim();
+//   this.isLoading = true;
+//   let empId;
+//   if (this.selectJobRole === 'Customer Officer') {
+//     empId = 'CUO' + this.inputId
+//   } else if (this.selectJobRole === 'Collection Officer') {
+//     empId = 'COO' + this.inputId
+//   } else if (this.selectJobRole === 'Distribution Officer') {
+//     empId = 'DIO' + this.inputId
+//   } else if (this.selectJobRole === 'Driver') {
+//     empId = 'DRV' + this.inputId
+//   } else {
+//     this.isLoading = false;
+//     return this.toastSrv.warning('Please select a valid Job Role');
+//   }
+
+//   console.log('empId', empId)
+
+//   this.ManageOficerSrv.getOfficerByEmpId(empId).subscribe(
+//     (res) => {
+//       if (res.status) {
+//         this.officerObj = res.data
+//         this.isOfficerExist = true
+//         this.hasData = false
+//         this.isLoading = false;
+//       } else {
+//         this.isOfficerExist = false;
+//         this.hasData = true
+//         this.isLoading = false;
+//       }
+//     },
+//     (error) => {
+//       this.isLoading = false;
+//       this.toastSrv.error("An error occurred while fetching the officer.");
+//     }
+//   )
+// }
 
   onJobRoleSelectionChange(selectedValue: string) {
     this.selectJobRole = selectedValue || '';

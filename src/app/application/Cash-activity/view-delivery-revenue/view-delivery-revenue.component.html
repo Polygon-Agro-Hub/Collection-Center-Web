@@ -176,7 +176,7 @@
               <td class="px-4 py-3 text-left text-black dark:text-textDark">
                 {{ item.invNo || "N/A" }}
               </td>
-              <td class="px-4 py-3 text-left dark:text-textDark"
+              <td class="px-4 py-3 text-left"
               [ngClass]="getPriceClass(item.status, item.isHandOver)">
                 {{ formatCurrency(item.handOverPrice) }}
               </td>

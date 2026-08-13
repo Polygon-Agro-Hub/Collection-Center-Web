@@ -120,7 +120,9 @@ if (segments[1] === 'distribution-center') {
     // const today = new Date();
     // this.selectedDate = today.toISOString().split('T')[0];
     this.fetchAllAssignOrders();
+    if (segments[1] !== 'distribution-center') {
     this.fetchCenterData();
+    }
   }
 
   fetchAllAssignOrders(status: string = this.selectStatus, search: string = this.searchText, selectDate: string | Date | null = this.selectedDate, type: string = this.selectType, timeSlot: string = this.selectTimeSlot, row: number | null = this.selectRow, centerId: number | null = this.centerId) {

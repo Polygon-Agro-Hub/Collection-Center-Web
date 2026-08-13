@@ -240,7 +240,8 @@
     </div>
 
     <div *ngIf="!hasData" class="flex flex-col items-center w-full h-screen mt-6">
-        <p class="text-[#494949] my-6 dark:text-white">--The centre target is empty at the moment--</p>
+        <p *ngIf="tab === 'distribution-center'" class="text-[#494949] my-6 dark:text-white">--No Data Available--</p>
+        <p *ngIf="tab !== 'distribution-center'" class="text-[#494949] my-6 dark:text-white">--The centre target is empty at the moment--</p>
         <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
     </div>
 

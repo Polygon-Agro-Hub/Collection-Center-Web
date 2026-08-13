@@ -376,7 +376,9 @@ isSelected(item: any): boolean {
         this.personalData.jobRole = res.officerData.collectionOfficer.jobRole
         this.personalData.previousjobRole = res.officerData.collectionOfficer.jobRole;
         this.personalData.previousEmpId = res.officerData.collectionOfficer.empIdPrefix
-        this.selectedCenterName = res.officerData.collectionOfficer.regCode + ' - ' + res.officerData.collectionOfficer.centerName
+        this.selectedCenterName = (res.officerData.collectionOfficer.centerId && res.officerData.collectionOfficer.regCode && res.officerData.collectionOfficer.centerName)
+          ? res.officerData.collectionOfficer.regCode + ' - ' + res.officerData.collectionOfficer.centerName
+          : ''
 
         if (res.officerData.collectionOfficer.irmId != null) {
           this.selectedManager = res.managerName.empId + ' - ' + res.managerName.firstNameEnglish + ' ' + res.managerName.lastNameEnglish

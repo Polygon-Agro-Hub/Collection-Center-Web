@@ -342,7 +342,9 @@ export class EditOfficerComponent implements OnInit {
         console.log(this.personalData);
         this.ExistirmId = res.officerData.irmId;
 
-        this.selectedCenterName = res.officerData.collectionOfficer.regCode + ' - ' + res.officerData.collectionOfficer.centerName
+        this.selectedCenterName = (res.officerData.collectionOfficer.centerId && res.officerData.collectionOfficer.regCode && res.officerData.collectionOfficer.centerName)
+          ? res.officerData.collectionOfficer.regCode + ' - ' + res.officerData.collectionOfficer.centerName
+          : ''
         if (res.officerData.collectionOfficer.irmId) {
           this.selectedManager = res.managerName.empId + ' - ' + res.managerName.firstNameEnglish + ' ' + res.managerName.lastNameEnglish
         } else {

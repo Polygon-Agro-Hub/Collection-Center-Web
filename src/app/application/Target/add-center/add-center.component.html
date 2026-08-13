@@ -162,6 +162,7 @@
             [(ngModel)]="centerData.province"
             #provinceInput="ngModel"
             borderClass="border border-gray-300"
+            searchInputClass="text-textLight dark:text-textDark"
             (selectionChange)="onProvinceChange($event)">
         </app-searchable-dropdown>
       <!-- <select
@@ -207,6 +208,7 @@
           [(ngModel)]="centerData.district"
           #districtInput="ngModel"
           borderClass="border border-gray-300"
+          searchInputClass="text-textLight dark:text-textDark"
           (selectionChange)="onDistrictChange($event)">
       </app-searchable-dropdown>
 

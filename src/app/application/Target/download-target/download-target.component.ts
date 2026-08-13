@@ -277,13 +277,15 @@ onDateFromDateChange(newDate: string | Date | null) {
       return;
     }
 
+    console.log('ta', this.targetArr)
+
     const worksheetData = this.targetArr.map((item, index) => ({
   No: index + 1,
   'Crop Name': item.cropNameEnglish,
   'Variety Name': item.varietyNameEnglish,
   Grade: item.grade,
-  'Target (kg)': item.target ? Number(item.target) : '-',
-  'Completed (kg)': item.complete ? Number(item.complete) : '-',
+  'Target (kg)': item.target ? item.target : '-',
+  'Completed (kg)': item.complete ? item.complete : '-',
   'Target Date': item.date
     ? new Date(item.date).toISOString().split('T')[0].replace(/-/g, '/')
     : '',

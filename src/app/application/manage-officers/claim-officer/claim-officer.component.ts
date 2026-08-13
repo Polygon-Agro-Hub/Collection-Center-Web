@@ -92,57 +92,6 @@ export class ClaimOfficerComponent implements OnInit {
     )
   }
 
-//   fetchOfficer() {
-//   if (!this.selectJobRole && !this.inputId) {
-//   return this.toastSrv.warning('Please fill in all fields');
-// }
-
-// if (!this.selectJobRole) {
-//   return this.toastSrv.warning('Please select a Job Role');
-// }
-
-// if (!this.inputId) {
-//   return this.toastSrv.warning('Please enter a valid Employee ID');
-// }
-
-//   this.inputId = this.inputId?.trim();
-//   this.isLoading = true;
-//   let empId;
-//   if (this.selectJobRole === 'Customer Officer') {
-//     empId = 'CUO' + this.inputId
-//   } else if (this.selectJobRole === 'Collection Officer') {
-//     empId = 'COO' + this.inputId
-//   } else if (this.selectJobRole === 'Distribution Officer') {
-//     empId = 'DIO' + this.inputId
-//   } else if (this.selectJobRole === 'Driver') {
-//     empId = 'DRV' + this.inputId
-//   } else {
-//     this.isLoading = false;
-//     return this.toastSrv.warning('Please select a valid Job Role');
-//   }
-
-//   console.log('empId', empId)
-
-//   this.ManageOficerSrv.getOfficerByEmpId(empId).subscribe(
-//     (res) => {
-//       if (res.status) {
-//         this.officerObj = res.data
-//         this.isOfficerExist = true
-//         this.hasData = false
-//         this.isLoading = false;
-//       } else {
-//         this.isOfficerExist = false;
-//         this.hasData = true
-//         this.isLoading = false;
-//       }
-//     },
-//     (error) => {
-//       this.isLoading = false;
-//       this.toastSrv.error("An error occurred while fetching the officer.");
-//     }
-//   )
-// }
-
   onJobRoleSelectionChange(selectedValue: string) {
     this.selectJobRole = selectedValue || '';
 

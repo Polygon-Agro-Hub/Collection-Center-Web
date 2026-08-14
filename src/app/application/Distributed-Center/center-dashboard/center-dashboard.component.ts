@@ -67,7 +67,6 @@ export class CenterDashboardComponent implements OnInit {
 
 
   selectPackingLine() {
-    console.log('clicked')
     this.isSelectPackingLine = true;
     this.isSelectProgress = false;
     this.isSelectViewOfficers = false;

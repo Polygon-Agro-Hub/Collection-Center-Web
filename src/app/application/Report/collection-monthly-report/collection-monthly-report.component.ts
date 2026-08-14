@@ -79,12 +79,8 @@ export class CollectionMonthlyReportComponent implements OnInit {
   }
 
   filterDate() {
-    console.log('filtering');
     const startEntered = !!this.startDate;
     const endEntered = !!this.endDate;
-
-    console.log(this.startDate, this.endDate);
-
     if (startEntered && endEntered) {
       this.fetchOfficerData();
     } else {

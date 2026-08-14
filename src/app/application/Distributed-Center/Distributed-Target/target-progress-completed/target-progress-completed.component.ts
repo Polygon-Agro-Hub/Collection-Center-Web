@@ -285,8 +285,6 @@ getScheduleClass(item: any): string {
 
   // Today's schedule - compare completion time with the slot
   const completeTime = new Date(item.completeTime);
-  console.log('completeTime', completeTime)
-
   const slotStart = new Date(scheduleDate);
   const slotEnd = new Date(scheduleDate);
 

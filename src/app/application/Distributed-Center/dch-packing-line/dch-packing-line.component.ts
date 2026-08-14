@@ -109,12 +109,10 @@ export class DchPackingLineComponent {
 
   fetchDcmCenterId() {
     this.isLoading = true;
-    console.log('sdsds1')
     this.DistributionSrv.getDCMCenterId().subscribe(
       
       (res) => {
         this.centerId = res;
-        console.log('center', this.centerId)
         this.isLoading = false;
       }
     )
@@ -126,9 +124,7 @@ export class DchPackingLineComponent {
       (res) => {
         this.rows = res.items;
         this.total = res.items.length || 0;
-        console.log('total', this.total)
         this.hasData = this.rows.length > 0;
-        console.log('hasData', this.hasData)
         this.isLoading = false;
         if (!this.hasData) {
           setTimeout(() => this.loadNoRowsAnimation(), 0);
@@ -198,7 +194,6 @@ export class DchPackingLineComponent {
 
   openCreateRowModal(): void {
     this.currentRow = this.rows[this.rows.length] || [];
-    console.log('currentRow', this.currentRow)
     this.showCreateRowModal = true;
   }
 
@@ -208,9 +203,7 @@ export class DchPackingLineComponent {
 
   confirmCreateRow(): void {
     const currentRowIndex = this.rows.length > 0 ? this.rows.length : 0
-    console.log('currentRowIndex', currentRowIndex);
     this.createDCHCenterRow(currentRowIndex + 1);
-    // this.rows.push({ rowIndex: this.nextRowNo, isEnabled: true, positionsArr: [] });
     this.showCreateRowModal = false;
   }
 
@@ -229,18 +222,6 @@ if (res.success) {
       }
     )
   }
-
-  // onToggleRowClick(event: Event, row: PackingLineRow): void {
-  //   this.rowToToggle = row
-  //   if (this.rowToToggle.isEnabled === 0) {
-  //     this.openToggleRowPopUpEnable = true;
-  //   } else {
-  //     this.openToggleRowPopUpDisable = true;
-  //   }
-
-  //   event.preventDefault();
-    
-  // }
 
   onToggleRowClick(row: PackingLineRow): void {
     this.rowToToggle = row
@@ -268,7 +249,6 @@ if (res.success) {
     this.isLoading = true;
     this.DistributionSrv.toggleRow(enableStatus, row.id).subscribe({
   next: (res) => {
-    console.log('Success:', res);
     if (row.isEnabled === 0) {
         this.toastSrv.success(`Packing row ${this.rowToToggle.rowIndex} enabled successfully.`);
     } else if (row.isEnabled === 1) {
@@ -283,7 +263,6 @@ if (res.success) {
   },
   error: (err) => {
     if (err.status === 401) {
-      console.log('401 Unauthorized');
       this.openErrorDisableRow = true;
     } else {
       console.error('Other error:', err);
@@ -298,7 +277,6 @@ if (res.success) {
   }
 
   openCreatePositionModal(row: PackingLineRow): void {
-    console.log('row', row)
     this.currentRow = row;
     this.newPos = row.positions.length - 1;
     this.showCreatePositionModal = true;
@@ -308,15 +286,9 @@ if (res.success) {
     this.showCreatePositionModal = false;
   }
 
-  // confirmCreatePosition(): void {
-  //   this.rows.push({ rowNo: this.nextRowNo, disabled: true });
-  //   this.showCreatePositionModal = false;
-  // }
-
   createNextPosNo() {
     this.isLoading = true;
     const nextPos = (this.currentRow.positions.length - 2) + 1;
-    console.log('nextPos', nextPos)
     this.DistributionSrv.createDCHCenterPos(this.centerId, nextPos, this.currentRow.positions[0].rowId).subscribe(
       (res) => {
 if (res.success) {
@@ -355,8 +327,6 @@ if (res.success) {
     this.positionToDelete.pIndex!
   ).subscribe({
     next: (res) => {
-      console.log('Success:', res);
-
       this.toastSrv.success('Position deletion successful.');
 
       this.isLoading = false;

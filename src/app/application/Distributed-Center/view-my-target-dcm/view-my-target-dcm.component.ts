@@ -179,9 +179,7 @@ export class ViewMyTargetDcmComponent implements OnInit {
     this.isLoading = true;
     this.DistributionSrv.getOfficers().subscribe(
       (res) => {
-        console.log('officer', res)
         this.officersArr = res
-        console.log('officersArr', this.officersArr)
         this.totalOfficers = res.length;
         this.isLoading = false;
 
@@ -202,7 +200,6 @@ export class ViewMyTargetDcmComponent implements OnInit {
   }
 
   onSearch() {
-    console.log('called', this.searchText)
     this.searchText = this.searchText.trimStart();
     this.fetchSelectedOfficerTargets();
 
@@ -297,9 +294,6 @@ toggleOrder(orderId: number, event: Event): void {
   // Only consider selectable items (Pending and not locked)
   
   this.allChecked = this.selectedOrderIds.length === this.selectableOrders.length;
-
-  console.log('selectedOrderIds', this.selectedOrderIds);
-  console.log('allChecked', this.allChecked);
 }
 
 
@@ -317,7 +311,6 @@ toggleAllOrders(event: Event): void {
     this.selectedOrderIds = [];
   }
 
-  console.log('selectedOrderIds', this.selectedOrderIds);
 }
 
 deSelectAll() {
@@ -330,35 +323,6 @@ passTarget() {
   this.fetchOfficers()
 }
 
-// PassTarget() {
-
-//   const now = new Date();
-
-// const year = now.getFullYear();
-// const month = String(now.getMonth() + 1).padStart(2, '0');  // Months are 0-based
-// const day = String(now.getDate()).padStart(2, '0');
-
-// const hours = String(now.getHours()).padStart(2, '0');
-// const minutes = String(now.getMinutes()).padStart(2, '0');
-// const seconds = String(now.getSeconds()).padStart(2, '0');
-
-// const currentTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
-
-// console.log(currentTime);
-
-//   if (this.allChecked) {
-//     console.log('allcehcke');
-//   } else {
-//     console.log('count', this.selectedOrderIds.length);
-//   }
-//   console.log('currentTime', currentTime)
-
-//   this.changeStatusAndTime({
-//     orderIds: this.selectedOrderIds,
-//     time: currentTime
-//   });
-// }
-
 PassTarget() {
   this.isPass = true;
   this.isPassTarget = false;
@@ -367,21 +331,13 @@ PassTarget() {
   const filteredOrders = this.ordersArr.filter(order =>
     this.selectedOrderIds.includes(order.processOrderId)
   );
-
-  console.log('selected po', this.selectedOrderIds);
-  console.log('filtered orders', filteredOrders);
-
   // If you want to store it in another property
   this.filteredOrdersArr = filteredOrders;
-  console.log('filteredOrdersArr', this.filteredOrdersArr)
 }
 
 
 changeStatusAndTime(data: { orderIds: any[]; time: string }) {
   this.isLoading = true;
-  console.log('change status');
-  
-
   this.DistributionSrv.setStatusAndTime(data).subscribe({
     next: (res) => {
       this.isLoading = false;
@@ -427,10 +383,8 @@ passTargetToBackEnd() {
     this.toastSrv.error('Please select a short stock assignee to pass the target!', 'Error');
     return; 
   }
-  console.log('orderIds', this.selectedOrderIds, 'distargetid', this.filteredOrdersArr[0].distributedTargetId, 'officer', this.selectedOfficerId, 'officerID', this.officerId )
   this.DistributionSrv.passTarget(this.selectedOrderIds, this.filteredOrdersArr[0].distributedTargetId, this.selectedOfficerId, this.officerId).subscribe(
     (res) => {
-      console.log('respass', res)
       this.isLoading = false;
       if (res && res.status) {
         // Find the officer object with the selected ID
@@ -440,9 +394,6 @@ passTargetToBackEnd() {
 
         const orderCount = this.selectedOrderIds.length < 10 ? ('0' + this.selectedOrderIds.length) : (this.selectedOrderIds.length);
         const orderLabel = this.selectedOrderIds.length === 1 ? 'order' : 'orders';
-
-        console.log('orderCount', orderCount, 'orderLabel', orderLabel )
-
         // Get the empId if officer exists
         const empId = selectedOfficer ? selectedOfficer.empId : 'Unknown';
 
@@ -503,15 +454,12 @@ const passOfficer = this.officersArr.find(
 );
 
 this.selectedEmpId = passOfficer ? passOfficer.empId : '';
-  // Add any additional logic you need when category changes
-  console.log('officer selected:', this.selectedOfficerId);
 }
 
 
 onOfficerChange(event: Event) {
   const selectElement = event.target as HTMLSelectElement;
   this.selectedOfficerId = selectElement.value ? Number(selectElement.value) : '';
-  console.log('Selected Officer ID:', this.selectedOfficerId);
 }
 
 goBack() {
@@ -530,17 +478,12 @@ getStatus(item: orders): string {
 
   // Shift both UTC timestamps into Sri Lanka time
   const scheduleDateSL = new Date(new Date(item.sheduleDate).getTime() + SL_OFFSET_MS);
-  console.log('scheduleDateSL', scheduleDateSL)
   const completeTimeSL = item.completeTime
     ? new Date(new Date(item.completeTime).getTime() + SL_OFFSET_MS)
     : null;
-
-  console.log('completeTimeSL', completeTimeSL)
-
   // Build deadline using setUTCHours on the already-shifted date
   // (setUTCHours on a SL-shifted date = setting SL local hours, browser-independent)
   const deadline = new Date(scheduleDateSL);
-  console.log('deadline', deadline)
 
   if (item.sheduleTime) {
     const timeSlot = item.sheduleTime.trim();

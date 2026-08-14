@@ -80,7 +80,6 @@ export class CentersDashbordComponent implements OnInit {
   }
 
   navigateAddTarget() {
-    console.log('navigating')
     this.router.navigate([`/centers/add-target/${this.centerId}/${this.centerNameObj.centerName}/${this.centerNameObj.regCode}`]);
   }
 

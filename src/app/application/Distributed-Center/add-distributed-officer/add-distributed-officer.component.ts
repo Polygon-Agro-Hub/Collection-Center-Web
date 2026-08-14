@@ -721,7 +721,6 @@ export class AddDistributedOfficerComponent implements OnInit {
     this.DistributedManageOfficerSrv.getDriverCategory().subscribe(
       (res) => {
         this.drvCatArr = res
-        console.log('drvCatArr', this.drvCatArr)
         this.isLoading = false;
       }
     )
@@ -856,7 +855,7 @@ export class AddDistributedOfficerComponent implements OnInit {
 
     if (!this.personalData.email) {
       missingFields.push('Email is required');
-    } else if (!/^[A-Za-z0-9](?!.*\.\.)([A-Za-z0-9._%+-]{0,62}[A-Za-z0-9])?@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(this.personalData.email)) {
+    } else if (!/^[a-zA-Z0-9]+([._-][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-][a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/.test(this.personalData.email)) {
       missingFields.push('Email - Must be in a valid format (format: example&#64;domain.com)');
     }
 
@@ -1848,7 +1847,6 @@ if (this.personalData.conformAccNumber && !/^[0-9]+$/.test(this.personalData.con
 
   onDriverCategorySelectionChange(selectedValue: string) {
     this.personalData.drvCategory = selectedValue || '';
-    console.log('drvCa', this.personalData.drvCategory)
   }
 
 }

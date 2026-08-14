@@ -6,8 +6,9 @@
         Officers</p>
     </div>
 
-    <div class="w-full min-w-max px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg overflow-x-auto">
-        <div class="flex flex-row items-center justify-between">
+    <div class="w-full bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg overflow-x-auto">
+        <div class="min-w-max px-10 py-7">
+        <div class="flex flex-row items-center justify-between min-w-max max-w-[80vw] mx-auto">
             <div class="flex flex-row gap-4">
                 <button
                     class="w-28  bg-[#415CFF] text-[#FFFFFF] dark:text-white rounded-lg shadow-lg px-4 py-2 whitespace-nowrap"
@@ -183,16 +184,16 @@
 
         </div>
 
-        <div *ngIf="!hasData"
+        <div>
+            <div *ngIf="!hasData"
             class="flex flex-col items-center w-full h-screen px-10 py-7 bg-tileLight dark:bg-[#363636] dark:text-textDark mt-6">
             <p class="text-[#494949] my-6 dark:text-textDark">--No Data Availabale--</p>
             <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20 dark:text-textDark" />
         </div>
 
-        <div *ngIf="hasData" class="min-w-max overflow-hidden  mt-5">
-            <div class=" border-gray-100 border-[2px] dark:border-[#202021] rounded-lg">
-                <table class="w-full min-w-max divide-y-2 border-[1px] border-gray-300 rounded-lg overflow-hidden">
-                    <thead class=" text-[#4B5563] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
+        <div *ngIf="hasData" class=" min-w-max mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021] overflow-hidden">
+                <table class="w-full min-w-max divide-y-2">
+                    <thead class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
                         <tr>
                             <th class="px-2 py-3 text-left text-sm font-medium">No</th>
                             <th class="px-3 py-3 text-left text-sm font-medium">EMP ID</th>
@@ -280,14 +281,21 @@
                         </tr>
                     </tbody>
                 </table>
-            </div>
-            <div *ngIf="hasData" class="flex justify-end items-center my-5 pt-3 dark:bg-[#1D1D1F] text-right">
+            
+        </div>
+                <div *ngIf="hasData" class="flex justify-end items-center my-5 pt-3 dark:bg-[#1D1D1F] text-right">
                 <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true"
                     [previousLabel]="'Previous'" [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'"
                     [screenReaderPageLabel]="'page'" [screenReaderCurrentLabel]="'Youre on page'">
                 </pagination-controls>
-            </div>
-            </div>
-            
+                </div>
         </div>
+
+        
+                
+        </div>
+
+
+            
     </div>
+</div>

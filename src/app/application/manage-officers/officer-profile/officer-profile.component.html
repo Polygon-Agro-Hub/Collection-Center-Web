@@ -83,7 +83,7 @@
                     </span>
                     <button *ngIf="(logingRole === 'Collection Centre Manager' || logingRole === 'Collection Centre Head')" class="bg-blue-600 text-white font-semibold rounded-lg shadow-md px-5 py-2"
                         (click)="viewOfficerTarget(officerId, officerObj.centerName)">View Target</button>
-                    <button *ngIf="(logingRole === 'Distribution Centre Manager' || logingRole === 'Distribution Centre Head') && (officerObj.jobRole === 'Distribution Centre Manager' || officerObj.jobRole === 'Distribution Officer')" class="bg-blue-600 text-white font-semibold rounded-lg shadow-md px-5 py-2"
+                    <button *ngIf="(logingRole === 'Distribution Centre Manager' || logingRole === 'Distribution Centre Head') && (officerObj.jobRole === 'Distribution Centre Manager' || officerObj.jobRole === 'Distribution Officer') && officerObj.distributedCenterRegCode" class="bg-blue-600 text-white font-semibold rounded-lg shadow-md px-5 py-2"
                         (click)="viewOfficerTargetDistribution(officerId, officerObj.distributedCenterName, officerObj.distributedCenterId, officerObj.empIdPrefix)">View Target</button>
                 </div>
 

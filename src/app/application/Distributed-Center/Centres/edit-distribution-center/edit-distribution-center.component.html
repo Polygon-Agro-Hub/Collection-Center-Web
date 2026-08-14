@@ -207,7 +207,9 @@
           <app-searchable-dropdown [items]="provinceItems" [placeholder]="'Province'"
             [searchPlaceholder]="'Search provinces...'" [clearable]="true" [showSelected]="true" id="province"
             name="province" [(ngModel)]="centerData.province" #provinceInput="ngModel"
-            (selectionChange)="onProvinceChange($event)">
+            (selectionChange)="onProvinceChange($event)"
+                        searchInputClass="text-textLight dark:text-textDark"
+                        borderClass="border border-gray-300">
           </app-searchable-dropdown>
         </div>
 
@@ -223,7 +225,8 @@
           <app-searchable-dropdown [items]="districtItems" [placeholder]="'District'"
             [searchPlaceholder]="'Search districts...'" [clearable]="true" [showSelected]="true" id="district"
             name="district" [(ngModel)]="centerData.district" #districtInput="ngModel"
-            (selectionChange)="onDistrictChange($event)">
+            (selectionChange)="onDistrictChange($event)" searchInputClass="text-textLight dark:text-textDark"
+                        borderClass="border border-gray-300">
           </app-searchable-dropdown>
         </div>
 

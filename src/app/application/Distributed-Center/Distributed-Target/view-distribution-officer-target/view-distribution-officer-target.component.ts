@@ -414,14 +414,8 @@ getStatus(item: orders): string {
   // Convert both into Date objects
   const scheduleDate = new Date(item.sheduleDate);
   const completeTime = item.completeTime ? new Date(item.completeTime) : null;
-
-  console.log('completeTime', completeTime)
-
   // Create the schedule deadline
   const deadline = new Date(scheduleDate);
-
-  console.log('deadline', deadline)
-
   if (item.sheduleTime) {
     const timeSlot = item.sheduleTime.trim();
 

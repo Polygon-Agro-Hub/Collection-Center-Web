@@ -68,10 +68,6 @@ export class EditOfficerTargetComponent {
   // 5. Add selection change handler
   onOfficerSelectionChange(selectedValue: string) {
     this.selectedOfficerId = selectedValue || '';
-    // Add any additional logic you need when category changes
-    console.log('Category selected:', selectedValue);
-
-    console.log('officer', this.selectedOfficerId)
   }
 
   filterOfficer() {

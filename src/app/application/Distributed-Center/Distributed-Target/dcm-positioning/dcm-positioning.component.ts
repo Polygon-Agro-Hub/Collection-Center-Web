@@ -119,9 +119,7 @@ export class DcmPositioningComponent implements OnInit, AfterViewChecked {
     this.DistributionSrv.getDCMPositioningRows().subscribe(
       (res) => {
         this.rows = res.items;
-        console.log('rows', this.rows)
         this.total = res.items.length || 0;
-        console.log('total', this.total)
         this.hasData = res.items.length > 0;
         this.isLoading = false;
         if (!this.hasData) {
@@ -163,7 +161,6 @@ export class DcmPositioningComponent implements OnInit, AfterViewChecked {
     this.selectedRow = row;
     this.attemptedSave = false;
     this.view = 'placement';
-    console.log('view', this.view)
     this.fetchDcmPositionsForRows(this.selectedRow.id);
   }
 
@@ -173,9 +170,7 @@ export class DcmPositioningComponent implements OnInit, AfterViewChecked {
       (res) => {
         this.positions = res.items.items;
         this.productsArr = res.mpItems.mpiItems;
-        console.log('productsArr', this.productsArr)
         this.total = this.positions.length || 0;
-        console.log('positions', this.positions)
         this.hasPositionsData = this.positions.length > 0;
        
         this.isLoading = false;

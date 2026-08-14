@@ -83,7 +83,6 @@ export class ViewOfficerTargetComponent implements OnInit {
       (res) => {
         this.selectedOfficerDataArr = res.items;
         this.empId = res.empId
-        console.log('empId', this.empId)
         if (res.items.length === 0) {
           this.hasData = false;
         } else {

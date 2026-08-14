@@ -54,13 +54,10 @@ this.selectDate = tomorrow.toISOString().split('T')[0];
   }
 
   onDateChange(newDate: string | Date | null) {
-    console.log('newDate', newDate)
     this.selectDatePickerDate = newDate;
     this.selectDate = this.selectDatePickerDate
   ? this.selectDatePickerDate.toString().split('T')[0]
   : '';
-
-    console.log('selectDatePickerDate', this.selectDatePickerDate)
     this.fetchSavedCenterCrops();
   }
 
@@ -73,13 +70,11 @@ this.selectDate = tomorrow.toISOString().split('T')[0];
           ...p,
           originalTotal: (p.targetA || 0) + (p.targetB || 0) + (p.targetC || 0)
         }));
-        console.log('assignCropsArr', this.assignCropsArr)
         this.countCrops = res.products.length
         this.companyCenterId = res.companyCenterId
         this.isLoading = false;
         this.hasData = res.products.length > 0 ? true : false;
         this.validateForm();
-        console.log('hasData', this.hasData)
 
       }
     )
@@ -100,8 +95,6 @@ onSubmit() {
         title: 'dark:text-white',
 
         icon: '',
-        // confirmButton: 'hover:bg-red-600 dark:hover:bg-red-700 focus:ring-red-500 dark:focus:ring-red-800',
-        // cancelButton: 'hover:bg-blue-600 dark:hover:bg-blue-700 focus:ring-blue-500 dark:focus:ring-blue-800',
         actions: 'gap-2'
       }
     }).then((result) => {
@@ -120,9 +113,6 @@ onSubmit() {
     this.newTargetObj.companyCenterId = this.companyCenterId
     this.newTargetObj.date = this.selectDate
     this.newTargetObj.crop = newCrops
-    console.log('newTargetObj', this.newTargetObj)
-
-
     this.TargetSrv.addNewCenterTarget(this.newTargetObj).subscribe(
       (res) => {
         if (res.status) {
@@ -179,7 +169,6 @@ onSubmit() {
       grade: grade,
       varietyId: item.varietyId
     }
-    console.log('data', data);
     this.TargetSrv.updateTargetQty(data).subscribe(
       
       (res) => {

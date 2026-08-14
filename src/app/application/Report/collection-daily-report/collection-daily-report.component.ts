@@ -72,8 +72,6 @@ export class CollectionDailyReportComponent implements OnInit {
 
     this.ReportSrv.getCollectionDailyReport(this.officerId, date).subscribe(
       (res) => {
-        console.log('response', res.data);
-
         this.hasData = res.data.length > 0;
 
         if (!this.hasData) {
@@ -88,9 +86,6 @@ export class CollectionDailyReportComponent implements OnInit {
           gradeC: Number(item.gradeC) || 0,
           total: Number(item.total) || 0,
         }));
-
-        console.log('array', this.dailyReportArr);
-
         this.updateChart();
         this.loadingTable = false;
         this.isLoading = false;
@@ -107,11 +102,6 @@ export class CollectionDailyReportComponent implements OnInit {
   navigateToReports() {
     this.router.navigate(['/reports']); // Change '/reports' to your desired route
   }
-
-  // filterByDate() {
-  //   this.dailyReportArr = [];
-  //   this.fetchDailyReport(this.selectDate);
-  // }
 
   onDateChange(newDate: string | Date | null) {
   this.dailyReportArr = [];
@@ -138,9 +128,6 @@ export class CollectionDailyReportComponent implements OnInit {
       y: crop.gradeA || 0,
       color: '#2B88D9',
     }));
-
-    console.log(gradeAData);
-
     const gradeBData = this.dailyReportArr.map((crop) => ({
       label: crop.varietyNameEnglish,
       y: crop.gradeB || 0,
@@ -409,7 +396,6 @@ private drawBarChart(doc: jsPDF, x: number, y: number, width: number): number {
   }
 
   async downloadPDF2(): Promise<void> {
-    // console.log('created date', this.createdDateForPdf);
     this.isDownloading = true;
     setTimeout(() => {
       const doc = new jsPDF('p', 'mm', 'a4');
@@ -444,8 +430,7 @@ private drawBarChart(doc: jsPDF, x: number, y: number, width: number): number {
   gradeC: item.gradeC || 0,
   totalWeight: item.total || 0,
 }));
-      console.log('groupedData', groupedData)
-  
+
       const legendItems = [
         { label: 'Grade A', color: colors.gradeA },
         { label: 'Grade B', color: colors.gradeB },

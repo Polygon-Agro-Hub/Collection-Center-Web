@@ -271,7 +271,6 @@ export class EditDistributedOfficerComponent implements OnInit {
 
   onDriverCategorySelectionChange(selectedValue: string) {
     this.personalData.drvCategory = selectedValue || '';
-    console.log('drvCa', this.personalData.drvCategory)
   }
 
   @HostListener('document:click', ['$event'])
@@ -419,7 +418,6 @@ isSelected(item: any): boolean {
         });
 
         this.isLoading = false;
-        console.log('personalData', this.personalData.drvCategory)
       }
     );
   }

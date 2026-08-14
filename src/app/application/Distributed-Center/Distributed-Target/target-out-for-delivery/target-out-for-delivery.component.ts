@@ -106,11 +106,9 @@ export class TargetOutForDeliveryComponent implements OnInit {
 
 
   ngOnInit(): void {
-            console.log('centerId1', this.centerId)
 
 const segments = this.router.url.split('/');
 this.tab = segments[1]
-console.log('segments', segments[1])
 
 if (segments[1] === 'distribution-center') {
   this.centerId = Number(this.route.snapshot.paramMap.get('id'));
@@ -130,10 +128,8 @@ if (segments[1] === 'distribution-center') {
     this.DistributionSrv.getOutForDeliveryOrders(status, search, type, timeSlot, row, selectDate, centerId).subscribe(
       (res) => {
         this.ordersArr = res.items
-        console.log('ordersArr', this.ordersArr)
         this.rowIndexes = res.rowIndexes;
         this.rowDropdownOptions = this.rowIndexes
-        console.log('rowIndexes', this.rowIndexes)
         this.centerName = res.centerName;
         this.totalItems = res.items.length | 0;
                 this.listView = true;
@@ -406,11 +402,8 @@ if (segments[1] === 'distribution-center') {
     this.DistributionSrv.getOutForDeliveryOrderDeatils(poId).subscribe(
       (res) => {
         this.processOrder = res.items
-        console.log('processOrder', this.processOrder)
         this.isLoading = false;
         this.listView = false;
-
-        console.log('listView', this.listView, 'isLoading', this.isLoading)
       }
     )
     

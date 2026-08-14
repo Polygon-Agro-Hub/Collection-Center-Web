@@ -72,31 +72,8 @@ export class EditMyTargetComponent implements OnInit {
 
   onOfficerSelectionChange(selectedValue: string) {
     this.selectedOfficerId = selectedValue || '';
-    // Add any additional logic you need when category changes
-    console.log('Category selected:', selectedValue);
-
-    console.log('officer', this.selectedOfficerId)
   }
 
-//   filterOfficer() {
-//   if (!this.officerArr) return;
-//   const search = this.filterTerm.toLowerCase();
-//   this.filteredOfficers = this.officerArr.filter(officer =>
-//     officer.firstNameEnglish.toLowerCase().includes(search) ||
-//     officer.lastNameEnglish.toLowerCase().includes(search)
-//   );
-// }
-
-//   selectOfficer(id: number) {
-//   const selectedOfficer = this.officerArr.find(officer => officer.id === id);
-//   if (selectedOfficer) {
-//     this.searchTerm = `${selectedOfficer.firstNameEnglish} ${selectedOfficer.lastNameEnglish}`;
-//     this.selectedOfficerId = id;
-//     this.isOpen = false;
-//     this.filterTerm = '';
-//     this.filteredOfficers = [...this.officerArr];
-//   }
-// }
 
   onPassAmountInput(event: Event): void {
     const input = event.target as HTMLInputElement;

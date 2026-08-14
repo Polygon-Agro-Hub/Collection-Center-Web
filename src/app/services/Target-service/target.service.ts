@@ -28,9 +28,7 @@ export class TargetService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
-
-    console.log(limit, 'searchText', searchText);
-
+    
     let url = `${this.apiUrl}/get-daily-target`;
 
     if (searchText) {
@@ -133,8 +131,6 @@ export class TargetService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
-
-    // console.log(limit);
 
     let url = `${this.apiUrl}/assign-all-daily-target?page=${page}&limit=${limit}`;
 
@@ -341,10 +337,6 @@ export class TargetService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
-
-    console.log('page', page, 'limit', limit, 'status', status, 'validity', validity)
-    console.log('data', data);
-
     let url = `${this.apiUrl}/officer-target-check-available?page=${page}&limit=${limit}`;
 
     if (status) {
@@ -428,7 +420,7 @@ export class TargetService {
   }
 
   getCentreData(centreId: number): Observable<any> {
-    console.log('fetchinh')
+
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });

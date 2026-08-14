@@ -304,9 +304,6 @@ onDistrictChange(selectedDistrict: string | null): void {
       this.toastSrv.warning('Please fill all required fields');
       return;
     }
-
-    console.log('this.centerData', this.centerData)
-
     // Call the service to create a center
     this.DistributionSrv.editCenter(this.centerData).subscribe({
       next: (res: any) => {

@@ -83,7 +83,6 @@ selectStatusOption(option: string) {
 }
 
 selectValidityOption(option: string) {
-  console.log('validity', this.selectValidity)
   this.selectValidity = option;
   this.isValidityDropdownOpen = false;
   this.page = 1;
@@ -119,9 +118,6 @@ ngOnInit(): void {
         this.OfficerObj.toDate = this.toDate
         this.onSubmit();
     }
-
-    // Now you can safely call onSubmit if needed
-    // this.onSubmit();
   });
 }
 
@@ -151,21 +147,13 @@ ngOnInit(): void {
 
         }
 
-        console.log(this.responseTitle, this.hasData);
-
       }
     )
   }
 
   onSubmit(page: number = this.page, limit: number = this.itemsPerPage, status: string = this.selectStatus, validity: string = this.selectValidity, searchText: string = this.searchText) {
-    console.log('subbimiting');
-    console.log(this.hasData);
     this.isLoading = true
 
-    // this.OfficerObj.officerId = this.
-    // this.OfficerObj.fromDate = this.fromDate
-    // this.OfficerObj.toDate = this.toDate
-    console.log('from', this.OfficerObj.fromDate, 'to', this.OfficerObj.toDate)
     if (!this.OfficerObj.jobRole || !this.OfficerObj.officerId || !this.OfficerObj.fromDate || !this.OfficerObj.toDate) {
       this.responseTitle = 'Fill input fields first'
       this.toastSrv.warning('Fill all Input fields')
@@ -190,8 +178,6 @@ ngOnInit(): void {
 
       (res) => {
 
-        console.log('res', res)
-        
         if (res.status) {
           this.responseTitle = res.message;
           if (res.result.length === 0) {
@@ -208,8 +194,6 @@ ngOnInit(): void {
           this.isLoading = false;
 
         }
-        console.log('fetched');
-        console.log(this.hasData);
       }
     )
   }
@@ -282,7 +266,6 @@ checkToDate(date: string | Date | null) {
 }
 
   editOfficerTarget(id: number, toDate: string, fromDate: string, officerId: string, empId: string) {
-    console.log('officerObj', this.OfficerObj)
     this.router.navigate(['/officer-target/edit-officer-target', id, toDate, fromDate],
       {
         queryParams: {officerId: officerId, empId: empId} 
@@ -295,20 +278,10 @@ checkToDate(date: string | Date | null) {
     this.fetchAllOfficers();
   }
 
-  // clearStatusFilter() {
-  //   this.selectStatus = ''
-  //   this.fetchAllOfficers();
-  // }
-
   applyValidityFilters() {
     this.page = 1;
     this.fetchAllOfficers();
   }
-
-  // clearValidityFilter() {
-  //   this.selectValidity = ''
-  //   this.fetchAllOfficers();
-  // }
 
   onSearch() {
     this.page = 1;

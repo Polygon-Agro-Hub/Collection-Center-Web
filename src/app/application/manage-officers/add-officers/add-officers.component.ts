@@ -187,11 +187,6 @@ export class AddOfficersComponent implements OnInit {
     this.getAllCenters();
 
     this.setJobRoles();
-
-    console.log('loging role', this.logingRole)
-
-    // this.getLastID('COO');
-    // this.EpmloyeIdCreate();
   }
 
   setJobRoles() {
@@ -216,18 +211,13 @@ export class AddOfficersComponent implements OnInit {
 
   toggleJobRoleDropdown() {
     this.isJobRoleOpen = !this.isJobRoleOpen;
-
     this.jobRoleInputTouched = true;
-
-    console.log('jobRoleInputTouched', this.jobRoleInputTouched)
   }
 
   getJobRole(role: string) {
     this.personalData.jobRole = role;
     this.isJobRoleOpen = false;
     this.jobRoleInputTouched = true;
-
-    console.log('jobRoleInputTouched', this.jobRoleInputTouched)
   }
 
   toggleDropdown() {
@@ -239,8 +229,6 @@ export class AddOfficersComponent implements OnInit {
   }
 
   selectCenter(item: Center) {
-    console.log('center selected');
-
     this.personalData.centerId = item.id;
     this.selectedCenterName = item.regCode + ' - ' + item.centerName;
     this.centreDropdownOpen = false; // close dropdown
@@ -256,37 +244,26 @@ export class AddOfficersComponent implements OnInit {
   }
 
   changeCenter() {
-    console.log('changing')
-    console.log('perosnal center change,', this.personalData)
     this.personalData.jobRole = ''
     this.personalData.irmId = null
     this.selectedManager = ''
     this.filteredManagerArr = []
-    console.log('personalData.irmId', this.personalData.irmId)
-    console.log('filteredManagerArr', this.filteredManagerArr)
     this.getAllManagers()
   }
 
   onManagerSearchInput(event: Event) {
     const input = event.target as HTMLInputElement;
     const value = input.value.toLowerCase().trim(); // remove leading/trailing spaces
-    console.log('search value', value);
-
     this.filteredManagerArr = this.managerArr.filter(m => {
       const fullName = `${m.firstNameEnglish} ${m.lastNameEnglish}`.toLowerCase();
       return fullName.includes(value);
     });
-
-    console.log('filtered managers', this.filteredManagerArr);
   }
 
 
   selectManager(item: Manager) {
-    console.log('Manager selected');
-
     this.personalData.irmId = item.id;
     this.selectedManager = item.empId + ' - ' + item.firstNameEnglish + ' ' + item.lastNameEnglish;
-    console.log('selectedManager', this.selectedManager)
     this.managerDropdownOpen = false; // close dropdown
 
     // Reset search input and filtered array
@@ -295,25 +272,7 @@ export class AddOfficersComponent implements OnInit {
     if (searchInput) {
       searchInput.value = '';
     }
-
-    console.log('id', this.personalData.irmId)
-
-    // this.changeCenter();
   }
-
-  //   @HostListener('document:click', ['$event.target'])
-  // onClick(targetElement: HTMLElement) {
-  //   const insideDropdown1 = targetElement.closest('.dropdown-wrapper-1');
-  //   const insideDropdown2 = targetElement.closest('.dropdown-wrapper-2');
-
-  //   // Close dropdowns only if click is outside their wrapper
-  //   if (!insideDropdown1) {
-  //     this.dropdownOpen = false;
-  //   }
-  //   if (!insideDropdown2) {
-  //     this.dropdownOpen2 = false;
-  //   }
-  // }
 
   @HostListener('document:click', ['$event'])
   onClickOutside(event: MouseEvent) {
@@ -349,27 +308,20 @@ export class AddOfficersComponent implements OnInit {
   onSearchInput(event: Event) {
     const input = event.target as HTMLInputElement;
     const value = input.value.toLowerCase();
-    console.log('value', value);
-
     this.filteredCenterArr = this.centerArr.filter(c =>
       (c.centerName || '').toLowerCase().includes(value)
     );
-
-    console.log('filtered centers', this.filteredCenterArr);
-
   }
 
   selectCountry1(country: Country) {
     this.selectedCountry1 = country;
     this.personalData.phoneNumber01Code = country.dialCode; // update ngModel
-    console.log('sdsf', this.personalData.phoneNumber01Code)
     this.dropdownOpen = false;
   }
 
   selectCountry2(country: Country) {
     this.selectedCountry2 = country;
     this.personalData.phoneNumber02Code = country.dialCode; // update ngModel
-    console.log('sdsf', this.personalData.phoneNumber02Code)
     this.dropdownOpen2 = false;
   }
 
@@ -388,16 +340,6 @@ export class AddOfficersComponent implements OnInit {
     const prefix = input.substring(0, 2);
     const isValidPrefix = this.allowedPrefixes.includes(prefix);
     const isValidLength = input.length === 9;
-
-    // if (firstDigit !== '7') {
-    //   this.isPhoneInvalidMap[key] = true;
-    //   return;
-    // }
-
-    // if (!isValidPrefix && input.length >= 2) {
-    //   this.isPhoneInvalidMap[key] = true;
-    //   return;
-    // }
 
     if (input.length === 9 && isValidPrefix) {
       this.isPhoneInvalidMap[key] = false;
@@ -485,8 +427,6 @@ export class AddOfficersComponent implements OnInit {
   }
 
   onSubmit() {
-    console.log('personal data', this.personalData);
-    // this.personalData.image = this.selectedFile;
     if (this.personalData.accNumber !== this.personalData.conformAccNumber) {
       return;
     }
@@ -682,7 +622,6 @@ export class AddOfficersComponent implements OnInit {
       (res) => {
         this.centerArr = res
         this.filteredCenterArr = [...this.centerArr];
-        console.log('centerArr', this.centerArr)
         this.isLoading = false;
 
       }
@@ -698,8 +637,6 @@ export class AddOfficersComponent implements OnInit {
         this.managerArr = res
         this.filteredManagerArr = [];
         this.filteredManagerArr = [...this.managerArr];
-        console.log('managerArr', this.managerArr)
-        console.log('perosnal,', this.personalData)
         this.isLoading = false;
 
 
@@ -722,8 +659,6 @@ export class AddOfficersComponent implements OnInit {
   }
 
   onSubmitForm1(form: NgForm) {
-
-    console.log('personal data', this.personalData);
     form.form.markAllAsTouched();
     this.jobRoleInputTouched = true;
 

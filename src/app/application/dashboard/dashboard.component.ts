@@ -45,7 +45,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
     this.isLoading = true;
     this.dashboardService.getOfficerCounts().subscribe(
       (data) => {
-        console.log('data', data);
         this.COOCount = data.COOCount.COOCOUNT;
         this.activityLogs = data.activities;
         this.isLoading = false;
@@ -67,8 +66,6 @@ export class DashboardComponent implements OnInit, AfterViewInit {
   fetchChart(filter: string) {
     this.activeButton = filter;
     this.isLoading = true;
-    console.log('stargting')
-
     this.dashboardService.getChartData(filter).subscribe(
       (response: any) => {
 

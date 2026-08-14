@@ -98,7 +98,6 @@ export class AssignOfficerTargetComponent implements OnInit {
       return;
     }
 
-    console.log('ob',this.AssignTargetObj)
     this.targetSrv.assignOfficerTartget(this.AssignTargetObj).subscribe(
       (res) => {
         if (res.status) {

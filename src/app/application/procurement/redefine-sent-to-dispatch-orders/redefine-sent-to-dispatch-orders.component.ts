@@ -77,19 +77,14 @@ export class RedefineSentToDispatchOrdersComponent implements OnInit {
       )
       .subscribe({
         next: (response) => {
-          console.log('API Response:', response);
           this.hasData = response.total === 0 ? false : true;
-
           if (response && response.data) {
-            console.log('response.data', response.data)
             this.orders = response.data
-            console.log('orders', this.orders)
             this.totalItems = response.total || 0;
           } else {
             this.orders = response.data
             this.totalItems = this.orders.length;
           }
-          console.log('Orders:', this.orders.length, 'Total:', this.totalItems);
           this.isLoading = false;
         },
         error: (error) => {
@@ -101,17 +96,8 @@ export class RedefineSentToDispatchOrdersComponent implements OnInit {
       });
   }
 
-  // Helper method to format Date to YYYY-MM-DD string
-  // private formatDate(date: Date): string {
-  //   const year = date.getFullYear();
-  //   const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  //   const day = date.getDate().toString().padStart(2, '0');
-  //   return `${year}-${month}-${day}`;
-  // }
-
   onDateChange(newDate: string | Date | null) {
-    console.log('newDate', newDate);
-  
+
     let dateString = '';
   
     if (newDate instanceof Date) {

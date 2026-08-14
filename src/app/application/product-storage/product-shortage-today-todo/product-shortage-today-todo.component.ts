@@ -62,13 +62,11 @@ afterSixPm!: boolean;
   }
 
   getAllShortageTodayToDo(status: string = this.selectStatus, search: string = this.searchText) {
-    console.log('status', this.selectStatus)
     this.isLoading = true;
     this.DistributionSrv.fetchAllShortageTodayToDo(status, search).subscribe(
       (res) => {
         this.itemsArr = res.data
         this.officersArr = res.officers
-        console.log('itemsArr', this.itemsArr)
         if (res.data.length === 0) {
           this.hasData = false;
         } else {

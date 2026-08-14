@@ -154,8 +154,6 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
     return product.isExcluded;
   }
   onSelectionChange() {
-    console.log('Selected option:', this.selectedOption);
-    // Add any additional logic here
   }
 
   getSelectedOptionText(): string {
@@ -377,11 +375,6 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
 
       // Validate if current total is within the allowed limit
       this.isWithinLimit = currentTotal <= allowedLimit;
-
-      // console.log('Calculated total price:', this.totalPrice);
-      // console.log('Allowed limit:', allowedLimit);
-      // console.log('Current total:', currentTotal);
-      // console.log('Is within limit:', this.isWithinLimit);
     } else {
       this.totalPrice = 0;
       this.isWithinLimit = true;

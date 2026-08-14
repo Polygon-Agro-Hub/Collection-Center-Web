@@ -205,7 +205,6 @@ export class ExpensesComponent implements OnInit {
       if (this.fromDatePicker) {
         this.fromDatePicker.selectedDate = null;
       }
-      console.log('this.fromDate', this.fromDate)
       this.toastSrv.warning("From date cannot be in the future.");
       return;
     }
@@ -245,7 +244,6 @@ export class ExpensesComponent implements OnInit {
         if (this.toDatePicker) {
           this.toDatePicker.selectedDate = null;
         }
-        console.log(this.toDate);
       }
       this.toastSrv.warning("Please select the 'From' date first.");
       return;

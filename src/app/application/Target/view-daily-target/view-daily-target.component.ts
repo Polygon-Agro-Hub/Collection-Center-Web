@@ -111,9 +111,6 @@ export class ViewDailyTargetComponent implements OnInit {
 
 
       (res) => {
-        console.log('fetching');
-        console.log(this.hasData);
-        // this.targetArr = res.items;
         this.allTargets = res.items;
         this.targetArr = [...this.allTargets];  
         this.totalItems = res.totalPages
@@ -123,7 +120,6 @@ export class ViewDailyTargetComponent implements OnInit {
           this.hasData = false;
         }
         this.isLoading = false;
-        console.log(this.hasData);
       }
 
 
@@ -191,7 +187,6 @@ export class ViewDailyTargetComponent implements OnInit {
     this.TargetSrv.AssignAllDailyTarget(page, limit, search).subscribe(
       (res) => {
         this.assignTargetArr = res;
-        console.log('assignTargetArr', this.assignTargetArr.length)
         if (res.length > 0) {
           this.assignHasData = true;
         } else {
@@ -237,8 +232,6 @@ export class ViewDailyTargetComponent implements OnInit {
     this.TargetSrv.AssignAllDailyTarget(1, 10, this.assignSearch).subscribe(
       (res) => {
         this.assignTargetArr = res || []; // fallback if response is null or undefined
-        console.log('assignTargetArr', this.assignTargetArr)
-
         // Apply filtering
         if (this.selectAssignStatus === 'Updated') {
           this.assignTargetArr = this.assignTargetArr.filter(item =>
@@ -287,11 +280,6 @@ export class ViewDailyTargetComponent implements OnInit {
     this.selectAssignStatus = '';
     this.AssignAllDailyTarget();
   }
-
-  // cancelAssignStatus() {
-  //   this.selectAssignStatus = '';
-  //   this.AssignAllDailyTarget();
-  // }
 
   checkLeadingSpace() {
     if (this.searchText && this.searchText.startsWith(' ')) {

@@ -234,25 +234,18 @@ export class EditOfficerComponent implements OnInit {
 
   toggleJobRoleDropdown() {
     this.isJobRoleOpen = !this.isJobRoleOpen;
-
     this.jobRoleInputTouched = true;
-
-    console.log('jobRoleInputTouched', this.jobRoleInputTouched)
   }
 
   getJobRole(role: string) {
     this.personalData.jobRole = role;
     this.isJobRoleOpen = false;
     this.jobRoleInputTouched = true;
-
-    console.log('jobRoleInputTouched', this.jobRoleInputTouched)
   }
 
   onSearchInput(event: Event) {
     const input = event.target as HTMLInputElement;
     const value = input.value.toLowerCase();
-    console.log('value', value);
-
     this.filteredCenterArr = this.centerArr.filter(c => {
       const combined1 = `${c.regCode}-${c.centerName}`.toLowerCase();
       const combined2 = `${c.regCode} - ${c.centerName}`.toLowerCase();
@@ -273,7 +266,6 @@ export class EditOfficerComponent implements OnInit {
   }
 
   selectCenter(item: Center) {
-    console.log('center selected');
 
     this.personalData.centerId = item.id;
     this.selectedCenterName = item.regCode + ' - ' + item.centerName;
@@ -299,7 +291,6 @@ export class EditOfficerComponent implements OnInit {
   onManagerSearchInput(event: Event) {
     const input = event.target as HTMLInputElement;
     const value = input.value.toLowerCase().trim(); // remove leading/trailing spaces
-    console.log('search value', value);
 
     this.filteredManagerArr = this.managerArr.filter(m => {
       const fullName = `${m.empId}-${m.firstNameEnglish} ${m.lastNameEnglish}`.toLowerCase();
@@ -311,11 +302,8 @@ export class EditOfficerComponent implements OnInit {
 
 
   selectManager(item: Manager) {
-    console.log('Manager selected');
-
     this.personalData.irmId = item.id;
     this.selectedManager = item.empId + ' - ' + item.firstNameEnglish + ' ' + item.lastNameEnglish;
-    console.log('name', item.firstNameEnglish)
     this.managerDropdownOpen = false; // close dropdown
 
     // Reset search input and filtered array
@@ -325,9 +313,6 @@ export class EditOfficerComponent implements OnInit {
       searchInput.value = '';
     }
 
-    console.log('id', this.personalData.irmId)
-
-    // this.changeCenter();
   }
 
   fetchOffierById(id: number) {
@@ -338,8 +323,6 @@ export class EditOfficerComponent implements OnInit {
         this.personalData = res.officerData.collectionOfficer;
         this.personalData.previousJobRole = res.officerData.collectionOfficer.jobRole;
         this.personalData.conformAccNumber = this.personalData.accNumber
-
-        console.log(this.personalData);
         this.ExistirmId = res.officerData.irmId;
 
         this.selectedCenterName = (res.officerData.collectionOfficer.centerId && res.officerData.collectionOfficer.regCode && res.officerData.collectionOfficer.centerName)
@@ -391,14 +374,12 @@ export class EditOfficerComponent implements OnInit {
   selectCountry1(country: Country) {
     this.selectedCountry1 = country;
     this.personalData.phoneCode01 = country.dialCode; // update ngModel
-    console.log('sdsf', this.personalData.phoneCode01)
     this.dropdownOpen = false;
   }
 
   selectCountry2(country: Country) {
     this.selectedCountry2 = country;
     this.personalData.phoneCode01 = country.dialCode; // update ngModel
-    console.log('sdsf', this.personalData.phoneCode01)
     this.dropdownOpen2 = false;
   }
 
@@ -417,16 +398,6 @@ export class EditOfficerComponent implements OnInit {
     const prefix = input.substring(0, 2);
     const isValidPrefix = this.allowedPrefixes.includes(prefix);
     const isValidLength = input.length === 9;
-
-    // if (firstDigit !== '7') {
-    //   this.isPhoneInvalidMap[key] = true;
-    //   return;
-    // }
-
-    // if (!isValidPrefix && input.length >= 2) {
-    //   this.isPhoneInvalidMap[key] = true;
-    //   return;
-    // }
 
     if (input.length === 9 && isValidPrefix) {
       this.isPhoneInvalidMap[key] = false;
@@ -466,7 +437,6 @@ export class EditOfficerComponent implements OnInit {
 
   validateLanguages() {
     this.languagesRequired = !this.personalData.languages || this.personalData.languages.trim() === '';
-    console.log('language', this.languagesRequired)
   }
 
 
@@ -546,9 +516,6 @@ export class EditOfficerComponent implements OnInit {
 
 
   onSubmit() {
-
-    console.log('personal data', this.personalData)
-
     this.personalData.empId = this.upateEmpID;
 
     if (this.personalData.accNumber !== this.personalData.conformAccNumber) {
@@ -704,8 +671,6 @@ export class EditOfficerComponent implements OnInit {
         );
       }
 
-
-
     }
   }
 
@@ -738,20 +703,16 @@ export class EditOfficerComponent implements OnInit {
       (res) => {
         this.centerArr = res
         this.filteredCenterArr = [...this.centerArr];
-        console.log('centerArr', this.centerArr)
-
       }
     )
   }
 
   getAllManagers() {
-    console.log('id', this.personalData.cofId)
     this.ManageOficerSrv.getCenterManagersForEdit(this.personalData.centerId, Number(this.personalData.cofId)).subscribe(
       (res) => {
 
         this.managerArr = res
         this.filteredManagerArr = [...this.managerArr];
-        console.log('managerArr', this.managerArr)
 
       }
     )
@@ -891,19 +852,11 @@ export class EditOfficerComponent implements OnInit {
 
   onSubmitForm1(form: NgForm) {
 
-    console.log('personal data', this.personalData);
     form.form.markAllAsTouched();
     this.jobRoleInputTouched = true;
 
     this.validateLanguages();
-
-
     const missingFields: string[] = [];
-
-    // Validation for pageOne fields
-    // if (!this.personalData.empType) {
-    //   missingFields.push('Staff Employee Type');
-    // }
 
     if (!this.personalData.centerId && this.logingRole === 'Collection Centre Head') {
       missingFields.push('Collection Centre Name is required');
@@ -924,12 +877,6 @@ export class EditOfficerComponent implements OnInit {
     if (!this.personalData.employeeType) {
       missingFields.push('Employee Type is required');
     }
-
-
-
-    // if (!this.personalData.companyId) {
-    //   missingFields.push('Company Name');
-    // }
 
     if (!this.personalData.firstNameEnglish) {
       missingFields.push('First Name (in English) is required');
@@ -1005,8 +952,6 @@ export class EditOfficerComponent implements OnInit {
   }
 
   onSubmitForm2(form: NgForm) {
-    console.log('page2')
-
     form.form.markAllAsTouched();
 
     const missingFields: string[] = [];
@@ -1078,7 +1023,6 @@ export class EditOfficerComponent implements OnInit {
   }
 
   onSubmitForm3(form: NgForm) {
-    console.log('page3')
     form.form.markAllAsTouched();
 
     const missingFields: string[] = [];
@@ -1743,8 +1687,6 @@ export class EditOfficerComponent implements OnInit {
 
 
   openPopup(item: Personal) {
-    console.log('personal', item);
-    console.log('officerId', this.editOfficerId);
     this.isPopupVisible = true;
 
     const message = `Are you sure you want to reset password for this ${item.jobRole}?`;
@@ -1830,7 +1772,6 @@ export class EditOfficerComponent implements OnInit {
           this.toastSrv.success(`Officer password reset successfully.`);
         } else {
           this.isLoading = false;
-          console.log(`Failed to reset the Officer password.`)
         }
       },
       error: (err) => {

@@ -721,7 +721,6 @@ export class AddDistributedOfficerComponent implements OnInit {
     this.DistributedManageOfficerSrv.getDriverCategory().subscribe(
       (res) => {
         this.drvCatArr = res
-        console.log('drvCatArr', this.drvCatArr)
         this.isLoading = false;
       }
     )
@@ -1848,7 +1847,6 @@ if (this.personalData.conformAccNumber && !/^[0-9]+$/.test(this.personalData.con
 
   onDriverCategorySelectionChange(selectedValue: string) {
     this.personalData.drvCategory = selectedValue || '';
-    console.log('drvCa', this.personalData.drvCategory)
   }
 
 }

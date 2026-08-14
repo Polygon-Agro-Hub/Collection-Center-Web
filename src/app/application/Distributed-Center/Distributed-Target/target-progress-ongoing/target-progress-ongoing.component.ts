@@ -100,12 +100,8 @@ export class TargetProgressOngoingComponent implements OnInit {
 
   ngOnInit(): void {
 
-        console.log('centerId1', this.centerId)
-
 const segments = this.router.url.split('/');
 this.tab = segments[1]
-console.log('segments', segments[1])
-
 if (segments[1] === 'distribution-center') {
   this.centerId = Number(this.route.snapshot.paramMap.get('id'));
   this.selectedCenterName = this.route.snapshot.paramMap.get('centerName');
@@ -116,9 +112,6 @@ if (segments[1] === 'distribution-center') {
   this.regCode = null;
 }
 
-    console.log('centerId2', this.centerId)
-    // const today = new Date();
-    // this.selectedDate = today.toISOString().split('T')[0];
     this.fetchAllAssignOrders();
     if (segments[1] !== 'distribution-center') {
     this.fetchCenterData();
@@ -133,8 +126,6 @@ if (segments[1] === 'distribution-center') {
         this.ordersArr = res.items;
         this.rowIndexes = res.rowIndexes;
         this.rowDropdownOptions = this.rowIndexes
-        console.log('rowIndexes', this.rowIndexes)
-
         this.hasData = res.items.length > 0;
         this.isLoading = false;
       }

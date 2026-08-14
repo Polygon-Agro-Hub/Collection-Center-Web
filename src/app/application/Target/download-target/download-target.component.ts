@@ -277,8 +277,6 @@ onDateFromDateChange(newDate: string | Date | null) {
       return;
     }
 
-    console.log('ta', this.targetArr)
-
     const worksheetData = this.targetArr.map((item, index) => ({
   No: index + 1,
   'Crop Name': item.cropNameEnglish,

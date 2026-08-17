@@ -319,4 +319,8 @@ blockInvalidKey(event: KeyboardEvent): void {
   }
 }
 
+goDashboard() {
+    this.router.navigate([`/distribution-procurement`])
+  }
+
 }

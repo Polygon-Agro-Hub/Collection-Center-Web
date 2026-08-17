@@ -33,7 +33,7 @@
 
         <!-- To Finalize Section -->
         <div *ngIf="toFinalizeList.length > 0" class="mb-8">
-            <h3 class="text-[16px] font-medium text-[#292929] dark:text-textDark mb-3">
+            <h3 class="font-[600] text-[#000000] dark:text-textDark mb-3">
                 To Finalize ({{ toFinalizeList.length | number:'2.0' }})
             </h3>
 
@@ -59,59 +59,22 @@
                         </div>
                     </div>
 
-                    <!-- Distribution Center Custom Dropdown -->
-                    <div class="flex flex-col justify-center w-52 shrink-0 mr-3 centre-dropdown-wrapper">
+                    <!-- Distribution Center Dropdown -->
+                    <div class="flex flex-col justify-center w-52 shrink-0 mr-3">
                         <label class="text-[12px] font-normal text-textLight dark:text-textDark mb-1">Select
                             Centre</label>
-                        <div class="relative w-full">
-
-                            <!-- Trigger -->
-                            <div (click)="toggleCentreDropdown(item)"
-                                class="w-full h-10 px-3 flex items-center justify-between rounded-lg border border-[#828282] cursor-pointer text-sm font-semibold text-textLight dark:text-textDark bg-white dark:bg-[#292929]">
-                                <span class="truncate" [ngClass]="{'text-[#828282] font-normal': !item.selectedDC}">
-                                    {{ item.selectedDC ? (item.selectedDC.value + ' - ' +
-                                    getCentreNameOnly(item.selectedDC)) : '--Select Centre--' }}
-                                </span>
-                                <i class="fa-solid fa-chevron-down text-xs text-[#828282] transition-transform shrink-0 ml-2"
-                                    [ngClass]="{ 'rotate-180': item.dropdownOpen }"></i>
-                            </div>
-
-                            <!-- Panel -->
-                            <div *ngIf="item.dropdownOpen"
-                                class="absolute z-10 overflow-hidden w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
-
-                                <!-- Search -->
-                                <div
-                                    class="sticky top-0 bg-gray-100 dark:bg-[#1D1D1F] px-2 py-1.5 border-b border-[#828282]">
-                                    <div class="relative">
-                                        <input type="text" placeholder="Search..."
-                                            (input)="onCentreSearchInput($event, item)"
-                                            (click)="$event.stopPropagation()"
-                                            class="w-full text-sm bg-transparent outline-none pr-6 text-textLight dark:text-textDark" />
-                                        <i
-                                            class="fa-solid fa-magnifying-glass absolute right-1 top-1/2 transform -translate-y-1/2 text-[#828282] text-xs"></i>
-                                    </div>
-                                </div>
-
-                                <div class="max-h-60 overflow-y-auto">
-                                    <div *ngFor="let dc of item.filteredCenters; let i = index"
-                                        (click)="selectCentreOption(item, dc)"
-                                        class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center"
-                                        [ngClass]="{
-                                            'rounded-b-xl': i === item.filteredCenters.length - 1,
-                                            'bg-gray-200 dark:bg-gray-700': item.selectedDC?.comCenId === dc.comCenId
-                                        }">
-                                        <span class="flex-grow text-sm">{{ dc.value }} - {{ getCentreNameOnly(dc)
-                                            }}</span>
-                                    </div>
-
-                                    <div *ngIf="item.filteredCenters.length === 0"
-                                        class="px-3 py-2 text-sm text-[#828282]">
-                                        No centres available
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
+                        <app-searchable-dropdown
+                            [items]="getCentreDropdownItems(item)"
+                            placeholder="--Select Centre--"
+                            searchPlaceholder="Search..."
+                            [ngModel]="item.selectedDC"
+                            [ngModelOptions]="{standalone: true}"
+                            (selectionChange)="onCentreSelected(item, $event)"
+                            [clearable]="true"
+                            [showSelected]="true"
+                            borderClass="border border-[#828282]"
+                            class="block w-full">
+                        </app-searchable-dropdown>
                     </div>
 
                     <!-- Market Price -->
@@ -151,7 +114,7 @@
 
         <!-- Finalized Section -->
         <div *ngIf="finalizedList.length > 0">
-            <h3 class="text-lg font-semibold text-[#000000] dark:text-textDark mb-3">
+            <h3 class="font-[600] text-[#000000] dark:text-textDark mb-3">
                 Finalized ({{ finalizedList.length | number:'2.0' }})
             </h3>
 

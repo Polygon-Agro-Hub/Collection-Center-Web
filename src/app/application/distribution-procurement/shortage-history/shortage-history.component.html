@@ -105,11 +105,11 @@
               </div>
             </div>
 
-            <div class="mr-8 min-w-[180px]">
+            <div class="mr-8 w-[180px] flex-shrink-0">
               <p class="text-xs text-[#000000] dark:text-textDark mb-1">
                 Assigned Centre
               </p>
-              <p class="font-medium text-[#292929] dark:text-textDark truncate">
+              <p class="font-medium text-[#292929] dark:text-textDark truncate" [title]="item.assignedCentre || '----'">
                 {{ item.assignedCentre || "----" }}
               </p>
             </div>

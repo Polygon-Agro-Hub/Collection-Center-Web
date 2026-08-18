@@ -152,23 +152,23 @@ export class AssignOfficerTargetComponent implements OnInit {
     if (grade === 'A' && this.totTargetA > this.targetVerity.qtyA) {
       this.toastSrv.warning(`Total Grade A target cannot exceed ${this.targetVerity.qtyA}!`);
       setTimeout(() => {
-        this.officerArr[index].targetA = Math.max(0, remainingA);
+        this.officerArr[index].targetA = Math.max(0, Math.round(remainingA * 1000) / 1000);
         this.cdRef.detectChanges();
       }, 0);
     }
-  
+
     if (grade === 'B' && this.totTargetB > this.targetVerity.qtyB) {
       this.toastSrv.warning(`Total Grade B target cannot exceed ${this.targetVerity.qtyB}!`);
       setTimeout(() => {
-        this.officerArr[index].targetB = Math.max(0, remainingB);
+        this.officerArr[index].targetB = Math.max(0, Math.round(remainingB * 1000) / 1000);
         this.cdRef.detectChanges();
       }, 0);
     }
-  
+
     if (grade === 'C' && this.totTargetC > this.targetVerity.qtyC) {
       this.toastSrv.warning(`Total Grade C target cannot exceed ${this.targetVerity.qtyC}!`);
       setTimeout(() => {
-        this.officerArr[index].targetC = Math.max(0, remainingC);
+        this.officerArr[index].targetC = Math.max(0, Math.round(remainingC * 1000) / 1000);
         this.cdRef.detectChanges();
       }, 0);
     }

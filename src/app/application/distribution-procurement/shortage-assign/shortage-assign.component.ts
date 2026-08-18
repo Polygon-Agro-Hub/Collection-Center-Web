@@ -219,7 +219,7 @@ this.filteredCentres = this.centres; // new
     let value = input.value;
 
     // Match up to 2 decimal places, discard anything beyond
-    const match = value.match(/^\d*(\.\d{0,2})?/);
+    const match = value.match(/^\d*(\.\d{0,3})?/);
     const trimmed = match ? match[0] : value;
 
     if (trimmed !== value) {

@@ -30,6 +30,7 @@ export class ProductShortageTodayTodoComponent implements OnInit {
 
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Assigned', 'Not Assigned'];
+  isOfficerAssigned: boolean = false
 
   toggleStatusDropdown() {
     this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
@@ -112,6 +113,7 @@ afterSixPm!: boolean;
 
   openAssignOfficerModel(item: ShortageProducts) {
     this.selectedItem = item
+    this.isOfficerAssigned = item.isAssigned
     this.isModalOpen = true;
   }
 
@@ -130,6 +132,8 @@ afterSixPm!: boolean;
  assignOfficer() {
   this.isLoading = true;
 
+  // this.officerEdit = 
+
   const shortageId = this.selectedItem.id;
   const shortageAssignId = this.selectedItem.shortageAssignId;
 
@@ -141,9 +145,16 @@ afterSixPm!: boolean;
 
         if (res.success) {
           this.isModalOpen = false;
-          this.toastSrv.success('Officer assigned Successfully.');
+          if (!this.isOfficerAssigned) {
+          this.toastSrv.success('Officer Assigned Successfully.');
+          } else if (this.isOfficerAssigned) {
+            this.toastSrv.success('Officer Updated Successfully.');
+          }
+
           this.getAllShortageTodayToDo();
               this.selectedOfficerId = null;
+              this.selectedOfficerId = null;
+
         }
       },
       error: (err) => {
@@ -171,6 +182,7 @@ class ShortageProducts {
   assignOfficerId!: number | null;
   empId!: string;
   price!: number;
+  isAssigned!: boolean
 }
 
 

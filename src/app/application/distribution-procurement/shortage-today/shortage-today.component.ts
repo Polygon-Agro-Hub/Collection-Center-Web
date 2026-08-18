@@ -51,6 +51,10 @@ export class ShortageTodayComponent
     autoplay: true,
   };
 
+  currentTime!: Date;
+afterSixPm!: boolean;
+hasData: boolean = false;
+
   @ViewChild('lottieContainer', { static: false }) lottieContainer!: ElementRef;
   private animationItem: AnimationItem | undefined;
   private waitTimer: any;
@@ -68,6 +72,9 @@ export class ShortageTodayComponent
   ngOnInit(): void {
     const now = new Date().getTime();
     const target = this.availableDate.getTime();
+
+        this.currentTime = new Date()
+    this.afterSixPm = this.currentTime.getHours() >= 18;
 
     if (now >= target) {
       this.isWaiting = false;
@@ -98,6 +105,7 @@ export class ShortageTodayComponent
           assignments: [],
         }));
         this.isLoading = false;
+        this.hasData = this.shortages.length > 0
       },
       error: (err) => {
         console.error('Error fetching shortage details:', err);

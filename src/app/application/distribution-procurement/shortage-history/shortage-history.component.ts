@@ -95,6 +95,7 @@ export class ShortageHistoryComponent implements OnInit {
     this.procurementService.getAllShortageAssignedDetails(dateParam).subscribe({
       next: (response: any[]) => {
         this.shortageItems = (response || []).map((row) => this.mapRowToShortageItem(row));
+        console.log('shortageItems', this.shortageItems)
         this.splitByAssignment();
         this.hasData = this.shortageItems.length > 0;
         this.isLoading = false;
@@ -231,7 +232,7 @@ export class ShortageHistoryComponent implements OnInit {
    * Get total records count as padded string
    */
   getTotalRecords(): string {
-    return this.shortageItems.length.toString().padStart(2, '0');
+    return (this.notAssignedItems.length + this.assignedItems.length).toString().padStart(2, '0');
   }
 
   /**

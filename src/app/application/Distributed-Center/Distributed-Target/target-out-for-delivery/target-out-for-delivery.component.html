@@ -333,8 +333,8 @@
         <div
             class="flex items-center bg-white dark:bg-[#1D1D1F] border-[1px] border-[#828282] rounded-xl px-6 py-4 mb-6">
             <div class="pr-6 flex-shrink-0">
-                <p class="text-s text-[#7F7F7F] dark:text-gray-400 mb-1">Order ID :</p>
-                <p class="font-medium text-lg text-[#000000] dark:text-textDark">{{ processOrder.orderId }}</p>
+                <p class="text-sm text-[#7F7F7F] dark:text-gray-400 mb-1">Order ID :</p>
+                <p class="font-medium text-[#000000] dark:text-textDark">{{ processOrder.invNo }}</p>
             </div>
 
             <div class="w-px self-stretch bg-[#828282] mx-6"></div>
@@ -342,11 +342,11 @@
             <div class="flex-1 flex items-center justify-between gap-4">
                 <div>
                     <p class="text-sm text-[#7F7F7F] dark:text-gray-400 mb-1">Type :</p>
-                    <p class="font-medium text-lg text-[#000000] dark:text-textDark">{{ processOrder.delivaryMethod }}</p>
+                    <p class="font-medium text-[#000000] dark:text-textDark">{{ processOrder.delivaryMethod }}</p>
                 </div>
                 <div>
                     <p class="text-sm text-[#7F7F7F] dark:text-gray-400 mb-1">Scheduled Date :</p>
-                    <p class="font-medium text-lg text-[#000000] dark:text-textDark">{{ getOrdinalDay(processOrder.sheduleDate) }} {{ processOrder.sheduleDate | date:'MMMM y' }}</p>
+                    <p class="font-medium text-[#000000] dark:text-textDark">{{ getOrdinalDay(processOrder.sheduleDate) }} {{ processOrder.sheduleDate | date:'MMMM y' }}</p>
                 </div>
                 <div>
                     <p class="text-sm text-[#7F7F7F] dark:text-gray-400 mb-1">Time Slot :</p>
@@ -354,11 +354,11 @@
                 </div>
                 <div>
                     <p class="text-sm text-[#7F7F7F] dark:text-gray-400 mb-1">QC Done By :</p>
-                    <p class="font-medium text-lg text-[#000000] dark:text-textDark">{{ processOrder.qcDoneBy }}</p>
+                    <p class="font-medium text-[#000000] dark:text-textDark">{{ processOrder.qcDoneBy }}</p>
                 </div>
                 <div>
                     <p class="text-sm text-[#7F7F7F] dark:text-gray-400 mb-1">Out Time :</p>
-                    <p class="font-medium text-lg text-[#000000] dark:text-textDark">{{ processOrder.packTime | date:'hh:mm a' }} on {{ getOrdinalDay(processOrder.packTime) }} {{ processOrder.packTime | date:'MMMM y' }}</p>
+                    <p class="font-medium text-[#000000] dark:text-textDark">{{ processOrder.packTime | date:'hh:mm a' }} on {{ getOrdinalDay(processOrder.packTime) }} {{ processOrder.packTime | date:'MMMM y' }}</p>
                 </div>
             </div>
         </div>
@@ -468,7 +468,7 @@
                         <div>
                             <p class="text-sm font-[400] text-[#7F7F7F] dark:text-gray-400 mb-1">QR Printed :</p>
                             <p class="font-[500] text-[#000000] dark:text-textDark">
-                                ---- by {{ processOrder.qrPrintTime | date:'hh:mm a' }} on {{ getOrdinalDay(processOrder.qrPrintTime) }} {{ processOrder.packTime | date:'MMMM y' }}
+                                ---- by {{ processOrder.qrPrintTime | date:'hh:mm a' }} on {{ getOrdinalDay(processOrder.qrPrintTime) }} {{ processOrder.qrPrintTime | date:'MMMM y' }}
                             </p>
                         </div>
                         <div>

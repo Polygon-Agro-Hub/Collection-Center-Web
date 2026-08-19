@@ -169,14 +169,14 @@ export const MENU_ITEMS = [
     permission: ['Distribution Centre Manager'],
   },
 
-  {
-    id: 15,
-    key: 'officer-targets',
-    path: '/officer-targets',
-    label: 'Officer Targets',
-    icon: 'fa-solid fa-user-plus',
-    permission: ['Distribution Centre Manager'],
-  },
+  // {
+  //   id: 15,
+  //   key: 'officer-targets',
+  //   path: '/officer-targets',
+  //   label: 'Officer Targets',
+  //   icon: 'fa-solid fa-user-plus',
+  //   permission: ['Distribution Centre Manager'],
+  // },
 
 
   {

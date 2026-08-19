@@ -468,7 +468,7 @@
                         <div>
                             <p class="text-sm font-[400] text-[#7F7F7F] dark:text-gray-400 mb-1">QR Printed :</p>
                             <p class="font-[500] text-[#000000] dark:text-textDark">
-                                ---- by {{ processOrder.qrPrintTime | date:'hh:mm a' }} on {{ getOrdinalDay(processOrder.qrPrintTime) }} {{ processOrder.qrPrintTime | date:'MMMM y' }}
+                                {{processOrder.qrPrintBy }} by {{ processOrder.qrPrintTime | date:'hh:mm a' }} on {{ getOrdinalDay(processOrder.qrPrintTime) }} {{ processOrder.qrPrintTime | date:'MMMM y' }}
                             </p>
                         </div>
                         <div>

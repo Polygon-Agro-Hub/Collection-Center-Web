@@ -451,6 +451,7 @@ export class ProcessOrder {
   packTime!: Date;
   qcDoneBy!: string;
     qrPrintTime!: Date;
+    qrPrintBy!: string;
 
   packages: OrderPackage[] = [];
   additionalItems: AdditionalItem[] = [];
@@ -470,7 +471,7 @@ export class PackageItem {
   image!: string;
   qty!: number;
   isPacked!: boolean;
-  packingTime!: string | null;
+  packingTime!: Date;
   packedByOfficer!: string;
 }
 
@@ -481,7 +482,7 @@ export class AdditionalItem {
   qty!: number;
   unit!: string;
   isPacked!: boolean;
-  packingTime!: string | null;
+  packingTime!: Date;
   packedByOfficer!: string;
 }
 

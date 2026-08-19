@@ -46,6 +46,9 @@ export class ShortageHistoryComponent implements OnInit {
   selectedDate: string = '';
   maxSelectableDate: string = '';
 
+    currentTime!: Date;
+afterSixPm!: boolean;
+
   // Fallback images for known items — update the paths to match your assets folder
   private readonly itemImageMap: { [key: string]: string } = {
     garlic: 'assets/items/garlic.png',
@@ -70,9 +73,21 @@ export class ShortageHistoryComponent implements OnInit {
     const today = new Date();
     this.maxSelectableDate = this.formatDateToYYYYMMDD(today);
 
+    this.currentTime = new Date()
+    this.afterSixPm = this.currentTime.getHours() >= 18;
+
     this.loadShortageHistory();
 }
 
+isPrevToday() {
+  const selected = new Date(this.selectedDate);
+  const today = new Date();
+
+  selected.setHours(0, 0, 0, 0);
+  today.setHours(0, 0, 0, 0);
+
+  return selected < today;
+}
   /**
    * Helper method to format Date to YYYY-MM-DD
    */

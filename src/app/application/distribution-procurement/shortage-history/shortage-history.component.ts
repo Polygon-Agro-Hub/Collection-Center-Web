@@ -110,7 +110,6 @@ isPrevToday() {
     this.procurementService.getAllShortageAssignedDetails(dateParam).subscribe({
       next: (response: any[]) => {
         this.shortageItems = (response || []).map((row) => this.mapRowToShortageItem(row));
-        console.log('shortageItems', this.shortageItems)
         this.splitByAssignment();
         this.hasData = this.shortageItems.length > 0;
         this.isLoading = false;

@@ -15,7 +15,7 @@
     <div class="flex flex-row items-center justify-between gap-4 mt-2">
         <div><p class="text-lg dark:text-white whitespace-nowrap">All ({{ totalItems < 10 ? ('0' + totalItems) : totalItems }})</p></div>
     <div class="flex flex-row items-center justify-end gap-5 ">
-                <div class="relative w-40 custom-status-dropdown-container">
+                <div class="relative w-24 custom-status-dropdown-container">
             <!-- Hidden native select -->
             <select [(ngModel)]="selectType" class="hidden" (change)="filterType()">
                 <option value="" selected disabled>Type</option>
@@ -106,7 +106,7 @@
         </div>
 
 
-                <div class="relative w-40 custom-status-dropdown-container">
+                <div class="relative w-28 custom-status-dropdown-container">
             <!-- Hidden native select -->
             <select [(ngModel)]="selectRow" class="hidden" (change)="filterRow()">
                 <option value="" selected disabled>Type</option>
@@ -151,7 +151,7 @@
             </div>
         </div>
 
-        <div class="relative w-40 custom-status-dropdown-container">
+        <div class="relative w-28 custom-status-dropdown-container">
             <!-- Hidden native select -->
             <select [(ngModel)]="selectStatus" class="hidden" (change)="filterStatus()">
                 <option value="" selected disabled>Status</option>
@@ -191,7 +191,7 @@
                 </div>
             </div>
         </div>
-        <div class="relative w-36">
+        <div class="relative w-32">
                 <app-custom-datepicker
         [placeholder]="'Date'"
   [selectedDate]="selectedDate"
@@ -199,7 +199,7 @@
 ></app-custom-datepicker>
 </div>
 
-        <div class="flex mr-5 items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+        <div class="flex items-center rounded-full mr-5 px-4 py-2 w-96 sm:w-64 md:w-64 bg-[#F1F1F1] dark:bg-[#292929]">
             <input type="text" placeholder="Search by Order ID.." [(ngModel)]="searchText" (keyup.enter)="onSearch()"
             (keyup.esc)="offSearch()"
                 class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
@@ -333,8 +333,8 @@
         <div
             class="flex items-center bg-white dark:bg-[#1D1D1F] border-[1px] border-[#828282] rounded-xl px-6 py-4 mb-6">
             <div class="pr-6 flex-shrink-0">
-                <p class="text-s text-[#7F7F7F] dark:text-gray-400 mb-1">Order ID :</p>
-                <p class="font-medium text-lg text-[#000000] dark:text-textDark">{{ processOrder.orderId }}</p>
+                <p class="text-sm text-[#7F7F7F] dark:text-gray-400 mb-1">Order ID :</p>
+                <p class="font-medium text-[#000000] dark:text-textDark">{{ processOrder.invNo }}</p>
             </div>
 
             <div class="w-px self-stretch bg-[#828282] mx-6"></div>
@@ -342,11 +342,11 @@
             <div class="flex-1 flex items-center justify-between gap-4">
                 <div>
                     <p class="text-sm text-[#7F7F7F] dark:text-gray-400 mb-1">Type :</p>
-                    <p class="font-medium text-lg text-[#000000] dark:text-textDark">{{ processOrder.delivaryMethod }}</p>
+                    <p class="font-medium text-[#000000] dark:text-textDark">{{ processOrder.delivaryMethod }}</p>
                 </div>
                 <div>
                     <p class="text-sm text-[#7F7F7F] dark:text-gray-400 mb-1">Scheduled Date :</p>
-                    <p class="font-medium text-lg text-[#000000] dark:text-textDark">{{ getOrdinalDay(processOrder.sheduleDate) }} {{ processOrder.sheduleDate | date:'MMMM y' }}</p>
+                    <p class="font-medium text-[#000000] dark:text-textDark">{{ getOrdinalDay(processOrder.sheduleDate) }} {{ processOrder.sheduleDate | date:'MMMM y' }}</p>
                 </div>
                 <div>
                     <p class="text-sm text-[#7F7F7F] dark:text-gray-400 mb-1">Time Slot :</p>
@@ -354,11 +354,11 @@
                 </div>
                 <div>
                     <p class="text-sm text-[#7F7F7F] dark:text-gray-400 mb-1">QC Done By :</p>
-                    <p class="font-medium text-lg text-[#000000] dark:text-textDark">{{ processOrder.qcDoneBy }}</p>
+                    <p class="font-medium text-[#000000] dark:text-textDark">{{ processOrder.qcDoneBy }}</p>
                 </div>
                 <div>
                     <p class="text-sm text-[#7F7F7F] dark:text-gray-400 mb-1">Out Time :</p>
-                    <p class="font-medium text-lg text-[#000000] dark:text-textDark">{{ processOrder.packTime | date:'hh:mm a' }} on {{ getOrdinalDay(processOrder.packTime) }} {{ processOrder.packTime | date:'MMMM y' }}</p>
+                    <p class="font-medium text-[#000000] dark:text-textDark">{{ processOrder.packTime | date:'hh:mm a' }} on {{ getOrdinalDay(processOrder.packTime) }} {{ processOrder.packTime | date:'MMMM y' }}</p>
                 </div>
             </div>
         </div>
@@ -468,7 +468,7 @@
                         <div>
                             <p class="text-sm font-[400] text-[#7F7F7F] dark:text-gray-400 mb-1">QR Printed :</p>
                             <p class="font-[500] text-[#000000] dark:text-textDark">
-                                ---- by {{ processOrder.qrPrintTime | date:'hh:mm a' }} on {{ getOrdinalDay(processOrder.qrPrintTime) }} {{ processOrder.packTime | date:'MMMM y' }}
+                                {{processOrder.qrPrintBy }} by {{ processOrder.qrPrintTime | date:'hh:mm a' }} on {{ getOrdinalDay(processOrder.qrPrintTime) }} {{ processOrder.qrPrintTime | date:'MMMM y' }}
                             </p>
                         </div>
                         <div>

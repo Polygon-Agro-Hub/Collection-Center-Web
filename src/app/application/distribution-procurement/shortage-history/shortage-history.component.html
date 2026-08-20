@@ -132,12 +132,12 @@
               </p>
             </div>
 
-            <div class="mr-8">
+            <div class="mr-20">
               <p class="text-xs text-[#000000] dark:text-textDark mb-1">
                 1st Assigned By
               </p>
-              <p class="font-semibold text-[#292929] dark:text-textDark">
-                {{ item.firstAssignedBy || "----" }}
+              <p class="font-semibold text-[#292929] dark:text-textDark" [title]="item.firstAssignedBy || '----'">
+                {{ truncateText(item.firstAssignedBy) }}
               </p>
             </div>
 

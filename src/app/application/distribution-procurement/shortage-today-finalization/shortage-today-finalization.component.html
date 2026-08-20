@@ -27,7 +27,7 @@
         <!-- No Data -->
         <div *ngIf="shortageItems.length === 0 && !isLoading"
             class="flex flex-col items-center justify-center w-full py-20">
-            <p class="text-[#494949] my-6 dark:text-textDark text-lg">-- No Data Available --</p>
+            <p class="text-[#494949] my-6 dark:text-textDark">-- No Data Available --</p>
             <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20 opacity-80" />
         </div>
 
@@ -190,7 +190,7 @@
         </div>
 
         <p class="text-[#4B5563] dark:text-textDark text-base leading-relaxed mb-7" *ngIf="itemPendingFinalize">
-            Are you sure you want to assign {{ itemPendingFinalize.shortageKg | number:'1.0-2' }} kg of {{
+            Are you sure you want to finalize {{ itemPendingFinalize.shortageKg | number:'1.0-2' }} kg of {{
             itemPendingFinalize.itemName
             }}
             to {{ itemPendingFinalize.selectedDC?.value }}
@@ -199,13 +199,13 @@
 
         <div class="flex justify-center gap-4">
             <button
-                class="bg-[#F6F7F9] hover:bg-[#e5e7eb] text-[#6B7D8C] font-semibold py-2 px-10 rounded-xl shadow-md border border-[#95A1AC] transition-colors leading-tight"
+                class="bg-[#F6F7F9] hover:bg-[#e5e7eb] text-[#6B7D8C] font-semibold py-2 px-10 rounded-xl shadow-lg border border-[#95A1AC] transition-colors leading-tight"
                 [disabled]="isFinalizing" (click)="onCancelFinalize()">
                 No<br>
                 <span class="font-normal text-sm">Go Back</span>
             </button>
             <button
-                class="bg-[#415CFF] hover:bg-[#3549e0] text-white font-semibold py-2 px-10 rounded-xl shadow-md transition-colors disabled:opacity-60 leading-tight"
+                class="bg-[#415CFF] hover:bg-[#3549e0] text-white font-semibold py-2 px-10 rounded-xl shadow-lg transition-colors disabled:opacity-60 leading-tight"
                 [disabled]="isFinalizing" (click)="onConfirmFinalize()">
                 <ng-container *ngIf="!isFinalizing">
                     Yes<br>

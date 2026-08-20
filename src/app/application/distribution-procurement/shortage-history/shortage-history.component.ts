@@ -264,6 +264,14 @@ isPrevToday() {
   }
 
   /**
+   * Truncate text to a max length, appending an ellipsis when cut
+   */
+  truncateText(value: string | undefined, maxLength: number = 20): string {
+    if (!value) return '----';
+    return value.length > maxLength ? `${value.slice(0, maxLength)}...` : value;
+  }
+
+  /**
    * Navigate back to previous page
    */
   goBack(): void {

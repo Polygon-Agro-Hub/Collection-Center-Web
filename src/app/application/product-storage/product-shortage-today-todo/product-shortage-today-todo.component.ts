@@ -30,6 +30,7 @@ export class ProductShortageTodayTodoComponent implements OnInit {
 
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Assigned', 'Not Assigned'];
+  isOfficerAssigned: boolean = false
 
   toggleStatusDropdown() {
     this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
@@ -62,13 +63,11 @@ afterSixPm!: boolean;
   }
 
   getAllShortageTodayToDo(status: string = this.selectStatus, search: string = this.searchText) {
-    console.log('status', this.selectStatus)
     this.isLoading = true;
     this.DistributionSrv.fetchAllShortageTodayToDo(status, search).subscribe(
       (res) => {
         this.itemsArr = res.data
         this.officersArr = res.officers
-        console.log('itemsArr', this.itemsArr)
         if (res.data.length === 0) {
           this.hasData = false;
         } else {
@@ -114,6 +113,7 @@ afterSixPm!: boolean;
 
   openAssignOfficerModel(item: ShortageProducts) {
     this.selectedItem = item
+    this.isOfficerAssigned = item.isAssigned
     this.isModalOpen = true;
   }
 
@@ -132,6 +132,8 @@ afterSixPm!: boolean;
  assignOfficer() {
   this.isLoading = true;
 
+  // this.officerEdit = 
+
   const shortageId = this.selectedItem.id;
   const shortageAssignId = this.selectedItem.shortageAssignId;
 
@@ -143,9 +145,16 @@ afterSixPm!: boolean;
 
         if (res.success) {
           this.isModalOpen = false;
-          this.toastSrv.success('Officer assigned Successfully.');
+          if (!this.isOfficerAssigned) {
+          this.toastSrv.success('Officer Assigned Successfully.');
+          } else if (this.isOfficerAssigned) {
+            this.toastSrv.success('Officer Updated Successfully.');
+          }
+
           this.getAllShortageTodayToDo();
               this.selectedOfficerId = null;
+              this.selectedOfficerId = null;
+
         }
       },
       error: (err) => {
@@ -173,6 +182,7 @@ class ShortageProducts {
   assignOfficerId!: number | null;
   empId!: string;
   price!: number;
+  isAssigned!: boolean
 }
 
 

@@ -76,23 +76,13 @@ export class RedefineTodoOrdersComponent implements OnInit {
       )
       .subscribe({
         next: (response) => {
-          console.log('API Response:', response);
-
           if (response && response.data) {
             this.orders = response.data
-            // .filter(
-            //   (order: { packingStatus: string }) =>
-            //     order.packingStatus === 'Todo'
-            // );
-            console.log('Filtered Orders:', this.orders);
             this.totalItems = response.total || response.totalCount || 0;
             this.hasData = response.total === 0 ? false : true;
           } else {
             const allOrders = Array.isArray(response) ? response : [];
             this.orders = allOrders
-            // .filter(
-            //   (order) => order.packingStatus === 'Todo'
-            // );
             this.totalItems = this.orders.length;
           }
 
@@ -138,8 +128,6 @@ export class RedefineTodoOrdersComponent implements OnInit {
   }
 
   onDateChange(newDate: string | Date | null) {
-    console.log('newDate', newDate);
-  
     let dateString = '';
   
     if (newDate instanceof Date) {
@@ -155,8 +143,6 @@ export class RedefineTodoOrdersComponent implements OnInit {
   }
 
   onDateChange2(newDate: string | Date | null) {
-    console.log('newDate', newDate);
-  
     let dateString = '';
   
     if (newDate instanceof Date) {
@@ -170,22 +156,6 @@ export class RedefineTodoOrdersComponent implements OnInit {
     this.dateFilter = dateString; // ✅ assign as string
     this.fetchOrders();
   }
-  // onDateSelect(): void {
-  //   this.page = 1;
-  //   this.fetchOrders();
-  // }
-
-  // onDateClear(): void {
-  //   this.dateFilter1 = null;
-  //   this.page = 1;
-  //   this.fetchOrders();
-  // }
-
-  // onDateFilterClear(): void {
-  //   this.dateFilter = null;
-  //   this.page = 1;
-  //   this.fetchOrders();
-  // }
 
   onPageChange(event: number): void {
     this.page = event;

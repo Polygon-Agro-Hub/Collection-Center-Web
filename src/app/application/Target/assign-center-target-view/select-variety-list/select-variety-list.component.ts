@@ -47,11 +47,9 @@ export class SelectVarietyListComponent implements OnInit {
         this.cropsArr = res.items
         this.cropCount = res.items.length;
         this.hasData = this.cropsArr.length > 0 ? true : false;
-        console.log('hasData', this.hasData)
         this.totalItems = res.total;
         this.isLoading = false;
         this.isInitialData = this.cropsArr.length > 0 ? true : false;
-        console.log('isInitialData', this.isInitialData)
       }
     )
   }
@@ -63,10 +61,8 @@ export class SelectVarietyListComponent implements OnInit {
         this.cropsArr = res.items
         this.cropCount = res.items.length;
         this.hasData = this.cropsArr.length > 0 ? true : false;
-        console.log('hasData', this.hasData)
         this.totalItems = res.total;
         this.isLoading = false;
-        console.log('isInitialData', this.isInitialData)
       }
     )
   }

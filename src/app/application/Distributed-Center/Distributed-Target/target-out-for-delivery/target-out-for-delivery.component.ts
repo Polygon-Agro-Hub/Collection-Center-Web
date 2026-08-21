@@ -1,4 +1,4 @@
-import { CommonModule, DatePipe } from '@angular/common';
+import { CommonModule, DatePipe, Location } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -9,7 +9,6 @@ import { ComplaintsService } from '../../../../services/Complaints-Service/compl
 import Swal from 'sweetalert2';
 import { ToastAlertService } from '../../../../services/toast-alert/toast-alert.service';
 import { CustomDatepickerComponent } from "../../../../components/custom-datepicker/custom-datepicker.component";
-
 
 @Component({
   selector: 'app-target-out-for-delivery',
@@ -101,16 +100,15 @@ export class TargetOutForDeliveryComponent implements OnInit {
     private ComplainSrv: ComplaintsService,
     private DistributionSrv: DistributionServiceService,
     private toastSrv: ToastAlertService,
-    private route: ActivatedRoute
+    private route: ActivatedRoute,
+        private location: Location
   ) { }
 
 
   ngOnInit(): void {
-            console.log('centerId1', this.centerId)
 
 const segments = this.router.url.split('/');
 this.tab = segments[1]
-console.log('segments', segments[1])
 
 if (segments[1] === 'distribution-center') {
   this.centerId = Number(this.route.snapshot.paramMap.get('id'));
@@ -130,10 +128,8 @@ if (segments[1] === 'distribution-center') {
     this.DistributionSrv.getOutForDeliveryOrders(status, search, type, timeSlot, row, selectDate, centerId).subscribe(
       (res) => {
         this.ordersArr = res.items
-        console.log('ordersArr', this.ordersArr)
         this.rowIndexes = res.rowIndexes;
         this.rowDropdownOptions = this.rowIndexes
-        console.log('rowIndexes', this.rowIndexes)
         this.centerName = res.centerName;
         this.totalItems = res.items.length | 0;
                 this.listView = true;
@@ -406,18 +402,15 @@ if (segments[1] === 'distribution-center') {
     this.DistributionSrv.getOutForDeliveryOrderDeatils(poId).subscribe(
       (res) => {
         this.processOrder = res.items
-        console.log('processOrder', this.processOrder)
         this.isLoading = false;
         this.listView = false;
-
-        console.log('listView', this.listView, 'isLoading', this.isLoading)
       }
     )
     
   }
 
   goBack() {
-    // this.location.back();
+    this.ngOnInit();
   }
   
 }
@@ -458,6 +451,7 @@ export class ProcessOrder {
   packTime!: Date;
   qcDoneBy!: string;
     qrPrintTime!: Date;
+    qrPrintBy!: string;
 
   packages: OrderPackage[] = [];
   additionalItems: AdditionalItem[] = [];
@@ -477,7 +471,7 @@ export class PackageItem {
   image!: string;
   qty!: number;
   isPacked!: boolean;
-  packingTime!: string | null;
+  packingTime!: Date;
   packedByOfficer!: string;
 }
 
@@ -488,7 +482,7 @@ export class AdditionalItem {
   qty!: number;
   unit!: string;
   isPacked!: boolean;
-  packingTime!: string | null;
+  packingTime!: Date;
   packedByOfficer!: string;
 }
 

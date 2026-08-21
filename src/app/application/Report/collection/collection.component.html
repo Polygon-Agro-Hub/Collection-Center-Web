@@ -119,7 +119,7 @@
                             <th class="px-3 py-3 text-left text-base font-medium"
                                 *ngIf="logingRole === 'Collection Centre Head'">Centre Name</th>
                             <th class="px-3 py-3 text-left text-base font-medium">Crop</th>
-                            <th class="px-3 py-3 text-left text-base font-medium ">Variety</th>
+                            <th class="px-1 py-3 text-left text-base font-medium w-52">Variety</th>
                             <th class="px-3 py-3 text-center text-base font-medium ">Quantity A (kg)</th>
                             <th class="px-3 py-3 text-center text-base font-medium">Quantity B (kg)</th>
                             <th class="px-3 py-3 text-center text-base font-medium">Quantity C (kg)</th>
@@ -143,7 +143,7 @@
                             <td class="px-3 py-4 text-base text-gray-900 dark:text-gray-300">
                                 {{ item.cropNameEnglish || '-' }}
                             </td>
-                            <td class="px-3 py-4 text-base text-left text-gray-900 dark:text-gray-300">
+                            <td class="px-1 py-4 w-52 text-base text-left text-gray-900 dark:text-gray-300">
                                 {{ item.varietyNameEnglish || '-' }}
                             </td>
                             <td class="px-3 py-4 text-base text-center dark:text-gray-300">{{item.totalGradeAQuantity |

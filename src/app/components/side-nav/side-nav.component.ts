@@ -169,14 +169,14 @@ export const MENU_ITEMS = [
     permission: ['Distribution Centre Manager'],
   },
 
-  {
-    id: 15,
-    key: 'officer-targets',
-    path: '/officer-targets',
-    label: 'Officer Targets',
-    icon: 'fa-solid fa-user-plus',
-    permission: ['Distribution Centre Manager'],
-  },
+  // {
+  //   id: 15,
+  //   key: 'officer-targets',
+  //   path: '/officer-targets',
+  //   label: 'Officer Targets',
+  //   icon: 'fa-solid fa-user-plus',
+  //   permission: ['Distribution Centre Manager'],
+  // },
 
 
   {
@@ -280,7 +280,6 @@ export class SideNavComponent {
 
   ) {
     this.role = tokenSrv.getUserDetails().role;
-    // console.log('role', this.role)
     this.companyLogo = tokenSrv.getUserDetails().logo;
     this.companyFavicon = tokenSrv.getUserDetails().favicon;
     this.setActiveTabFromRoute();

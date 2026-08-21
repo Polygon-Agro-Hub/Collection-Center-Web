@@ -176,7 +176,8 @@
             <app-searchable-dropdown id="district" name="district" [items]="districtItems"
                         [placeholder]="'Select a district'" [searchPlaceholder]="'Search districts...'"
                         [(ngModel)]="centerData.district" #district="ngModel"
-                        (ngModelChange)="onDistrictChange($event)"></app-searchable-dropdown>
+                        (ngModelChange)="onDistrictChange($event)" searchInputClass="text-textLight dark:text-textDark"
+                        borderClass="border border-gray-300"></app-searchable-dropdown>
             <p *ngIf="!centerData.district && district.touched" class="text-red-500 text-sm">
                 District is required.
             </p>

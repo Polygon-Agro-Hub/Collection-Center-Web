@@ -52,8 +52,6 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
     this.route.queryParams.subscribe(params => {
       this.officerId = params['officerId'];
       this.empId = params['empId'];
-
-      console.log('officerId', this.officerId)
     });
 
     this.fetchTargetDetalis();
@@ -88,18 +86,7 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
   // 5. Add selection change handler
   onOfficerSelectionChange(selectedValue: string) {
     this.selectedOfficerId = selectedValue || '';
-    // Add any additional logic you need when category changes
-    console.log('Category selected:', selectedValue);
-
-    console.log('officer', this.selectedOfficerId)
   }
-
-  // onOfficerSelectionChange(selectedValue: string) {
-  //   this.selectedOfficerId = selectedValue ? Number(selectedValue) : null;
-
-  //   console.log('Officer selected:', this.selectedOfficerId);
-  //   console.log('officer', this.officer1);
-  // }
 
   filterOfficer() {
     if (!this.officerArr) return;
@@ -120,10 +107,6 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
   }
 
   onSubmit() {
-    // this.isLoading = true;
-
-    console.log('passAmount', this.passAmount)
-
     if (!this.selectedOfficerId) {
       this.isLoading = false;
       this.toastSrv.warning('Please fill all fields!')

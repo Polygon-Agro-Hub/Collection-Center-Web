@@ -102,9 +102,6 @@ export class CchPriceRequestComponent implements OnInit {
       (res) => {
         this.reqPriceArr = res.items;
         this.totalItems = res.total;
-        console.log(res)
-        console.log(res.items)
-
         if (res.items.length === 0) {
           this.hasData = false;
         } else {
@@ -129,11 +126,6 @@ export class CchPriceRequestComponent implements OnInit {
     this.searchText = '';
     this.fetchAllRequestPriceCCH(this.page, this.itemsPerPage, this.selectGrade, this.selectStatus, this.searchText);
   }
-
-  // cancelGrade() {
-  //   this.selectGrade = '';
-  //   this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade);
-  // }
 
   filterGrade() {
     this.fetchAllRequestPriceCCH(this.page, this.itemsPerPage, this.selectGrade, this.selectStatus, this.searchText);
@@ -174,8 +166,6 @@ export class CchPriceRequestComponent implements OnInit {
 
   openPopUp(requestId: number, officerId: number) {
     this.requestId = requestId;
-    console.log('requestId', requestId);
-  
     // Navigate with route parameter
     this.router.navigate([`cch-price-request/cch-center-price-list/${requestId}/${officerId}`]);
   }

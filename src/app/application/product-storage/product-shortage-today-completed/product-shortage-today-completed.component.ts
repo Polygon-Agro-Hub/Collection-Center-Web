@@ -44,12 +44,10 @@ export class ProductShortageTodayCompletedComponent implements OnInit {
   }
 
   getAllShortageTodayCompleted(search: string = this.searchText) {
-    console.log('searchText', this.searchText)
     this.isLoading = true;
     this.DistributionSrv.fetchAllShortageTodayCompleted(search).subscribe(
       (res) => {
         this.itemsArr = res.data
-        console.log('itemsArr', this.itemsArr)
         if (res.data.length === 0) {
           this.hasData = false;
         } else {

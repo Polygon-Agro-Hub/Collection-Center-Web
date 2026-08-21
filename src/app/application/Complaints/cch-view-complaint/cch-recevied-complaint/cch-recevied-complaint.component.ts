@@ -73,8 +73,6 @@ complainArr!: RecivedComplaint[];
       (res) => {
         this.complainArr = res.items
         this.totalItems = res.total;
-        console.log('totalItems', this.totalItems)
-        
         if (res.items.length === 0) {
           this.hasData = false;
         } else {
@@ -108,6 +106,7 @@ complainArr!: RecivedComplaint[];
   }
 
   onSearch() {
+    this.page = 1;
     this.searchText = this.searchText?.trim() || '';
     this.fetchAllreciveComplaint();
 
@@ -120,6 +119,7 @@ complainArr!: RecivedComplaint[];
   }
 
   filterStatus() {
+        this.page = 1;
     this.fetchAllreciveComplaint();
   }
 

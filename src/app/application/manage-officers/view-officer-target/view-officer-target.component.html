@@ -95,69 +95,114 @@
         <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
     </div>
 
-    <div *ngIf="hasData" class="mt-5 mr-5 relative">
-        <div class="border-gray-100 border-[2px] rounded-lg dark:border-[#202021] overflow-auto h-[calc(100vh-320px)]" #tableContainer>
-            <table class="w-full min-w-max divide-y-2">
-                <thead class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default sticky top-0 bg-white dark:bg-[#0F0F0F] z-10">
-                    <tr>
-                        <th class="px-2 py-3 text-left font-normal whitespace-nowrap">No</th>
-                        <th class="px-3 py-3 text-left font-normal whitespace-nowrap">Crop Name</th>
-                        <th class="px-3 py-3 text-left font-normal whitespace-nowrap">Variety Name</th>
-                        <th class="px-3 py-3 text-center font-normal whitespace-nowrap">Grade</th>
-                        <th class="px-5 py-3 text-left font-normal whitespace-nowrap">Target (kg)</th>
-                        <th class="px-5 py-3 text-left font-normal whitespace-nowrap">To Do (kg)</th>
-                        <th class="px-5 py-3 text-left font-normal whitespace-nowrap">Completed (kg)</th>
-                        <th class="px-3 py-3 text-center font-normal whitespace-nowrap">Status</th>
-                        <th class="px-3 py-3 text-left font-normal whitespace-nowrap" *ngIf="logingRole === 'Collection Centre Manager'">
-                        </th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
-                    <tr *ngFor="let item of selectedOfficerDataArr; let i = index" >
-                        <td class="px-2 py-4 text-gray-900 dark:text-gray-300">
-                            {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }} </td>
-                        <td class="px-3 py-4 text-black font-normal dark:text-gray-300 text-left whitespace-nowrap">{{item.cropNameEnglish}}
-                        </td>
-                        <td class="px-3 py-4 text-black font-normal dark:text-gray-300 text-left whitespace-nowrap">
-                            {{item.varietyNameEnglish}}</td>
-                        <td class="px-3 py-4 text-black font-normal dark:text-gray-300 text-center">{{item.grade}}</td>
-                        <td class="px-5 py-4 text-black font-normal dark:text-gray-300 text-left">{{item.target}}</td>
-                        <td class="px-5 py-4 text-black font-normal dark:text-gray-300 text-left">{{item.remaining}}</td>
-                        <td class="px-5 py-4 text-black font-normal dark:text-gray-300 text-left">{{item.complete}}</td>
-                        <td class="px-6 py-4 text-gray-[#000000] font-semibold dark:text-gray-300">
-                            <div class="flex justify-center">
-                              <span *ngIf="item.status === 'Pending'"
+<div *ngIf="hasData" class="mt-5 mr-5 relative flex-1 min-h-0">
+    <div
+        class="border-gray-100 border-[2px] rounded-lg dark:border-[#202021] overflow-auto h-full"
+        #tableContainer
+    >
+        <table class="w-full min-w-max divide-y-2">
+            <thead
+                class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default bg-white dark:bg-[#0F0F0F]">
+                <tr>
+                    <th class="px-2 py-3 text-left font-normal whitespace-nowrap">No</th>
+                    <th class="px-3 py-3 text-left font-normal whitespace-nowrap">Crop Name</th>
+                    <th class="px-3 py-3 text-left font-normal whitespace-nowrap">Variety Name</th>
+                    <th class="px-3 py-3 text-center font-normal whitespace-nowrap">Grade</th>
+                    <th class="px-5 py-3 text-left font-normal whitespace-nowrap">Target (kg)</th>
+                    <th class="px-5 py-3 text-left font-normal whitespace-nowrap">To Do (kg)</th>
+                    <th class="px-5 py-3 text-left font-normal whitespace-nowrap">Completed (kg)</th>
+                    <th class="px-3 py-3 text-center font-normal whitespace-nowrap">Status</th>
+
+                    <th
+                        class="px-3 py-3 text-left font-normal whitespace-nowrap"
+                        *ngIf="logingRole === 'Collection Centre Manager'">
+                    </th>
+                </tr>
+            </thead>
+
+            <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
+                <tr *ngFor="let item of selectedOfficerDataArr; let i = index">
+
+                    <td class="px-2 py-4 text-gray-900 dark:text-gray-300">
+                        {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }}
+                    </td>
+
+                    <td class="px-3 py-4 text-black font-normal dark:text-gray-300 text-left whitespace-nowrap">
+                        {{item.cropNameEnglish}}
+                    </td>
+
+                    <td class="px-3 py-4 text-black font-normal dark:text-gray-300 text-left whitespace-nowrap">
+                        {{item.varietyNameEnglish}}
+                    </td>
+
+                    <td class="px-3 py-4 text-black font-normal dark:text-gray-300 text-center">
+                        {{item.grade}}
+                    </td>
+
+                    <td class="px-5 py-4 text-black font-normal dark:text-gray-300 text-left">
+                        {{item.target}}
+                    </td>
+
+                    <td class="px-5 py-4 text-black font-normal dark:text-gray-300 text-left">
+                        {{item.remaining}}
+                    </td>
+
+                    <td class="px-5 py-4 text-black font-normal dark:text-gray-300 text-left">
+                        {{item.complete}}
+                    </td>
+
+                    <td class="px-6 py-4 text-gray-[#000000] font-semibold dark:text-gray-300">
+                        <div class="flex justify-center">
+
+                            <span
+                                *ngIf="item.status === 'Pending'"
                                 class="bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-8 py-1 h-full flex items-center">
                                 Pending
-                              </span>
-                              <span *ngIf="item.status === 'Exceeded'"
+                            </span>
+
+                            <span
+                                *ngIf="item.status === 'Exceeded'"
                                 class="bg-[#C8E0FF] text-[#415CFF] text-center rounded-lg px-6 py-1 h-full flex items-center">
                                 Exceeded
-                              </span>
-                              <span *ngIf="item.status === 'Completed'"
+                            </span>
+
+                            <span
+                                *ngIf="item.status === 'Completed'"
                                 class="bg-[#c0f8ac] text-[#30911a] text-center rounded-lg px-4 py-1 h-full flex items-center">
                                 Completed
-                              </span>
-                              <span *ngIf="item.status === 'Extra'"
+                            </span>
+
+                            <span
+                                *ngIf="item.status === 'Extra'"
                                 class="bg-[#FFE4C9] text-[#CD6700] text-center rounded-lg px-10 py-1 h-full flex items-center">
                                 Extra
-                              </span>
-                            </div>
-                           </td>
-                        <td class="px-3 py-4 text-gray-900 dark:text-gray-300"
-                            *ngIf="logingRole === 'Collection Centre Manager'">
-                            <i *ngIf="item.status === 'Pending'"
-                                class="fa-solid fa-pen-to-square text-blue-600 text-2xl cursor-pointer"
-                                (click)="navigateToNewPage(item.id)">
-                            </i>
-                            <i *ngIf="item.status !== 'Pending'" class="fa-solid fa-pen-to-square text-2xl text-gray-400">
-                            </i>
-                           </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
+                            </span>
+
+                        </div>
+                    </td>
+
+                    <td
+                        class="px-3 py-4 text-gray-900 dark:text-gray-300"
+                        *ngIf="logingRole === 'Collection Centre Manager'">
+
+                        <i
+                            *ngIf="item.status === 'Pending'"
+                            class="fa-solid fa-pen-to-square text-blue-600 text-2xl cursor-pointer"
+                            (click)="navigateToNewPage(item.id)">
+                        </i>
+
+                        <i
+                            *ngIf="item.status !== 'Pending'"
+                            class="fa-solid fa-pen-to-square text-2xl text-gray-400">
+                        </i>
+
+                    </td>
+
+                </tr>
+            </tbody>
+        </table>
     </div>
+</div>
 
     <div *ngIf="hasData" class="flex-shrink-0 flex items-center justify-center text-center mt-6">
         <button

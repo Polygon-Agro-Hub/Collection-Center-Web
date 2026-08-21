@@ -210,7 +210,6 @@ export class CollectionComponent implements OnInit {
       if (this.fromDatePicker) {
         this.fromDatePicker.selectedDate = null;
       }
-      console.log('this.fromDate', this.fromDate)
       this.toastSrv.warning("From date cannot be in the future.");
       return;
     }

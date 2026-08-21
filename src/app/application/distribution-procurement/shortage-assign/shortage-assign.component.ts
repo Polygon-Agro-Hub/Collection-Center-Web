@@ -48,7 +48,7 @@ centreSearchTerm: string = '';    // new
 
   assignQty: number = 0;
   selectedCentreId: number | null = null;
-  ceilingPercent: number = 0;
+  ceilingPercent: number = 1;
 
   showConfirmModal = false;
 
@@ -211,7 +211,7 @@ this.filteredCentres = this.centres; // new
   private resetAssignForm(): void {
     this.assignQty = 0;
     this.selectedCentreId = null;
-    this.ceilingPercent = 0;
+    this.ceilingPercent = 1;
   }
 
   onQtyInput(event: Event): void {
@@ -219,7 +219,7 @@ this.filteredCentres = this.centres; // new
     let value = input.value;
 
     // Match up to 2 decimal places, discard anything beyond
-    const match = value.match(/^\d*(\.\d{0,2})?/);
+    const match = value.match(/^\d*(\.\d{0,3})?/);
     const trimmed = match ? match[0] : value;
 
     if (trimmed !== value) {
@@ -237,22 +237,32 @@ this.filteredCentres = this.centres; // new
 
 onCeilingInput(event: Event): void {
   const input = event.target as HTMLInputElement;
-  let value = input.value;
 
   // Strip anything that isn't a digit
-  let digitsOnly = value.replace(/\D/g, '');
+  let sanitized = input.value.replace(/\D/g, '');
 
-  // Clamp to max 99 (allow typing to continue below min while in progress)
-  let num = digitsOnly === '' ? 0 : Number(digitsOnly);
+  // Strip leading zeros (e.g. "01" -> "1", "00" -> "")
+  sanitized = sanitized.replace(/^0+(?=\d)/, '');
+
+  // Cap to max 2 digits while typing (prevents "999" -> stops at "99")
+  if (sanitized.length > 2) {
+    sanitized = sanitized.slice(0, 2);
+  }
+
+  if (sanitized === '' || sanitized === '0') {
+    input.value = '';
+    this.ceilingPercent = 0; // treated as "invalid/empty" until blur
+    return;
+  }
+
+  let num = parseInt(sanitized, 10);
+
+  // Clamp to 99 in case of edge cases (e.g. "99" typed then another digit pasted)
   if (num > 99) {
     num = 99;
-    digitsOnly = '99';
   }
 
-  if (digitsOnly !== value) {
-    input.value = digitsOnly;
-  }
-
+  input.value = String(num);
   this.ceilingPercent = num;
 }
 
@@ -318,5 +328,9 @@ blockInvalidKey(event: KeyboardEvent): void {
     event.preventDefault();
   }
 }
+
+goDashboard() {
+    this.router.navigate([`/distribution-procurement`])
+  }
 
 }

@@ -46,6 +46,9 @@ export class ShortageHistoryComponent implements OnInit {
   selectedDate: string = '';
   maxSelectableDate: string = '';
 
+    currentTime!: Date;
+afterSixPm!: boolean;
+
   // Fallback images for known items — update the paths to match your assets folder
   private readonly itemImageMap: { [key: string]: string } = {
     garlic: 'assets/items/garlic.png',
@@ -70,9 +73,21 @@ export class ShortageHistoryComponent implements OnInit {
     const today = new Date();
     this.maxSelectableDate = this.formatDateToYYYYMMDD(today);
 
+    this.currentTime = new Date()
+    this.afterSixPm = this.currentTime.getHours() >= 18;
+
     this.loadShortageHistory();
 }
 
+isPrevToday() {
+  const selected = new Date(this.selectedDate);
+  const today = new Date();
+
+  selected.setHours(0, 0, 0, 0);
+  today.setHours(0, 0, 0, 0);
+
+  return selected < today;
+}
   /**
    * Helper method to format Date to YYYY-MM-DD
    */
@@ -231,7 +246,7 @@ export class ShortageHistoryComponent implements OnInit {
    * Get total records count as padded string
    */
   getTotalRecords(): string {
-    return this.shortageItems.length.toString().padStart(2, '0');
+    return (this.notAssignedItems.length + this.assignedItems.length).toString().padStart(2, '0');
   }
 
   /**
@@ -246,6 +261,14 @@ export class ShortageHistoryComponent implements OnInit {
    */
   getAssignedCount(): string {
     return this.assignedItems.length.toString().padStart(2, '0');
+  }
+
+  /**
+   * Truncate text to a max length, appending an ellipsis when cut
+   */
+  truncateText(value: string | undefined, maxLength: number = 20): string {
+    if (!value) return '----';
+    return value.length > maxLength ? `${value.slice(0, maxLength)}...` : value;
   }
 
   /**

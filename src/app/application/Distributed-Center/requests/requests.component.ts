@@ -84,34 +84,16 @@ export class RequestsComponent implements OnInit {
 
   ngOnInit(): void {
     this.date = new Date().toISOString().split('T')[0];
-    console.log('date', this.date)
-    // this.today = new Date().toISOString().split('T')[0];
     this.fetchAllRequests();
 
   }
-
-  // @HostListener('document:click', ['$event'])
-  // onDocumentClick(event: MouseEvent) {
-  //   const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
-  //   const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
-
-  //   if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
-  //     this.isStatusDropdownOpen = false;
-  //   }
-
-  // }
 
   fetchAllRequests(date: string = this.date, status: string = this.selectStatus, search: string = this.searchText) {
     this.isLoading = true;
     this.distributionSrv.getAllRequests(date, status, search).subscribe(
       (res) => {
-        console.log('res', res)
         this.requestArr = res.items;
-        console.log('requestArr', this.requestArr)
         this.totalItems = res.total;
-        console.log(res)
-        console.log(res.items)
-
         if (res.items.length === 0) {
           this.hasData = false;
         } else {
@@ -173,11 +155,7 @@ export class RequestsComponent implements OnInit {
   openReplacePopUp(item: Request) {
     this.selectedRequestObj = item;
     this.selectedRequestObj.replaceQty = this.selectedRequestObj.reqreplaceQty
-    console.log(this.selectedRequestObj.replaceQty, 'replaceqty', this.selectedRequestObj.reqreplaceQty, 'req')
-
     this.onQtyChange();
-    console.log('selectedRequestObj', this.selectedRequestObj);
-
     // Start loading
     this.isLoading = true;
     this.hasData = false;
@@ -186,18 +164,12 @@ export class RequestsComponent implements OnInit {
       .getProductsForUser(this.selectedRequestObj.rrId)
       .subscribe(
         (res) => {
-          console.log(res);
-
           this.productsArr = res?.products || [];
           this.exlItemsArr = res?.exlItems || [];
           this.prfItemsArr = res?.prfItems || [];
           this.hasData = this.productsArr.length > 0;
 
-          console.log('exlItemsArr', this.exlItemsArr)
-          console.log('prfItemsArr', this.prfItemsArr)
           this.productId = String(this.selectedRequestObj?.replaceProductId || '');
-          console.log('productId', this.productId);
-
           this.isLoading = false;
         },
         (error) => {
@@ -218,9 +190,6 @@ export class RequestsComponent implements OnInit {
 
     this.distributionSrv.rejectRequest(this.selectedRequestObj).subscribe({
       next: (res) => {
-        console.log('Approval response:', res);
-        console.log('res', res)
-
         if (res.data.success) {
           this.toastSrv.success('Request rejected successfully.')
           this.fetchAllRequests();
@@ -240,13 +209,10 @@ export class RequestsComponent implements OnInit {
 
   onApprove() {
     this.isReplacePopUpOpen = false;
-    console.log('selectedRequestObj', this.selectedRequestObj);
     this.isLoading = true;
 
     this.distributionSrv.approveRequest(this.selectedRequestObj).subscribe({
       next: (res) => {
-        console.log('Approval response:', res);
-
         if (res.data.success) {
 
           this.toastSrv.success('Request approved successfully.')
@@ -301,8 +267,6 @@ export class RequestsComponent implements OnInit {
     const numericId = Number(this.productId); // convert string to number
     const selectedProduct = this.productsArr.find(p => p.id === numericId);
 
-    console.log('Selected Product:', selectedProduct);
-
     if (selectedProduct) {
       this.selectedRequestObj.replaceProductId = selectedProduct.id;
       this.selectedRequestObj.replaceProduct = selectedProduct.displayName;
@@ -311,8 +275,6 @@ export class RequestsComponent implements OnInit {
       this.selectedRequestObj.replaceUnitType = selectedProduct.unitType
       this.setIsPriceValid();
     }
-
-    console.log('prodid', this.selectedRequestObj.replaceProductId)
   }
 
   onQtyChange() {
@@ -342,7 +304,6 @@ export class RequestsComponent implements OnInit {
 
   setIsPriceValid() {
     this.isPriceValid = true;
-    console.log('called')
     if ((this.selectedRequestObj.replacePrice > this.selectedRequestObj.prevDefineProductPrice) && this.selectedRequestObj.status === 'Approved') {
       this.isPriceValid = false;
     } else if ((this.selectedRequestObj.replacePrice > this.selectedRequestObj.currentProductPrice) && this.selectedRequestObj.status === 'Not Approved') {
@@ -352,14 +313,6 @@ export class RequestsComponent implements OnInit {
 
   openViewProductReplacementPopup(item: Request) {
     this.selectedRequestObj = item
-    console.log('selectedRequestObj', this.selectedRequestObj);
-
-    // this.productReplacementObj.replacedProductId = item.replaceProductId
-    // this.productReplacementObj.replacedProduct = item.replaceProduct
-    // this.productReplacementObj.definedProductPrice = item.replacePrice
-    // this.productReplacementObj.replacedProductQty = item.replaceQty
-    // this.productReplacementObj.replacedUnitPrice = item.replaceUnitPrice
-
     this.isViewProductReplacement = true;
   }
 

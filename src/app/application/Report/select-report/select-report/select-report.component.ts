@@ -25,8 +25,6 @@ export class SelectReportComponent {
 
   GoBtn() {
     this.type = this.reportType;
-
-    console.log('type', this.type)
   }
 
   clearSelection() {
@@ -47,8 +45,6 @@ export class SelectReportComponent {
   // 5. Add selection change handler
   onCategorySelectionChange(selectedValue: string) {
     this.reportType = selectedValue || '';
-    // Add any additional logic you need when category changes
-    console.log('Category selected:', selectedValue);
   }
 
 }

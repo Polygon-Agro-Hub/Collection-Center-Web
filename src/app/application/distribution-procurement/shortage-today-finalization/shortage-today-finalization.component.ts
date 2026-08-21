@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
-import { Component, HostListener } from '@angular/core';
+import { Component } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { DialogModule } from 'primeng/dialog';
 import { DistributionProcurementService } from '../../../services/disribution-procuement-service/distribution-procurement.service';
+import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
 
 interface ShortageItem {
   id: number;
@@ -11,13 +12,11 @@ interface ShortageItem {
   imageUrl: string;
   shortageKg: number;
   distributionCenters: DistributionCenterDto[];
-  filteredCenters: DistributionCenterDto[];
   selectedDC: DistributionCenterDto | null;
   marketPricePerKg: number;
   ceilingPercent: number;
   assignedBy: string;
   finalized: boolean;
-  dropdownOpen: boolean;
 }
 
 export interface DistributionCenterDto {
@@ -30,7 +29,7 @@ export interface DistributionCenterDto {
 @Component({
   selector: 'app-shortage-today-finalization',
   standalone: true,
-  imports: [CommonModule, FormsModule, DialogModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, DialogModule, LoadingSpinnerComponent, SerchableDropdownComponent],
   templateUrl: './shortage-today-finalization.component.html',
   styleUrl: './shortage-today-finalization.component.css',
 })
@@ -101,13 +100,11 @@ export class ShortageTodayFinalizationComponent {
         imageUrl: item.imageUrl,
         shortageKg: item.shortageKg,
         distributionCenters,
-        filteredCenters: [...distributionCenters],
         selectedDC: preselectedDC,
         marketPricePerKg: Number(item.marketPricePerKg) || 0,
         ceilingPercent: Number(item.ceilingPercent) || 0,
         assignedBy: item.assignedBy,
         finalized,
-        dropdownOpen: false,
       };
     });
   }
@@ -124,36 +121,15 @@ export class ShortageTodayFinalizationComponent {
     return `Rs. ${Number(value ?? 0).toFixed(2)}`;
   }
 
-  toggleCentreDropdown(item: ShortageItem) {
-    this.shortageItems.forEach((i) => {
-      if (i !== item) i.dropdownOpen = false;
-    });
-    item.dropdownOpen = !item.dropdownOpen;
-    if (item.dropdownOpen) {
-      item.filteredCenters = [...item.distributionCenters];
-    }
+  getCentreDropdownItems(item: ShortageItem) {
+    return item.distributionCenters.map((dc) => ({
+      value: dc,
+      label: `${dc.value} - ${this.getCentreNameOnly(dc)}`,
+    }));
   }
 
-  onCentreSearchInput(event: Event, item: ShortageItem) {
-    const value = (event.target as HTMLInputElement).value.toLowerCase().trim();
-    item.filteredCenters = item.distributionCenters.filter((dc) => {
-      const combined = `${dc.value}-${dc.fullName}`.toLowerCase();
-      const combined2 = `${dc.value} - ${dc.fullName}`.toLowerCase();
-      return combined.includes(value) || combined2.includes(value);
-    });
-  }
-
-  selectCentreOption(item: ShortageItem, dc: DistributionCenterDto) {
+  onCentreSelected(item: ShortageItem, dc: DistributionCenterDto | null) {
     item.selectedDC = dc;
-    item.dropdownOpen = false;
-  }
-
-  @HostListener('document:click', ['$event'])
-  onClickOutside(event: MouseEvent) {
-    const target = event.target as HTMLElement;
-    if (!target.closest('.centre-dropdown-wrapper')) {
-      this.shortageItems.forEach((i) => (i.dropdownOpen = false));
-    }
   }
 
   onCeilingInput(event: Event, item: ShortageItem) {

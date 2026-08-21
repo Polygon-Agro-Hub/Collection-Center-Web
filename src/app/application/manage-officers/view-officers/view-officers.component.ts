@@ -177,8 +177,6 @@ export class ViewOfficersComponent implements OnInit {
       (res) => {
         this.OfficerArr = res.items
         this.totalItems = res.total
-
-        console.log('total', this.totalItems)
         if (res.items.length === 0) {
           this.hasData = false;
         } else {
@@ -376,17 +374,7 @@ export class ViewOfficersComponent implements OnInit {
     this.fetchByRole();
   }
 
-  // applyStatusFilters() {
-  //   this.fetchByRole();
-  // }
-
-  // clearStatusFilter() {
-  //   this.selectStatus = ''
-  //   this.fetchByRole();
-  // }
-
   applyRoleFilters() {
-    console.log('selectRole', this.selectRole)
     this.page = 1;
     this.fetchByRole();
   }

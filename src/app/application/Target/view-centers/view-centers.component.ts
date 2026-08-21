@@ -288,25 +288,6 @@ onDistrictChange(selectedDistrict: string | null): void {
         this.router.navigate([`/centers/add-a-center`]);
     }
 
-//     dropdownItems = [
-//     { value: 'us', label: 'United States' },
-//     { value: 'ca', label: 'Canada' },
-//     { value: 'uk', label: 'United Kingdom' },
-//     { value: 'au', label: 'Australia' },
-//     { value: 'de', label: 'Germany' },
-//     { value: 'fr', label: 'France' },
-//     { value: 'jp', label: 'Japan' },
-//     { value: 'in', label: 'India' },
-//     { value: 'br', label: 'Brazil' },
-//     { value: 'mx', label: 'Mexico' }
-//   ];
-
-//   selectedValue: any = null;
-
-//   onSelectionChange(value: any): void {
-//     this.selectedValue = value;
-//     console.log('Selected:', value);
-//   }
 }
 
 class CenterData {

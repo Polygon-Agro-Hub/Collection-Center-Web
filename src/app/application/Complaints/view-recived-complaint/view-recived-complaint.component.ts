@@ -50,11 +50,7 @@ export class ViewRecivedComplaintComponent implements OnInit {
     this.isLoading = true;
     this.ComplainSrv.getComplainById(id).subscribe(
       (res) => {
-        console.log('getting');
-        console.log('res', res)
         this.compalintObj = res.data;
-        console.log('compalintObj', this.compalintObj)
-
         this.officerName =
           (this.compalintObj?.firstNameEnglish || '') + ' ' +
           (this.compalintObj?.lastNameEnglish || '');

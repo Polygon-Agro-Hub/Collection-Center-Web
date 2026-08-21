@@ -31,7 +31,6 @@ export class RedefineOrdersComponent implements OnInit {
   ngOnInit(): void {
   this.route.queryParams.subscribe(params => {
     const route = params['route'] || null;
-    console.log('route', route);
     if (route === 'dispatch') {
       this.isSelectToDo = false;
       this.isSelectSentToDispatch = true;
@@ -54,7 +53,6 @@ export class RedefineOrdersComponent implements OnInit {
   selectSentToDispatch() {
     this.isSelectSentToDispatch = true;
     this.isSelectToDo = false;
-    console.log('isSelectSentToDispatch', this.isSelectSentToDispatch)
   }
 
 }

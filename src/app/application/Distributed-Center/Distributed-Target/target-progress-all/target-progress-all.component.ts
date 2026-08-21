@@ -17,7 +17,7 @@ export class TargetProgressAllComponent implements OnInit {
 
   isSelectAll: boolean = true;
   isSelectToDo: boolean = false;
-  isSelectCompleted: boolean = false;
+  // isSelectCompleted: boolean = false;
   isSelectOutForDelivery: boolean = false;
   
 
@@ -32,28 +32,28 @@ export class TargetProgressAllComponent implements OnInit {
   selectAll() {
     this.isSelectAll = true;
     this.isSelectToDo = false;
-    this.isSelectCompleted = false;
+    // this.isSelectCompleted = false;
     this.isSelectOutForDelivery = false;
   }
 
   selectToDo() {
     this.isSelectAll = false;
     this.isSelectToDo = true;
-    this.isSelectCompleted = false;
+    // this.isSelectCompleted = false;
     this.isSelectOutForDelivery = false;
   }
 
-  selectCompleted() {
-    this.isSelectAll = false;
-    this.isSelectToDo = false;
-    this.isSelectCompleted = true;
-    this.isSelectOutForDelivery = false;
-  }
+  // selectCompleted() {
+  //   this.isSelectAll = false;
+  //   this.isSelectToDo = false;
+  //   this.isSelectCompleted = true;
+  //   this.isSelectOutForDelivery = false;
+  // }
 
   selectOutForDelivery() {
     this.isSelectAll = false;
     this.isSelectToDo = false;
-    this.isSelectCompleted = false;
+    // this.isSelectCompleted = false;
     this.isSelectOutForDelivery = true;
   }
 

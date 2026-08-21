@@ -107,8 +107,6 @@ export class TargetProgressTodoComponent implements OnInit {
         this.ordersArr = res.items
         this.rowIndexes = res.rowIndexes;
         this.rowDropdownOptions = this.rowIndexes
-        console.log('rowIndexes', this.rowIndexes)
-
         if (res.items.length === 0) {
           this.hasData = false;
         } else {
@@ -221,10 +219,6 @@ getDateColor(item: any): string {
   if (diffDays > 0) {
     return '#000000';
   }
-
-  // ----------------------
-  // Today's orders
-  // ----------------------
 
   const currentMinutes = now.getHours() * 60 + now.getMinutes();
 

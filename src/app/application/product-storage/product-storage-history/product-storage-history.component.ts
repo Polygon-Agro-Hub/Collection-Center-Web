@@ -57,12 +57,10 @@ export class ProductStorageHistoryComponent implements OnInit {
   }
 
   getAllShortageHistory(date: string | Date | null = this.selectedDate, search: string = this.searchText) {
-    console.log('searchText', this.searchText)
     this.isLoading = true;
     this.DistributionSrv.fetchAllShortageHistory(date, search).subscribe(
       (res) => {
         this.itemsArr = res.data
-        console.log('itemsArr', this.itemsArr)
         if (res.data.length === 0) {
           this.hasData = false;
         } else {

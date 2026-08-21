@@ -83,9 +83,6 @@ export class ViewPriceListComponent implements OnInit {
       this.priceListArr = res.items;
       this.totalItems = res.total;
 
-      // const newItems = [];
-
-      console.log(res);
       if (res.items.length === 0) {
         this.hasData = false;
       } else {
@@ -167,8 +164,6 @@ export class ViewPriceListComponent implements OnInit {
     if (this.editValue !== null && this.editValue !== undefined && !isNaN(value)) {
       this.editValue = parseFloat(value.toFixed(2));
     }
-  
-    console.log('edit', this.editValue, 'allowed?', this.isUpdateAllowed);
   }
   
   

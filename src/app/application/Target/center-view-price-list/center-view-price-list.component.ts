@@ -83,21 +83,13 @@ export class
       next: (res) => {
         this.priceListArr = res.items || [];
         this.centerName = res.centerData[0].centerName;
-        console.log('centerName', this.centerName);
         this.totalItems = res.total || 0;
   
         this.hasData = this.priceListArr.length > 0;
-  
-        // ✅ runs once after API finishes
         this.isMarketPricerExists = this.priceListArr.length > 0;
-  
-        console.log('this.isMarketPricerExists', this.isMarketPricerExists);
-        console.log('this.daata', this.hasData);
-  
         this.isLoading = false;
       },
       error: (err) => {
-        console.log(err);
         this.priceListArr = [];
         this.totalItems = 0;
         this.hasData = false;
@@ -152,12 +144,6 @@ export class
     this.selectGrade = '';
     this.fetchAllPriceList(this.centerId, this.page, this.itemsPerPage, this.selectGrade, this.searchText);
   }
-
-  // cancelGrade() {
-  //   // event.stopPropagation();
-  //   this.selectGrade = '';
-  //   this.fetchAllPriceList(this.centerId, this.page, this.itemsPerPage, this.selectGrade, this.searchText);
-  // }
 
   onSearch() {
     this.page = 1;

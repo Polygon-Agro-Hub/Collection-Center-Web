@@ -124,6 +124,7 @@ export class CchSendComplaintComponent implements OnInit {
   }
 
   filterStatus() {
+    this.page = 1;
     this.fetchAllreciveComplaint();
   }
 
@@ -141,6 +142,7 @@ export class CchSendComplaintComponent implements OnInit {
   // }
 
   filterEmployee() {
+    this.page = 1;
     this.fetchAllreciveComplaint();
   }
 
@@ -153,6 +155,7 @@ export class CchSendComplaintComponent implements OnInit {
   }
 
   onSearch() {
+    this.page = 1;
     this.searchText = this.searchText?.trim() || '';
     this.fetchAllreciveComplaint();
 

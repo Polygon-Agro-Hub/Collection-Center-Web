@@ -26,6 +26,25 @@
         Centre Name is required.
       </p>
     </div>
+
+    <!-- Registration Code -->
+    <div>
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Distribution Centre Reg Code</label>
+      <input
+        type="text"
+        class="form-control pointer-events-none mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+        [(ngModel)]="centerData.regCode"
+        name="regCode"
+        placeholder=" ----- "
+        required
+        #regCode="ngModel"
+        readonly
+      />
+      <p *ngIf="regCode.invalid && regCode.touched" class="text-red-500 text-sm">
+        Registration Code is required.
+      </p>
+    </div>
+    
     <!-- Country -->
     <div>
       <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Country</label>
@@ -205,23 +224,7 @@
         City is required.
       </p>
     </div>
-    <!-- Registration Code -->
-    <div>
-      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Distribution Centre Reg Code</label>
-      <input
-        type="text"
-        class="form-control pointer-events-none mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
-        [(ngModel)]="centerData.regCode"
-        name="regCode"
-        placeholder=" ----- "
-        required
-        #regCode="ngModel"
-        readonly
-      />
-      <p *ngIf="regCode.invalid && regCode.touched" class="text-red-500 text-sm">
-        Registration Code is required.
-      </p>
-    </div>
+    
 
 
 

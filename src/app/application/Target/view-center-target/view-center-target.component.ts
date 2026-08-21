@@ -81,16 +81,11 @@ export class ViewCenterTargetComponent implements OnInit {
 
   fetchAllTarget(centerId: number = this.centerId, page: number = 1, limit: number = this.itemsPerPage, status: string = this.selectStatus, search: string = this.searchText) {
     this.isLoading = true;
-    console.log('fetching')
-    console.log(this.hasData);
     this.TargetSrv.getAllCenterDailyTarget(centerId, page, limit, status, search).subscribe(
       (res) => {
         this.targetArr = res.items;
-        console.log(res.items)
         if (res.items.length > 0) {
           this.hasData = true;
-          console.log('fetched')
-          console.log(this.hasData);
         } else {
           this.hasData = false;
         }
@@ -111,11 +106,6 @@ export class ViewCenterTargetComponent implements OnInit {
   filterStatus() {
     this.fetchAllTarget();
   }
-
-  // cancelStatus() {
-  //   this.selectStatus = '';
-  //   this.fetchAllTarget();
-  // }
 
   cancelStatus(event?: MouseEvent) {
     if (event) {

@@ -11,11 +11,11 @@
 
     <div class="px-7 py-5 border-b border-gray-100 dark:border-gray-700">
       <h2 class="text-[16px] font-medium text-textLight dark:text-textDark m-0">
-        Shortage Today ({{ shortageCount.toString().padStart(2, '0') }})
+Shortage Today ({{ afterSixPm ? shortageCount.toString().padStart(2, '00') : 0 }})
       </h2>
     </div>
 
-    <div [class.min-h-[500px]]="isWaiting || shortageCount === 0" [class.flex]="isWaiting || shortageCount === 0"
+    <div *ngIf="hasData && afterSixPm" [class.min-h-[500px]]="isWaiting || shortageCount === 0" [class.flex]="isWaiting || shortageCount === 0"
       [class.items-center]="isWaiting || shortageCount === 0" [class.justify-center]="isWaiting || shortageCount === 0"
       [class.p-6]="!isWaiting && shortageCount > 0">
 
@@ -89,6 +89,19 @@
 
       </ng-template>
 
+    </div>
+
+    <div *ngIf="!afterSixPm" class="flex flex-col items-center w-full h-screen px-10 py-7 mt-12 ">
+                <img src="assets/images/ShortageNoData.png" alt="No Data" class="w-24 h-28" />
+        <p class="text-[#000000] my-6 dark:text-textDark text-[20px] font-[600]">--No assigned product shortages yet!--</p>
+        <p class="text-center font-[400]">--If there are any shortages, you will be able to view them <span class="text-[#494949] font-[700]">after 6:00 PM</span> on {{ currentTime | date:'d MMMM y' }},<br>
+once they have been assigned by the Procurement Officer.--</p>
+
+    </div>
+
+    <div *ngIf="!hasData && afterSixPm" class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6 ">
+        <p class="text-[#494949] my-6 dark:text-textDark">--No Product Shortages for today yet--</p>
+        <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
     </div>
   </div>
 </div>

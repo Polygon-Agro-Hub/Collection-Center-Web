@@ -271,7 +271,6 @@ export class EditDistributedOfficerComponent implements OnInit {
 
   onDriverCategorySelectionChange(selectedValue: string) {
     this.personalData.drvCategory = selectedValue || '';
-    console.log('drvCa', this.personalData.drvCategory)
   }
 
   @HostListener('document:click', ['$event'])
@@ -376,7 +375,9 @@ isSelected(item: any): boolean {
         this.personalData.jobRole = res.officerData.collectionOfficer.jobRole
         this.personalData.previousjobRole = res.officerData.collectionOfficer.jobRole;
         this.personalData.previousEmpId = res.officerData.collectionOfficer.empIdPrefix
-        this.selectedCenterName = res.officerData.collectionOfficer.regCode + ' - ' + res.officerData.collectionOfficer.centerName
+        this.selectedCenterName = (res.officerData.collectionOfficer.centerId && res.officerData.collectionOfficer.regCode && res.officerData.collectionOfficer.centerName)
+          ? res.officerData.collectionOfficer.regCode + ' - ' + res.officerData.collectionOfficer.centerName
+          : ''
 
         if (res.officerData.collectionOfficer.irmId != null) {
           this.selectedManager = res.managerName.empId + ' - ' + res.managerName.firstNameEnglish + ' ' + res.managerName.lastNameEnglish
@@ -417,7 +418,6 @@ isSelected(item: any): boolean {
         });
 
         this.isLoading = false;
-        console.log('personalData', this.personalData.drvCategory)
       }
     );
   }
@@ -1125,7 +1125,7 @@ isSelected(item: any): boolean {
 
     if (!this.personalData.email) {
       missingFields.push('Email is required');
-    } else if (!/^[A-Za-z0-9](?!.*\.\.)([A-Za-z0-9._%+-]{0,62}[A-Za-z0-9])?@[A-Za-z0-9.-]+\.[A-Za-z]{2,}$/.test(this.personalData.email)) {
+    } else if (!/^[a-zA-Z0-9]+([._-][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-][a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/.test(this.personalData.email)) {
       missingFields.push('Email - Must be in a valid format (format: example&#64;domain.com)');
     }
 

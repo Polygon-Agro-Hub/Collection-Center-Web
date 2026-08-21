@@ -68,7 +68,6 @@ export class CchCenterPriceListComponent implements OnInit {
     
     this.requestId = Number(this.route.snapshot.paramMap.get('requestId'));
     this.userId = Number(this.route.snapshot.paramMap.get('officerId'));
-    console.log('userId', this.userId)
     this.fetchAllPriceList();
 
     this.today = this.datePipe.transform(new Date(), 'yyyy/MM/dd') || '';
@@ -92,10 +91,6 @@ export class CchCenterPriceListComponent implements OnInit {
       this.isLoading = false;
       this.priceListArr = res.items;
       this.totalItems = res.total;
-
-      // const newItems = [];
-
-      console.log(res);
       if (res.items.length === 0) {
         this.hasData = false;
       } else {
@@ -110,8 +105,6 @@ export class CchCenterPriceListComponent implements OnInit {
     this.PriceListSrv.getPriceRequestCCH(requestId).subscribe(
       (res) => {
         this.priceRequestObj = res.items[0];
-        console.log(res)
-        console.log('object', this.priceRequestObj)
         this.isLoading = false;
       }
     )
@@ -207,7 +200,6 @@ export class CchCenterPriceListComponent implements OnInit {
           this.toastSrv.error('Failed to assign the target!');
         }
         this.editingIndex = null; // Reset editing state after successful save
-        console.log('fetching')
         this.fetchAllPriceList(this.userId, this.page, this.itemsPerPage);
       },
       (error) => {
@@ -241,7 +233,6 @@ export class CchCenterPriceListComponent implements OnInit {
 
   RejectStatus() {
     this.isLoading = true;
-    console.log('price', this.priceRequestObj)
     this.PriceListSrv.rejectStatus(this.priceRequestObj.id).subscribe(
       
       (res) => {
@@ -267,7 +258,6 @@ export class CchCenterPriceListComponent implements OnInit {
 
   ApproveStatus() {
     this.isLoading = true;
-    console.log('price', this.priceRequestObj)
     this.PriceListSrv.changeStatus(this.priceRequestObj.id, this.priceRequestObj.requestPrice, this.priceRequestObj.centerId).subscribe(
       
       (res) => {

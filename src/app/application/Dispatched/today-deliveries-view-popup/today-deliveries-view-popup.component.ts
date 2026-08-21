@@ -44,15 +44,15 @@ interface TrackingDetails {
 
 interface TimelineStep {
   type:
-    | 'out'
-    | 'pickedup'
-    | 'collected'
-    | 'started'
-    | 'hold'
-    | 'restart'
-    | 'return'
-    | 'delivered'
-    | 'return recieved';
+  | 'out'
+  | 'pickedup'
+  | 'collected'
+  | 'started'
+  | 'hold'
+  | 'restart'
+  | 'return'
+  | 'delivered'
+  | 'return recieved';
   payload: any;
 }
 
@@ -65,10 +65,9 @@ interface TimelineStep {
 })
 
 
-export class TodayDeliveriesViewPopupComponent implements OnInit, OnChanges
-{
+export class TodayDeliveriesViewPopupComponent implements OnInit, OnChanges {
   @Input() visible: boolean = false;
-  @Input() deliveryId!: number; 
+  @Input() deliveryId!: number;
   @Output() closePopup = new EventEmitter<void>();
 
   trackingDetails: TrackingDetails | null = null;
@@ -76,7 +75,7 @@ export class TodayDeliveriesViewPopupComponent implements OnInit, OnChanges
   error: string = '';
   steps: TimelineStep[] = [];
 
-  constructor(private distributionService: DistributionServiceService) {}
+  constructor(private distributionService: DistributionServiceService) { }
 
   ngOnInit(): void {
     if (this.visible) {
@@ -124,7 +123,7 @@ export class TodayDeliveriesViewPopupComponent implements OnInit, OnChanges
 
     steps.push({
       type: 'out',
-      payload: { outDlvrDate: c.outDlvrDate, regCode: c.regCode || '', centerName: c.centerName || '', empId: c.empId  }
+      payload: { outDlvrDate: c.outDlvrDate, regCode: c.regCode || '', centerName: c.centerName || '', empId: c.empId }
     });
 
     if (c.deliveredTime && c.centerId !== null) {
@@ -139,7 +138,7 @@ export class TodayDeliveriesViewPopupComponent implements OnInit, OnChanges
     if (d.collectTime) {
       steps.push({ type: 'collected', payload: { empId: d.empId, driverName: d.driverName, driverPhone: d.driverPhone, collectTime: d.collectTime } });
     } else {
-      return steps; 
+      return steps;
     }
 
     if (d.startTime) {
@@ -178,22 +177,22 @@ export class TodayDeliveriesViewPopupComponent implements OnInit, OnChanges
     // Convert "2026-02-10 09:51:50" -> "2026-02-10T09:51:50Z" (UTC)
     const utcString = dateStr.replace(" ", "T") + "Z";
     const date = new Date(utcString);
-  
+
     const time = date.toLocaleTimeString("en-US", {
       hour: "2-digit",
       minute: "2-digit",
       hour12: true
     });
-  
+
     const fullDate = date.toLocaleDateString("en-US", {
       month: "long",
       day: "2-digit",
       year: "numeric"
     });
-  
+
     return `${time} on ${fullDate}`;
   }
-  
+
 
   formatDateTime(dateString: string | null): string {
     if (!dateString) return 'N/A';

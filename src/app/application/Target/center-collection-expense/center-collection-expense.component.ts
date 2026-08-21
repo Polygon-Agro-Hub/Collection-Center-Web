@@ -100,17 +100,6 @@ export class CenterCollectionExpenseComponent implements OnInit {
     return parseFloat(num.toFixed(2));
   }
 
-  // Update the calculateTotalPayments method
-  // calculateTotalPayments(): void {
-  //   this.totalPaymentsAmount = this.farmerPaymentsArr.reduce((sum, payment) => {
-  //     const amount = this.formatNumberToTwoDecimals(payment.totalAmount);
-  //     return sum + (isNaN(amount) ? 0 : amount);
-  //   }, 0);
-
-  //   // Ensure the final total is also formatted to 2 decimal places
-  //   this.totalPaymentsAmount = this.formatNumberToTwoDecimals(this.totalPaymentsAmount);
-  // }
-
   onSearch() {
     this.page = 1;
     this.fetchFilteredPayments();
@@ -142,9 +131,9 @@ export class CenterCollectionExpenseComponent implements OnInit {
     }
 
     this.fromDate = this.selectedFromDate
-  ? this.selectedFromDate.toString().split('T')[0]
-  : '';
-   this.validateFromDate();
+      ? this.selectedFromDate.toString().split('T')[0]
+      : '';
+    this.validateFromDate();
   }
 
   onToDateChange(newDate: string | Date | null) {
@@ -163,9 +152,9 @@ export class CenterCollectionExpenseComponent implements OnInit {
     }
 
     this.toDate = this.selectedToDate
-  ? this.selectedToDate.toString().split('T')[0]
-  : '';
-   this.validateToDate();
+      ? this.selectedToDate.toString().split('T')[0]
+      : '';
+    this.validateToDate();
   }
 
 
@@ -191,9 +180,9 @@ export class CenterCollectionExpenseComponent implements OnInit {
         this.toDate = ''; // Reset toDate
         this.selectedToDate = null;
 
-      if (this.toDatePicker) {
-        this.toDatePicker.selectedDate = null;
-      }
+        if (this.toDatePicker) {
+          this.toDatePicker.selectedDate = null;
+        }
         this.toastSrv.warning("The 'To' date cannot be earlier than or same to the 'From' date.");
       }
     }
@@ -214,9 +203,9 @@ export class CenterCollectionExpenseComponent implements OnInit {
         this.fromDate = ''; // Reset toDate
         this.selectedFromDate = null;
 
-      if (this.fromDatePicker) {
-        this.fromDatePicker.selectedDate = null;
-      }
+        if (this.fromDatePicker) {
+          this.fromDatePicker.selectedDate = null;
+        }
         this.toastSrv.warning("The 'From' date cannot be Later than or same to the 'From' date.");
       }
     }
@@ -225,18 +214,6 @@ export class CenterCollectionExpenseComponent implements OnInit {
 
   goBtn() {
     if (!this.fromDate || !this.toDate) {
-
-      // if (this.fromDatePicker) {
-      //   this.fromDatePicker.selectedDate = null;
-      // }
-      // this.selectedFromDate = null;
-      // this.fromDate = ''
-
-      // if (this.toDatePicker) {
-      //   this.toDatePicker.selectedDate = null;
-      // }
-      // this.selectedToDate = null;
-      // this.toDate = ''
       this.toastSrv.warning("Please fill in all fields");
 
       this.hasData = false;

@@ -10,7 +10,7 @@ import { DchPackingLineComponent } from "./../../dch-packing-line/dch-packing-li
 @Component({
   selector: 'app-packing-targets',
   standalone: true,
-    imports: [CommonModule, FormsModule, TargetProgressOngoingComponent, TargetProgressTodoComponent, TargetProgressCompletedComponent, TargetOutForDeliveryComponent, DcmPositioningComponent, DchPackingLineComponent],
+  imports: [CommonModule, FormsModule, TargetProgressOngoingComponent, TargetProgressTodoComponent, TargetProgressCompletedComponent, TargetOutForDeliveryComponent, DcmPositioningComponent, DchPackingLineComponent],
   templateUrl: './packing-targets.component.html',
   styleUrl: './packing-targets.component.css'
 })

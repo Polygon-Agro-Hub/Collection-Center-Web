@@ -44,185 +44,183 @@
     </div>
 
 
-<div *ngIf="hasData && hasDataAndTime"
-    class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg mt-6 overflow-hidden">
+    <div *ngIf="hasData && hasDataAndTime"
+        class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg mt-6 overflow-hidden">
 
-    <!-- Entire table scrolls (header + body) -->
-    <div class="h-[calc(100vh-420px)] overflow-auto">
+        <!-- Entire table scrolls (header + body) -->
+        <div class="h-[calc(100vh-420px)] overflow-auto">
 
-        <div class="min-w-max">
+            <div class="min-w-max">
 
-            <div class="border-gray-100 border-[2px] dark:border-[#202021] rounded-lg">
+                <div class="border-gray-100 border-[2px] dark:border-[#202021] rounded-lg">
 
-                <table class="min-w-full divide-y-2 table-fixed">
+                    <table class="min-w-full divide-y-2 table-fixed">
 
-                    <!-- Header scrolls with table -->
-                    <thead class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F]">
+                        <!-- Header scrolls with table -->
+                        <thead class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F]">
 
-                        <tr>
-                            <th class="px-6 py-3 text-left font-medium w-16">
-                                No
-                            </th>
+                            <tr>
+                                <th class="px-6 py-3 text-left font-medium w-16">
+                                    No
+                                </th>
 
-                            <th class="px-6 py-3 text-left font-medium w-1/6">
-                                Crop Name
-                            </th>
+                                <th class="px-6 py-3 text-left font-medium w-1/6">
+                                    Crop Name
+                                </th>
 
-                            <th class="px-6 py-3 text-left font-medium w-1/6">
-                                Variety Name
-                            </th>
+                                <th class="px-6 py-3 text-left font-medium w-1/6">
+                                    Variety Name
+                                </th>
 
-                            <th class="px-6 py-3 text-center font-medium w-1/6">
-                                Grade
-                            </th>
+                                <th class="px-6 py-3 text-center font-medium w-1/6">
+                                    Grade
+                                </th>
 
-                            <th class="px-6 py-3 text-left font-medium whitespace-nowrap w-1/6">
-                                Target (kg)
-                            </th>
+                                <th class="px-6 py-3 text-left font-medium whitespace-nowrap w-1/6">
+                                    Target (kg)
+                                </th>
 
-                            <th class="px-6 py-3 text-left font-medium whitespace-nowrap w-1/6">
-                                Completed (kg)
-                            </th>
+                                <th class="px-6 py-3 text-left font-medium whitespace-nowrap w-1/6">
+                                    Completed (kg)
+                                </th>
 
-                            <th class="px-6 py-3 text-left font-medium whitespace-nowrap w-1/6">
-                                Target Date
-                            </th>
+                                <th class="px-6 py-3 text-left font-medium whitespace-nowrap w-1/6">
+                                    Target Date
+                                </th>
 
-                            <th class="px-6 py-3 text-center font-medium w-24">
-                                Status
-                            </th>
+                                <th class="px-6 py-3 text-center font-medium w-24">
+                                    Status
+                                </th>
 
-                            <th class="px-6 py-3 text-center font-medium w-24">
-                                Validity
-                            </th>
-                        </tr>
+                                <th class="px-6 py-3 text-center font-medium w-24">
+                                    Validity
+                                </th>
+                            </tr>
 
-                    </thead>
-
-
-                    <tbody class="bg-white dark:bg-[#1D1D1F]">
-
-                        <tr *ngFor="let item of targetArr; let i = index">
-
-                            <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
-                                {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }}
-                            </td>
+                        </thead>
 
 
-                            <td class="px-6 py-4 text-gray-900 dark:text-gray-300 truncate">
-                                {{item.cropNameEnglish}}
-                            </td>
+                        <tbody class="bg-white dark:bg-[#1D1D1F]">
+
+                            <tr *ngFor="let item of targetArr; let i = index">
+
+                                <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
+                                    {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }} </td>
 
 
-                            <td class="px-6 py-4 text-gray-900 dark:text-gray-300 truncate">
-                                {{item.varietyNameEnglish}}
-                            </td>
+                                <td class="px-6 py-4 text-gray-900 dark:text-gray-300 truncate">
+                                    {{item.cropNameEnglish}}
+                                </td>
 
 
-                            <td class="px-6 py-4 text-gray-900 dark:text-gray-300 text-center">
-                                {{item.grade}}
-                            </td>
+                                <td class="px-6 py-4 text-gray-900 dark:text-gray-300 truncate">
+                                    {{item.varietyNameEnglish}}
+                                </td>
 
 
-                            <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
-                                {{item.target}}
-                            </td>
+                                <td class="px-6 py-4 text-gray-900 dark:text-gray-300 text-center">
+                                    {{item.grade}}
+                                </td>
 
 
-                            <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
-                                {{ item.complete != null ? item.complete : '-' }}
-                            </td>
+                                <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
+                                    {{item.target}}
+                                </td>
 
 
-                            <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
-                                {{ item.date | date:'YYYY/MM/dd' }}
-                            </td>
+                                <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
+                                    {{ item.complete != null ? item.complete : '-' }}
+                                </td>
 
 
-                            <td class="px-6 py-4 font-semibold dark:text-gray-300">
-
-                                <div class="flex justify-center">
-
-                                    <span *ngIf="item.status === 'Pending'"
-                                        class="bg-[#F8FFA6] text-[#A8A100] min-w-32 text-center rounded-lg py-1">
-                                        Pending
-                                    </span>
+                                <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
+                                    {{ item.date | date:'YYYY/MM/dd' }}
+                                </td>
 
 
-                                    <span *ngIf="item.status === 'Exceeded'"
-                                        class="bg-[#C8E0FF] text-[#415CFF] min-w-32 text-center rounded-lg py-1">
-                                        Exceeded
-                                    </span>
+                                <td class="px-6 py-4 font-semibold dark:text-gray-300">
+
+                                    <div class="flex justify-center">
+
+                                        <span *ngIf="item.status === 'Pending'"
+                                            class="bg-[#F8FFA6] text-[#A8A100] min-w-32 text-center rounded-lg py-1">
+                                            Pending
+                                        </span>
 
 
-                                    <span *ngIf="item.status === 'Completed'"
-                                        class="bg-[#c0f8ac] text-[#30911a] min-w-32 text-center rounded-lg py-1">
-                                        Completed
-                                    </span>
+                                        <span *ngIf="item.status === 'Exceeded'"
+                                            class="bg-[#C8E0FF] text-[#415CFF] min-w-32 text-center rounded-lg py-1">
+                                            Exceeded
+                                        </span>
 
 
-                                    <span *ngIf="item.status === 'Extra'"
-                                        class="bg-[#FFE4C9] text-[#CD6700] min-w-32 text-center rounded-lg py-1">
-                                        Extra
-                                    </span>
-
-                                </div>
-
-                            </td>
+                                        <span *ngIf="item.status === 'Completed'"
+                                            class="bg-[#c0f8ac] text-[#30911a] min-w-32 text-center rounded-lg py-1">
+                                            Completed
+                                        </span>
 
 
-                            <td class="px-6 py-4 font-semibold dark:text-gray-300">
+                                        <span *ngIf="item.status === 'Extra'"
+                                            class="bg-[#FFE4C9] text-[#CD6700] min-w-32 text-center rounded-lg py-1">
+                                            Extra
+                                        </span>
 
-                                <div class="flex justify-center">
+                                    </div>
 
-                                    <span *ngIf="item.validity === 'Unassigned'"
-                                        class="bg-[#B7F4FF] text-[#008CA2] min-w-32 text-center rounded-lg py-1">
-                                        Unassigned
-                                    </span>
-
-
-                                    <span *ngIf="item.validity === 'Expired'"
-                                        class="bg-[#D9D9D9] text-[#8A8A8A] min-w-32 text-center rounded-lg py-1">
-                                        Expired
-                                    </span>
+                                </td>
 
 
-                                    <span *ngIf="item.validity === 'Active'"
-                                        class="bg-[#c0f8ac] text-[#30911a] min-w-32 text-center rounded-lg py-1">
-                                        Active
-                                    </span>
+                                <td class="px-6 py-4 font-semibold dark:text-gray-300">
 
-                                </div>
+                                    <div class="flex justify-center">
 
-                            </td>
+                                        <span *ngIf="item.validity === 'Unassigned'"
+                                            class="bg-[#B7F4FF] text-[#008CA2] min-w-32 text-center rounded-lg py-1">
+                                            Unassigned
+                                        </span>
 
 
-                        </tr>
+                                        <span *ngIf="item.validity === 'Expired'"
+                                            class="bg-[#D9D9D9] text-[#8A8A8A] min-w-32 text-center rounded-lg py-1">
+                                            Expired
+                                        </span>
 
-                    </tbody>
 
-                </table>
+                                        <span *ngIf="item.validity === 'Active'"
+                                            class="bg-[#c0f8ac] text-[#30911a] min-w-32 text-center rounded-lg py-1">
+                                            Active
+                                        </span>
+
+                                    </div>
+
+                                </td>
+
+
+                            </tr>
+
+                        </tbody>
+
+                    </table>
+
+                </div>
 
             </div>
 
         </div>
 
+
+        <!-- Always visible -->
+        <div class="flex items-center justify-center pt-6">
+
+            <button class="bg-[#415CFF] text-white text-lg font-semibold px-6 py-2 rounded-lg shadow-md"
+                (click)="downloadXlSheet()">
+
+                Download
+
+            </button>
+
+        </div>
+
+
     </div>
-
-
-    <!-- Always visible -->
-    <div class="flex items-center justify-center pt-6">
-
-        <button
-            class="bg-[#415CFF] text-white text-lg font-semibold px-6 py-2 rounded-lg shadow-md"
-            (click)="downloadXlSheet()">
-
-            Download
-
-        </button>
-
-    </div>
-
-
-</div>
 </div>

@@ -123,20 +123,20 @@ export class ViewDeliveryRevenueComponent implements OnInit, OnDestroy {
 
   onDateChange(newDate: string | Date | null) {
     let dateString: string;
-  
+
     if (!newDate) {
-      
+
       dateString = new Date().toISOString().split('T')[0];
-    } 
+    }
     else if (newDate instanceof Date) {
-      
+
       dateString = newDate.toISOString().split('T')[0];
-    } 
+    }
     else {
-      
+
       dateString = newDate;
     }
-  
+
     this.selectedDate = dateString;
     this.loadRevenueData();
   }
@@ -149,7 +149,7 @@ export class ViewDeliveryRevenueComponent implements OnInit, OnDestroy {
           const price = Number(item.handOverPrice);
           return sum + (isNaN(price) ? 0 : price);
         }
-  
+
         return sum;
       },
       0
@@ -243,7 +243,7 @@ export class ViewDeliveryRevenueComponent implements OnInit, OnDestroy {
   }
 
   getStatusClass(status: string): string {
-    switch (status) {      
+    switch (status) {
       case 'Delivered':
         return 'bg-[#BBFFC6] text-[#308233]';
       case 'Collected':
@@ -258,7 +258,7 @@ export class ViewDeliveryRevenueComponent implements OnInit, OnDestroy {
         return 'bg-[#FFDCDA] text-[#FF1100]';
       case 'Out For Delivery':
         return 'bg-[#FCD4FF] text-[#80118A]';
-  
+
       default:
         return 'bg-gray-200 text-gray-700';
     }
@@ -276,7 +276,7 @@ export class ViewDeliveryRevenueComponent implements OnInit, OnDestroy {
 
   getUpdatedTime(item: RevenueItem): Date | null {
     let statusOption = item.status;
-    switch (statusOption) {      
+    switch (statusOption) {
       case 'Delivered':
         return item.completeTime;
       case 'Collected':
@@ -291,7 +291,7 @@ export class ViewDeliveryRevenueComponent implements OnInit, OnDestroy {
         return item.returnRecivedTime;
       case 'Out For Delivery':
         return item.outDlvrDate;
-  
+
       default:
         return null;
     }

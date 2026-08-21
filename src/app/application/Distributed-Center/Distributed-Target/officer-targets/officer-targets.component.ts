@@ -21,7 +21,7 @@ export class OfficerTargetsComponent implements OnInit {
   hasData: boolean = true;
   totalItems!: number;
   selectedDate!: string;
-  isLoading:boolean = true;
+  isLoading: boolean = true;
 
   constructor(
     private router: Router,
@@ -61,10 +61,10 @@ export class OfficerTargetsComponent implements OnInit {
     let dateString: string;
     if (!newDate) {
       dateString = new Date().toISOString().split('T')[0];
-    } 
+    }
     else if (newDate instanceof Date) {
       dateString = newDate.toISOString().split('T')[0];
-    } 
+    }
     else {
       dateString = newDate;
     }

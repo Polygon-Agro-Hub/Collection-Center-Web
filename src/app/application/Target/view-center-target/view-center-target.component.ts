@@ -202,7 +202,7 @@ export class ViewCenterTargetComponent implements OnInit {
           a.download = `Current Centre Target Report For ${this.today}.xlsx`;
           a.click();
           window.URL.revokeObjectURL(url);
-          
+
           this.toastSrv.success('File Downloaded Successfully');
           this.isDownloading = false;
         },
@@ -211,7 +211,7 @@ export class ViewCenterTargetComponent implements OnInit {
           this.isDownloading = false;
         }
       });
-}
+  }
 
 }
 

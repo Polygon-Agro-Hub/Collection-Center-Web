@@ -24,7 +24,7 @@ export class SelectVarietyListComponent implements OnInit {
   totalItems: number = 0;
   itemsPerPage: number = 10;
   isLoading: boolean = true;
-  
+
   isInitialData: boolean = false;
 
   cropCount: number = 0;

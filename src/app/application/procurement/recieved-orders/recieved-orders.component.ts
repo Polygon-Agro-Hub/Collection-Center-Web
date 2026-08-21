@@ -324,41 +324,41 @@ export class RecievedOrdersComponent {
   }
 
   private downloadAggregatedReport(items: any[]) {
-  let queryParams = [];
+    let queryParams = [];
 
-  if (this.filterType) {
-    queryParams.push(`filterType=${this.filterType}`);
+    if (this.filterType) {
+      queryParams.push(`filterType=${this.filterType}`);
+    }
+
+    if (this.date) {
+      queryParams.push(`date=${this.date}`);
+    }
+
+    if (this.search) {
+      queryParams.push(`search=${encodeURIComponent(this.search)}`);
+    }
+
+    const queryString = queryParams.length > 0 ? `?${queryParams.join('&')}` : '';
+
+    // No aggregation — each item becomes a row
+    const worksheet = XLSX.utils.json_to_sheet(items.map(item => ({
+      'Crop': item.cropNameEnglish,
+      'Variety': item.varietyNameEnglish,
+      'Quantity (kg)': item.quantity,
+      'Ordered On': this.formatDateForExcel(item.createdAt),
+      'Scheduled Date': this.formatDateForExcel(item.sheduleDate),
+      'To Collection Centre': this.formatDateForExcel(item.toCollectionCentre),
+      'To Dispatch Centre': this.formatDateForExcel(item.toDispatchCenter)
+    })));
+
+    const workbook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(workbook, worksheet, 'Procurement Report');
+
+    const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
+
+    // Keep your original naming (with query params if you plan to use it)
+    this.saveAsExcelFile(excelBuffer, `Procument_Items_Report`);
   }
-
-  if (this.date) {
-    queryParams.push(`date=${this.date}`);
-  }
-
-  if (this.search) {
-    queryParams.push(`search=${encodeURIComponent(this.search)}`);
-  }
-
-  const queryString = queryParams.length > 0 ? `?${queryParams.join('&')}` : '';
-
-  // No aggregation — each item becomes a row
-  const worksheet = XLSX.utils.json_to_sheet(items.map(item => ({
-    'Crop': item.cropNameEnglish,
-    'Variety': item.varietyNameEnglish,
-    'Quantity (kg)': item.quantity,
-    'Ordered On': this.formatDateForExcel(item.createdAt),
-    'Scheduled Date': this.formatDateForExcel(item.sheduleDate), 
-    'To Collection Centre': this.formatDateForExcel(item.toCollectionCentre),
-    'To Dispatch Centre': this.formatDateForExcel(item.toDispatchCenter)
-  })));
-
-  const workbook = XLSX.utils.book_new();
-  XLSX.utils.book_append_sheet(workbook, worksheet, 'Procurement Report');
-
-  const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-
-  // Keep your original naming (with query params if you plan to use it)
-  this.saveAsExcelFile(excelBuffer, `Procument_Items_Report`);
-}
 
   private formatDateForExcel(dateString: string): string {
     if (!dateString) return '';

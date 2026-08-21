@@ -125,8 +125,7 @@
                         <td class="px-6 py-4 text-black font-semibold dark:text-gray-300">{{item.target}}</td>
                         <td class="px-6 py-4 text-black font-semibold dark:text-gray-300">{{item.remaining}}</td>
                         <td class="px-6 py-4 text-black font-semibold dark:text-gray-300">{{item.complete}}</td>
-                        <td
-                            class="px-6 py-4 text-black font-semibold dark:text-gray-300 ">
+                        <td class="px-6 py-4 text-black font-semibold dark:text-gray-300 ">
                             <div class="flex justify-center items-center">
                                 <span *ngIf="item.status === 'Pending'"
                                     class="bg-[#F8FFA6] min-w-28 text-[#A8A100] text-center rounded-lg px-6 py-1 ">
@@ -147,16 +146,14 @@
                             </div>
 
                         </td>
-                        <!-- <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
-                            <p class="text-[#646464] text-sm">{{ item.toDate | date: 'yyyy/MM/dd' }}</p>
-                            <p class="text-[#646464] text-sm">{{ item.toDate | date: 'hh:mm a' }}</p>
-                        </td> -->
+
                         <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
                             <i *ngIf="item.status === 'Pending'"
                                 class="fa-solid fa-pen-to-square text-blue-600 cursor-pointer text-xl"
                                 (click)="navigateToNewPage(item.id)">
                             </i>
-                            <i *ngIf="item.status !== 'Pending'" class="fa-solid fa-pen-to-square text-xl text-gray-400">
+                            <i *ngIf="item.status !== 'Pending'"
+                                class="fa-solid fa-pen-to-square text-xl text-gray-400">
                             </i>
                         </td>
                     </tr>

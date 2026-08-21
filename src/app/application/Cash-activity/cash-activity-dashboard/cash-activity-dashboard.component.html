@@ -1,92 +1,89 @@
 <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
 
 <div *ngIf="!isLoading">
-    <p class="font-semibold text[#424242] mb-4 mr-5 ml-0 dark:text-[#FFFFFF] dark:bg-black">Cash Activity</p>
+  <p class="font-semibold text[#424242] mb-4 mr-5 ml-0 dark:text-[#FFFFFF] dark:bg-black">Cash Activity</p>
 
-    <div 
-  class="fixed-width-container overflow-x-auto scrollbar-thin scrollbar-thumb-scrollBarColor scrollbar-track-transparent scrollbar-thumb-rounded-full">
-  <div class="pt-5 pb-5 w-full bg-white dark:bg-[#363636] shadow-lg rounded-lg">
-    <!-- Header Section -->
-    <div class="flex justify-center items-center pb-5 pr-12 pl-12 border-b border-[#4B5563]">
+  <div
+    class="fixed-width-container overflow-x-auto scrollbar-thin scrollbar-thumb-scrollBarColor scrollbar-track-transparent scrollbar-thumb-rounded-full">
+    <div class="pt-5 pb-5 w-full bg-white dark:bg-[#363636] shadow-lg rounded-lg">
+      <!-- Header Section -->
+      <div class="flex justify-center items-center pb-5 pr-12 pl-12 border-b border-[#4B5563]">
         <p class="font-semibold text-[#030308] dark:text-white text-center">
-          Cash Activity on {{ receivedDate | date:'MMMM d, y' }} ({{ (totPickOrders + totDeliveryOrders) < 10 ? '0' + (totPickOrders + totDeliveryOrders) :
-          (totPickOrders + totDeliveryOrders) }})
-        </p>
-    </div>
-
-    <!-- Pickup Orders Section -->
-    <div class="px-12 py-6 border-b border-[#4B5563]">
-      <!-- Pickup Header -->
-      <div class="flex justify-between items-center mb-6">
-        <div class="flex items-center gap-3">
-          <span class=" text-[#030308] dark:text-gray-300">Total Pickup Order Income Today :</span>
-          <span class=" font-bold text-gray-900 dark:text-white">Rs. {{totalPickupIncome | number:
-            '1.2-2'}}</span>
-        </div>
-        <button
-          (click)="viewPickupRevenue()"
-          class="text-blue-600 underline hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 flex items-center gap-1 text-base font-medium">
-          View Pickup Revenue
-          <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
-        </button>
+          Cash Activity on {{ receivedDate | date:'MMMM d, y' }} ({{ (totPickOrders + totDeliveryOrders) < 10 ? '0' +
+            (totPickOrders + totDeliveryOrders) : (totPickOrders + totDeliveryOrders) }}) </p>
       </div>
 
-      <!-- Pickup Metrics Grid -->
-      <div class="grid grid-cols-3 gap-4">
-        <div *ngFor="let metric of pickupMetrics"
-          class="relative flex flex-col rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-          <div class="flex items-center justify-between p-3">
-            <span class="text-sm text-[#4B5563] dark:text-gray-300">{{
-              metric.label
-              }}</span>
-            <div class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-700 dark:bg-gray-600">
-              <span class="text-white font-semibold text-sm">{{
-                metric.count
-                }}</span>
-            </div>
+      <!-- Pickup Orders Section -->
+      <div class="px-12 py-6 border-b border-[#4B5563]">
+        <!-- Pickup Header -->
+        <div class="flex justify-between items-center mb-6">
+          <div class="flex items-center gap-3">
+            <span class=" text-[#030308] dark:text-gray-300">Total Pickup Order Income Today :</span>
+            <span class=" font-bold text-gray-900 dark:text-white">Rs. {{totalPickupIncome | number:
+              '1.2-2'}}</span>
           </div>
-          <!-- Colored Bottom Border -->
-          <div class="h-1 w-full" [style.background-color]="metric.color"></div>
+          <button (click)="viewPickupRevenue()"
+            class="text-blue-600 underline hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 flex items-center gap-1 text-base font-medium">
+            View Pickup Revenue
+            <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+          </button>
         </div>
-      </div>
-    </div>
 
-    <!-- Delivery Orders Section -->
-    <div class="px-12 py-6">
-      <!-- Delivery Header -->
-      <div class="flex justify-between items-center mb-6">
-        <div class="flex items-center gap-3">
-          <span class="text-[#030308] dark:text-gray-300">Total Delivery Order Income Today :</span>
-          <span class="font-bold text-gray-900 dark:text-white">Rs. {{totalDeliveryIncome | number:
-            '1.2-2'}}</span>
-        </div>
-        <button
-          (click)="viewDeliveryRevenue()"
-          class="text-blue-600 underline hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 flex items-center gap-1 text-base font-medium">
-          View Delivery Revenue
-          <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
-        </button>
-      </div>
-
-      <!-- Delivery Metrics Grid -->
-      <div class="grid grid-cols-3 gap-4">
-        <div *ngFor="let metric of deliveryMetrics"
-          class="relative flex flex-col rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
-          <div class="flex items-center justify-between p-3">
-            <span class="text-sm text-[#4B5563] dark:text-gray-300">{{
-              metric.label
-              }}</span>
-            <div class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-700 dark:bg-gray-600">
-              <span class="text-white font-semibold text-sm">{{
-                metric.count
+        <!-- Pickup Metrics Grid -->
+        <div class="grid grid-cols-3 gap-4">
+          <div *ngFor="let metric of pickupMetrics"
+            class="relative flex flex-col rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+            <div class="flex items-center justify-between p-3">
+              <span class="text-sm text-[#4B5563] dark:text-gray-300">{{
+                metric.label
                 }}</span>
+              <div class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-700 dark:bg-gray-600">
+                <span class="text-white font-semibold text-sm">{{
+                  metric.count
+                  }}</span>
+              </div>
             </div>
+            <!-- Colored Bottom Border -->
+            <div class="h-1 w-full" [style.background-color]="metric.color"></div>
           </div>
-          <!-- Colored Bottom Border -->
-          <div class="h-1 w-full" [style.background-color]="metric.color"></div>
+        </div>
+      </div>
+
+      <!-- Delivery Orders Section -->
+      <div class="px-12 py-6">
+        <!-- Delivery Header -->
+        <div class="flex justify-between items-center mb-6">
+          <div class="flex items-center gap-3">
+            <span class="text-[#030308] dark:text-gray-300">Total Delivery Order Income Today :</span>
+            <span class="font-bold text-gray-900 dark:text-white">Rs. {{totalDeliveryIncome | number:
+              '1.2-2'}}</span>
+          </div>
+          <button (click)="viewDeliveryRevenue()"
+            class="text-blue-600 underline hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300 flex items-center gap-1 text-base font-medium">
+            View Delivery Revenue
+            <i class="fa-solid fa-arrow-up-right-from-square text-xs"></i>
+          </button>
+        </div>
+
+        <!-- Delivery Metrics Grid -->
+        <div class="grid grid-cols-3 gap-4">
+          <div *ngFor="let metric of deliveryMetrics"
+            class="relative flex flex-col rounded-lg border border-gray-200 dark:border-gray-700 overflow-hidden">
+            <div class="flex items-center justify-between p-3">
+              <span class="text-sm text-[#4B5563] dark:text-gray-300">{{
+                metric.label
+                }}</span>
+              <div class="flex items-center justify-center w-10 h-10 rounded-full bg-gray-700 dark:bg-gray-600">
+                <span class="text-white font-semibold text-sm">{{
+                  metric.count
+                  }}</span>
+              </div>
+            </div>
+            <!-- Colored Bottom Border -->
+            <div class="h-1 w-full" [style.background-color]="metric.color"></div>
+          </div>
         </div>
       </div>
     </div>
   </div>
-</div>
 </div>

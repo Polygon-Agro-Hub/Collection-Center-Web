@@ -62,7 +62,7 @@ export class CentersDashbordComponent implements OnInit {
         this.hasData = true;
       } else {
         this.hasData = false;
-    }
+      }
 
     });
   }
@@ -91,11 +91,11 @@ export class CentersDashbordComponent implements OnInit {
     this.router.navigate([`/centers/view-center-target/${this.centerId}`]);
   }
 
-  navigateCenterOfficers(){
+  navigateCenterOfficers() {
     this.router.navigate([`centers/center-view-officers/${this.centerId}`]);
   }
 
-  navigateCollectionExpenses(){
+  navigateCollectionExpenses() {
     this.router.navigate([`centers/center-collection-expense/${this.centerId}`]);
   }
 }

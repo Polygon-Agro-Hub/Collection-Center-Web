@@ -15,12 +15,13 @@
         <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Distribution Centre Name</label>
         <input type="text"
           class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F] "
-          [(ngModel)]="centerData.centerName" (input)="onTrimInput($event, centerData, 'centerName')" name="centerName" required #centerName="ngModel" />
+          [(ngModel)]="centerData.centerName" (input)="onTrimInput($event, centerData, 'centerName')" name="centerName"
+          required #centerName="ngModel" />
         <p *ngIf="centerName.invalid && centerName.touched" class="text-red-500 text-sm">
           Centre Name is required.
         </p>
       </div>
-      
+
 
       <div>
         <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Distribution Centre Reg
@@ -207,9 +208,8 @@
           <app-searchable-dropdown [items]="provinceItems" [placeholder]="'Province'"
             [searchPlaceholder]="'Search provinces...'" [clearable]="true" [showSelected]="true" id="province"
             name="province" [(ngModel)]="centerData.province" #provinceInput="ngModel"
-            (selectionChange)="onProvinceChange($event)"
-                        searchInputClass="text-textLight dark:text-textDark"
-                        borderClass="border border-gray-300">
+            (selectionChange)="onProvinceChange($event)" searchInputClass="text-textLight dark:text-textDark"
+            borderClass="border border-gray-300">
           </app-searchable-dropdown>
         </div>
 
@@ -226,7 +226,7 @@
             [searchPlaceholder]="'Search districts...'" [clearable]="true" [showSelected]="true" id="district"
             name="district" [(ngModel)]="centerData.district" #districtInput="ngModel"
             (selectionChange)="onDistrictChange($event)" searchInputClass="text-textLight dark:text-textDark"
-                        borderClass="border border-gray-300">
+            borderClass="border border-gray-300">
           </app-searchable-dropdown>
         </div>
 

@@ -19,7 +19,7 @@ export class SendedComplaintComponent implements OnInit {
   complainArr!: SentComplaint[];
   replyObj: Reply = new Reply();
   templateData!: TemplateData;
-  
+
   officerId!: number
 
   selectStatus: string = '';
@@ -212,8 +212,8 @@ class Reply {
   id!: number
   reply!: string
   language!: string
-  firstNameEnglish:string = '';
-  lastNameEnglish:string = '';
+  firstNameEnglish: string = '';
+  lastNameEnglish: string = '';
 }
 
 interface TemplateData {

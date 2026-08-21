@@ -1,4 +1,4 @@
-import { Component, OnInit, ElementRef, HostListener, ViewChild  } from '@angular/core';
+import { Component, OnInit, ElementRef, HostListener, ViewChild } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -44,7 +44,7 @@ export class ShortageAssignComponent implements OnInit {
   selectedItem: ShortageItem | null = null;
   centres: Centre[] = [];
   filteredCentres: Centre[] = [];   // new
-centreSearchTerm: string = '';    // new
+  centreSearchTerm: string = '';    // new
 
   assignQty: number = 0;
   selectedCentreId: number | null = null;
@@ -61,7 +61,7 @@ centreSearchTerm: string = '';    // new
     private router: Router,
     private location: Location,
     private procumentService: DistributionProcurementService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     this.itemId = Number(this.route.snapshot.paramMap.get('id'));
@@ -80,12 +80,12 @@ centreSearchTerm: string = '';    // new
     this.procumentService.getShortageDetailsById(this.itemId).subscribe({
       next: (res: any) => {
         this.centres = (res.centers || []).map((c: any) => ({
-  id: c.id,
-  code: c.regCode,
-  name: c.centerName,
-  label: `${c.regCode} ${c.centerName}`,
-}));
-this.filteredCentres = this.centres; // new
+          id: c.id,
+          code: c.regCode,
+          name: c.centerName,
+          label: `${c.regCode} ${c.centerName}`,
+        }));
+        this.filteredCentres = this.centres; // new
 
         this.selectedItem = {
           id: this.itemId,
@@ -109,17 +109,17 @@ this.filteredCentres = this.centres; // new
   }
 
   onCentreSearch(): void {
-  const term = this.centreSearchTerm.trim().toLowerCase();
+    const term = this.centreSearchTerm.trim().toLowerCase();
 
-  if (!term) {
-    this.filteredCentres = this.centres;
-    return;
+    if (!term) {
+      this.filteredCentres = this.centres;
+      return;
+    }
+
+    this.filteredCentres = this.centres.filter((c) =>
+      c.label.toLowerCase().includes(term)
+    );
   }
-
-  this.filteredCentres = this.centres.filter((c) =>
-    c.label.toLowerCase().includes(term)
-  );
-}
 
   loadAssignedDetails(): void {
     this.procumentService.getShortageAssignedDetails(this.itemId).subscribe({
@@ -230,51 +230,51 @@ this.filteredCentres = this.centres; // new
   }
 
   blockDecimalKey(event: KeyboardEvent): void {
-  if (event.key === '.' || event.key === ',') {
-    event.preventDefault();
-  }
-}
-
-onCeilingInput(event: Event): void {
-  const input = event.target as HTMLInputElement;
-
-  // Strip anything that isn't a digit
-  let sanitized = input.value.replace(/\D/g, '');
-
-  // Strip leading zeros (e.g. "01" -> "1", "00" -> "")
-  sanitized = sanitized.replace(/^0+(?=\d)/, '');
-
-  // Cap to max 2 digits while typing (prevents "999" -> stops at "99")
-  if (sanitized.length > 2) {
-    sanitized = sanitized.slice(0, 2);
+    if (event.key === '.' || event.key === ',') {
+      event.preventDefault();
+    }
   }
 
-  if (sanitized === '' || sanitized === '0') {
-    input.value = '';
-    this.ceilingPercent = 0; // treated as "invalid/empty" until blur
-    return;
+  onCeilingInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    // Strip anything that isn't a digit
+    let sanitized = input.value.replace(/\D/g, '');
+
+    // Strip leading zeros (e.g. "01" -> "1", "00" -> "")
+    sanitized = sanitized.replace(/^0+(?=\d)/, '');
+
+    // Cap to max 2 digits while typing (prevents "999" -> stops at "99")
+    if (sanitized.length > 2) {
+      sanitized = sanitized.slice(0, 2);
+    }
+
+    if (sanitized === '' || sanitized === '0') {
+      input.value = '';
+      this.ceilingPercent = 0; // treated as "invalid/empty" until blur
+      return;
+    }
+
+    let num = parseInt(sanitized, 10);
+
+    // Clamp to 99 in case of edge cases (e.g. "99" typed then another digit pasted)
+    if (num > 99) {
+      num = 99;
+    }
+
+    input.value = String(num);
+    this.ceilingPercent = num;
   }
 
-  let num = parseInt(sanitized, 10);
+  onCeilingBlur(event: Event): void {
+    const input = event.target as HTMLInputElement;
 
-  // Clamp to 99 in case of edge cases (e.g. "99" typed then another digit pasted)
-  if (num > 99) {
-    num = 99;
+    // Enforce min 1 once the user is done typing (covers 0, empty, and leading zeros)
+    if (!this.ceilingPercent || this.ceilingPercent < 1) {
+      this.ceilingPercent = 1;
+      input.value = '1';
+    }
   }
-
-  input.value = String(num);
-  this.ceilingPercent = num;
-}
-
-onCeilingBlur(event: Event): void {
-  const input = event.target as HTMLInputElement;
-
-  // Enforce min 1 once the user is done typing (covers 0, empty, and leading zeros)
-  if (!this.ceilingPercent || this.ceilingPercent < 1) {
-    this.ceilingPercent = 1;
-    input.value = '1';
-  }
-}
 
   formatNumber(value: number): string {
     // Convert to string and remove trailing zeros
@@ -282,19 +282,19 @@ onCeilingBlur(event: Event): void {
   }
 
   toggleCentreDropdown(): void {
-  this.isCentreDropdownOpen = !this.isCentreDropdownOpen;
-  if (this.isCentreDropdownOpen) {
+    this.isCentreDropdownOpen = !this.isCentreDropdownOpen;
+    if (this.isCentreDropdownOpen) {
+      this.centreSearchTerm = '';
+      this.filteredCentres = this.centres;
+    }
+  }
+
+  selectCentreOption(option: Centre): void {
+    this.selectedCentreId = option.id;
+    this.isCentreDropdownOpen = false;
     this.centreSearchTerm = '';
     this.filteredCentres = this.centres;
   }
-}
-
-  selectCentreOption(option: Centre): void {
-  this.selectedCentreId = option.id;
-  this.isCentreDropdownOpen = false;
-  this.centreSearchTerm = '';
-  this.filteredCentres = this.centres;
-}
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent): void {
@@ -307,29 +307,29 @@ onCeilingBlur(event: Event): void {
     }
   }
 
-blockInvalidKey(event: KeyboardEvent): void {
-  // Keys that must always be allowed through (navigation/editing)
-  const allowedKeys = [
-    'Backspace', 'Delete', 'Tab', 'Escape', 'Enter',
-    'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End',
-  ];
+  blockInvalidKey(event: KeyboardEvent): void {
+    // Keys that must always be allowed through (navigation/editing)
+    const allowedKeys = [
+      'Backspace', 'Delete', 'Tab', 'Escape', 'Enter',
+      'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End',
+    ];
 
-  if (allowedKeys.includes(event.key)) {
-    return;
+    if (allowedKeys.includes(event.key)) {
+      return;
+    }
+
+    // Allow copy/paste/select-all/cut shortcuts (Ctrl/Cmd + A/C/V/X)
+    if ((event.ctrlKey || event.metaKey) && ['a', 'c', 'v', 'x'].includes(event.key.toLowerCase())) {
+      return;
+    }
+
+    // Only allow digits 0-9; block everything else (e, E, +, -, ., ,, etc.)
+    if (!/^[0-9]$/.test(event.key)) {
+      event.preventDefault();
+    }
   }
 
-  // Allow copy/paste/select-all/cut shortcuts (Ctrl/Cmd + A/C/V/X)
-  if ((event.ctrlKey || event.metaKey) && ['a', 'c', 'v', 'x'].includes(event.key.toLowerCase())) {
-    return;
-  }
-
-  // Only allow digits 0-9; block everything else (e, E, +, -, ., ,, etc.)
-  if (!/^[0-9]$/.test(event.key)) {
-    event.preventDefault();
-  }
-}
-
-goDashboard() {
+  goDashboard() {
     this.router.navigate([`/distribution-procurement`])
   }
 

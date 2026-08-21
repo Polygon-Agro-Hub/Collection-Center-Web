@@ -19,7 +19,7 @@ export class TargetProgressAllComponent implements OnInit {
   isSelectToDo: boolean = false;
   // isSelectCompleted: boolean = false;
   isSelectOutForDelivery: boolean = false;
-  
+
 
   constructor() { }
 

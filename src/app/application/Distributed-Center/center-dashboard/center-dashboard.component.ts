@@ -24,8 +24,8 @@ export class CenterDashboardComponent implements OnInit {
 
   isSelectProgress: boolean = false;
   isSelectViewOfficers: boolean = false;
-  isSelectViewOutForDelivery: boolean =  false;
-  isSelectPackingLine: boolean =  true;
+  isSelectViewOutForDelivery: boolean = false;
+  isSelectPackingLine: boolean = true;
   isAddComplaintOpen: boolean = false;
   categoryArr: Category[] = [];
   category: string = '';

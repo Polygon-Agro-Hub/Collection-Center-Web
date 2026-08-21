@@ -1,4 +1,4 @@
-import { CommonModule, DatePipe, Location  } from '@angular/common';
+import { CommonModule, DatePipe, Location } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -26,18 +26,18 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
   totalOfficers: number = 0;
   isPass: boolean = false;
   officerId!: number;
-  date:  string = '';
+  date: string = '';
   totalItems: number = 0;
   hasData: boolean = true;
   selectedDate!: string;
-  isLoading:boolean = true;
+  isLoading: boolean = true;
   selectedOfficerId: number | '' = '';
   selectedEmpId!: string;
   selectedOfficer: string = '';
-  selectedOrderIds: number[] = []; 
-  selectableOrders:  orders[] = [];
+  selectedOrderIds: number[] = [];
+  selectableOrders: orders[] = [];
   allChecked: boolean = false;
-  filteredOrdersArr!: orders[] 
+  filteredOrdersArr!: orders[]
   isPassTarget = false;
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Pending', 'Completed', 'Opened'];
@@ -86,12 +86,12 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
     this.empId = this.route.snapshot.queryParamMap.get('empId');
 
     this.fetchSelectedOfficerTargets();
-    
+
   }
 
   fetchSelectedOfficerTargets(
-    officerId: number = this.officerId, 
-    search: string = this.searchText, 
+    officerId: number = this.officerId,
+    search: string = this.searchText,
     status: string = this.selectStatus,
     completingStatus: string = this.selectCompletingStatus,
     date: string = this.selectedDate
@@ -101,10 +101,10 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
       (res) => {
         this.ordersArr = res.items.map((item: any) => {
           let status = '';
-          
+
           const pkgStatus = item.packageStatus;
           const addStatus = item.additionalItemsStatus;
-          
+
           // Priority 1: If either is Pending, combinedStatus is Pending
           if (pkgStatus === 'Pending' || addStatus === 'Pending') {
             status = 'Pending';
@@ -128,7 +128,7 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
           else {
             status = 'Unknown';
           }
-        
+
           return {
             ...item,
             combinedStatus: status
@@ -140,12 +140,12 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
         this.selectableOrders = this.ordersArr.filter(
           item => item.combinedStatus === 'Pending' && item.lockStatus !== 1
         );
-        
+
         this.isLoading = false;
       }
     );
   }
-  
+
 
   fetchOfficers() {
     this.isLoading = true;
@@ -178,13 +178,13 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
   getDisplayDate(scheduleDate: string | Date): string {
     const today = new Date();
     const schedule = new Date(scheduleDate);
-  
+
     // Normalize times to midnight for accurate date-only comparison
     today.setHours(0, 0, 0, 0);
     schedule.setHours(0, 0, 0, 0);
-  
+
     const diffDays = Math.floor((schedule.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-  
+
     if (diffDays === 0) {
       return 'Today';
     } else if (diffDays === 1) {
@@ -193,10 +193,10 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
       return 'Day after tomorrow';
     } else {
       const day = schedule.getDate();
-      const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
-                          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
       const month = monthNames[schedule.getMonth()];
-  
+
       // Get ordinal for the day
       const ordinal = (n: number) => {
         if (n > 3 && n < 21) return 'th';
@@ -207,12 +207,12 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
           default: return 'th';
         }
       }
-  
+
       return `${day}${ordinal(day)} ${month}`;
     }
   }
-  
-  
+
+
 
   removeWithin(time: string): string {
     return time ? time.replace('Within ', '') : time;
@@ -220,231 +220,231 @@ export class ViewDistributionOfficerTargetComponent implements OnInit {
 
   isChecked(orderId: number): boolean {
     return this.selectedOrderIds.includes(orderId);
-}
+  }
 
 
-toggleOrder(orderId: number, event: Event): void {
-  const isChecked = (event.target as HTMLInputElement).checked;
+  toggleOrder(orderId: number, event: Event): void {
+    const isChecked = (event.target as HTMLInputElement).checked;
 
-  if (isChecked) {
-    if (!this.selectedOrderIds.includes(orderId)) {
-      this.selectedOrderIds.push(orderId);
+    if (isChecked) {
+      if (!this.selectedOrderIds.includes(orderId)) {
+        this.selectedOrderIds.push(orderId);
+      }
+    } else {
+      this.selectedOrderIds = this.selectedOrderIds.filter(id => id !== orderId);
     }
-  } else {
-    this.selectedOrderIds = this.selectedOrderIds.filter(id => id !== orderId);
+    // Only consider selectable items (Pending and not locked)
+    this.allChecked = this.selectedOrderIds.length === this.selectableOrders.length;
+
   }
-  // Only consider selectable items (Pending and not locked)
-  this.allChecked = this.selectedOrderIds.length === this.selectableOrders.length;
-
-}
 
 
-toggleAllOrders(event: Event): void {
-  const isChecked = (event.target as HTMLInputElement).checked;
-  this.allChecked = isChecked;
+  toggleAllOrders(event: Event): void {
+    const isChecked = (event.target as HTMLInputElement).checked;
+    this.allChecked = isChecked;
 
-  if (isChecked) {
-    // Select only items that are not disabled (Pending and not locked)
-    this.selectedOrderIds = this.ordersArr
-      .filter(item => item.combinedStatus === 'Pending' && item.lockStatus !== 1)
-      .map(item => item.processOrderId);
-  } else {
-    // Deselect all
-    this.selectedOrderIds = [];
-  }
-}
-
-deSelectAll() {
-  this.selectedOrderIds = [];
-  this.allChecked = false;
-}
-
-passTarget() {
-  this.isPassTarget = true;
-}
-
-PassTarget() {
-  this.fetchOfficers();
-  this.isPass = true;
-  this.isPassTarget = false;
-  
-  // Filter orders based on selectedOrderIds
-  const filteredOrders = this.ordersArr.filter(order =>
-    this.selectedOrderIds.includes(order.processOrderId)
-  );
-  // If you want to store it in another property
-  this.filteredOrdersArr = filteredOrders;
-}
-
-
-changeStatusAndTime(data: { orderIds: any[]; time: string }) {
-  this.isLoading = true;
-  this.DistributionSrv.setStatusAndTime(data).subscribe({
-    next: (res) => {
-      this.isLoading = false;
-
-      if (res && res.success) {
-        const orderCount = data.orderIds.length < 10 ? ('0' + data.orderIds.length) : (data.orderIds.length);
-        const orderLabel = orderCount === 1 ? 'order' : 'orders';
-        this.toastSrv.success(`${orderCount} ${orderLabel} successfully passed to ${this.selectedEmpId}`, 'Success');
-        this.isPassTarget = false;
-      } else {
-        this.toastSrv.error('Failed to pass the target to selected officer!', 'Error');
-        this.isPassTarget = false;
-      }
-      this.fetchSelectedOfficerTargets()
-      this.allChecked = false;
-    },
-    error: (err) => {
-      this.isLoading = false;
-      console.error(err);
-      this.toastSrv.error('Something went wrong!', 'Error');
-      this.isPassTarget = false;
-      this.fetchSelectedOfficerTargets()
-      this.allChecked = false;
-    }
-  });
-}
-
-cancelPass() {
-  this.isPassTarget = false;
-}
-
-cancell() {
-  this.isPass = false;
-  // Reset the select field
-  this.selectedOfficer = '';
-  this.selectedOfficerId = '';
-  this.selectedEmpId = '';
-}
-
-passTargetToBackEnd() {
-  if (!this.selectedOfficerId) {
-    this.toastSrv.error('Please select a short stock assignee to pass the target!', 'Error');
-    return; 
-  }
-  this.DistributionSrv.passTarget(this.selectedOrderIds, this.filteredOrdersArr[0].distributedTargetId, this.selectedOfficerId, this.officerId).subscribe(
-    (res) => {
-      this.isLoading = false;
-      if (res && res.status) {
-        // Find the officer object with the selected ID
-        const selectedOfficer = this.officersArr.find(
-          officer => officer.id === this.selectedOfficerId
-        );
-
-        const orderCount = this.selectedOrderIds.length < 10 ? ('0' + this.selectedOrderIds.length) : (this.selectedOrderIds.length);
-        const orderLabel = this.selectedOrderIds.length === 1 ? 'order' : 'orders';
-        // Get the empId if officer exists
-        const empId = selectedOfficer ? selectedOfficer.empId : 'Unknown';
-        this.toastSrv.success(`${orderCount} ${orderLabel} successfully passed to ${empId}`, 'Success');
-        this.fetchSelectedOfficerTargets()
-        this.isPass = false;
-        this.isPassTarget = false;
-        this.selectedOrderIds = [];
-      }
-      else {
-        this.toastSrv.error('Failed to sent out for delivery!', 'Error');
-        this.isPass = false;
-      }
-      this.fetchSelectedOfficerTargets()
-      this.isPassTarget = false;
-      this.allChecked = false;
+    if (isChecked) {
+      // Select only items that are not disabled (Pending and not locked)
+      this.selectedOrderIds = this.ordersArr
+        .filter(item => item.combinedStatus === 'Pending' && item.lockStatus !== 1)
+        .map(item => item.processOrderId);
+    } else {
+      // Deselect all
       this.selectedOrderIds = [];
     }
-
-  )
-}
-
-filterStatus() {
-  this.fetchSelectedOfficerTargets();
-}
-
-cancelStatus(event?: MouseEvent) {
-  if (event) {
-    event.stopPropagation(); // Prevent triggering the dropdown toggle
   }
-  this.selectStatus = '';
-  this.fetchSelectedOfficerTargets();
-}
 
-filterCompletingStatus() {
-  this.fetchSelectedOfficerTargets();
-}
-
-cancelCompletingStatus(event?: MouseEvent) {
-  if (event) {
-    event.stopPropagation(); // Prevent triggering the dropdown toggle
+  deSelectAll() {
+    this.selectedOrderIds = [];
+    this.allChecked = false;
   }
-  this.selectCompletingStatus = '';
-  this.fetchSelectedOfficerTargets();
-}
+
+  passTarget() {
+    this.isPassTarget = true;
+  }
+
+  PassTarget() {
+    this.fetchOfficers();
+    this.isPass = true;
+    this.isPassTarget = false;
+
+    // Filter orders based on selectedOrderIds
+    const filteredOrders = this.ordersArr.filter(order =>
+      this.selectedOrderIds.includes(order.processOrderId)
+    );
+    // If you want to store it in another property
+    this.filteredOrdersArr = filteredOrders;
+  }
 
 
-get categoryDropdownItems() {
-  return this.officersArr
-    .filter(officer => officer.id !== this.officerId) 
-    .map(officer => ({
-      value: officer.id.toString(),
-      label: `${officer.empId} - ${officer.firstNameEnglish} ${officer.lastNameEnglish}`,
-      disabled: false
-    }));
-}
+  changeStatusAndTime(data: { orderIds: any[]; time: string }) {
+    this.isLoading = true;
+    this.DistributionSrv.setStatusAndTime(data).subscribe({
+      next: (res) => {
+        this.isLoading = false;
 
+        if (res && res.success) {
+          const orderCount = data.orderIds.length < 10 ? ('0' + data.orderIds.length) : (data.orderIds.length);
+          const orderLabel = orderCount === 1 ? 'order' : 'orders';
+          this.toastSrv.success(`${orderCount} ${orderLabel} successfully passed to ${this.selectedEmpId}`, 'Success');
+          this.isPassTarget = false;
+        } else {
+          this.toastSrv.error('Failed to pass the target to selected officer!', 'Error');
+          this.isPassTarget = false;
+        }
+        this.fetchSelectedOfficerTargets()
+        this.allChecked = false;
+      },
+      error: (err) => {
+        this.isLoading = false;
+        console.error(err);
+        this.toastSrv.error('Something went wrong!', 'Error');
+        this.isPassTarget = false;
+        this.fetchSelectedOfficerTargets()
+        this.allChecked = false;
+      }
+    });
+  }
 
-// 5. Add selection change handler
-onCategorySelectionChange(selectedValue: string) {
-  this.selectedOfficer = selectedValue || '';
-  this.selectedOfficerId = Number(this.selectedOfficer);
-const passOfficer = this.officersArr.find(
-  officer => officer.id === this.selectedOfficerId
-);
+  cancelPass() {
+    this.isPassTarget = false;
+  }
 
-this.selectedEmpId = passOfficer ? passOfficer.empId : '';
-}
+  cancell() {
+    this.isPass = false;
+    // Reset the select field
+    this.selectedOfficer = '';
+    this.selectedOfficerId = '';
+    this.selectedEmpId = '';
+  }
 
-goBack() {
-  this.location.back();
-}
-
-formatSelectedCount(count: number): string {
-  return count < 10 ? `0${count}` : `${count}`;
-}
-
-getStatus(item: orders): string {
-  // Convert both into Date objects
-  const scheduleDate = new Date(item.sheduleDate);
-  const completeTime = item.completeTime ? new Date(item.completeTime) : null;
-  // Create the schedule deadline
-  const deadline = new Date(scheduleDate);
-  if (item.sheduleTime) {
-    const timeSlot = item.sheduleTime.trim();
-
-    if (timeSlot === 'Within 8AM - 2PM') {
-      deadline.setHours(14, 0, 0, 0); // 12:00 PM
-    } else if (timeSlot === 'Within 2PM - 8PM') {
-      deadline.setHours(20, 0, 0, 0); // 4:00 PM
+  passTargetToBackEnd() {
+    if (!this.selectedOfficerId) {
+      this.toastSrv.error('Please select a short stock assignee to pass the target!', 'Error');
+      return;
     }
+    this.DistributionSrv.passTarget(this.selectedOrderIds, this.filteredOrdersArr[0].distributedTargetId, this.selectedOfficerId, this.officerId).subscribe(
+      (res) => {
+        this.isLoading = false;
+        if (res && res.status) {
+          // Find the officer object with the selected ID
+          const selectedOfficer = this.officersArr.find(
+            officer => officer.id === this.selectedOfficerId
+          );
+
+          const orderCount = this.selectedOrderIds.length < 10 ? ('0' + this.selectedOrderIds.length) : (this.selectedOrderIds.length);
+          const orderLabel = this.selectedOrderIds.length === 1 ? 'order' : 'orders';
+          // Get the empId if officer exists
+          const empId = selectedOfficer ? selectedOfficer.empId : 'Unknown';
+          this.toastSrv.success(`${orderCount} ${orderLabel} successfully passed to ${empId}`, 'Success');
+          this.fetchSelectedOfficerTargets()
+          this.isPass = false;
+          this.isPassTarget = false;
+          this.selectedOrderIds = [];
+        }
+        else {
+          this.toastSrv.error('Failed to sent out for delivery!', 'Error');
+          this.isPass = false;
+        }
+        this.fetchSelectedOfficerTargets()
+        this.isPassTarget = false;
+        this.allChecked = false;
+        this.selectedOrderIds = [];
+      }
+
+    )
   }
 
-  // Current time in SL
-  const now = new Date(
-    new Date().toLocaleString('en-US', { timeZone: 'Asia/Colombo' })
-  );
+  filterStatus() {
+    this.fetchSelectedOfficerTargets();
+  }
 
-  // --- Case 1: Not completed yet ---
-  if (!completeTime) {
-    if (now.getTime() > deadline.getTime()) {
-      this.isLateAndNotCompleted = true;
-      return 'Not Completed';
-    } else {
-      this.isLateAndNotCompleted = false;
-      return 'Not Completed';
+  cancelStatus(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
     }
+    this.selectStatus = '';
+    this.fetchSelectedOfficerTargets();
   }
 
-  // --- Case 2: Completed: Check on-time or late ---
-  return completeTime.getTime() <= deadline.getTime() ? 'On Time' : 'Late';
-}
+  filterCompletingStatus() {
+    this.fetchSelectedOfficerTargets();
+  }
+
+  cancelCompletingStatus(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
+    this.selectCompletingStatus = '';
+    this.fetchSelectedOfficerTargets();
+  }
+
+
+  get categoryDropdownItems() {
+    return this.officersArr
+      .filter(officer => officer.id !== this.officerId)
+      .map(officer => ({
+        value: officer.id.toString(),
+        label: `${officer.empId} - ${officer.firstNameEnglish} ${officer.lastNameEnglish}`,
+        disabled: false
+      }));
+  }
+
+
+  // 5. Add selection change handler
+  onCategorySelectionChange(selectedValue: string) {
+    this.selectedOfficer = selectedValue || '';
+    this.selectedOfficerId = Number(this.selectedOfficer);
+    const passOfficer = this.officersArr.find(
+      officer => officer.id === this.selectedOfficerId
+    );
+
+    this.selectedEmpId = passOfficer ? passOfficer.empId : '';
+  }
+
+  goBack() {
+    this.location.back();
+  }
+
+  formatSelectedCount(count: number): string {
+    return count < 10 ? `0${count}` : `${count}`;
+  }
+
+  getStatus(item: orders): string {
+    // Convert both into Date objects
+    const scheduleDate = new Date(item.sheduleDate);
+    const completeTime = item.completeTime ? new Date(item.completeTime) : null;
+    // Create the schedule deadline
+    const deadline = new Date(scheduleDate);
+    if (item.sheduleTime) {
+      const timeSlot = item.sheduleTime.trim();
+
+      if (timeSlot === 'Within 8AM - 2PM') {
+        deadline.setHours(14, 0, 0, 0); // 12:00 PM
+      } else if (timeSlot === 'Within 2PM - 8PM') {
+        deadline.setHours(20, 0, 0, 0); // 4:00 PM
+      }
+    }
+
+    // Current time in SL
+    const now = new Date(
+      new Date().toLocaleString('en-US', { timeZone: 'Asia/Colombo' })
+    );
+
+    // --- Case 1: Not completed yet ---
+    if (!completeTime) {
+      if (now.getTime() > deadline.getTime()) {
+        this.isLateAndNotCompleted = true;
+        return 'Not Completed';
+      } else {
+        this.isLateAndNotCompleted = false;
+        return 'Not Completed';
+      }
+    }
+
+    // --- Case 2: Completed: Check on-time or late ---
+    return completeTime.getTime() <= deadline.getTime() ? 'On Time' : 'Late';
+  }
 
 
 }

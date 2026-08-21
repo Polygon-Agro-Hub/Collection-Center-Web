@@ -148,49 +148,49 @@ export class DchCenterTargetOutForDeliveryComponent implements OnInit {
   }
 
   downloadTemplate1() {
-  this.isDownloading = true;
-  const now = new Date();
+    this.isDownloading = true;
+    const now = new Date();
 
-  // Today's date for "Generated at" — with year
-  const generatedDateStr = `${String(now.getDate()).padStart(2, '0')}-${String(now.getMonth() + 1).padStart(2, '0')}-${now.getFullYear()}`;
-  const timeStr = now
-    .toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
-    .replace(':', '.')
-    .replace(' ', ' ');
-  const generatedAt = `${generatedDateStr} ${timeStr}`;
+    // Today's date for "Generated at" — with year
+    const generatedDateStr = `${String(now.getDate()).padStart(2, '0')}-${String(now.getMonth() + 1).padStart(2, '0')}-${now.getFullYear()}`;
+    const timeStr = now
+      .toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
+      .replace(':', '.')
+      .replace(' ', ' ');
+    const generatedAt = `${generatedDateStr} ${timeStr}`;
 
-  // Selected date label (only built if date is selected) — with year
-  let datePart = '';
-  if (this.date) {
-    const selectedDateObj = new Date(String(this.date));
-    const dateStr = selectedDateObj.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
-    datePart = ` on ${dateStr}`;
-  }
+    // Selected date label (only built if date is selected) — with year
+    let datePart = '';
+    if (this.date) {
+      const selectedDateObj = new Date(String(this.date));
+      const dateStr = selectedDateObj.toLocaleDateString('en-GB', { day: '2-digit', month: 'short', year: 'numeric' });
+      datePart = ` on ${dateStr}`;
+    }
 
-  // Status filter label
-  const statusPart = this.selectStatus ? ` filtered by ${this.selectStatus}` : '';
+    // Status filter label
+    const statusPart = this.selectStatus ? ` filtered by ${this.selectStatus}` : '';
 
-  // Final filenameFV
-  const fileName = `${this.regCode} OFH Orders${datePart}${statusPart} Generated at ${generatedAt}.xlsx`;
+    // Final filenameFV
+    const fileName = `${this.regCode} OFH Orders${datePart}${statusPart} Generated at ${generatedAt}.xlsx`;
 
-  this.DistributionSrv
-    .downloadDCHOutForDeliveryTargetProgressReport(this.selectStatus, this.date, this.searchText, this.centerId!)
-    .subscribe({
-      next: (blob) => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement('a');
-        a.href = url;
-        a.download = fileName;
-        a.click();
-        window.URL.revokeObjectURL(url);
-        this.toastSrv.success('File Downloaded Successfully')
-        this.isDownloading = false;
-      },
-      error: (error) => {
-        this.toastSrv.error('File Download Failed');
-        this.isDownloading = false;
-      }
-    });
+    this.DistributionSrv
+      .downloadDCHOutForDeliveryTargetProgressReport(this.selectStatus, this.date, this.searchText, this.centerId!)
+      .subscribe({
+        next: (blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = fileName;
+          a.click();
+          window.URL.revokeObjectURL(url);
+          this.toastSrv.success('File Downloaded Successfully')
+          this.isDownloading = false;
+        },
+        error: (error) => {
+          this.toastSrv.error('File Download Failed');
+          this.isDownloading = false;
+        }
+      });
   }
 
   removeWithin(time: string): string {
@@ -215,13 +215,13 @@ export class DchCenterTargetOutForDeliveryComponent implements OnInit {
   }
 
   formatTime(s: string): string {
-  if (!s) return '';
-  const time = s.substring(11, 16);            // '15:46'
-  let [h, m] = time.split(':').map(Number);    // 15, 46
-  const ampm = h >= 12 ? 'PM' : 'AM';
-  h = h % 12 || 12;                            // 15 -> 3, 0 -> 12
-  return `${h}:${m.toString().padStart(2, '0')} ${ampm}`;  // '3:46 PM'
-}
+    if (!s) return '';
+    const time = s.substring(11, 16);            // '15:46'
+    let [h, m] = time.split(':').map(Number);    // 15, 46
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12;                            // 15 -> 3, 0 -> 12
+    return `${h}:${m.toString().padStart(2, '0')} ${ampm}`;  // '3:46 PM'
+  }
 
 }
 

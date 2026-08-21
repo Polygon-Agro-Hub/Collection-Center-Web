@@ -9,7 +9,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { DistributedManageOfficersService } from '../../../services/Distributed-manage-officers-service/distributed-manage-officers.service';
-import { DistributionServiceService }  from '../../../services/Distribution-Service/distribution-service.service'
+import { DistributionServiceService } from '../../../services/Distribution-Service/distribution-service.service'
 
 @Component({
   selector: 'app-view-center-officers',
@@ -207,32 +207,32 @@ export class ViewCenterOfficersComponent implements OnInit {
 
     let message = '';
 
-if (item.status === 'Approved') {
-  message = `Are you sure you want to reject this ${item.jobRole} ?`;
-} 
-else if (item.status === 'Rejected') {
-  message = `Are you sure you want to approve this ${item.jobRole} ?`;
-} 
-else if (item.status === 'Not Approved') {
-  message = `Are you sure you want to approve or reject this ${item.jobRole} ?`;
-} 
-else {
-  message = ``;
-}
+    if (item.status === 'Approved') {
+      message = `Are you sure you want to reject this ${item.jobRole} ?`;
+    }
+    else if (item.status === 'Rejected') {
+      message = `Are you sure you want to approve this ${item.jobRole} ?`;
+    }
+    else if (item.status === 'Not Approved') {
+      message = `Are you sure you want to approve or reject this ${item.jobRole} ?`;
+    }
+    else {
+      message = ``;
+    }
 
-const rejectButton = (item.status === 'Approved' || item.status === 'Not Approved')
-  ? `<button id="rejectButton" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg mr-2">
+    const rejectButton = (item.status === 'Approved' || item.status === 'Not Approved')
+      ? `<button id="rejectButton" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg mr-2">
        Reject
      </button>`
-  : '';
+      : '';
 
-const approveButton = (item.status === 'Rejected' || item.status === 'Not Approved')
-  ? `<button id="approveButton" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
+    const approveButton = (item.status === 'Rejected' || item.status === 'Not Approved')
+      ? `<button id="approveButton" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
        Approve
      </button>`
-  : '';
+      : '';
 
-const tableHtml = `
+    const tableHtml = `
   <div class="container mx-auto">
     <h1 class="text-center text-2xl font-bold mb-4 dark:text-white">Officer Name: ${item.firstNameEnglish}</h1>
     <div>

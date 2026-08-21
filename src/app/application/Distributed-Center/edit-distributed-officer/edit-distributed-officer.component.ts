@@ -99,7 +99,7 @@ export class EditDistributedOfficerComponent implements OnInit {
   vehicleTypeDropdownOpen = false;
   vehicleTypeTouched = false;
 
-    drvCatArr: DriverCategory[] = [];
+  drvCatArr: DriverCategory[] = [];
 
   selectVehicletype: any = { name: '', capacity: '' };
 
@@ -292,9 +292,9 @@ export class EditDistributedOfficerComponent implements OnInit {
     );
   }
 
-isSelected(item: any): boolean {
+  isSelected(item: any): boolean {
     return this.selectedCenterName === `${item.regCode} - ${item.centerName}`;
-}
+  }
 
   toggleDropdown() {
     this.isJobRoleOpen = false;
@@ -580,10 +580,6 @@ isSelected(item: any): boolean {
     this.personalData.province = selected ? selected.province : '';
   }
 
-  // Uploads any newly selected images to the backend (which forwards them to
-  // R2) and swaps the local File references for the resulting public URLs
-  // before the officer payload is sent. Fields left untouched keep whatever
-  // URL was already loaded from the server.
   private async uploadChangedImages(): Promise<void> {
     const uploads: Promise<void>[] = [];
 
@@ -619,8 +615,6 @@ isSelected(item: any): boolean {
     await Promise.all(uploads);
   }
 
-  // Builds and shows the "Duplicate Information" dialog from a list of
-  // backend error codes (NIC/Email/PhoneNumber01/PhoneNumber02).
   private showDuplicateErrorDialog(errors: string[]): void {
     const messages = errors.map((err: string) => {
       switch (err) {
@@ -659,185 +653,185 @@ isSelected(item: any): boolean {
 
   async onSubmit() {
 
-      this.isLoading = true;
+    this.isLoading = true;
 
-      try {
-        await firstValueFrom(this.DistributedManageOfficerSrv.checkDuplicateOfficer(this.personalData, this.editOfficerId));
-      } catch (error: any) {
-        this.isLoading = false;
-        const duplicateErrors = error?.error?.errors;
-        if (Array.isArray(duplicateErrors) && duplicateErrors.length > 0) {
-          this.showDuplicateErrorDialog(duplicateErrors);
-        } else {
-          this.toastSrv.error('Failed to verify officer details. Please try again.');
-        }
-        return;
+    try {
+      await firstValueFrom(this.DistributedManageOfficerSrv.checkDuplicateOfficer(this.personalData, this.editOfficerId));
+    } catch (error: any) {
+      this.isLoading = false;
+      const duplicateErrors = error?.error?.errors;
+      if (Array.isArray(duplicateErrors) && duplicateErrors.length > 0) {
+        this.showDuplicateErrorDialog(duplicateErrors);
+      } else {
+        this.toastSrv.error('Failed to verify officer details. Please try again.');
+      }
+      return;
+    }
+
+    try {
+      await this.uploadChangedImages();
+    } catch (error) {
+      this.isLoading = false;
+      this.toastSrv.error('Failed to upload one or more images. Please try again.');
+      return;
+    }
+
+    if (this.logingRole === 'Distribution Centre Manager') {
+
+      if (this.personalData.jobRole === 'Driver') {
+
+        this.driverObj.licFrontName = this.licenseFrontImageFileName
+        this.driverObj.licBackName = this.licenseBackImageFileName
+        this.driverObj.insFrontName = this.insurenceFrontImageFileName
+        this.driverObj.insBackName = this.insurenceBackImageFileName
+        this.driverObj.vFrontName = this.vehicleFrontImageFileName
+        this.driverObj.vBackName = this.vehicleBackImageFileName
+        this.driverObj.vSideAName = this.vehicleSideAImageFileName
+        this.driverObj.vSideBName = this.vehicleSideBImageFileName
       }
 
-      try {
-        await this.uploadChangedImages();
-      } catch (error) {
-        this.isLoading = false;
-        this.toastSrv.error('Failed to upload one or more images. Please try again.');
-        return;
-      }
-
-      if (this.logingRole === 'Distribution Centre Manager') {
-
-        if (this.personalData.jobRole === 'Driver') {
-
-          this.driverObj.licFrontName = this.licenseFrontImageFileName
-          this.driverObj.licBackName = this.licenseBackImageFileName
-          this.driverObj.insFrontName = this.insurenceFrontImageFileName
-          this.driverObj.insBackName = this.insurenceBackImageFileName
-          this.driverObj.vFrontName = this.vehicleFrontImageFileName
-          this.driverObj.vBackName = this.vehicleBackImageFileName
-          this.driverObj.vSideAName = this.vehicleSideAImageFileName
-          this.driverObj.vSideBName = this.vehicleSideBImageFileName
-        }
-
-        this.DistributedManageOfficerSrv.updateDistributionOfficerDIO(this.personalData, this.editOfficerId, this.driverObj).subscribe(
-          (res: any) => {
-            this.officerId = res.officerId;
-            this.isLoading = false;
-            if (res && res.message) {
-              // Success response from backend
-              this.toastSrv.success(`${this.personalData.jobRole} Profile Updated Successfully`);
-              this.redirectToPreviousPage();
-            } else {
-              // Handle unexpected format
-              this.toastSrv.error('Something went wrong while updating.');
-            }
-
-          },
-          (error: any) => {
-            this.isLoading = false;
-            let errorMessage = 'An unexpected error occurred';
-            let messages: string[] = [];
-
-            if (error.error && Array.isArray(error.error.errors)) {
-              messages = error.error.errors.map((err: string) => {
-                switch (err) {
-                  case 'NIC':
-                    return 'The NIC number is already registered.';
-                  case 'Email':
-                    return 'Email already exists.';
-                  case 'PhoneNumber01':
-                    return 'Mobile Number 1 already exists.';
-                  case 'PhoneNumber02':
-                    return 'Mobile Number 2 already exists.';
-                  default:
-                    return 'Validation error: ' + err;
-                }
-              });
-            }
-
-            if (messages.length > 0) {
-              errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following Duplicate field issues:</p><ul class="list-disc pl-5">';
-              messages.forEach(m => {
-                errorMessage += `<li>${m}</li>`;
-              });
-              errorMessage += '</ul></div>';
-
-              Swal.fire({
-                icon: 'error',
-                title: 'Duplicate Information',
-                html: errorMessage,
-                confirmButtonText: 'OK',
-                customClass: {
-                  popup: 'bg-tileLight dark:bg-[#363636] text-black dark:text-white',
-                  title: 'font-semibold text-lg',
-                  htmlContainer: 'text-left',
-                  confirmButton: 'bg-red-500 dark:bg-red-500 hover:bg-red-600 dark:hover:bg-red-700',
-                },
-              });
-              return;
-            }
+      this.DistributedManageOfficerSrv.updateDistributionOfficerDIO(this.personalData, this.editOfficerId, this.driverObj).subscribe(
+        (res: any) => {
+          this.officerId = res.officerId;
+          this.isLoading = false;
+          if (res && res.message) {
+            // Success response from backend
+            this.toastSrv.success(`${this.personalData.jobRole} Profile Updated Successfully`);
+            this.redirectToPreviousPage();
+          } else {
+            // Handle unexpected format
+            this.toastSrv.error('Something went wrong while updating.');
           }
-        );
-      } else if (this.logingRole === 'Distribution Centre Head') {
-        if (this.personalData.jobRole === 'Distribution Centre Manager') {
-          this.personalData.irmId = null;
-        }
 
-        if (this.personalData.jobRole === 'Driver') {
+        },
+        (error: any) => {
+          this.isLoading = false;
+          let errorMessage = 'An unexpected error occurred';
+          let messages: string[] = [];
 
-
-          this.driverObj.licFrontName = this.licenseFrontImageFileName
-          this.driverObj.licBackName = this.licenseBackImageFileName
-          this.driverObj.insFrontName = this.insurenceFrontImageFileName
-          this.driverObj.insBackName = this.insurenceBackImageFileName
-          this.driverObj.vFrontName = this.vehicleFrontImageFileName
-          this.driverObj.vBackName = this.vehicleBackImageFileName
-          this.driverObj.vSideAName = this.vehicleSideAImageFileName
-          this.driverObj.vSideBName = this.vehicleSideBImageFileName
-        }
-
-        this.DistributedManageOfficerSrv.updateDistributionOfficer(this.personalData, this.editOfficerId, this.driverObj).subscribe(
-          (res: any) => {
-            this.isLoading = false;
-
-            if (res && res.message) {
-              // Success response from backend
-              this.toastSrv.success(`${this.personalData.jobRole} Profile Updated Successfully`);
-              this.redirectToPreviousPage();
-            } else {
-              // Handle unexpected format
-              this.toastSrv.error('Something went wrong while updating.');
-            }
-          },
-          (error: any) => {
-            this.isLoading = false;
-            let errorMessage = 'An unexpected error occurred';
-            let messages: string[] = [];
-
-            if (error.error && Array.isArray(error.error.errors)) {
-              messages = error.error.errors.map((err: string) => {
-                switch (err) {
-                  case 'NIC':
-                    return 'The NIC number is already registered.';
-                  case 'Email':
-                    return 'Email already exists.';
-                  case 'PhoneNumber01':
-                    return 'Mobile Number 01 already exists.';
-                  case 'PhoneNumber02':
-                    return 'Mobile Number 02 already exists.';
-                  default:
-                    return 'Validation error: ' + err;
-                }
-              });
-            }
-
-            if (messages.length > 0) {
-              errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following Duplicate field issues:</p><ul class="list-disc pl-5">';
-              messages.forEach(m => {
-                errorMessage += `<li>${m}</li>`;
-              });
-              errorMessage += '</ul></div>';
-
-              Swal.fire({
-                icon: 'error',
-                title: 'Duplicate Information',
-                html: errorMessage,
-                confirmButtonText: 'OK',
-                customClass: {
-                  popup: 'bg-tileLight dark:bg-[#363636] text-black dark:text-white',
-                  title: 'font-semibold text-lg',
-                  htmlContainer: 'text-left',
-                  confirmButton: 'bg-red-500 dark:bg-red-500 hover:bg-red-600 dark:hover:bg-red-700',
-                },
-              });
-              return;
-            }
+          if (error.error && Array.isArray(error.error.errors)) {
+            messages = error.error.errors.map((err: string) => {
+              switch (err) {
+                case 'NIC':
+                  return 'The NIC number is already registered.';
+                case 'Email':
+                  return 'Email already exists.';
+                case 'PhoneNumber01':
+                  return 'Mobile Number 1 already exists.';
+                case 'PhoneNumber02':
+                  return 'Mobile Number 2 already exists.';
+                default:
+                  return 'Validation error: ' + err;
+              }
+            });
           }
-        );
+
+          if (messages.length > 0) {
+            errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following Duplicate field issues:</p><ul class="list-disc pl-5">';
+            messages.forEach(m => {
+              errorMessage += `<li>${m}</li>`;
+            });
+            errorMessage += '</ul></div>';
+
+            Swal.fire({
+              icon: 'error',
+              title: 'Duplicate Information',
+              html: errorMessage,
+              confirmButtonText: 'OK',
+              customClass: {
+                popup: 'bg-tileLight dark:bg-[#363636] text-black dark:text-white',
+                title: 'font-semibold text-lg',
+                htmlContainer: 'text-left',
+                confirmButton: 'bg-red-500 dark:bg-red-500 hover:bg-red-600 dark:hover:bg-red-700',
+              },
+            });
+            return;
+          }
+        }
+      );
+    } else if (this.logingRole === 'Distribution Centre Head') {
+      if (this.personalData.jobRole === 'Distribution Centre Manager') {
+        this.personalData.irmId = null;
       }
+
+      if (this.personalData.jobRole === 'Driver') {
+
+
+        this.driverObj.licFrontName = this.licenseFrontImageFileName
+        this.driverObj.licBackName = this.licenseBackImageFileName
+        this.driverObj.insFrontName = this.insurenceFrontImageFileName
+        this.driverObj.insBackName = this.insurenceBackImageFileName
+        this.driverObj.vFrontName = this.vehicleFrontImageFileName
+        this.driverObj.vBackName = this.vehicleBackImageFileName
+        this.driverObj.vSideAName = this.vehicleSideAImageFileName
+        this.driverObj.vSideBName = this.vehicleSideBImageFileName
+      }
+
+      this.DistributedManageOfficerSrv.updateDistributionOfficer(this.personalData, this.editOfficerId, this.driverObj).subscribe(
+        (res: any) => {
+          this.isLoading = false;
+
+          if (res && res.message) {
+            // Success response from backend
+            this.toastSrv.success(`${this.personalData.jobRole} Profile Updated Successfully`);
+            this.redirectToPreviousPage();
+          } else {
+            // Handle unexpected format
+            this.toastSrv.error('Something went wrong while updating.');
+          }
+        },
+        (error: any) => {
+          this.isLoading = false;
+          let errorMessage = 'An unexpected error occurred';
+          let messages: string[] = [];
+
+          if (error.error && Array.isArray(error.error.errors)) {
+            messages = error.error.errors.map((err: string) => {
+              switch (err) {
+                case 'NIC':
+                  return 'The NIC number is already registered.';
+                case 'Email':
+                  return 'Email already exists.';
+                case 'PhoneNumber01':
+                  return 'Mobile Number 01 already exists.';
+                case 'PhoneNumber02':
+                  return 'Mobile Number 02 already exists.';
+                default:
+                  return 'Validation error: ' + err;
+              }
+            });
+          }
+
+          if (messages.length > 0) {
+            errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following Duplicate field issues:</p><ul class="list-disc pl-5">';
+            messages.forEach(m => {
+              errorMessage += `<li>${m}</li>`;
+            });
+            errorMessage += '</ul></div>';
+
+            Swal.fire({
+              icon: 'error',
+              title: 'Duplicate Information',
+              html: errorMessage,
+              confirmButtonText: 'OK',
+              customClass: {
+                popup: 'bg-tileLight dark:bg-[#363636] text-black dark:text-white',
+                title: 'font-semibold text-lg',
+                htmlContainer: 'text-left',
+                confirmButton: 'bg-red-500 dark:bg-red-500 hover:bg-red-600 dark:hover:bg-red-700',
+              },
+            });
+            return;
+          }
+        }
+      );
+    }
   }
 
   // Add this new method for redirecting based on URL
   redirectToPreviousPage(): void {
     const currentUrl = this.router.url;
-    
+
     // Check if we came from center-dashboard or distribution-officers
     if (currentUrl.includes('/distribution-center/center-dashboard')) {
       // Navigate to center dashboard
@@ -1415,7 +1409,7 @@ isSelected(item: any): boolean {
       modelRef[fieldName] = numericValue;
       inputElement.value = numericValue;
     }
-}
+  }
 
 
 

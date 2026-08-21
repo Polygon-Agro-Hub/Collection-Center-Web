@@ -38,22 +38,22 @@ export class ViewDistributionCenterTargetComponent implements OnInit {
     this.isLoading = true;
     this.DistributionSrv.getDistributionOrders().subscribe(
       (res) => {
-        if (res.length === 0 ) {
+        if (res.length === 0) {
           this.hasData = false
         }
         const today = new Date();
         today.setHours(0, 0, 0, 0);
-  
+
         const tomorrow = new Date(today);
         tomorrow.setDate(today.getDate() + 1);
-  
+
         const dayAfterTomorrow = new Date(today);
         dayAfterTomorrow.setDate(today.getDate() + 2);
-  
+
         this.ordersArr = res.map((order: Orders) => {
           const scheduleDate = new Date(order.sheduleDate);
           scheduleDate.setHours(0, 0, 0, 0);
-  
+
           let formattedDateLabel = '';
           if (scheduleDate.getTime() === today.getTime()) {
             formattedDateLabel = 'Today';

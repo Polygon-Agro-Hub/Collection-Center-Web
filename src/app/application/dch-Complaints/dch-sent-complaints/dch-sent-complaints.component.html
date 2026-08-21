@@ -92,9 +92,7 @@
         <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929] mr-5">
             <input type="text" placeholder="Search by Ref No, EMP ID" [(ngModel)]="searchText"
                 class="bg-transparent outline-none w-full text-textLight dark:text-textDark" (keyup.enter)="onSearch()"
-                (keyup.esc)="offSearch()" (keydown)="preventLeadingSpace($event)"
-                
-                />
+                (keyup.esc)="offSearch()" (keydown)="preventLeadingSpace($event)" />
             <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                 (click)="onSearch()">
                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -138,7 +136,8 @@
                     *ngFor="let item of complainArr | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index">
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.refNo}}</td>
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
-                        <span *ngIf="item.officerId === officerId" class="text-[#415CFF] italic whitespace-nowrap">Own Complaint</span>
+                        <span *ngIf="item.officerId === officerId" class="text-[#415CFF] italic whitespace-nowrap">Own
+                            Complaint</span>
                         <span *ngIf="item.officerId !== officerId">{{item.empId}}</span>
                     </td>
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.complainCategory}}</td>
@@ -146,33 +145,32 @@
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
                         {{ truncateText(item.complain, item.id) }}
                         <ng-container *ngIf="item.complain.length > 150">
-                          <span 
-                            (click)="toggleText(item.id)" 
-                            class="text-blue-500 cursor-pointer ml-1"
-                          >
-                            {{ expandedItems[item.id] ? 'Read less' : 'Read more' }}
-                          </span>
+                            <span (click)="toggleText(item.id)" class="text-blue-500 cursor-pointer ml-1">
+                                {{ expandedItems[item.id] ? 'Read less' : 'Read more' }}
+                            </span>
                         </ng-container>
-                      </td>
+                    </td>
 
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
                         <div class="flex flex-col items-center justify-center">
                             <p class="text-[#3E3E3E] dark:text-gray-300">{{ item.createdAt | date:'yyyy/MM/dd' }}</p>
                             <p class="text-[#3E3E3E] dark:text-gray-300">{{ item.createdAt | date:'hh.mm a' }}</p>
-                          </div>
+                        </div>
                     </td>
                     <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
                         <div class="flex items-center justify-center h-full">
-                          <span *ngIf="item.status === 'Opened'" class="bg-[#C8E0FF] text-center text-[#415CFF] px-3 py-1 rounded-lg min-w-24">
-                            Opened
-                          </span>
-                      
-                          <span *ngIf="item.status === 'Closed'" class="bg-[#B7FFBE] text-center text-[#02BB3D] px-3 py-1 rounded-lg min-w-24">
-                            Closed
-                          </span>
+                            <span *ngIf="item.status === 'Opened'"
+                                class="bg-[#C8E0FF] text-center text-[#415CFF] px-3 py-1 rounded-lg min-w-24">
+                                Opened
+                            </span>
+
+                            <span *ngIf="item.status === 'Closed'"
+                                class="bg-[#B7FFBE] text-center text-[#02BB3D] px-3 py-1 rounded-lg min-w-24">
+                                Closed
+                            </span>
                         </div>
-                      </td>
-                      
+                    </td>
+
                     <td class="px-6 py-4 cursor-pointer">
                         <i class="fa-solid fa-reply text-[#415CFF] text-lg cursor-pointer"
                             [ngClass]="{'text-gray-200 cursor-not-allowed': item.reply === null}"
@@ -202,67 +200,73 @@
                 <p class="text-lg font-bold dark:text-white">Reply from Polygon Holdings</p>
 
                 <div class="flex flex-col w-full border-[1px] border-[#D9D9D9] dark:text-white py-4 px-5 rounded-lg">
-                    <div class="flex flex-col gap-y-2" >
+                    <div class="flex flex-col gap-y-2">
                         <p>
-                            {{replyObj.language === 'Sinhala' ? 'හිතවත් ': replyObj.language === 'Tamil' ? 'அன்புள்ள ' : 'Dear '}}
-                            <span class="font-semibold">{{replyObj.firstNameEnglish}} {{replyObj.lastNameEnglish}},</span>
+                            {{replyObj.language === 'Sinhala' ? 'හිතවත් ': replyObj.language === 'Tamil' ? 'அன்புள்ள ' :
+                            'Dear '}}
+                            <span class="font-semibold">{{replyObj.firstNameEnglish}}
+                                {{replyObj.lastNameEnglish}},</span>
                         </p>
-    
+
                         <p *ngIf="replyObj.language === 'Sinhala'">
                             ඔබගේ පැමිණිල්ල නිරාකරණය කර ඇති බව ඔබට දැනුම් දීමට අපි සතුටු වෙමු.
                         </p>
-                        
+
                         <p *ngIf="replyObj.language === 'Tamil'">
                             உங்கள் முறையீடு தீர்வு செய்யப்பட்டதாக தெரிவித்து மகிழ்ச்சியடைகிறோம்.
                         </p>
-    
+
                         <p *ngIf="replyObj.language !== 'Sinhala' && replyObj.language !== 'Tamil'">
                             We are pleased to inform you that your complaint has been resolved.
-                          </p>
-    
+                        </p>
+
                         <div class="border-none outline-none bg-[#F6F6F6] dark:bg-[#363636] rounded-lg w-full p-1">
-                            <textarea rows="5" class="bg-[#F6F6F6] dark:bg-[#363636] w-full border-none outline-none " cols="6" [(ngModel)]="replyObj.reply" name="reply" placeholder="[ Add message here... ]" disabled=""></textarea>
+                            <textarea rows="5" class="bg-[#F6F6F6] dark:bg-[#363636] w-full border-none outline-none "
+                                cols="6" [(ngModel)]="replyObj.reply" name="reply" placeholder="[ Add message here... ]"
+                                disabled=""></textarea>
                         </div>
-    
-                        
+
+
                     </div>
                     <div class="flex flex-col mb-1 mt-1">
                         <p>
                             {{
-                                replyObj.language === 'Sinhala' ? 'ඔබට තවත් ගැටළු හෝ ප්‍රශ්න තිබේ නම්, කරුණාකර අප හා සම්බන්ධ වන්න. '
-                                : replyObj.language === 'Tamil' ? 'உங்களுக்கு மேலும் ஏதேனும் சிக்கல்கள் அல்லது கேள்விகள் இருந்தால், தயவுசெய்து எங்களைத் தொடர்பு கொள்ளவும். ' 
-                                : 'If you have any further concerns or questions, feel free to reach out. '
+                            replyObj.language === 'Sinhala' ? 'ඔබට තවත් ගැටළු හෝ ප්‍රශ්න තිබේ නම්, කරුණාකර අප හා සම්බන්ධ
+                            වන්න. '
+                            : replyObj.language === 'Tamil' ? 'உங்களுக்கு மேலும் ஏதேனும் சிக்கல்கள் அல்லது கேள்விகள்
+                            இருந்தால், தயவுசெய்து எங்களைத் தொடர்பு கொள்ளவும். '
+                            : 'If you have any further concerns or questions, feel free to reach out. '
                             }}
-    
+
                         </p>
 
                         <p>
                             {{
-                                replyObj.language === 'Sinhala' ? 'ඔබේ ඉවසීම සහ අවබෝධය වෙනුවෙන් ස්තූතියි. '
-                                : replyObj.language === 'Tamil' ? 'உங்கள் பொறுமைக்கும் புரிதலுக்கும் நன்றி. ' 
-                                : 'Thank you for your patience and understanding. '
+                            replyObj.language === 'Sinhala' ? 'ඔබේ ඉවසීම සහ අවබෝධය වෙනුවෙන් ස්තූතියි. '
+                            : replyObj.language === 'Tamil' ? 'உங்கள் பொறுமைக்கும் புரிதலுக்கும் நன்றி. '
+                            : 'Thank you for your patience and understanding. '
                             }}
-    
+
                         </p>
                     </div>
 
-                    <div  class="flex flex-col mt-1 gap-y-0">
+                    <div class="flex flex-col mt-1 gap-y-0">
                         <p>
                             {{
-                                replyObj.language === 'Sinhala' ? 'මෙයට'
-                                : replyObj.language === 'Tamil' ? 'இதற்கு,'
-                                : 'Sincerely,' 
+                            replyObj.language === 'Sinhala' ? 'මෙයට'
+                            : replyObj.language === 'Tamil' ? 'இதற்கு,'
+                            : 'Sincerely,'
                             }}
                         </p>
                         <p>
                             {{
-                                replyObj.language === 'Sinhala' ? 'Polygon Agro පාරිභෝගික සහාය කණ්ඩායම ' 
-                                : replyObj.language === 'Tamil' ? 'Polygon Agro வாடிக்கையாளர் ஆதரவு குழு'
-                                : 'Polygon Customer Support Team ' 
+                            replyObj.language === 'Sinhala' ? 'Polygon Agro පාරිභෝගික සහාය කණ්ඩායම '
+                            : replyObj.language === 'Tamil' ? 'Polygon Agro வாடிக்கையாளர் ஆதரவு குழு'
+                            : 'Polygon Customer Support Team '
                             }}
                         </p>
                     </div>
-     
+
                 </div>
                 <button
                     class="bg-[#F6F7F9]  text-[#6B7D8C] text-lg  border-2 border-gray-400 rounded-lg px-6 py-2 font-medium shadow-md hover:bg-gray-100"

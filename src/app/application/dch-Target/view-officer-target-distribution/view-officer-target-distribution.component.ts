@@ -1,4 +1,4 @@
-import { CommonModule, DatePipe, Location  } from '@angular/common';
+import { CommonModule, DatePipe, Location } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
@@ -29,9 +29,9 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
   totalOfficers: number = 0;
   officerId!: number;
   centerId!: number;
-  date:  string = '';
+  date: string = '';
   hasData: boolean = false;
-  isLoading:boolean = true;
+  isLoading: boolean = true;
   isStatusDropdownOpen = false;
   isTarget: boolean = false;
   firstTime = true;
@@ -61,9 +61,9 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
     this.officerId = this.route.snapshot.params['officerId'];
     const nameParam = this.route.snapshot.params['centerName'];
     this.centerName =
-    nameParam && nameParam !== 'null' && nameParam.trim() !== ''
-      ? nameParam
-      : null;
+      nameParam && nameParam !== 'null' && nameParam.trim() !== ''
+        ? nameParam
+        : null;
     this.centerId = this.route.snapshot.params['centerId'];
     this.empId = this.route.snapshot.params['empId']
     const today = new Date();
@@ -86,9 +86,9 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
   }
 
   fetchSelectedOfficerTargets(
-    officerId: number = this.officerId, 
+    officerId: number = this.officerId,
     centerId: number = this.centerId,
-    search: string = this.searchText, 
+    search: string = this.searchText,
     status: string = this.selectStatus,
     date: string = this.selectedDate
   ) {
@@ -97,10 +97,10 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
       (res) => {
         this.ordersArr = res.items.map((item: any) => {
           let status = '';
-    
+
           const pkgStatus = item.packageStatus;
           const addStatus = item.additionalItemsStatus;
-          
+
           // Priority 1: If either is Pending, combinedStatus is Pending
           if (pkgStatus === 'Pending' || addStatus === 'Pending') {
             status = 'Pending';
@@ -124,17 +124,17 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
           else {
             status = 'Unknown';
           }
-        
+
           return {
             ...item,
             combinedStatus: status
           };
         });
-        
+
         this.hasData = this.ordersArr.length > 0;
         if (this.selectStatus === '' && this.hasData) {
           this.isTarget = true;
-        } 
+        }
         this.isLoading = false;
       }
     );
@@ -142,22 +142,22 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
 
   onDateChange(newDate: string | Date | null) {
     let dateString: string;
-  
+
     if (!newDate) {
       dateString = new Date().toISOString().split('T')[0];
-    } 
+    }
     else if (newDate instanceof Date) {
       dateString = newDate.toISOString().split('T')[0];
-    } 
+    }
     else {
       dateString = newDate;
     }
-  
+
     this.selectedDate = dateString;
     this.isTarget = false;
     this.fetchSelectedOfficerTargets();
   }
-  
+
 
   fetchOfficers() {
     this.isLoading = true;
@@ -183,13 +183,13 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
   getDisplayDate(scheduleDate: string | Date): string {
     const today = new Date();
     const schedule = new Date(scheduleDate);
-  
+
     // Normalize times to midnight for accurate date-only comparison
     today.setHours(0, 0, 0, 0);
     schedule.setHours(0, 0, 0, 0);
-  
+
     const diffDays = Math.floor((schedule.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-  
+
     if (diffDays === 0) {
       return 'Today';
     } else if (diffDays === 1) {
@@ -198,10 +198,10 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
       return 'Day after tomorrow';
     } else {
       const day = schedule.getDate();
-      const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", 
-                          "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+      const monthNames = ["Jan", "Feb", "Mar", "Apr", "May", "Jun",
+        "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
       const month = monthNames[schedule.getMonth()];
-  
+
       // Get ordinal for the day
       const ordinal = (n: number) => {
         if (n > 3 && n < 21) return 'th';
@@ -212,42 +212,42 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
           default: return 'th';
         }
       }
-  
+
       return `${day}${ordinal(day)} ${month}`;
     }
   }
-  
+
   removeWithin(time: string): string {
     return time ? time.replace('Within ', '') : time;
   }
 
 
   getDateColor(item: any): string {
-  const schedule = item.sheduleTime;
+    const schedule = item.sheduleTime;
 
-  if (!schedule) return '#606060';
+    if (!schedule) return '#606060';
 
-  const now = new Date();
-  const currentMinutes = now.getHours() * 60 + now.getMinutes();
+    const now = new Date();
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
 
-  let upperLimitMinutes: number | null = null;
+    let upperLimitMinutes: number | null = null;
 
-  if (schedule === 'Within 8AM - 2PM') {
-    upperLimitMinutes = 14 * 60; // 2:00 PM
-  } else if (schedule === 'Within 2PM - 8PM') {
-    upperLimitMinutes = 20 * 60; // 8:00 PM
+    if (schedule === 'Within 8AM - 2PM') {
+      upperLimitMinutes = 14 * 60; // 2:00 PM
+    } else if (schedule === 'Within 2PM - 8PM') {
+      upperLimitMinutes = 20 * 60; // 8:00 PM
+    }
+
+    if (upperLimitMinutes === null) return '#606060';
+
+    // RED if current time is past limit
+    if (currentMinutes > upperLimitMinutes) {
+      return '#FF0000';
+    }
+
+    // BLUE if still within limit
+    return '#415CFF';
   }
-
-  if (upperLimitMinutes === null) return '#606060';
-
-  // RED if current time is past limit
-  if (currentMinutes > upperLimitMinutes) {
-    return '#FF0000';
-  }
-
-  // BLUE if still within limit
-  return '#415CFF';
-}
 
   filterStatus() {
     this.fetchSelectedOfficerTargets();
@@ -291,38 +291,38 @@ export class ViewOfficerTargetDistributionComponent implements OnInit {
       } else if (timeSlot === 'Within 4-8 PM') {
         deadline.setHours(20, 0, 0, 0); // 8:00 PM
       }
+    }
+
+    return completeTime.getTime() <= deadline.getTime() ? 'On Time' : 'Late';
   }
 
-  return completeTime.getTime() <= deadline.getTime() ? 'On Time' : 'Late';
-}
-
-downloadTemplate1() {
-  this.isDownloading = true;
+  downloadTemplate1() {
+    this.isDownloading = true;
     this.DistributionSrv
-    .downloadRequestedItemsReportFile(this.officerId, this.centerId, this.searchText, this.selectStatus, this.selectedDate)
-    .subscribe({
-      next: (blob) => {
-        const url = window.URL.createObjectURL(blob);
-        const a = document.createElement("a");
-        a.href = url;
-        if(this.selectStatus) {
-          a.download = `${this.empId}_Current_active_officer_targets_filtered_by_${this.selectStatus}_on_${this.selectedDate}.xlsx`;
-        } else {
-          a.download = `${this.empId}_Current_active_officer_targets_on_${this.selectedDate}.xlsx`;
+      .downloadRequestedItemsReportFile(this.officerId, this.centerId, this.searchText, this.selectStatus, this.selectedDate)
+      .subscribe({
+        next: (blob) => {
+          const url = window.URL.createObjectURL(blob);
+          const a = document.createElement("a");
+          a.href = url;
+          if (this.selectStatus) {
+            a.download = `${this.empId}_Current_active_officer_targets_filtered_by_${this.selectStatus}_on_${this.selectedDate}.xlsx`;
+          } else {
+            a.download = `${this.empId}_Current_active_officer_targets_on_${this.selectedDate}.xlsx`;
+          }
+          a.click();
+          window.URL.revokeObjectURL(url);
+
+          this.toastSrv.success('File Downloaded Successfully.');
+          this.isDownloading = false;
+        },
+        error: (error) => {
+          this.toastSrv.error('File Download Failed.');
+          this.isDownloading = false;
         }
-        a.click();
-        window.URL.revokeObjectURL(url);
+      });
 
-        this.toastSrv.success('File Downloaded Successfully.');
-        this.isDownloading = false;
-      },
-      error: (error) => {
-        this.toastSrv.error('File Download Failed.');
-        this.isDownloading = false;
-      }
-    });
-
-}
+  }
 
 }
 

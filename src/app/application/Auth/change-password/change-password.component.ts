@@ -31,9 +31,9 @@ export class ChangePasswordComponent implements OnInit {
     hasSpecial: false,
   };
 
-  constructor(private authService: AuthService, private http: HttpClient, private router: Router) {}
+  constructor(private authService: AuthService, private http: HttpClient, private router: Router) { }
 
-  ngOnInit(): void {}
+  ngOnInit(): void { }
 
   togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;

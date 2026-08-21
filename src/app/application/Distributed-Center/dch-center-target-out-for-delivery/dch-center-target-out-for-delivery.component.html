@@ -62,14 +62,13 @@
             </div>
 
             <div class="relative w-36 mr-12">
-                <app-custom-datepicker 
-                [placeholder]="'Delivery Date'"
-                [selectedDate]="date"
-                (dateChange)="onDateChange($event)"></app-custom-datepicker>
+                <app-custom-datepicker [placeholder]="'Delivery Date'" [selectedDate]="date"
+                    (dateChange)="onDateChange($event)"></app-custom-datepicker>
             </div>
 
             <div class="flex mr-5 items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
-                <input type="text" placeholder="Search by Order ID.." [(ngModel)]="searchText" (keyup.enter)="onSearch()" (keyup.esc)="offSearch()"
+                <input type="text" placeholder="Search by Order ID.." [(ngModel)]="searchText"
+                    (keyup.enter)="onSearch()" (keyup.esc)="offSearch()"
                     class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
                 <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                     (click)="onSearch()">
@@ -93,19 +92,20 @@
     </div>
 
     <button *ngIf="hasData"
-                class="bg-[#415CFF] text-white shadow-md font-medium rounded-lg py-2 px-5 mr-5 text-lg flex items-center"
-                (click)="downloadTemplate1()">
-                <i class="fa-solid fa-download px-2" *ngIf="!isDownloading"></i>
-                <i class="fa-solid fa-spinner fa-spin px-2" *ngIf="isDownloading"></i>
-                {{ isDownloading ? " Downloading..." : " Download" }}
-            </button>
+        class="bg-[#415CFF] text-white shadow-md font-medium rounded-lg py-2 px-5 mr-5 text-lg flex items-center"
+        (click)="downloadTemplate1()">
+        <i class="fa-solid fa-download px-2" *ngIf="!isDownloading"></i>
+        <i class="fa-solid fa-spinner fa-spin px-2" *ngIf="isDownloading"></i>
+        {{ isDownloading ? " Downloading..." : " Download" }}
+    </button>
 
     <div *ngIf="!hasData" class="flex flex-col items-center w-full h-screen mt-6">
         <p class="text-[#494949] my-6 dark:text-white">--No orders found--</p>
         <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
     </div>
 
-    <div *ngIf="hasData" class="min-w-max overflow-hidden mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+    <div *ngIf="hasData"
+        class="min-w-max overflow-hidden mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
         <table class="w-full min-w-max divide-y-2 overflow-hidden">
             <thead class="text-[#4B5563] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
                 <tr>
@@ -120,8 +120,7 @@
                 </tr>
             </thead>
             <tbody class="bg-white dark:bg-[#1D1D1F] text-[#000000] dark:border-[#1D1D1F] cursor-default">
-                <tr
-                    *ngFor="let item of ordersArr; let i = index">
+                <tr *ngFor="let item of ordersArr; let i = index">
 
                     <td class="px-6 py-4 text-sm font-medium text-gray-900 dark:text-[#C5C5C5]">
                         {{ (i + 1) < 10 ? ('0' + (i + 1)) : (i + 1) }} </td>
@@ -132,22 +131,19 @@
                         getDisplayDate(item.sheduleDate) }} {{ removeWithin(item.sheduleTime) }}</td>
                     <td class="px-6 py-4 text-sm text-left font-medium text-gray-900 dark:text-[#C5C5C5]">
                         {{ formatTime(item.outDlvrDate) }}
-                      </td>
+                    </td>
                     <td class="px-6 py-4 text-sm text-center ">
 
                         <div class="flex font-medium items-center justify-center h-full">
-                            <span *ngIf="item.deliveryPeriod ==='On Time'"
-                                class="text-[#415CFF] px-3 py-1">
+                            <span *ngIf="item.deliveryPeriod ==='On Time'" class="text-[#415CFF] px-3 py-1">
                                 On Time
                             </span>
 
-                            <span *ngIf="item.deliveryPeriod ==='Late'"
-                                class="text-[#FF0000] px-3 py-1">
+                            <span *ngIf="item.deliveryPeriod ==='Late'" class="text-[#FF0000] px-3 py-1">
                                 Late
                             </span>
 
-                            <span *ngIf="item.deliveryPeriod ==='Later'"
-                                class="text-[#AC0003] px-3 py-1">
+                            <span *ngIf="item.deliveryPeriod ==='Later'" class="text-[#AC0003] px-3 py-1">
                                 Late
                             </span>
 

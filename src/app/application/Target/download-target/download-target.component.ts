@@ -67,81 +67,7 @@ export class DownloadTargetComponent {
     );
   }
 
-  // validateToDate() {
-  //   // Case 1: User hasn't selected fromDate yet
-  //   if (!this.fromDate) {
-  //     this.toDate = ''; // Reset toDate
-  //     this.toastSrv.warning("Please select the 'From' date first.");
-  //     return;
-  //   }
-
-  //   // Case 2: toDate is earlier than fromDate
-  //   if (this.toDate) {
-  //     const from = new Date(this.fromDate);
-  //     const to = new Date(this.toDate);
-
-  //     if (to <= from) {
-  //       this.toDate = ''; // Reset toDate
-  //       this.toastSrv.warning("The 'To' date cannot be earlier than or same to the 'From' date.");
-  //     }
-  //   }
-  // }
-
-  // validateFromDate() {
-  //   // Case 1: User hasn't selected fromDate yet
-  //   if (!this.toDate) {
-  //     return;
-  //   }
-
-  //   // Case 2: toDate is earlier than fromDate
-  //   if (this.toDate) {
-  //     const from = new Date(this.fromDate);
-  //     const to = new Date(this.toDate);
-
-  //     if (to <= from) {
-  //       this.fromDate = ''; // Reset toDate
-  //       this.toastSrv.warning("The 'From' date cannot be Later than or same to the 'From' date.");
-  //     }
-  //   }
-  // }
-
-  // onDateFromDateChange(newDate: string | Date | null) {
-  //   let dateString: string;
-  
-  //   if (!newDate) {
-      
-  //     return
-  //   }
-  //   else if (newDate instanceof Date) {
-      
-  //     dateString = newDate.toISOString().split('T')[0];
-  //   } 
-  //   else {
-      
-  //     dateString = newDate;
-  //   }
-
-  //   if (!this.toDate) {
-  //     return;
-  //   }
-
-  //   this.fromDate = dateString;
-
-  //   // Case 2: toDate is earlier than fromDate
-  //   if (this.toDate) {
-  //     const from = new Date(this.fromDate);
-  //     const to = new Date(this.toDate);
-
-  //     if (to <= from) {
-  //       this.fromDate = ''; // Reset toDate
-  //       newDate = '';
-  //       this.toastSrv.warning("The 'From' date cannot be Later than or same to the 'From' date.");
-  //     }
-  //   }
-  
-  // }
-
-onDateFromDateChange(newDate: string | Date | null) {
+  onDateFromDateChange(newDate: string | Date | null) {
     let dateString: string;
 
     if (!newDate) {
@@ -262,11 +188,6 @@ onDateFromDateChange(newDate: string | Date | null) {
       return;
     }
 
-    
-    // if (!this.fromDate || !this.toDate) {
-    //   this.toastSrv.warning("Please fill in all fields");
-    //   return;
-    // }
     this.hasDataAndTime = true;
     this.fetchDownloadTarget();
   }
@@ -278,31 +199,31 @@ onDateFromDateChange(newDate: string | Date | null) {
     }
 
     const worksheetData = this.targetArr.map((item, index) => ({
-  No: index + 1,
-  'Crop Name': item.cropNameEnglish,
-  'Variety Name': item.varietyNameEnglish,
-  Grade: item.grade,
-  'Target (kg)': item.target ? item.target : '-',
-  'Completed (kg)': item.complete ? item.complete : '-',
-  'Target Date': item.date
-    ? new Date(item.date).toISOString().split('T')[0].replace(/-/g, '/')
-    : '',
-  Status: item.status,
-  Validity: item.validity,
-}));
+      No: index + 1,
+      'Crop Name': item.cropNameEnglish,
+      'Variety Name': item.varietyNameEnglish,
+      Grade: item.grade,
+      'Target (kg)': item.target ? item.target : '-',
+      'Completed (kg)': item.complete ? item.complete : '-',
+      'Target Date': item.date
+        ? new Date(item.date).toISOString().split('T')[0].replace(/-/g, '/')
+        : '',
+      Status: item.status,
+      Validity: item.validity,
+    }));
 
     const worksheet: XLSX.WorkSheet = XLSX.utils.json_to_sheet(worksheetData);
 
     // Set column widths (in characters)
     worksheet['!cols'] = [
-      { wch: 5 },    // No (column A)
-      { wch: 20 },   // Crop Name (column B)
-      { wch: 20 },   // Variety Name (column C)
-      { wch: 10 },   // Grade (column D)
-      { wch: 12 },   // Target (kg) (column E)
-      { wch: 15 },   // Completed (kg) (column F)
-      { wch: 12 },   // Status (column G)
-      { wch: 12 }    // Validity (column H)
+      { wch: 5 },   
+      { wch: 20 },  
+      { wch: 20 },  
+      { wch: 10 },  
+      { wch: 12 },  
+      { wch: 15 },  
+      { wch: 12 },  
+      { wch: 12 }   
     ];
 
     // Auto-filter (optional)

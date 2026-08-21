@@ -70,9 +70,9 @@ export class
 
   ngOnInit(): void {
     this.centerId = +this.route.snapshot.params['id'];
-  
+
     this.isLoading = true;
-  
+
     this.TargetSrv.getAllPriceList(
       this.centerId,
       1,
@@ -84,7 +84,7 @@ export class
         this.priceListArr = res.items || [];
         this.centerName = res.centerData[0].centerName;
         this.totalItems = res.total || 0;
-  
+
         this.hasData = this.priceListArr.length > 0;
         this.isMarketPricerExists = this.priceListArr.length > 0;
         this.isLoading = false;
@@ -98,7 +98,7 @@ export class
       }
     });
   }
-  
+
 
   @HostListener('document:click', ['$event'])
   onDocumentClick(event: MouseEvent) {
@@ -115,14 +115,14 @@ export class
     this.isLoading = true;
     this.TargetSrv.getAllPriceList(centerId, page, limit, grade, search).subscribe((res) => {
       this.priceListArr = res.items;
-      
+
       this.totalItems = res.total | 0;
       if (res.items.length === 0) {
         this.hasData = false;
-      }else{
+      } else {
         this.hasData = true;
       }
-        this.isLoading = false;
+      this.isLoading = false;
 
     });
   }

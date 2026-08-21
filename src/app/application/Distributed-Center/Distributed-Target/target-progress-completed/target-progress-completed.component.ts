@@ -1,4 +1,4 @@
-import { CommonModule, DatePipe, Location  } from '@angular/common';
+import { CommonModule, DatePipe, Location } from '@angular/common';
 import { Component, HostListener, OnInit, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
@@ -18,7 +18,7 @@ import Swal from 'sweetalert2';
   templateUrl: './target-progress-completed.component.html',
   styleUrl: './target-progress-completed.component.css'
 })
-export class TargetProgressCompletedComponent implements OnInit{
+export class TargetProgressCompletedComponent implements OnInit {
 
   @Output() switchToOutForDelivery = new EventEmitter<void>();
 
@@ -26,17 +26,17 @@ export class TargetProgressCompletedComponent implements OnInit{
   searchText: string = '';
   selectStatus: string = '';
 
-  date:  string = '';
+  date: string = '';
 
   page: number = 1;
   totalItems: number = 0;
   itemsPerPage: number = 10;
   hasData: boolean = true;
 
-  isLoading:boolean = true;
+  isLoading: boolean = true;
 
-  selectedOrderIds: number[] = []; 
-  allChecked: boolean = false; 
+  selectedOrderIds: number[] = [];
+  allChecked: boolean = false;
 
   isOutForDelivery = false;
 
@@ -64,10 +64,10 @@ export class TargetProgressCompletedComponent implements OnInit{
         this.totalItems = res.items.length;
         this.ordersArr = res.items.map((item: any) => {
           let status = '';
-          
+
           const pkgStatus = item.packageStatus;
           const addStatus = item.additionalItemsStatus;
-          
+
           // Priority 1: If either is Pending, combinedStatus is Pending
           if (pkgStatus === 'Pending' || addStatus === 'Pending') {
             status = 'Pending';
@@ -91,7 +91,7 @@ export class TargetProgressCompletedComponent implements OnInit{
           else {
             status = 'Unknown';
           }
-        
+
           return {
             ...item,
             combinedStatus: status
@@ -121,14 +121,14 @@ export class TargetProgressCompletedComponent implements OnInit{
 
   onDateChange(newDate: string | Date | null) {
     let formattedDate: string = '';
-  
+
     if (newDate instanceof Date) {
       // Convert Date object to string (YYYY-MM-DD)
       formattedDate = newDate.toISOString().split('T')[0];
     } else if (typeof newDate === 'string') {
       formattedDate = newDate;
     }
-  
+
     this.date = formattedDate;
     this.fetchCompletedAssignOrders();
   }
@@ -137,13 +137,13 @@ export class TargetProgressCompletedComponent implements OnInit{
   getDisplayDate(sheduleDate: string | Date): string {
     const today = new Date();
     const schedule = new Date(sheduleDate);
-  
+
     // Normalize times to midnight for accurate date-only comparison
     today.setHours(0, 0, 0, 0);
     schedule.setHours(0, 0, 0, 0);
-  
+
     const diffDays = Math.floor((schedule.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-  
+
     if (diffDays === 0) {
       return 'Today';
     } else if (diffDays === 1) {
@@ -157,7 +157,7 @@ export class TargetProgressCompletedComponent implements OnInit{
       return `${month}/${day}`;
     }
   }
-  
+
 
   removeWithin(time: string): string {
     return time ? time.replace('Within ', '') : time;
@@ -165,165 +165,165 @@ export class TargetProgressCompletedComponent implements OnInit{
 
   isChecked(orderId: number): boolean {
     return this.selectedOrderIds.includes(orderId);
-}
+  }
 
 
-toggleOrder(orderId: number, event: Event): void {
+  toggleOrder(orderId: number, event: Event): void {
     const isChecked = (event.target as HTMLInputElement).checked;
-    
+
     if (isChecked) {
-        if (!this.selectedOrderIds.includes(orderId)) {
-            this.selectedOrderIds.push(orderId);
-        }
+      if (!this.selectedOrderIds.includes(orderId)) {
+        this.selectedOrderIds.push(orderId);
+      }
     } else {
-        this.selectedOrderIds = this.selectedOrderIds.filter(id => id !== orderId);
+      this.selectedOrderIds = this.selectedOrderIds.filter(id => id !== orderId);
     }
 
     this.allChecked = this.selectedOrderIds.length === this.ordersArr.length;
-}
+  }
 
 
-toggleAllOrders(event: Event): void {
+  toggleAllOrders(event: Event): void {
     const isChecked = (event.target as HTMLInputElement).checked;
     this.allChecked = isChecked;
-    
+
     if (isChecked) {
-      
-        this.selectedOrderIds = this.ordersArr.map(item => item.processOrderId);
+
+      this.selectedOrderIds = this.ordersArr.map(item => item.processOrderId);
     } else {
-        // Deselect all orders
-        this.selectedOrderIds = [];
+      // Deselect all orders
+      this.selectedOrderIds = [];
     }
-}
+  }
 
-deSelectAll() {
-  this.selectedOrderIds = [];
-  this.allChecked = false;
-}
+  deSelectAll() {
+    this.selectedOrderIds = [];
+    this.allChecked = false;
+  }
 
-outForDelivery() {
-  this.isOutForDelivery = true;
-}
+  outForDelivery() {
+    this.isOutForDelivery = true;
+  }
 
-sendOutForDelivery() {
+  sendOutForDelivery() {
 
-  const now = new Date();
-  const year = now.getFullYear();
-  const month = String(now.getMonth() + 1).padStart(2, '0');  // Months are 0-based
-  const day = String(now.getDate()).padStart(2, '0');
+    const now = new Date();
+    const year = now.getFullYear();
+    const month = String(now.getMonth() + 1).padStart(2, '0');  // Months are 0-based
+    const day = String(now.getDate()).padStart(2, '0');
 
-  const hours = String(now.getHours()).padStart(2, '0');
-  const minutes = String(now.getMinutes()).padStart(2, '0');
-  const seconds = String(now.getSeconds()).padStart(2, '0');
+    const hours = String(now.getHours()).padStart(2, '0');
+    const minutes = String(now.getMinutes()).padStart(2, '0');
+    const seconds = String(now.getSeconds()).padStart(2, '0');
 
-  const currentTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+    const currentTime = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
     this.changeStatusAndTime({
       orderIds: this.selectedOrderIds,
       time: currentTime
     });
-}
+  }
 
-changeStatusAndTime(data: { orderIds: any[]; time: string }) {
-  this.isLoading = true;
-  this.DistributionSrv.setStatusAndTime(data).subscribe({
-    next: (res) => {
-      this.isLoading = false;
+  changeStatusAndTime(data: { orderIds: any[]; time: string }) {
+    this.isLoading = true;
+    this.DistributionSrv.setStatusAndTime(data).subscribe({
+      next: (res) => {
+        this.isLoading = false;
 
-      if (res && res.success) {
-        const orderCount = data.orderIds.length < 10 ? ('0' + data.orderIds.length) : (data.orderIds.length);
-        const orderLabel = data.orderIds.length === 1 ? 'order has' : 'orders have';
-       
-        this.toastSrv.success(`${orderCount} ${orderLabel} been released to the next stage.`, 'Success');
+        if (res && res.success) {
+          const orderCount = data.orderIds.length < 10 ? ('0' + data.orderIds.length) : (data.orderIds.length);
+          const orderLabel = data.orderIds.length === 1 ? 'order has' : 'orders have';
+
+          this.toastSrv.success(`${orderCount} ${orderLabel} been released to the next stage.`, 'Success');
+          this.isOutForDelivery = false;
+          this.switchToOutForDelivery.emit();
+        } else {
+          this.toastSrv.error('Failed to sent out for delivery!', 'Error');
+          this.isOutForDelivery = false;
+        }
+        this.fetchCompletedAssignOrders()
+        this.allChecked = false;
+        this.selectedOrderIds = [];
+      },
+      error: (err) => {
+        this.isLoading = false;
+        console.error(err);
+        this.toastSrv.error('Something went wrong!', 'Error');
         this.isOutForDelivery = false;
-        this.switchToOutForDelivery.emit();
-      } else {
-        this.toastSrv.error('Failed to sent out for delivery!', 'Error');
-        this.isOutForDelivery = false;
+        this.fetchCompletedAssignOrders()
+        this.allChecked = false;
       }
-      this.fetchCompletedAssignOrders()
-      this.allChecked = false;
-      this.selectedOrderIds = [];
-    },
-    error: (err) => {
-      this.isLoading = false;
-      console.error(err);
-      this.toastSrv.error('Something went wrong!', 'Error');
-      this.isOutForDelivery = false;
-      this.fetchCompletedAssignOrders()
-      this.allChecked = false;
-    }
-  });
-}
-
-cancelOutForDelivery() {
-  this.isOutForDelivery = false;
-}
-
-getScheduleClass(item: any): string {
-
-  if (!item.completeTime) {
-    return 'schedule-future';
+    });
   }
 
-  const today = new Date();
-  today.setHours(0, 0, 0, 0);
-
-  const scheduleDate = new Date(item.sheduleDate);
-  scheduleDate.setHours(0, 0, 0, 0);
-
-  const diffMs = scheduleDate.getTime() - today.getTime();
-
-  // Future schedule date
-  if (diffMs > 0) {
-    return 'schedule-future';
+  cancelOutForDelivery() {
+    this.isOutForDelivery = false;
   }
 
-  // Past schedule date
-  if (diffMs < 0) {
-    return 'schedule-past';
-  }
+  getScheduleClass(item: any): string {
 
-  // Today's schedule - compare completion time with the slot
-  const completeTime = new Date(item.completeTime);
-  const slotStart = new Date(scheduleDate);
-  const slotEnd = new Date(scheduleDate);
-
-  switch (item.sheduleTime) {
-    case '08:00 AM - 12:00 PM':
-      slotStart.setHours(7, 15, 0, 0);
-      slotEnd.setHours(12, 0, 0, 0);
-      break;
-
-    case '12:00 PM - 04:00 PM':
-      slotStart.setHours(11, 15, 0, 0);
-      slotEnd.setHours(16, 0, 0, 0);
-      break;
-
-    case '04:00 PM - 09:00 PM':
-      slotStart.setHours(15, 15, 0, 0);
-      slotEnd.setHours(21, 0, 0, 0);
-      break;
-
-    default:
+    if (!item.completeTime) {
       return 'schedule-future';
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const scheduleDate = new Date(item.sheduleDate);
+    scheduleDate.setHours(0, 0, 0, 0);
+
+    const diffMs = scheduleDate.getTime() - today.getTime();
+
+    // Future schedule date
+    if (diffMs > 0) {
+      return 'schedule-future';
+    }
+
+    // Past schedule date
+    if (diffMs < 0) {
+      return 'schedule-past';
+    }
+
+    // Today's schedule - compare completion time with the slot
+    const completeTime = new Date(item.completeTime);
+    const slotStart = new Date(scheduleDate);
+    const slotEnd = new Date(scheduleDate);
+
+    switch (item.sheduleTime) {
+      case '08:00 AM - 12:00 PM':
+        slotStart.setHours(7, 15, 0, 0);
+        slotEnd.setHours(12, 0, 0, 0);
+        break;
+
+      case '12:00 PM - 04:00 PM':
+        slotStart.setHours(11, 15, 0, 0);
+        slotEnd.setHours(16, 0, 0, 0);
+        break;
+
+      case '04:00 PM - 09:00 PM':
+        slotStart.setHours(15, 15, 0, 0);
+        slotEnd.setHours(21, 0, 0, 0);
+        break;
+
+      default:
+        return 'schedule-future';
+    }
+
+    // Completed outside the allowed window
+    if (completeTime < slotStart || completeTime > slotEnd) {
+      return 'schedule-expired';
+    }
+
+    // Completed within the allowed window
+    return 'schedule-active';
   }
 
-  // Completed outside the allowed window
-  if (completeTime < slotStart || completeTime > slotEnd) {
-    return 'schedule-expired';
+  onKeydown(event: KeyboardEvent) {
+    // Prevent space key
+    if (event.key === ' ') {
+      event.preventDefault();
+      return;
+    }
   }
-
-  // Completed within the allowed window
-  return 'schedule-active';
-}
-
-onKeydown(event: KeyboardEvent) {
-  // Prevent space key
-  if (event.key === ' ') {
-    event.preventDefault();
-    return;
-  }
-}
 
 }
 

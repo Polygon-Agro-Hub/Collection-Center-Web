@@ -1,69 +1,49 @@
 <div class="relative w-full">
   <!-- Input box -->
-  <div
-    [ngClass]="triggerClass"
-    (click)="toggleCalendar()"
-  >
+  <div [ngClass]="triggerClass" (click)="toggleCalendar()">
     <span class="flex-1 text-[16px] text-[#5C5C5C] dark:text-textDark" [ngClass]=" placeholderClass">
       {{ selectedDate ? selectedDate : placeholder }}
     </span>
 
     <!-- Clear button -->
-    <button
-    *ngIf="selectedDate && showClearButton"
-      type="button"
-      (click)="clearDate($event)"
-      class="ml-2 text-black dark:text-textDark"
-    >
+    <button *ngIf="selectedDate && showClearButton" type="button" (click)="clearDate($event)"
+      class="ml-2 text-black dark:text-textDark">
       ✕
     </button>
 
     <!-- Calendar icon -->
-    <i
-      *ngIf="!selectedDate && !showCalendar"
-      class="fa-solid fa-calendar-days ml-2 text-gray-500 dark:text-gray-300"
-    ></i>
+    <i *ngIf="!selectedDate && !showCalendar"
+      class="fa-solid fa-calendar-days ml-2 text-gray-500 dark:text-gray-300"></i>
 
     <!-- Up arrow when calendar is open -->
-    <i
-      *ngIf="showCalendar && !selectedDate"
-      class="fa-solid fa-angle-up ml-2 text-gray-500 dark:text-gray-300"
-    ></i>
+    <i *ngIf="showCalendar && !selectedDate" class="fa-solid fa-angle-up ml-2 text-gray-500 dark:text-gray-300"></i>
   </div>
 
   <!-- Calendar popup -->
-  <div
-    *ngIf="showCalendar"
-    class="absolute border-[1.8px] w-72 border-[#b0baf3] dark:border-[#828282] z-50 mt-2 p-4 bg-white dark:bg-[#292929] rounded-xl shadow-lg"
-  >
+  <div *ngIf="showCalendar"
+    class="absolute border-[1.8px] w-72 border-[#b0baf3] dark:border-[#828282] z-50 mt-2 p-4 bg-white dark:bg-[#292929] rounded-xl shadow-lg">
     <!-- Year Picker View -->
     <div *ngIf="showYearPicker">
       <div class="flex justify-between items-center mb-4">
-        <button type="button" (click)="prevYearRange()" class="px-2 text-2xl dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded">‹</button>
+        <button type="button" (click)="prevYearRange()"
+          class="px-2 text-2xl dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded">‹</button>
         <span class="font-semibold text-textLight dark:text-white">
           {{ yearRange[0] }} - {{ yearRange[yearRange.length - 1] }}
         </span>
-        <button type="button" (click)="nextYearRange()" class="px-2 text-2xl dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded">›</button>
+        <button type="button" (click)="nextYearRange()"
+          class="px-2 text-2xl dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded">›</button>
       </div>
-      
+
       <div class="grid grid-cols-3 gap-2">
-        <button
-        type="button"
-          *ngFor="let year of yearRange"
-          (click)="selectYear(year)"
+        <button type="button" *ngFor="let year of yearRange" (click)="selectYear(year)"
           class="p-3 rounded cursor-pointer hover:bg-blue-300 dark:hover:bg-blue-600 dark:text-white"
-          [class.bg-blue-500]="year === currentYear"
-          [class.text-white]="year === currentYear"
-        >
+          [class.bg-blue-500]="year === currentYear" [class.text-white]="year === currentYear">
           {{ year }}
         </button>
       </div>
-      
-      <button 
-        type="button"
-        (click)="toggleYearPicker()" 
-        class="w-full mt-4 py-2 bg-gray-200 dark:bg-gray-700 dark:text-white rounded hover:bg-blue-600 dark:hover:bg-blue-600"
-      >
+
+      <button type="button" (click)="toggleYearPicker()"
+        class="w-full mt-4 py-2 bg-gray-200 dark:bg-gray-700 dark:text-white rounded hover:bg-blue-600 dark:hover:bg-blue-600">
         Back to Calendar
       </button>
     </div>
@@ -72,15 +52,17 @@
     <div *ngIf="!showYearPicker">
       <!-- Month navigation -->
       <div class="flex justify-between items-center mb-2">
-        <button type="button" (click)="prevMonth()" class="px-2 text-[#828282] mb-2 text-3xl dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded"><i class="fa-solid fa-angle-left text-lg "></i></button>
-        <span 
+        <button type="button" (click)="prevMonth()"
+          class="px-2 text-[#828282] mb-2 text-3xl dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded"><i
+            class="fa-solid fa-angle-left text-lg "></i></button>
+        <span
           class="font-semibold text-textLight dark:text-white cursor-pointer hover:bg-gray-100 dark:hover:bg-gray-700 px-3 py-1 rounded"
-          (click)="toggleYearPicker()"
-          title="Click to select year"
-        >
+          (click)="toggleYearPicker()" title="Click to select year">
           {{ months[currentMonth] }} {{ currentYear }}
         </span>
-        <button type="button" (click)="nextMonth()" class="px-2 text-[#828282] mb-2 text-3xl dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded"><i class="fa-solid fa-angle-right text-lg"></i></button>
+        <button type="button" (click)="nextMonth()"
+          class="px-2 text-[#828282] mb-2 text-3xl dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 rounded"><i
+            class="fa-solid fa-angle-right text-lg"></i></button>
       </div>
 
       <!-- Weekdays -->
@@ -90,25 +72,17 @@
 
       <!-- Days -->
       <div class="grid grid-cols-7 gap-1 text-center mt-2 dark:text-white">
-  <div
-    *ngFor="let day of calendarDays"
-    (click)="selectDate(day)"
-    class="h-8 w-8 flex items-center justify-center rounded border border-[#b0baf3] dark:border-gray-600"
-    [class.cursor-pointer]="!isDisabled(day)"
-    [class.cursor-not-allowed]="isDisabled(day)"
-    [class.text-gray-300]="isDisabled(day)"
-    [class.dark:text-gray-600]="isDisabled(day)"
-    [class.hover:bg-blue-300]="!isDisabled(day)"
-    [class.dark:hover:bg-blue-600]="!isDisabled(day)"
-    [class.text-gray-400]="!day.currentMonth && !isDisabled(day)"
-    [class.dark:text-gray-500]="!day.currentMonth && !isDisabled(day)"
-    [class.bg-blue-500]="isSelected(day)"
-    [class.text-white]="isSelected(day)"
-    [class.border-blue-500]="isSelected(day)"
-  >
-    {{ day.date }}
-  </div>
-</div>
+        <div *ngFor="let day of calendarDays" (click)="selectDate(day)"
+          class="h-8 w-8 flex items-center justify-center rounded border border-[#b0baf3] dark:border-gray-600"
+          [class.cursor-pointer]="!isDisabled(day)" [class.cursor-not-allowed]="isDisabled(day)"
+          [class.text-gray-300]="isDisabled(day)" [class.dark:text-gray-600]="isDisabled(day)"
+          [class.hover:bg-blue-300]="!isDisabled(day)" [class.dark:hover:bg-blue-600]="!isDisabled(day)"
+          [class.text-gray-400]="!day.currentMonth && !isDisabled(day)"
+          [class.dark:text-gray-500]="!day.currentMonth && !isDisabled(day)" [class.bg-blue-500]="isSelected(day)"
+          [class.text-white]="isSelected(day)" [class.border-blue-500]="isSelected(day)">
+          {{ day.date }}
+        </div>
+      </div>
     </div>
   </div>
 </div>

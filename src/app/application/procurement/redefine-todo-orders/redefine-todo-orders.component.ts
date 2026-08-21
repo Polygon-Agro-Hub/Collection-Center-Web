@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, HostListener, OnInit, ViewChild  } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ReportServiceService } from '../../../services/Report-service/report-service.service';
@@ -30,8 +30,8 @@ export class RedefineTodoOrdersComponent implements OnInit {
   totalItems: number = 0;
 
   statusFilter: string = '';
-  dateFilter:string = ''; // Changed to Date type for p-calendar
-  dateFilter1:string = ''; // Changed to Date type for p-calendar
+  dateFilter: string = ''; // Changed to Date type for p-calendar
+  dateFilter1: string = ''; // Changed to Date type for p-calendar
   deliveryDateFilter: string = '';
   searchTerm: string = '';
   hasData: boolean = false;
@@ -129,7 +129,7 @@ export class RedefineTodoOrdersComponent implements OnInit {
 
   onDateChange(newDate: string | Date | null) {
     let dateString = '';
-  
+
     if (newDate instanceof Date) {
       // Convert Date object to "YYYY-MM-DD" format
       dateString = newDate.toISOString().split('T')[0];
@@ -137,14 +137,14 @@ export class RedefineTodoOrdersComponent implements OnInit {
       // Already a string
       dateString = newDate;
     }
-  
+
     this.dateFilter1 = dateString; // ✅ assign as string
     this.fetchOrders();
   }
 
   onDateChange2(newDate: string | Date | null) {
     let dateString = '';
-  
+
     if (newDate instanceof Date) {
       // Convert Date object to "YYYY-MM-DD" format
       dateString = newDate.toISOString().split('T')[0];
@@ -152,7 +152,7 @@ export class RedefineTodoOrdersComponent implements OnInit {
       // Already a string
       dateString = newDate;
     }
-  
+
     this.dateFilter = dateString; // ✅ assign as string
     this.fetchOrders();
   }
@@ -162,7 +162,7 @@ export class RedefineTodoOrdersComponent implements OnInit {
     this.fetchOrders();
   }
 
-  
+
 
   getStatusClass(status: string): string {
     switch (status?.toLowerCase()) {

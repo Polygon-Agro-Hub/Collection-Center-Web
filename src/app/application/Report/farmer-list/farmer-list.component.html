@@ -1,8 +1,9 @@
-<app-loading-spinner *ngIf="isLoading"/>
+<app-loading-spinner *ngIf="isLoading" />
 
 
 <div *ngIf="!isLoading">
-    <div class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
+    <div
+        class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
         <p (click)="navigateToReports()">Report</p>
         <p onclick="history.back()">Officer Reports</p>
         <p>Farmer List</p>
@@ -15,24 +16,18 @@
                 <p class="text-lg font-normal text-[#000000] dark:text-white">Date :</p>
                 <div class="relative w-48 mr-6">
 
-                    <app-custom-datepicker
-  [selectedDate]="selectedDate"
-  (dateChange)="onDateChange($event)"
-></app-custom-datepicker>
-                    <!-- <div
-                        class="border-2 rounded-xl  text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
-                        <input type="date" [(ngModel)]="selectDate" (change)="filterDate()"
-                            class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-1 rounded-xl focus:outline-none custom-date-input" />
-                    </div> -->
+                    <app-custom-datepicker [selectedDate]="selectedDate"
+                        (dateChange)="onDateChange($event)"></app-custom-datepicker>
                 </div>
 
-                
+
 
             </div>
 
             <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929] mr-5">
                 <input type="text" placeholder="Search by First / Last name, NIC" [(ngModel)]="searchText"
-                    class="bg-transparent outline-none w-full text-textLight dark:text-textDark" (keyup.enter)="onSearch()" (keyup.esc)="offSearch()" (input)="checkLeadingSpace()"/>
+                    class="bg-transparent outline-none w-full text-textLight dark:text-textDark"
+                    (keyup.enter)="onSearch()" (keyup.esc)="offSearch()" (input)="checkLeadingSpace()" />
                 <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                     (click)="onSearch()">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -57,62 +52,69 @@
             <p class="text-[#534E4E] text-base font-normal my-2 dark:text-textDark">On {{selectedDate}}</p>
         </div>
 
-        <div *ngIf="hasData" class=" min-w-max mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021] overflow-hidden">
-            
-                <table class="w-full min-w-max divide-y-2">
-                    <thead class="text-[#4B5563] text-base font-medium dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
-                        <tr>
-                            <th class="px-5 py-3 text-left  text-[#4B5563] text-base font-medium">No</th>
-                            <th class="px-5 py-3 text-left  text-[#4B5563] text-base font-medium">First Name</th>
-                            <th class="px-5 py-3 text-left  text-[#4B5563] text-base font-medium">Last Name</th>
-                            <th class="px-5 py-3 text-left  text-[#4B5563] text-base font-medium">NIC</th>
-                            <th class="px-5 py-3 text-left  text-[#4B5563] text-base font-medium">Total (Rs.)</th>
-                            <th class="px-5 py-3 text-center  text-[#4B5563] text-base font-medium">Collection</th>
-                        </tr>
-                    </thead>
-                    <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
-                        <tr *ngFor="let item of farmerListArr | paginate
+        <div *ngIf="hasData"
+            class=" min-w-max mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021] overflow-hidden">
+
+            <table class="w-full min-w-max divide-y-2">
+                <thead
+                    class="text-[#4B5563] text-base font-medium dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
+                    <tr>
+                        <th class="px-5 py-3 text-left  text-[#4B5563] text-base font-medium">No</th>
+                        <th class="px-5 py-3 text-left  text-[#4B5563] text-base font-medium">First Name</th>
+                        <th class="px-5 py-3 text-left  text-[#4B5563] text-base font-medium">Last Name</th>
+                        <th class="px-5 py-3 text-left  text-[#4B5563] text-base font-medium">NIC</th>
+                        <th class="px-5 py-3 text-left  text-[#4B5563] text-base font-medium">Total (Rs.)</th>
+                        <th class="px-5 py-3 text-center  text-[#4B5563] text-base font-medium">Collection</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
+                    <tr *ngFor="let item of farmerListArr | paginate
                     : {
                         itemsPerPage: itemsPerPage,
                         currentPage: page,
                         totalItems: totalItems
                       };  let i = index" class="border-b">
-                            <td class="px-5 py-4  text-[#000000] text-base font-medium dark:text-textDark">
-                                {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i +
-                                    1) : (((page - 1) * itemsPerPage) + i + 1) }} </td>
-                            <td class="px-5 py-4  text-[#000000] text-base font-medium dark:text-textDark">{{item.firstName}}</td>
-                            <td class="px-5 py-4  text-[#000000] text-base font-medium dark:text-textDark">{{item.lastName}}</td>
-                            <td class="px-5 py-4  text-[#000000] text-base font-medium dark:text-textDark">{{item.NICnumber}}</td>
-                            <td class="px-5 py-4  text-[#000000] text-base font-medium dark:text-textDark">{{item.totalAmount | number: '1.2-2' }}</td>
-    
-                            <td class="flex justify-center px-5 py-4  text-[#000000] text-base font-medium dark:text-textDark">
-                                <button (click)="vieFarmerReport(item.id)"
-                                    class="flex items-center justify-center text-[#415CFF] hover:text-blue-500 w-10 h-10">
-                                    <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>
-                                </button>
-                            </td>
-                        </tr>
-                    </tbody>
-                </table>
-            
+                        <td class="px-5 py-4  text-[#000000] text-base font-medium dark:text-textDark">
+                            {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i + 1)
+                                : (((page - 1) * itemsPerPage) + i + 1) }} </td>
+                        <td class="px-5 py-4  text-[#000000] text-base font-medium dark:text-textDark">
+                            {{item.firstName}}</td>
+                        <td class="px-5 py-4  text-[#000000] text-base font-medium dark:text-textDark">{{item.lastName}}
+                        </td>
+                        <td class="px-5 py-4  text-[#000000] text-base font-medium dark:text-textDark">
+                            {{item.NICnumber}}</td>
+                        <td class="px-5 py-4  text-[#000000] text-base font-medium dark:text-textDark">
+                            {{item.totalAmount | number: '1.2-2' }}</td>
+
+                        <td
+                            class="flex justify-center px-5 py-4  text-[#000000] text-base font-medium dark:text-textDark">
+                            <button (click)="vieFarmerReport(item.id)"
+                                class="flex items-center justify-center text-[#415CFF] hover:text-blue-500 w-10 h-10">
+                                <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>
+                            </button>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+
         </div>
 
         <div *ngIf="hasData" class="flex items-center justify-end my-5 mr-5">
-                <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true"
-                    [previousLabel]="'Previous'" [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'"
-                    [screenReaderPageLabel]="'page'" [screenReaderCurrentLabel]="'Youre on page'">
-                </pagination-controls>
-            </div>
+            <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
+                [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
+                [screenReaderCurrentLabel]="'Youre on page'">
+            </pagination-controls>
+        </div>
 
         <div *ngIf="!hasData"
-        class="flex flex-col items-center w-full h-screen px-10 py-7 bg-tileLight rounded-lg mt-6 dark:bg-[#363636]">
-        <p class="text-[#494949] my-6 dark:text-textDark">--No Data Availabale--</p>
-        <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
+            class="flex flex-col items-center w-full h-screen px-10 py-7 bg-tileLight rounded-lg mt-6 dark:bg-[#363636]">
+            <p class="text-[#494949] my-6 dark:text-textDark">--No Data Availabale--</p>
+            <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
+        </div>
+
+
     </div>
 
-        
-    </div>
 
-    
-    
+
 </div>

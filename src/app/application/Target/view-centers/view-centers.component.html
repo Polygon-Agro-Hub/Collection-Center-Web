@@ -19,32 +19,23 @@
                 <div class="flex gap-4 flex-shrink-0">
                     <!-- Province Dropdown -->
                     <div class="w-40 flex-shrink-0">
-                        <app-searchable-dropdown
-                            [items]="provinceItems"
-                            [placeholder]="'Province'"
-                            [searchPlaceholder]="'Search...'"
-                            [clearable]="true"
-                            [showSelected]="true"
-                            [(ngModel)]="selectProvince"
-                            (selectionChange)="onProvinceChange($event)">
+                        <app-searchable-dropdown [items]="provinceItems" [placeholder]="'Province'"
+                            [searchPlaceholder]="'Search...'" [clearable]="true" [showSelected]="true"
+                            [(ngModel)]="selectProvince" (selectionChange)="onProvinceChange($event)">
                         </app-searchable-dropdown>
                     </div>
-                
+
                     <!-- District Dropdown -->
                     <div class="w-40 flex-shrink-0">
-                        <app-searchable-dropdown
-                            [items]="districtItems"
-                            [placeholder]="'District'"
-                            [searchPlaceholder]="'Search...'"
-                            [clearable]="true"
-                            [showSelected]="true"
-                            [(ngModel)]="selectDistrict"
-                            (selectionChange)="onDistrictChange($event)">
+                        <app-searchable-dropdown [items]="districtItems" [placeholder]="'District'"
+                            [searchPlaceholder]="'Search...'" [clearable]="true" [showSelected]="true"
+                            [(ngModel)]="selectDistrict" (selectionChange)="onDistrictChange($event)">
                         </app-searchable-dropdown>
                     </div>
                 </div>
 
-                <div class="flex items-center mr-5 rounded-full px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929] flex-shrink-0">
+                <div
+                    class="flex items-center mr-5 rounded-full px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929] flex-shrink-0">
                     <input type="text" placeholder="Search by Reg Code / Centre Name.." [(ngModel)]="searchText"
                         class="bg-transparent outline-none w-full text-textLight dark:text-textDark"
                         (keydown.enter)="onSearch()" (keydown.esc)="offSearch()" />
@@ -69,74 +60,71 @@
         </div>
 
         <div class="flex flex-row mt-3 mb-0">
-            <button class="bg-[#415CFF] text-white font-semibold px-4 py-2 rounded-lg shadow-xl" (click)="addCenter()">Add a
+            <button class="bg-[#415CFF] text-white font-semibold px-4 py-2 rounded-lg shadow-xl"
+                (click)="addCenter()">Add a
                 Centre</button>
         </div>
 
-    
-<div *ngIf="hasData" class="min-w-max overflow-hidden  mt-5 mr-5">
-        <div  class=" border-gray-100 border-[2px] dark:border-[#202021] rounded-lg">
-            <table class="w-full min-w-max divide-y-2">
-                <thead class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
-                    <tr>
-                        <th class="px-6 py-3 text-left font-normal w-10">No</th>
-                        <th class="px-6 py-3 text-left font-normal w-32">Reg Code</th>
-                        <th class="px-6 py-3 text-left font-normal w-48 whitespace-nowrap">Centre Name</th>
-                        <th class="px-6 py-3 text-left font-normal w-28 whitespace-nowrap">Province</th>
-                        <th class="px-6 py-3 text-left font-normal w-28 whitespace-nowrap">District</th>
-                        <th class="px-6 py-3 text-left font-normal w-28">City</th>
-                        <th class="px-6 py-3 text-left font-normal w-40 whitespace-nowrap">Contact Number -1</th>
-                        <th class="px-6 py-3 text-center font-normal w-32 whitespace-nowrap">CCM Profiles</th>
-                        <th class="px-6 py-3 text-center font-normal w-32 whitespace-nowrap">COO Profiles</th>
-                    </tr>
-                </thead>
-                <tbody *ngIf="countOfOfficers != 0" class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
-                    <tr class="hover:bg-[#415CFF] hover:text-white dark:text-gray-300 cursor-pointer"
-                        *ngFor="let item of itemsArr | paginate : { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index"
-                        (click)="navigateToDashboard(item.centerId)">
-                        <td class="px-6 py-3 font-medium text-center">
-                            {{ ('0' + ((currentPage - 1) * itemsPerPage + i + 1)).slice(-2) }}
-                        </td>
-                        <td class="px-6 py-3 font-medium text-left">{{ item.regCode }}</td>
-                        <td class="px-6 py-3 font-medium text-left whitespace-nowrap">{{ item.centerName }}</td>
-                        <td class="px-6 py-3 font-medium text-left">{{ item.province }}</td>
-                        <td class="px-6 py-3 font-medium text-left whitespace-nowrap">{{ item.district }}</td>
-                        <td class="px-6 py-3 font-medium text-left whitespace-nowrap">{{ item.city }}</td>
-                        <td class="px-6 py-3 font-medium text-left whitespace-nowrap">
-                            <ng-container *ngIf="item.contact01; else noContact">
-                                {{ '+94' + item.contact01 }}
-                            </ng-container>
-                            <ng-template #noContact>
-                                N/A
-                            </ng-template>
-                        </td>
-                        <td class="px-6 py-3 font-medium text-center">{{ item.collectionCenterManagerCount }}</td>
-                        <td class="px-6 py-3 font-medium text-center">{{ item.collectionOfficerCount }}</td>
-                    </tr>
-                </tbody>
-            </table>
+
+        <div *ngIf="hasData" class="min-w-max overflow-hidden  mt-5 mr-5">
+            <div class=" border-gray-100 border-[2px] dark:border-[#202021] rounded-lg">
+                <table class="w-full min-w-max divide-y-2">
+                    <thead
+                        class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
+                        <tr>
+                            <th class="px-6 py-3 text-left font-normal w-10">No</th>
+                            <th class="px-6 py-3 text-left font-normal w-32">Reg Code</th>
+                            <th class="px-6 py-3 text-left font-normal w-48 whitespace-nowrap">Centre Name</th>
+                            <th class="px-6 py-3 text-left font-normal w-28 whitespace-nowrap">Province</th>
+                            <th class="px-6 py-3 text-left font-normal w-28 whitespace-nowrap">District</th>
+                            <th class="px-6 py-3 text-left font-normal w-28">City</th>
+                            <th class="px-6 py-3 text-left font-normal w-40 whitespace-nowrap">Contact Number -1</th>
+                            <th class="px-6 py-3 text-center font-normal w-32 whitespace-nowrap">CCM Profiles</th>
+                            <th class="px-6 py-3 text-center font-normal w-32 whitespace-nowrap">COO Profiles</th>
+                        </tr>
+                    </thead>
+                    <tbody *ngIf="countOfOfficers != 0" class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
+                        <tr class="hover:bg-[#415CFF] hover:text-white dark:text-gray-300 cursor-pointer"
+                            *ngFor="let item of itemsArr | paginate : { itemsPerPage: itemsPerPage, currentPage: currentPage, totalItems: totalItems }; let i = index"
+                            (click)="navigateToDashboard(item.centerId)">
+                            <td class="px-6 py-3 font-medium text-center">
+                                {{ ('0' + ((currentPage - 1) * itemsPerPage + i + 1)).slice(-2) }}
+                            </td>
+                            <td class="px-6 py-3 font-medium text-left">{{ item.regCode }}</td>
+                            <td class="px-6 py-3 font-medium text-left whitespace-nowrap">{{ item.centerName }}</td>
+                            <td class="px-6 py-3 font-medium text-left">{{ item.province }}</td>
+                            <td class="px-6 py-3 font-medium text-left whitespace-nowrap">{{ item.district }}</td>
+                            <td class="px-6 py-3 font-medium text-left whitespace-nowrap">{{ item.city }}</td>
+                            <td class="px-6 py-3 font-medium text-left whitespace-nowrap">
+                                <ng-container *ngIf="item.contact01; else noContact">
+                                    {{ '+94' + item.contact01 }}
+                                </ng-container>
+                                <ng-template #noContact>
+                                    N/A
+                                </ng-template>
+                            </td>
+                            <td class="px-6 py-3 font-medium text-center">{{ item.collectionCenterManagerCount }}</td>
+                            <td class="px-6 py-3 font-medium text-center">{{ item.collectionOfficerCount }}</td>
+                        </tr>
+                    </tbody>
+                </table>
 
 
+            </div>
+
+            <div *ngIf="hasData" class="flex justify-end min-w-max items-center my-5 pt-3 dark:bg-[#1D1D1F] text-right">
+                <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true"
+                    [previousLabel]="'Previous'" [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'"
+                    [screenReaderPageLabel]="'page'" [screenReaderCurrentLabel]="'Youre on page'">
+                </pagination-controls>
+            </div>
         </div>
 
-        <div *ngIf="hasData" class="flex justify-end min-w-max items-center my-5 pt-3 dark:bg-[#1D1D1F] text-right">
-            <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
-                [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
-                [screenReaderCurrentLabel]="'Youre on page'">
-            </pagination-controls>
-        </div>
-</div>
 
 
-       
         <div *ngIf="!hasData"
             class="flex flex-col items-center w-full h-screen px-10 py-7 bg-tileLight dark:bg-[#363636] dark:text-textDark mt-6">
             <p class="text-[#494949] my-6 dark:text-textDark">--No Data Availabale--</p>
             <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20 dark:text-textDark" />
         </div>
     </div>
-
-
-    <!-- <app-searchable-dropdown [items]="dropdownItems" [placeholder]="'Select a country'"
-        [searchPlaceholder]="'Search countries...'" [clearable]="true"
-        (selectionChange)="onSelectionChange($event)"></app-searchable-dropdown> -->

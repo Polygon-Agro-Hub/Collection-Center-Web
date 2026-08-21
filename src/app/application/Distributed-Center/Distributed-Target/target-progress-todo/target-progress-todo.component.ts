@@ -22,20 +22,20 @@ export class TargetProgressTodoComponent implements OnInit {
   selectStatus: string = '';
   selectType: string = '';
   selectTimeSlot: string = '';
-    selectRow!: number | null;
-      rowDropdownOptions: number[] = [];
+  selectRow!: number | null;
+  rowDropdownOptions: number[] = [];
   rowIndexes: number[] = [];
 
-  
 
-  date:  string = '';
+
+  date: string = '';
 
   page: number = 1;
   totalItems: number = 0;
   itemsPerPage: number = 10;
   hasData: boolean = true;
 
-  isLoading:boolean = true;
+  isLoading: boolean = true;
 
   isStatusDropdownOpen = false;
   isTypeDropdownOpen = false;
@@ -44,7 +44,7 @@ export class TargetProgressTodoComponent implements OnInit {
   timeSlotDropdownOptions = ['08:00 AM - 12:00 PM', '12:00 PM - 04:00 PM', '04:00 PM - 09:00 PM'];
   statusDropdownOptions = ['Pending', 'Opened'];
 
-    isRowDropdownOpen = false;
+  isRowDropdownOpen = false;
 
   toggleStatusDropdown() {
     this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
@@ -77,7 +77,7 @@ export class TargetProgressTodoComponent implements OnInit {
     this.filterTimeSlot();
   }
 
-    toggleRowDropdown() {
+  toggleRowDropdown() {
     this.isRowDropdownOpen = !this.isRowDropdownOpen;
   }
 
@@ -180,95 +180,95 @@ export class TargetProgressTodoComponent implements OnInit {
 
   onDateChange(newDate: string | Date | null) {
     let formattedDate: string = '';
-  
+
     if (newDate instanceof Date) {
       // Convert Date object to string (YYYY-MM-DD)
       formattedDate = newDate.toISOString().split('T')[0];
     } else if (typeof newDate === 'string') {
       formattedDate = newDate;
     }
-  
+
     this.date = formattedDate;
     this.fetchToDoAssignOrders();
   }
 
-  navigateViewReply(id:number){
+  navigateViewReply(id: number) {
     this.router.navigate([`/cch-complaints/view-recive-reply/${id}`])
   }
 
-getDateColor(item: any): string {
-  const now = new Date();
+  getDateColor(item: any): string {
+    const now = new Date();
 
-  const today = new Date(now);
-  const schedule = new Date(item.sheduleDate);
+    const today = new Date(now);
+    const schedule = new Date(item.sheduleDate);
 
-  // Normalize dates
-  today.setHours(0, 0, 0, 0);
-  schedule.setHours(0, 0, 0, 0);
+    // Normalize dates
+    today.setHours(0, 0, 0, 0);
+    schedule.setHours(0, 0, 0, 0);
 
-  const diffDays = Math.floor(
-    (schedule.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
-  );
+    const diffDays = Math.floor(
+      (schedule.getTime() - today.getTime()) / (1000 * 60 * 60 * 24)
+    );
 
-  // Past dates
-  if (diffDays < 0) {
+    // Past dates
+    if (diffDays < 0) {
+      return '#AC0003';
+    }
+
+    // Future dates (tomorrow and beyond)
+    if (diffDays > 0) {
+      return '#000000';
+    }
+
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+    let alertStart = 0;
+    let slotEnd = 0;
+
+    switch (item.sheduleTime) {
+      case '08:00 AM - 12:00 PM':
+        alertStart = 7 * 60 + 15;
+        slotEnd = 12 * 60;
+        break;
+
+      case '12:00 PM - 04:00 PM':
+        alertStart = 11 * 60 + 15;
+        slotEnd = 16 * 60;
+        break;
+
+      case '04:00 PM - 09:00 PM':
+        alertStart = 15 * 60 + 15;
+        slotEnd = 21 * 60;
+        break;
+
+      default:
+        return '#000000';
+    }
+
+    // Before alert window
+    if (currentMinutes < alertStart) {
+      return '#000000';
+    }
+
+    // During alert window
+    if (currentMinutes <= slotEnd) {
+      return '#FF0000';
+    }
+
+    // After the slot has ended
     return '#AC0003';
   }
-
-  // Future dates (tomorrow and beyond)
-  if (diffDays > 0) {
-    return '#000000';
-  }
-
-  const currentMinutes = now.getHours() * 60 + now.getMinutes();
-
-  let alertStart = 0;
-  let slotEnd = 0;
-
-  switch (item.sheduleTime) {
-    case '08:00 AM - 12:00 PM':
-      alertStart = 7 * 60 + 15;   
-      slotEnd = 12 * 60;          
-      break;
-
-    case '12:00 PM - 04:00 PM':
-      alertStart = 11 * 60 + 15;  
-      slotEnd = 16 * 60;          
-      break;
-
-    case '04:00 PM - 09:00 PM':
-      alertStart = 15 * 60 + 15;  
-      slotEnd = 21 * 60;          
-      break;
-
-    default:
-      return '#000000';
-  }
-
-  // Before alert window
-  if (currentMinutes < alertStart) {
-    return '#000000';
-  }
-
-  // During alert window
-  if (currentMinutes <= slotEnd) {
-    return '#FF0000';
-  }
-
-  // After the slot has ended
-  return '#AC0003';
-}
 
   getDisplayDate(sheduleDate: string | Date): string {
     const today = new Date();
     const schedule = new Date(sheduleDate);
-  
+
     // Normalize times to midnight for accurate date-only comparison
     today.setHours(0, 0, 0, 0);
     schedule.setHours(0, 0, 0, 0);
-  
+
     const diffDays = Math.floor((schedule.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-  
+
     if (diffDays === 0) {
       return 'Today';
     } else if (diffDays === 1) {
@@ -276,7 +276,7 @@ getDateColor(item: any): string {
     } else if (diffDays === 2) {
       return 'Day after tomorrow';
     } else {
-      return schedule.toLocaleDateString('en-CA').replace(/-/g, '/'); 
+      return schedule.toLocaleDateString('en-CA').replace(/-/g, '/');
       // Formats as YYYY/MM/DD
     }
   }
@@ -286,12 +286,12 @@ getDateColor(item: any): string {
   }
 
   onKeydown(event: KeyboardEvent) {
-  // Prevent space key
-  if (event.key === ' ') {
-    event.preventDefault();
-    return;
+    // Prevent space key
+    if (event.key === ' ') {
+      event.preventDefault();
+      return;
+    }
   }
-}
 
 }
 
@@ -302,6 +302,6 @@ class orders {
   invNo!: string
   sheduleDate!: Date
   sheduleTime!: string
-    delivaryMethod!: string;
+  delivaryMethod!: string;
   combinedStatus!: string
 }

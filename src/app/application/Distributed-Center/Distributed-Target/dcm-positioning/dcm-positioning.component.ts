@@ -1,4 +1,4 @@
-import { CommonModule, DatePipe, Location  } from '@angular/common';
+import { CommonModule, DatePipe, Location } from '@angular/common';
 import { Component, HostListener, OnInit, ElementRef, ViewChild, AfterViewChecked } from '@angular/core';
 import lottie from 'lottie-web';
 import { FormsModule } from '@angular/forms';
@@ -18,7 +18,7 @@ export interface PackingLineRow {
   companyCenterId: number;
   rowIndex: number;
   isEnabled: number;
-  norCount:number;
+  norCount: number;
 }
 
 export interface Positions {
@@ -34,7 +34,7 @@ export interface PositionsCrops {
   mpiId: number;
   varietyId: number;
   category: string;
-  displayName:string;
+  displayName: string;
 }
 
 export interface ChangeItems {
@@ -45,7 +45,7 @@ export interface ChangeItems {
   mpiId: number;
   varietyId: number;
   category: string;
-  displayName:string;
+  displayName: string;
 }
 
 export interface Products {
@@ -108,11 +108,11 @@ export class DcmPositioningComponent implements OnInit, AfterViewChecked {
     private toastSrv: ToastAlertService,
     private route: ActivatedRoute,
     private tokenSrv: TokenServiceService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-  this.fetchDcmPostitioningRows()
-}
+    this.fetchDcmPostitioningRows()
+  }
 
   fetchDcmPostitioningRows() {
     this.isLoading = true;
@@ -172,7 +172,7 @@ export class DcmPositioningComponent implements OnInit, AfterViewChecked {
         this.productsArr = res.mpItems.mpiItems;
         this.total = this.positions.length || 0;
         this.hasPositionsData = this.positions.length > 0;
-       
+
         this.isLoading = false;
       }
     )
@@ -344,7 +344,7 @@ export class DcmPositioningComponent implements OnInit, AfterViewChecked {
     return this.getDuplicateVarietyIds().size > 0 || this.positions.some(slot => this.isPositionEmpty(slot));
   }
 
-    // ===== Navigation / save =====
+  // ===== Navigation / save =====
   goBack(): void {
     this.view = 'rows';
     this.positions = [];

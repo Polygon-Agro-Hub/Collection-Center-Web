@@ -27,8 +27,8 @@ interface ShortageItem {
   selector: 'app-shortage-history',
   standalone: true,
   imports: [
-    CommonModule, 
-    FormsModule, 
+    CommonModule,
+    FormsModule,
     LoadingSpinnerComponent,
     CustomDatepickerComponent
   ],
@@ -46,8 +46,8 @@ export class ShortageHistoryComponent implements OnInit {
   selectedDate: string = '';
   maxSelectableDate: string = '';
 
-    currentTime!: Date;
-afterSixPm!: boolean;
+  currentTime!: Date;
+  afterSixPm!: boolean;
 
   // Fallback images for known items — update the paths to match your assets folder
   private readonly itemImageMap: { [key: string]: string } = {
@@ -61,7 +61,7 @@ afterSixPm!: boolean;
     private router: Router,
     private location: Location,
     private procurementService: DistributionProcurementService,
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     // Set yesterday's date in YYYY-MM-DD format (default selected date)
@@ -77,17 +77,17 @@ afterSixPm!: boolean;
     this.afterSixPm = this.currentTime.getHours() >= 18;
 
     this.loadShortageHistory();
-}
+  }
 
-isPrevToday() {
-  const selected = new Date(this.selectedDate);
-  const today = new Date();
+  isPrevToday() {
+    const selected = new Date(this.selectedDate);
+    const today = new Date();
 
-  selected.setHours(0, 0, 0, 0);
-  today.setHours(0, 0, 0, 0);
+    selected.setHours(0, 0, 0, 0);
+    today.setHours(0, 0, 0, 0);
 
-  return selected < today;
-}
+    return selected < today;
+  }
   /**
    * Helper method to format Date to YYYY-MM-DD
    */
@@ -152,17 +152,10 @@ isPrevToday() {
     };
   }
 
-  /**
-   * Split items into assigned and not-assigned lists
-   */
   private splitByAssignment(): void {
     // Assigned table: unchanged — every real assignment record still shows here.
     this.assignedItems = this.shortageItems.filter((item) => item.isAssigned);
 
-    // Not-assigned table: one entry per shortage that STILL has qty left
-    // to assign, even if it already has partial assignment(s). A shortage
-    // with multiple assignments produces multiple rows in shortageItems,
-    // so dedupe by shortageId.
     const seen = new Set<number>();
     this.notAssignedItems = [];
 
@@ -192,11 +185,11 @@ isPrevToday() {
       const yesterday = new Date();
       yesterday.setDate(yesterday.getDate() - 1);
       this.selectedDate = this.formatDateToYYYYMMDD(yesterday);
-    } 
+    }
     else if (newDate instanceof Date) {
       // If it's a Date object, format it
       this.selectedDate = this.formatDateToYYYYMMDD(newDate);
-    } 
+    }
     else if (typeof newDate === 'string') {
       // If it's already a string, check if it's in YYYY-MM-DD format
       // If the custom datepicker returns a Date object as string, parse it
@@ -210,13 +203,10 @@ isPrevToday() {
         this.selectedDate = this.formatDateToYYYYMMDD(yesterday);
       }
     }
-    
+
     this.loadShortageHistory();
   }
 
-  /**
-   * Clear the selected date and load data
-   */
   clearDate(): void {
     // Set to yesterday's date instead of null
     const yesterday = new Date();
@@ -225,55 +215,34 @@ isPrevToday() {
     this.loadShortageHistory();
   }
 
-  /**
-   * Get image URL for an item based on its name
-   */
   getItemImage(itemName: string): string {
     const key = (itemName || '').trim().toLowerCase();
     return this.itemImageMap[key] || 'assets/images/items/default-item.png';
   }
 
-  /**
-   * Format currency amount
-   */
   formatCurrency(amount: number): string {
     return new Intl.NumberFormat('en-LK', {
       minimumFractionDigits: 2,
     }).format(amount || 0);
   }
 
-  /**
-   * Get total records count as padded string
-   */
   getTotalRecords(): string {
     return (this.notAssignedItems.length + this.assignedItems.length).toString().padStart(2, '0');
   }
 
-  /**
-   * Get not assigned count as padded string
-   */
   getNotAssignedCount(): string {
     return this.notAssignedItems.length.toString().padStart(2, '0');
   }
 
-  /**
-   * Get assigned count as padded string
-   */
   getAssignedCount(): string {
     return this.assignedItems.length.toString().padStart(2, '0');
   }
 
-  /**
-   * Truncate text to a max length, appending an ellipsis when cut
-   */
   truncateText(value: string | undefined, maxLength: number = 20): string {
     if (!value) return '----';
     return value.length > maxLength ? `${value.slice(0, maxLength)}...` : value;
   }
 
-  /**
-   * Navigate back to previous page
-   */
   goBack(): void {
     this.location.back();
   }

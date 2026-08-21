@@ -43,7 +43,7 @@ export class ShortageTodayFinalizationComponent {
   showConfirmModal = false;
   itemPendingFinalize: ShortageItem | null = null;
 
-  constructor(private distributionService: DistributionProcurementService) {}
+  constructor(private distributionService: DistributionProcurementService) { }
 
   ngOnInit(): void {
     this.loadAllData();
@@ -133,35 +133,35 @@ export class ShortageTodayFinalizationComponent {
   }
 
   onCeilingInput(event: Event, item: ShortageItem) {
-  const inputEl = event.target as HTMLInputElement;
+    const inputEl = event.target as HTMLInputElement;
 
-  // Strip anything that isn't a digit (blocks special chars, decimals, minus sign)
-  let sanitized = inputEl.value.replace(/[^0-9]/g, '');
+    // Strip anything that isn't a digit (blocks special chars, decimals, minus sign)
+    let sanitized = inputEl.value.replace(/[^0-9]/g, '');
 
-  // Strip leading zeros (e.g. "01" -> "1", "00" -> "")
-  sanitized = sanitized.replace(/^0+(?=\d)/, '');
+    // Strip leading zeros (e.g. "01" -> "1", "00" -> "")
+    sanitized = sanitized.replace(/^0+(?=\d)/, '');
 
-  // Cap to max 2 digits while typing (prevents "999" -> stops at "99")
-  if (sanitized.length > 2) {
-    sanitized = sanitized.slice(0, 2);
+    // Cap to max 2 digits while typing (prevents "999" -> stops at "99")
+    if (sanitized.length > 2) {
+      sanitized = sanitized.slice(0, 2);
+    }
+
+    if (sanitized === '' || sanitized === '0') {
+      inputEl.value = '';
+      item.ceilingPercent = 0; // treated as "invalid/empty" until blur
+      return;
+    }
+
+    let numericValue = parseInt(sanitized, 10);
+
+    // Clamp to 99 in case of edge cases (e.g. "99" typed then another digit pasted)
+    if (numericValue > 99) {
+      numericValue = 99;
+    }
+
+    inputEl.value = String(numericValue);
+    item.ceilingPercent = numericValue;
   }
-
-  if (sanitized === '' || sanitized === '0') {
-    inputEl.value = '';
-    item.ceilingPercent = 0; // treated as "invalid/empty" until blur
-    return;
-  }
-
-  let numericValue = parseInt(sanitized, 10);
-
-  // Clamp to 99 in case of edge cases (e.g. "99" typed then another digit pasted)
-  if (numericValue > 99) {
-    numericValue = 99;
-  }
-
-  inputEl.value = String(numericValue);
-  item.ceilingPercent = numericValue;
-}
 
   onFinalizeClick(item: ShortageItem) {
     if (!item.selectedDC) {
@@ -221,18 +221,18 @@ export class ShortageTodayFinalizationComponent {
   }
 
   onCeilingKeydown(event: KeyboardEvent) {
-  // Block minus, plus, exponent, decimal point outright
-  const blockedKeys = ['-', '+', 'e', 'E', '.', ','];
-  if (blockedKeys.includes(event.key)) {
-    event.preventDefault();
+    // Block minus, plus, exponent, decimal point outright
+    const blockedKeys = ['-', '+', 'e', 'E', '.', ','];
+    if (blockedKeys.includes(event.key)) {
+      event.preventDefault();
+    }
   }
-}
 
-onCeilingBlur(item: ShortageItem) {
-  if (!item.ceilingPercent || item.ceilingPercent < 1) {
-    item.ceilingPercent = 1;
-  } else if (item.ceilingPercent > 99) {
-    item.ceilingPercent = 99;
+  onCeilingBlur(item: ShortageItem) {
+    if (!item.ceilingPercent || item.ceilingPercent < 1) {
+      item.ceilingPercent = 1;
+    } else if (item.ceilingPercent > 99) {
+      item.ceilingPercent = 99;
+    }
   }
-}
 }

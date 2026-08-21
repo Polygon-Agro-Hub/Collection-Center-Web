@@ -53,7 +53,7 @@ export class CchSendComplaintComponent implements OnInit {
   employeeDropdownOptions = [
     { value: 'Own', label: 'Own Complaints' },
     { value: 'Other', label: 'Other Employees' }
-];
+  ];
 
   toggleEmployeeDropdown() {
     this.isEmployeeDropdownOpen = !this.isEmployeeDropdownOpen;
@@ -195,10 +195,10 @@ export class CchSendComplaintComponent implements OnInit {
     const lineHeight = 24; // adjust if your text line spacing is different
     const maxRows = 5;
     const maxHeight = lineHeight * maxRows;
-  
+
     textarea.style.height = 'auto';
     const newHeight = textarea.scrollHeight;
-  
+
     // If content exceeds 5 rows → cap height and allow scrolling
     if (newHeight > maxHeight) {
       textarea.style.height = maxHeight + 'px';

@@ -1,4 +1,4 @@
-<app-loading-spinner *ngIf="isLoading"/>
+<app-loading-spinner *ngIf="isLoading" />
 
 <div class="flex gap-0 mb-4 mr-5 ml-0">
     <p class="font-semibold text[#424242]  dark:text-[#FFFFFF] dark:bg-blacks cursor-pointer">Complaints</p>
@@ -21,7 +21,8 @@
                 </div>
             </div>
 
-            <button class="bg-[#415CFF] text-white font-semibold px-4 py-2 rounded-lg shadow-lg" (click)="openAddComplaint()">Add
+            <button class="bg-[#415CFF] text-white font-semibold px-4 py-2 rounded-lg shadow-lg"
+                (click)="openAddComplaint()">Add
                 Complaint
             </button>
         </div>
@@ -46,18 +47,11 @@
                 <label for="category" class="block text-[14px] font-medium text-[#534E4E] dark:text-textDark mb-2">
                     Select Complain Category
                 </label>
-                <app-searchable-dropdown
-                  [items]="categoryDropdownItems"
-                  placeholder="Select Category"
-                  searchPlaceholder="Search categories..."
-                  [(ngModel)]="category"
-                  (selectionChange)="onCategorySelectionChange($event)"
-                  [clearable]="true"
-                  [showSelected]="true"
-                  [disabled]="false"
-                  borderClass="border border-[#D9D9D9] dark:border-[#424242]"
-                  class="block w-full mb-4"
-                ></app-searchable-dropdown>
+                <app-searchable-dropdown [items]="categoryDropdownItems" placeholder="Select Category"
+                    searchPlaceholder="Search categories..." [(ngModel)]="category"
+                    (selectionChange)="onCategorySelectionChange($event)" [clearable]="true" [showSelected]="true"
+                    [disabled]="false" borderClass="border border-[#D9D9D9] dark:border-[#424242]"
+                    class="block w-full mb-4"></app-searchable-dropdown>
 
                 <!-- Textarea -->
                 <textarea rows="4" [(ngModel)]="complaint" placeholder="Kindly submit your complaint here"

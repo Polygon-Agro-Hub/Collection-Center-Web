@@ -177,20 +177,20 @@
       <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">District *</label>
       
       <div class="w-full text-textLight dark:text-textDark">
-                        <app-searchable-dropdown
-                            [items]="districtItems"
-                            [placeholder]="'--Select a District--'"
-                            [searchPlaceholder]="'Search districts...'"
-                            [clearable]="true"
-                            [showSelected]="true"
-                            id="district" name="district"
-                            [(ngModel)]="centerData.district"
-                            #districtInput="ngModel"
-                            borderClass="border border-gray-300"
-                            searchInputClass="text-textLight dark:text-textDark"
-                            (selectionChange)="onDistrictChange($event)">
-                        </app-searchable-dropdown>
-                    </div>
+         <app-searchable-dropdown
+             [items]="districtItems"
+             [placeholder]="'--Select a District--'"
+             [searchPlaceholder]="'Search districts...'"
+             [clearable]="true"
+             [showSelected]="true"
+             id="district" name="district"
+             [(ngModel)]="centerData.district"
+             #districtInput="ngModel"
+             borderClass="border border-gray-300"
+             searchInputClass="text-textLight dark:text-textDark"
+             (selectionChange)="onDistrictChange($event)">
+         </app-searchable-dropdown>
+      </div>
       
       
       <p *ngIf="!centerData.district && districtInput.touched" class="text-red-500 text-sm">

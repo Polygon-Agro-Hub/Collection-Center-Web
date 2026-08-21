@@ -163,4 +163,38 @@
         <p class="text-[#494949] my-6 dark:text-[#FFFFFF]">--No Data Availabale--</p>
         <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20 dark:text-black" />
     </div>
+
+    <div *ngIf="showConfirmModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+        <div class="bg-white dark:bg-[#363636] rounded-2xl shadow-xl w-[520px] px-10 py-10 flex flex-col items-center text-center">
+            <h2 class="text-xl text-[#000000] font-[600] dark:text-white">Finish up!</h2>
+            <p class="text-sm text-[##534E4E] font-[300] dark:text-gray-300 mt-3 leading-relaxed">
+                Marking as completed in {{ confirmDurationSeconds }} seconds.<br />
+                Tap 'Go Back' to edit.
+            </p>
+
+            <div class="relative w-40 h-40 my-8">
+                <svg class="w-full h-full -rotate-90" viewBox="0 0 120 120">
+                    <circle cx="60" cy="60" r="54" fill="none" stroke="#E5E7EB" stroke-width="4" />
+                    <circle cx="60" cy="60" r="54" fill="none" stroke="hsl(231,100%,63%)" stroke-width="4"
+                        stroke-linecap="round" [attr.stroke-dasharray]="confirmCircumference"
+                        [attr.stroke-dashoffset]="confirmDashOffset" style="transition: stroke-dashoffset 1s linear;" />
+                </svg>
+                <div class="absolute inset-0 flex items-center justify-center text-2xl font-semibold text-[#000000E0] font-300 dark:text-white">
+                    {{ confirmFormattedTime }}
+                </div>
+            </div>
+
+            <div class="flex flex-row gap-4 w-full">
+                <button type="button"
+                    class="flex-1 rounded-xl px-6 py-3 bg-[#F6F7F9] border-2 border-[#95A1AC] font-[600] text-[#6B7D8C] dark:text-white dark:border-gray-500"
+                    (click)="onCancelConfirm()">
+                    Back to Edit
+                </button>
+                <button type="button" class="flex-1  border-2 border-[#415CFF] rounded-xl px-6 py-3 font-[600] bg-[#415CFF] text-[#FFFFFF] shadow-lg"
+                    (click)="onConfirmSave()">
+                    Confirm & Save
+                </button>
+            </div>
+        </div>
+    </div>
 </div>

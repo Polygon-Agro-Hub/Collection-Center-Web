@@ -54,8 +54,6 @@ import { EditCentreComponent } from './application/Target/edit-centre/edit-centr
 import { AddDistributedOfficerComponent } from './application/Distributed-Center/add-distributed-officer/add-distributed-officer.component';
 import { EditDistributedOfficerComponent } from './application/Distributed-Center/edit-distributed-officer/edit-distributed-officer.component';
 import { CenterDashboardComponent } from './application/Distributed-Center/center-dashboard/center-dashboard.component';
-import { AssignDistributionTargetComponent } from './application/Distributed-Center/Distributed-Target/assign-distribution-target/assign-distribution-target.component';
-import { ViewDistributionCenterTargetComponent } from './application/Distributed-Center/Distributed-Target/view-distribution-center-target/view-distribution-center-target.component';
 import { TargetProgressAllComponent } from './application/Distributed-Center/Distributed-Target/target-progress-all/target-progress-all.component';
 import { RequestsComponent } from './application/Distributed-Center/requests/requests.component';
 import { DcmComplaintsComponent } from './application/dcm-Complaints/dcm-complaints/dcm-complaints.component';
@@ -562,12 +560,7 @@ export const routes: Routes = [
                     {
                         path: '',
                         component: PackingTargetsComponent,
-                    },
-                    {
-                        path: 'Assign',
-                        component: AssignDistributionTargetComponent,
-                        canDeactivate: [PendingTargetAssignGuard]
-                    },
+                    }
                     
                 ]
             },

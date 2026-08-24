@@ -86,18 +86,6 @@ export class DistributionServiceService {
     });
   }
 
-  getDistributionOrders(): Observable<any> {
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${this.token}`,
-      'Content-Type': 'application/json',
-    });
-
-    return this.http.get(`${this.apiUrl}/get-distribution-orders`, {
-      headers,
-    });
-  }
-
   assignOrdersToCenterOfficers(
     assignmentPayload: { officerId: number; count: number }[],
     orderIdList: number[]
@@ -250,25 +238,6 @@ export class DistributionServiceService {
     return this.http.get<any>(url, { headers });
   }
 
-  getCompletedAssignOrders(searchText: string = '', selectDate: string = ''): Observable<any> {
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${this.token}`
-    });
-
-
-    let url = `${this.apiUrl}/get-completed-assign-orders?test=${1}`;
-
-    if (searchText) {
-      url += `&searchText=${searchText}`
-
-    }
-
-    if (selectDate) {
-      url += `&date=${selectDate}`
-    }
-
-    return this.http.get<any>(url, { headers });
-  }
 
   getOutForDeliveryOrders(status: string = '', searchText: string = '', type: string = '', timeSlot: string = '', row: number | null, selectDate: string | Date | null = '', cenId: number | null): Observable<any> {
     const headers = new HttpHeaders({
@@ -390,28 +359,6 @@ export class DistributionServiceService {
     });
 
     let url = `${this.apiUrl}/get-center-target?centerId=${centerId}`;
-  
-    if (searchText) {
-      url += `&searchText=${searchText}`
-    }
-  
-    if (status) {
-      url += `&status=${status}`
-    }
-
-    if (selectDate) {
-      url += `&date=${selectDate}`
-    }
-  
-    return this.http.get<any>(url, { headers });
-  }
-
-  getCenterTargetForDelivery(centerId: number, searchText: string = '', status: string = '', selectDate: string | Date | null = ''): Observable<any> {
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${this.token}`
-    });
-
-    let url = `${this.apiUrl}/get-center-target-out-for-delivery?centerId=${centerId}`;
   
     if (searchText) {
       url += `&searchText=${searchText}`

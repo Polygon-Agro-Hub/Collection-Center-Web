@@ -7,7 +7,6 @@ import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loa
 import { ViewCenterOfficersComponent } from "../view-center-officers/view-center-officers.component";
 import { ActivatedRoute, Router } from '@angular/router';
 import { ViewDchCenterTargetComponent } from '../view-dch-center-target/view-dch-center-target.component';
-import { DchCenterTargetOutForDeliveryComponent } from "../dch-center-target-out-for-delivery/dch-center-target-out-for-delivery.component";
 import { DchPackingLineComponent } from "../dch-packing-line/dch-packing-line.component";
 import { TargetProgressOngoingComponent } from '../Distributed-Target/target-progress-ongoing/target-progress-ongoing.component';
 import { TargetOutForDeliveryComponent } from "../Distributed-Target/target-out-for-delivery/target-out-for-delivery.component";
@@ -16,7 +15,7 @@ import { TargetOutForDeliveryComponent } from "../Distributed-Target/target-out-
 @Component({
   selector: 'app-center-dashboard',
   standalone: true,
-  imports: [CommonModule, FormsModule, LoadingSpinnerComponent, ViewCenterOfficersComponent, TargetProgressOngoingComponent, DchPackingLineComponent, TargetOutForDeliveryComponent, ViewDchCenterTargetComponent, DchCenterTargetOutForDeliveryComponent],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent, ViewCenterOfficersComponent, TargetProgressOngoingComponent, DchPackingLineComponent, TargetOutForDeliveryComponent, ViewDchCenterTargetComponent],
   templateUrl: './center-dashboard.component.html',
   styleUrl: './center-dashboard.component.css'
 })

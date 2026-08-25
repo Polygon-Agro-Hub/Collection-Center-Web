@@ -58,11 +58,8 @@ import { TargetProgressAllComponent } from './application/Distributed-Center/Dis
 import { RequestsComponent } from './application/Distributed-Center/requests/requests.component';
 import { DcmComplaintsComponent } from './application/dcm-Complaints/dcm-complaints/dcm-complaints.component';
 import { ViewDcmReceiveReplyComponent } from './application/dcm-Complaints/view-dcm-receive-reply/view-dcm-receive-reply.component';
-import { OfficerTargetsComponent } from './application/Distributed-Center/Distributed-Target/officer-targets/officer-targets.component';
-import { ViewDistributionOfficerTargetComponent } from './application/Distributed-Center/Distributed-Target/view-distribution-officer-target/view-distribution-officer-target.component';
 import { DchComplaintsComponent } from './application/dch-Complaints/dch-complaints/dch-complaints.component';
 import { DchViewRecieveComplaintComponent } from './application/dch-Complaints/dch-view-recieve-complaint/dch-view-recieve-complaint.component';
-import { PendingTargetAssignGuard } from './guards/pending-target-assign.guard';
 import { CchPriceRequestComponent } from './application/Price-List/cch-price-request/cch-price-request.component';
 import { CchCenterPriceListComponent } from './application/Price-List/cch-center-price-list/cch-center-price-list.component';
 import { pendingPricelistUpdateCchGuard } from './guards/pending-pricelist-update-cch.guard';
@@ -74,7 +71,6 @@ import { SentToDispatchPremadeOrdersComponent } from './application/procurement/
 import { RecievedOrdersComponent } from './application/procurement/recieved-orders/recieved-orders.component';
 import { RequestedItemsComponent } from './application/procurement/requested-items/requested-items.component';
 import { ViewMyTargetDcmComponent } from './application/Distributed-Center/view-my-target-dcm/view-my-target-dcm.component';
-import { ViewOfficerTargetDistributionComponent } from './application/dch-Target/view-officer-target-distribution/view-officer-target-distribution.component';
 import { DcmDashboardComponent } from './application/Distributed-Center/dcm-dashboard/dcm-dashboard.component';
 import { ViewDistributionCenterComponent } from './application/Distributed-Center/Centres/view-distribution-center/view-distribution-center.component';
 import { EditDistributionCenterComponent } from './application/Distributed-Center/Centres/edit-distribution-center/edit-distribution-center.component';
@@ -239,8 +235,6 @@ export const routes: Routes = [
                         path: 'farmer-report-invoice/:invNo',
                         component: FarmerReportInvoiceComponent
                     },
-
-
                 ]
             },
 
@@ -507,11 +501,6 @@ export const routes: Routes = [
                         component: ViewOfficerTargetComponent
                     },
 
-                    {
-                        path: 'view-distribution-officer-target/:officerId/:centerName/:centerId/:empId',
-                        component: ViewOfficerTargetDistributionComponent
-                    }
-
                 ]
             },
 
@@ -593,23 +582,6 @@ export const routes: Routes = [
                         path: 'shortage-history',
                         component: ShortageHistoryComponent,
                     }
-                ]
-            },
-
-            {
-                path: 'officer-targets',
-                canActivate:[RoleGuardService],
-                data: { roles: ['Distribution Centre Manager'] },
-                children: [
-                    {
-                        path: '',
-                        component: OfficerTargetsComponent,
-                    },
-                    {
-                        path: 'view-officer-target/:officerId/:date',  
-                        component: ViewDistributionOfficerTargetComponent
-                      }
-                   
                 ]
             },
 

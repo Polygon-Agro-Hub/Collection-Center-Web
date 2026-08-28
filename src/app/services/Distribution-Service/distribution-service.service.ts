@@ -238,7 +238,6 @@ export class DistributionServiceService {
     return this.http.get<any>(url, { headers });
   }
 
-
   getOutForDeliveryOrders(status: string = '', searchText: string = '', type: string = '', timeSlot: string = '', row: number | null, selectDate: string | Date | null = '', cenId: number | null): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`

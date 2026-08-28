@@ -611,18 +611,18 @@ export const routes: Routes = [
                 ]
             },
 
-            {
-                path: 'dispatched',
-                canActivate:[RoleGuardService],
-                data: { roles: ['Distribution Centre Manager'] },
-                children: [
-                    {
-                        path: '',
-                        component: DispatchedDashboardComponent,
-                    },
+            // {
+            //     path: 'dispatched',
+            //     canActivate:[RoleGuardService],
+            //     data: { roles: ['Distribution Centre Manager'] },
+            //     children: [
+            //         {
+            //             path: '',
+            //             component: DispatchedDashboardComponent,
+            //         },
                     
-                ]
-            },
+            //     ]
+            // },
 
 
             {
@@ -641,27 +641,27 @@ export const routes: Routes = [
                 ]
             },
 
-            {
-                path: 'cash-activity',
-                canActivate:[RoleGuardService],
-                data: { roles: ['Distribution Centre Manager'] },
-                children: [
-                    {
-                        path: '',
-                        component: CashActivityDashboardComponent,
-                    },
+            // {
+            //     path: 'cash-activity',
+            //     canActivate:[RoleGuardService],
+            //     data: { roles: ['Distribution Centre Manager'] },
+            //     children: [
+            //         {
+            //             path: '',
+            //             component: CashActivityDashboardComponent,
+            //         },
 
-                    {
-                        path: 'view-pikup-chash-revenue',
-                        component: ViewPickupCashRevenueComponent,
-                    },
+            //         {
+            //             path: 'view-pikup-chash-revenue',
+            //             component: ViewPickupCashRevenueComponent,
+            //         },
 
-                    {
-                        path: 'view-delivery-revenue',
-                        component: ViewDeliveryRevenueComponent,
-                    },
-                ]
-            },
+            //         {
+            //             path: 'view-delivery-revenue',
+            //             component: ViewDeliveryRevenueComponent,
+            //         },
+            //     ]
+            // },
 
 
             {

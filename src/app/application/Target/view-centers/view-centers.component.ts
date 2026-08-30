@@ -34,17 +34,17 @@ export class ViewCentersComponent implements OnInit {
     isProvinceDropdownOpen = false;
     isDistrictDropdownOpen = false;
 
-    provinces: string[] = [
-        'Western',
-        'Central',
-        'Southern',
-        'Northern',
-        'Eastern',
-        'North Western',
-        'North Central',
-        'Uva',
-        'Sabaragamuwa'
-    ];
+provinces: string[] = [
+    'Central',
+    'Eastern',
+    'North Central',
+    'North Western',
+    'Northern',
+    'Sabaragamuwa',
+    'Southern',
+    'Uva',
+    'Western'
+];
 
     // Define all districts with their provinces
     allDistricts = [

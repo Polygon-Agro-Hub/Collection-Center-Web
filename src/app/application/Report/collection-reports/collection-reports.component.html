@@ -1,8 +1,9 @@
-<app-loading-spinner *ngIf="isLoading"/>
+<app-loading-spinner *ngIf="isLoading" />
 
 <div *ngIf="!isLoading">
 
-    <div class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
+    <div
+        class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
         <p onclick="history.back()">Reports</p>
         <!-- <p onclick="history.back()">Officer Reports</p> -->
         <p>Collection Reports</p>
@@ -28,9 +29,6 @@
                 </div>
             </div>
 
-            <!-- <button class="bg-[#415CFF] text-white font-semibold px-4 py-2 rounded-lg" (click)="openAddComplaint()">Add
-                Complaint</button> -->
-
         </div>
 
         <hr class="my-8 border-[1px] border-[#7F7F7F]" />
@@ -39,5 +37,5 @@
 
         <app-collection *ngIf="isSelectCollection" />
     </div>
-    
+
 </div>

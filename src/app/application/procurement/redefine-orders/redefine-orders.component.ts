@@ -29,17 +29,17 @@ export class RedefineOrdersComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-  this.route.queryParams.subscribe(params => {
-    const route = params['route'] || null;
-    if (route === 'dispatch') {
-      this.isSelectToDo = false;
-      this.isSelectSentToDispatch = true;
-    } else {
-      this.isSelectToDo = true;
-      this.isSelectSentToDispatch = false;
-    }
-  });
-}
+    this.route.queryParams.subscribe(params => {
+      const route = params['route'] || null;
+      if (route === 'dispatch') {
+        this.isSelectToDo = false;
+        this.isSelectSentToDispatch = true;
+      } else {
+        this.isSelectToDo = true;
+        this.isSelectSentToDispatch = false;
+      }
+    });
+  }
 
   onSwitchToOutForDelivery() {
     this.selectSentToDispatch();

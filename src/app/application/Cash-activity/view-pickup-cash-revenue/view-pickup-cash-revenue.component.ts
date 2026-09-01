@@ -51,7 +51,7 @@ export class ViewPickupCashRevenueComponent implements OnInit, OnDestroy {
 
   cancelStatus(event?: MouseEvent) {
     if (event) {
-      event.stopPropagation(); 
+      event.stopPropagation();
     }
     this.selectedStatus = '';
     this.loadRevenueData();
@@ -64,7 +64,7 @@ export class ViewPickupCashRevenueComponent implements OnInit, OnDestroy {
     private route: ActivatedRoute,
     private distributionSrv: DistributionServiceService,
     private location: Location
-  ) {}
+  ) { }
 
   ngOnInit(): void {
     const today = new Date();
@@ -107,7 +107,7 @@ export class ViewPickupCashRevenueComponent implements OnInit, OnDestroy {
         },
       });
   }
-  
+
 
   onSearch(): void {
     this.searchText = this.searchText?.trim() || '';
@@ -122,20 +122,20 @@ export class ViewPickupCashRevenueComponent implements OnInit, OnDestroy {
 
   onDateChange(newDate: string | Date | null) {
     let dateString: string;
-  
+
     if (!newDate) {
-      
+
       dateString = new Date().toISOString().split('T')[0];
-    } 
+    }
     else if (newDate instanceof Date) {
-      
+
       dateString = newDate.toISOString().split('T')[0];
-    } 
+    }
     else {
-      
+
       dateString = newDate;
     }
-  
+
     this.selectedDate = dateString;
     this.loadRevenueData();
   }
@@ -162,8 +162,8 @@ export class ViewPickupCashRevenueComponent implements OnInit, OnDestroy {
       0
     );
 
-  this.totalOrders = this.revenueData.length;
-}
+    this.totalOrders = this.revenueData.length;
+  }
   private resetSummary(): void {
     this.totalAmount = 0;
     this.totalOrders = 0;
@@ -179,53 +179,53 @@ export class ViewPickupCashRevenueComponent implements OnInit, OnDestroy {
   // Helper method to format date/time like "11:00 AM June 2, 2025"
   formatDateTime(dateTime: string): string {
     if (!dateTime) return 'N/A';
-    
+
     const date = new Date(dateTime);
-    
+
     // Format time part: 11:00 AM
     const timeString = date.toLocaleTimeString('en-US', {
       hour: '2-digit',
       minute: '2-digit',
       hour12: true
     });
-    
+
     // Format date part: June 2, 2025
     const dateString = date.toLocaleDateString('en-US', {
       month: 'long',
       day: 'numeric',
       year: 'numeric'
     });
-    
+
     return `${timeString} ${dateString}`;
   }
 
   // Alternative method if you want exactly "11:00 AM June 2, 2025" format
   formatDateTimeExact(dateTime: string): string {
     if (!dateTime) return 'N/A';
-    
+
     const date = new Date(dateTime);
-    
+
     // Get hours and minutes
     const hours = date.getHours();
     const minutes = date.getMinutes();
-    
+
     // Format time with AM/PM
     const period = hours >= 12 ? 'PM' : 'AM';
     const formattedHours = hours % 12 || 12;
     const formattedMinutes = minutes.toString().padStart(2, '0');
     const timeString = `${formattedHours}:${formattedMinutes} ${period}`;
-    
+
     // Month names
     const monthNames = [
       'January', 'February', 'March', 'April', 'May', 'June',
       'July', 'August', 'September', 'October', 'November', 'December'
     ];
-    
+
     // Get date parts
     const month = monthNames[date.getMonth()];
     const day = date.getDate();
     const year = date.getFullYear();
-    
+
     return `${timeString} ${month} ${day}, ${year}`;
   }
 
@@ -260,7 +260,7 @@ interface RevenueItem {
   status: string;
 }
 
-interface CashPrice{
-  total_price:number;
-  total_orders:number;
+interface CashPrice {
+  total_price: number;
+  total_orders: number;
 }

@@ -84,7 +84,7 @@ export class ViewDailyTargetComponent implements OnInit {
 
     this.fetchAllTarget();
     this.AssignAllDailyTarget()
-    
+
   }
 
   @HostListener('document:click', ['$event'])
@@ -112,7 +112,7 @@ export class ViewDailyTargetComponent implements OnInit {
 
       (res) => {
         this.allTargets = res.items;
-        this.targetArr = [...this.allTargets];  
+        this.targetArr = [...this.allTargets];
         this.totalItems = res.totalPages
         if (res.items.length > 0) {
           this.hasData = true;
@@ -130,7 +130,7 @@ export class ViewDailyTargetComponent implements OnInit {
   onSearch() {
     this.fetchAllTarget();
   }
-  
+
   offSearch() {
     this.searchText = '';
     this.fetchAllTarget()
@@ -145,7 +145,7 @@ export class ViewDailyTargetComponent implements OnInit {
     }
 
     this.targetArr = this.allTargets.filter(item => item.status === this.selectStatus);
-    
+
     if (this.targetArr.length > 0) {
       this.hasData = true;
     } else {

@@ -14,7 +14,7 @@ import { DistributionComplaintsService } from '../../../services/distribution-co
   templateUrl: './dch-sent-complaints.component.html',
   styleUrl: './dch-sent-complaints.component.css'
 })
-export class DchSentComplaintsComponent implements OnInit{
+export class DchSentComplaintsComponent implements OnInit {
 
   complainArr!: SentComplaint[];
   replyObj: Reply = new Reply();
@@ -72,24 +72,6 @@ export class DchSentComplaintsComponent implements OnInit{
   ngOnInit(): void {
     this.fetchAllreciveComplaint();
   }
-
-  // @HostListener('document:click', ['$event'])
-  // onDocumentClick(event: MouseEvent) {
-  //   const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
-  //   const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
-
-  //   if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
-  //     this.isStatusDropdownOpen = false;
-  //   }
-
-  //   const employeeDropdownElement = document.querySelector('.custom-employee-dropdown-container');
-  //   const employeeDropdownClickedInside = employeeDropdownElement?.contains(event.target as Node);
-
-  //   if (!employeeDropdownClickedInside && this.isEmployeeDropdownOpen) {
-  //     this.isEmployeeDropdownOpen = false;
-  //   }
-
-  // }
 
   fetchAllreciveComplaint(page: number = this.page, limit: number = this.itemsPerPage, status: string = this.selectStatus, emptype: string = this.selectEmployee, search: string = this.searchText) {
     this.isLoading = true;
@@ -189,13 +171,13 @@ export class DchSentComplaintsComponent implements OnInit{
   }
 
   preventLeadingSpace(event: KeyboardEvent) {
-  const input = event.target as HTMLInputElement;
-  
-  // If space is pressed and cursor is at the beginning or the field is empty
-  if (event.key === ' ' && (input.selectionStart === 0 || this.searchText === '')) {
-    event.preventDefault();
+    const input = event.target as HTMLInputElement;
+
+    // If space is pressed and cursor is at the beginning or the field is empty
+    if (event.key === ' ' && (input.selectionStart === 0 || this.searchText === '')) {
+      event.preventDefault();
+    }
   }
-}
 
 
 }

@@ -29,68 +29,68 @@ export class AddCenterComponent implements OnInit {
 
   allowedPrefixes = ['70', '71', '72', '75', '76', '77', '78'];
   isPhoneInvalidMap: { [key: string]: boolean } = {
-  phone01: false,
-  phone02: false,
-};
+    phone01: false,
+    phone02: false,
+  };
 
   provinces: string[] = [
-  'Western',
-  'Central',
-  'Southern',
-  'Northern',
-  'Eastern',
-  'North Western',
-  'North Central',
-  'Uva',
-  'Sabaragamuwa'
-];
+    'Western',
+    'Central',
+    'Southern',
+    'Northern',
+    'Eastern',
+    'North Western',
+    'North Central',
+    'Uva',
+    'Sabaragamuwa'
+  ];
 
-// Define all districts with their provinces
-allDistricts = [
-  { name: 'Ampara', province: 'Eastern' },
-  { name: 'Anuradhapura', province: 'North Central' },
-  { name: 'Badulla', province: 'Uva' },
-  { name: 'Batticaloa', province: 'Eastern' },
-  { name: 'Colombo', province: 'Western' },
-  { name: 'Galle', province: 'Southern' },
-  { name: 'Gampaha', province: 'Western' },
-  { name: 'Hambantota', province: 'Southern' },
-  { name: 'Jaffna', province: 'Northern' },
-  { name: 'Kalutara', province: 'Western' },
-  { name: 'Kandy', province: 'Central' },
-  { name: 'Kegalle', province: 'Sabaragamuwa' },
-  { name: 'Kilinochchi', province: 'Northern' },
-  { name: 'Kurunegala', province: 'North Western' },
-  { name: 'Mannar', province: 'Northern' },
-  { name: 'Matale', province: 'Central' },
-  { name: 'Matara', province: 'Southern' },
-  { name: 'Monaragala', province: 'Uva' },
-  { name: 'Mullaitivu', province: 'Northern' },
-  { name: 'Nuwara Eliya', province: 'Central' },
-  { name: 'Polonnaruwa', province: 'North Central' },
-  { name: 'Puttalam', province: 'North Western' },
-  { name: 'Rathnapura', province: 'Sabaragamuwa' },
-  { name: 'Trincomalee', province: 'Eastern' },
-  { name: 'Vavuniya', province: 'Northern' },
-];
+  // Define all districts with their provinces
+  allDistricts = [
+    { name: 'Ampara', province: 'Eastern' },
+    { name: 'Anuradhapura', province: 'North Central' },
+    { name: 'Badulla', province: 'Uva' },
+    { name: 'Batticaloa', province: 'Eastern' },
+    { name: 'Colombo', province: 'Western' },
+    { name: 'Galle', province: 'Southern' },
+    { name: 'Gampaha', province: 'Western' },
+    { name: 'Hambantota', province: 'Southern' },
+    { name: 'Jaffna', province: 'Northern' },
+    { name: 'Kalutara', province: 'Western' },
+    { name: 'Kandy', province: 'Central' },
+    { name: 'Kegalle', province: 'Sabaragamuwa' },
+    { name: 'Kilinochchi', province: 'Northern' },
+    { name: 'Kurunegala', province: 'North Western' },
+    { name: 'Mannar', province: 'Northern' },
+    { name: 'Matale', province: 'Central' },
+    { name: 'Matara', province: 'Southern' },
+    { name: 'Monaragala', province: 'Uva' },
+    { name: 'Mullaitivu', province: 'Northern' },
+    { name: 'Nuwara Eliya', province: 'Central' },
+    { name: 'Polonnaruwa', province: 'North Central' },
+    { name: 'Puttalam', province: 'North Western' },
+    { name: 'Rathnapura', province: 'Sabaragamuwa' },
+    { name: 'Trincomalee', province: 'Eastern' },
+    { name: 'Vavuniya', province: 'Northern' },
+  ];
 
-get provinceItems() {
+  get provinceItems() {
     return this.provinces.map(province => ({
-        value: province,
-        label: province
+      value: province,
+      label: province
     }));
-}
+  }
 
-get districtItems() {
-    const districts = this.centerData.province 
-        ? this.allDistricts.filter(d => d.province === this.centerData.province)
-        : this.allDistricts;
-    
+  get districtItems() {
+    const districts = this.centerData.province
+      ? this.allDistricts.filter(d => d.province === this.centerData.province)
+      : this.allDistricts;
+
     return districts.map(district => ({
-        value: district.name,
-        label: district.name
+      value: district.name,
+      label: district.name
     }));
-}
+  }
 
   countries: Country[] = COUNTRIES;
   selectedCountry1: Country | null = null;
@@ -113,49 +113,49 @@ get districtItems() {
   ngOnInit(): void {
   }
 
-selectCountry1(country: Country) {
-  this.selectedCountry1 = country;
-  this.centerData.phoneNumber01Code = country.dialCode; // update ngModel
-  this.dropdownOpen = false;
-}
+  selectCountry1(country: Country) {
+    this.selectedCountry1 = country;
+    this.centerData.phoneNumber01Code = country.dialCode; // update ngModel
+    this.dropdownOpen = false;
+  }
 
-selectCountry2(country: Country) {
-  this.selectedCountry2 = country;
-  this.centerData.phoneNumber02Code = country.dialCode; // update ngModel
-  this.dropdownOpen2 = false;
-}
+  selectCountry2(country: Country) {
+    this.selectedCountry2 = country;
+    this.centerData.phoneNumber02Code = country.dialCode; // update ngModel
+    this.dropdownOpen2 = false;
+  }
 
-// get flag
-getFlagUrl(code: string): string {
-  return `https://flagcdn.com/24x18/${code}.png`;
-}
+  // get flag
+  getFlagUrl(code: string): string {
+    return `https://flagcdn.com/24x18/${code}.png`;
+  }
 
-validateSriLankanPhone(input: string, key: string): void {
+  validateSriLankanPhone(input: string, key: string): void {
     if (!input) {
       this.isPhoneInvalidMap[key] = false;
       return;
     }
-  
+
     const firstDigit = input.charAt(0);
     const prefix = input.substring(0, 2);
     const isValidPrefix = this.allowedPrefixes.includes(prefix);
     const isValidLength = input.length === 9;
-  
+
     if (firstDigit !== '7') {
       this.isPhoneInvalidMap[key] = true;
       return;
     }
-  
+
     if (!isValidPrefix && input.length >= 2) {
       this.isPhoneInvalidMap[key] = true;
       return;
     }
-  
+
     if (input.length === 9 && isValidPrefix) {
       this.isPhoneInvalidMap[key] = false;
       return;
     }
-  
+
     this.isPhoneInvalidMap[key] = false;
   }
 
@@ -169,27 +169,27 @@ validateSriLankanPhone(input: string, key: string): void {
   capitalizeFirstLetter(field: keyof CenterData) {
     if (this.centerData[field]) {
       let value = this.centerData[field] as unknown as string;
-  
+
       // Trim spaces
       value = value.trim();
-  
+
       // Capitalize first letter
       value = value.charAt(0).toUpperCase() + value.slice(1);
-  
+
       this.centerData[field] = value as never; // assign back safely
     }
   }
 
   onFormatInput(event: Event, modelRef: any, fieldName: string): void {
     const inputElement = event.target as HTMLInputElement;
-  
+
     if (inputElement && inputElement.value) {
       // Remove only leading spaces
       let value = inputElement.value.replace(/^\s+/, '');
-  
+
       // Capitalize first letter (if exists)
       value = value.charAt(0).toUpperCase() + value.slice(1);
-  
+
       // Update model and input box
       modelRef[fieldName] = value;
       inputElement.value = value;
@@ -212,7 +212,7 @@ validateSriLankanPhone(input: string, key: string): void {
     } else if (!/^[0-9]{9}$/.test(this.centerData.phoneNumber01) || this.isPhoneInvalidMap['phone01']) {
       missingFields.push('Contact Number - 1 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
     }
-  
+
     if (this.centerData.phoneNumber02) {
       if (!/^[0-9]{9}$/.test(this.centerData.phoneNumber02) || this.isPhoneInvalidMap['phone02']) {
         missingFields.push('Contact Number - 2 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
@@ -252,7 +252,7 @@ validateSriLankanPhone(input: string, key: string): void {
         errorMessage += `<li>${field}</li>`;
       });
       errorMessage += '</ul></div>';
-  
+
       Swal.fire({
         icon: 'error',
         title: 'Missing or Invalid Information',
@@ -360,36 +360,36 @@ validateSriLankanPhone(input: string, key: string): void {
     this.centerData.province = selectedProvince || '';
 
     if (!selectedProvince) {
-        this.centerData.province = '';
+      this.centerData.province = '';
     } else {
-        // Check if current district is still valid for the selected province
-        const isDistrictValid = this.allDistricts.some(d => 
-            d.name === this.centerData.district && d.province === selectedProvince
-        );
-        if (!isDistrictValid) {
-            this.centerData.district = '';
-        }
+      // Check if current district is still valid for the selected province
+      const isDistrictValid = this.allDistricts.some(d =>
+        d.name === this.centerData.district && d.province === selectedProvince
+      );
+      if (!isDistrictValid) {
+        this.centerData.district = '';
+      }
     }
 
     this.updateRegCode();
   }
 
-// Handle district selection change
-onDistrictChange(selectedDistrict: string | null): void {
+  // Handle district selection change
+  onDistrictChange(selectedDistrict: string | null): void {
     this.centerData.district = selectedDistrict || '';
 
     // When district is selected, automatically set the province
     if (selectedDistrict) {
-        const district = this.allDistricts.find(d => d.name === selectedDistrict);
-        if (district && district.province !== this.centerData.province) {
-            this.centerData.province = district.province;
+      const district = this.allDistricts.find(d => d.name === selectedDistrict);
+      if (district && district.province !== this.centerData.province) {
+        this.centerData.province = district.province;
 
-        }
+      }
     }
 
     this.updateRegCode();
-  
-}
+
+  }
 
   updateRegCode() {
     const province = this.centerData.province;

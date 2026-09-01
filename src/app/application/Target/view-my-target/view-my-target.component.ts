@@ -81,7 +81,7 @@ export class ViewMyTargetComponent implements OnInit {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
-          a.download = `Officer Target Report_${this.officerDataArr[0].empId  }.xlsx`;
+          a.download = `Officer Target Report_${this.officerDataArr[0].empId}.xlsx`;
           a.click();
           window.URL.revokeObjectURL(url);
 

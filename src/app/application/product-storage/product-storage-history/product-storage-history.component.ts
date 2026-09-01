@@ -42,7 +42,7 @@ export class ProductStorageHistoryComponent implements OnInit {
   ) { }
 
 
-   ngOnInit(): void {
+  ngOnInit(): void {
     this.selectedDate = this.getYesterdayDateString();
     this.getAllShortageHistory();
   }
@@ -89,22 +89,22 @@ export class ProductStorageHistoryComponent implements OnInit {
     this.location.back();
   }
 
-onDateChange(newDate: string | Date | null) {
+  onDateChange(newDate: string | Date | null) {
     let dateString: string;
-  
+
     if (!newDate) {
 
       dateString = this.getYesterdayDateString();
     }
     else if (newDate instanceof Date) {
-      
+
       dateString = newDate.toISOString().split('T')[0];
-    } 
+    }
     else {
-      
+
       dateString = newDate;
     }
-  
+
     this.selectedDate = dateString;
     this.getAllShortageHistory();
   }

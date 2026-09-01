@@ -1,64 +1,39 @@
 <div class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
   <p onclick="history.back()">Reports</p>
-  <p>Officer Reports</p> 
+  <p>Officer Reports</p>
 </div>
 
-<div >
-  <div class="flex flex-row items-center justify-center shadow-lg rounded-lg bg-tileLight dark:bg-[#363636] w-full px-10 py-5">
+<div>
+  <div
+    class="flex flex-row items-center justify-center shadow-lg rounded-lg bg-tileLight dark:bg-[#363636] w-full px-10 py-5">
     <p class="text-xl font-semibold text-[#292929] mx-5 dark:text-[#FFFFFF]">
       Select Report Type
     </p>
 
-    <!-- <div class="relative w-56 mx-5">
-            <div
-                class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
-                <select [(ngModel)]="selectedtype" 
-                    class="block w-full appearance-none  dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 rounded-xl focus:outline-none">
-                    <option value="" selected>--Select--</option>
-                    <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                        value="Collection Report">Collection Report</option>
-                    <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                        value="Sales Report">Sales Report</option>
-                </select>
-                <button>
-                    <i class="fa-solid fa-angle-down text-lg mr-3"></i>
-                </button>
-            </div>
-        </div> -->
-
     <div class="relative w-52 mt-4">
-      <app-searchable-dropdown
-              [items]="categoryDropdownItems"
-              placeholder="--Select--"
-              searchPlaceholder="Search..."
-              [(ngModel)]="reportType"
-              (selectionChange)="onCategorySelectionChange($event)"
-              [clearable]="true"
-              [showSelected]="true"
-              [disabled]="false"
-              class="block w-full mb-4"
-            ></app-searchable-dropdown>
+      <app-searchable-dropdown [items]="categoryDropdownItems" placeholder="--Select--" searchPlaceholder="Search..."
+        [(ngModel)]="reportType" (selectionChange)="onCategorySelectionChange($event)" [clearable]="true"
+        [showSelected]="true" [disabled]="false" class="block w-full mb-4"></app-searchable-dropdown>
 
     </div>
 
-    <button
-      class="bg-[#415CFF] text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-lg ml-5 dark:text-white"
+    <button class="bg-[#415CFF] text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-lg ml-5 dark:text-white"
       (click)="GoBtn()">
       Go
     </button>
 
-</div>
+  </div>
 
-<div *ngIf="type === ''"
-  class="flex flex-col items-center w-full h-screen px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg mt-6 dark:text-black">
-  <p class="text-[#494949] my-6 dark:text-[#FFFFFF]">--No Data Availabale--</p>
-  <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20 dark:text-black" />
-</div>
+  <div *ngIf="type === ''"
+    class="flex flex-col items-center w-full h-screen px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg mt-6 dark:text-black">
+    <p class="text-[#494949] my-6 dark:text-[#FFFFFF]">--No Data Availabale--</p>
+    <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20 dark:text-black" />
+  </div>
 
-<div *ngIf="type === 'Collection Reports'" class="shadow-lg rounded-lg">
-  <app-collection-report-component />
-</div>
+  <div *ngIf="type === 'Collection Reports'" class="shadow-lg rounded-lg">
+    <app-collection-report-component />
+  </div>
 
-<div *ngIf="type === 'Sales Reports'" class="shadow-lg rounded-lg">
-  <app-sales-report-component />
-</div>
+  <div *ngIf="type === 'Sales Reports'" class="shadow-lg rounded-lg">
+    <app-sales-report-component />
+  </div>

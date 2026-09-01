@@ -143,66 +143,66 @@
         <button class="bg-[#415CFF] text-white font-semibold px-4 py-2 rounded-lg shadow-lg"
             (click)="openAddRequest()">Add
             Request</button>
-            <div *ngIf="!hasData" class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6 ">
-                <p class="text-[#494949] my-6 dark:text-textDark">--No Data Availabale--</p>
-                <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
-            </div>
+        <div *ngIf="!hasData" class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6 ">
+            <p class="text-[#494949] my-6 dark:text-textDark">--No Data Availabale--</p>
+            <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
+        </div>
 
-            <div *ngIf="hasData" class="min-w-max overflow-hidden  mt-5 mr-5">
-        <div  class=" border-gray-100 border-[2px] dark:border-[#202021] rounded-lg">
-                    <table class="w-full min-w-max divide-y-2 border-collapse">
-                        <thead
-                            class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default text-[14px]">
-                            <tr>
-                                <th class="px-6 py-3 text-left font-medium">No</th>
-                                <th class="px-6 py-3 text-left font-medium">Crop Name</th>
-                                <th class="px-6 py-3 text-left font-medium">Variety Name</th>
-                                <th class="px-6 py-3 text-left font-medium">Grade</th>
-                                <th class="px-6 py-3 text-left font-medium">Requested (Rs.)</th>
-                                <th class="px-6 py-3 text-center font-medium">Status</th>
-                                <th class="px-6 py-3 text-left font-medium">EMP ID</th>
-                                <th class="px-6 py-3 text-left font-medium">Time</th>
-                                <th class="px-6 py-3 text-left font-medium">View</th>
-                                <th class="px-6 py-3 text-left font-medium">Forward</th>
-                            </tr>
-                        </thead>
-                       <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F] cursor-default">
-                            <tr *ngFor="let item of reqPriceArr | paginate: {
+        <div *ngIf="hasData" class="min-w-max overflow-hidden  mt-5 mr-5">
+            <div class=" border-gray-100 border-[2px] dark:border-[#202021] rounded-lg">
+                <table class="w-full min-w-max divide-y-2 border-collapse">
+                    <thead
+                        class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default text-[14px]">
+                        <tr>
+                            <th class="px-6 py-3 text-left font-medium">No</th>
+                            <th class="px-6 py-3 text-left font-medium">Crop Name</th>
+                            <th class="px-6 py-3 text-left font-medium">Variety Name</th>
+                            <th class="px-6 py-3 text-left font-medium">Grade</th>
+                            <th class="px-6 py-3 text-left font-medium">Requested (Rs.)</th>
+                            <th class="px-6 py-3 text-center font-medium">Status</th>
+                            <th class="px-6 py-3 text-left font-medium">EMP ID</th>
+                            <th class="px-6 py-3 text-left font-medium">Time</th>
+                            <th class="px-6 py-3 text-left font-medium">View</th>
+                            <th class="px-6 py-3 text-left font-medium">Forward</th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F] cursor-default">
+                        <tr *ngFor="let item of reqPriceArr | paginate: {
                         itemsPerPage: itemsPerPage,
                         currentPage: page,
                         totalItems: totalItems
                     }; let i = index">
-                                <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
-                                    {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) +
-                                        i + 1) : (((page - 1) * itemsPerPage) + i + 1) }} </td>
-                                <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.cropNameEnglish}}</td>
-                                <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.varietyNameEnglish}}</td>
-                                <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.grade}}</td>
-<td class="px-6 py-4 text-gray-900 dark:text-gray-300">
-  {{ item.requestPrice | number:'1.2-2' }}
-</td>
-                                <td class="px-6 py-4 text-gray-900 dark:text-gray-300 flex justify-center items-center">
-                                    <span *ngIf="item.status === 'Pending'"
-                                        class="bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-6 py-1 ">
-                                        Pending
-                                    </span>
-                                    <span *ngIf="item.status === 'Approved'"
-                                        class="bg-[#C8E0FF] text-[#415CFF] text-center rounded-lg px-4 py-1 ">
-                                        Approved
-                                    </span>
-                                    <span *ngIf="item.status === 'Rejected'"
-                                        class="bg-[#FFB9B7] text-[#D16D6A] text-center rounded-lg px-5 py-1 ">
-                                        Rejected
-                                    </span>
-                                </td>
-                                <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
-                                    {{ item.empId.startsWith('CCM') ? 'You' : item.empId }}
-                                </td>
-                                <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.createdAt | date: 'hh:mm
-                                    a'}}
-                                </td>
-                                <td class="px-6 py-4 text-gray-900 dark:text-gray-300 text-center">
-                                    <button (click)="openChangeStatusPopUp(item.id, item.requestPrice)" [disabled]="
+                            <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
+                                {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i +
+                                    1) : (((page - 1) * itemsPerPage) + i + 1) }} </td>
+                            <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.cropNameEnglish}}</td>
+                            <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.varietyNameEnglish}}</td>
+                            <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.grade}}</td>
+                            <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
+                                {{ item.requestPrice | number:'1.2-2' }}
+                            </td>
+                            <td class="px-6 py-4 text-gray-900 dark:text-gray-300 flex justify-center items-center">
+                                <span *ngIf="item.status === 'Pending'"
+                                    class="bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-6 py-1 ">
+                                    Pending
+                                </span>
+                                <span *ngIf="item.status === 'Approved'"
+                                    class="bg-[#C8E0FF] text-[#415CFF] text-center rounded-lg px-4 py-1 ">
+                                    Approved
+                                </span>
+                                <span *ngIf="item.status === 'Rejected'"
+                                    class="bg-[#FFB9B7] text-[#D16D6A] text-center rounded-lg px-5 py-1 ">
+                                    Rejected
+                                </span>
+                            </td>
+                            <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
+                                {{ item.empId.startsWith('CCM') ? 'You' : item.empId }}
+                            </td>
+                            <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.createdAt | date: 'hh:mm
+                                a'}}
+                            </td>
+                            <td class="px-6 py-4 text-gray-900 dark:text-gray-300 text-center">
+                                <button (click)="openChangeStatusPopUp(item.id, item.requestPrice)" [disabled]="
                                 item.assignRole === 'CCH' ||
                                 item.empId.startsWith('CCM') ||
                                 item.status !== 'Pending'
@@ -216,25 +216,25 @@
                                   !item.empId.startsWith('CCM') &&
                                   item.status === 'Pending'
                               }" class="p-2 transition">
-                                        <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none"
-                                            xmlns="http://www.w3.org/2000/svg" [attr.stroke]="
+                                    <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none"
+                                        xmlns="http://www.w3.org/2000/svg" [attr.stroke]="
                                   item.assignRole === 'CCH' ||
                                   item.empId.startsWith('CCM') ||
                                   item.status !== 'Pending'
                                     ? '#9CA3AF'  
                                     : '#415CFF'  
                                 ">
-                                            <path
-                                                d="M3 14C3 9.02944 7.02944 5 12 5C16.9706 5 21 9.02944 21 14M17 14C17 16.7614 14.7614 19 12 19C9.23858 19 7 16.7614 7 14C7 11.2386 9.23858 9 12 9C14.7614 9 17 11.2386 17 14Z"
-                                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                                        </svg>
-                                    </button>
-                                </td>
+                                        <path
+                                            d="M3 14C3 9.02944 7.02944 5 12 5C16.9706 5 21 9.02944 21 14M17 14C17 16.7614 14.7614 19 12 19C9.23858 19 7 16.7614 7 14C7 11.2386 9.23858 9 12 9C14.7614 9 17 11.2386 17 14Z"
+                                            stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                    </svg>
+                                </button>
+                            </td>
 
-                                <td class="px-6 py-4 text-gray-900 dark:text-gray-300 text-center">
-                                    <button
-                                        [disabled]="item.assignRole === 'CCH' || item.empId.startsWith('CCM') || item.status !== 'Pending'"
-                                        [ngClass]="{
+                            <td class="px-6 py-4 text-gray-900 dark:text-gray-300 text-center">
+                                <button
+                                    [disabled]="item.assignRole === 'CCH' || item.empId.startsWith('CCM') || item.status !== 'Pending'"
+                                    [ngClass]="{
                                 'text-gray-400 cursor-not-allowed':
                                   item.assignRole === 'CCH' ||
                                   item.empId.startsWith('CCM') ||
@@ -244,24 +244,24 @@
                                   !item.empId.startsWith('CCM') &&
                                   item.status === 'Pending'
                               }" class="p-2 transition" (click)="forwardRequest(item.id)">
-                                        <i class="fa-solid fa-share"></i>
-                                    </button>
-                                </td>
+                                    <i class="fa-solid fa-share"></i>
+                                </button>
+                            </td>
 
-                            </tr>
-                        </tbody>
+                        </tr>
+                    </tbody>
 
-                    </table>
-                </div>
-                <div *ngIf="hasData" class="flex justify-end items-center my-5 pt-3 dark:bg-[#1D1D1F] text-right">
-                    <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true"
-                        [previousLabel]="'Previous'" [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'"
-                        [screenReaderPageLabel]="'page'" [screenReaderCurrentLabel]="'Youre on page'">
-                    </pagination-controls>
-                </div>
+                </table>
             </div>
+            <div *ngIf="hasData" class="flex justify-end items-center my-5 pt-3 dark:bg-[#1D1D1F] text-right">
+                <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true"
+                    [previousLabel]="'Previous'" [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'"
+                    [screenReaderPageLabel]="'page'" [screenReaderCurrentLabel]="'Youre on page'">
+                </pagination-controls>
+            </div>
+        </div>
 
-            
+
 
 
 

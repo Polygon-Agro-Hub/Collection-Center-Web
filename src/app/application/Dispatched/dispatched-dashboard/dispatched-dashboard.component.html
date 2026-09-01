@@ -2,136 +2,96 @@
 
 <div>
   <p class="font-semibold text-[#424242] mb-4 mr-5 ml-0 dark:text-[#FFFFFF] cursor-pointer">Dispatched</p>
-  
+
   <div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg overflow-x-auto">
-    
+
     <!-- Tabs Section - Fixed width, separate scroll -->
     <div class="pt-5 pb-5 dark:bg-[#363636] rounded-lg mr-4">
       <div class="flex w-full space-x-4 pb-5 border-b border-gray-300 overflow-x-auto mr-4">
-        <button
-          (click)="selectTab('all')"
-          [ngClass]="{
+        <button (click)="selectTab('all')" [ngClass]="{
             'border-2 border-[#415CFF] text-[#415CFF]': activeTab === 'all',
             'border border-gray-300 text-textLight dark:text-textDark':
               activeTab !== 'all'
-          }"
-          class="h-10 whitespace-nowrap px-5 flex items-center justify-center rounded-full gap-2"
-        >
+          }" class="h-10 whitespace-nowrap px-5 flex items-center justify-center rounded-full gap-2">
           <i *ngIf="activeTab === 'all'" class="fa fa-check"></i>
           All
         </button>
 
-        <button
-          (click)="selectTab('Ready to Pickup')"
-          [ngClass]="{
+        <button (click)="selectTab('Ready to Pickup')" [ngClass]="{
             'border-2 border-[#415CFF] text-[#415CFF]': activeTab === 'Ready to Pickup',
             'border border-gray-300 text-textLight dark:text-textDark':
               activeTab !== 'Ready to Pickup'
-          }"
-          class="h-10 whitespace-nowrap px-5 flex items-center justify-center rounded-full gap-2"
-        >
+          }" class="h-10 whitespace-nowrap px-5 flex items-center justify-center rounded-full gap-2">
           <i *ngIf="activeTab === 'Ready to Pickup'" class="fa fa-check"></i>
           Ready to Pickup
         </button>
 
-        <button
-          (click)="selectTab('Picked Up')"
-          [ngClass]="{
+        <button (click)="selectTab('Picked Up')" [ngClass]="{
             'border-2 border-[#415CFF] text-[#415CFF]': activeTab === 'Picked Up',
             'border border-gray-300 text-textLight dark:text-textDark':
               activeTab !== 'Picked Up'
-          }"
-          class="h-10 px-5 whitespace-nowrap flex items-center justify-center rounded-full gap-2"
-        >
+          }" class="h-10 px-5 whitespace-nowrap flex items-center justify-center rounded-full gap-2">
           <i *ngIf="activeTab === 'Picked Up'" class="fa fa-check"></i>
           Picked Up
         </button>
-        <button
-          (click)="selectTab('out-for-delivery')"
-          [ngClass]="{
+        <button (click)="selectTab('out-for-delivery')" [ngClass]="{
             'border-2 border-[#415CFF] text-[#415CFF]':
               activeTab === 'out-for-delivery',
             'border border-gray-300 text-textLight dark:text-textDark':
               activeTab !== 'out-for-delivery'
-          }"
-          class="h-10 px-5 whitespace-nowrap flex items-center justify-center rounded-full gap-2"
-        >
+          }" class="h-10 px-5 whitespace-nowrap flex items-center justify-center rounded-full gap-2">
           <i *ngIf="activeTab === 'out-for-delivery'" class="fa fa-check"></i>
           Out for Delivery
         </button>
 
-        <button
-          (click)="selectTab('Collected')"
-          [ngClass]="{
+        <button (click)="selectTab('Collected')" [ngClass]="{
             'border-2 border-[#415CFF] text-[#415CFF]': activeTab === 'Collected',
             'border border-gray-300 text-textLight dark:text-textDark':
               activeTab !== 'Collected'
-          }"
-          class="h-10 px-5 whitespace-nowrap flex items-center justify-center rounded-full gap-2"
-        >
+          }" class="h-10 px-5 whitespace-nowrap flex items-center justify-center rounded-full gap-2">
           <i *ngIf="activeTab === 'Collected'" class="fa fa-check"></i>
           Collected
         </button>
 
-        <button
-          (click)="selectTab('on-the-way')"
-          [ngClass]="{
+        <button (click)="selectTab('on-the-way')" [ngClass]="{
             'border-2 border-[#415CFF] text-[#415CFF]': activeTab === 'on-the-way',
             'border border-gray-300 text-textLight dark:text-textDark':
               activeTab !== 'on-the-way'
-          }"
-          class="h-10 px-5 whitespace-nowrap flex items-center justify-center rounded-full gap-2"
-        >
+          }" class="h-10 px-5 whitespace-nowrap flex items-center justify-center rounded-full gap-2">
           <i *ngIf="activeTab === 'on-the-way'" class="fa fa-check"></i>
           On the way
         </button>
-        <button
-          (click)="selectTab('hold')"
-          [ngClass]="{
+        <button (click)="selectTab('hold')" [ngClass]="{
             'border-2 border-[#415CFF] text-[#415CFF]': activeTab === 'hold',
             'border border-gray-300 text-textLight dark:text-textDark':
               activeTab !== 'hold'
-          }"
-          class="h-10 px-5 whitespace-nowrap flex items-center justify-center rounded-full gap-2"
-        >
+          }" class="h-10 px-5 whitespace-nowrap flex items-center justify-center rounded-full gap-2">
           <i *ngIf="activeTab === 'hold'" class="fa fa-check"></i>
           Hold
         </button>
-        <button
-          (click)="selectTab('return')"
-          [ngClass]="{
+        <button (click)="selectTab('return')" [ngClass]="{
             'border-2 border-[#415CFF] text-[#415CFF]': activeTab === 'return',
             'border border-gray-300 text-textLight dark:text-textDark':
               activeTab !== 'return'
-          }"
-          class="h-10 px-5 whitespace-nowrap flex items-center justify-center rounded-full gap-2"
-        >
+          }" class="h-10 px-5 whitespace-nowrap flex items-center justify-center rounded-full gap-2">
           <i *ngIf="activeTab === 'return'" class="fa fa-check"></i>
           Return
         </button>
 
-        <button
-          (click)="selectTab('delivered')"
-          [ngClass]="{
+        <button (click)="selectTab('delivered')" [ngClass]="{
             'border-2 border-[#415CFF] text-[#415CFF]': activeTab === 'delivered',
             'border border-gray-300 text-textLight dark:text-textDark':
               activeTab !== 'delivered'
-          }"
-          class="h-10 px-5 whitespace-nowrap flex items-center justify-center rounded-full gap-2"
-        >
+          }" class="h-10 px-5 whitespace-nowrap flex items-center justify-center rounded-full gap-2">
           <i *ngIf="activeTab === 'delivered'" class="fa fa-check"></i>
           Delivered
         </button>
 
-        <button
-          (click)="selectTab('Return Received')"
-          [ngClass]="{
+        <button (click)="selectTab('Return Received')" [ngClass]="{
             'border-2 border-[#415CFF] text-[#415CFF]': activeTab === 'Return Received',
             'border border-gray-300 text-textLight dark:text-textDark':
               activeTab !== 'Return Received'
-          }"
-          class="h-10 px-5 whitespace-nowrap flex items-center justify-center rounded-full gap-2"
-        >
+          }" class="h-10 px-5 whitespace-nowrap flex items-center justify-center rounded-full gap-2">
           <i *ngIf="activeTab === 'Return Received'" class="fa fa-check"></i>
           Return Received
         </button>
@@ -144,133 +104,126 @@
     <div class="flex flex-row items-center justify-between min-w-max max-w-[80vw] mx-auto">
       <div class="flex justify-start items-center">
         <h2 class="text-lg font-semibold text-textLight dark:text-textDark whitespace-nowrap">
-          All ({{ allDeliveries.length < 10 ? ('0' + allDeliveries.length) : allDeliveries.length }})
-        </h2>
+          All ({{ allDeliveries.length < 10 ? ('0' + allDeliveries.length) : allDeliveries.length }}) </h2>
       </div>
       <div class="flex w-full flex-row items-center justify-end gap-x-5 mr-5">
 
-        <i *ngIf="activeTab === 'all' || activeTab === 'Ready to Pickup' || activeTab === 'out-for-delivery' || activeTab === 'Return Received' || activeTab === 'Picked Up'" class="fa-solid text-[#4A4A4A] fa-list text-lg dark:text-white ml-5"></i>
-        <p *ngIf="activeTab === 'all' || activeTab === 'Ready to Pickup' || activeTab === 'out-for-delivery' || activeTab === 'Return Received' || activeTab === 'Picked Up'" class="text-[#4A4A4A] dark:text-textDark whitespace-nowrap">Filter By</p>
-  
+        <i *ngIf="activeTab === 'all' || activeTab === 'Ready to Pickup' || activeTab === 'out-for-delivery' || activeTab === 'Return Received' || activeTab === 'Picked Up'"
+          class="fa-solid text-[#4A4A4A] fa-list text-lg dark:text-white ml-5"></i>
+        <p *ngIf="activeTab === 'all' || activeTab === 'Ready to Pickup' || activeTab === 'out-for-delivery' || activeTab === 'Return Received' || activeTab === 'Picked Up'"
+          class="text-[#4A4A4A] dark:text-textDark whitespace-nowrap">Filter By</p>
+
         <div *ngIf="activeTab === 'all'" class="relative w-48  custom-status-dropdown-container">
           <select [(ngModel)]="selectedStatus" class="hidden" (change)="filterStatus()">
-              <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300" value="Assigned">
-                  Assigned</option>
-              <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300" value="Closed">
-                  Closed</option>
+            <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300" value="Assigned">
+              Assigned</option>
+            <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300" value="Closed">
+              Closed</option>
           </select>
 
           <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
-              (click)="toggleStatusDropdown()">
-              <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer ">
-                  <span>{{ selectedStatus || 'Status' }}</span>
-                  <div class="flex items-center ">
-                      <i *ngIf="selectedStatus" (click)="cancelStatus($event)"
-                          class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
+            (click)="toggleStatusDropdown()">
+            <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer ">
+              <span>{{ selectedStatus || 'Status' }}</span>
+              <div class="flex items-center ">
+                <i *ngIf="selectedStatus" (click)="cancelStatus($event)"
+                  class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
 
-                      <i *ngIf="isStatusDropdownOpen || !selectedStatus"
-                          class="fa-solid text-lg text-[#828282] transition-transform duration-200"
-                          [class.fa-angle-down]="!isStatusDropdownOpen"
-                          [class.fa-angle-up]="isStatusDropdownOpen"></i>
-                  </div>
+                <i *ngIf="isStatusDropdownOpen || !selectedStatus"
+                  class="fa-solid text-lg text-[#828282] transition-transform duration-200"
+                  [class.fa-angle-down]="!isStatusDropdownOpen" [class.fa-angle-up]="isStatusDropdownOpen"></i>
               </div>
+            </div>
           </div>
 
           <div *ngIf="isStatusDropdownOpen"
-     class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282] max-h-[160px] overflow-y-auto">
+            class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282] max-h-[160px] overflow-y-auto">
 
-  <div>
-    <div *ngFor="let option of statusOptionsArr"
-         (click)="selectStatusOption(option.value)"
-         class="px-3 py-2 cursor-pointer flex items-center dark:text-textDark"
-         [ngClass]="{
+            <div>
+              <div *ngFor="let option of statusOptionsArr" (click)="selectStatusOption(option.value)"
+                class="px-3 py-2 cursor-pointer flex items-center dark:text-textDark" [ngClass]="{
            'bg-gray-300 dark:bg-gray-600': selectedStatus === option.value,
            'hover:bg-gray-300 dark:hover:bg-gray-600': selectedStatus !== option.value
          }">
 
-      <span class="flex-grow">{{ option.label }}</span>
+                <span class="flex-grow">{{ option.label }}</span>
 
-      <i *ngIf="selectedStatus === option.value"
-         class="fa-solid fa-check ml-2 text-green-500">
-      </i>
+                <i *ngIf="selectedStatus === option.value" class="fa-solid fa-check ml-2 text-green-500">
+                </i>
 
-    </div>
-  </div>
+              </div>
+            </div>
 
-</div>
+          </div>
 
         </div>
-  
-        <div *ngIf="activeTab === 'all' || activeTab === 'out-for-delivery' || activeTab === 'Return Received' || activeTab === 'Picked Up'" class="w-36"
-        [ngClass]="{
+
+        <div
+          *ngIf="activeTab === 'all' || activeTab === 'out-for-delivery' || activeTab === 'Return Received' || activeTab === 'Picked Up'"
+          class="w-36" [ngClass]="{
           'w-44': activeTab === 'Return Received' || activeTab === 'Picked Up',
           'w-32': activeTab === 'all'
         }">
-          <app-custom-datepicker
-          [placeholder]="placeholderDate"
-          [selectedDate]="selectedDate"
-          (dateChange)="onDateChange($event)"
-          ></app-custom-datepicker>
+          <app-custom-datepicker [placeholder]="placeholderDate" [selectedDate]="selectedDate"
+            (dateChange)="onDateChange($event)"></app-custom-datepicker>
         </div>
 
         <div *ngIf="activeTab === 'Ready to Pickup'" class="relative w-40 custom-status-dropdown-container">
           <select [(ngModel)]="selectedStatus" class="hidden" (change)="filterTimeSlot()">
-              <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300" value="Assigned">
-                  8AM - 2PM</option>
-              <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300" value="Closed">
-                  2PM - 8PM</option>
+            <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300" value="Assigned">
+              8AM - 2PM</option>
+            <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300" value="Closed">
+              2PM - 8PM</option>
           </select>
 
           <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
-              (click)="toggleTimeSlotDropdown()">
-              <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer ">
-                  <span>{{ selectedTimeSlot || 'Time Slot' }}</span>
-                  <div class="flex items-center ">
-                      <i *ngIf="selectedTimeSlot" (click)="cancelTimeSlot($event)"
-                          class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
+            (click)="toggleTimeSlotDropdown()">
+            <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer ">
+              <span>{{ selectedTimeSlot || 'Time Slot' }}</span>
+              <div class="flex items-center ">
+                <i *ngIf="selectedTimeSlot" (click)="cancelTimeSlot($event)"
+                  class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
 
-                      <i *ngIf="isTimeSlotDropdownOpen || !selectedStatus"
-                          class="fa-solid text-lg text-[#828282] transition-transform duration-200"
-                          [class.fa-angle-down]="!isTimeSlotDropdownOpen"
-                          [class.fa-angle-up]="isTimeSlotDropdownOpen"></i>
-                  </div>
+                <i *ngIf="isTimeSlotDropdownOpen || !selectedStatus"
+                  class="fa-solid text-lg text-[#828282] transition-transform duration-200"
+                  [class.fa-angle-down]="!isTimeSlotDropdownOpen" [class.fa-angle-up]="isTimeSlotDropdownOpen"></i>
               </div>
+            </div>
           </div>
 
           <div *ngIf="isTimeSlotDropdownOpen"
-              class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282] overflow-hidden">
-              <div class="">
-                  <div *ngFor="let option of timeSlotOptionsArr" (click)="selectTimeSlotOption(option.value)"
-                      class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
-                      <span class="flex-grow">{{ option.label }}</span>
-                      <i class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
-                  </div>
+            class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282] overflow-hidden">
+            <div class="">
+              <div *ngFor="let option of timeSlotOptionsArr" (click)="selectTimeSlotOption(option.value)"
+                class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
+                <span class="flex-grow">{{ option.label }}</span>
+                <i class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
               </div>
+            </div>
           </div>
         </div>
-  
+
         <div
-        class="flex items-center text-[#95A1AC] rounded-full px-4 py-2 w-2/5 max-w-96 bg-[#F1F1F1] dark:bg-[#292929]">
-        <input type="text" [placeholder]="searchPlaceHolder" [(ngModel)]="searchText" (keyup.enter)="onSearchChange()"
-          (keyup.esc)="onSearchChange()"
-          class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
-        <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
-          (click)="onSearchChange()">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
-          </svg>
-        </button>
-        <button *ngIf="this.searchText" type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none"
-          (click)="clearSearch()">
-          <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-            stroke="currentColor">
-            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-              d="M6 18L18 6M6 6l12 12" />
-          </svg>
-        </button>
-      </div>
+          class="flex items-center text-[#95A1AC] rounded-full px-4 py-2 w-2/5 max-w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+          <input type="text" [placeholder]="searchPlaceHolder" [(ngModel)]="searchText" (keyup.enter)="onSearchChange()"
+            (keyup.esc)="onSearchChange()"
+            class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
+          <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
+            (click)="onSearchChange()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
+            </svg>
+          </button>
+          <button *ngIf="this.searchText" type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none"
+            (click)="clearSearch()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
+          </button>
+        </div>
       </div>
     </div>
 
@@ -279,9 +232,10 @@
       <p class="text-[#494949] my-6 dark:text-white">--No Orders Found--</p>
       <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
     </div>
-  
+
     <!-- Table Section - Horizontally Scrollable -->
-    <div *ngIf="hasData" class="min-w-max mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021] overflow-hidden">
+    <div *ngIf="hasData"
+      class="min-w-max mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021] overflow-hidden">
       <table class="w-full min-w-max divide-y-2">
         <thead class="text-[#4B5563] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
           <tr>
@@ -291,44 +245,52 @@
             <th class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-left whitespace-nowrap">
               Order ID
             </th>
-  
-            <th *ngIf="activeTab === 'all'" class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-center whitespace-nowrap">
+
+            <th *ngIf="activeTab === 'all'"
+              class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-center whitespace-nowrap">
               Status
             </th>
-  
-            <th *ngIf="activeTab !== 'all'" class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-left whitespace-nowrap">
+
+            <th *ngIf="activeTab !== 'all'"
+              class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-left whitespace-nowrap">
               Value (Rs.)
             </th>
-  
-            <th *ngIf="activeTab !== 'all' && activeTab !== 'delivered' && activeTab !== 'Return Received'" class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-left whitespace-nowrap">
+
+            <th *ngIf="activeTab !== 'all' && activeTab !== 'delivered' && activeTab !== 'Return Received'"
+              class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-left whitespace-nowrap">
               Customer Phone
             </th>
-  
-            <th *ngIf="activeTab !== 'all' && activeTab !== 'delivered' && activeTab !== 'Return Received'" class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-left whitespace-nowrap">
+
+            <th *ngIf="activeTab !== 'all' && activeTab !== 'delivered' && activeTab !== 'Return Received'"
+              class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-left whitespace-nowrap">
               Receiver Phone-1
             </th>
-  
-            <th *ngIf="activeTab !== 'all'" class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-center whitespace-nowrap">
+
+            <th *ngIf="activeTab !== 'all'"
+              class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-center whitespace-nowrap">
               Receiver's Info
             </th>
-  
+
             <th class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-center whitespace-nowrap">
               Scheduled Time Slot
             </th>
-  
-            <th *ngIf="activeTab === 'Return Received'" class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-center whitespace-nowrap">
+
+            <th *ngIf="activeTab === 'Return Received'"
+              class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-center whitespace-nowrap">
               Recieved Time
             </th>
 
-            <th *ngIf="activeTab === 'delivered'" class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-center whitespace-nowrap">
+            <th *ngIf="activeTab === 'delivered'"
+              class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-center whitespace-nowrap">
               Delivered Time
             </th>
-  
+
             <th class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-left whitespace-nowrap">
               Payment
             </th>
 
-            <th *ngIf="activeTab === 'all'" class="px-4 py-3 font-normal text-textLight dark:text-textDark text-left whitespace-nowrap">
+            <th *ngIf="activeTab === 'all'"
+              class="px-4 py-3 font-normal text-textLight dark:text-textDark text-left whitespace-nowrap">
               Value (Rs.)
             </th>
 
@@ -338,15 +300,14 @@
           </tr>
         </thead>
         <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
-          <tr *ngFor="let delivery of allDeliveries; let i = index"
-            class=" ">
+          <tr *ngFor="let delivery of allDeliveries; let i = index" class=" ">
             <td class="px-4 py-3 text-center text-[#000000] dark:text-textDark whitespace-nowrap">
               {{ i + 1 | number : "2.0" }}
             </td>
             <td class="px-4 py-3 text-left text-[#000000] dark:text-textDark whitespace-nowrap">
               {{ delivery.invNo || "N/A" }}
             </td>
-  
+
             <td *ngIf="activeTab === 'all'" class="px-4 py-3 text-center text-[#000000] dark:text-textDark">
               <span class="inline-block w-32 px-3 py-2 rounded-lg text-sm font-medium text-center whitespace-nowrap {{
                   getStatusClass(delivery.status)
@@ -354,86 +315,79 @@
                 {{ delivery.status }}
               </span>
             </td>
-  
-            <td *ngIf="activeTab !== 'all'" class="px-4 py-3 text-left text-[#000000] dark:text-textDark whitespace-nowrap">
+
+            <td *ngIf="activeTab !== 'all'"
+              class="px-4 py-3 text-left text-[#000000] dark:text-textDark whitespace-nowrap">
               {{delivery.total | number:'1.2-2'}}
             </td>
-  
-            <td *ngIf="activeTab !== 'all' && activeTab !== 'delivered' && activeTab !== 'Return Received'" class="px-4 py-3 text-left text-[#000000] dark:text-textDark whitespace-nowrap">
+
+            <td *ngIf="activeTab !== 'all' && activeTab !== 'delivered' && activeTab !== 'Return Received'"
+              class="px-4 py-3 text-left text-[#000000] dark:text-textDark whitespace-nowrap">
               {{ delivery.customerPhone || '--' }}
             </td>
-  
-            <td *ngIf="activeTab !== 'all' && activeTab !== 'delivered' && activeTab !== 'Return Received'" class="px-4 py-3 text-left text-[#000000] dark:text-textDark whitespace-nowrap">
+
+            <td *ngIf="activeTab !== 'all' && activeTab !== 'delivered' && activeTab !== 'Return Received'"
+              class="px-4 py-3 text-left text-[#000000] dark:text-textDark whitespace-nowrap">
               {{ delivery?.phone1 ? (delivery.phoneCode1 + ' ' + delivery.phone1) : '--' }}
             </td>
-  
-            <td *ngIf="activeTab !== 'all'"
-              class="px-4 py-3 text-center whitespace-nowrap align-middle">
-            <button
-              (click)="openInfoPopup(delivery)"
-              class="flex items-center justify-center w-full text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
 
-              <svg class="w-5 h-5"
-                   viewBox="0 0 24 24"
-                   fill="none"
-                   xmlns="http://www.w3.org/2000/svg">
-                <path
-                  d="M3 14C3 9.02944 7.02944 5 12 5C16.9706 5 21 9.02944 21 14M17 14C17 16.7614 14.7614 19 12 19C9.23858 19 7 16.7614 7 14C7 11.2386 9.23858 9 12 9C14.7614 9 17 11.2386 17 14Z"
-                  stroke="currentColor"
-                  stroke-width="2"
-                  stroke-linecap="round"
-                  stroke-linejoin="round" />
-              </svg>
-            </button>
-          </td>
-  
+            <td *ngIf="activeTab !== 'all'" class="px-4 py-3 text-center whitespace-nowrap align-middle">
+              <button (click)="openInfoPopup(delivery)"
+                class="flex items-center justify-center w-full text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
+
+                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path
+                    d="M3 14C3 9.02944 7.02944 5 12 5C16.9706 5 21 9.02944 21 14M17 14C17 16.7614 14.7614 19 12 19C9.23858 19 7 16.7614 7 14C7 11.2386 9.23858 9 12 9C14.7614 9 17 11.2386 17 14Z"
+                    stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
+                </svg>
+              </button>
+            </td>
+
             <td class="px-4 py-3 text-center text-[#000000] dark:text-textDark whitespace-nowrap">
-             <p> {{ formatTimeRange(delivery.sheduleTime) }}</p>
-             <p>{{delivery.sheduleDate | date:'MMMM d, y'}}</p> 
-            </td>
-  
-            <td *ngIf="activeTab === 'Return Received'" class="px-4 py-3 text-center text-[#000000] dark:text-textDark whitespace-nowrap">
-             <p> {{ delivery.receivedTime | date:'h:mm a' }}</p>
-             <p>{{delivery.receivedTime | date:'MMMM d, y'}}</p> 
+              <p> {{ formatTimeRange(delivery.sheduleTime) }}</p>
+              <p>{{delivery.sheduleDate | date:'MMMM d, y'}}</p>
             </td>
 
-            <td *ngIf="activeTab === 'delivered'" class="px-4 py-3 text-center text-[#000000] dark:text-textDark whitespace-nowrap">
-              <p> {{ delivery.completeTime | date:'h:mm a' }}</p>
-              <p>{{delivery.completeTime | date:'MMMM d, y'}}</p> 
+            <td *ngIf="activeTab === 'Return Received'"
+              class="px-4 py-3 text-center text-[#000000] dark:text-textDark whitespace-nowrap">
+              <p> {{ delivery.receivedTime | date:'h:mm a' }}</p>
+              <p>{{delivery.receivedTime | date:'MMMM d, y'}}</p>
             </td>
-  
+
+            <td *ngIf="activeTab === 'delivered'"
+              class="px-4 py-3 text-center text-[#000000] dark:text-textDark whitespace-nowrap">
+              <p> {{ delivery.completeTime | date:'h:mm a' }}</p>
+              <p>{{delivery.completeTime | date:'MMMM d, y'}}</p>
+            </td>
+
             <td class="px-4 py-3 text-left whitespace-nowrap">
               <div class="flex items-center justify-start h-full">
-                <span *ngIf="delivery.isPaid === 0"
-                  class=" dark:text-textDark"
-                  [ngClass]="{
+                <span *ngIf="delivery.isPaid === 0" class=" dark:text-textDark" [ngClass]="{
                     'text-[#EB3223] dark:text-[#EB3223]': delivery.status === 'Return Received' && activeTab !== 'all'
                   }">
                   Pending
                 </span>
-            
-                <span *ngIf="delivery.isPaid === 1 && delivery.paymentMethod === 'Cash'"
-                  class="dark:text-textDark">
+
+                <span *ngIf="delivery.isPaid === 1 && delivery.paymentMethod === 'Cash'" class="dark:text-textDark">
                   Received
                 </span>
-            
-                <span *ngIf="delivery.isPaid === 1 && delivery.paymentMethod === 'Card'"
-                  class="dark:text-textDark"
+
+                <span *ngIf="delivery.isPaid === 1 && delivery.paymentMethod === 'Card'" class="dark:text-textDark"
                   [ngClass]="{
                     'text-[#415CFF] dark:text-[#415CFF]': delivery.status === 'Ready to Pickup' && activeTab !== 'all'
                   }">
                   Paid
                 </span>
               </div>
-          </td>
+            </td>
 
-          <td *ngIf="activeTab === 'all'" class="px-4 py-3 text-left text-[#000000] dark:text-textDark whitespace-nowrap">
-            {{delivery.total | number:'1.2-2'}}
-          </td>
-  
+            <td *ngIf="activeTab === 'all'"
+              class="px-4 py-3 text-left text-[#000000] dark:text-textDark whitespace-nowrap">
+              {{delivery.total | number:'1.2-2'}}
+            </td>
+
             <td class="px-4 py-3 text-center whitespace-nowrap">
-              <button 
-                (click)="openDetailsPopup(delivery)"
+              <button (click)="openDetailsPopup(delivery)"
                 class="text-blue-500 hover:text-blue-700 dark:text-blue-400 dark:hover:text-blue-300">
                 <svg class="w-5 h-5 mx-auto" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
                   <path
@@ -443,15 +397,13 @@
               </button>
             </td>
           </tr>
-      
+
         </tbody>
       </table>
 
-      <app-today-deliveries-view-popup
-          [visible]="showDetailsPopup"
-          [deliveryId]="selectedDeliveryId"
-          (closePopup)="closeDetailsPopup()">
-        </app-today-deliveries-view-popup>
+      <app-today-deliveries-view-popup [visible]="showDetailsPopup" [deliveryId]="selectedDeliveryId"
+        (closePopup)="closeDetailsPopup()">
+      </app-today-deliveries-view-popup>
     </div>
 
   </div>
@@ -479,7 +431,7 @@
         <span class="text-sm text-[#4B5563] dark:text-gray-400 w-44 flex-shrink-0">Customer Name</span>
         <span class="text-sm text-[#000000] dark:text-gray-400 mx-3">:</span>
         <span class="text-sm text-[#000000] dark:text-textDark font-medium flex-1">
-            {{deliveryObj.title}}. {{ deliveryObj.customerName }}
+          {{deliveryObj.title}}. {{ deliveryObj.customerName }}
         </span>
       </div>
 
@@ -498,11 +450,11 @@
         <span class="text-sm text-[#000000] dark:text-gray-400 mx-3">:</span>
         <span class="text-sm text-[#000000] dark:text-textDark font-medium flex-1">
           {{
-            deliveryObj.orderApp === 'Marketplace'
-              ? 'GoVi Mart'
-              : deliveryObj.orderApp === 'Dash'
-                ? 'SalesDash'
-                : deliveryObj.orderApp
+          deliveryObj.orderApp === 'Marketplace'
+          ? 'GoVi Mart'
+          : deliveryObj.orderApp === 'Dash'
+          ? 'SalesDash'
+          : deliveryObj.orderApp
           }}
         </span>
       </div>
@@ -517,7 +469,8 @@
       </div>
 
       <div class="flex items-start">
-        <span class="text-sm text-[#4B5563] dark:text-gray-400 w-44 flex-shrink-0 whitespace-nowrap">Scheduled Time</span>
+        <span class="text-sm text-[#4B5563] dark:text-gray-400 w-44 flex-shrink-0 whitespace-nowrap">Scheduled
+          Time</span>
         <span class="text-sm text-[#000000] dark:text-gray-400 mx-3">:</span>
         <span class="text-sm text-[#000000] dark:text-textDark font-medium flex-1 whitespace-nowrap">
           {{ deliveryObj.sheduleTime }} {{ deliveryObj.sheduleDate | date:'on MMMM d, y'}}
@@ -533,16 +486,18 @@
       </div>
 
       <div class="flex items-start">
-        <span class="text-sm text-[#4B5563] dark:text-gray-400 w-44 flex-shrink-0 whitespace-nowrap">Receiver’s Phone Number - 1</span>
+        <span class="text-sm text-[#4B5563] dark:text-gray-400 w-44 flex-shrink-0 whitespace-nowrap">Receiver’s Phone
+          Number - 1</span>
         <span class="text-sm text-[#000000] dark:text-gray-400 mx-3">:</span>
         <span class="text-sm text-[#000000] dark:text-textDark font-medium flex-1 whitespace-nowrap">
-            {{ deliveryObj.phoneCode1 }} {{ deliveryObj.phone1 }}
+          {{ deliveryObj.phoneCode1 }} {{ deliveryObj.phone1 }}
         </span>
       </div>
 
       <!-- Crop -->
       <div class="flex items-start">
-        <span class="text-sm text-[#4B5563] dark:text-gray-400 w-44 flex-shrink-0 whitespace-nowrap">Receiver’s Phone Number - 2</span>
+        <span class="text-sm text-[#4B5563] dark:text-gray-400 w-44 flex-shrink-0 whitespace-nowrap">Receiver’s Phone
+          Number - 2</span>
         <span class="text-sm text-[#000000] dark:text-gray-400 mx-3">:</span>
         <span class="text-sm text-[#000000] dark:text-textDark font-medium flex-1">
           {{ deliveryObj.phone2 ? (deliveryObj.phoneCode2 + ' ' + deliveryObj.phone2) : '--' }}

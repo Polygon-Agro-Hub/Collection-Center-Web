@@ -13,25 +13,9 @@
       <div class="flex flex-row items-center gap-4">
         <p class="text-[18px] font-normal text-[#000000] dark:text-white">Date :</p>
         <div class="relative w-48 mr-6">
-          <!-- <div
-            class="border-2 rounded-xl dark:bg-[#363638] text-textLight dark:text-textDark flex flex-row justify-between items-center text-lg">
-            <input type="date" [(ngModel)]="selectDate" (change)="filterByDate()" class="block w-full appearance-none text-textLight dark:text-textDark bg-white dark:bg-[#292929] px-3 py-2 rounded-xl focus:outline-none 
-                          border border-gray-300 dark:border-gray-600
-                          [color-scheme:light] dark:[color-scheme:dark]
-                          [&::-webkit-calendar-picker-indicator]:filter 
-                          [&::-webkit-calendar-picker-indicator]:cursor-pointer
-                          [&::-webkit-calendar-picker-indicator]:ml-1
-                          dark:[&::-webkit-calendar-picker-indicator]:invert
-                          [&::-webkit-datetime-edit]:text-gray-800
-                          dark:[&::-webkit-datetime-edit]:text-gray-200
-                          [&::-webkit-datetime-edit-fields-wrapper]:text-gray-800
-                          dark:[&::-webkit-datetime-edit-fields-wrapper]:text-gray-200" />
-          </div> -->
 
-          <app-custom-datepicker
-  [selectedDate]="selectDate"
-  (dateChange)="onDateChange($event)"
-></app-custom-datepicker>
+          <app-custom-datepicker [selectedDate]="selectDate"
+            (dateChange)="onDateChange($event)"></app-custom-datepicker>
         </div>
       </div>
     </div>
@@ -39,7 +23,8 @@
     <div class="flex flex-col items-center justify-center my-5">
       <p class="text-[18px] text-[#292929] dark:text-textDark font-normal">{{officerName}} - <span
           class="dark:text-white">{{empId}}</span></p>
-      <p class="text-[16px] font-normal text-[#534E4E] mt-3 dark:text-textDark">On <span class="dark:text-white">{{selectDate}}</span></p>
+      <p class="text-[16px] font-normal text-[#534E4E] mt-3 dark:text-textDark">On <span
+          class="dark:text-white">{{selectDate}}</span></p>
     </div>
 
     <div *ngIf="!hasData"

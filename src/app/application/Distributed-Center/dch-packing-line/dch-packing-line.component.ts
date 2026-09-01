@@ -1,4 +1,4 @@
-import { CommonModule, DatePipe, Location  } from '@angular/common';
+import { CommonModule, DatePipe, Location } from '@angular/common';
 import { Component, HostListener, OnInit, ElementRef, ViewChild } from '@angular/core';
 import lottie from 'lottie-web';
 import { FormsModule } from '@angular/forms';
@@ -74,43 +74,43 @@ export class DchPackingLineComponent {
     private toastSrv: ToastAlertService,
     private route: ActivatedRoute,
     private tokenSrv: TokenServiceService
-  ) { 
+  ) {
     this.logingRole = tokenSrv.getUserDetails().role
   }
 
 
   ngOnInit(): void {
-  let center$;
-  this.isLoading = true;
+    let center$;
+    this.isLoading = true;
 
-  if (this.logingRole === 'Distribution Centre Head') {
-    this.centerId = Number(this.route.snapshot.paramMap.get('id'));
-    this.centerName = String(this.route.snapshot.paramMap.get('centerName'));
-    this.regCode = String(this.route.snapshot.paramMap.get('regCode'));
+    if (this.logingRole === 'Distribution Centre Head') {
+      this.centerId = Number(this.route.snapshot.paramMap.get('id'));
+      this.centerName = String(this.route.snapshot.paramMap.get('centerName'));
+      this.regCode = String(this.route.snapshot.paramMap.get('regCode'));
 
-    center$ = of(null); // Completes immediately
-  } else {
-    center$ = this.DistributionSrv.getDCMCenterId();
-  }
-
-  center$.subscribe({
-    next: (res) => {
-      if (res !== null) {
-        this.centerId = res;
-      }
-
-      this.fetchDCHCenterRows();
-    },
-    error: (err) => {
-      console.error(err);
+      center$ = of(null); // Completes immediately
+    } else {
+      center$ = this.DistributionSrv.getDCMCenterId();
     }
-  });
-}
+
+    center$.subscribe({
+      next: (res) => {
+        if (res !== null) {
+          this.centerId = res;
+        }
+
+        this.fetchDCHCenterRows();
+      },
+      error: (err) => {
+        console.error(err);
+      }
+    });
+  }
 
   fetchDcmCenterId() {
     this.isLoading = true;
     this.DistributionSrv.getDCMCenterId().subscribe(
-      
+
       (res) => {
         this.centerId = res;
         this.isLoading = false;
@@ -208,15 +208,15 @@ export class DchPackingLineComponent {
   }
 
   createDCHCenterRow(nextRow: number) {
-  this.isLoading = true;
+    this.isLoading = true;
     this.DistributionSrv.createDCHCenterRow(this.centerId, nextRow).subscribe(
       (res) => {
-if (res.success) {
-    this.toastSrv.success(`Row addition successful.`);
-} else {
-    this.toastSrv.error(`Row addition failed.`);
-}
-        
+        if (res.success) {
+          this.toastSrv.success(`Row addition successful.`);
+        } else {
+          this.toastSrv.error(`Row addition failed.`);
+        }
+
         this.isLoading = false;
         this.fetchDCHCenterRows();
       }
@@ -230,13 +230,13 @@ if (res.success) {
     } else {
       this.openToggleRowPopUpDisable = true;
     }
-    
+
   }
 
   confirmToggleRow() {
-      this.toggleRow(this.rowToToggle);
-      this.openToggleRowPopUpEnable = false;
-      this.openToggleRowPopUpEnable = false;
+    this.toggleRow(this.rowToToggle);
+    this.openToggleRowPopUpEnable = false;
+    this.openToggleRowPopUpEnable = false;
   }
 
   toggleRow(row: PackingLineRow): void {
@@ -248,31 +248,31 @@ if (res.success) {
     }
     this.isLoading = true;
     this.DistributionSrv.toggleRow(enableStatus, row.id).subscribe({
-  next: (res) => {
-    if (row.isEnabled === 0) {
-        this.toastSrv.success(`Packing row ${this.rowToToggle.rowIndex} enabled successfully.`);
-    } else if (row.isEnabled === 1) {
-        this.toastSrv.success(`Packing row ${this.rowToToggle.rowIndex} disabled successfully.`);
-    }
-    
+      next: (res) => {
+        if (row.isEnabled === 0) {
+          this.toastSrv.success(`Packing row ${this.rowToToggle.rowIndex} enabled successfully.`);
+        } else if (row.isEnabled === 1) {
+          this.toastSrv.success(`Packing row ${this.rowToToggle.rowIndex} disabled successfully.`);
+        }
 
-    this.fetchDCHCenterRows();
-    this.isLoading = false;
-    this.openToggleRowPopUpEnable = false;
-    this.openToggleRowPopUpDisable = false;
-  },
-  error: (err) => {
-    if (err.status === 401) {
-      this.openErrorDisableRow = true;
-    } else {
-      console.error('Other error:', err);
-    }
 
-    this.openToggleRowPopUpEnable = false;
-    this.openToggleRowPopUpDisable = false;
-    this.isLoading = false;
-  }
-});
+        this.fetchDCHCenterRows();
+        this.isLoading = false;
+        this.openToggleRowPopUpEnable = false;
+        this.openToggleRowPopUpDisable = false;
+      },
+      error: (err) => {
+        if (err.status === 401) {
+          this.openErrorDisableRow = true;
+        } else {
+          console.error('Other error:', err);
+        }
+
+        this.openToggleRowPopUpEnable = false;
+        this.openToggleRowPopUpDisable = false;
+        this.isLoading = false;
+      }
+    });
 
   }
 
@@ -291,12 +291,12 @@ if (res.success) {
     const nextPos = (this.currentRow.positions.length - 2) + 1;
     this.DistributionSrv.createDCHCenterPos(this.centerId, nextPos, this.currentRow.positions[0].rowId).subscribe(
       (res) => {
-if (res.success) {
-    this.toastSrv.success(`Position addition successful.`);
-} else {
-  this.toastSrv.error(`Position addition failed.`);
-}
-        
+        if (res.success) {
+          this.toastSrv.success(`Position addition successful.`);
+        } else {
+          this.toastSrv.error(`Position addition failed.`);
+        }
+
         this.isLoading = false;
         this.showCreatePositionModal = false;
         this.fetchDCHCenterRows();
@@ -319,34 +319,34 @@ if (res.success) {
   }
 
   confirmDeletePosition(): void {
-  this.isLoading = true;
+    this.isLoading = true;
 
-  this.DistributionSrv.deleteDCHCenterPos(
-    this.positionToDelete.id,
-    this.positionToDelete.rowId,
-    this.positionToDelete.pIndex!
-  ).subscribe({
-    next: (res) => {
-      this.toastSrv.success('Position deletion successful.');
+    this.DistributionSrv.deleteDCHCenterPos(
+      this.positionToDelete.id,
+      this.positionToDelete.rowId,
+      this.positionToDelete.pIndex!
+    ).subscribe({
+      next: (res) => {
+        this.toastSrv.success('Position deletion successful.');
 
-      this.isLoading = false;
-      this.fetchDCHCenterRows();
-      this.showDeletePositionModal = false;
-    },
-
-    error: (err) => {
-      if (err.status === 409) {
+        this.isLoading = false;
+        this.fetchDCHCenterRows();
         this.showDeletePositionModal = false;
-        this.openPositionDeleteErrorPopUp = true;
-      } else {
-        console.error('Other error:', err);
-        this.toastSrv.error('An error occurred while deleting position.');
+      },
+
+      error: (err) => {
+        if (err.status === 409) {
+          this.showDeletePositionModal = false;
+          this.openPositionDeleteErrorPopUp = true;
+        } else {
+          console.error('Other error:', err);
+          this.toastSrv.error('An error occurred while deleting position.');
+        }
+        this.showDeletePositionModal = false;
+        this.isLoading = false;
       }
-      this.showDeletePositionModal = false;
-      this.isLoading = false;
-    }
-  });
-}
+    });
+  }
 
   cancelErrorEnableRow(): void {
     this.openErrorEnableRow = false;
@@ -361,7 +361,7 @@ if (res.success) {
   }
 
   cancelOpenTogglePopupEnable(): void {
-    this.openToggleRowPopUpEnable= false;
+    this.openToggleRowPopUpEnable = false;
   }
 
   cancelPoisitonDeleteErrorPopup(): void {

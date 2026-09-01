@@ -40,7 +40,7 @@ export class PriceRequestComponent implements OnInit {
   today!: string;
   isPopupVisible: boolean = false
   isLoading: boolean = false;
-  isChangeStatusViewOpen =  false;
+  isChangeStatusViewOpen = false;
   requestPrice!: string;
   requestId!: number;
 
@@ -83,7 +83,7 @@ export class PriceRequestComponent implements OnInit {
     private datePipe: DatePipe,
     private tokenSrv: TokenServiceService,
     private toastSrv: ToastAlertService,
-  ) {this.logingRole = tokenSrv.getUserDetails().role}
+  ) { this.logingRole = tokenSrv.getUserDetails().role }
 
   ngOnInit(): void {
     this.today = this.datePipe.transform(new Date(), 'yyyy/MM/dd') || '';
@@ -147,7 +147,7 @@ export class PriceRequestComponent implements OnInit {
 
   fetchCurrentPrice(cropGroupId: number, cropVarietyId: number, grade: string) {
     this.isLoading = true;
-    this.PriceListSrv.getCurrentPrice(cropGroupId, cropVarietyId, grade ).subscribe(
+    this.PriceListSrv.getCurrentPrice(cropGroupId, cropVarietyId, grade).subscribe(
       (res) => {
         this.priceRequestObject.currentPrice = res.items[0].price;
         this.priceRequestObject.id = res.items[0].id;
@@ -390,7 +390,7 @@ export class PriceRequestComponent implements OnInit {
 
   forwardRequest(id: number) {
     this.forwardId = id;
-    
+
     this.isForwardViewOpen = true;
   }
 
@@ -398,7 +398,7 @@ export class PriceRequestComponent implements OnInit {
     this.isForwardViewOpen = !this.isForwardViewOpen;
     this.isLoading = true;
     this.PriceListSrv.forwardRequest(this.forwardId).subscribe(
-      
+
       (res) => {
         if (res.status) {
           Swal.fire({
@@ -456,7 +456,7 @@ export class PriceRequestComponent implements OnInit {
   submitRequest() {
     this.isLoading = true;
     this.PriceListSrv.addRequest(this.priceRequestObject).subscribe(
-      
+
       (res) => {
         if (res.status) {
           Swal.fire({
@@ -498,7 +498,7 @@ export class PriceRequestComponent implements OnInit {
         }
       }
     )
-       
+
   }
 
   preventMinus(event: KeyboardEvent) {
@@ -514,13 +514,13 @@ export class PriceRequestComponent implements OnInit {
     this.requestId = requestId
     this.requestPrice = requestPrice
     this.isChangeStatusViewOpen = true;
-    
+
   }
 
   RejectStatus() {
     this.isLoading = true;
     this.PriceListSrv.rejectStatus(this.requestId).subscribe(
-      
+
       (res) => {
         if (res.status) {
           this.toastSrv.success(
@@ -533,7 +533,7 @@ export class PriceRequestComponent implements OnInit {
           this.toastSrv.error(
             'Something went wrong while Rejecting the request. Please try again.'
           );
-          
+
           this.isChangeStatusViewOpen = false;
         }
       }
@@ -542,8 +542,8 @@ export class PriceRequestComponent implements OnInit {
 
   ApproveStatus() {
     this.isLoading = true;
-    this.PriceListSrv.changeStatusCCM(this.requestId, this.requestPrice ).subscribe(
-      
+    this.PriceListSrv.changeStatusCCM(this.requestId, this.requestPrice).subscribe(
+
       (res) => {
         if (res.status) {
           this.toastSrv.success(
@@ -556,7 +556,7 @@ export class PriceRequestComponent implements OnInit {
           this.toastSrv.success(
             'Something went wrong while Approving the request. Please try again.'
           );
-          
+
           this.isChangeStatusViewOpen = false;
         }
       }
@@ -566,7 +566,7 @@ export class PriceRequestComponent implements OnInit {
   closeChangeStatus() {
     this.isChangeStatusViewOpen = false;
   }
-  
+
 
 }
 

@@ -86,18 +86,6 @@ export class DistributionServiceService {
     });
   }
 
-  getDistributionOrders(): Observable<any> {
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${this.token}`,
-      'Content-Type': 'application/json',
-    });
-
-    return this.http.get(`${this.apiUrl}/get-distribution-orders`, {
-      headers,
-    });
-  }
-
   assignOrdersToCenterOfficers(
     assignmentPayload: { officerId: number; count: number }[],
     orderIdList: number[]
@@ -250,26 +238,6 @@ export class DistributionServiceService {
     return this.http.get<any>(url, { headers });
   }
 
-  getCompletedAssignOrders(searchText: string = '', selectDate: string = ''): Observable<any> {
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${this.token}`
-    });
-
-
-    let url = `${this.apiUrl}/get-completed-assign-orders?test=${1}`;
-
-    if (searchText) {
-      url += `&searchText=${searchText}`
-
-    }
-
-    if (selectDate) {
-      url += `&date=${selectDate}`
-    }
-
-    return this.http.get<any>(url, { headers });
-  }
-
   getOutForDeliveryOrders(status: string = '', searchText: string = '', type: string = '', timeSlot: string = '', row: number | null, selectDate: string | Date | null = '', cenId: number | null): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
@@ -406,28 +374,6 @@ export class DistributionServiceService {
     return this.http.get<any>(url, { headers });
   }
 
-  getCenterTargetForDelivery(centerId: number, searchText: string = '', status: string = '', selectDate: string | Date | null = ''): Observable<any> {
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${this.token}`
-    });
-
-    let url = `${this.apiUrl}/get-center-target-out-for-delivery?centerId=${centerId}`;
-  
-    if (searchText) {
-      url += `&searchText=${searchText}`
-    }
-  
-    if (status) {
-      url += `&status=${status}`
-    }
-
-    if (selectDate) {
-      url += `&date=${selectDate}`
-    }
-  
-    return this.http.get<any>(url, { headers });
-  }
-
   generateRegCode(
     province: string,
     district: string,
@@ -525,33 +471,6 @@ export class DistributionServiceService {
     return this.http.get(url, { headers, responseType: 'blob' });
   }
 
-  downloadDCHOutForDeliveryTargetProgressReport(
-    status: string,
-    date: Date | string | null,
-    searchText: string = '',
-    centerId: number
-  ): Observable<Blob> {
-    let url = `${this.apiUrl}/download-dch-out-for-delivery-target-progress?centerId=${centerId}`;
-
-    if (status) {
-      url += `&status=${status}`;
-    }
-
-    if (date) {
-      url += `&date=${date}`;
-    }
-
-    if (searchText) {
-      url += `&searchText=${searchText}`;
-    }
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${this.token}`,
-    });
-
-    return this.http.get(url, { headers, responseType: 'blob' });
-  }
-
   getAssignForCityes(province: string, district: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
@@ -602,30 +521,6 @@ export class DistributionServiceService {
     }
   
     return this.http.get<any>(url, { headers });
-  }
-
-  downloadRequestedItemsReportFile(
-    officerId: number, centerId: number, search: string = '', status: string = '', date: string = ''
-  ): Observable<Blob> {
-    let url = `${this.apiUrl}/download-officer-targets?officerId=${officerId}&centerId=${centerId}`;
-
-    if (search) {
-      url += `&search=${search}`;
-    }
-
-    if (status) {
-      url += `&status=${status}`;
-    }
-
-    if (date) {
-      url += `&date=${date}`;
-    }
-
-    const headers = new HttpHeaders({
-      Authorization: `Bearer ${this.token}`,
-    });
-
-    return this.http.get(url, { headers, responseType: 'blob' });
   }
 
   getDispatchChartData(): Observable<any[]> {

@@ -1,5 +1,6 @@
 <div class="flex gap-0">
-    <p class="font-semibold text[#424242] mb-4 mr-5 ml-0 dark:text-[#FFFFFF] dark:bg-blacks cursor-pointer">Complaints</p>
+    <p class="font-semibold text[#424242] mb-4 mr-5 ml-0 dark:text-[#FFFFFF] dark:bg-blacks cursor-pointer">Complaints
+    </p>
 </div>
 
 <div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg">
@@ -18,7 +19,8 @@
             </div>
         </div>
 
-        <button class="bg-[#415CFF] text-white font-semibold px-4 py-2 rounded-lg shadow-lg" (click)="openAddComplaint()">Add
+        <button class="bg-[#415CFF] text-white font-semibold px-4 py-2 rounded-lg shadow-lg"
+            (click)="openAddComplaint()">Add
             Complaint</button>
 
     </div>
@@ -53,22 +55,16 @@
 
             </select> -->
 
-            <app-searchable-dropdown
-              [items]="categoryDropdownItems"
-              placeholder="Select Category"
-              searchPlaceholder="Search categories..."
-              [(ngModel)]="category"
-              (selectionChange)="onCategorySelectionChange($event)"
-              [clearable]="true"
-              [showSelected]="true"
-              [disabled]="false"
-              class="block w-full mb-4"
-            ></app-searchable-dropdown>
+            <app-searchable-dropdown [items]="categoryDropdownItems" placeholder="Select Category"
+                searchPlaceholder="Search categories..." [(ngModel)]="category"
+                (selectionChange)="onCategorySelectionChange($event)" [clearable]="true" [showSelected]="true"
+                [disabled]="false" class="block w-full mb-4"></app-searchable-dropdown>
 
             <!-- Textarea -->
-            <textarea rows="4" [(ngModel)]="complaint" placeholder="Kindly submit your complaint here" (input)="capitalizeFirstLetter($event)"
+            <textarea rows="4" [(ngModel)]="complaint" placeholder="Kindly submit your complaint here"
+                (input)="capitalizeFirstLetter($event)"
                 class="block w-full px-3 py-2 border dark:bg-[#1D1D1F] border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent resize-none mb-4 dark:text-textDark "></textarea>
-                
+
             <!-- Buttons -->
             <div class="flex justify-center space-x-4">
                 <button (click)="closeAddComplaint()"

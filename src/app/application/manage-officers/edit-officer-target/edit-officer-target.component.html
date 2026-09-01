@@ -28,9 +28,10 @@
                 Select Short Stock Assignee :
             </label>
             <app-searchable-dropdown [items]="officerDropdownItems" placeholder="--Select Officer--"
-                    searchPlaceholder="Search Officers..." [(ngModel)]="selectedOfficerId"
-                    (selectionChange)="onOfficerSelectionChange($event)" [clearable]="true" [showSelected]="true"
-                    [disabled]="false" class="block w-full mb-4" borderClass="border-gray-300 border-[1px]"></app-searchable-dropdown>
+                searchPlaceholder="Search Officers..." [(ngModel)]="selectedOfficerId"
+                (selectionChange)="onOfficerSelectionChange($event)" [clearable]="true" [showSelected]="true"
+                [disabled]="false" class="block w-full mb-4"
+                borderClass="border-gray-300 border-[1px]"></app-searchable-dropdown>
 
         </div>
 
@@ -38,28 +39,19 @@
         <div>
             <label for="passAmount" class="block text-sm font-medium text-gray-700 dark:text-textDark">The Amount (kg)
                 :</label>
-            <input
-            #passAmountRef="ngModel"
-  id="passAmount"
-  name="passAmount"
-  type="number"
-  [(ngModel)]="passAmount"
-  min="0.001"
-  step="any"
-  (keydown)="preventZeroAndNegative($event)"
-  (input)="validatePassAmount()"
-  (blur)="onBlurPassAmount()"
-  class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F] quantity-input"
-/>
-<div *ngIf="passAmountRef.invalid && passAmountRef.touched" class="text-red-500 text-sm mt-1">
-                    <span *ngIf="passAmountRef.errors?.['required']">
-                        Amount is required.
-                    </span>
+            <input #passAmountRef="ngModel" id="passAmount" name="passAmount" type="number" [(ngModel)]="passAmount"
+                min="0.001" step="any" (keydown)="preventZeroAndNegative($event)" (input)="validatePassAmount()"
+                (blur)="onBlurPassAmount()"
+                class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F] quantity-input" />
+            <div *ngIf="passAmountRef.invalid && passAmountRef.touched" class="text-red-500 text-sm mt-1">
+                <span *ngIf="passAmountRef.errors?.['required']">
+                    Amount is required.
+                </span>
 
-                    <span *ngIf="passAmountRef.errors?.['min'] || passAmount <= 0">
-                        Amount must be greater than 0.
-                    </span>
-                </div>
+                <span *ngIf="passAmountRef.errors?.['min'] || passAmount <= 0">
+                    Amount must be greater than 0.
+                </span>
+            </div>
         </div>
     </div>
 

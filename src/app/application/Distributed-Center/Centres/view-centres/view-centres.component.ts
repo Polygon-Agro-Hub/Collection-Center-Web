@@ -9,15 +9,15 @@ import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/
 import { SerchableDropdownComponent } from '../../../../components/serchable-dropdown/serchable-dropdown.component';
 
 @Component({
-  selector: 'app-view-centres',
-  standalone: true,
-  imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, LoadingSpinnerComponent, SerchableDropdownComponent],
-  templateUrl: './view-centres.component.html',
-  styleUrl: './view-centres.component.css'
+    selector: 'app-view-centres',
+    standalone: true,
+    imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, LoadingSpinnerComponent, SerchableDropdownComponent],
+    templateUrl: './view-centres.component.html',
+    styleUrl: './view-centres.component.css'
 })
 export class ViewCentresComponent implements OnInit {
 
-  itemsArr!: CenterData[];
+    itemsArr!: CenterData[];
     searchText: string = '';
     selectProvince: string = '';
     selectDistrict: string = '';
@@ -90,135 +90,135 @@ export class ViewCentresComponent implements OnInit {
     }
 
     fetchAllDistributionCenterDetails(province: string = this.selectProvince, district: string = this.selectDistrict, search: string = this.searchText) {
-      this.isLoading = true;
-      this.DistributionSrv.getDistributionCenterDetails(this.currentPage, this.itemsPerPage, province, district, search).subscribe(
-          (res) => {
-              this.itemsArr = res.items;
-              this.totalItems = res.totalItems;
-              this.countOfOfficers = res.items.length;
-              this.hasData = res.items.length > 0 ? true : false;
-              this.isLoading = false;
-          }
-      );
-  }
-
-onSearch() {
-    this.currentPage = 1; // Reset to first page on new search
-    this.fetchAllDistributionCenterDetails();
-}
-
-onPageChange(page: number) {
-  this.currentPage = page;
-  this.fetchAllDistributionCenterDetails();
-}
-
-offSearch() {
-    this.searchText = '';
-    this.fetchAllDistributionCenterDetails();
-}
-
-toggleProvinceDropdown() {
-    this.isProvinceDropdownOpen = !this.isProvinceDropdownOpen;
-    // Close district dropdown when opening province dropdown
-    if (this.isProvinceDropdownOpen) {
-        this.isDistrictDropdownOpen = false;
+        this.isLoading = true;
+        this.DistributionSrv.getDistributionCenterDetails(this.currentPage, this.itemsPerPage, province, district, search).subscribe(
+            (res) => {
+                this.itemsArr = res.items;
+                this.totalItems = res.totalItems;
+                this.countOfOfficers = res.items.length;
+                this.hasData = res.items.length > 0 ? true : false;
+                this.isLoading = false;
+            }
+        );
     }
-}
 
-
-
-toggleDistrictDropdown() {
-    this.isDistrictDropdownOpen = !this.isDistrictDropdownOpen;
-    if (this.isDistrictDropdownOpen) {
-        this.isProvinceDropdownOpen = false;
-    }
-}
-
-
-clearDistrictFilter(event?: MouseEvent) {
-    if (event) {
-        event.stopPropagation(); // Prevent triggering the dropdown toggle
-    }
-    this.selectDistrict = '';
-    this.fetchAllDistributionCenterDetails();
-}
-
-filterDistrict(districtName: string | null) {
-    if (this.itemId1 !== null) {
-        this.selectDistrict = ''
+    onSearch() {
+        this.currentPage = 1; // Reset to first page on new search
         this.fetchAllDistributionCenterDetails();
-    } // keep your original guard
-
-    const selected = this.allDistricts.find(d => d.name === districtName || '');
-    this.selectProvince = selected ? selected.province : '';
-    this.fetchAllDistributionCenterDetails();
-  }
-
-  filterProvince(provinceName: string | null) {
-    if (this.itemId2 !== null) {
-        this.selectProvince = ''
-        this.fetchAllDistributionCenterDetails();
-    }; 
-
-    const selected = this.provinceItems.find(p => p.value === provinceName || '');
-    this.updateFilteredDistricts(); 
-    this.fetchAllDistributionCenterDetails();
-  }
-
-
-updateFilteredDistricts() {
-    if (this.selectProvince) {
-        this.filteredDistricts = this.allDistricts.filter(d => d.province === this.selectProvince);
-       this.districtItems = this.filteredDistricts.map(d => ({ value: d.name, label: d.name }));
-    } else {
-        this.filteredDistricts = this.allDistricts;
-        this.districtItems = this.filteredDistricts.map(d => ({ value: d.name, label: d.name }));
     }
-}
 
-cancelDistrict() {
-    this.clearDistrictFilter();
-}
+    onPageChange(page: number) {
+        this.currentPage = page;
+        this.fetchAllDistributionCenterDetails();
+    }
 
-getTotalPages(): number {
-    return Math.ceil(this.totalItems / this.itemsPerPage);
-}
+    offSearch() {
+        this.searchText = '';
+        this.fetchAllDistributionCenterDetails();
+    }
 
-navigateToDashboard(id: number, centerName: string, regCode: string) {
-    this.router.navigate([
-      `/distribution-center/center-dashboard`,
-      id,
-      centerName,
-      regCode
-    ]);
-  }
+    toggleProvinceDropdown() {
+        this.isProvinceDropdownOpen = !this.isProvinceDropdownOpen;
+        // Close district dropdown when opening province dropdown
+        if (this.isProvinceDropdownOpen) {
+            this.isDistrictDropdownOpen = false;
+        }
+    }
 
 
-addCenter() {
-    this.router.navigate([`/distribution-center/create-distribution-centre`]);
-}
 
-navigateToAssignCities() {
-    this.router.navigate([`/distribution-center/assign-cities`]);
-}
+    toggleDistrictDropdown() {
+        this.isDistrictDropdownOpen = !this.isDistrictDropdownOpen;
+        if (this.isDistrictDropdownOpen) {
+            this.isProvinceDropdownOpen = false;
+        }
+    }
+
+
+    clearDistrictFilter(event?: MouseEvent) {
+        if (event) {
+            event.stopPropagation(); // Prevent triggering the dropdown toggle
+        }
+        this.selectDistrict = '';
+        this.fetchAllDistributionCenterDetails();
+    }
+
+    filterDistrict(districtName: string | null) {
+        if (this.itemId1 !== null) {
+            this.selectDistrict = ''
+            this.fetchAllDistributionCenterDetails();
+        } // keep your original guard
+
+        const selected = this.allDistricts.find(d => d.name === districtName || '');
+        this.selectProvince = selected ? selected.province : '';
+        this.fetchAllDistributionCenterDetails();
+    }
+
+    filterProvince(provinceName: string | null) {
+        if (this.itemId2 !== null) {
+            this.selectProvince = ''
+            this.fetchAllDistributionCenterDetails();
+        };
+
+        const selected = this.provinceItems.find(p => p.value === provinceName || '');
+        this.updateFilteredDistricts();
+        this.fetchAllDistributionCenterDetails();
+    }
+
+
+    updateFilteredDistricts() {
+        if (this.selectProvince) {
+            this.filteredDistricts = this.allDistricts.filter(d => d.province === this.selectProvince);
+            this.districtItems = this.filteredDistricts.map(d => ({ value: d.name, label: d.name }));
+        } else {
+            this.filteredDistricts = this.allDistricts;
+            this.districtItems = this.filteredDistricts.map(d => ({ value: d.name, label: d.name }));
+        }
+    }
+
+    cancelDistrict() {
+        this.clearDistrictFilter();
+    }
+
+    getTotalPages(): number {
+        return Math.ceil(this.totalItems / this.itemsPerPage);
+    }
+
+    navigateToDashboard(id: number, centerName: string, regCode: string) {
+        this.router.navigate([
+            `/distribution-center/center-dashboard`,
+            id,
+            centerName,
+            regCode
+        ]);
+    }
+
+
+    addCenter() {
+        this.router.navigate([`/distribution-center/create-distribution-centre`]);
+    }
+
+    navigateToAssignCities() {
+        this.router.navigate([`/distribution-center/assign-cities`]);
+    }
 
 }
 
 class CenterData {
-  centerId!: number
-  centerName!: string
-  province!: string
-  district!: string
-  city!: string
-  contact01!: string
-  collectionOfficerCount!: number
-  customerOfficerCount!: number
-  collectionCenterManagerCount!: number
-  customerServiceCount!: number
-  regCode!: string
-  distributionOfficerCount!: number
-  distributionCenterManagerCount!: number
-  latitude!: string;
-  longitude!: string;
+    centerId!: number
+    centerName!: string
+    province!: string
+    district!: string
+    city!: string
+    contact01!: string
+    collectionOfficerCount!: number
+    customerOfficerCount!: number
+    collectionCenterManagerCount!: number
+    customerServiceCount!: number
+    regCode!: string
+    distributionOfficerCount!: number
+    distributionCenterManagerCount!: number
+    latitude!: string;
+    longitude!: string;
 
 }

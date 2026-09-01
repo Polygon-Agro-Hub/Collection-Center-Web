@@ -1,4 +1,4 @@
-<app-loading-spinner *ngIf="isLoading"/>
+<app-loading-spinner *ngIf="isLoading" />
 
 <div class="flex flex-row items-center gap-6 font-semibold text[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
     <p onclick="history.back()">Distribution Centres</p>
@@ -23,25 +23,29 @@
                 </div>
 
                 <div class="flex flex-row items-center gap-2 border-[2px] rounded-2xl px-4 py-2 cursor-pointer dark:text-textDark dark:bg-[#292929]"
-                    [ngClass]="{'text-[#415CFF] border-[#415CFF]': isSelectViewOutForDelivery}" (click)="selectViewOutForDelivery()">
+                    [ngClass]="{'text-[#415CFF] border-[#415CFF]': isSelectViewOutForDelivery}"
+                    (click)="selectViewOutForDelivery()">
                     <i *ngIf="isSelectViewOutForDelivery" class="fa-solid fa-check"></i>
                     <p>Out for Handover</p>
                 </div>
-                
+
 
                 <div class="flex flex-row items-center gap-2 border-[2px] rounded-2xl px-4 py-2 cursor-pointer dark:text-textDark dark:bg-[#292929]"
-                    [ngClass]="{'text-[#415CFF] border-[#415CFF]': isSelectViewOfficers}" (click)="selectViewOfficers()">
+                    [ngClass]="{'text-[#415CFF] border-[#415CFF]': isSelectViewOfficers}"
+                    (click)="selectViewOfficers()">
                     <i *ngIf="isSelectViewOfficers" class="fa-solid fa-check"></i>
                     <p>Officers</p>
                 </div>
             </div>
 
             <div class="flex flex-row gap-4">
-                <button class=" text-[#415CFF] border-2 border-[#415CFF] font-semibold px-4 py-1 rounded-lg" (click)="editCentre()">
+                <button class=" text-[#415CFF] border-2 border-[#415CFF] font-semibold px-4 py-1 rounded-lg"
+                    (click)="editCentre()">
                     <i class="fa-solid fa-pen-to-square text-xl"></i>
                     Edit</button>
-    
-                <button class=" text-[#415CFF] border-2 border-[#415CFF] font-semibold px-4 py-1 rounded-lg" (click)="viewCentre()">
+
+                <button class=" text-[#415CFF] border-2 border-[#415CFF] font-semibold px-4 py-1 rounded-lg"
+                    (click)="viewCentre()">
                     <i class="fa-solid fa-eye text-lg"></i>
                     Details</button>
             </div>

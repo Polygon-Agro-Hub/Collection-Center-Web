@@ -12,19 +12,13 @@
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-8 my-10 px-10">
-    <div *ngIf="logingRole === 'Collection Centre Manager'" >
+    <div *ngIf="logingRole === 'Collection Centre Manager'">
       <label for="jobRole" class="block  font-medium text-gray-700 dark:text-textDark">
         Job Role
       </label>
 
-      <input 
-        id="jobRole"
-        [(ngModel)]="selectJobRole"
-        name="selectJobRole"
-        readonly
-        class="form-control mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 
-               rounded-md text-[#534E4E] bg-gray-200 dark:text-textDark dark:bg-[#1D1D1F]"
-      >
+      <input id="jobRole" [(ngModel)]="selectJobRole" name="selectJobRole" readonly class="form-control mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 
+               rounded-md text-[#534E4E] bg-gray-200 dark:text-textDark dark:bg-[#1D1D1F]">
     </div>
 
     <div *ngIf="logingRole === 'Distribution Centre Manager'">
@@ -32,17 +26,10 @@
         Job Role
       </label>
 
-            <app-searchable-dropdown
-              [items]="jobRoleItems"
-              placeholder=" --Select Job Role-- "
-              searchPlaceholder="Search Job Role..."
-              [(ngModel)]="selectJobRole"
-              (selectionChange)="onJobRoleSelectionChange($event)"
-              [clearable]="true"
-              [showSelected]="true"
-              [disabled]="false"
-              class="block w-full mb-4"
-            ></app-searchable-dropdown>
+      <app-searchable-dropdown [items]="jobRoleItems" placeholder=" --Select Job Role-- "
+        searchPlaceholder="Search Job Role..." [(ngModel)]="selectJobRole"
+        (selectionChange)="onJobRoleSelectionChange($event)" [clearable]="true" [showSelected]="true" [disabled]="false"
+        class="block w-full mb-4"></app-searchable-dropdown>
 
       <!-- <input type="text" [(ngModel)]="selectJobRole" name="jobRole" id="jobRole" readonly
       class="form-control mt-1 block w-full p-2  border border-gray-300 dark:border-gray-600 rounded-md text-[#534E4E] bg-gray-200 dark:text-textDark  dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500"> -->
@@ -66,8 +53,9 @@
     </div>
   </div>
 
-  <div class="flex justify-center items-center" >
-    <button class="bg-[#415CFF] text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-md" (click)="fetchOfficer()">
+  <div class="flex justify-center items-center">
+    <button class="bg-[#415CFF] text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-md"
+      (click)="fetchOfficer()">
       Search
     </button>
   </div>
@@ -79,9 +67,9 @@
     <div class="flex flex-row items-center">
       <img *ngIf="officerObj.image" class="w-28 h-28 rounded-full " [src]="officerObj.image" />
 
-      <div *ngIf="!officerObj.image" 
-          class="flex rounded-full border-solid border-2 justify-center items-center w-32 h-32">
-          <i class="fa-regular fa-user text-6xl dark:text-white"></i>
+      <div *ngIf="!officerObj.image"
+        class="flex rounded-full border-solid border-2 justify-center items-center w-32 h-32">
+        <i class="fa-regular fa-user text-6xl dark:text-white"></i>
       </div>
 
       <div class="ml-6">

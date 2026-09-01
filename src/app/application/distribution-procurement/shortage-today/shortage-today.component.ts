@@ -11,7 +11,7 @@ import { Router } from '@angular/router';
 import lottie, { AnimationItem } from 'lottie-web';
 import { DistributionProcurementService } from '../../../services/disribution-procuement-service/distribution-procurement.service';
 import { LoadingSpinnerComponent } from "../../../components/loading-spinner/loading-spinner.component"; // adjust path/name as needed
- // adjust path/name as needed
+// adjust path/name as needed
 
 interface AssignmentRecord {
   qty: number;
@@ -37,8 +37,7 @@ interface ShortageItem {
   styleUrl: './shortage-today.component.css',
 })
 export class ShortageTodayComponent
-  implements OnInit, AfterViewInit, OnDestroy
-{
+  implements OnInit, AfterViewInit, OnDestroy {
   shortages: ShortageItem[] = [];
 
   availableDate: Date = new Date('2026-06-23T18:00:00');
@@ -52,8 +51,8 @@ export class ShortageTodayComponent
   };
 
   currentTime!: Date;
-afterSixPm!: boolean;
-hasData: boolean = false;
+  afterSixPm!: boolean;
+  hasData: boolean = false;
 
   @ViewChild('lottieContainer', { static: false }) lottieContainer!: ElementRef;
   private animationItem: AnimationItem | undefined;
@@ -63,7 +62,7 @@ hasData: boolean = false;
     private location: Location,
     private router: Router,
     private procurementsService: DistributionProcurementService,
-  ) {}
+  ) { }
 
   get shortageCount(): number {
     return this.shortages.length;
@@ -73,7 +72,7 @@ hasData: boolean = false;
     const now = new Date().getTime();
     const target = this.availableDate.getTime();
 
-        this.currentTime = new Date()
+    this.currentTime = new Date()
     this.afterSixPm = this.currentTime.getHours() >= 18;
 
     if (now >= target) {

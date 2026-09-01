@@ -75,7 +75,7 @@ export class DchComplaintsComponent implements OnInit {
           this.isLoading = false;
           this.toastSrv.warning('Please try again')
         }
-          this.isLoading = false;
+        this.isLoading = false;
       },
       (error) => {
         this.isLoading = false;

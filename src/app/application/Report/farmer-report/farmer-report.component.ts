@@ -143,11 +143,11 @@ export class FarmerReportComponent implements OnInit {
     ): number => {
       let currentY = startY;
       const originalFont = doc.getFont(); // Store original font settings
-    
+
       data.forEach((row, rowIndex) => {
         let maxLines = 1;
         const cellLines: string[][] = [];
-    
+
         // First determine how many lines we need for this row
         row.forEach((cell, colIndex) => {
           const cellContent = cell.toString();
@@ -156,21 +156,21 @@ export class FarmerReportComponent implements OnInit {
           cellLines.push(lines);
           maxLines = Math.max(maxLines, lines.length);
         });
-    
+
         // Calculate total row height
         const rowHeight = maxLines * lineHeight + padding * 2;
-    
+
         // Set text style based on row type
         const isHeader = rowIndex === 0;
         doc.setTextColor(isHeader ? headerTextColor : bodyTextColor);
-        
+
         // Set font to bold for headers
         if (isHeader) {
           doc.setFont(originalFont.fontName, 'bold');
         } else {
           doc.setFont(originalFont.fontName, 'normal');
         }
-    
+
         // Draw each cell
         let currentX = startX;
         row.forEach((cell, colIndex) => {
@@ -181,12 +181,12 @@ export class FarmerReportComponent implements OnInit {
             columnWidths[colIndex],
             rowHeight
           );
-    
+
           // Draw text (centered vertically)
           const lines = cellLines[colIndex];
           const textHeight = lines.length * lineHeight;
           const verticalOffset = (rowHeight - textHeight) / 1.5;
-    
+
           lines.forEach((line, lineIndex) => {
             doc.text(
               line,
@@ -194,13 +194,13 @@ export class FarmerReportComponent implements OnInit {
               currentY + verticalOffset + (lineIndex * lineHeight) + padding
             );
           });
-    
+
           currentX += columnWidths[colIndex];
         });
-    
+
         currentY += rowHeight;
       });
-    
+
       // Reset to original font settings
       doc.setFont(originalFont.fontName, originalFont.fontStyle);
       doc.setTextColor('#000000');

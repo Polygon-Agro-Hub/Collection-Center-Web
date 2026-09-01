@@ -1,9 +1,10 @@
-<app-loading-spinner *ngIf="isLoading"/>
+<app-loading-spinner *ngIf="isLoading" />
 
-<div *ngIf="!isLoading" class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-8 mx-5 cursor-pointer">
+<div *ngIf="!isLoading"
+    class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-8 mx-5 cursor-pointer">
     <p onclick="history.back()"> Centre Target</p>
     <p>Assign Officer Target</p>
-  </div>
+</div>
 
 <div *ngIf="!isLoading">
     <div class="font-semibold text[#424242] mb-8 dark:bg-[#363636] mx-0 rounded-lg dark:text-[#FFFFFF]">
@@ -11,7 +12,8 @@
             <p class="text-lg text-black dark:text-white font-bold">{{targetVerity.cropNameEnglish}} :
                 {{targetVerity.varietyNameEnglish}}
             </p>
-            <p class="text-black font-semibold dark:text-textDark">Daily Target for <span class="text-[#415CFF]">{{targetVerity.formattedToDate}}</span></p>
+            <p class="text-black font-semibold dark:text-textDark">Daily Target for <span
+                    class="text-[#415CFF]">{{targetVerity.formattedToDate}}</span></p>
 
             <div class="border-[1px] border-[#E5E7EB] my-5 rounded-lg">
                 <table>
@@ -31,17 +33,20 @@
                     </tr>
                     <tr>
                         <th class="px-8 py-4 text-[#4B5563] font-normal">
-                            <div class="bg-[#F6F7F9] dark:bg-slate-500 border-[1px] border-[#415CFF] rounded-lg px-3 py-1">
+                            <div
+                                class="bg-[#F6F7F9] dark:bg-slate-500 border-[1px] border-[#415CFF] rounded-lg px-3 py-1">
                                 <p class="text-black dark:text-white font-semibold">{{targetVerity.qtyA }}</p>
                             </div>
                         </th>
                         <th class="px-8 py-4 text-[#4B5563] font-normal">
-                            <div class="bg-[#F6F7F9] dark:bg-slate-500 border-[1px] border-[#415CFF] rounded-lg px-3 py-1">
+                            <div
+                                class="bg-[#F6F7F9] dark:bg-slate-500 border-[1px] border-[#415CFF] rounded-lg px-3 py-1">
                                 <p class="text-black dark:text-white font-semibold">{{targetVerity.qtyB }}</p>
                             </div>
                         </th>
                         <th class="px-8 py-4 text-[#4B5563] font-normal">
-                            <div class="bg-[#F6F7F9] dark:bg-slate-500 border-[1px] border-[#415CFF] rounded-lg px-3 py-1">
+                            <div
+                                class="bg-[#F6F7F9] dark:bg-slate-500 border-[1px] border-[#415CFF] rounded-lg px-3 py-1">
                                 <p class="text-black dark:text-white font-semibold">{{targetVerity.qtyC }}</p>
                             </div>
                         </th>
@@ -72,23 +77,20 @@
                         <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.firstNameEnglish}}
                             {{item.lastNameEnglish}}</td>
                         <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
-    <input step="any" type="number" [(ngModel)]="officerArr[i].targetA" name="targetA"
-        (ngModelChange)="updateTotals(i, 'A')"
-        (input)="restrictDecimals($event, i, 'A')"
-        class="border-[#415CFF] border-[2px] border-dotted dark:bg-slate-500 rounded-lg w-28 px-2 py-1" />
-</td>
-<td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
-    <input step="any" type="number" [(ngModel)]="officerArr[i].targetB" name="targetB"
-        (ngModelChange)="updateTotals(i, 'B')"
-        (input)="restrictDecimals($event, i, 'B')"
-        class="border-[#415CFF] border-[2px] border-dotted dark:bg-slate-500 rounded-lg w-28 px-2 py-1" />
-</td>
-<td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
-    <input step="any" type="number" [(ngModel)]="officerArr[i].targetC" name="targetC"
-        (ngModelChange)="updateTotals(i, 'C')"
-        (input)="restrictDecimals($event, i, 'C')"
-        class="border-[#415CFF] border-[2px] border-dotted dark:bg-slate-500 rounded-lg w-28 px-2 py-1" />
-</td>
+                            <input step="any" type="number" [(ngModel)]="officerArr[i].targetA" name="targetA"
+                                (ngModelChange)="updateTotals(i, 'A')" (input)="restrictDecimals($event, i, 'A')"
+                                class="border-[#415CFF] border-[2px] border-dotted dark:bg-slate-500 rounded-lg w-28 px-2 py-1" />
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
+                            <input step="any" type="number" [(ngModel)]="officerArr[i].targetB" name="targetB"
+                                (ngModelChange)="updateTotals(i, 'B')" (input)="restrictDecimals($event, i, 'B')"
+                                class="border-[#415CFF] border-[2px] border-dotted dark:bg-slate-500 rounded-lg w-28 px-2 py-1" />
+                        </td>
+                        <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
+                            <input step="any" type="number" [(ngModel)]="officerArr[i].targetC" name="targetC"
+                                (ngModelChange)="updateTotals(i, 'C')" (input)="restrictDecimals($event, i, 'C')"
+                                class="border-[#415CFF] border-[2px] border-dotted dark:bg-slate-500 rounded-lg w-28 px-2 py-1" />
+                        </td>
                     </tr>
                     <tr class="border-t-2 border-[#E5E7EB]">
                         <td class="px-6 py-3 text-gray-900 dark:text-gray-300"></td>
@@ -133,8 +135,7 @@
 
         <div class="flex flex-row justify-center items-center my-7 gap-8">
             <button class="bg-[#FFFFFF] text-[#6B7D8C] border-[2px] border-[#95A1AC] rounded-lg px-5 py-2"
-                (click)="onCancel()"
-            >
+                (click)="onCancel()">
                 Cancel
             </button>
             <button class="rounded-lg px-7 py-2"

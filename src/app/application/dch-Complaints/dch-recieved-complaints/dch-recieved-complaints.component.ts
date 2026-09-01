@@ -32,7 +32,7 @@ export class DchRecievedComplaintsComponent implements OnInit {
   itemsPerPage: number = 10;
   hasData: boolean = true;
 
-  isLoading:boolean = true;
+  isLoading: boolean = true;
 
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Assigned', 'Closed'];
@@ -64,7 +64,7 @@ export class DchRecievedComplaintsComponent implements OnInit {
       (res) => {
         this.complainArr = res.items
         this.totalItems = res.total;
-        
+
         if (res.items.length === 0) {
           this.hasData = false;
         } else {
@@ -126,18 +126,18 @@ export class DchRecievedComplaintsComponent implements OnInit {
     this.fetchAllreciveComplaint(this.page, this.itemsPerPage);
   }
 
-  navigateViewReply(id:number){
+  navigateViewReply(id: number) {
     this.router.navigate([`/dch-complaints/view-recieve-complaint/${id}`])
   }
 
   preventLeadingSpace(event: KeyboardEvent) {
-  const input = event.target as HTMLInputElement;
-  
-  // If space is pressed and cursor is at the beginning or the field is empty
-  if (event.key === ' ' && (input.selectionStart === 0 || this.searchText === '')) {
-    event.preventDefault();
+    const input = event.target as HTMLInputElement;
+
+    // If space is pressed and cursor is at the beginning or the field is empty
+    if (event.key === ' ' && (input.selectionStart === 0 || this.searchText === '')) {
+      event.preventDefault();
+    }
   }
-}
 
 }
 
@@ -156,8 +156,8 @@ class Reply {
   id!: number
   reply!: string
   language!: string
-  firstNameEnglish:string = '';
-  lastNameEnglish:string = '';
+  firstNameEnglish: string = '';
+  lastNameEnglish: string = '';
 }
 
 interface TemplateData {

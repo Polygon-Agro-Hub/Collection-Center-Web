@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TargetService } from '../../../../services/Target-service/target.service';
@@ -7,7 +7,6 @@ import { ToastAlertService } from '../../../../services/toast-alert/toast-alert.
 import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
 import { Location } from '@angular/common';
 import { CustomDatepickerComponent } from "../../../../components/custom-datepicker/custom-datepicker.component";
-import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-assign-center-target',
@@ -16,7 +15,7 @@ import Swal from 'sweetalert2';
   templateUrl: './assign-center-target.component.html',
   styleUrl: './assign-center-target.component.css'
 })
-export class AssignCenterTargetComponent implements OnInit {
+export class AssignCenterTargetComponent implements OnInit, OnDestroy {
   @Input() centerDetails!: CenterDetails;
   assignCropsArr: AssignCrops[] = [];
   newTargetObj: NewTarget = new NewTarget();
@@ -31,6 +30,13 @@ export class AssignCenterTargetComponent implements OnInit {
   isLoading: boolean = true;
   isDateValid: boolean = true;
   hasData: boolean = false;
+
+  showConfirmModal: boolean = false;
+  confirmDurationSeconds: number = 30;
+  confirmRemainingSeconds: number = this.confirmDurationSeconds;
+  private readonly confirmRadius = 54;
+  readonly confirmCircumference = 2 * Math.PI * this.confirmRadius;
+  private confirmTimerId: ReturnType<typeof setInterval> | null = null;
 
 
   constructor(
@@ -51,6 +57,10 @@ tomorrow.setDate(today.getDate() + 1);
 this.selectDate = tomorrow.toISOString().split('T')[0];
     this.selectDatePickerDate = this.selectDate;
     this.fetchSavedCenterCrops()
+  }
+
+  ngOnDestroy(): void {
+    this.stopConfirmCountdown();
   }
 
   onDateChange(newDate: string | Date | null) {
@@ -81,25 +91,15 @@ this.selectDate = tomorrow.toISOString().split('T')[0];
   }
 
 onSubmit() {
-    Swal.fire({
-      title: 'Are you sure?',
-      text: 'Do you want to save these assinged targets?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#3085d6',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Confirm and save!',
-      cancelButtonText: 'No, cancel',
-      customClass: {
-        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-        title: 'dark:text-white',
+    this.showConfirmModal = true;
+    this.startConfirmCountdown();
+  }
 
-        icon: '',
-        actions: 'gap-2'
-      }
-    }).then((result) => {
-      if (result.isConfirmed) {
-        const newCrops = this.assignCropsArr.filter(crop => crop.isNew);
+  onConfirmSave() {
+    this.showConfirmModal = false;
+    this.stopConfirmCountdown();
+
+    const newCrops = this.assignCropsArr.filter(crop => crop.isNew);
     const invalidCrop = newCrops.find(crop =>
       crop.targetA < 0 || crop.targetB < 0 || crop.targetC < 0 || this.isQtyExceeded(crop)
     );
@@ -122,10 +122,41 @@ onSubmit() {
         }
       }
     )
+  }
+
+  onCancelConfirm() {
+    this.showConfirmModal = false;
+    this.stopConfirmCountdown();
+  }
+
+  get confirmDashOffset(): number {
+    const fraction = this.confirmDurationSeconds > 0 ? this.confirmRemainingSeconds / this.confirmDurationSeconds : 0;
+    return this.confirmCircumference * (1 - fraction);
+  }
+
+  get confirmFormattedTime(): string {
+    const clamped = Math.max(this.confirmRemainingSeconds, 0);
+    const minutes = Math.floor(clamped / 60).toString().padStart(2, '0');
+    const seconds = (clamped % 60).toString().padStart(2, '0');
+    return `${minutes}:${seconds}`;
+  }
+
+  private startConfirmCountdown() {
+    this.stopConfirmCountdown();
+    this.confirmRemainingSeconds = this.confirmDurationSeconds;
+    this.confirmTimerId = setInterval(() => {
+      this.confirmRemainingSeconds--;
+      if (this.confirmRemainingSeconds <= 0) {
+        this.onConfirmSave();
       }
-    });
+    }, 1000);
+  }
 
-
+  private stopConfirmCountdown() {
+    if (this.confirmTimerId) {
+      clearInterval(this.confirmTimerId);
+      this.confirmTimerId = null;
+    }
   }
 
   onCancel() {

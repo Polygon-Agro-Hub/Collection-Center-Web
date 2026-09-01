@@ -50,49 +50,49 @@ export class DcmDashboardComponent implements OnInit {
   }
 
   loadChartData(): void {
-  this.isLoading = true;
-  this.DistributionSrv.getDispatchChartData().subscribe({
-    next: (data: any) => {
-      this.dioCount = data.dioCount;
-      this.processChartData(data.chartData);
-      this.isLoading = false;
-      
-      // Use setTimeout to ensure DOM is ready
-      setTimeout(() => {
-        this.createChart();
-      }, 100);
-    },
-    error: (error) => {
-      console.error('Error loading chart data:', error);
-      this.isLoading = false;
-      // Create chart with empty data as fallback
-      setTimeout(() => {
-        this.createChart();
-      }, 100);
-    }
-  });
-}
+    this.isLoading = true;
+    this.DistributionSrv.getDispatchChartData().subscribe({
+      next: (data: any) => {
+        this.dioCount = data.dioCount;
+        this.processChartData(data.chartData);
+        this.isLoading = false;
 
-  processChartData(apiData: any[]): void {
-  
-  // Initialize array with zeros for all 24 hours
-  this.chartData = new Array(24).fill(0);
-  
-  // Map the API data to our chart data array
-  if (apiData && apiData.length > 0) {
-
-    apiData.forEach(item => {
-      const hour = item.hourSlot; // This should be 0-23 from the API
-      const orderCount = item.orderCount;
-      
-      if (hour >= 0 && hour < 24) {
-        this.chartData[hour] = orderCount;
+        // Use setTimeout to ensure DOM is ready
+        setTimeout(() => {
+          this.createChart();
+        }, 100);
+      },
+      error: (error) => {
+        console.error('Error loading chart data:', error);
+        this.isLoading = false;
+        // Create chart with empty data as fallback
+        setTimeout(() => {
+          this.createChart();
+        }, 100);
       }
     });
   }
-  
-  
-}
+
+  processChartData(apiData: any[]): void {
+
+    // Initialize array with zeros for all 24 hours
+    this.chartData = new Array(24).fill(0);
+
+    // Map the API data to our chart data array
+    if (apiData && apiData.length > 0) {
+
+      apiData.forEach(item => {
+        const hour = item.hourSlot; // This should be 0-23 from the API
+        const orderCount = item.orderCount;
+
+        if (hour >= 0 && hour < 24) {
+          this.chartData[hour] = orderCount;
+        }
+      });
+    }
+
+
+  }
 
   createChart(): void {
     const ctx = document.getElementById('MyChart') as HTMLCanvasElement;

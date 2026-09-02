@@ -908,6 +908,10 @@ export class AddDistributedOfficerComponent implements OnInit {
       missingFields.push('Province is required');
     }
 
+    if (!this.personalData.accHolderName) {
+      missingFields.push('Account Holder’s Name is required');
+    }
+
     if (!this.personalData.accNumber) {
       missingFields.push('Account Number is required');
     }

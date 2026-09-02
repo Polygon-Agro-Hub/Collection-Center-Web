@@ -346,7 +346,7 @@
             class="flex items-center bg-white dark:bg-[#1D1D1F] border-[1px] border-[#828282] rounded-xl px-6 py-4 mb-6">
             <div class="pr-6 flex-shrink-0">
                 <p class="text-sm text-[#7F7F7F] dark:text-gray-400 mb-1">Order ID :</p>
-                <p class="font-medium text-[#000000] dark:text-textDark">{{ processOrder.invNo }}</p>
+                <p class="font-medium text-lg text-[#000000] dark:text-textDark">{{ processOrder.invNo }}</p>
             </div>
 
             <div class="w-px self-stretch bg-[#828282] mx-6"></div>
@@ -363,7 +363,7 @@
                 </div>
                 <div>
                     <p class="text-sm text-[#7F7F7F] dark:text-gray-400 mb-1">Time Slot :</p>
-                    <p class="font-medium text-lg text-[#000000] dark:text-textDark">{{ processOrder.sheduleTime }}</p>
+                    <p class="font-medium text-[#000000] dark:text-textDark">{{ processOrder.sheduleTime }}</p>
                 </div>
                 <div>
                     <p class="text-sm text-[#7F7F7F] dark:text-gray-400 mb-1">QC Done By :</p>
@@ -436,7 +436,7 @@
 
                 <div *ngIf="processOrder.additionalItems.length">
                     <p class="text-[#415CFF] text-sm font-medium mb-2">
-                        Additional Items
+                        Ala Carte Items
                         ({{ processOrder.additionalItems.length < 10 ? ('0' + processOrder.additionalItems.length) :
                             processOrder.additionalItems.length }}) </p>
 

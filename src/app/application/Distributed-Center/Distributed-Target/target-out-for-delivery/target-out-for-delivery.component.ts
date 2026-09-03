@@ -413,6 +413,10 @@ export class TargetOutForDeliveryComponent implements OnInit {
     this.ngOnInit();
   }
 
+  getPackageNumbers(quantity: number): number[] {
+  return Array.from({ length: quantity }, (_, i) => i + 1);
+}
+
 }
 
 class orders {
@@ -461,7 +465,7 @@ export class OrderPackage {
   orderPackageId!: number;
   packageId!: number;
   packageName!: string;
-
+packageQty!: number;
   items: PackageItem[] = [];
 }
 

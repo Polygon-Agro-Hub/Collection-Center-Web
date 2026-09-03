@@ -10,7 +10,7 @@
   <div class="bg-white dark:bg-tileBlack shadow-lg rounded-lg relative p-8">
     <div class="flex items-center mb-8 flex-wrap gap-6">
       <div class="flex items-center whitespace-nowrap">
-        <h2 class="text-[20px] font-normal text-[#292929] dark:text-textDark">
+        <h2 class="font-semibold text-[#000000] dark:text-textDark">
           Shortage History ({{ getTotalRecords() }})
         </h2>
 
@@ -37,7 +37,7 @@
     <div *ngIf="(hasData && isPrevToday()) || (hasData && afterSixPm && !isPrevToday())">
       <!-- Not Assigned Section -->
       <div class="mb-10" *ngIf="notAssignedItems.length > 0">
-        <h3 class="text-lg font-medium text-[#292929] dark:text-textDark mb-4">
+        <h3 class="font-semibold text-[#000000] dark:text-textDark mb-4">
           Not Assigned ({{ getNotAssignedCount() }})
         </h3>
 

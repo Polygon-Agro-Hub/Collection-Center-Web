@@ -100,7 +100,9 @@ export class EditAssignOfficerTargetComponent {
         if (res.status) {
           this.isLoading = false;
           this.toastSrv.success('Successfully assigned the target!');
-          this.router.navigate(['/target'])
+          this.router.navigate(['/target'], {
+            state: { selectAssign: true }
+          });
         } else {
           this.isLoading = false;
           this.toastSrv.error('Failed to assign the target!');
@@ -138,9 +140,24 @@ export class EditAssignOfficerTargetComponent {
   }
 
   updateTotals(index: number, grade: 'A' | 'B' | 'C') {
-    this.totTargetA = this.officerArr.reduce((sum, officer) => sum + (officer.targetA || 0), 0);
-    this.totTargetB = this.officerArr.reduce((sum, officer) => sum + (officer.targetB || 0), 0);
-    this.totTargetC = this.officerArr.reduce((sum, officer) => sum + (officer.targetC || 0), 0);
+    this.totTargetA = Number(
+        this.officerArr
+            .reduce((sum, officer) => sum + (officer.targetA || 0), 0)
+            .toFixed(3)
+    );
+        
+    this.totTargetB = Number(
+        this.officerArr
+          .reduce((sum, officer) => sum + Number(officer.targetB || 0), 0)
+          .toFixed(3)
+    );
+
+      
+    this.totTargetC = Number(
+        this.officerArr
+          .reduce((sum, officer) => sum + Number(officer.targetC || 0), 0)
+          .toFixed(3)
+    );
 
     let remainingA = this.targetVerity.qtyA - (this.totTargetA - this.officerArr[index].targetA);
     let remainingB = this.targetVerity.qtyB - (this.totTargetB - this.officerArr[index].targetB);
@@ -149,7 +166,7 @@ export class EditAssignOfficerTargetComponent {
     if (grade === 'A' && this.totTargetA > this.targetVerity.qtyA) {
       this.toastSrv.warning(`Total Grade A target cannot exceed ${this.targetVerity.qtyA}!`);
       setTimeout(() => {
-        this.officerArr[index].targetA = Math.max(0, remainingA);
+        this.officerArr[index].targetA = Math.max(0, Math.round(remainingA * 1000) / 1000);
         this.cdRef.detectChanges();
       }, 0);
     }
@@ -157,7 +174,7 @@ export class EditAssignOfficerTargetComponent {
     if (grade === 'B' && this.totTargetB > this.targetVerity.qtyB) {
       this.toastSrv.warning(`Total Grade B target cannot exceed ${this.targetVerity.qtyB}!`);
       setTimeout(() => {
-        this.officerArr[index].targetB = Math.max(0, remainingB);
+        this.officerArr[index].targetB = Math.max(0, Math.round(remainingB * 1000) / 1000);
         this.cdRef.detectChanges();
       }, 0);
     }
@@ -165,23 +182,23 @@ export class EditAssignOfficerTargetComponent {
     if (grade === 'C' && this.totTargetC > this.targetVerity.qtyC) {
       this.toastSrv.warning(`Total Grade C target cannot exceed ${this.targetVerity.qtyC}!`);
       setTimeout(() => {
-        this.officerArr[index].targetC = Math.max(0, remainingC);
+        this.officerArr[index].targetC = Math.max(0, Math.round(remainingC * 1000) / 1000);
         this.cdRef.detectChanges();
       }, 0);
     }
 
     setTimeout(() => {
-      this.totTargetA = this.officerArr.reduce((sum, officer) => sum + (officer.targetA || 0), 0);
-      this.totTargetB = this.officerArr.reduce((sum, officer) => sum + (officer.targetB || 0), 0);
-      this.totTargetC = this.officerArr.reduce((sum, officer) => sum + (officer.targetC || 0), 0);
+      this.totTargetA = Number(this.officerArr.reduce((sum, officer) => sum + (officer.targetA || 0), 0).toFixed(3));
+      this.totTargetB = Number(this.officerArr.reduce((sum, officer) => sum + (officer.targetB || 0), 0).toFixed(3));
+      this.totTargetC = Number(this.officerArr.reduce((sum, officer) => sum + (officer.targetC || 0), 0).toFixed(3));
     }, 10);
 
   }
 
   checkTotals() {
-    this.totTargetA = this.officerArr.reduce((sum, officer) => sum + (officer.targetA || 0), 0);
-    this.totTargetB = this.officerArr.reduce((sum, officer) => sum + (officer.targetB || 0), 0);
-    this.totTargetC = this.officerArr.reduce((sum, officer) => sum + (officer.targetC || 0), 0);
+      this.totTargetA = Number(this.officerArr.reduce((sum, officer) => sum + (officer.targetA || 0), 0).toFixed(3));
+      this.totTargetB = Number(this.officerArr.reduce((sum, officer) => sum + (officer.targetB || 0), 0).toFixed(3));
+      this.totTargetC = Number(this.officerArr.reduce((sum, officer) => sum + (officer.targetC || 0), 0).toFixed(3));
 
     if (
       +this.totTargetA === +this.targetVerity.qtyA &&

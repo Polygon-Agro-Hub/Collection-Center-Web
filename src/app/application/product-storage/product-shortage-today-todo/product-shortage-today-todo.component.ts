@@ -120,7 +120,7 @@ afterSixPm!: boolean;
   get officerDropdownItems() {
     return this.officersArr.map(officer => ({
       value: officer.id,
-      label: `${officer.empId} - ${officer.firstNameEnglish} ${officer.firstNameEnglish}`
+      label: `${officer.empId} - ${officer.firstNameEnglish} ${officer.lastNameEnglish}`
     }));
   }
 

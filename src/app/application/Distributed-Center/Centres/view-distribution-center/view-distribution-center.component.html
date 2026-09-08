@@ -101,27 +101,12 @@
 
             </div>
           </div>
-          <input id="phoneNumber02" name="phoneNumber02" type="tell" #phoneNumber02Input="ngModel"
-            [(ngModel)]="centerData.phoneNumber02"
+          <input id="phoneNumber02" name="phoneNumber02" type="tell" 
+            [value]="centerData.phoneNumber02 || '--'"
             class="block w-full pointer-events-none p-2 border border-gray-300 hover:bg-gray-200 rounded-r-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
             pattern="^[0-9]{9}$" minlength="9" maxlength="9" readonly maxlength="9"
-            (ngModelChange)="validateSriLankanPhone($event, 'phone02')"
             (keypress)="($event.charCode >= 48 && $event.charCode <= 57) ? true : $event.preventDefault()" />
 
-        </div>
-        <div *ngIf="centerData.phoneNumber02 && phoneNumber02Input.invalid && !isPhoneInvalidMap['phone02']"
-          class="text-red-500 text-sm mt-1">
-          Contact Number must be exactly 9 digits.
-        </div>
-
-        <div
-          *ngIf="centerData.phoneNumber02 && centerData.phoneNumber02 === centerData.phoneNumber01 && !isPhoneInvalidMap['phone02'] && !phoneNumber02Input.invalid"
-          class="text-red-500 text-sm mt-1">
-          Contact Number - 2 should be different from Phone Number - 1.
-        </div>
-
-        <div *ngIf="isPhoneInvalidMap['phone02'] && centerData.phoneNumber02" class="text-red-500 text-sm mt-1">
-          Please enter a valid Contact number (format: +947XXXXXXXX)
         </div>
       </div>
 

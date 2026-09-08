@@ -346,7 +346,7 @@
             class="flex items-center bg-white dark:bg-[#1D1D1F] border-[1px] border-[#828282] rounded-xl px-6 py-4 mb-6">
             <div class="pr-6 flex-shrink-0">
                 <p class="text-sm text-[#7F7F7F] dark:text-gray-400 mb-1">Order ID :</p>
-                <p class="font-medium text-[#000000] dark:text-textDark">{{ processOrder.invNo }}</p>
+                <p class="font-medium text-lg text-[#000000] dark:text-textDark">{{ processOrder.invNo }}</p>
             </div>
 
             <div class="w-px self-stretch bg-[#828282] mx-6"></div>
@@ -363,7 +363,7 @@
                 </div>
                 <div>
                     <p class="text-sm text-[#7F7F7F] dark:text-gray-400 mb-1">Time Slot :</p>
-                    <p class="font-medium text-lg text-[#000000] dark:text-textDark">{{ processOrder.sheduleTime }}</p>
+                    <p class="font-medium text-[#000000] dark:text-textDark">{{ processOrder.sheduleTime }}</p>
                 </div>
                 <div>
                     <p class="text-sm text-[#7F7F7F] dark:text-gray-400 mb-1">QC Done By :</p>
@@ -383,60 +383,99 @@
             <div
                 class="flex-1 w-full min-w-0 flex flex-col gap-6 lg:max-h-[calc(100vh-260px)] lg:overflow-y-auto lg:pr-2">
                 <div *ngFor="let pack of processOrder.packages">
+
+
+                    <!-- Create one table for each packageQty -->
+                    <div *ngFor="let packageNumber of getPackageNumbers(pack.packageQty); let i = index"
+                        class="mb-4">
+
+                    <!-- Package heading -->
                     <p class="text-[#415CFF] text-sm font-medium mb-2">
                         {{ pack.packageName }}
-                        ({{ pack.items.length < 10 ? ('0' + pack.items.length) : pack.items.length }}) </p>
+                        ({{ pack.items.length < 10 ? ('0' + pack.items.length) : pack.items.length }})
+                    </p>
 
-                            <div class="overflow-hidden border border-gray-100 dark:border-[#202021] rounded-lg">
-                                <table class="w-full divide-y-2">
-                                    <thead
-                                        class="text-gray-700 bg-[#F7F8FB] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
-                                        <tr>
-                                            <th
-                                                class="px-4 py-2 text-left text-sm font-[400] text-[#4B5563] dark:text-white">
-                                                Item
-                                                Name</th>
-                                            <th
-                                                class="px-4 py-2 text-left text-sm font-[400] text-[#4B5563] dark:text-white">
-                                                Qty
-                                            </th>
-                                            <th
-                                                class="px-4 py-2 text-left text-sm font-[400] text-[#4B5563] dark:text-white">
-                                                Packed By</th>
-                                            <th
-                                                class="px-4 py-2 text-left text-sm font-[400] text-[#4B5563] dark:text-white">
-                                                Time
-                                            </th>
-                                        </tr>
-                                    </thead>
-                                    <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
-                                        <tr *ngFor="let item of pack.items">
-                                            <td class="px-4 py-3">
-                                                <div class="flex items-center gap-3">
-                                                    <img [src]="item.image" [alt]="item.productName"
-                                                        class="w-8 h-8 rounded-full object-cover flex-shrink-0" />
-                                                    <span class="text-[#000000] font-[400]  dark:text-[#C5C5C5]">{{
-                                                        item.productName }}</span>
-                                                </div>
-                                            </td>
-                                            <td class="px-4 py-3 text-[#000000] font-[400] dark:text-[#C5C5C5]">
-                                                {{ item.qty }}kg
-                                            </td>
-                                            <td class="px-4 py-3 text-[#000000] font-[400] dark:text-[#C5C5C5]">
-                                                {{ item.packedByOfficer || "----" }}
-                                            </td>
-                                            <td class="px-4 py-3 text-[#000000] font-[400] dark:text-[#C5C5C5]">
-                                                {{ item.packingTime | date:'hh:mm a' }}
-                                            </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
+                        <div class="overflow-hidden border border-gray-100 dark:border-[#202021] rounded-lg">
+
+                            <table class="w-full divide-y-2">
+
+                                <thead
+                                    class="text-gray-700 bg-[#F7F8FB] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
+
+                                    <tr>
+                                        <th
+                                            class="px-4 py-2 w-[40%] text-left text-sm font-[400] text-[#4B5563] dark:text-white">
+                                            Item Name
+                                        </th>
+
+                                        <th
+                                            class="px-4 py-2 w-[20%] text-left text-sm font-[400] text-[#4B5563] dark:text-white">
+                                            Qty
+                                        </th>
+
+                                        <th
+                                            class="px-4 py-2 w-[20%] text-left text-sm font-[400] text-[#4B5563] dark:text-white">
+                                            Packed By
+                                        </th>
+
+                                        <th
+                                            class="px-4 py-2 w-[20%] text-left text-sm font-[400] text-[#4B5563] dark:text-white">
+                                            Time
+                                        </th>
+                                    </tr>
+
+                                </thead>
+
+                                <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
+
+                                    <tr *ngFor="let item of pack.items">
+
+                                        <td class="px-4 py-3 ">
+                                            <div class="flex items-center gap-3">
+
+                                                <img
+                                                    [src]="item.image"
+                                                    [alt]="item.productName"
+                                                    class="w-8 h-8 rounded-full object-cover flex-shrink-0" />
+
+                                                <span
+                                                    class="text-[#000000] font-[400] dark:text-[#C5C5C5]">
+                                                    {{ item.productName }}
+                                                </span>
+
+                                            </div>
+                                        </td>
+
+                                        <td
+                                            class="px-4 py-3 text-[#000000] font-[400] dark:text-[#C5C5C5]">
+                                            {{ item.qty }}kg
+                                        </td>
+
+                                        <td
+                                            class="px-4 py-3 text-[#000000] font-[400] dark:text-[#C5C5C5]">
+                                            {{ item.packedByOfficer || "----" }}
+                                        </td>
+
+                                        <td
+                                            class="px-4 py-3 text-[#000000] font-[400] dark:text-[#C5C5C5]">
+                                            {{ item.packingTime | date:'hh:mm a' }}
+                                        </td>
+
+                                    </tr>
+
+                                </tbody>
+
+                            </table>
+
+                        </div>
+
+                    </div>
+
                 </div>
 
                 <div *ngIf="processOrder.additionalItems.length">
                     <p class="text-[#415CFF] text-sm font-medium mb-2">
-                        Additional Items
+                        Ala Carte Items
                         ({{ processOrder.additionalItems.length < 10 ? ('0' + processOrder.additionalItems.length) :
                             processOrder.additionalItems.length }}) </p>
 
@@ -446,18 +485,18 @@
                                         class="text-gray-700 bg-[#F7F8FB] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
                                         <tr>
                                             <th
-                                                class="px-4 py-2 text-left text-sm font-[400] text-[#4B5563] dark:text-white">
+                                                class="px-4 py-2 w-[40%] text-left text-sm font-[400] text-[#4B5563] dark:text-white">
                                                 Item
                                                 Name</th>
                                             <th
-                                                class="px-4 py-2 text-left text-sm font-[400] text-[#4B5563] dark:text-white">
+                                                class="px-4 py-2 w-[20%] text-left text-sm font-[400] text-[#4B5563] dark:text-white">
                                                 Qty
                                             </th>
                                             <th
-                                                class="px-4 py-2 text-left text-sm font-[400] text-[#4B5563] dark:text-white">
+                                                class="px-4 py-2 w-[20%] text-left text-sm font-[400] text-[#4B5563] dark:text-white">
                                                 Packed By</th>
                                             <th
-                                                class="px-4 py-2 text-left text-sm font-[400] text-[#4B5563] dark:text-white">
+                                                class="px-4 py-2 w-[20%] text-left text-sm font-[400] text-[#4B5563] dark:text-white">
                                                 Time
                                             </th>
                                         </tr>

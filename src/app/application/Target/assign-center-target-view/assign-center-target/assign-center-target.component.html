@@ -109,7 +109,7 @@
                             </td>
 
                             <!-- Grade B Column -->
-                            <td class="px-6 py-4 text-base text-[#000000] dark:text-gray-300 align-top">
+                            <td class="px-6 py-3 text-base text-[#000000] dark:text-gray-300 align-top">
                                 <input type="number" [(ngModel)]="item.targetB" step="any" name="targetB" min="0"
                                     (change)="checkNegativeValue(item, 'B')"
                                     (input)="restrictDecimal($event, item, 'B')"
@@ -131,7 +131,7 @@
                             </td>
 
                             <!-- Grade C Column -->
-                            <td class="px-6 py-4 text-base text-[#000000] dark:text-gray-300 align-top">
+                            <td class="px-6 py-3 text-base text-[#000000] dark:text-gray-300 align-top">
                                 <input type="number" [(ngModel)]="item.targetC" step="any" name="targetC" min="0"
                                     (change)="checkNegativeValue(item, 'C')"
                                     (input)="restrictDecimal($event, item, 'C')"

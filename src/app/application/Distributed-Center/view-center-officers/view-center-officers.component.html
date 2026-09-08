@@ -171,18 +171,22 @@
                         <div class="flex justify-center items-center"
                             [style.cursor]="logingRole === 'Distribution Centre Head' ? 'pointer' : 'default'"
                             (click)="logingRole === 'Distribution Centre Head' && openPopup(item)">
+
                             <span *ngIf="item.status === 'Approved'"
-                                class="inline-block px-6 py-1 bg-[#C8E0FF] text-[#415CFF] text-sm font-medium rounded-md shadow-md">
+                                class="inline-block w-28 py-1 text-center bg-[#C8E0FF] text-[#415CFF] text-sm font-medium rounded-md shadow-md">
                                 Approved
                             </span>
+
                             <span *ngIf="item.status === 'Not Approved'"
-                                class="inline-block px-3 py-1 bg-[#F8FFA6] text-[#A8A100] text-sm font-medium rounded-md shadow-md">
+                                class="inline-block w-28 py-1 text-center bg-[#F8FFA6] text-[#A8A100] text-sm font-medium rounded-md shadow-md">
                                 Not Approved
                             </span>
+
                             <span *ngIf="item.status === 'Rejected'"
-                                class="inline-block px-8 py-1 bg-[#FFB9B7] text-[#D16D6A]  text-sm font-medium rounded-md shadow-md">
+                                class="inline-block w-28 py-1 text-center bg-[#FFB9B7] text-[#D16D6A] text-sm font-medium rounded-md shadow-md">
                                 Rejected
                             </span>
+
                         </div>
                     </td>
 

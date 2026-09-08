@@ -9,7 +9,7 @@
 <div *ngIf="!isLoading"
     class="w-full overflow-x-auto px-10 py-7 bg-tileLight shadow-lg rounded-lg dark:text-[#FFFFFF] dark:bg-[#363636]">
 
-    <div class="flex justify-between items-center mb-5 mt-3"> <!-- Changed this line -->
+    <div *ngIf="hasData" class="flex justify-between items-center mb-5 mt-3"> <!-- Changed this line -->
 
         <button
             class="bg-[#415CFF] text-white shadow-md font-medium rounded-lg py-2 px-5 mr-5 text-lg flex items-center"

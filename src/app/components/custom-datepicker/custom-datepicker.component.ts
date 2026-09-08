@@ -34,6 +34,8 @@ export class CustomDatepickerComponent {
 
   @Input() triggerClass: string = 'w-full h-12 border-[1.8px] border-[#828282] rounded-xl flex items-center px-3 py-2 cursor-pointer dark:bg-[#292929]';
 
+  @Input() maxDropdownHeight: string | null = null;
+
   showCalendar = false;
   showYearPicker = false;
 

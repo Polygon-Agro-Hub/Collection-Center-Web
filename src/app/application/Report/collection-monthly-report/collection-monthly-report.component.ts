@@ -84,22 +84,15 @@ export class CollectionMonthlyReportComponent implements OnInit {
     if (startEntered && endEntered) {
       this.fetchOfficerData();
     } else {
-      let msg = '';
 
       if (!startEntered && !endEntered) {
-        msg = 'Please enter both Start Date and End Date.';
+        this.toastSrv.warning("Please enter both Start Date and End Date.");
       } else if (!startEntered) {
-        msg = 'Please enter the Start Date.';
+        this.toastSrv.warning("Please enter the Start Date.");
       } else if (!endEntered) {
-        msg = 'Please enter the End Date.';
+        this.toastSrv.warning("Please enter the End Date.");
       }
 
-      Swal.fire({
-        icon: 'warning',
-        title: 'Missing Date Input',
-        text: msg,
-        confirmButtonText: 'OK'
-      });
     }
 
     this.hasData = false;

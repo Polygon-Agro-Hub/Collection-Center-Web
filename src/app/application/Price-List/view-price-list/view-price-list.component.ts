@@ -191,7 +191,7 @@ export class ViewPriceListComponent implements OnInit {
             this.toastSrv.success(
               `Successfully changed price of <b style="color:black;">${crop}-${variety}-${grade}</b><br>
                from <b style="color:black;">Rs.${this.originalValue}</b> to 
-               <b style="color:black;">Rs.${this.editValue}</b>`,
+               <b style="color:black;">Rs.${Number(this.editValue).toFixed(2)}</b>`,
               { enableHtml: true }
             );
           } else {

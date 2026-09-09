@@ -45,7 +45,7 @@ export class ShortageTodayComponent
   isLoading = false;
 
   loadingOptions: any = {
-    path: '/assets/json/blue_loading.json',
+    path: '/assets/json/blue%20loading.json',
     loop: true,
     autoplay: true,
   };

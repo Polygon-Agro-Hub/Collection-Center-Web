@@ -2,8 +2,7 @@ import {
   Component,
   ElementRef,
   ViewChild,
-  AfterViewInit,
-  OnDestroy,
+  AfterViewChecked,
   OnInit,
 } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
@@ -36,7 +35,7 @@ interface ShortageItem {
   styleUrl: './shortage-today.component.css',
 })
 export class ShortageTodayComponent
-  implements OnInit, AfterViewInit, OnDestroy {
+  implements OnInit, AfterViewChecked {
   shortages: ShortageItem[] = [];
 
   availableDate: Date = new Date('2026-06-23T18:00:00');
@@ -77,14 +76,15 @@ export class ShortageTodayComponent
     if (now >= target) {
       this.isWaiting = false;
       this.fetchShortageDetails();
-    } else {
-      this.isWaiting = true;
-      this.waitTimer = setTimeout(() => {
-        this.isWaiting = false;
-        this.animationItem?.destroy();
-        this.fetchShortageDetails();
-      }, target - now);
     }
+    //  else {
+    //   this.isWaiting = true;
+    //   this.waitTimer = setTimeout(() => {
+    //     this.isWaiting = false;
+    //     this.animationItem?.destroy();
+    //     this.fetchShortageDetails();
+    //   }, target - now);
+    // }
   }
 
   fetchShortageDetails(): void {

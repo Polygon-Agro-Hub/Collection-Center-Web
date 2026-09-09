@@ -409,39 +409,33 @@ export class DcmPositioningComponent implements OnInit, AfterViewChecked {
     this.showDeletePositionModal = false;
   }
 
-  // confirmDeletePosition(): void {
-  //   this.isLoading = true;
+  confirmDeletePosition(): void {
+    this.isLoading = true;
 
-  //   this.DistributionSrv.deleteDCHCenterPos(
-  //     this.positionToDelete.id,
-  //     this.positionToDelete.rowId,
-  //     this.positionToDelete.pIndex!
-  //   ).subscribe({
-  //     next: (res) => {
-  //       this.toastSrv.success('Position deletion successful.');
+    this.DistributionSrv.deleteDCHCenterPos(
+      this.positionToDelete.id,
+      this.positionToDelete.rowId,
+      this.positionToDelete.pIndex!
+    ).subscribe({
+      next: (res) => {
+        this.toastSrv.success('Position deletion successful.');
 
-  //       this.isLoading = false;
-  //       this.fetchDCHCenterRows();
-  //       this.showDeletePositionModal = false;
-  //     },
+        this.isLoading = false;
+        this.fetchDcmPositionsForRows(this.selectedRow.id);
+        this.showDeletePositionModal = false;
+      },
 
-  //     error: (err) => {
-  //       if (err.status === 409) {
-  //         this.showDeletePositionModal = false;
-  //         this.openPositionDeleteErrorPopUp = true;
-  //       } else {
-  //         console.error('Other error:', err);
-  //         this.toastSrv.error('An error occurred while deleting position.');
-  //       }
-  //       this.showDeletePositionModal = false;
-  //       this.isLoading = false;
-  //     }
-  //   });
-  // }
-
-  // cancelErrorEnableRow(): void {
-  //   this.openErrorEnableRow = false;
-  // }
-
+      error: (err) => {
+        if (err.status === 409) {
+          this.showDeletePositionModal = false;
+        } else {
+          console.error('Other error:', err);
+          this.toastSrv.error('An error occurred while deleting position.');
+        }
+        this.showDeletePositionModal = false;
+        this.isLoading = false;
+      }
+    });
+  }
 
 }

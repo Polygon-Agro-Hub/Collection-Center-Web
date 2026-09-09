@@ -8,10 +8,9 @@ import {
 } from '@angular/core';
 import { CommonModule, Location } from '@angular/common';
 import { Router } from '@angular/router';
-import lottie, { AnimationItem } from 'lottie-web';
 import { DistributionProcurementService } from '../../../services/disribution-procuement-service/distribution-procurement.service';
-import { LoadingSpinnerComponent } from "../../../components/loading-spinner/loading-spinner.component"; // adjust path/name as needed
-// adjust path/name as needed
+import { LoadingSpinnerComponent } from "../../../components/loading-spinner/loading-spinner.component";
+import lottie from 'lottie-web';
 
 interface AssignmentRecord {
   qty: number;
@@ -54,9 +53,9 @@ export class ShortageTodayComponent
   afterSixPm!: boolean;
   hasData: boolean = false;
 
-  @ViewChild('lottieContainer', { static: false }) lottieContainer!: ElementRef;
-  private animationItem: AnimationItem | undefined;
-  private waitTimer: any;
+  @ViewChild('shortageNoDataAnim') shortageNoDataAnim!: ElementRef;
+  private noDataAnimInstance: any = null;
+  private noDataAnimLoaded: boolean = false;
 
   constructor(
     private location: Location,
@@ -113,22 +112,33 @@ export class ShortageTodayComponent
     });
   }
 
-  ngAfterViewInit(): void {
-    if (this.isWaiting && this.lottieContainer) {
-      this.animationItem = lottie.loadAnimation({
-        container: this.lottieContainer.nativeElement,
-        renderer: 'svg',
-        loop: this.loadingOptions.loop,
-        autoplay: this.loadingOptions.autoplay,
-        path: this.loadingOptions.path,
-      });
+  ngAfterViewChecked(): void {
+    if (!this.afterSixPm && !this.noDataAnimLoaded) {
+      const container = this.shortageNoDataAnim?.nativeElement;
+      if (container) {
+        this.loadShortageNoDataAnimation();
+        this.noDataAnimLoaded = true;
+      }
     }
   }
 
-  ngOnDestroy(): void {
-    this.animationItem?.destroy();
-    if (this.waitTimer) {
-      clearTimeout(this.waitTimer);
+  private loadShortageNoDataAnimation() {
+    try {
+      if (this.noDataAnimInstance) {
+        this.noDataAnimInstance.destroy();
+        this.noDataAnimInstance = null;
+      }
+      const container = this.shortageNoDataAnim?.nativeElement;
+      if (!container) return;
+      this.noDataAnimInstance = lottie.loadAnimation({
+        container,
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: 'assets/json/blue%20loading.json'
+      });
+    } catch (err) {
+      console.error('Failed to load Lottie animation', err);
     }
   }
 

@@ -36,15 +36,15 @@ export class ViewCentresComponent implements OnInit {
     itemId1: number | null = null;
     itemId2: number | null = null;
     provinceItems = [
-        { value: 'Western', label: 'Western' },
         { value: 'Central', label: 'Central' },
-        { value: 'Southern', label: 'Southern' },
-        { value: 'Northern', label: 'Northern' },
         { value: 'Eastern', label: 'Eastern' },
-        { value: 'North Western', label: 'North Western' },
         { value: 'North Central', label: 'North Central' },
+        { value: 'North Western', label: 'North Western' },
+        { value: 'Northern', label: 'Northern' },
+        { value: 'Sabaragamuwa', label: 'Sabaragamuwa' },
+        { value: 'Southern', label: 'Southern' },
         { value: 'Uva', label: 'Uva' },
-        { value: 'Sabaragamuwa', label: 'Sabaragamuwa' }
+        { value: 'Western', label: 'Western' }
     ];
 
     // Define all districts with their provinces

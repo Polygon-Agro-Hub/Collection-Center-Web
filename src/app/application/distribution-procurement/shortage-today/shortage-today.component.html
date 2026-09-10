@@ -92,17 +92,17 @@
     </div>
 
     <div *ngIf="!afterSixPm" class="flex flex-col items-center w-full h-screen px-10 py-7 mt-12 ">
-      <img src="assets/images/ShortageNoData.png" alt="No Data" class="w-24 h-28" />
-      <p class="text-[#000000] my-6 dark:text-textDark text-[30px] font-[600]">Please Wait!
+       <div #shortageNoDataAnim class="w-48 h-48"></div>
+      <p class="text-[#000000] mt-2 mb-6 dark:text-textDark text-[30px] font-[600]">Please Wait!
       </p>
       <p class="text-center font-[400]">--If there are any shortages, you will be able to view them <span
           class="text-[#494949] font-[700]">after 6:00 PM</span> on {{ currentTime | date:'d MMMM y' }}.--</p>
-
     </div>
 
     <div *ngIf="!hasData && afterSixPm" class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6 ">
       <p class="text-[#494949] my-6 dark:text-textDark">--No Product Shortages for today yet--</p>
       <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
     </div>
+
   </div>
 </div>

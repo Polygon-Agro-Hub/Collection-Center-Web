@@ -140,8 +140,8 @@
     </div>
 
     <div *ngIf="!afterSixPm" class="flex flex-col items-center w-full h-screen px-10 py-7 mt-12 ">
-                <img src="assets/images/ShortageNoData.png" alt="No Data" class="w-24 h-28" />
-        <p class="text-[#000000] my-6 dark:text-textDark text-[20px] font-[600]">--No assigned product shortages yet!--</p>
+                <div #shortageNoDataAnim class="w-48 h-48"></div>
+        <p class="text-[#000000] mt-2 mb-6 dark:text-textDark text-[20px] font-[600]">--No assigned product shortages yet!--</p>
         <p class="text-center font-[400]">--If there are any shortages, you will be able to view them <span class="text-[#494949] font-[700]">after 6:00 PM</span> on {{ currentTime | date:'d MMMM y' }},<br>
 once they have been assigned by the Procurement Officer.--</p>
 

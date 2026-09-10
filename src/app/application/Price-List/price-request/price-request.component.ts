@@ -43,6 +43,7 @@ export class PriceRequestComponent implements OnInit {
   isChangeStatusViewOpen = false;
   requestPrice!: string;
   requestId!: number;
+  originalProce!: number;
 
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Pending', 'Approved', 'Rejected'];
@@ -510,9 +511,11 @@ export class PriceRequestComponent implements OnInit {
   log() {
   }
 
-  openChangeStatusPopUp(requestId: number, requestPrice: string) {
+  openChangeStatusPopUp(requestId: number, requestPrice: string, price: number) {
     this.requestId = requestId
     this.requestPrice = requestPrice
+    this.originalProce = Number(price)
+    console.log('originalProce', this.originalProce)
     this.isChangeStatusViewOpen = true;
 
   }
@@ -541,7 +544,17 @@ export class PriceRequestComponent implements OnInit {
   }
 
   ApproveStatus() {
+
+    if (Number(this.requestPrice) > (this.originalProce + 15)) {
+      this.toastSrv.error('Approval is restricted to a maximum 15 rupees range from original market price.');
+      return;
+    } else if (Number(this.requestPrice) < (this.originalProce - 15)) {
+      this.toastSrv.error('Approval is restricted to a maximum 15 rupees range from original market price.');
+      return;
+    }
+
     this.isLoading = true;
+
     this.PriceListSrv.changeStatusCCM(this.requestId, this.requestPrice).subscribe(
 
       (res) => {
@@ -577,6 +590,7 @@ class RequestPrice {
   status!: string
   empId!: string
   grade!: string
+  price!: number;
   varietyNameEnglish!: string
   cropNameEnglish!: string
   createdAt!: string

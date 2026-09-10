@@ -19,7 +19,7 @@
                         class="block text-sm font-semibold text-[#534E4E] dark:text-textDark">Variety
                         Name :</label>
                     <input id="varietyNameEnglish" [value]="targetObj.varietyNameEnglish" disabled
-                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
+                        class="mt-1 h-11 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
                 </div>
 
                 <div>
@@ -27,7 +27,7 @@
                         Amount
                         You Can Pass (kg) :</label>
                     <input id="todo" [value]="targetObj.todo" disabled
-                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
+                        class="mt-1 h-11 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
                 </div>
             </div>
 
@@ -43,7 +43,8 @@
                         searchPlaceholder="Search Officers..." [(ngModel)]="selectedOfficerId" name="selectedOfficer"
                         (selectionChange)="onOfficerSelectionChange($event)" [clearable]="true" [showSelected]="true"
                         [disabled]="false" class="block w-full mb-4"
-                        borderClass="border-gray-300 border-[1px]"></app-searchable-dropdown>
+                        borderClass="border-gray-300 border-[1px]">
+                    </app-searchable-dropdown>
 
 
                 </div>
@@ -56,7 +57,7 @@
                     <input #passAmountRef="ngModel" id="passAmount" name="passAmount" type="number"
                         [(ngModel)]="passAmount" min="0.001" step="any" (keydown)="preventZeroAndNegative($event)"
                         (input)="validatePassAmount()" (blur)="onBlurPassAmount()"
-                        class="mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
+                        class="mt-1 h-11 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
 
                     <div *ngIf="passAmountRef.invalid && passAmountRef.touched" class="text-red-500 text-sm mt-1">
                         <span *ngIf="passAmountRef.errors?.['required']">

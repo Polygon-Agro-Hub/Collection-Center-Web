@@ -71,6 +71,9 @@ export class DcmPositioningComponent implements OnInit, AfterViewChecked {
   centerName!: string;
   centerId!: number;
 
+  currentRow!: PackingLineRow;
+  positionToDelete!: Positions;
+
   rows: PackingLineRow[] = [];
   positions: Positions[] = [];
   productsArr: Products[] = [];
@@ -100,6 +103,8 @@ export class DcmPositioningComponent implements OnInit, AfterViewChecked {
 
   // ===== Validation display state: only show messages after a user-triggered change or a save attempt =====
   attemptedSave: boolean = false;
+
+  showDeletePositionModal: boolean = false;
 
   constructor(
     private router: Router,
@@ -254,6 +259,11 @@ export class DcmPositioningComponent implements OnInit, AfterViewChecked {
     this.closeModal();
   }
 
+  // ===== Delete position (placeholder - behavior to be defined) =====
+  onDeletePosition(slot: Positions): void {
+    // TODO: wire up position delete behavior (e.g. DistributionSrv.deleteDCHCenterPos).
+  }
+
   // ===== Remove item flow =====
   requestRemoveItem(slot: Positions, item: PositionsCrops, index: number): void {
     this.pendingRemoval = { slot, item, index };
@@ -385,6 +395,45 @@ export class DcmPositioningComponent implements OnInit, AfterViewChecked {
       error: () => {
         this.isLoading = false;
         this.toastSrv.error('Failed to save positions. Please try again.');
+      }
+    });
+  }
+
+  openDeletePositionModal(pos: Positions): void {
+    this.positionToDelete = pos;
+    console.log('positionToDelete', this.positionToDelete)
+    this.showDeletePositionModal = true;
+  }
+
+  cancelDeletePosition(): void {
+    this.showDeletePositionModal = false;
+  }
+
+  confirmDeletePosition(): void {
+    this.isLoading = true;
+
+    this.DistributionSrv.deleteDCHCenterPos(
+      this.positionToDelete.id,
+      this.positionToDelete.rowId,
+      this.positionToDelete.pIndex!
+    ).subscribe({
+      next: (res) => {
+        this.toastSrv.success('Position deletion successful.');
+
+        this.isLoading = false;
+        this.fetchDcmPositionsForRows(this.selectedRow.id);
+        this.showDeletePositionModal = false;
+      },
+
+      error: (err) => {
+        if (err.status === 409) {
+          this.showDeletePositionModal = false;
+        } else {
+          console.error('Other error:', err);
+          this.toastSrv.error('An error occurred while deleting position.');
+        }
+        this.showDeletePositionModal = false;
+        this.isLoading = false;
       }
     });
   }

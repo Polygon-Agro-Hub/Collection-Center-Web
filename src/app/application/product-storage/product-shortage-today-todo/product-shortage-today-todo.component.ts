@@ -1,4 +1,4 @@
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, ElementRef, ViewChild, AfterViewChecked } from '@angular/core';
 import { Router } from '@angular/router';
 import { ComplaintsService } from '../../../services/Complaints-Service/complaints.service';
 import { CommonModule, DatePipe, Location } from '@angular/common';
@@ -8,6 +8,7 @@ import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loa
 import { DistributionServiceService } from '../../../services/Distribution-Service/distribution-service.service';
 import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
+import lottie from 'lottie-web';
 
 @Component({
   selector: 'app-product-shortage-today-todo',
@@ -16,7 +17,7 @@ import { ToastAlertService } from '../../../services/toast-alert/toast-alert.ser
   templateUrl: './product-shortage-today-todo.component.html',
   styleUrl: './product-shortage-today-todo.component.css'
 })
-export class ProductShortageTodayTodoComponent implements OnInit {
+export class ProductShortageTodayTodoComponent implements OnInit, AfterViewChecked {
 
   itemsArr!: ShortageProducts[];
   officersArr!: Officers[];
@@ -46,6 +47,10 @@ export class ProductShortageTodayTodoComponent implements OnInit {
   selectedOfficerId!: number | null;
 currentTime!: Date;
 afterSixPm!: boolean;
+
+  @ViewChild('shortageNoDataAnim') shortageNoDataAnim!: ElementRef;
+  private noDataAnimInstance: any = null;
+  private noDataAnimLoaded: boolean = false;
 
   constructor(
     private router: Router,
@@ -167,6 +172,36 @@ afterSixPm!: boolean;
 
   goBack() {
     this.location.back();
+  }
+
+  ngAfterViewChecked(): void {
+    if (!this.afterSixPm && !this.noDataAnimLoaded) {
+      const container = this.shortageNoDataAnim?.nativeElement;
+      if (container) {
+        this.loadShortageNoDataAnimation();
+        this.noDataAnimLoaded = true;
+      }
+    }
+  }
+
+  private loadShortageNoDataAnimation() {
+    try {
+      if (this.noDataAnimInstance) {
+        this.noDataAnimInstance.destroy();
+        this.noDataAnimInstance = null;
+      }
+      const container = this.shortageNoDataAnim?.nativeElement;
+      if (!container) return;
+      this.noDataAnimInstance = lottie.loadAnimation({
+        container,
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: 'assets/json/blue%20loading.json'
+      });
+    } catch (err) {
+      console.error('Failed to load Lottie animation', err);
+    }
   }
 
 }

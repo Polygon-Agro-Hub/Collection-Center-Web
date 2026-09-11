@@ -236,10 +236,8 @@ export class ViewDailyTargetComponent implements OnInit {
     this.TargetSrv.AssignAllDailyTarget(1, 10, this.assignSearch).subscribe(
       (res) => {
         this.assignTargetArr = res || []; // fallback if response is null or undefined
-        console.log('selectAssignStatus', this.selectAssignStatus)
         // Apply filtering
         if (this.selectAssignStatus === 'Updated') {
-                  console.log('selectAssignStatus', this.selectAssignStatus)
           this.assignTargetArr = this.assignTargetArr.filter(item =>
             item.isAssign === 1 &&
             (item.assignStatusA === 0 || item.assignStatusB === 0 || item.assignStatusC === 0)

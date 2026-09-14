@@ -128,6 +128,7 @@ export class TargetOutForDeliveryComponent implements OnInit {
     this.DistributionSrv.getOutForDeliveryOrders(status, search, type, timeSlot, row, selectDate, centerId).subscribe(
       (res) => {
         this.ordersArr = res.items
+        console.log('ordersArr', this.ordersArr)
         this.rowIndexes = res.rowIndexes;
         this.rowDropdownOptions = this.rowIndexes
         this.centerName = res.centerName;
@@ -299,7 +300,7 @@ export class TargetOutForDeliveryComponent implements OnInit {
       .replace(' ', '');
 
     this.DistributionSrv
-      .downloadOutForDeliveryTargetProgressReport(this.selectStatus, this.searchText, this.selectType, this.selectRow, this.selectTimeSlot, this.selectedDate)
+      .downloadOutForDeliveryTargetProgressReport(this.selectStatus, this.searchText, this.selectType, this.selectRow, this.selectTimeSlot, this.selectedDate, this.centerId)
       .subscribe({
         next: (blob) => {
           const url = window.URL.createObjectURL(blob);
@@ -475,7 +476,7 @@ export class PackageItem {
   image!: string;
   qty!: number;
   isPacked!: boolean;
-  packingTime!: Date;
+  packingTime!: string;
   packedByOfficer!: string;
 }
 
@@ -486,7 +487,7 @@ export class AdditionalItem {
   qty!: number;
   unit!: string;
   isPacked!: boolean;
-  packingTime!: Date;
+  packingTime!: string;
   packedByOfficer!: string;
 }
 

@@ -1,7 +1,8 @@
 <app-loading-spinner *ngIf="isLoading" />
 
 
-<div *ngIf="!isLoading" class="flex flex-row items-center gap-6 font-semibold text[#424242] mb-4 mr-5 ml-0 dark:text-white cursor-pointer">
+<div *ngIf="!isLoading"
+    class="flex flex-row items-center gap-6 font-semibold text[#424242] mb-4 mr-5 ml-0 dark:text-white cursor-pointer">
     <p class=" " (click)="navigateToCenters()">Centres</p>
     <p class="" onclick="history.back()">Centre Dashboard</p>
     <p class="">View Price List</p>
@@ -10,7 +11,7 @@
 <div *ngIf="!isLoading" class="w-full overflow-x-auto px-10 py-7 bg-tileLight shadow-lg rounded-lg dark:bg-[#363636]">
     <div class="flex flex-row items-center justify-between min-w-max">
         <div class="h-[100px]"> <!-- Set a fixed height to prevent layout shifts -->
-            <ng-container >
+            <ng-container>
                 <p class="font-semibold text-black text-base dark:text-white">
                     Centre: {{ centerName }}
                 </p>
@@ -29,42 +30,43 @@
             <p class="text-[#4A4A4A] dark:text-white">Filter By</p>
 
             <div class="relative w-40 custom-grade-dropdown-container">
-    <!-- Hidden native select -->
-    <select [(ngModel)]="selectGrade" class="hidden" (change)="filterGrade()">
-        <option value="" selected disabled>Status</option>
-        <option value="A" class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">A</option>
-        <option value="B" class="text-textLight dark:text-textDark hover:bg-gray-300">B</option>
-        <option value="C" class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">C</option>
-    </select>
+                <!-- Hidden native select -->
+                <select [(ngModel)]="selectGrade" class="hidden" (change)="filterGrade()">
+                    <option value="" selected disabled>Status</option>
+                    <option value="A" class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">A
+                    </option>
+                    <option value="B" class="text-textLight dark:text-textDark hover:bg-gray-300">B</option>
+                    <option value="C" class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300">C
+                    </option>
+                </select>
 
-    <!-- Custom dropdown trigger -->
-    <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
-        (click)="togglegradeDropdown()">
-        <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
-            <span>{{ selectGrade || 'Grade' }}</span>
-            <div class="flex items-center">
-                <i *ngIf="selectGrade" (click)="cancelGrade($event)"
-                    class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
-                <i *ngIf="isGradeDropdownOpen || !selectGrade"
-                    class="fa-solid text-lg text-[#828282] transition-transform duration-200"
-                    [class.fa-angle-down]="!isGradeDropdownOpen"
-                    [class.fa-angle-up]="isGradeDropdownOpen"></i>
+                <!-- Custom dropdown trigger -->
+                <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
+                    (click)="togglegradeDropdown()">
+                    <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
+                        <span>{{ selectGrade || 'Grade' }}</span>
+                        <div class="flex items-center">
+                            <i *ngIf="selectGrade" (click)="cancelGrade($event)"
+                                class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
+                            <i *ngIf="isGradeDropdownOpen || !selectGrade"
+                                class="fa-solid text-lg text-[#828282] transition-transform duration-200"
+                                [class.fa-angle-down]="!isGradeDropdownOpen"
+                                [class.fa-angle-up]="isGradeDropdownOpen"></i>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Custom dropdown options -->
+                <div *ngIf="isGradeDropdownOpen"
+                    class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282] overflow-hidden">
+                    <div *ngFor="let option of gradeDropdownOptions; let first = first; let last = last"
+                        (click)="selectGradeOption(option)"
+                        class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center"
+                        [class.rounded-t-xl]="first" [class.rounded-b-xl]="last">
+                        <span class="flex-grow">{{ option }}</span>
+                    </div>
+                </div>
             </div>
-        </div>
-    </div>
-
-    <!-- Custom dropdown options -->
-    <div *ngIf="isGradeDropdownOpen"
-        class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282] overflow-hidden">
-        <div *ngFor="let option of gradeDropdownOptions; let first = first; let last = last"
-            (click)="selectGradeOption(option)"
-            class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center"
-            [class.rounded-t-xl]="first"
-            [class.rounded-b-xl]="last">
-            <span class="flex-grow">{{ option }}</span>
-        </div>
-    </div>
-</div>
 
 
             <div class="flex items-center rounded-full mr-5 px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
@@ -101,22 +103,30 @@
 
     <div *ngIf="!hasData && !isMarketPricerExists"
         class="flex flex-col items-center w-full h-screen px-10 py-7 bg-tileLight dark:bg-[#363636] dark:text-textDark mt-6">
-        <p class="text-[#494949] mt-6 dark:text-textDark">Currently, the market price for this centre has not been uploaded.</p>
-            <p class="text-[#494949] mt-1 mb-6 dark:text-textDark">Please wait!!</p>
+        <p class="text-[#494949] mt-6 dark:text-textDark">Currently, the market price for this centre has not been
+            uploaded.</p>
+        <p class="text-[#494949] mt-1 mb-6 dark:text-textDark">Please wait!!</p>
         <div #lottieContainer class="w-20 h-20"></div>
     </div>
 
 
-    <div *ngIf="hasData" class=" min-w-max overflow-hidden mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+    <div *ngIf="hasData"
+        class=" min-w-max overflow-hidden mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
         <table class="w-full min-w-max divide-y-2 overflow-hidden">
             <thead class=" text-[#000000] text-base dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
                 <tr>
                     <th class="px-6 py-3 text-left text-[#000000] dark:text-[#C5C5C5] text-base font-medium">No</th>
-                    <th class="px-6 py-3 text-left text-[#000000] dark:text-[#C5C5C5] text-base font-medium">Crop Name</th>
-                    <th class="px-6 py-3 text-left text-[#000000] dark:text-[#C5C5C5] text-base font-medium">Variety Name</th>
-                    <th class="px-8 py-3  text-center text-[#000000] dark:text-[#C5C5C5] text-base font-medium">Grade</th>
-                    <th class="px-6 w-44 py-3  text-left text-[#000000] dark:text-[#C5C5C5] text-base font-medium whitespace-nowrap">Average Price (Rs.)</th>
-                    <th class="px-6 py-3  text-center text-[#000000] dark:text-[#C5C5C5] text-base font-medium">Price (Rs.)</th>
+                    <th class="px-6 py-3 text-left text-[#000000] dark:text-[#C5C5C5] text-base font-medium">Crop Name
+                    </th>
+                    <th class="px-6 py-3 text-left text-[#000000] dark:text-[#C5C5C5] text-base font-medium">Variety
+                        Name</th>
+                    <th class="px-8 py-3  text-center text-[#000000] dark:text-[#C5C5C5] text-base font-medium">Grade
+                    </th>
+                    <th
+                        class="px-6 w-44 py-3  text-left text-[#000000] dark:text-[#C5C5C5] text-base font-medium whitespace-nowrap">
+                        Average Price (Rs.)</th>
+                    <th class="px-6 py-3  text-center text-[#000000] dark:text-[#C5C5C5] text-base font-medium">Price
+                        (Rs.)</th>
 
                 </tr>
             </thead>
@@ -125,17 +135,17 @@
                     *ngFor="let item of priceListArr | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index">
                     <td class="px-6 py-3 text-[#000000] text-base dark:text-[#C5C5C5]">
                         {{
-                          ((page - 1) * itemsPerPage + i + 1) < 10
-                            ? '0' + ((page - 1) * itemsPerPage + i + 1)
-                            : ((page - 1) * itemsPerPage + i + 1)
-                        }}
-                    </td>
+                        ((page - 1) * itemsPerPage + i + 1) < 10 ? '0' + ((page - 1) * itemsPerPage + i + 1) : ((page -
+                            1) * itemsPerPage + i + 1) }} </td>
                     <td class="px-6 py-3 text-[#000000] text-base dark:text-[#C5C5C5]">{{ item.cropNameEnglish }}</td>
-                    <td class="px-6 py-3 text-[#000000] text-base dark:text-[#C5C5C5]">{{ item.varietyNameEnglish }}</td>
+                    <td class="px-6 py-3 text-[#000000] text-base dark:text-[#C5C5C5]">{{ item.varietyNameEnglish }}
+                    </td>
                     <td class="px-8 py-3 text-center text-[#000000] text-base dark:text-[#C5C5C5]">{{ item.grade }}</td>
-                    <td class="pl-6 w-44 py-3 text-[#000000] text-base dark:text-[#C5C5C5]">{{ item.averagePrice | number:
+                    <td class="pl-6 w-44 py-3 text-[#000000] text-base dark:text-[#C5C5C5]">{{ item.averagePrice |
+                        number:
                         '1.2-2' }}</td>
-                    <td class="px-6 py-3 text-center text-[#000000] text-base dark:text-[#C5C5C5]">{{ item.updatedPrice | number:
+                    <td class="px-6 py-3 text-center text-[#000000] text-base dark:text-[#C5C5C5]">{{ item.updatedPrice
+                        | number:
                         '1.2-2' }}</td>
 
                 </tr>

@@ -65,7 +65,7 @@ export class CchCenterPriceListComponent implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    
+
     this.requestId = Number(this.route.snapshot.paramMap.get('requestId'));
     this.userId = Number(this.route.snapshot.paramMap.get('officerId'));
     this.fetchAllPriceList();
@@ -178,40 +178,40 @@ export class CchCenterPriceListComponent implements OnInit {
 
   // Modified saveRow method to reset the editing state
   saveRow(id: number, crop: string, variety: string, grade: string) {
-  if (this.editValue != null) {
-    this.isLoading = true; // Show loading while saving
-    this.PriceListSrv.updatePrice(id, this.editValue).subscribe(
-      (res) => {
-        if (res.status) {
-          this.isLoading = false;
-          
-          // Format numbers with 2 decimal places
-          const formattedOriginal = Number(this.originalValue).toFixed(2);
-          const formattedEdit = Number(this.editValue).toFixed(2);
-          
-          this.toastSrv.success(
-            `Successfully changed price of <b style="color:black;">${crop} - ${grade} - Grade ${variety}</b><br>
+    if (this.editValue != null) {
+      this.isLoading = true; // Show loading while saving
+      this.PriceListSrv.updatePrice(id, this.editValue).subscribe(
+        (res) => {
+          if (res.status) {
+            this.isLoading = false;
+
+            // Format numbers with 2 decimal places
+            const formattedOriginal = Number(this.originalValue).toFixed(2);
+            const formattedEdit = Number(this.editValue).toFixed(2);
+
+            this.toastSrv.success(
+              `Successfully changed price of <b style="color:black;">${crop} - ${grade} - Grade ${variety}</b><br>
              from <b style="color:black;">Rs.${formattedOriginal}</b> to 
              <b style="color:black;">Rs.${formattedEdit}</b>`,
-            { enableHtml: true }
-          );
-        } else {
+              { enableHtml: true }
+            );
+          } else {
+            this.isLoading = false;
+            this.toastSrv.error('Failed to assign the target!');
+          }
+          this.editingIndex = null; // Reset editing state after successful save
+          this.fetchAllPriceList(this.userId, this.page, this.itemsPerPage);
+        },
+        (error) => {
+          console.error('Error updating price:', error);
+          Swal.fire('Error', 'Failed to update price', 'error');
           this.isLoading = false;
-          this.toastSrv.error('Failed to assign the target!');
         }
-        this.editingIndex = null; // Reset editing state after successful save
-        this.fetchAllPriceList(this.userId, this.page, this.itemsPerPage);
-      },
-      (error) => {
-        console.error('Error updating price:', error);
-        Swal.fire('Error', 'Failed to update price', 'error');
-        this.isLoading = false;
-      }
-    );
-  } else {
-    this.editingIndex = null;
+      );
+    } else {
+      this.editingIndex = null;
+    }
   }
-}
 
   cancelEdit() {
     this.editingIndex = null;
@@ -234,13 +234,13 @@ export class CchCenterPriceListComponent implements OnInit {
   RejectStatus() {
     this.isLoading = true;
     this.PriceListSrv.rejectStatus(this.priceRequestObj.id).subscribe(
-      
+
       (res) => {
         if (res.status) {
           this.toastSrv.success(
             'The request Rejected successfully.'
           );
-          
+
           this.isChangeStatusViewOpen = false;
           this.fetchPriceRequest();
           this.fetchAllPriceList(this.userId, this.page, this.itemsPerPage, this.selectGrade, this.searchText);
@@ -249,7 +249,7 @@ export class CchCenterPriceListComponent implements OnInit {
           this.toastSrv.success(
             'Something went wrong while Rejecting the request. Please try again.'
           );
-          
+
           this.isChangeStatusViewOpen = false;
         }
       }
@@ -259,13 +259,13 @@ export class CchCenterPriceListComponent implements OnInit {
   ApproveStatus() {
     this.isLoading = true;
     this.PriceListSrv.changeStatus(this.priceRequestObj.id, this.priceRequestObj.requestPrice, this.priceRequestObj.centerId).subscribe(
-      
+
       (res) => {
         if (res.status) {
           this.toastSrv.success(
             'The request Approved successfully.'
           );
-          
+
           this.isChangeStatusViewOpen = false;
           this.fetchPriceRequest();
           this.fetchAllPriceList(this.userId, this.page, this.itemsPerPage, this.selectGrade, this.searchText);
@@ -274,7 +274,7 @@ export class CchCenterPriceListComponent implements OnInit {
           this.toastSrv.success(
             'Something went wrong while Approving the request. Please try again.'
           );
-          
+
           this.isChangeStatusViewOpen = false;
         }
       }

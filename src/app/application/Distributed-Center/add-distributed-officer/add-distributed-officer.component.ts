@@ -912,13 +912,19 @@ export class AddDistributedOfficerComponent implements OnInit {
       missingFields.push('Account Holder’s Name is required');
     }
 
+    if (!this.personalData.accNumber) {
+      missingFields.push('Account Number is required');
+    }
+
     if (this.personalData.accNumber && !/^[0-9]+$/.test(this.personalData.accNumber)) {
   missingFields.push('Account Number should only contain numbers');
 }
 
-if (this.personalData.conformAccNumber && !/^[0-9]+$/.test(this.personalData.conformAccNumber)) {
-  missingFields.push('Confirm Account Number should only contain numbers');
-}
+    if (!this.personalData.conformAccNumber) {
+      missingFields.push('Confirm Account Number is required');
+    } else if (this.personalData.accNumber !== this.personalData.conformAccNumber) {
+      missingFields.push('Confirm Account Number - Must match Account Number');
+    }
 
     if (!this.selectedBankId) {
       missingFields.push('Bank Name is required');

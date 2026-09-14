@@ -20,7 +20,7 @@ import { DistributionServiceService } from '../../../../services/Distribution-Se
   templateUrl: './edit-distribution-center.component.html',
   styleUrl: './edit-distribution-center.component.css'
 })
-export class EditDistributionCenterComponent implements OnInit{
+export class EditDistributionCenterComponent implements OnInit {
 
   centerData: CenterData = new CenterData();
 
@@ -30,50 +30,50 @@ export class EditDistributionCenterComponent implements OnInit{
 
   allowedPrefixes = ['70', '71', '72', '75', '76', '77', '78'];
   isPhoneInvalidMap: { [key: string]: boolean } = {
-  phone01: false,
-  phone02: false,
-};
+    phone01: false,
+    phone02: false,
+  };
 
-provinces: string[] = [
-  'Western',
-  'Central',
-  'Southern',
-  'Northern',
-  'Eastern',
-  'North Western',
-  'North Central',
-  'Uva',
-  'Sabaragamuwa'
-];
+  provinces: string[] = [
+    'Western',
+    'Central',
+    'Southern',
+    'Northern',
+    'Eastern',
+    'North Western',
+    'North Central',
+    'Uva',
+    'Sabaragamuwa'
+  ];
 
-// Define all districts with their provinces
-allDistricts = [
-  { name: 'Ampara', province: 'Eastern' },
-  { name: 'Anuradhapura', province: 'North Central' },
-  { name: 'Badulla', province: 'Uva' },
-  { name: 'Batticaloa', province: 'Eastern' },
-  { name: 'Colombo', province: 'Western' },
-  { name: 'Galle', province: 'Southern' },
-  { name: 'Gampaha', province: 'Western' },
-  { name: 'Hambantota', province: 'Southern' },
-  { name: 'Jaffna', province: 'Northern' },
-  { name: 'Kalutara', province: 'Western' },
-  { name: 'Kandy', province: 'Central' },
-  { name: 'Kegalle', province: 'Sabaragamuwa' },
-  { name: 'Kilinochchi', province: 'Northern' },
-  { name: 'Kurunegala', province: 'North Western' },
-  { name: 'Mannar', province: 'Northern' },
-  { name: 'Matale', province: 'Central' },
-  { name: 'Matara', province: 'Southern' },
-  { name: 'Monaragala', province: 'Uva' },
-  { name: 'Mullaitivu', province: 'Northern' },
-  { name: 'Nuwara Eliya', province: 'Central' },
-  { name: 'Polonnaruwa', province: 'North Central' },
-  { name: 'Puttalam', province: 'North Western' },
-  { name: 'Rathnapura', province: 'Sabaragamuwa' },
-  { name: 'Trincomalee', province: 'Eastern' },
-  { name: 'Vavuniya', province: 'Northern' },
-];
+  // Define all districts with their provinces
+  allDistricts = [
+    { name: 'Ampara', province: 'Eastern' },
+    { name: 'Anuradhapura', province: 'North Central' },
+    { name: 'Badulla', province: 'Uva' },
+    { name: 'Batticaloa', province: 'Eastern' },
+    { name: 'Colombo', province: 'Western' },
+    { name: 'Galle', province: 'Southern' },
+    { name: 'Gampaha', province: 'Western' },
+    { name: 'Hambantota', province: 'Southern' },
+    { name: 'Jaffna', province: 'Northern' },
+    { name: 'Kalutara', province: 'Western' },
+    { name: 'Kandy', province: 'Central' },
+    { name: 'Kegalle', province: 'Sabaragamuwa' },
+    { name: 'Kilinochchi', province: 'Northern' },
+    { name: 'Kurunegala', province: 'North Western' },
+    { name: 'Mannar', province: 'Northern' },
+    { name: 'Matale', province: 'Central' },
+    { name: 'Matara', province: 'Southern' },
+    { name: 'Monaragala', province: 'Uva' },
+    { name: 'Mullaitivu', province: 'Northern' },
+    { name: 'Nuwara Eliya', province: 'Central' },
+    { name: 'Polonnaruwa', province: 'North Central' },
+    { name: 'Puttalam', province: 'North Western' },
+    { name: 'Rathnapura', province: 'Sabaragamuwa' },
+    { name: 'Trincomalee', province: 'Eastern' },
+    { name: 'Vavuniya', province: 'Northern' },
+  ];
 
   countries: Country[] = COUNTRIES;
   selectedCountry1: Country | null = null;
@@ -104,39 +104,39 @@ allDistricts = [
 
   get provinceItems() {
     return this.provinces.map(province => ({
-        value: province,
-        label: province
+      value: province,
+      label: province
     }));
-}
+  }
 
-get districtItems() {
-    const districts = this.centerData.province 
-        ? this.allDistricts.filter(d => d.province === this.centerData.province)
-        : this.allDistricts;
-    
+  get districtItems() {
+    const districts = this.centerData.province
+      ? this.allDistricts.filter(d => d.province === this.centerData.province)
+      : this.allDistricts;
+
     return districts.map(district => ({
-        value: district.name,
-        label: district.name
+      value: district.name,
+      label: district.name
     }));
-}
+  }
 
 
-selectCountry1(country: Country) {
-  this.selectedCountry1 = country;
-  this.centerData.phoneNumber01Code = country.dialCode; 
-  this.dropdownOpen = false;
-}
+  selectCountry1(country: Country) {
+    this.selectedCountry1 = country;
+    this.centerData.phoneNumber01Code = country.dialCode;
+    this.dropdownOpen = false;
+  }
 
-selectCountry2(country: Country) {
-  this.selectedCountry2 = country;
-  this.centerData.phoneNumber02Code = country.dialCode; 
-  this.dropdownOpen2 = false;
-}
+  selectCountry2(country: Country) {
+    this.selectedCountry2 = country;
+    this.centerData.phoneNumber02Code = country.dialCode;
+    this.dropdownOpen2 = false;
+  }
 
-// get flag
-getFlagUrl(code: string): string {
-  return `https://flagcdn.com/24x18/${code}.png`;
-}
+  // get flag
+  getFlagUrl(code: string): string {
+    return `https://flagcdn.com/24x18/${code}.png`;
+  }
 
   fetchCentreData(centreId: number) {
     this.isLoading = true;
@@ -147,64 +147,64 @@ getFlagUrl(code: string): string {
         this.isLoading = false;
       }
     );
-    
+
   }
   onProvinceChange(selectedProvince: string | null): void {
     this.centerData.province = selectedProvince || '';
     if (!selectedProvince) {
-        this.centerData.province = '';
+      this.centerData.province = '';
     } else {
-        // Check if current district is still valid for the selected province
-        const isDistrictValid = this.allDistricts.some(d => 
-            d.name === this.centerData.district && d.province === selectedProvince
-        );
-        if (!isDistrictValid) {
-            this.centerData.district = '';
-        }
+      // Check if current district is still valid for the selected province
+      const isDistrictValid = this.allDistricts.some(d =>
+        d.name === this.centerData.district && d.province === selectedProvince
+      );
+      if (!isDistrictValid) {
+        this.centerData.district = '';
+      }
     }
     this.updateRegCode();
   }
 
-// Handle district selection change
-onDistrictChange(selectedDistrict: string | null): void {
+  // Handle district selection change
+  onDistrictChange(selectedDistrict: string | null): void {
     this.centerData.district = selectedDistrict || '';
 
     if (selectedDistrict) {
-        const district = this.allDistricts.find(d => d.name === selectedDistrict);
-        if (district && district.province !== this.centerData.province) {
-            this.centerData.province = district.province;
-        }
+      const district = this.allDistricts.find(d => d.name === selectedDistrict);
+      if (district && district.province !== this.centerData.province) {
+        this.centerData.province = district.province;
+      }
     }
 
     this.updateRegCode();
-}
+  }
 
   validateSriLankanPhone(input: string, key: string): void {
     if (!input) {
       this.isPhoneInvalidMap[key] = false;
       return;
     }
-  
+
     const firstDigit = input.charAt(0);
     const prefix = input.substring(0, 2);
     const isValidPrefix = this.allowedPrefixes.includes(prefix);
     const isValidLength = input.length === 9;
-  
+
     if (firstDigit !== '7') {
       this.isPhoneInvalidMap[key] = true;
       return;
     }
-  
+
     if (!isValidPrefix && input.length >= 2) {
       this.isPhoneInvalidMap[key] = true;
       return;
     }
-  
+
     if (input.length === 9 && isValidPrefix) {
       this.isPhoneInvalidMap[key] = false;
       return;
     }
-  
+
     this.isPhoneInvalidMap[key] = false;
   }
 
@@ -215,15 +215,15 @@ onDistrictChange(selectedDistrict: string | null): void {
     if (!this.centerData.centerName) {
       missingFields.push('Centre Name is required');
     }
-  
+
     if (!this.centerData.country) {
       missingFields.push('Country is required');
     }
-  
+
     if (!this.centerData.province) {
       missingFields.push('Province is required');
     }
-  
+
     if (!this.centerData.district) {
       missingFields.push('District is required');
     }
@@ -235,11 +235,11 @@ onDistrictChange(selectedDistrict: string | null): void {
     if (!this.centerData.longitude) {
       missingFields.push('Longitude is required');
     }
-  
+
     if (!this.centerData.city) {
       missingFields.push('City is required');
     }
-  
+
     if (!this.centerData.regCode) {
       missingFields.push('Reg code is required');
     }
@@ -255,7 +255,7 @@ onDistrictChange(selectedDistrict: string | null): void {
     } else if (!/^[0-9]{9}$/.test(this.centerData.phoneNumber01) || this.isPhoneInvalidMap['phone01']) {
       missingFields.push('Contact Number - 01 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
     }
-  
+
     if (this.centerData.phoneNumber02) {
       if (!/^[0-9]{9}$/.test(this.centerData.phoneNumber02) || this.isPhoneInvalidMap['phone02']) {
         missingFields.push('Contact Number - 02 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
@@ -271,7 +271,7 @@ onDistrictChange(selectedDistrict: string | null): void {
         errorMessage += `<li>${field}</li>`;
       });
       errorMessage += '</ul></div>';
-  
+
       Swal.fire({
         icon: 'error',
         title: 'Missing or Invalid Information',
@@ -285,7 +285,7 @@ onDistrictChange(selectedDistrict: string | null): void {
       });
       return;
     }
-     this.onSubmit();
+    this.onSubmit();
   }
 
   onSubmit() {
@@ -348,20 +348,20 @@ onDistrictChange(selectedDistrict: string | null): void {
   }
 
   trimAndCapitalize(event: Event, field: keyof CenterData) {
-  const input = event.target as HTMLInputElement;
+    const input = event.target as HTMLInputElement;
 
-  // Remove leading spaces
-  let value = input.value.replace(/^\s+/, '');
+    // Remove leading spaces
+    let value = input.value.replace(/^\s+/, '');
 
-  // Capitalize first letter
-  if (value.length > 0) {
-    value = value.charAt(0).toUpperCase() + value.slice(1);
+    // Capitalize first letter
+    if (value.length > 0) {
+      value = value.charAt(0).toUpperCase() + value.slice(1);
+    }
+
+    // Update input and model
+    input.value = value;
+    this.centerData[field] = value as never;
   }
-
-  // Update input and model
-  input.value = value;
-  this.centerData[field] = value as never;
-}
 
   onTrimInput(event: Event, modelRef: any, fieldName: string): void {
     const inputElement = event.target as HTMLInputElement;
@@ -400,39 +400,39 @@ onDistrictChange(selectedDistrict: string | null): void {
         });
     }
   }
-  
+
   onCancel() {
-      Swal.fire({
-        title: 'Are you sure?',
-        text: 'You may lose the added data after canceling!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
+    Swal.fire({
+      title: 'Are you sure?',
+      text: 'You may lose the added data after canceling!',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Yes, cancel',
-        cancelButtonText: 'No, Keep Editing',
-        customClass: {
-          popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-          title: 'dark:text-white',
-  
-          icon: '',
-          confirmButton: 'hover:bg-red-600 dark:hover:bg-red-700 focus:ring-red-500 dark:focus:ring-red-800',
-          cancelButton: 'hover:bg-blue-600 dark:hover:bg-blue-700 focus:ring-blue-500 dark:focus:ring-blue-800',
-          actions: 'gap-2'
-        }
-      }).then((result) => {
-        if (result.isConfirmed) {
-  
-          this.toastSrv.warning('Distribution Centre Edit Operation Canceled.')
-          this.location.back();
-        }
-      });
-    }
+      confirmButtonText: 'Yes, cancel',
+      cancelButtonText: 'No, Keep Editing',
+      customClass: {
+        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+        title: 'dark:text-white',
+
+        icon: '',
+        confirmButton: 'hover:bg-red-600 dark:hover:bg-red-700 focus:ring-red-500 dark:focus:ring-red-800',
+        cancelButton: 'hover:bg-blue-600 dark:hover:bg-blue-700 focus:ring-blue-500 dark:focus:ring-blue-800',
+        actions: 'gap-2'
+      }
+    }).then((result) => {
+      if (result.isConfirmed) {
+
+        this.toastSrv.warning('Distribution Centre Edit Operation Canceled.')
+        this.location.back();
+      }
+    });
+  }
 
   enforceLatitudeRange(event: Event): void {
     const input = event.target as HTMLInputElement;
     let value = parseFloat(input.value);
-  
+
     if (value > 90) {
       input.value = '90';
       this.centerData.latitude = 90;
@@ -469,7 +469,7 @@ onDistrictChange(selectedDistrict: string | null): void {
   enforceLongitudeRange(event: Event): void {
     const input = event.target as HTMLInputElement;
     let value = parseFloat(input.value);
-  
+
     if (value > 180) {
       input.value = '180';
       this.centerData.longitude = 180;

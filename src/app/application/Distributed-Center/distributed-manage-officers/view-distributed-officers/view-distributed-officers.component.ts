@@ -9,11 +9,12 @@ import { DropdownModule } from 'primeng/dropdown';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
 import { DistributedManageOfficersService } from '../../../../services/Distributed-manage-officers-service/distributed-manage-officers.service';
+import { SerchableDropdownComponent } from './../../../../components/serchable-dropdown/serchable-dropdown.component';
 
 @Component({
   selector: 'app-view-distributed-officers',
   standalone: true,
-  imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, LoadingSpinnerComponent, SerchableDropdownComponent],
   templateUrl: './view-distributed-officers.component.html',
   styleUrl: './view-distributed-officers.component.css'
 })
@@ -196,6 +197,21 @@ export class ViewDistributedOfficersComponent implements OnInit {
           );
         }
       });
+  }
+
+    get centerDropdownItems() {
+    return this.centerArr.map(center => ({
+      value: center.id.toString(),
+      label: `${center.regCode} - ${center.centerName}`,
+      disabled: false
+    }));
+  }
+
+  // 5. Update your methods
+  onCenterSelectionChange(selectedValue: string) {
+    this.selectCenters = selectedValue || '';
+    this.page = 1;
+    this.applyCompanyFilters();
   }
 
 

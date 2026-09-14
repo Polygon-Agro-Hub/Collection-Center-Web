@@ -152,7 +152,8 @@
                         <span *ngIf="item.officerId === officerId" class="text-[#415CFF] italic ">Own Complaint</span>
                         <span *ngIf="item.officerId !== officerId">{{item.empId}}</span>
                     </td>
-                    <td class="px-6 align-top py-4 text-sm text-gray-900 dark:text-gray-300 whitespace-nowrap">{{item.complainCategory}}
+                    <td class="px-6 align-top py-4 text-sm text-gray-900 dark:text-gray-300 whitespace-nowrap">
+                        {{item.complainCategory}}
                     </td>
                     <td
                         class="px-6 align-top py-4 text-sm min-w-[300px] text-gray-900 dark:text-gray-300 w-1/3 break-words whitespace-normal">
@@ -230,12 +231,12 @@
                                 disabled=""></textarea>
                         </div>
 
-                        
+
 
                     </div>
 
                     <div class="flex flex-col">
-                            <p class="mt-2">
+                        <p class="mt-2">
                             {{
                             replyObj.language === 'Sinhala' ? 'ඔබට තවත් ගැටළු හෝ ප්‍රශ්න තිබේ නම්, කරුණාකර අප හා සම්බන්ධ
                             වන්න. '

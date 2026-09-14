@@ -89,15 +89,15 @@
           'text-gray-900 dark:text-textDark': item.id !== personalData.centerId
         }">
 
-    {{ item.regCode }} - {{ item.centerName }}
+                                        {{ item.regCode }} - {{ item.centerName }}
 
-  </span>
+                                    </span>
                                     <span *ngIf="item.id === personalData.centerId" class="ml-2 text-blue-600">✓</span>
                                 </div>
                                 <div *ngIf="filteredCenterArr.length === 0"
-             class="p-2 text-gray-500 dark:text-gray-400 bg-white dark:bg-[#292929] text-sm text-center">
-            No options found
-        </div>
+                                    class="p-2 text-gray-500 dark:text-gray-400 bg-white dark:bg-[#292929] text-sm text-center">
+                                    No options found
+                                </div>
                             </div>
                         </div>
 
@@ -135,14 +135,12 @@
                             class="absolute mt-1 w-full bg-white border dark:bg-[#292929] dark:text-textDark border-gray-200 dark:border-[#828282] rounded-md shadow-lg z-10">
                             <div *ngFor="let role of jobRoles" (click)="getJobRole(role)"
                                 class="flex items-center px-4 py-2 dark:text-textDark cursor-pointer hover:bg-gray-200 dark:hover:bg-gray-700 transition">
-                                <span
-    [ngClass]="{
+                                <span [ngClass]="{
       'text-blue-600 dark:text-blue-400 font-medium': role === personalData.jobRole,
       'text-gray-900 dark:text-textDark': role !== personalData.jobRole
-    }"
-  >
-    {{ role }}
-  </span>
+    }">
+                                    {{ role }}
+                                </span>
                                 <span *ngIf="role === personalData.jobRole" class="ml-2 text-blue-600">✓</span>
                             </div>
                         </div>
@@ -197,21 +195,20 @@
                                 <div *ngFor="let item of filteredManagerArr"
                                     class="flex items-center p-2 hover:bg-gray-200 dark:hover:bg-gray-700 dark:text-textDark cursor-pointer"
                                     (click)="selectManager(item)">
-                                    <span
-    [ngClass]="{
+                                    <span [ngClass]="{
       'text-blue-600 dark:text-blue-400 font-medium': item.id === personalData.irmId,
       'text-gray-900 dark:text-textDark': item.id !== personalData.irmId
     }">
 
-    {{ item.empId }} - {{ item.firstNameEnglish }} {{ item.lastNameEnglish }}
+                                        {{ item.empId }} - {{ item.firstNameEnglish }} {{ item.lastNameEnglish }}
 
-  </span>
+                                    </span>
                                     <span *ngIf="item.id === personalData.irmId" class="ml-2 text-blue-600">✓</span>
                                 </div>
                                 <div *ngIf="filteredManagerArr.length === 0"
-                                   class="p-2 text-gray-500 dark:text-gray-400 bg-white dark:bg-[#292929] text-sm text-center">
-                                No options found
-                              </div>
+                                    class="p-2 text-gray-500 dark:text-gray-400 bg-white dark:bg-[#292929] text-sm text-center">
+                                    No options found
+                                </div>
                             </div>
                         </div>
 
@@ -534,6 +531,7 @@
                     !PageOneForm.invalid 
                     && !this.languagesRequired
                     && personalData.phoneNumber02 !== personalData.phoneNumber01 
+                    && personalData.languages !== ''
                     && personalData.jobRole 
                     && !isPhoneInvalidMap['phone01'] 
                     && ((personalData.phoneNumber02 && !isPhoneInvalidMap['phone02']) || !personalData.phoneNumber02)

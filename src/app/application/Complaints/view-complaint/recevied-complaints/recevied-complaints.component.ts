@@ -138,7 +138,7 @@ export class ReceviedComplaintsComponent implements OnInit {
   navigateViewReply(id: number) {
     this.router.navigate([`/complaints/view-recive-reply/${id}`])
   }
-  
+
 
 }
 
@@ -157,8 +157,8 @@ class Reply {
   id!: number
   reply!: string
   language!: string
-  firstNameEnglish:string = '';
-  lastNameEnglish:string = '';
+  firstNameEnglish: string = '';
+  lastNameEnglish: string = '';
 }
 
 interface TemplateData {

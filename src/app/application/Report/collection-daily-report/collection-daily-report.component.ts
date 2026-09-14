@@ -104,22 +104,22 @@ export class CollectionDailyReportComponent implements OnInit {
   }
 
   onDateChange(newDate: string | Date | null) {
-  this.dailyReportArr = [];
+    this.dailyReportArr = [];
 
-  if (!newDate) {
-    const today = new Date().toISOString().split('T')[0];
-    this.selectDate = today;
+    if (!newDate) {
+      const today = new Date().toISOString().split('T')[0];
+      this.selectDate = today;
 
-    // ✅ Also reset the datepicker UI to show today's date
-    if (this.datePicker) {
-      this.datePicker.selectedDate = today;
+      // ✅ Also reset the datepicker UI to show today's date
+      if (this.datePicker) {
+        this.datePicker.selectedDate = today;
+      }
+    } else {
+      this.selectDate = newDate;
     }
-  } else {
-    this.selectDate = newDate;
-  }
 
-  this.fetchDailyReport();
-}
+    this.fetchDailyReport();
+  }
 
   updateChart() {
     this.isLoading = true;
@@ -158,15 +158,15 @@ export class CollectionDailyReportComponent implements OnInit {
         reversed: true,
       },
       axisY: {
-    title: "kg",
-    titleFontColor: textColor,
-    labelFontColor: textColor,
-    lineColor: gridColor,
-    tickColor: gridColor,
-    gridColor: gridColor,
-    includeZero: true,
-    margin: 15,   // <-- adds space between axisY and the data/legend area
-},
+        title: "kg",
+        titleFontColor: textColor,
+        labelFontColor: textColor,
+        lineColor: gridColor,
+        tickColor: gridColor,
+        gridColor: gridColor,
+        includeZero: true,
+        margin: 15,   // <-- adds space between axisY and the data/legend area
+      },
       legend: {
         cursor: 'pointer',
         fontColor: textColor,
@@ -245,114 +245,114 @@ export class CollectionDailyReportComponent implements OnInit {
     this.toastSrv.success('File Downloaded Successfully');
   }
 
-private drawBarChart(doc: jsPDF, x: number, y: number, width: number): number {
-  const items = this.dailyReportArr;
-  if (items.length === 0) return y;
+  private drawBarChart(doc: jsPDF, x: number, y: number, width: number): number {
+    const items = this.dailyReportArr;
+    if (items.length === 0) return y;
 
-  const labelColW = 44;
-  const valueColW = 22;
-  const barAreaX = x + labelColW;
-  const barAreaW = width - labelColW - valueColW;
-  const barH = 9;
-  const rowH = barH + 5;
+    const labelColW = 44;
+    const valueColW = 22;
+    const barAreaX = x + labelColW;
+    const barAreaW = width - labelColW - valueColW;
+    const barH = 9;
+    const rowH = barH + 5;
 
-  const maxTotal = Math.max(...items.map(i => i.gradeA + i.gradeB + i.gradeC), 1);
-  const scaledMax = maxTotal * 1.1;
+    const maxTotal = Math.max(...items.map(i => i.gradeA + i.gradeB + i.gradeC), 1);
+    const scaledMax = maxTotal * 1.1;
 
-  const dataStartY = y + 2;
-  const gridSteps = 5;
-  const gridBottom = dataStartY + items.length * rowH;
+    const dataStartY = y + 2;
+    const gridSteps = 5;
+    const gridBottom = dataStartY + items.length * rowH;
 
-  // ── Y-axis main label (rotated 90°, centered vertically over chart rows) ──
-  const chartCenterY = dataStartY + (items.length * rowH) / 2;
-  doc.setFontSize(8);
-  doc.setTextColor(80, 80, 80);
-  doc.text('Variety Name', x + 4, chartCenterY, {
-    angle: 90,
-    align: 'center',
-  });
-
-  // Grid lines
-  doc.setLineWidth(0.1);
-  doc.setDrawColor(200, 200, 200);
-  for (let i = 1; i <= gridSteps; i++) {
-    const gx = barAreaX + (i / gridSteps) * barAreaW;
-    doc.line(gx, dataStartY, gx, gridBottom);
-  }
-
-  // Bars
-  items.forEach((item, idx) => {
-    const by = dataStartY + idx * rowH;
-
+    // ── Y-axis main label (rotated 90°, centered vertically over chart rows) ──
+    const chartCenterY = dataStartY + (items.length * rowH) / 2;
     doc.setFontSize(8);
-    doc.setTextColor(50, 50, 50);
-    const label = item.varietyNameEnglish.length > 17
-      ? item.varietyNameEnglish.substring(0, 15) + '..'
-      : item.varietyNameEnglish;
-    doc.text(label, barAreaX - 2, by + barH / 2 + 2.5, { align: 'right' });
-
-    const aW = (item.gradeA / scaledMax) * barAreaW;
-    if (aW > 0) {
-      doc.setFillColor(43, 136, 217);
-      doc.rect(barAreaX, by, aW, barH, 'F');
-    }
-
-    const bW = (item.gradeB / scaledMax) * barAreaW;
-    if (bW > 0) {
-      doc.setFillColor(121, 186, 242);
-      doc.rect(barAreaX + aW, by, bW, barH, 'F');
-    }
-
-    const cW = (item.gradeC / scaledMax) * barAreaW;
-    if (cW > 0) {
-      doc.setFillColor(167, 213, 242);
-      doc.rect(barAreaX + aW + bW, by, cW, barH, 'F');
-    }
-
-    doc.setFontSize(7);
     doc.setTextColor(80, 80, 80);
-    doc.text(`${item.total.toFixed(1)}kg`, barAreaX + aW + bW + cW + 2, by + barH / 2 + 2);
-  });
+    doc.text('Variety Name', x + 4, chartCenterY, {
+      angle: 90,
+      align: 'center',
+    });
 
-  // Axes
-  doc.setDrawColor(100, 100, 100);
-  doc.setLineWidth(0.4);
-  doc.line(barAreaX, dataStartY, barAreaX, gridBottom);
-  doc.line(barAreaX, gridBottom, barAreaX + barAreaW, gridBottom);
+    // Grid lines
+    doc.setLineWidth(0.1);
+    doc.setDrawColor(200, 200, 200);
+    for (let i = 1; i <= gridSteps; i++) {
+      const gx = barAreaX + (i / gridSteps) * barAreaW;
+      doc.line(gx, dataStartY, gx, gridBottom);
+    }
 
-  // X-axis tick labels
-  doc.setFontSize(7);
-  doc.setTextColor(100, 100, 100);
-  for (let i = 0; i <= gridSteps; i++) {
-    const val = (scaledMax * i) / gridSteps;
-    const gx = barAreaX + (i / gridSteps) * barAreaW;
-    doc.text(`${val.toFixed(0)}`, gx, gridBottom + 5, { align: 'center' });
-  }
+    // Bars
+    items.forEach((item, idx) => {
+      const by = dataStartY + idx * rowH;
 
-  doc.setFontSize(8);
-  doc.setTextColor(80, 80, 80);
-  doc.text('Weight (kg)', barAreaX + barAreaW / 2, gridBottom + 11, { align: 'center' });
+      doc.setFontSize(8);
+      doc.setTextColor(50, 50, 50);
+      const label = item.varietyNameEnglish.length > 17
+        ? item.varietyNameEnglish.substring(0, 15) + '..'
+        : item.varietyNameEnglish;
+      doc.text(label, barAreaX - 2, by + barH / 2 + 2.5, { align: 'right' });
 
-  // Legend
-  const legendY = gridBottom + 20;
-  const legendSpacing = 45;
-  const legendEntries = [
-    { label: 'Grade A', r: 43, g: 136, b: 217 },
-    { label: 'Grade B', r: 121, g: 186, b: 242 },
-    { label: 'Grade C', r: 167, g: 213, b: 242 },
-  ];
-  let lx = x + (width - legendEntries.length * legendSpacing) / 2;
-  legendEntries.forEach(entry => {
-    doc.setFillColor(entry.r, entry.g, entry.b);
-    doc.rect(lx, legendY - 4, 7, 5, 'F');
+      const aW = (item.gradeA / scaledMax) * barAreaW;
+      if (aW > 0) {
+        doc.setFillColor(43, 136, 217);
+        doc.rect(barAreaX, by, aW, barH, 'F');
+      }
+
+      const bW = (item.gradeB / scaledMax) * barAreaW;
+      if (bW > 0) {
+        doc.setFillColor(121, 186, 242);
+        doc.rect(barAreaX + aW, by, bW, barH, 'F');
+      }
+
+      const cW = (item.gradeC / scaledMax) * barAreaW;
+      if (cW > 0) {
+        doc.setFillColor(167, 213, 242);
+        doc.rect(barAreaX + aW + bW, by, cW, barH, 'F');
+      }
+
+      doc.setFontSize(7);
+      doc.setTextColor(80, 80, 80);
+      doc.text(`${item.total.toFixed(1)}kg`, barAreaX + aW + bW + cW + 2, by + barH / 2 + 2);
+    });
+
+    // Axes
+    doc.setDrawColor(100, 100, 100);
+    doc.setLineWidth(0.4);
+    doc.line(barAreaX, dataStartY, barAreaX, gridBottom);
+    doc.line(barAreaX, gridBottom, barAreaX + barAreaW, gridBottom);
+
+    // X-axis tick labels
+    doc.setFontSize(7);
+    doc.setTextColor(100, 100, 100);
+    for (let i = 0; i <= gridSteps; i++) {
+      const val = (scaledMax * i) / gridSteps;
+      const gx = barAreaX + (i / gridSteps) * barAreaW;
+      doc.text(`${val.toFixed(0)}`, gx, gridBottom + 5, { align: 'center' });
+    }
+
     doc.setFontSize(8);
-    doc.setTextColor(50, 50, 50);
-    doc.text(entry.label, lx + 9, legendY);
-    lx += legendSpacing;
-  });
+    doc.setTextColor(80, 80, 80);
+    doc.text('Weight (kg)', barAreaX + barAreaW / 2, gridBottom + 11, { align: 'center' });
 
-  return legendY + 8;
-}
+    // Legend
+    const legendY = gridBottom + 20;
+    const legendSpacing = 45;
+    const legendEntries = [
+      { label: 'Grade A', r: 43, g: 136, b: 217 },
+      { label: 'Grade B', r: 121, g: 186, b: 242 },
+      { label: 'Grade C', r: 167, g: 213, b: 242 },
+    ];
+    let lx = x + (width - legendEntries.length * legendSpacing) / 2;
+    legendEntries.forEach(entry => {
+      doc.setFillColor(entry.r, entry.g, entry.b);
+      doc.rect(lx, legendY - 4, 7, 5, 'F');
+      doc.setFontSize(8);
+      doc.setTextColor(50, 50, 50);
+      doc.text(entry.label, lx + 9, legendY);
+      lx += legendSpacing;
+    });
+
+    return legendY + 8;
+  }
 
   // Helper method to add table to PDF
   private addTableToPdf(doc: jsPDF, startY: number) {
@@ -400,21 +400,21 @@ private drawBarChart(doc: jsPDF, x: number, y: number, width: number): number {
     setTimeout(() => {
       const doc = new jsPDF('p', 'mm', 'a4');
       const pageWidth = doc.internal.pageSize.getWidth();
-  
+
       const colors = {
         gradeA: '#FF9263',
         gradeB: '#5F75E9',
         gradeC: '#3DE188',
       };
-  
+
       // ── Header ────────────────────────────────────────────────────
       doc.setFontSize(14);
-    doc.setTextColor(0, 0, 0);
-    doc.text(`${this.officerName} - ${this.empId}`, 24, 14);
-    doc.setFontSize(11);
-    doc.setTextColor(64, 64, 64);
-    doc.text(`On ${this.selectDate}`, 24, 24);
-  
+      doc.setTextColor(0, 0, 0);
+      doc.text(`${this.officerName} - ${this.empId}`, 24, 14);
+      doc.setFontSize(11);
+      doc.setTextColor(64, 64, 64);
+      doc.text(`On ${this.selectDate}`, 24, 24);
+
       if (Object.keys(this.dailyReportArr).length === 0) {
         doc.setFontSize(10);
         doc.text('No data available to display.', 30, 35);
@@ -422,14 +422,14 @@ private drawBarChart(doc: jsPDF, x: number, y: number, width: number): number {
         this.isDownloading = false;
         return;
       }
-  
+
       const groupedData = this.dailyReportArr.map(item => ({
-  cropName: item.varietyNameEnglish,
-  gradeA: item.gradeA || 0,
-  gradeB: item.gradeB || 0,
-  gradeC: item.gradeC || 0,
-  totalWeight: item.total || 0,
-}));
+        cropName: item.varietyNameEnglish,
+        gradeA: item.gradeA || 0,
+        gradeB: item.gradeB || 0,
+        gradeC: item.gradeC || 0,
+        totalWeight: item.total || 0,
+      }));
 
       const legendItems = [
         { label: 'Grade A', color: colors.gradeA },
@@ -439,7 +439,7 @@ private drawBarChart(doc: jsPDF, x: number, y: number, width: number): number {
       const legendBoxSize = 4;
       const legendItemWidth = 30;
       const legendStartX = pageWidth / 2 - (legendItems.length * legendItemWidth) / 2;
-  
+
       // ── Draw legend first ─────────────────────────────────────────
       const legendY = 32;
       legendItems.forEach((item, i) => {
@@ -451,18 +451,18 @@ private drawBarChart(doc: jsPDF, x: number, y: number, width: number): number {
         doc.setTextColor(0, 0, 0);
         doc.text(item.label, lx + legendBoxSize + 2, legendY + legendBoxSize - 1);
       });
-  
+
       const labelAreaWidth = 38;
       const chartStartX = 15 + labelAreaWidth;
       const barHeight = 9;
       const rowGap = 14;
       const chartWidth = 120;
-  
+
       const maxWeight = Math.max(...groupedData.map((c) => c.totalWeight));
-  
+
       // ✅ FIX 1: chartStartY dynamically derived from legendY so they never overlap
       const chartStartY = legendY + legendBoxSize + 8;
-  
+
       // ✅ FIX 2: Y-axis title is centred within the label column and tracks chart midpoint
       const totalChartHeight = groupedData.length * rowGap;
       const chartMidY = chartStartY + totalChartHeight / 2;
@@ -470,11 +470,11 @@ private drawBarChart(doc: jsPDF, x: number, y: number, width: number): number {
       doc.setFontSize(9);
       doc.setTextColor(0, 0, 0);
       doc.text('Crop Variety', yAxisTitleX, chartMidY, { angle: 90, align: 'center' });
-  
+
       groupedData.forEach((crop, rowIndex) => {
         const rowY = chartStartY + rowIndex * rowGap;
         const barMidY = rowY + barHeight / 2;
-  
+
         const maxChars = 14;
         let labelLines: string[];
         if (crop.cropName.length <= maxChars) {
@@ -493,7 +493,7 @@ private drawBarChart(doc: jsPDF, x: number, y: number, width: number): number {
             ];
           }
         }
-  
+
         // Draw label lines centred on bar
         doc.setFontSize(7.5);
         doc.setTextColor(0, 0, 0);
@@ -502,11 +502,11 @@ private drawBarChart(doc: jsPDF, x: number, y: number, width: number): number {
           labelLines.length === 1
             ? barMidY + 1
             : barMidY - lineHeight / 2 + 1;
-  
+
         labelLines.forEach((line, li) => {
           doc.text(line, chartStartX - 2, labelBaseY + li * lineHeight, { align: 'right' });
         });
-  
+
         // Draw stacked bars
         let currentX = chartStartX;
         const gradeKeys = [
@@ -514,7 +514,7 @@ private drawBarChart(doc: jsPDF, x: number, y: number, width: number): number {
           { key: 'gradeB', color: colors.gradeB },
           { key: 'gradeC', color: colors.gradeC },
         ];
-  
+
         gradeKeys.forEach(({ key, color }) => {
           const weight = crop[key as keyof typeof crop] as number;
           if (weight > 0) {
@@ -522,7 +522,7 @@ private drawBarChart(doc: jsPDF, x: number, y: number, width: number): number {
             const [r, g, b] = this.hexToRgb(color);
             doc.setFillColor(r, g, b);
             doc.rect(currentX, rowY, barWidth, barHeight, 'F');
-  
+
             // Label inside bar (only if wide enough)
             if (barWidth > 12) {
               doc.setFontSize(6.5);
@@ -538,14 +538,14 @@ private drawBarChart(doc: jsPDF, x: number, y: number, width: number): number {
           }
         });
       });
-  
+
       // ── Axes ──────────────────────────────────────────────────────
       const axisY = chartStartY + groupedData.length * rowGap + 2;
       doc.setDrawColor(0, 0, 0);
       doc.setLineWidth(0.4);
       doc.line(chartStartX, chartStartY, chartStartX, axisY);
       doc.line(chartStartX, axisY, chartStartX + chartWidth, axisY);
-  
+
       // X-axis tick labels
       const tickCount = 5;
       doc.setFontSize(7);
@@ -556,29 +556,29 @@ private drawBarChart(doc: jsPDF, x: number, y: number, width: number): number {
         doc.line(tickX, axisY, tickX, axisY + 1.5);
         doc.text(`${tickValue}`, tickX, axisY + 5, { align: 'center' });
       }
-  
+
       // X-axis title
       doc.setFontSize(9);
       doc.setTextColor(0, 0, 0);
       doc.text('Total Weight (kg)', chartStartX + chartWidth / 2, axisY + 10, { align: 'center' });
-  
+
       // ── Table ─────────────────────────────────────────────────────
       const tableStartY = axisY + 18;
       const cellHeight = 8;
       const cellPadding = 2;
       const tableColWidths = [50, 30, 30, 30, 30];
-  
+
       // Centre the table horizontally
       const totalTableWidth = tableColWidths.reduce((a, b) => a + b, 0); // 170
       const startX = (pageWidth - totalTableWidth) / 2;
-  
+
       let rowY = tableStartY;
-  
+
       const headers = ['Crop Variety', 'Grade A', 'Grade B', 'Grade C', 'Total'];
-  
+
       doc.setLineWidth(0.2);
       doc.setDrawColor(180, 180, 180);
-  
+
       doc.setFontSize(9);
       doc.setFont('helvetica', 'bold');
       doc.setTextColor(60, 60, 60);
@@ -588,7 +588,7 @@ private drawBarChart(doc: jsPDF, x: number, y: number, width: number): number {
         doc.text(header, cellX + cellPadding, rowY + cellHeight / 2 + 2.5);
       });
       rowY += cellHeight;
-  
+
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(8.5);
       doc.setTextColor(90, 90, 90);
@@ -607,18 +607,18 @@ private drawBarChart(doc: jsPDF, x: number, y: number, width: number): number {
         });
         rowY += cellHeight;
       });
-  
+
       doc.save(`Daily_Report_${this.officerName}_${this.selectDate}.pdf`);
       this.isDownloading = false;
     }, 0);
   }
 
-hexToRgb(hex: string): [number, number, number] {
-  const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
-  return result
-    ? [parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16)]
-    : [0, 0, 0];
-}
+  hexToRgb(hex: string): [number, number, number] {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    return result
+      ? [parseInt(result[1], 16), parseInt(result[2], 16), parseInt(result[3], 16)]
+      : [0, 0, 0];
+  }
 }
 
 class DailyReport {

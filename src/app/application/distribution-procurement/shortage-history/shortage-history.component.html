@@ -10,14 +10,10 @@
   <div class="bg-white dark:bg-tileBlack shadow-lg rounded-lg relative p-8">
     <div class="flex items-center mb-8 flex-wrap gap-6">
       <div class="flex items-center whitespace-nowrap">
-        <h2 class="text-[20px] font-normal text-[#292929] dark:text-textDark">
+        <h2 class="font-semibold text-[#000000] dark:text-textDark">
           Shortage History ({{ getTotalRecords() }})
         </h2>
-        <!-- <span
-          class="ml-2 mr-5 font-normal text-2xl text-[#292929] dark:text-white"
-        >
-          ({{ getTotalRecords() }})
-        </span> -->
+
       </div>
       <div class="flex items-center flex-wrap gap-5">
         <i class="ml-5 w-5 h-5 fill-current text-[#4A4A4A]">
@@ -30,20 +26,18 @@
           Filter By
         </p>
         <div class="flex items-center">
-          <app-custom-datepicker 
-    [selectedDate]="selectedDate" 
-    [maxDate]="maxSelectableDate"
-    (dateChange)="onDateChange($event)"
-    triggerClass="w-full h-11 border-[1.8px] border-[#828282] rounded-xl flex items-center px-3 py-2 cursor-pointer dark:bg-[#292929]">
-</app-custom-datepicker>
+          <app-custom-datepicker [selectedDate]="selectedDate" [maxDate]="maxSelectableDate"
+            (dateChange)="onDateChange($event)"
+            triggerClass="w-full h-11 border-[1.8px] border-[#828282] rounded-xl flex items-center px-3 py-2 cursor-pointer dark:bg-[#292929]">
+          </app-custom-datepicker>
         </div>
       </div>
     </div>
 
-    <div *ngIf="hasData">
+    <div *ngIf="(hasData && isPrevToday()) || (hasData && afterSixPm && !isPrevToday())">
       <!-- Not Assigned Section -->
       <div class="mb-10" *ngIf="notAssignedItems.length > 0">
-        <h3 class="text-lg font-medium text-[#292929] dark:text-textDark mb-4">
+        <h3 class="font-semibold text-[#000000] dark:text-textDark mb-4">
           Not Assigned ({{ getNotAssignedCount() }})
         </h3>
 
@@ -132,12 +126,12 @@
               </p>
             </div>
 
-            <div class="mr-8">
+            <div class="mr-20">
               <p class="text-xs text-[#000000] dark:text-textDark mb-1">
                 1st Assigned By
               </p>
-              <p class="font-semibold text-[#292929] dark:text-textDark">
-                {{ item.firstAssignedBy || "----" }}
+              <p class="font-semibold text-[#292929] dark:text-textDark" [title]="item.firstAssignedBy || '----'">
+                {{ truncateText(item.firstAssignedBy) }}
               </p>
             </div>
 
@@ -154,11 +148,24 @@
       </div>
     </div>
 
-    <div *ngIf="!hasData && !isLoading" class="flex flex-col justify-center items-center py-20">
+    <div *ngIf="(!hasData && isPrevToday() && !isLoading) || (!hasData && !isPrevToday() && afterSixPm && !isLoading)"
+      class="flex flex-col justify-center items-center py-20">
       <p class="text-[#494949] dark:text-textDark mb-4">
         -- No Data Available --
       </p>
       <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20 mb-4" />
+    </div>
+
+
+    <div *ngIf="!afterSixPm &&!isPrevToday() && !isLoading"
+      class="flex flex-col items-center w-full h-screen px-10 py-7 mt-12 ">
+      <img src="assets/images/ShortageNoData.png" alt="No Data" class="w-24 h-28" />
+      <p class="text-[#000000] my-6 dark:text-textDark text-[20px] font-[600]">--No assigned product shortages yet!--
+      </p>
+      <p class="text-center font-[400]">--If there are any shortages, you will be able to view them <span
+          class="text-[#494949] font-[700]">after 6:00 PM</span> on {{ currentTime | date:'d MMMM y' }},<br>
+        once they have been assigned by the Procurement Officer.--</p>
+
     </div>
   </div>
 </div>

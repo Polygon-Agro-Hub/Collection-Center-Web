@@ -90,7 +90,7 @@ export class ViewDcmReceiveReplyComponent implements OnInit {
       }
     );
   }
-  
+
   forwordComplain() {
     Swal.fire({
       title: 'Are you sure?',
@@ -105,7 +105,7 @@ export class ViewDcmReceiveReplyComponent implements OnInit {
         popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white rounded-lg',
         title: 'dark:text-white',
         icon: '!border-gray-200 dark:!border-gray-500',
-        confirmButton: 'hover:!bg-[#3085d6] dark:hover:!bg[#3085d6] w-36', 
+        confirmButton: 'hover:!bg-[#3085d6] dark:hover:!bg[#3085d6] w-36',
         cancelButton: 'w-36',
         actions: 'gap-2'
       }

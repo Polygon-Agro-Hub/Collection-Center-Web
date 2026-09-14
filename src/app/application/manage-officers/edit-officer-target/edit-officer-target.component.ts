@@ -125,23 +125,23 @@ export class EditOfficerTargetComponent {
 
   onAmountInput(event: any) {
     let value = event.target.value;
-    
+
     // Block negative values
     if (value.startsWith('-')) {
-        event.target.value = value.substring(1);
-        this.passAmount = parseFloat(event.target.value) || 0;
-        return;
+      event.target.value = value.substring(1);
+      this.passAmount = parseFloat(event.target.value) || 0;
+      return;
     }
-    
+
     // Block more than 3 decimal places
     if (value.includes('.')) {
-        const parts = value.split('.');
-        if (parts[1].length > 3) {
-            event.target.value = parts[0] + '.' + parts[1].substring(0, 3);
-            this.passAmount = parseFloat(event.target.value);
-        }
+      const parts = value.split('.');
+      if (parts[1].length > 3) {
+        event.target.value = parts[0] + '.' + parts[1].substring(0, 3);
+        this.passAmount = parseFloat(event.target.value);
+      }
     }
-}
+  }
 
   onCancel() {
     this.searchTerm = '';

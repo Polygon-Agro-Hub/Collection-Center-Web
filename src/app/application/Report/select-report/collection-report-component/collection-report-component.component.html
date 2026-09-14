@@ -1,112 +1,106 @@
-<app-loading-spinner *ngIf="isLoading"/>
+<app-loading-spinner *ngIf="isLoading" />
 
 <div *ngIf="!isLoading" class="w-full px-10 py-7 bg-tileLight rounded-lg mt-6 dark:bg-[#363636]">
-    <div class="flex flex-row items-center justify-end gap-8 ">
-       
-        <div class="relative w-52 custom-center-dropdown-container" *ngIf="logingRole ==='Collection Centre Head'">
-           
-            <app-searchable-dropdown
-                        [items]="centerDropdownItems"
-                        placeholder="Select Centre..."
-                        searchPlaceholder="Search centre..."
-                        [(ngModel)]="selectCenters"
-                        (selectionChange)="onCenterSelectionChange($event)"
-                        [clearable]="true"
-                        [showSelected]="true"
-                        [disabled]="false"
-                        class="w-full"
-                      ></app-searchable-dropdown>
-           
-        </div>
+  <div class="flex flex-row items-center justify-end gap-8 ">
 
-        
-        <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929] mr-5">
-            <input type="text" placeholder="Search by EMP ID, First / Last name" [(ngModel)]="searchText" (keyup.enter)="onSearch()" (keyup.esc)="offSearch()" (input)="checkLeadingSpace()"
-                class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
-            <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
-                (click)="onSearch()">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                        d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
-                </svg>
-            </button>
-            <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none" (click)="offSearch()">
-                <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                    stroke="currentColor">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-                </svg>
-            </button>
-        </div>
+    <div class="relative w-52 custom-center-dropdown-container" *ngIf="logingRole ==='Collection Centre Head'">
+
+      <app-searchable-dropdown [items]="centerDropdownItems" placeholder="Select Centre..."
+        searchPlaceholder="Search centre..." [(ngModel)]="selectCenters"
+        (selectionChange)="onCenterSelectionChange($event)" [clearable]="true" [showSelected]="true" [disabled]="false"
+        class="w-full"></app-searchable-dropdown>
+
     </div>
 
-    <div *ngIf="!hasData"
-            class="flex flex-col items-center w-full h-screen px-10 py-7 bg-tileLight dark:bg-[#363636] dark:text-textDark mt-6">
-            <p class="text-[#494949] my-6 dark:text-textDark">--No Data Availabale--</p>
-            <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20 dark:text-textDark" />
-        </div>
 
-    <div *ngIf="hasData"
-  class="overflow-hidden mt-8 mr-5 border border-gray-200 rounded-lg dark:border-[#202021]">
-  <table class="w-full divide-y divide-gray-200 dark:divide-[#202021]">
-    <thead class="text-[#4B5563] text-base font-medium dark:text-gray-300 dark:bg-[#0F0F0F]">
-      <tr>
-        <th class="px-5 py-3 text-left text-[#4B5563] text-base font-medium">No</th>
-        <th class="px-5 py-3 text-left text-[#4B5563] text-base font-medium">EMP ID</th>
-        <th class="px-5 py-3 text-left text-[#4B5563] text-base font-medium">First Name</th>
-        <th class="px-5 py-3 text-left text-[#4B5563] text-base font-medium">Last Name</th>
-        <th class="px-5 py-3 text-left text-[#4B5563] text-base font-medium" *ngIf="logingRole === 'Collection Centre Head'">Centre</th>
-        <th class="px-5 py-3 text-center text-[#4B5563] text-base font-medium">Monthly Report</th>
-        <th class="px-5 py-3 text-center text-[#4B5563] text-base font-medium">Daily Report</th>
-        <th class="px-5 py-3 text-center text-[#4B5563] text-base font-medium">Farmers</th>
-      </tr>
-    </thead>
-    <tbody class="bg-white divide-y divide-gray-100 text-[#000000] font-semibold dark:bg-[#1D1D1F] dark:divide-[#202021]">
-      <tr *ngFor="let item of OfficerArr | paginate
+    <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929] mr-5">
+      <input type="text" placeholder="Search by EMP ID, First / Last name" [(ngModel)]="searchText"
+        (keyup.enter)="onSearch()" (keyup.esc)="offSearch()" (input)="checkLeadingSpace()"
+        class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
+      <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2" (click)="onSearch()">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
+        </svg>
+      </button>
+      <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none" (click)="offSearch()">
+        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+        </svg>
+      </button>
+    </div>
+  </div>
+
+  <div *ngIf="!hasData"
+    class="flex flex-col items-center w-full h-screen px-10 py-7 bg-tileLight dark:bg-[#363636] dark:text-textDark mt-6">
+    <p class="text-[#494949] my-6 dark:text-textDark">--No Data Availabale--</p>
+    <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20 dark:text-textDark" />
+  </div>
+
+  <div *ngIf="hasData" class="overflow-hidden mt-8 mr-5 border border-gray-200 rounded-lg dark:border-[#202021]">
+    <table class="w-full divide-y divide-gray-200 dark:divide-[#202021]">
+      <thead class="text-[#4B5563] text-base font-medium dark:text-gray-300 dark:bg-[#0F0F0F]">
+        <tr>
+          <th class="px-5 py-3 text-left text-[#4B5563] text-base font-medium">No</th>
+          <th class="px-5 py-3 text-left text-[#4B5563] text-base font-medium">EMP ID</th>
+          <th class="px-5 py-3 text-left text-[#4B5563] text-base font-medium">First Name</th>
+          <th class="px-5 py-3 text-left text-[#4B5563] text-base font-medium">Last Name</th>
+          <th class="px-5 py-3 text-left text-[#4B5563] text-base font-medium"
+            *ngIf="logingRole === 'Collection Centre Head'">Centre</th>
+          <th class="px-5 py-3 text-center text-[#4B5563] text-base font-medium">Monthly Report</th>
+          <th class="px-5 py-3 text-center text-[#4B5563] text-base font-medium">Daily Report</th>
+          <th class="px-5 py-3 text-center text-[#4B5563] text-base font-medium">Farmers</th>
+        </tr>
+      </thead>
+      <tbody
+        class="bg-white divide-y divide-gray-100 text-[#000000] font-semibold dark:bg-[#1D1D1F] dark:divide-[#202021]">
+        <tr *ngFor="let item of OfficerArr | paginate
           : {
               itemsPerPage: itemsPerPage,
               currentPage: page,
               totalItems: totalItems
             }; let i = index">
-        <td class="px-5 py-4 text-base text-gray-900 dark:text-gray-300">
-          {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i + 1) : (((page - 1) * itemsPerPage) + i + 1) }}
-        </td>
-        <td class="px-5 py-4 text-base text-gray-900 dark:text-gray-300">{{item.empId}}</td>
-        <td class="px-5 py-4 text-base text-gray-900 dark:text-gray-300">{{item.firstNameEnglish}}</td>
-        <td class="px-5 py-4 text-base text-gray-900 dark:text-gray-300">{{item.lastNameEnglish}}</td>
-        <td class="px-5 py-4 text-base text-gray-900 dark:text-gray-300" *ngIf="logingRole === 'Collection Centre Head'">{{item.centerName}}</td>
+          <td class="px-5 py-4 text-base text-gray-900 dark:text-gray-300">
+            {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i + 1) : (((page - 1) *
+              itemsPerPage) + i + 1) }} </td>
+          <td class="px-5 py-4 text-base text-gray-900 dark:text-gray-300">{{item.empId}}</td>
+          <td class="px-5 py-4 text-base text-gray-900 dark:text-gray-300">{{item.firstNameEnglish}}</td>
+          <td class="px-5 py-4 text-base text-gray-900 dark:text-gray-300">{{item.lastNameEnglish}}</td>
+          <td class="px-5 py-4 text-base text-gray-900 dark:text-gray-300"
+            *ngIf="logingRole === 'Collection Centre Head'">{{item.centerName}}</td>
 
-        <!-- Monthly Report td -->
-        <td class="px-5 py-4 text-center text-base text-gray-900 dark:text-gray-300">
-          <button class="inline-flex items-center justify-center text-base text-[#415CFF] hover:text-gray-600 w-10 h-10 mx-auto"
-            (click)="viewmonthlyReport(item.id)">
-            <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>
-          </button>
-        </td>
+          <!-- Monthly Report td -->
+          <td class="px-5 py-4 text-center text-base text-gray-900 dark:text-gray-300">
+            <button
+              class="inline-flex items-center justify-center text-base text-[#415CFF] hover:text-gray-600 w-10 h-10 mx-auto"
+              (click)="viewmonthlyReport(item.id)">
+              <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>
+            </button>
+          </td>
 
-        <!-- Daily Report td -->
-        <td class="px-5 py-4 text-center text-base text-gray-900 dark:text-gray-300">
-          <button class="inline-flex items-center justify-center text-[#415CFF] hover:text-gray-600 w-10 h-10 mx-auto"
-            (click)="viewDailyReport(item.id, item.firstNameEnglish, item.lastNameEnglish, item.empId)">
-            <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>
-          </button>
-        </td>
+          <!-- Daily Report td -->
+          <td class="px-5 py-4 text-center text-base text-gray-900 dark:text-gray-300">
+            <button class="inline-flex items-center justify-center text-[#415CFF] hover:text-gray-600 w-10 h-10 mx-auto"
+              (click)="viewDailyReport(item.id, item.firstNameEnglish, item.lastNameEnglish, item.empId)">
+              <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>
+            </button>
+          </td>
 
-        <!-- Farmers td -->
-        <td class="px-5 py-4 text-center text-gray-900 dark:text-gray-300">
-          <button class="inline-flex items-center justify-center text-[#415CFF] hover:text-blue-500 w-10 h-10 mx-auto"
-            (click)="viewFarmerList(item.id, item.firstNameEnglish, item.lastNameEnglish)">
-            <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>
-          </button>
-        </td>
-      </tr>
-    </tbody>
-  </table>
-</div>
-    <div *ngIf="hasData" class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#1D1D1F] text-right">
-        <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
-            [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
-            [screenReaderCurrentLabel]="'Youre on page'">
-        </pagination-controls>
-    </div>
+          <!-- Farmers td -->
+          <td class="px-5 py-4 text-center text-gray-900 dark:text-gray-300">
+            <button class="inline-flex items-center justify-center text-[#415CFF] hover:text-blue-500 w-10 h-10 mx-auto"
+              (click)="viewFarmerList(item.id, item.firstNameEnglish, item.lastNameEnglish)">
+              <i class="fa-solid fa-arrow-up-right-from-square text-lg"></i>
+            </button>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+  <div *ngIf="hasData" class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#1D1D1F] text-right">
+    <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
+      [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
+      [screenReaderCurrentLabel]="'Youre on page'">
+    </pagination-controls>
+  </div>
 </div>

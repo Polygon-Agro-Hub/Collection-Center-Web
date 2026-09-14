@@ -175,7 +175,7 @@ export class DcmRecievedComplaintsComponent implements OnInit {
       `;
     }
   }
-  
+
 
 }
 
@@ -218,7 +218,7 @@ class ReplyData {
 class Reply {
   id!: number;
   reply!: string;
-} 
+}
 
 class Manager {
   companyNameEnglish!: string;

@@ -46,7 +46,8 @@
                     <div *ngIf="isGradeDropdownOpen"
                         class="absolute z-10 w-full overflow-hidden mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
                         <div class="">
-                            <div *ngFor="let option of gradeDropdownOptions; let i = index" (click)="selectGradeOption(option)"
+                            <div *ngFor="let option of gradeDropdownOptions; let i = index"
+                                (click)="selectGradeOption(option)"
                                 class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center"
                                 [ngClass]="{
                                     'rounded-t-xl': i === 0,
@@ -94,7 +95,8 @@
                     <div *ngIf="isStatusDropdownOpen"
                         class="absolute z-10 w-full mt-1 overflow-hidden bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
                         <div class="">
-                            <div *ngFor="let option of statusDropdownOptions; let i = index" (click)="selectStatusOption(option)"
+                            <div *ngFor="let option of statusDropdownOptions; let i = index"
+                                (click)="selectStatusOption(option)"
                                 class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center"
                                 [ngClass]="{
                                     'rounded-t-xl': i === 0,
@@ -140,79 +142,78 @@
             <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
         </div>
 
-<div *ngIf="hasData" class=" min-w-max mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021] overflow-hidden">
-    <table class="w-full min-w-max divide-y-2">
-        <thead class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
-            <tr>
-                <th class="px-6 py-3 text-left font-medium dark:text-gray-300">No</th>
-                <th class="px-6 py-3 text-left font-medium dark:text-gray-300">Crop Name</th>
-                <th class="px-6 py-3 text-left font-medium dark:text-gray-300">Variety Name</th>
-                <th class="px-6 py-3 text-center font-medium dark:text-gray-300">Grade</th>
-                <th class="px-6 py-3 text-left font-medium dark:text-gray-300">Requested (Rs.)</th>
-                <th class="px-6 py-3 text-center font-medium dark:text-gray-300">Status</th>
-                <th class="px-6 py-3 text-left font-medium dark:text-gray-300">View</th>
-                <th class="px-6 py-3 text-left font-medium dark:text-gray-300">Centre Code</th>
-                <th class="px-6 py-3 text-left font-medium dark:text-gray-300">Centre Name</th>
-                <th class="px-6 py-3 text-left font-medium dark:text-gray-300">EMP ID</th>
-                <th class="px-6 py-3 text-left font-medium dark:text-gray-300">Time</th>
-            </tr>
-        </thead>
-        <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F] cursor-default">
-            <tr *ngFor="let item of reqPriceArr | paginate: {
+        <div *ngIf="hasData"
+            class=" min-w-max mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021] overflow-hidden">
+            <table class="w-full min-w-max divide-y-2">
+                <thead class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
+                    <tr>
+                        <th class="px-6 py-3 text-left font-medium dark:text-gray-300">No</th>
+                        <th class="px-6 py-3 text-left font-medium dark:text-gray-300">Crop Name</th>
+                        <th class="px-6 py-3 text-left font-medium dark:text-gray-300">Variety Name</th>
+                        <th class="px-6 py-3 text-center font-medium dark:text-gray-300">Grade</th>
+                        <th class="px-6 py-3 text-left font-medium dark:text-gray-300">Requested (Rs.)</th>
+                        <th class="px-6 py-3 text-center font-medium dark:text-gray-300">Status</th>
+                        <th class="px-6 py-3 text-left font-medium dark:text-gray-300">View</th>
+                        <th class="px-6 py-3 text-left font-medium dark:text-gray-300">Centre Code</th>
+                        <th class="px-6 py-3 text-left font-medium dark:text-gray-300">Centre Name</th>
+                        <th class="px-6 py-3 text-left font-medium dark:text-gray-300">EMP ID</th>
+                        <th class="px-6 py-3 text-left font-medium dark:text-gray-300">Time</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F] cursor-default">
+                    <tr *ngFor="let item of reqPriceArr | paginate: {
                 itemsPerPage: itemsPerPage,
                 currentPage: page,
                 totalItems: totalItems
             }; let i = index">
-                <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
-                    {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i + 1)
-                        : (((page - 1) * itemsPerPage) + i + 1) }}
-                </td>
-                <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.cropNameEnglish}}</td>
-                <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.varietyNameEnglish}}</td>
-                <td class="px-6 py-4 text-gray-900 text-center dark:text-gray-300">{{item.grade}}</td>
-                <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.requestPrice | number:'1.2-2' }}</td>
-                <td class="px-6 py-4 text-gray-900 dark:text-gray-300 flex justify-center items-center">
-                    <span *ngIf="item.status === 'Pending'"
-                        class="bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-6 py-1 ">
-                        Pending
-                    </span>
-                    <span *ngIf="item.status === 'Approved'"
-                        class="bg-[#C8E0FF] text-[#415CFF] text-center rounded-lg px-4 py-1 ">
-                        Approved
-                    </span>
-                    <span *ngIf="item.status === 'Rejected'"
-                        class="bg-[#FFB9B7] text-[#D16D6A] text-center rounded-lg px-5 py-1 ">
-                        Rejected
-                    </span>
-                </td>
-                <td class="px-6 py-4 text-gray-900 dark:text-gray-300 text-center">
-                    <button (click)="openPopUp(item.id, item.officerId)">
-                        <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none"
-                            xmlns="http://www.w3.org/2000/svg"
-                            [attr.stroke]="'#415CFF'">
-                            <path
-                                d="M3 14C3 9.02944 7.02944 5 12 5C16.9706 5 21 9.02944 21 14M17 14C17 16.7614 14.7614 19 12 19C9.23858 19 7 16.7614 7 14C7 11.2386 9.23858 9 12 9C14.7614 9 17 11.2386 17 14Z"
-                                stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
-                        </svg>
-                    </button>
-                </td>
-                <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.regCode}}</td>
-                <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.centerName}}</td>
-                <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
-                    {{ item.empId }}
-                </td>
-                <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.createdAt | date: 'hh:mm a'}}</td>
-            </tr>
-        </tbody>
-    </table>
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
+                            {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i + 1)
+                                : (((page - 1) * itemsPerPage) + i + 1) }} </td>
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.cropNameEnglish}}</td>
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.varietyNameEnglish}}</td>
+                        <td class="px-6 py-4 text-gray-900 text-center dark:text-gray-300">{{item.grade}}</td>
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.requestPrice | number:'1.2-2' }}
+                        </td>
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300 flex justify-center items-center">
+                            <span *ngIf="item.status === 'Pending'"
+                                class="bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-6 py-1 ">
+                                Pending
+                            </span>
+                            <span *ngIf="item.status === 'Approved'"
+                                class="bg-[#C8E0FF] text-[#415CFF] text-center rounded-lg px-4 py-1 ">
+                                Approved
+                            </span>
+                            <span *ngIf="item.status === 'Rejected'"
+                                class="bg-[#FFB9B7] text-[#D16D6A] text-center rounded-lg px-5 py-1 ">
+                                Rejected
+                            </span>
+                        </td>
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300 text-center">
+                            <button (click)="openPopUp(item.id, item.officerId)">
+                                <svg width="25px" height="25px" viewBox="0 0 24 24" fill="none"
+                                    xmlns="http://www.w3.org/2000/svg" [attr.stroke]="'#415CFF'">
+                                    <path
+                                        d="M3 14C3 9.02944 7.02944 5 12 5C16.9706 5 21 9.02944 21 14M17 14C17 16.7614 14.7614 19 12 19C9.23858 19 7 16.7614 7 14C7 11.2386 9.23858 9 12 9C14.7614 9 17 11.2386 17 14Z"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
+                                </svg>
+                            </button>
+                        </td>
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.regCode}}</td>
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.centerName}}</td>
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
+                            {{ item.empId }}
+                        </td>
+                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">{{item.createdAt | date: 'hh:mm a'}}</td>
+                    </tr>
+                </tbody>
+            </table>
 
-        <div *ngIf="hasData" class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#262f45] text-right">
-            <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
-                [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
-                [screenReaderCurrentLabel]="'Youre on page'">
-            </pagination-controls>
+            <div *ngIf="hasData" class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#262f45] text-right">
+                <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true"
+                    [previousLabel]="'Previous'" [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'"
+                    [screenReaderPageLabel]="'page'" [screenReaderCurrentLabel]="'Youre on page'">
+                </pagination-controls>
+            </div>
         </div>
-</div>
     </div>
 </div>
-    

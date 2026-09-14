@@ -24,9 +24,9 @@ export class TargetOutForDeliveryComponent implements OnInit {
   selectType: string = '';
   selectTimeSlot: string = '';
   selectRow!: number | null;
-    selectedDate: string | Date | null = null;
+  selectedDate: string | Date | null = null;
 
-    rowDropdownOptions: number[] = [];
+  rowDropdownOptions: number[] = [];
   rowIndexes: number[] = [];
   processOrder = new ProcessOrder();
 
@@ -36,7 +36,7 @@ export class TargetOutForDeliveryComponent implements OnInit {
   hasData: boolean = true;
   centerName!: string;
 
-  isLoading:boolean = true;
+  isLoading: boolean = true;
 
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Late', 'On Time'];
@@ -46,13 +46,13 @@ export class TargetOutForDeliveryComponent implements OnInit {
   typeDropdownOptions = ['Pickup', 'Delivery'];
   timeSlotDropdownOptions = ['08:00 AM - 12:00 PM', '12:00 PM - 04:00 PM', '04:00 PM - 09:00 PM'];
 
-    centerId: number | null = null;
+  centerId: number | null = null;
   selectedCenterName: string | null = null;
   regCode: string | null = null;
   tab!: string;
 
   isDownloading = false;
-    listView: boolean = true;
+  listView: boolean = true;
 
   toggleStatusDropdown() {
     this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
@@ -101,24 +101,24 @@ export class TargetOutForDeliveryComponent implements OnInit {
     private DistributionSrv: DistributionServiceService,
     private toastSrv: ToastAlertService,
     private route: ActivatedRoute,
-        private location: Location
+    private location: Location
   ) { }
 
 
   ngOnInit(): void {
 
-const segments = this.router.url.split('/');
-this.tab = segments[1]
+    const segments = this.router.url.split('/');
+    this.tab = segments[1]
 
-if (segments[1] === 'distribution-center') {
-  this.centerId = Number(this.route.snapshot.paramMap.get('id'));
-  this.selectedCenterName = this.route.snapshot.paramMap.get('centerName');
-  this.regCode = this.route.snapshot.paramMap.get('regCode');
-} else {
-  this.centerId = null;
-  this.selectedCenterName = null;
-  this.regCode = null;
-}
+    if (segments[1] === 'distribution-center') {
+      this.centerId = Number(this.route.snapshot.paramMap.get('id'));
+      this.selectedCenterName = this.route.snapshot.paramMap.get('centerName');
+      this.regCode = this.route.snapshot.paramMap.get('regCode');
+    } else {
+      this.centerId = null;
+      this.selectedCenterName = null;
+      this.regCode = null;
+    }
 
     this.fetchOutForDeliveryOrders();
   }
@@ -132,7 +132,7 @@ if (segments[1] === 'distribution-center') {
         this.rowDropdownOptions = this.rowIndexes
         this.centerName = res.centerName;
         this.totalItems = res.items.length | 0;
-                this.listView = true;
+        this.listView = true;
         if (res.items.length === 0) {
           this.hasData = false;
         } else {
@@ -141,7 +141,7 @@ if (segments[1] === 'distribution-center') {
         this.isLoading = false;
       }
     )
-    
+
   }
 
   onSearch() {
@@ -206,20 +206,20 @@ if (segments[1] === 'distribution-center') {
 
   onDateChange(newDate: string | Date | null) {
     let dateString: string;
-  
+
     if (!newDate) {
-      
+
       dateString = '';
-    } 
+    }
     else if (newDate instanceof Date) {
-      
+
       dateString = newDate.toISOString().split('T')[0];
-    } 
+    }
     else {
-      
+
       dateString = newDate;
     }
-  
+
     this.selectedDate = dateString;
     this.fetchOutForDeliveryOrders();
   }
@@ -227,13 +227,13 @@ if (segments[1] === 'distribution-center') {
   getDisplayDate(sheduleDate: string | Date): string {
     const today = new Date();
     const schedule = new Date(sheduleDate);
-  
+
     // Normalize times to midnight for accurate date-only comparison
     today.setHours(0, 0, 0, 0);
     schedule.setHours(0, 0, 0, 0);
-  
+
     const diffDays = Math.floor((schedule.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-  
+
     if (diffDays === 0) {
       return 'Today';
     } else if (diffDays === 1) {
@@ -305,7 +305,7 @@ if (segments[1] === 'distribution-center') {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
-  
+
           const activeFilters: string[] = [];
           if (this.selectStatus) activeFilters.push(this.selectStatus);
           if (this.selectType) activeFilters.push(this.selectType);
@@ -315,16 +315,16 @@ if (segments[1] === 'distribution-center') {
           const filterStr = activeFilters.length ? ` filtered by ${activeFilters.join(', ')}` : '';
 
           a.download = `${this.centerName} OFH Orders${dateStr}${filterStr} Generated at ${String(day).padStart(2, '0')}/${monthNumber}/${year} ${timeStr}.xlsx`;
-  
+
           a.click();
           window.URL.revokeObjectURL(url);
-  
+
           this.toastSrv.success('File Downloaded Successfully.');
           this.isDownloading = false;
         },
         error: (error) => {
-        
-        this.toastSrv.error('File Download Failed.');
+
+          this.toastSrv.error('File Download Failed.');
           this.isDownloading = false;
         }
       });
@@ -334,13 +334,13 @@ if (segments[1] === 'distribution-center') {
     // Convert both into Date objects
     const scheduleDate = new Date(item.sheduleDate);
     const outDlvrDateLocal = item.outDlvrDateLocal ? new Date(item.outDlvrDateLocal) : null;
-  
+
     // Create the schedule deadline
     const deadline = new Date(scheduleDate);
-  
+
     if (item.sheduleTime) {
       const timeSlot = item.sheduleTime.trim();
-  
+
       if (timeSlot === 'Within 8-12 PM') {
         deadline.setHours(12, 0, 0, 0); // 12:00 PM
       } else if (timeSlot === 'Within 12-4 PM') {
@@ -349,7 +349,7 @@ if (segments[1] === 'distribution-center') {
         deadline.setHours(20, 0, 0, 0); // 8:00 PM
       }
     }
-  
+
     // Current time in SL
     const now = new Date(
       new Date().toLocaleString('en-US', { timeZone: 'Asia/Colombo' })
@@ -360,35 +360,35 @@ if (segments[1] === 'distribution-center') {
       if (outDlvrDateLocal.getTime() > deadline.getTime()) {
         // this.isLateAndNotCompleted = true;
         return 'Late';
-      } else if (outDlvrDateLocal.getTime() <= deadline.getTime()){
+      } else if (outDlvrDateLocal.getTime() <= deadline.getTime()) {
         return 'On Time';
       }
     }
-  
+
     return 'Unknown';
   }
 
   getTimeValidity(item: orders): string {
     const scheduleDate = new Date(item.sheduleDate);
-  
+
     // Get current date in Asia/Colombo
     const now = new Date(
       new Date().toLocaleString('en-US', { timeZone: 'Asia/Colombo' })
     );
-  
+
     // Compare only the date part (ignore time)
     const scheduleDateOnly = new Date(
       scheduleDate.getFullYear(),
       scheduleDate.getMonth(),
       scheduleDate.getDate()
     );
-  
+
     const currentDateOnly = new Date(
       now.getFullYear(),
       now.getMonth(),
       now.getDate()
     );
-  
+
     if (scheduleDateOnly.getTime() === currentDateOnly.getTime()) {
       return 'Equal';
     } else if (scheduleDateOnly.getTime() < currentDateOnly.getTime()) {
@@ -406,13 +406,17 @@ if (segments[1] === 'distribution-center') {
         this.listView = false;
       }
     )
-    
+
   }
 
   goBack() {
     this.ngOnInit();
   }
-  
+
+  getPackageNumbers(quantity: number): number[] {
+  return Array.from({ length: quantity }, (_, i) => i + 1);
+}
+
 }
 
 class orders {
@@ -450,8 +454,8 @@ export class ProcessOrder {
   sheduleDate!: Date;
   packTime!: Date;
   qcDoneBy!: string;
-    qrPrintTime!: Date;
-    qrPrintBy!: string;
+  qrPrintTime!: Date;
+  qrPrintBy!: string;
 
   packages: OrderPackage[] = [];
   additionalItems: AdditionalItem[] = [];
@@ -461,7 +465,7 @@ export class OrderPackage {
   orderPackageId!: number;
   packageId!: number;
   packageName!: string;
-
+packageQty!: number;
   items: PackageItem[] = [];
 }
 

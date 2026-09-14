@@ -4,11 +4,6 @@
     z-index: 50;
 }
 
-/* Make sure parent containers don't clip the dropdown */
-.overflow-x-auto {
-    overflow-x: visible !important;
-}
-
 /* Ensure dropdown appears above other elements */
 .absolute.z-50 {
     z-index: 9999 !important;

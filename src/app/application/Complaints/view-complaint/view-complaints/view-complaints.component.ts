@@ -145,7 +145,7 @@ export class ViewComplaintsComponent implements OnInit {
     if (this.complaint) {
       // Trim spaces
       this.complaint = this.complaint.trim();
-  
+
       // Capitalize first letter
       this.complaint =
         this.complaint.charAt(0).toUpperCase() +

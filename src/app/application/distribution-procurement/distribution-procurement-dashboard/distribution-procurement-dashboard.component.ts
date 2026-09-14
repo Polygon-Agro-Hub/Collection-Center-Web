@@ -23,14 +23,14 @@ export class DistributionProcurementDashboardComponent {
   onProductShortageTodayClick() {
     this.isProductShortageTodayClicked = true;
     this.isProductShortageHistoryClicked = false;
-            this.isProductShortageFinalizationClicked = false;
+    this.isProductShortageFinalizationClicked = false;
     this.navigateToProductShortageToday();
   }
 
   onProductShortageHistoryClick() {
     this.isProductShortageTodayClicked = false;
     this.isProductShortageHistoryClicked = true;
-        this.isProductShortageFinalizationClicked = false;
+    this.isProductShortageFinalizationClicked = false;
     this.navigateToProductShortageHistory();
   }
 
@@ -43,7 +43,7 @@ export class DistributionProcurementDashboardComponent {
 
   navigateToProductShortageToday() {
     if (this.isProductShortageTodayClicked) {
-this.router.navigate(['/distribution-procurement/shortage-today']);
+      this.router.navigate(['/distribution-procurement/shortage-today']);
     }
   }
 

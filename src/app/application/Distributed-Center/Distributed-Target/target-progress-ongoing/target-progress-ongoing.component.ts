@@ -29,7 +29,7 @@ export class TargetProgressOngoingComponent implements OnInit {
   selectedDate: string | Date | null = null;
   totalItems: number = 0;
   hasData: boolean = true;
-  isLoading:boolean = false;
+  isLoading: boolean = false;
   isStatusDropdownOpen = false;
   isTypeDropdownOpen = false;
   isTimeSlotDropdownOpen = false;
@@ -100,21 +100,21 @@ export class TargetProgressOngoingComponent implements OnInit {
 
   ngOnInit(): void {
 
-const segments = this.router.url.split('/');
-this.tab = segments[1]
-if (segments[1] === 'distribution-center') {
-  this.centerId = Number(this.route.snapshot.paramMap.get('id'));
-  this.selectedCenterName = this.route.snapshot.paramMap.get('centerName');
-  this.regCode = this.route.snapshot.paramMap.get('regCode');
-} else {
-  this.centerId = null;
-  this.selectedCenterName = null;
-  this.regCode = null;
-}
+    const segments = this.router.url.split('/');
+    this.tab = segments[1]
+    if (segments[1] === 'distribution-center') {
+      this.centerId = Number(this.route.snapshot.paramMap.get('id'));
+      this.selectedCenterName = this.route.snapshot.paramMap.get('centerName');
+      this.regCode = this.route.snapshot.paramMap.get('regCode');
+    } else {
+      this.centerId = null;
+      this.selectedCenterName = null;
+      this.regCode = null;
+    }
 
     this.fetchAllAssignOrders();
     if (segments[1] !== 'distribution-center') {
-    this.fetchCenterData();
+      this.fetchCenterData();
     }
   }
 
@@ -144,7 +144,7 @@ if (segments[1] === 'distribution-center') {
       }
     );
   }
-  
+
   onSearch() {
     this.searchText = this.searchText?.trim() || '';
     this.fetchAllAssignOrders();
@@ -206,38 +206,38 @@ if (segments[1] === 'distribution-center') {
   }
   onDateChange(newDate: string | Date | null) {
     let dateString: string;
-  
+
     if (!newDate) {
-      
+
       dateString = '';
-    } 
+    }
     else if (newDate instanceof Date) {
-      
+
       dateString = newDate.toISOString().split('T')[0];
-    } 
+    }
     else {
-      
+
       dateString = newDate;
     }
-  
+
     this.selectedDate = dateString;
     this.fetchAllAssignOrders();
   }
 
-  navigateViewReply(id:number){
+  navigateViewReply(id: number) {
     this.router.navigate([`/cch-complaints/view-recive-reply/${id}`])
   }
 
   getDisplayDate(sheduleDate: string | Date): string {
     const today = new Date();
     const schedule = new Date(sheduleDate);
-  
+
     // Normalize times to midnight for accurate date-only comparison
     today.setHours(0, 0, 0, 0);
     schedule.setHours(0, 0, 0, 0);
-  
+
     const diffDays = Math.floor((schedule.getTime() - today.getTime()) / (1000 * 60 * 60 * 24));
-  
+
     if (diffDays === 0) {
       return 'Today';
     } else if (diffDays === 1) {
@@ -245,84 +245,84 @@ if (segments[1] === 'distribution-center') {
     } else if (diffDays === 2) {
       return 'Day after tomorrow';
     } else {
-      return schedule.toLocaleDateString('en-CA').replace(/-/g, '/'); 
+      return schedule.toLocaleDateString('en-CA').replace(/-/g, '/');
       // Formats as YYYY/MM/DD
     }
   }
 
-getDateColor(item: any): string {
-  const now = new Date();
-  const today = new Date(now);
+  getDateColor(item: any): string {
+    const now = new Date();
+    const today = new Date(now);
 
-  const scheduleDate = new Date(item.sheduleDate);
+    const scheduleDate = new Date(item.sheduleDate);
 
-  // Normalize dates for comparison
-  today.setHours(0, 0, 0, 0);
-  scheduleDate.setHours(0, 0, 0, 0);
+    // Normalize dates for comparison
+    today.setHours(0, 0, 0, 0);
+    scheduleDate.setHours(0, 0, 0, 0);
 
-  const diffDays =
-    (scheduleDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24);
+    const diffDays =
+      (scheduleDate.getTime() - today.getTime()) / (1000 * 60 * 60 * 24);
 
-  const status = (item.combinedStatus || '').toLowerCase();
+    const status = (item.combinedStatus || '').toLowerCase();
 
-  // Completed is always black
-  if (status === 'completed') {
-    return '#000000';
-  }
+    // Completed is always black
+    if (status === 'completed') {
+      return '#000000';
+    }
 
-  // Past dates
-  if (diffDays < 0) {
+    // Past dates
+    if (diffDays < 0) {
+      return '#AC0003';
+    }
+
+    // Future dates
+    if (diffDays > 0) {
+      return '#000000';
+    }
+
+    // --------------------------
+    // Today's orders
+    // --------------------------
+
+    const currentMinutes = now.getHours() * 60 + now.getMinutes();
+
+    let alertStart = 0;
+    let slotEnd = 0;
+
+    switch (item.sheduleTime) {
+      case '08:00 AM - 12:00 PM':
+        alertStart = 7 * 60 + 15;   // 7:15 AM
+        slotEnd = 12 * 60;          // 12:00 PM
+        break;
+
+      case '12:00 PM - 04:00 PM':
+        alertStart = 11 * 60 + 15;  // 11:15 AM
+        slotEnd = 16 * 60;          // 4:00 PM
+        break;
+
+      case '04:00 PM - 09:00 PM':
+        alertStart = 15 * 60 + 15;  // 3:15 PM
+        slotEnd = 21 * 60;          // 9:00 PM
+        break;
+
+      default:
+        return '#000000';
+    }
+
+    // Before alert window
+    if (currentMinutes < alertStart) {
+      return '#000000';
+    }
+
+    // During alert window
+    if (currentMinutes >= alertStart && currentMinutes <= slotEnd) {
+      return '#FF0000';
+    }
+
+    // After slot has ended
     return '#AC0003';
   }
 
-  // Future dates
-  if (diffDays > 0) {
-    return '#000000';
-  }
-
-  // --------------------------
-  // Today's orders
-  // --------------------------
-
-  const currentMinutes = now.getHours() * 60 + now.getMinutes();
-
-  let alertStart = 0;
-  let slotEnd = 0;
-
-  switch (item.sheduleTime) {
-    case '08:00 AM - 12:00 PM':
-      alertStart = 7 * 60 + 15;   // 7:15 AM
-      slotEnd = 12 * 60;          // 12:00 PM
-      break;
-
-    case '12:00 PM - 04:00 PM':
-      alertStart = 11 * 60 + 15;  // 11:15 AM
-      slotEnd = 16 * 60;          // 4:00 PM
-      break;
-
-    case '04:00 PM - 09:00 PM':
-      alertStart = 15 * 60 + 15;  // 3:15 PM
-      slotEnd = 21 * 60;          // 9:00 PM
-      break;
-
-    default:
-      return '#000000';
-  }
-
-  // Before alert window
-  if (currentMinutes < alertStart) {
-    return '#000000';
-  }
-
-  // During alert window
-  if (currentMinutes >= alertStart && currentMinutes <= slotEnd) {
-    return '#FF0000';
-  }
-
-  // After slot has ended
-  return '#AC0003';
-}
-  
   removeWithin(time: string): string {
     return time ? time.replace('Within ', '') : time;
   }
@@ -330,13 +330,13 @@ getDateColor(item: any): string {
   downloadTemplate1() {
     this.isDownloading = true;
     // Example: selectedDate = "2025-11-10" or "11/10/2025"
-    const selectedDateStr = String(this.selectedDate); 
+    const selectedDateStr = String(this.selectedDate);
     // Convert safely to Date
     const selectedDateObj = new Date(selectedDateStr);
     // Example: "10 Nov"
     function getOrdinal(day: number): string {
       if (day > 3 && day < 21) return 'th';
-    
+
       switch (day % 10) {
         case 1: return 'st';
         case 2: return 'nd';
@@ -344,31 +344,31 @@ getDateColor(item: any): string {
         default: return 'th';
       }
     }
-    
+
     const day = selectedDateObj.getDate();
     const month = selectedDateObj.toLocaleString('en-GB', { month: 'long' });
     const year = selectedDateObj.getFullYear();
     const monthNumber = String(selectedDateObj.getMonth() + 1).padStart(2, '0');
-    
+
     const dateStr = `${String(day).padStart(2, '0')}${getOrdinal(day)} ${month} ${year}`;
-  
+
     const fullDateStr = `${String(selectedDateObj.getMonth() + 1).padStart(2, '0')}-${String(selectedDateObj.getDate()).padStart(2, '0')}`;
     const now = new Date();
 
-// use TODAY for "Generated at"
-const genDay = now.getDate();
-const genMonthNumber = String(now.getMonth() + 1).padStart(2, '0');
-const genYear = now.getFullYear();
+    // use TODAY for "Generated at"
+    const genDay = now.getDate();
+    const genMonthNumber = String(now.getMonth() + 1).padStart(2, '0');
+    const genYear = now.getFullYear();
 
-const timeStr = now
-  .toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
-  .replace(':', '.')
-  .replace(' ', '');
+    const timeStr = now
+      .toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', hour12: true })
+      .replace(':', '.')
+      .replace(' ', '');
 
-const generatedAtStr = `${genDay}/${genMonthNumber}/${genYear} ${timeStr}`;
+    const generatedAtStr = `${genDay}/${genMonthNumber}/${genYear} ${timeStr}`;
 
     this.DistributionSrv
-      .downloadAllTargetProgressReport(this.selectStatus, this.selectedDate, this.searchText, this.selectType, this.selectRow, this.selectTimeSlot )
+      .downloadAllTargetProgressReport(this.selectStatus, this.selectedDate, this.searchText, this.selectType, this.selectRow, this.selectTimeSlot)
       .subscribe({
         next: (blob) => {
           const url = window.URL.createObjectURL(blob);
@@ -391,20 +391,20 @@ const generatedAtStr = `${genDay}/${genMonthNumber}/${genYear} ${timeStr}`;
           this.isDownloading = false;
         },
         error: (error) => {
-        
-        this.toastSrv.error('File Download Failed.');
+
+          this.toastSrv.error('File Download Failed.');
           this.isDownloading = false;
         }
       });
   }
 
   onKeydown(event: KeyboardEvent) {
-  // Prevent space key
-  if (event.key === ' ') {
-    event.preventDefault();
-    return;
+    // Prevent space key
+    if (event.key === ' ') {
+      event.preventDefault();
+      return;
+    }
   }
-}
 
 }
 

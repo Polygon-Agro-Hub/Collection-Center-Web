@@ -71,7 +71,7 @@ export class CchPriceRequestComponent implements OnInit {
     private PriceListSrv: PriceListService,
     private datePipe: DatePipe,
     private tokenSrv: TokenServiceService,
-  ) {this.logingRole = tokenSrv.getUserDetails().role}
+  ) { this.logingRole = tokenSrv.getUserDetails().role }
 
   ngOnInit(): void {
     this.today = this.datePipe.transform(new Date(), 'yyyy/MM/dd') || '';

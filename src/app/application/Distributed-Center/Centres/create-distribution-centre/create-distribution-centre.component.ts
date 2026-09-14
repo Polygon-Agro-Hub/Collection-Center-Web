@@ -1,6 +1,6 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, OnInit, ViewChild  } from '@angular/core';
-import { FormsModule, NgForm  } from '@angular/forms';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
+import { FormsModule, NgForm } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ToastAlertService } from '../../../../services/toast-alert/toast-alert.service';
 import Swal from 'sweetalert2';
@@ -28,16 +28,16 @@ export class CreateDistributionCentreComponent implements OnInit {
 
   allowedPrefixes = ['70', '71', '72', '75', '76', '77', '78'];
   isPhoneInvalidMap: { [key: string]: boolean } = {
-  phone01: false,
-  phone02: false,
-};
+    phone01: false,
+    phone02: false,
+  };
 
   countries: Country[] = COUNTRIES;
   selectedCountry1: Country | null = null;
   selectedCountry2: Country | null = null;
 
   dropdownOpen = false;
-  dropdownOpen2 = false;  
+  dropdownOpen2 = false;
 
 
   provinces: string[] = [
@@ -89,7 +89,7 @@ export class CreateDistributionCentreComponent implements OnInit {
     private toastSrv: ToastAlertService,
     private DistributionService: DistributionServiceService,
     private location: Location
-  ) { 
+  ) {
     const defaultCountry = this.countries.find(c => c.code === 'lk') || null;
     this.selectedCountry1 = defaultCountry;
     this.selectedCountry2 = defaultCountry;
@@ -99,32 +99,32 @@ export class CreateDistributionCentreComponent implements OnInit {
   }
 
   @HostListener('document:click', ['$event.target'])
-onClick(target: EventTarget | null) {
-  if (!(target instanceof HTMLElement)) return; // exit if not an element
+  onClick(target: EventTarget | null) {
+    if (!(target instanceof HTMLElement)) return; // exit if not an element
 
-  const insideDropdown1 = target.closest('.dropdown-wrapper-1');
-  const insideDropdown2 = target.closest('.dropdown-wrapper-2');
+    const insideDropdown1 = target.closest('.dropdown-wrapper-1');
+    const insideDropdown2 = target.closest('.dropdown-wrapper-2');
 
-  if (!insideDropdown1) this.dropdownOpen = false;
-  if (!insideDropdown2) this.dropdownOpen2 = false;
-}
+    if (!insideDropdown1) this.dropdownOpen = false;
+    if (!insideDropdown2) this.dropdownOpen2 = false;
+  }
 
-selectCountry1(country: Country) {
-  this.selectedCountry1 = country;
-  this.centerData.phoneNumber01Code = country.dialCode; 
-  this.dropdownOpen = false;
-}
+  selectCountry1(country: Country) {
+    this.selectedCountry1 = country;
+    this.centerData.phoneNumber01Code = country.dialCode;
+    this.dropdownOpen = false;
+  }
 
-selectCountry2(country: Country) {
-  this.selectedCountry2 = country;
-  this.centerData.phoneNumber02Code = country.dialCode; 
-  this.dropdownOpen2 = false;
-}
+  selectCountry2(country: Country) {
+    this.selectedCountry2 = country;
+    this.centerData.phoneNumber02Code = country.dialCode;
+    this.dropdownOpen2 = false;
+  }
 
-// get flag
-getFlagUrl(code: string): string {
-  return `https://flagcdn.com/24x18/${code}.png`;
-}
+  // get flag
+  getFlagUrl(code: string): string {
+    return `https://flagcdn.com/24x18/${code}.png`;
+  }
 
   updateRegCode() {
     const province = this.centerData.province;
@@ -171,27 +171,27 @@ getFlagUrl(code: string): string {
       this.isPhoneInvalidMap[key] = false;
       return;
     }
-  
+
     const firstDigit = input.charAt(0);
     const prefix = input.substring(0, 2);
     const isValidPrefix = this.allowedPrefixes.includes(prefix);
     const isValidLength = input.length === 9;
-  
+
     if (firstDigit !== '7') {
       this.isPhoneInvalidMap[key] = true;
       return;
     }
-  
+
     if (!isValidPrefix && input.length >= 2) {
       this.isPhoneInvalidMap[key] = true;
       return;
     }
-  
+
     if (input.length === 9 && isValidPrefix) {
       this.isPhoneInvalidMap[key] = false;
       return;
     }
-  
+
     this.isPhoneInvalidMap[key] = false;
   }
 
@@ -212,7 +212,7 @@ getFlagUrl(code: string): string {
     } else if (!/^[0-9]{9}$/.test(this.centerData.phoneNumber01) || this.isPhoneInvalidMap['phone01']) {
       missingFields.push('Contact Number - 01 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
     }
-  
+
     if (this.centerData.phoneNumber02) {
       if (!/^[0-9]{9}$/.test(this.centerData.phoneNumber02) || this.isPhoneInvalidMap['phone02']) {
         missingFields.push('Contact Number - 02 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
@@ -258,7 +258,7 @@ getFlagUrl(code: string): string {
         errorMessage += `<li>${field}</li>`;
       });
       errorMessage += '</ul></div>';
-  
+
       Swal.fire({
         icon: 'error',
         title: 'Missing or Invalid Information',
@@ -286,79 +286,79 @@ getFlagUrl(code: string): string {
       },
     }).then((result) => {
       if (result.isConfirmed) {
-this.isLoading = true;
+        this.isLoading = true;
 
-    // Call the service to create a center
-    this.DistributionService.createDistributionCenter(this.centerData).subscribe({
-      next: (res: any) => {
-        if (res.status) {
-          this.toastSrv.success('Distribution Centre Created Successfully');
-          this.router.navigate(['/distribution-center']);
-        } else {
-          this.toastSrv.error(res.message || 'There was an error creating the Distribution Centre');
-        }
-      },
-      error: (error: any) => {
-        this.isLoading = false;
+        // Call the service to create a center
+        this.DistributionService.createDistributionCenter(this.centerData).subscribe({
+          next: (res: any) => {
+            if (res.status) {
+              this.toastSrv.success('Distribution Centre Created Successfully');
+              this.router.navigate(['/distribution-center']);
+            } else {
+              this.toastSrv.error(res.message || 'There was an error creating the Distribution Centre');
+            }
+          },
+          error: (error: any) => {
+            this.isLoading = false;
 
-        // Handle different types of errors based on error status or message
-        if (error.status === 400) {
-          // Validation error or bad request
-          const errorMessage =
-            error?.error?.message ||
-            'Invalid input. Please check the data and try again.';
-          this.toastSrv.error(errorMessage);
-        } else if (error.status === 409) {
-          // Conflict error, e.g., duplicate regCode
-          const errorMessage =
-            error?.error?.message ||
-            'A Distribution Centre with this registration code already exists.';
-          this.toastSrv.error(errorMessage);
-        } else if (error.status === 500) {
-          // Server error
-          this.toastSrv.error('An internal server error occurred. Please try again later.');
-        } else {
-          // Generic error
-          const errorMessage =
-            error?.error?.message ||
-            'There was an error creating the Centre. Please try again.';
-          this.toastSrv.error(errorMessage);
-        }
-      },
-      complete: () => {
-        this.isLoading = false;
-      },
-    });
+            // Handle different types of errors based on error status or message
+            if (error.status === 400) {
+              // Validation error or bad request
+              const errorMessage =
+                error?.error?.message ||
+                'Invalid input. Please check the data and try again.';
+              this.toastSrv.error(errorMessage);
+            } else if (error.status === 409) {
+              // Conflict error, e.g., duplicate regCode
+              const errorMessage =
+                error?.error?.message ||
+                'A Distribution Centre with this registration code already exists.';
+              this.toastSrv.error(errorMessage);
+            } else if (error.status === 500) {
+              // Server error
+              this.toastSrv.error('An internal server error occurred. Please try again later.');
+            } else {
+              // Generic error
+              const errorMessage =
+                error?.error?.message ||
+                'There was an error creating the Centre. Please try again.';
+              this.toastSrv.error(errorMessage);
+            }
+          },
+          complete: () => {
+            this.isLoading = false;
+          },
+        });
       }
     })
   }
 
   onCancel() {
-      Swal.fire({
-        title: 'Are you sure?',
+    Swal.fire({
+      title: 'Are you sure?',
       text: 'You may lose the added data after canceling!',
-        icon: 'warning',
-        showCancelButton: true,
-        confirmButtonColor: '#d33',
-        cancelButtonColor: '#3085d6',
-        confirmButtonText: 'Yes, cancel',
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#d33',
+      cancelButtonColor: '#3085d6',
+      confirmButtonText: 'Yes, cancel',
       cancelButtonText: 'No, Keep Editing',
-        customClass: {
-          popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-          title: 'dark:text-white',
-          icon: '!border-gray-200 dark:!border-gray-500',
-          confirmButton: 'rounded-lg hover:bg-red-600 dark:hover:bg-red-700 focus:ring-red-500 dark:focus:ring-red-800',
-          cancelButton: 'rounded-lg hover:bg-blue-600 dark:hover:bg-blue-700 focus:ring-blue-500 dark:focus:ring-blue-800',
-          actions: 'gap-2'
-        }
-      }).then((result) => {
+      customClass: {
+        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+        title: 'dark:text-white',
+        icon: '!border-gray-200 dark:!border-gray-500',
+        confirmButton: 'rounded-lg hover:bg-red-600 dark:hover:bg-red-700 focus:ring-red-500 dark:focus:ring-red-800',
+        cancelButton: 'rounded-lg hover:bg-blue-600 dark:hover:bg-blue-700 focus:ring-blue-500 dark:focus:ring-blue-800',
+        actions: 'gap-2'
+      }
+    }).then((result) => {
       if (result.isConfirmed) {
 
         this.toastSrv.warning('Distribution Centre Add Operation Canceled.')
         this.location.back();
       }
     });
-    }
+  }
 
 
   // onCancel() {
@@ -390,7 +390,7 @@ this.isLoading = true;
   enforceLatitudeRange(event: Event): void {
     const input = event.target as HTMLInputElement;
     let value = parseFloat(input.value);
-  
+
     if (value > 90) {
       input.value = '90';
       this.centerData.latitude = 90;
@@ -427,7 +427,7 @@ this.isLoading = true;
   enforceLongitudeRange(event: Event): void {
     const input = event.target as HTMLInputElement;
     let value = parseFloat(input.value);
-  
+
     if (value > 180) {
       input.value = '180';
       this.centerData.longitude = 180;
@@ -471,25 +471,25 @@ this.isLoading = true;
   capitalizeFirstLetter(field: keyof CenterData) {
     if (this.centerData[field]) {
       let value = this.centerData[field] as unknown as string;
-  
+
       // Trim spaces
       value = value.trim();
-  
+
       // Capitalize first letter
       value = value.charAt(0).toUpperCase() + value.slice(1);
-  
+
       this.centerData[field] = value as never; // assign back safely
     }
   }
 
   onDistributionCenterNameKeydown(event: KeyboardEvent): void {
-  const inputElement = event.target as HTMLInputElement;
-  
-  // If space is pressed and cursor is at the beginning, prevent it
-  if (event.key === ' ' && inputElement.selectionStart === 0) {
-    event.preventDefault();
+    const inputElement = event.target as HTMLInputElement;
+
+    // If space is pressed and cursor is at the beginning, prevent it
+    if (event.key === ' ' && inputElement.selectionStart === 0) {
+      event.preventDefault();
+    }
   }
-}
 }
 
 class CenterData {

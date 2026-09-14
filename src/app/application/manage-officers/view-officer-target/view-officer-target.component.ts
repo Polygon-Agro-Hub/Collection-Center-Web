@@ -116,7 +116,7 @@ export class ViewOfficerTargetComponent implements OnInit {
           this.isDownloading = false;
         }
       });
-}
+  }
 
   navigateToNewPage(id: number): void {
     this.router.navigate([`/manage-officers/edit-officer-target/${id}`]);  // Assuming you want to pass the `item.id` to the new page

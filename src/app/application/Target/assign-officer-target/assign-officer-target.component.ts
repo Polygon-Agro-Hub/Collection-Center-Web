@@ -103,7 +103,9 @@ export class AssignOfficerTargetComponent implements OnInit {
         if (res.status) {
           this.isLoading = false;
           this.toastSrv.success('Successfully assigned the target!');
-          this.router.navigate(['/target'])
+          this.router.navigate(['/target'], {
+            state: { selectAssign: true }
+          });
         } else {
           this.isLoading = false;
           this.toastSrv.error('Failed to assign the target!');
@@ -141,9 +143,25 @@ export class AssignOfficerTargetComponent implements OnInit {
   }
 
   updateTotals(index: number, grade: 'A' | 'B' | 'C') {
-    this.totTargetA = this.officerArr.reduce((sum, officer) => sum + (officer.targetA || 0), 0);
-    this.totTargetB = this.officerArr.reduce((sum, officer) => sum + (officer.targetB || 0), 0);
-    this.totTargetC = this.officerArr.reduce((sum, officer) => sum + (officer.targetC || 0), 0);
+    this.totTargetA = Number(
+        this.officerArr
+            .reduce((sum, officer) => sum + (officer.targetA || 0), 0)
+            .toFixed(3)
+    );
+        
+    this.totTargetB = Number(
+        this.officerArr
+          .reduce((sum, officer) => sum + Number(officer.targetB || 0), 0)
+          .toFixed(3)
+    );
+
+      
+    this.totTargetC = Number(
+        this.officerArr
+          .reduce((sum, officer) => sum + Number(officer.targetC || 0), 0)
+          .toFixed(3)
+    );
+
   
     let remainingA = this.targetVerity.qtyA - (this.totTargetA - (this.officerArr[index].targetA || 0));
     let remainingB = this.targetVerity.qtyB - (this.totTargetB - (this.officerArr[index].targetB || 0));
@@ -174,9 +192,9 @@ export class AssignOfficerTargetComponent implements OnInit {
     }
   
     setTimeout(() => {
-      this.totTargetA = this.officerArr.reduce((sum, officer) => sum + (officer.targetA || 0), 0);
-      this.totTargetB = this.officerArr.reduce((sum, officer) => sum + (officer.targetB || 0), 0);
-      this.totTargetC = this.officerArr.reduce((sum, officer) => sum + (officer.targetC || 0), 0);
+      this.totTargetA = Number(this.officerArr.reduce((sum, officer) => sum + (officer.targetA || 0), 0).toFixed(3));
+      this.totTargetB = Number(this.officerArr.reduce((sum, officer) => sum + (officer.targetB || 0), 0).toFixed(3));
+      this.totTargetC = Number(this.officerArr.reduce((sum, officer) => sum + (officer.targetC || 0), 0).toFixed(3));
     }, 10);
   }
 

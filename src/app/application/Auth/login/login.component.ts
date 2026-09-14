@@ -64,7 +64,7 @@ export class LoginComponent {
         customClass: {
           popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white rounded-lg',
           title: 'dark:text-white',
-          
+
         }
       });
     }
@@ -77,7 +77,7 @@ export class LoginComponent {
         customClass: {
           popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white rounded-lg',
           title: 'dark:text-white',
-          
+
         }
       });
 
@@ -91,7 +91,7 @@ export class LoginComponent {
         customClass: {
           popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white rounded-lg',
           title: 'dark:text-white',
-          
+
         }
       });
 
@@ -111,7 +111,7 @@ export class LoginComponent {
             res.companyImage === null ? '' : res.companyImage,
             res.companyFavicon === null ? '' : res.companyFavicon
           );
-          
+
           if (res.companyFavicon !== null) {
             this.changeFavicon(res.companyFavicon);
           }
@@ -122,7 +122,7 @@ export class LoginComponent {
             text: 'Successfully Logged In',
             showConfirmButton: false,
             timer: 1500,
-           
+
           });
 
           this.role = res.role;
@@ -157,7 +157,7 @@ export class LoginComponent {
                 customClass: {
                   popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white rounded-lg',
                   title: 'dark:text-white',
-                  
+
                 }
               });
               this.isLoading = false;
@@ -175,7 +175,7 @@ export class LoginComponent {
             customClass: {
               popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white rounded-lg',
               title: 'dark:text-white',
-              
+
             }
           });
         }

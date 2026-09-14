@@ -43,7 +43,7 @@ export class OfficerProfileComponent implements OnInit {
     this.fetchOfficer(this.officerId);
     this.centerId = this.route.snapshot.params['centerId'];
     this.setActiveTabFromRoute()
-    
+
   }
 
   fetchOfficer(id: number) {
@@ -452,7 +452,7 @@ export class OfficerProfileComponent implements OnInit {
       this.router.navigate([`/manage-officers/view-officer-target/${officerId}/${newCenterName}`]);
     } else if (this.logingRole === 'Distribution Centre Head' || this.logingRole === 'Distribution Centre Manager') {
       this.router.navigate([`/distribution-officers/view-distribution-officer-target/${officerId}/${centerName}`]);
-    } 
+    }
   }
 
   cancelDisclaim() {
@@ -467,7 +467,7 @@ export class OfficerProfileComponent implements OnInit {
       (response) => {
         this.isLoading = false;
         this.showDisclaimView = false;
-        this.fetchOfficer(this.officerId);      
+        this.fetchOfficer(this.officerId);
         this.toastSrv.success('Officer Disclaimed Successfully!');
         this.location.back();
       },

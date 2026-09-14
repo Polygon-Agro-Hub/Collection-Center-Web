@@ -1,4 +1,4 @@
-import { CommonModule, DatePipe, Location  } from '@angular/common';
+import { CommonModule, DatePipe, Location } from '@angular/common';
 import { Component, HostListener, OnInit, ElementRef, ViewChild, AfterViewChecked } from '@angular/core';
 import lottie from 'lottie-web';
 import { FormsModule } from '@angular/forms';
@@ -18,7 +18,7 @@ export interface PackingLineRow {
   companyCenterId: number;
   rowIndex: number;
   isEnabled: number;
-  norCount:number;
+  norCount: number;
 }
 
 export interface Positions {
@@ -34,7 +34,7 @@ export interface PositionsCrops {
   mpiId: number;
   varietyId: number;
   category: string;
-  displayName:string;
+  displayName: string;
 }
 
 export interface ChangeItems {
@@ -45,7 +45,7 @@ export interface ChangeItems {
   mpiId: number;
   varietyId: number;
   category: string;
-  displayName:string;
+  displayName: string;
 }
 
 export interface Products {
@@ -70,6 +70,9 @@ export class DcmPositioningComponent implements OnInit, AfterViewChecked {
   regCode!: string;
   centerName!: string;
   centerId!: number;
+
+  currentRow!: PackingLineRow;
+  positionToDelete!: Positions;
 
   rows: PackingLineRow[] = [];
   positions: Positions[] = [];
@@ -101,6 +104,8 @@ export class DcmPositioningComponent implements OnInit, AfterViewChecked {
   // ===== Validation display state: only show messages after a user-triggered change or a save attempt =====
   attemptedSave: boolean = false;
 
+  showDeletePositionModal: boolean = false;
+
   constructor(
     private router: Router,
     private DistributionSrv: DistributionServiceService,
@@ -108,11 +113,11 @@ export class DcmPositioningComponent implements OnInit, AfterViewChecked {
     private toastSrv: ToastAlertService,
     private route: ActivatedRoute,
     private tokenSrv: TokenServiceService
-  ) {}
+  ) { }
 
   ngOnInit(): void {
-  this.fetchDcmPostitioningRows()
-}
+    this.fetchDcmPostitioningRows()
+  }
 
   fetchDcmPostitioningRows() {
     this.isLoading = true;
@@ -172,7 +177,7 @@ export class DcmPositioningComponent implements OnInit, AfterViewChecked {
         this.productsArr = res.mpItems.mpiItems;
         this.total = this.positions.length || 0;
         this.hasPositionsData = this.positions.length > 0;
-       
+
         this.isLoading = false;
       }
     )
@@ -252,6 +257,11 @@ export class DcmPositioningComponent implements OnInit, AfterViewChecked {
     });
 
     this.closeModal();
+  }
+
+  // ===== Delete position (placeholder - behavior to be defined) =====
+  onDeletePosition(slot: Positions): void {
+    // TODO: wire up position delete behavior (e.g. DistributionSrv.deleteDCHCenterPos).
   }
 
   // ===== Remove item flow =====
@@ -344,7 +354,7 @@ export class DcmPositioningComponent implements OnInit, AfterViewChecked {
     return this.getDuplicateVarietyIds().size > 0 || this.positions.some(slot => this.isPositionEmpty(slot));
   }
 
-    // ===== Navigation / save =====
+  // ===== Navigation / save =====
   goBack(): void {
     this.view = 'rows';
     this.positions = [];
@@ -385,6 +395,44 @@ export class DcmPositioningComponent implements OnInit, AfterViewChecked {
       error: () => {
         this.isLoading = false;
         this.toastSrv.error('Failed to save positions. Please try again.');
+      }
+    });
+  }
+
+  openDeletePositionModal(pos: Positions): void {
+    this.positionToDelete = pos;
+    this.showDeletePositionModal = true;
+  }
+
+  cancelDeletePosition(): void {
+    this.showDeletePositionModal = false;
+  }
+
+  confirmDeletePosition(): void {
+    this.isLoading = true;
+
+    this.DistributionSrv.deleteDCHCenterPos(
+      this.positionToDelete.id,
+      this.positionToDelete.rowId,
+      this.positionToDelete.pIndex!
+    ).subscribe({
+      next: (res) => {
+        this.toastSrv.success('Position deletion successful.');
+
+        this.isLoading = false;
+        this.fetchDcmPositionsForRows(this.selectedRow.id);
+        this.showDeletePositionModal = false;
+      },
+
+      error: (err) => {
+        if (err.status === 409) {
+          this.showDeletePositionModal = false;
+        } else {
+          console.error('Other error:', err);
+          this.toastSrv.error('An error occurred while deleting position.');
+        }
+        this.showDeletePositionModal = false;
+        this.isLoading = false;
       }
     });
   }

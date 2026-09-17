@@ -11,6 +11,7 @@ import { HttpClient } from '@angular/common/http';
 import { Location } from '@angular/common';
 import { DistributedManageOfficersService } from '../../../services/Distributed-manage-officers-service/distributed-manage-officers.service';
 import { Country, COUNTRIES } from '../../../../assets/country-data';
+import { JOB_ROLE_TYPES, JobRoleTypes } from '../../../../assets/job-roles-data';
 import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
 import { CustomDatepickerComponent } from '../../../components/custom-datepicker/custom-datepicker.component';
 import { firstValueFrom } from 'rxjs';
@@ -82,7 +83,7 @@ export class AddDistributedOfficerComponent implements OnInit {
   managerDropdownOpen = false;
   selectedManagerName: string = "";
   jobRoles: string[] = [];
-  jobRoleTypes: { lightWeightDriver: string; heavyWeightDriver: string } = { lightWeightDriver: '', heavyWeightDriver: '' };
+  jobRoleTypes: JobRoleTypes = JOB_ROLE_TYPES;
   jobRoleInputTouched = false;
   vehicleTypeDropdownOpen = false;
   vehicleTypeTouched = false;
@@ -181,20 +182,7 @@ export class AddDistributedOfficerComponent implements OnInit {
     this.loadBanks()
     this.loadBranches()
     this.getAllDistributionCenters();
-    this.loadJobRoleTypes();
-  }
-
-  loadJobRoleTypes() {
-    this.http.get<{ lightWeightDriver: string; heavyWeightDriver: string }>('assets/json/job-roles.json').subscribe(
-      data => {
-        this.jobRoleTypes = data;
-        this.setJobRoles();
-      },
-      error => {
-        console.error('Error loading job roles:', error);
-        this.setJobRoles();
-      }
-    );
+    this.setJobRoles();
   }
 
   isDriverRole(role: string | null | undefined): boolean {

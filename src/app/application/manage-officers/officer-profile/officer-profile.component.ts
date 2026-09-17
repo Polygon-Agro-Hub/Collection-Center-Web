@@ -7,6 +7,7 @@ import { FormsModule } from '@angular/forms';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { TokenServiceService } from '../../../services/Token/token-service.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
+import { JOB_ROLE_TYPES, JobRoleTypes } from './../../../../assets/job-roles-data';
 
 @Component({
   selector: 'app-officer-profile',
@@ -25,6 +26,8 @@ export class OfficerProfileComponent implements OnInit {
   contentHeight!: number;
   isLoading: boolean = true;
   centerId!: number;
+
+  jobRoleTypes: JobRoleTypes = JOB_ROLE_TYPES;
 
   constructor(
     private ManageOficerSrv: ManageOfficersService,
@@ -56,7 +59,8 @@ export class OfficerProfileComponent implements OnInit {
 
   async generatePDF() {
 
-    if (this.officerObj.jobRole === 'Driver') {
+    
+    if (this.officerObj.jobRole === this.jobRoleTypes.lightWeightDriver || this.officerObj.jobRole === this.jobRoleTypes.heavyWeightDriver) {
       this.contentHeight = 397
     } else {
       this.contentHeight = 297
@@ -179,8 +183,12 @@ export class OfficerProfileComponent implements OnInit {
         empType = 'Collection Officer';
         empCode = 'COO';
         break;
-      case 'Driver':
-        empType = 'Driver';
+      case this.jobRoleTypes.lightWeightDriver:
+        empType = this.jobRoleTypes.lightWeightDriver;
+        empCode = 'DVR';
+        break;
+      case this.jobRoleTypes.heavyWeightDriver:
+        empType = this.jobRoleTypes.heavyWeightDriver;
         empCode = 'DVR';
         break;
       case 'Distribution Centre Head':
@@ -209,7 +217,7 @@ export class OfficerProfileComponent implements OnInit {
     let centerText = 'Officer has been disclaimed - No Assigned Centre';
 
     const ccRoles = ['Collection Centre Manager', 'Collection Centre Head', 'Collection Officer', 'Customer Officer'];
-    const dcRoles = ['Distribution Centre Manager', 'Distribution Centre Head', 'Distribution Officer', 'Driver'];
+    const dcRoles = ['Distribution Centre Manager', 'Distribution Centre Head', 'Distribution Officer', this.jobRoleTypes.lightWeightDriver, this.jobRoleTypes.heavyWeightDriver];
 
     if (ccRoles.includes(this.officerObj.jobRole)) {
       if (this.officerObj.regCode) {
@@ -322,7 +330,7 @@ export class OfficerProfileComponent implements OnInit {
     doc.text("Branch Name", 100, startY + 146);
     doc.text(getValueOrNA(this.officerObj.branchName), 100, startY + 152);
 
-    if (this.officerObj.jobRole === 'Driver') {
+    if (this.officerObj.jobRole === this.jobRoleTypes.lightWeightDriver || this.officerObj.jobRole === this.jobRoleTypes.heavyWeightDriver) {
 
       const DdetailsX = 10;
       const DdetailsY = startY + 158;

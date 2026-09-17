@@ -10,7 +10,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
 import { DistributedManageOfficersService } from '../../../../services/Distributed-manage-officers-service/distributed-manage-officers.service';
 import { SerchableDropdownComponent } from './../../../../components/serchable-dropdown/serchable-dropdown.component';
-
+import { JOB_ROLE_TYPES, JobRoleTypes } from './../../../../../assets/job-roles-data';
 @Component({
   selector: 'app-view-distributed-officers',
   standalone: true,
@@ -36,6 +36,8 @@ export class ViewDistributedOfficersComponent implements OnInit {
 
   logingRole: string | null = null;
   isLoading: boolean = true;
+
+  jobRoleTypes: JobRoleTypes = JOB_ROLE_TYPES;
 
   constructor(
     private router: Router,
@@ -67,7 +69,7 @@ export class ViewDistributedOfficersComponent implements OnInit {
   }
 
   isRoleDropdownOpen = false;
-  roleDropdownOptions = ['Distribution Centre Manager', 'Distribution Officer', 'Driver'];
+  roleDropdownOptions = ['Distribution Centre Manager', 'Distribution Officer', this.jobRoleTypes.lightWeightDriver, this.jobRoleTypes.heavyWeightDriver];
 
   toggleRoleDropdown() {
     this.isRoleDropdownOpen = !this.isRoleDropdownOpen;

@@ -11,6 +11,7 @@ import { HttpClient } from '@angular/common/http';
 import { Location } from '@angular/common';
 import { Country, COUNTRIES } from '../../../../assets/country-data';
 import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
+import { JOB_ROLE_TYPES, JobRoleTypes } from './../../../../assets/job-roles-data';
 
 @Component({
   selector: 'app-edit-officer',
@@ -130,7 +131,7 @@ export class EditOfficerComponent implements OnInit {
   vehicleSideBImagePreview: string | ArrayBuffer | null = null;
   vehicleSideBImageFile: File | null = null;
 
-
+  jobRoleTypes: JobRoleTypes = JOB_ROLE_TYPES;
 
   constructor(
     private ManageOficerSrv: ManageOfficersService,
@@ -597,7 +598,7 @@ export class EditOfficerComponent implements OnInit {
           this.personalData.irmId = null;
         }
 
-        if (this.personalData.jobRole === 'Driver') {
+        if (this.personalData.jobRole === this.jobRoleTypes.lightWeightDriver || this.personalData.jobRole === this.jobRoleTypes.heavyWeightDriver) {
 
           this.driverObj.licFrontName = this.licenseFrontImageFileName
           this.driverObj.licBackName = this.licenseBackImageFileName

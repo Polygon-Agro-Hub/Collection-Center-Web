@@ -3,6 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, from, switchMap } from 'rxjs';
 import { TokenServiceService } from '../Token/token-service.service';
 import { environment } from '../../environments/environment';
+import { JOB_ROLE_TYPES } from '../../../assets/job-roles-data';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +13,7 @@ export class DistributedManageOfficersService {
   private apiUrl = `${environment.API_BASE_URL}/distributed`;
   private token!: string | null;
 
-  // Keep in sync with assets/json/job-roles.json
-  private readonly driverRoles = ['Light Weight Driver', 'Heavy Weight Driver'];
+  private readonly driverRoles = [JOB_ROLE_TYPES.lightWeightDriver, JOB_ROLE_TYPES.heavyWeightDriver];
 
   constructor(private http: HttpClient, private tokenSrv: TokenServiceService) {
     this.token = this.tokenSrv.getToken()

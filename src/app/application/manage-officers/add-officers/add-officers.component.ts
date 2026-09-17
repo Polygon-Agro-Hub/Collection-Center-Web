@@ -11,7 +11,7 @@ import { HttpClient } from '@angular/common/http';
 import { Location } from '@angular/common';
 import { Country, COUNTRIES } from '../../../../assets/country-data';
 import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
-
+import { JOB_ROLE_TYPES, JobRoleTypes } from './../../../../assets/job-roles-data';
 
 @Component({
   selector: 'app-add-officers',
@@ -80,6 +80,7 @@ export class AddOfficersComponent implements OnInit {
   jobRoles: string[] = [];
 
   jobRoleInputTouched = false;
+  jobRoleTypes: JobRoleTypes = JOB_ROLE_TYPES;
 
 
   // Driver Images
@@ -199,7 +200,6 @@ export class AddOfficersComponent implements OnInit {
       this.jobRoles = [
         'Collection Centre Manager',
         'Collection Officer',
-        // 'Driver'
       ];
     }
     else {
@@ -502,7 +502,7 @@ export class AddOfficersComponent implements OnInit {
         );
       } else if (this.logingRole === 'Collection Centre Head') {
 
-        if (this.personalData.jobRole === 'Driver') {
+        if (this.personalData.jobRole === this.jobRoleTypes.lightWeightDriver || this.personalData.jobRole === this.jobRoleTypes.heavyWeightDriver) {
           if (!this.licenseFrontImageFileName || !this.licenseBackImageFileName || !this.insurenceFrontImageFileName || !this.insurenceBackImageFileName || !this.vehicleFrontImageFileName || !this.vehicleBackImageFileName || !this.vehicleSideAImageFileName || !this.vehicleSideBImageFileName) {
             this.isLoading = false;
             this.toastSrv.warning('Pleace fill all required vehicle image upload fields')

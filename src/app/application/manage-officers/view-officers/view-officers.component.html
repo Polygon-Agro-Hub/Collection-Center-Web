@@ -253,17 +253,17 @@
                                 </td>
                                 <td class="px-1 py-4 text-sm text-gray-900 dark:text-gray-300 text-center">
                                     <button class="text-[#415CFF] hover:text-blue-500 px-2" [ngClass]="{
-                                    'text-gray-400 hover:text-gray-600': (logingRole ==='Collection Centre Manager' && (item.jobRole === 'Collection Centre Manager' || item.jobRole ==='Driver'))
+                                    'text-gray-400 hover:text-gray-600': (logingRole ==='Collection Centre Manager' && (item.jobRole === 'Collection Centre Manager' || item.jobRole === this.jobRoleTypes.lightWeightDriver || item.jobRole === this.jobRoleTypes.heavyWeightDriver))
                                   }"
-                                        (click)="(logingRole ==='Collection Centre Manager' && (item.jobRole === 'Collection Centre Manager' || item.jobRole ==='Driver')) ? '' : navigateToEdit(item.id)">
+                                        (click)="(logingRole ==='Collection Centre Manager' && (item.jobRole === 'Collection Centre Manager' || item.jobRole === this.jobRoleTypes.lightWeightDriver || item.jobRole === this.jobRoleTypes.heavyWeightDriver)) ? '' : navigateToEdit(item.id)">
                                         <i class="fa-solid fa-pen-to-square text-lg"></i>
                                     </button>
                                 </td>
 
                                 <td class="px-1 py-4 text-sm text-gray-900 dark:text-gray-300 text-center">
                                     <button class="text-[#FF415C] px-2" [ngClass]="{
-                                'text-gray-400 hover:text-gray-600': (logingRole ==='Collection Centre Manager' && (item.jobRole === 'Collection Centre Manager' || item.jobRole ==='Driver'))
-                              }" (click)="(logingRole ==='Collection Centre Manager' && (item.jobRole === 'Collection Centre Manager' || item.jobRole ==='Driver')) ? '' : deleteCollectionOfficer(item.id)">
+                                'text-gray-400 hover:text-gray-600': (logingRole ==='Collection Centre Manager' && (item.jobRole === 'Collection Centre Manager' || item.jobRole === this.jobRoleTypes.lightWeightDriver || item.jobRole === this.jobRoleTypes.heavyWeightDriver))
+                              }" (click)="(logingRole ==='Collection Centre Manager' && (item.jobRole === 'Collection Centre Manager' || item.jobRole === this.jobRoleTypes.lightWeightDriver || item.jobRole === this.jobRoleTypes.heavyWeightDriver)) ? '' : deleteCollectionOfficer(item.id)">
                                         <i class="fa-solid fa-trash text-lg"></i>
                                     </button>
                                 </td>

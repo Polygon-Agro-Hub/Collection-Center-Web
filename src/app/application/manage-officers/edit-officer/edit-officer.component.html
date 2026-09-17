@@ -734,7 +734,7 @@
                     Back
                 </button>
 
-                <button *ngIf="personalData.jobRole !== 'Driver'" type="submit"
+                <button *ngIf="personalData.jobRole !== jobRoleTypes.lightWeightDriver && personalData.jobRole !== jobRoleTypes.heavyWeightDriver" type="submit"
                     class="px-6 py-1 bg-[#415CFF] text-[#FFFFFF] rounded-lg" (click)="
                     !PageTwoForm.invalid 
                       ? onSubmit()
@@ -743,7 +743,7 @@
                     Sent to Approve
                 </button>
 
-                <button *ngIf="personalData.jobRole === 'Driver'" type="submit"
+                <button *ngIf="personalData.jobRole === jobRoleTypes.lightWeightDriver || personalData.jobRole === jobRoleTypes.heavyWeightDriver" type="submit"
                     class="px-6 py-1 bg-[#415CFF] text-[#FFFFFF] rounded-lg" (click)="
                     !PageTwoForm.invalid && selectedBankId && selectedBranchId && (personalData.accNumber === personalData.conformAccNumber)
                       ? nextForm('pageThree')

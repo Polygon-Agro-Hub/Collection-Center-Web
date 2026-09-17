@@ -12,8 +12,15 @@ export class DistributedManageOfficersService {
   private apiUrl = `${environment.API_BASE_URL}/distributed`;
   private token!: string | null;
 
+  // Keep in sync with assets/json/job-roles.json
+  private readonly driverRoles = ['Light Weight Driver', 'Heavy Weight Driver'];
+
   constructor(private http: HttpClient, private tokenSrv: TokenServiceService) {
     this.token = this.tokenSrv.getToken()
+  }
+
+  private isDriverRole(role: string): boolean {
+    return this.driverRoles.includes(role);
   }
 
   getAllOfficers(page: number = 1, limit: number = 10, status: string = '', role: string = '', searchText: string = ''): Observable<any> {
@@ -156,7 +163,7 @@ export class DistributedManageOfficersService {
     });
 
     const body: any = { officerData: person };
-    if (person.jobRole === 'Driver') {
+    if (this.isDriverRole(person.jobRole)) {
       body.driverData = driver;
     }
 
@@ -172,7 +179,7 @@ export class DistributedManageOfficersService {
     });
 
     const body: any = { officerData: person };
-    if (person.jobRole === 'Driver') {
+    if (this.isDriverRole(person.jobRole)) {
       body.driverData = driver;
     }
 
@@ -197,7 +204,7 @@ export class DistributedManageOfficersService {
     });
 
     const body: any = { officerData: person };
-    if (person.jobRole === 'Driver') {
+    if (this.isDriverRole(person.jobRole)) {
       body.driverData = driver;
     }
 
@@ -213,7 +220,7 @@ export class DistributedManageOfficersService {
     });
 
     const body: any = { officerData: person };
-    if (person.jobRole === 'Driver') {
+    if (this.isDriverRole(person.jobRole)) {
       body.driverData = driver;
     }
 

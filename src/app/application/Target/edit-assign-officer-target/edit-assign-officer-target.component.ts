@@ -6,7 +6,6 @@ import { ActivatedRoute, Router } from '@angular/router';
 import { TargetService } from '../../../services/Target-service/target.service';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import Swal from 'sweetalert2';
-import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-edit-assign-officer-target',
@@ -40,7 +39,6 @@ export class EditAssignOfficerTargetComponent {
     private route: ActivatedRoute,
     private toastSrv: ToastAlertService,
     private cdRef: ChangeDetectorRef,
-    private location: Location,
     private datePipe: DatePipe
   ) { }
 
@@ -134,7 +132,9 @@ export class EditAssignOfficerTargetComponent {
       if (result.isConfirmed) {
 
         this.toastSrv.warning('Assign Officer Target edit was canceled.')
-        this.location.back();
+        this.router.navigate(['/target'], {
+          state: { selectAssign: true }
+        });
       }
     });
   }

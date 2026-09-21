@@ -55,7 +55,7 @@ export class ViewDailyTargetComponent implements OnInit, OnDestroy {
         renderer: 'svg',
         loop: true,
         autoplay: true,
-        path: '/assets/json/NoRowAvailable.json',
+        path: 'assets/json/NoRowAvailable.json',
       });
     }
   }

@@ -257,12 +257,19 @@ export class ViewDailyTargetComponent implements OnInit, OnDestroy {
   selectPrograss() {
     this.isSelectPrograss = true;
     this.isSelectAssign = false;
+    this.rememberSelectedTab();
   }
 
   selectAssign() {
     this.isSelectPrograss = false;
     this.isSelectAssign = true;
+    this.rememberSelectedTab();
     this.filterAssignStatus();
+  }
+
+  // Keeps the active tab in this history entry so browser/back navigation restores it.
+  private rememberSelectedTab() {
+    history.replaceState({ ...history.state, selectAssign: this.isSelectAssign }, '');
   }
 
   AssignAllDailyTarget(page: number = 1, limit: number = this.itemsPerPage, search: string = this.assignSearch, date: string = this.assignDate) {

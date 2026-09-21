@@ -127,18 +127,10 @@
           <span class="ml-2">Rs. {{ this.totalDefinePkgPrice | number : "1.2-2" }}</span>
         </div>
         <div *ngIf="isWithinLimit" class="text-xs text-[#006C5A] italic">
-          Allowed limit : {{ this.totalPackagePrice | number : "1.2-2" }} +
-          {{ this.totalPackagePrice | number : "1.2-2" }} x 8% = Rs. {{
-          this.totalPackagePrice * 1.08 | number : "1.2-2"
-          }}
+          {{limitMassage}}
         </div>
         <div *ngIf="!isWithinLimit" class="text-xs text-[#E11E21] dark:text-red-400 mt-1 italic">
-          Calculated price exceeds the allowed limit ({{
-          totalPackagePrice | number : "1.2-2"
-          }}
-          + {{ totalPackagePrice | number : "1.2-2" }} x 8% = Rs. {{
-          totalPackagePrice * 1.08 | number : "1.2-2"
-          }}) . To save the order, it must be within 8% of the target price.
+          {{limitMassage}}
         </div>
       </div>
     </div>

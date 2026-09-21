@@ -276,18 +276,18 @@ export class ViewDistributedOfficersComponent implements OnInit {
         // Approve Button
         document.getElementById('approveButton')?.addEventListener('click', () => {
           Swal.close();
-          this.handleStatusChange(swalInstance, item.id, 'Approved');
+          this.handleStatusChange(swalInstance, item.id, 'Approved', item.jobRole);
         });
 
         document.getElementById('rejectButton')?.addEventListener('click', () => {
           Swal.close();
-          this.handleStatusChange(swalInstance, item.id, 'Rejected');
+          this.handleStatusChange(swalInstance, item.id, 'Rejected', item.jobRole);
         });
       }
     });
   }
 
-  private handleStatusChange(swalInstance: any, id: number, status: 'Approved' | 'Rejected') {
+  private handleStatusChange(swalInstance: any, id: number, status: 'Approved' | 'Rejected', jobRole: string) {
     // Show loading state
     this.isLoading = true;
     swalInstance.update({
@@ -311,11 +311,11 @@ export class ViewDistributedOfficersComponent implements OnInit {
           this.isLoading = false;
           swalInstance.close();
           const action = status === 'Approved' ? 'approved' : 'rejected';
-          this.toastSrv.success(`The Distribution Officer was ${action} successfully.`);
+          this.toastSrv.success(`The ${jobRole} was ${action} successfully.`);
           this.fetchByRole();
         } else {
           this.isLoading = false;
-          this.toastSrv.error(`Failed to ${status.toLowerCase()} the Distribution Officer.`);
+          this.toastSrv.error(`Failed to ${status.toLowerCase()} the ${jobRole}.`);
         }
       },
       error: (err) => {

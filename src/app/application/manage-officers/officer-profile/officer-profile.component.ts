@@ -208,6 +208,12 @@ export class OfficerProfileComponent implements OnInit {
     let empId = this.officerObj.empId || '';
     let empCodeText = empCode ? `${empCode}${empId}` : empId;
 
+    const isDriver = this.officerObj.jobRole === this.jobRoleTypes.lightWeightDriver
+      || this.officerObj.jobRole === this.jobRoleTypes.heavyWeightDriver;
+    if (isDriver && this.officerObj.slvCatName) {
+      empCodeText += `  |  ${this.officerObj.slvCatName}`;
+    }
+
     let empTypeText = `${getValueOrNA(empType)} - `;
     doc.text(empTypeText, startX, 22);
 

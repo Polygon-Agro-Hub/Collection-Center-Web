@@ -401,7 +401,6 @@ export class DcmPositioningComponent implements OnInit, AfterViewChecked {
 
   openDeletePositionModal(pos: Positions): void {
     this.positionToDelete = pos;
-    console.log('positionToDelete', this.positionToDelete)
     this.showDeletePositionModal = true;
   }
 

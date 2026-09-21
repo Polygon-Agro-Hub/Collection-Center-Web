@@ -86,11 +86,11 @@ export class CollectionMonthlyReportComponent implements OnInit {
     } else {
 
       if (!startEntered && !endEntered) {
-        this.toastSrv.warning("Please enter both Start Date and End Date.");
+        this.toastSrv.warning("Please select a date range to view the data");
       } else if (!startEntered) {
-        this.toastSrv.warning("Please enter the Start Date.");
+        this.toastSrv.warning("Please select a Start Date.");
       } else if (!endEntered) {
-        this.toastSrv.warning("Please enter the End Date.");
+        this.toastSrv.warning("Please select an End Date.");
       }
 
     }

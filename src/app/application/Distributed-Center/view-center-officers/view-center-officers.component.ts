@@ -245,7 +245,7 @@ export class ViewCenterOfficersComponent implements OnInit {
   </div>
 `;
 
-    const swalInstance = Swal.fire({
+    Swal.fire({
       html: tableHtml,
       showConfirmButton: false,
       width: 'auto',
@@ -259,50 +259,34 @@ export class ViewCenterOfficersComponent implements OnInit {
       didOpen: () => {
         // Approve Button
         document.getElementById('approveButton')?.addEventListener('click', () => {
-          this.handleStatusChange(swalInstance, item.id, 'Approved');
+          this.handleStatusChange(item.id, 'Approved');
         });
 
         // Reject Button
         document.getElementById('rejectButton')?.addEventListener('click', () => {
-          this.handleStatusChange(swalInstance, item.id, 'Rejected');
+          this.handleStatusChange(item.id, 'Rejected');
         });
       }
     });
   }
 
-  private handleStatusChange(swalInstance: any, id: number, status: 'Approved' | 'Rejected') {
-    // Show loading state
+  private handleStatusChange(id: number, status: 'Approved' | 'Rejected') {
+    // Close the popup right away and hand loading off to the app's default loader
+    Swal.close();
     this.isLoading = true;
-    swalInstance.update({
-      showConfirmButton: false,
-      allowEscapeKey: false,
-      allowOutsideClick: false,
-      customClass: {
-        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-        title: 'dark:text-white',
-      },
-
-      didOpen: () => {
-        Swal.showLoading();
-      }
-    });
 
     this.ManageOficerSrv.ChangeStatus(id, status).subscribe({
       next: (res) => {
-        swalInstance.close();
+        this.isLoading = false;
         if (res.status) {
-          this.isLoading = false;
-          swalInstance.close();
           const action = status === 'Approved' ? 'approved' : 'rejected';
           this.toastSrv.success(`The Distribution Officer ${action} successfully.`);
           this.fetchByRole();
         } else {
-          this.isLoading = false;
           this.toastSrv.error(res.message || `Failed to ${status.toLowerCase()} the collection.`);
         }
       },
       error: (err) => {
-        swalInstance.close();
         this.isLoading = false;
         this.toastSrv.error(`An error occurred while ${status.toLowerCase()}ing. Please try again.`);
       }

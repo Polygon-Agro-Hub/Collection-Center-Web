@@ -46,7 +46,8 @@
     Selected Row : <span class="font-semibold">{{ formatSelectedRowLabel(selectedRow!.rowIndex) }}</span>
   </div>
 
-  <ng-container *ngFor="let slot of positions; let i = index">
+  <ng-container *ngIf="hasPositionsData">
+   <ng-container *ngFor="let slot of positions; let i = index">
     <div class="mb-4">
       <div class="flex items-center gap-4">
         <div class="flex-1 flex items-stretch rounded-md overflow-hidden border-2 min-h-16"
@@ -99,19 +100,25 @@
         <span *ngIf="isPositionInvalid(slot)">Duplicate products detected.</span>
       </div>
     </div>
+   </ng-container>
+
+    <div class="sticky bottom-0 z-20 -mx-5 px-5 bg-white dark:bg-gray-900 py-5 mt-6 flex justify-center gap-4">
+      <button
+        class="rounded-lg px-8 py-2 text-[18px] font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors min-w-16"
+        (click)="onCancel()">
+        Cancel
+      </button>
+      <button
+        class="rounded-lg px-8 py-2 text-[18px] font-medium bg-[#415CFF] text-white hover:bg-[#415CFF] transition-colors min-w-16"
+        (click)="onSave()">
+        Save
+      </button>
+    </div>
   </ng-container>
 
-  <div class="sticky bottom-0 z-20 -mx-5 px-5 bg-white dark:bg-gray-900 py-5 mt-6 flex justify-center gap-4">
-    <button
-      class="rounded-lg px-8 py-2 text-[18px] font-medium border border-gray-300 dark:border-gray-600 text-gray-700 dark:text-gray-300 bg-white dark:bg-gray-800 hover:bg-gray-50 dark:hover:bg-gray-700 transition-colors min-w-16"
-      (click)="onCancel()">
-      Cancel
-    </button>
-    <button
-      class="rounded-lg px-8 py-2 text-[18px] font-medium bg-[#415CFF] text-white hover:bg-[#415CFF] transition-colors min-w-16"
-      (click)="onSave()">
-      Save
-    </button>
+  <div *ngIf="!hasPositionsData" class="flex flex-col items-center w-full h-screen mt-6">
+    <p class="text-[#494949] my-6 dark:text-white">--No Positions Available--</p>
+    <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
   </div>
 </div>
 

@@ -7,7 +7,6 @@ import { ManageOfficersService } from '../../../services/manage-officers-service
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import Swal from 'sweetalert2';
-import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-assign-officer-target',
@@ -39,7 +38,6 @@ export class AssignOfficerTargetComponent implements OnInit {
     private route: ActivatedRoute,
     private toastSrv: ToastAlertService,
     private cdRef: ChangeDetectorRef,
-    private location: Location,
     private datePipe: DatePipe
   ) { }
 
@@ -137,7 +135,9 @@ export class AssignOfficerTargetComponent implements OnInit {
       if (result.isConfirmed) {
 
         this.toastSrv.warning('Assign Officer Target Operation Canceled.')
-        this.location.back();
+        this.router.navigate(['/target'], {
+          state: { selectAssign: true }
+        });
       }
     });
   }

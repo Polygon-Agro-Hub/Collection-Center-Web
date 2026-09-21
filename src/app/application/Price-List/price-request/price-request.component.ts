@@ -515,7 +515,6 @@ export class PriceRequestComponent implements OnInit {
     this.requestId = requestId
     this.requestPrice = requestPrice
     this.originalProce = Number(price)
-    console.log('originalProce', this.originalProce)
     this.isChangeStatusViewOpen = true;
 
   }

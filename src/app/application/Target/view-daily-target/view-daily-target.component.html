@@ -191,63 +191,18 @@
         <div class="flex flex-row items-center justify-between gap-8 ">
 
             <div class="flex flex-col justify-between">
-                <p class="font-semibold text-lg mb-1">Centre Target on {{today}} </p>
+                <p class="font-semibold text-lg mb-1">Centre Target on {{ assignDate | date:'yyyy/MM/dd' }} </p>
             </div>
 
             <div class="flex flex-row items-center gap-8 ">
+
                 <i class="fa-solid text-[#4A4A4A] fa-list text-lg ml-8 dark:text-white"></i>
 
                 <p class="text-[#4A4A4A] dark:text-white">Filter By</p>
 
-
-                <div class="relative w-40 custom-assign-status-dropdown-container">
-                    <!-- Hidden native select -->
-                    <select [(ngModel)]="selectAssignStatus" class="hidden" (change)="filterAssignStatus()">
-
-                        <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                            value="Updated">Updated</option>
-                        <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                            value="Assigned">Assigned</option>
-                        <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                            value="Not Assigned">Not Assigned</option>
-                    </select>
-
-                    <!-- Custom dropdown trigger -->
-                    <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
-                        (click)="toggleAssignStatusDropdown()">
-                        <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
-                            <span>{{ selectAssignStatus || 'Assign Status' }}</span>
-                            <div class="flex items-center">
-                                <!-- X icon (shown ONLY when option is selected) -->
-                                <i *ngIf="selectAssignStatus" (click)="cancelAssignStatus($event)"
-                                    class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
-
-                                <!-- Arrow icon (shown when EITHER: dropdown is open OR no selection exists) -->
-                                <i *ngIf="isAssignStatusDropdownOpen || !selectAssignStatus"
-                                    class="fa-solid text-lg text-[#828282] transition-transform duration-200"
-                                    [class.fa-angle-down]="!isAssignStatusDropdownOpen"
-                                    [class.fa-angle-up]="isAssignStatusDropdownOpen"></i>
-                            </div>
-                        </div>
-                    </div>
-
-                    <!-- Custom dropdown options -->
-                    <div *ngIf="isAssignStatusDropdownOpen"
-                        class="absolute overflow-hidden z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
-                        <div class="">
-                            <div *ngFor="let option of assignStatusDropdownOptions; let i = index"
-                                (click)="selectAssignStatusOption(option)"
-                                class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center"
-                                [ngClass]="{
-                                    'rounded-t-xl': i === 0,
-                                    'rounded-b-xl': i === assignStatusDropdownOptions.length - 1
-                                  }">
-                                <span class="flex-grow">{{ option }}</span>
-                                <i
-                                    class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
-                            </div>
-                        </div>
-                    </div>
+                <div class="w-48">
+                    <app-custom-datepicker [placeholder]="'Target Date'" [selectedDate]="assignDate"
+                        [showClearButton]="true" (dateChange)="onAssignDateChange($event)"></app-custom-datepicker>
                 </div>
 
 
@@ -279,12 +234,23 @@
 
         </div>
 
+        <div *ngIf="!assignHasData && isBeforeAssignDeadline"
+            class="flex items-center gap-2 mt-8 mr-5 px-4 py-3 rounded-lg bg-[#EDF5FC] text-sm font-[400] text-[#000000] dark:text-gray-800">
+            <i class="fa-solid fa-circle-info text-[#415CFF]"></i>
+            <p>Target will appear in the system on {{ assignBannerDateLabel }} after 7.00 PM once the CCH officer
+                assigns the target.
+            </p>
+        </div>
 
-        <!-- <div *ngIf="!assignHasData" class="flex justify-center items-center mt-8 mr-5 w-full h-[500px]">
-            <p class="text-3xl text-center font-semibold">No Data Availabale</p>
-        </div> -->
 
-        <div *ngIf="!assignHasData" class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6 ">
+        <div *ngIf="!assignHasData && isBeforeAssignDeadline"
+            class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6 ">
+            <div #lottieContainer class="w-40 h-40"></div>
+            <p class="text-[#494949] my-6 dark:text-textDark">--No Target Available--</p>
+        </div>
+
+        <div *ngIf="!assignHasData && !isBeforeAssignDeadline"
+            class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6 ">
             <p class="text-[#494949] my-6 dark:text-textDark">--No Data Available--</p>
             <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
         </div>
@@ -331,43 +297,51 @@
                             {{ item.qtyC }}
                         </td>
 
-                        <!--
-        <td class="px-6 py-4 text-black dark:text-gray-300 text-lg">
-            <p class="text-[#646464] text-sm">
-                {{ formatDate(item.toDate) }}
-            </p>
-        </td>
-        -->
 
                         <td class="px-6 py-4 text-center text-black-900 dark:text-gray-300">
                             <span
                                 *ngIf="item.isAssign === 0 && (item.assignStatusA === 0 && item.assignStatusB === 0 && item.assignStatusC === 0)">
-                                <i class="fa-solid fa-user-plus text-blue-600 text-xl cursor-pointer"
-                                    (click)="navigateToAssignTarget(item.varietyId, item.companyCenterId)">
+                                <i class="fa-solid fa-user-plus text-xl"
+                                    [class.text-blue-600]="!isAssignDateBeforeToday"
+                                    [class.text-gray-400]="isAssignDateBeforeToday"
+                                    [class.cursor-pointer]="!isAssignDateBeforeToday"
+                                    [class.cursor-not-allowed]="isAssignDateBeforeToday"
+                                    (click)="!isAssignDateBeforeToday && navigateToAssignTarget(item.varietyId, item.companyCenterId)">
                                 </i>
                             </span>
 
                             <span
                                 *ngIf="item.isAssign === 1 && (item.assignStatusA === 1 && item.assignStatusB === 1 && item.assignStatusC === 1)">
-                                <i class="fa-solid fa-pen-to-square text-xl text-blue-600 cursor-pointer"
-                                    (click)="navigateToEditAssignTarget(item.varietyId, item.companyCenterId)">
+                                <i class="fa-solid fa-pen-to-square text-xl"
+                                    [class.text-blue-600]="!isAssignDateBeforeToday"
+                                    [class.text-gray-400]="isAssignDateBeforeToday"
+                                    [class.cursor-pointer]="!isAssignDateBeforeToday"
+                                    [class.cursor-not-allowed]="isAssignDateBeforeToday"
+                                    (click)="!isAssignDateBeforeToday && navigateToEditAssignTarget(item.varietyId, item.companyCenterId)">
                                 </i>
                             </span>
 
                             <span
                                 *ngIf="item.isAssign === 1 && (item.assignStatusA === 0 || item.assignStatusB === 0 || item.assignStatusC === 0)">
-                                <i class="fa-solid fa-pen-to-square text-xl text-red-600 cursor-pointer"
-                                    (click)="navigateToEditAssignTarget(item.varietyId, item.companyCenterId)">
+                                <i class="fa-solid fa-pen-to-square text-xl"
+                                    [class.text-red-600]="!isAssignDateBeforeToday"
+                                    [class.text-gray-400]="isAssignDateBeforeToday"
+                                    [class.cursor-pointer]="!isAssignDateBeforeToday"
+                                    [class.cursor-not-allowed]="isAssignDateBeforeToday"
+                                    (click)="!isAssignDateBeforeToday && navigateToEditAssignTarget(item.varietyId, item.companyCenterId)">
                                 </i>
                             </span>
                         </td>
 
                         <td>
-                            <i class="fa-solid fa-circle-check text-2xl text-blue-600"
+                            <i class="fa-solid fa-circle-check text-2xl"
+                                [class.text-blue-600]="!isAssignDateBeforeToday"
+                                [class.text-gray-400]="isAssignDateBeforeToday"
                                 *ngIf="item.isAssign === 1 && (item.assignStatusA === 1 && item.assignStatusB === 1 && item.assignStatusC === 1)">
                             </i>
 
-                            <i class="fa-solid fa-circle-check text-2xl text-[#EB3223]"
+                            <i class="fa-solid fa-circle-check text-2xl"
+                                [ngClass]="isAssignDateBeforeToday ? 'text-gray-400' : 'text-[#EB3223]'"
                                 *ngIf="item.isAssign === 1 && (item.assignStatusA === 0 || item.assignStatusB === 0 || item.assignStatusC === 0)">
                             </i>
                         </td>

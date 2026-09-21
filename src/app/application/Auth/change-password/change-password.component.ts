@@ -95,6 +95,16 @@ export class ChangePasswordComponent implements OnInit {
         this.authService.changePassword(this.changePassword).subscribe(
           (response) => {
             this.isLoading = false;
+
+            if (!response.status) {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: response.message || 'Failed to update password. Please try again.',
+              });
+              return;
+            }
+
             Swal.fire({
               icon: 'success',
               title: 'Success',
@@ -108,7 +118,7 @@ export class ChangePasswordComponent implements OnInit {
             Swal.fire({
               icon: 'error',
               title: 'Error',
-              text: 'Failed to update password. Please try again.',
+              text: error?.error?.message || 'Failed to update password. Please try again.',
             });
           }
         );

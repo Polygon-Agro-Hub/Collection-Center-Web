@@ -165,7 +165,7 @@
                         </div>
                     </div>
 
-                    <div *ngIf="personalData.jobRole === 'Driver'">
+                    <div *ngIf="isDriverRole(personalData.jobRole)">
                         <label for="drvCategory" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
                             Driver Category *
                         </label>
@@ -185,7 +185,7 @@
                     </div>
 
                     <div
-                        *ngIf="(logingRole === 'Distribution Centre Head' && (personalData.jobRole === 'Distribution Officer')) || (logingRole === 'Distribution Centre Head' && (personalData.jobRole === 'Driver'))">
+                        *ngIf="(logingRole === 'Distribution Centre Head' && (personalData.jobRole === 'Distribution Officer')) || (logingRole === 'Distribution Centre Head' && isDriverRole(personalData.jobRole))">
                         <label for="irmId" class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">
                             Manager *
                         </label>
@@ -339,7 +339,7 @@
                         </div>
                     </div>
 
-                    <div *ngIf="personalData.jobRole !=='Driver'">
+                    <div *ngIf="!isDriverRole(personalData.jobRole)">
                         <label for="firstNameSinhala"
                             class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">First
                             Name (in Sinhala) *</label>
@@ -353,7 +353,7 @@
                         </div>
                     </div>
 
-                    <div *ngIf="personalData.jobRole !=='Driver'">
+                    <div *ngIf="!isDriverRole(personalData.jobRole)">
                         <label for="lastNameSinhala"
                             class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Last
                             Name (in Sinhala) *</label>
@@ -367,7 +367,7 @@
                         </div>
                     </div>
 
-                    <div *ngIf="personalData.jobRole !=='Driver'">
+                    <div *ngIf="!isDriverRole(personalData.jobRole)">
                         <label for="firstNameTamil"
                             class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">First
                             Name (in Tamil) *</label>
@@ -381,7 +381,7 @@
                         </div>
                     </div>
 
-                    <div *ngIf="personalData.jobRole !=='Driver'">
+                    <div *ngIf="!isDriverRole(personalData.jobRole)">
                         <label for="lastNameTamil"
                             class="block text-sm font-medium text-[#534E4E] mb-1 dark:text-textDark">Last
                             Name (in Tamil) *</label>
@@ -548,7 +548,7 @@
       && !this.languagesRequired
       && personalData.phoneNumber02 !== personalData.phoneNumber01 
       && personalData.jobRole 
-      && (personalData.jobRole !== 'Driver' || personalData.drvCategory)
+      && (!isDriverRole(personalData.jobRole) || personalData.drvCategory)
       && !isPhoneInvalidMap['phone01'] 
       && ((personalData.phoneNumber02 && !isPhoneInvalidMap['phone02']) || !personalData.phoneNumber02)
         ? nextForm('pageTwo') 
@@ -740,7 +740,7 @@
                 <button (click)="nextForm('pageOne')" type="button"
                     class="px-8 py-2 bg-[#F6F7F9] border-gray-400 border-[2px] text-[#6B7D8C] rounded-lg mr-2">Back</button>
 
-                <button *ngIf="personalData.jobRole !== 'Driver'" type="submit"
+                <button *ngIf="!isDriverRole(personalData.jobRole)" type="submit"
                     class="px-6 py-1 bg-[#415CFF] text-[#FFFFFF] rounded-lg" (click)="
                     !PageTwoForm.invalid 
                       ? onSubmit()
@@ -750,7 +750,7 @@
                 </button>
 
 
-                <button *ngIf="personalData.jobRole === 'Driver'" type="submit"
+                <button *ngIf="isDriverRole(personalData.jobRole)" type="submit"
                     class="px-6 py-1 bg-[#415CFF] text-[#FFFFFF] rounded-lg" (click)="
                     !PageTwoForm.invalid && selectedBankId && selectedBranchId && (personalData.accNumber === personalData.conformAccNumber)
                       ? nextForm('pageThree')

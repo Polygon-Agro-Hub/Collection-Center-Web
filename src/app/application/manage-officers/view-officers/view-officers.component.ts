@@ -10,6 +10,7 @@ import { ToastAlertService } from '../../../services/toast-alert/toast-alert.ser
 import { TokenServiceService } from '../../../services/Token/token-service.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
+import { JOB_ROLE_TYPES, JobRoleTypes } from './../../../../assets/job-roles-data';
 
 @Component({
   selector: 'app-view-officers',
@@ -39,6 +40,8 @@ export class ViewOfficersComponent implements OnInit {
 
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Approved', 'Not Approved', 'Rejected'];
+
+  jobRoleTypes: JobRoleTypes = JOB_ROLE_TYPES;
 
   toggleStatusDropdown() {
     this.isStatusDropdownOpen = !this.isStatusDropdownOpen;

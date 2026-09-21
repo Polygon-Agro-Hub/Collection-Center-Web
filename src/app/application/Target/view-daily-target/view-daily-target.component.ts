@@ -36,6 +36,7 @@ export class ViewDailyTargetComponent implements OnInit, OnDestroy {
   assignTotalItems: number = 0;
   assignItemsPerPage: number = 10;
   assignSearch: string = '';
+  selectAssignStatus: string = ''
   assignDate: string = '';
 
 
@@ -70,6 +71,19 @@ export class ViewDailyTargetComponent implements OnInit, OnDestroy {
     this.selectStatus = option;
     this.isStatusDropdownOpen = false;
     this.filterStatus();
+  }
+
+  isAssignStatusDropdownOpen = false;
+  assignStatusDropdownOptions = ['Updated', 'Assigned', 'Not Assigned'];
+
+  toggleAssignStatusDropdown() {
+    this.isAssignStatusDropdownOpen = !this.isAssignStatusDropdownOpen;
+  }
+
+  selectAssignStatusOption(option: string) {
+    this.selectAssignStatus = option;
+    this.isAssignStatusDropdownOpen = false;
+    this.filterAssignStatus();
   }
 
   constructor(
@@ -162,8 +176,15 @@ export class ViewDailyTargetComponent implements OnInit, OnDestroy {
     const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
     const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
 
+    const assignStatusDropdownElement = document.querySelector('.custom-assign-status-dropdown-container');
+    const assignStatusDropdownClickedInside = assignStatusDropdownElement?.contains(event.target as Node);
+
     if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
       this.isStatusDropdownOpen = false;
+    }
+
+    if (!assignStatusDropdownClickedInside && this.isAssignStatusDropdownOpen) {
+      this.isAssignStatusDropdownOpen = false;
     }
 
   }
@@ -241,7 +262,7 @@ export class ViewDailyTargetComponent implements OnInit, OnDestroy {
   selectAssign() {
     this.isSelectPrograss = false;
     this.isSelectAssign = true;
-    this.AssignAllDailyTarget();
+    this.filterAssignStatus();
   }
 
   AssignAllDailyTarget(page: number = 1, limit: number = this.itemsPerPage, search: string = this.assignSearch, date: string = this.assignDate) {
@@ -298,15 +319,66 @@ export class ViewDailyTargetComponent implements OnInit, OnDestroy {
 
     this.assignDate = dateString;
     this.assignPage = 1;
-    this.AssignAllDailyTarget();
+    this.filterAssignStatus();
   }
 
   assignOnSearch() {
-    this.AssignAllDailyTarget();
+    this.filterAssignStatus();
   }
   assignOffSearch() {
     this.assignSearch = '';
-    this.AssignAllDailyTarget()
+    this.filterAssignStatus();
+  }
+
+  filterAssignStatus() {
+    this.isLoading = true;
+    this.TargetSrv.AssignAllDailyTarget(1, 10, this.assignSearch, this.assignDate).subscribe(
+      (res) => {
+        this.assignTargetArr = res || []; // fallback if response is null or undefined
+        // Apply filtering
+        if (this.selectAssignStatus === 'Updated') {
+          this.assignTargetArr = this.assignTargetArr.filter(item =>
+            item.isAssign === 1 &&
+            (item.assignStatusA === 0 || item.assignStatusB === 0 || item.assignStatusC === 0)
+          );
+        } else if (this.selectAssignStatus === 'Assigned') {
+          this.assignTargetArr = this.assignTargetArr.filter(item =>
+            item.isAssign === 1 &&
+            item.assignStatusA === 1 &&
+            item.assignStatusB === 1 &&
+            item.assignStatusC === 1
+          );
+        } else if (this.selectAssignStatus === 'Not Assigned') {
+          this.assignTargetArr = this.assignTargetArr.filter(item =>
+            item.isAssign === 0 &&
+            item.assignStatusA === 0 &&
+            item.assignStatusB === 0 &&
+            item.assignStatusC === 0
+          );
+        }
+
+        this.isLoading = false;
+
+        this.assignHasData = this.assignTargetArr.length > 0;
+
+        this.assignTotalItems = this.assignTargetArr.length;
+        this.assignPage = 1;
+      },
+      (err) => {
+        this.isLoading = false;
+        console.error('Failed to load data', err);
+        this.assignTargetArr = [];
+        this.assignHasData = false;
+      }
+    );
+  }
+
+  cancelAssignStatus(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
+    this.selectAssignStatus = '';
+    this.filterAssignStatus();
   }
 
   checkLeadingSpace() {

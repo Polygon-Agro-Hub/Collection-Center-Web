@@ -3,6 +3,7 @@ import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, } from '@angular/common/http';
 import { TokenServiceService } from '../Token/token-service.service';
 import { environment } from '../../environments/environment';
+import { JOB_ROLE_TYPES, JobRoleTypes } from './../../../assets/job-roles-data';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,8 @@ import { environment } from '../../environments/environment';
 export class ManageOfficersService {
   private apiUrl = `${environment.API_BASE_URL}`;
   private token!: string | null;
+
+  jobRoleTypes: JobRoleTypes = JOB_ROLE_TYPES;
 
   constructor(private http: HttpClient, private tokenSrv: TokenServiceService) {
     this.token = this.tokenSrv.getToken()
@@ -262,8 +265,7 @@ export class ManageOfficersService {
 
   CCHcreateCollectiveOfficer(person: any, selectedFile: File | null, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
     const formData = new FormData();
-
-    if (person.jobRole === 'Driver') {
+    if (person.jobRole === this.jobRoleTypes.lightWeightDriver || person.jobRole === this.jobRoleTypes.heavyWeightDriver) {
       formData.append('driverData', JSON.stringify(driver));
       formData.append('licFront', licFront);
       formData.append('licBack', licBack);
@@ -291,7 +293,7 @@ export class ManageOfficersService {
   CCHupdateCollectiveOfficer(person: any, id: number, selectedFile: File | null, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
     const formData = new FormData();
 
-    if (person.jobRole === 'Driver') {
+    if (person.jobRole === this.jobRoleTypes.lightWeightDriver || person.jobRole === this.jobRoleTypes.heavyWeightDriver) {
       formData.append('driverData', JSON.stringify(driver));
       formData.append('licFront', licFront);
       formData.append('licBack', licBack);

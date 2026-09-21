@@ -103,6 +103,7 @@ export class ViewCentresComponent implements OnInit {
     }
 
     onSearch() {
+        this.searchText = this.searchText?.trim() || '';
         this.currentPage = 1; // Reset to first page on new search
         this.fetchAllDistributionCenterDetails();
     }
@@ -113,7 +114,7 @@ export class ViewCentresComponent implements OnInit {
     }
 
     offSearch() {
-        this.searchText = '';
+        this.searchText = this.searchText?.trim() || '';
         this.fetchAllDistributionCenterDetails();
     }
 
@@ -124,8 +125,6 @@ export class ViewCentresComponent implements OnInit {
             this.isDistrictDropdownOpen = false;
         }
     }
-
-
 
     toggleDistrictDropdown() {
         this.isDistrictDropdownOpen = !this.isDistrictDropdownOpen;

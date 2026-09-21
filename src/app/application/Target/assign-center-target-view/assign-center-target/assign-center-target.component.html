@@ -101,7 +101,7 @@
                                     Save
                                 </button>
                                 <div *ngIf="(item.isNew || item.editingA || item.editingB || item.editingC) && isQtyExceeded(item)"
-                                    class="flex items-center gap-1 mt-1 text-xs text-red-600 dark:text-red-400">
+                                    class="flex items-center gap-1 mt-1 w-28 whitespace-nowrap text-xs text-red-600 dark:text-red-400">
                                     <i class="fa-solid fa-triangle-exclamation text-[#FF0000]"></i>
                                     <span class="text-[#FF0000] font-[400] ">Only {{ item.remaining }} {{
                                         item.unitType.toLowerCase() }} remains to assign; you cannot assign more.</span>

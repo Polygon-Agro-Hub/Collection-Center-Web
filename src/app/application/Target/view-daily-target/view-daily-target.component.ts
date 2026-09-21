@@ -1,19 +1,21 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, OnDestroy, ViewChild, ElementRef } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { TargetService } from '../../../services/Target-service/target.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
+import { CustomDatepickerComponent } from '../../../components/custom-datepicker/custom-datepicker.component';
+import lottie, { AnimationItem } from 'lottie-web';
 
 @Component({
   selector: 'app-view-daily-target',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent, CustomDatepickerComponent],
   templateUrl: './view-daily-target.component.html',
   styleUrls: ['./view-daily-target.component.css'],
 })
-export class ViewDailyTargetComponent implements OnInit {
+export class ViewDailyTargetComponent implements OnInit, OnDestroy {
 
 
   targetArr!: DailyTargets[];
@@ -35,12 +37,28 @@ export class ViewDailyTargetComponent implements OnInit {
   assignItemsPerPage: number = 10;
   assignSearch: string = '';
   selectAssignStatus: string = ''
+  assignDate: string = '';
 
 
   isSelectPrograss = true;
   isSelectAssign = false;
 
   isLoading: boolean = false;
+
+  private animationItem: AnimationItem | undefined;
+
+  @ViewChild('lottieContainer') set lottieContainerRef(ref: ElementRef | undefined) {
+    this.animationItem?.destroy();
+    if (ref) {
+      this.animationItem = lottie.loadAnimation({
+        container: ref.nativeElement,
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: 'assets/json/NoRowAvailable.json',
+      });
+    }
+  }
 
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Pending', 'Completed', 'Exceeded', 'Extra'];
@@ -76,19 +94,81 @@ export class ViewDailyTargetComponent implements OnInit {
 
   ngOnInit(): void {
 
-    if (history.state.selectAssign) {
-      this.selectAssign();
-    }
-
     const date = new Date();
     const year = date.getFullYear();
     const month = ('0' + (date.getMonth() + 1)).slice(-2);
     const day = ('0' + date.getDate()).slice(-2);
     this.today = `${year}/${month}/${day}`;
 
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1);
+    this.assignDate = this.toDateInputFormat(tomorrow);
+
+    if (history.state.selectAssign) {
+      this.selectAssign();
+    }
+
     this.fetchAllTarget();
     this.AssignAllDailyTarget()
 
+  }
+
+  toDateInputFormat(date: Date): string {
+    const year = date.getFullYear();
+    const month = ('0' + (date.getMonth() + 1)).slice(-2);
+    const day = ('0' + date.getDate()).slice(-2);
+    return `${year}-${month}-${day}`;
+  }
+
+  get isAssignDateBeforeToday(): boolean {
+    if (!this.assignDate) {
+      return false;
+    }
+    const [year, month, day] = this.assignDate.split('-').map(Number);
+    const selectedDate = new Date(year, month - 1, day);
+    selectedDate.setHours(0, 0, 0, 0);
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    return selectedDate < today;
+  }
+
+  private getAssignBannerDate(): Date | null {
+    if (!this.assignDate) {
+      return null;
+    }
+    const [year, month, day] = this.assignDate.split('-').map(Number);
+    const bannerDate = new Date(year, month - 1, day);
+    bannerDate.setDate(bannerDate.getDate() - 1);
+    return bannerDate;
+  }
+
+  get assignBannerDateLabel(): string {
+    const bannerDate = this.getAssignBannerDate();
+    if (!bannerDate) {
+      return '';
+    }
+    return this.toOrdinalDateLabel(bannerDate);
+  }
+
+  get isBeforeAssignDeadline(): boolean {
+    const bannerDate = this.getAssignBannerDate();
+    if (!bannerDate) {
+      return true;
+    }
+    const deadline = new Date(bannerDate.getFullYear(), bannerDate.getMonth(), bannerDate.getDate(), 19, 0, 0, 0);
+    return new Date() < deadline;
+  }
+
+  toOrdinalDateLabel(date: Date): string {
+    const day = date.getDate();
+    const suffix = (day % 10 === 1 && day !== 11) ? 'st'
+      : (day % 10 === 2 && day !== 12) ? 'nd'
+        : (day % 10 === 3 && day !== 13) ? 'rd'
+          : 'th';
+    const month = date.toLocaleString('en-US', { month: 'long' });
+    return `${day}${suffix} ${month}`;
   }
 
   @HostListener('document:click', ['$event'])
@@ -177,18 +257,24 @@ export class ViewDailyTargetComponent implements OnInit {
   selectPrograss() {
     this.isSelectPrograss = true;
     this.isSelectAssign = false;
+    this.rememberSelectedTab();
   }
 
   selectAssign() {
     this.isSelectPrograss = false;
     this.isSelectAssign = true;
-    this.selectAssignStatus = 'Updated';
+    this.rememberSelectedTab();
     this.filterAssignStatus();
   }
 
-  AssignAllDailyTarget(page: number = 1, limit: number = this.itemsPerPage, search: string = this.assignSearch) {
+  // Keeps the active tab in this history entry so browser/back navigation restores it.
+  private rememberSelectedTab() {
+    history.replaceState({ ...history.state, selectAssign: this.isSelectAssign }, '');
+  }
+
+  AssignAllDailyTarget(page: number = 1, limit: number = this.itemsPerPage, search: string = this.assignSearch, date: string = this.assignDate) {
     this.isLoading = true;
-    this.TargetSrv.AssignAllDailyTarget(page, limit, search).subscribe(
+    this.TargetSrv.AssignAllDailyTarget(page, limit, search, date).subscribe(
       (res) => {
         this.assignTargetArr = res;
         if (res.length > 0) {
@@ -223,17 +309,37 @@ export class ViewDailyTargetComponent implements OnInit {
     return new Date(date).toISOString().split('T')[0]
   }
 
+  onAssignDateChange(newDate: string | Date | null) {
+    let dateString = '';
+
+    if (newDate instanceof Date) {
+      dateString = this.toDateInputFormat(newDate);
+    } else if (typeof newDate === 'string') {
+      dateString = newDate;
+    }
+
+    if (!dateString) {
+      const tomorrow = new Date();
+      tomorrow.setDate(tomorrow.getDate() + 1);
+      dateString = this.toDateInputFormat(tomorrow);
+    }
+
+    this.assignDate = dateString;
+    this.assignPage = 1;
+    this.filterAssignStatus();
+  }
+
   assignOnSearch() {
-    this.AssignAllDailyTarget();
+    this.filterAssignStatus();
   }
   assignOffSearch() {
     this.assignSearch = '';
-    this.AssignAllDailyTarget()
+    this.filterAssignStatus();
   }
 
   filterAssignStatus() {
     this.isLoading = true;
-    this.TargetSrv.AssignAllDailyTarget(1, 10, this.assignSearch).subscribe(
+    this.TargetSrv.AssignAllDailyTarget(1, 10, this.assignSearch, this.assignDate).subscribe(
       (res) => {
         this.assignTargetArr = res || []; // fallback if response is null or undefined
         // Apply filtering
@@ -260,10 +366,8 @@ export class ViewDailyTargetComponent implements OnInit {
 
         this.isLoading = false;
 
-        // Set hasAssignData explicitly
-        this.assignHasData = this.assignTargetArr.length > 0 ? true : false;
+        this.assignHasData = this.assignTargetArr.length > 0;
 
-        // Update pagination
         this.assignTotalItems = this.assignTargetArr.length;
         this.assignPage = 1;
       },
@@ -276,13 +380,12 @@ export class ViewDailyTargetComponent implements OnInit {
     );
   }
 
-
   cancelAssignStatus(event?: MouseEvent) {
     if (event) {
       event.stopPropagation(); // Prevent triggering the dropdown toggle
     }
     this.selectAssignStatus = '';
-    this.AssignAllDailyTarget();
+    this.filterAssignStatus();
   }
 
   checkLeadingSpace() {
@@ -295,6 +398,10 @@ export class ViewDailyTargetComponent implements OnInit {
     if (this.assignSearch && this.assignSearch.startsWith(' ')) {
       this.assignSearch = this.assignSearch.trim();
     }
+  }
+
+  ngOnDestroy(): void {
+    this.animationItem?.destroy();
   }
 
 }

@@ -98,7 +98,7 @@
                         <td class="px-6 py-3 font-bold text-end text-gray-900 dark:text-gray-300">Total : </td>
                         <td class="px-6 py-3 text-gray-900 dark:text-gray-300">
                             <div class="flex flex-row gap-2">
-                                <input type="any" [value]="totTargetA" disabled
+                                <input type="number" step="any" [value]="totTargetA" disabled
                                     class="border-[#415CFF] dark:bg-slate-500 border-[2px] border-dotted rounded-lg w-28 px-2 py-1" />
                                 <div *ngIf="+totTargetA === +targetVerity.qtyA"
                                     class="bg-[#415CFF] text-[#FFFFFF] flex justify-center items-center px-3 py-1 rounded-full">
@@ -108,7 +108,7 @@
                         </td>
                         <td class="px-6 py-3  text-gray-900 dark:text-gray-300">
                             <div class="flex flex-row gap-2">
-                                <input type="any" [value]="totTargetB" disabled
+                                <input type="number" step="any" [value]="totTargetB" disabled
                                     class="border-[#415CFF] dark:bg-slate-500 border-[2px] border-dotted rounded-lg w-28 px-2 py-1" />
                                 <div *ngIf="+totTargetB === +targetVerity.qtyB"
                                     class="bg-[#415CFF] text-[#FFFFFF] flex justify-center items-center px-3 py-1 rounded-full">
@@ -119,7 +119,7 @@
                         </td>
                         <td class="px-6 py-3 text-gray-900 dark:text-gray-300">
                             <div class="flex flex-row gap-2">
-                                <input type="any" [value]="totTargetC" disabled
+                                <input type="number" step="any" [value]="totTargetC" disabled
                                     class="border-[#415CFF] dark:bg-slate-500 border-[2px] border-dotted rounded-lg w-28 px-2 py-1" />
                                 <div *ngIf="+totTargetC == +targetVerity.qtyC"
                                     class="bg-[#415CFF] text-[#FFFFFF] flex justify-center items-center px-3 py-1 rounded-full">

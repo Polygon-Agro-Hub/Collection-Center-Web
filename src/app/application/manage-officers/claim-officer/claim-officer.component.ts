@@ -8,6 +8,7 @@ import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loa
 import Swal from 'sweetalert2';
 import { TokenServiceService } from '../../../services/Token/token-service.service';
 import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
+import { JOB_ROLE_TYPES, JobRoleTypes } from './../../../../assets/job-roles-data';
 
 @Component({
   selector: 'app-claim-officer',
@@ -29,6 +30,7 @@ export class ClaimOfficerComponent implements OnInit {
   isReset: boolean = false;
 
   jobRoleItems: { value: string; label: string }[] = []
+  jobRoleTypes: JobRoleTypes = JOB_ROLE_TYPES;
 
   constructor(
     private ManageOficerSrv: ManageOfficersService,
@@ -46,7 +48,8 @@ export class ClaimOfficerComponent implements OnInit {
       this.selectJobRole = '';
       this.jobRoleItems = [
         { value: 'Distribution Officer', label: 'Distribution Officer' },
-        { value: 'Driver', label: 'Driver' }
+        { value: this.jobRoleTypes.lightWeightDriver, label: this.jobRoleTypes.lightWeightDriver },
+        { value: this.jobRoleTypes.heavyWeightDriver, label: this.jobRoleTypes.heavyWeightDriver }
       ];
     } else if (this.logingRole === 'Collection Centre Manager') {
       // Collection Centre Manager only sees a readonly field with no way to pick a value,

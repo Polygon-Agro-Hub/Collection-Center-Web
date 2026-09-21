@@ -12,13 +12,13 @@
     </button>
 
     <div *ngIf="tab === 'distribution-center'">
-        <p class="text-lg font-[500] text-[#030308] dark:text-white whitespace-nowrap">{{ regCode }} {{
+        <p class="font-[500] text-[#030308] dark:text-white whitespace-nowrap">{{ regCode }} {{
             selectedCenterName }}</p>
     </div>
 
     <div class="flex flex-row items-center justify-between gap-4 mt-2">
         <div>
-            <p class="text-lg dark:text-white whitespace-nowrap">All ({{ totalItems < 10 ? ('0' + totalItems) :
+            <p class="dark:text-white whitespace-nowrap">All ({{ totalItems < 10 ? ('0' + totalItems) :
                     totalItems }})</p>
         </div>
         <div class="flex flex-row items-center justify-end gap-5 ">

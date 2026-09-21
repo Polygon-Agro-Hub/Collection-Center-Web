@@ -10,7 +10,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
 import { DistributedManageOfficersService } from '../../../../services/Distributed-manage-officers-service/distributed-manage-officers.service';
 import { SerchableDropdownComponent } from './../../../../components/serchable-dropdown/serchable-dropdown.component';
-
+import { JOB_ROLE_TYPES, JobRoleTypes } from './../../../../../assets/job-roles-data';
 @Component({
   selector: 'app-view-distributed-officers',
   standalone: true,
@@ -36,6 +36,8 @@ export class ViewDistributedOfficersComponent implements OnInit {
 
   logingRole: string | null = null;
   isLoading: boolean = true;
+
+  jobRoleTypes: JobRoleTypes = JOB_ROLE_TYPES;
 
   constructor(
     private router: Router,
@@ -67,7 +69,7 @@ export class ViewDistributedOfficersComponent implements OnInit {
   }
 
   isRoleDropdownOpen = false;
-  roleDropdownOptions = ['Distribution Centre Manager', 'Distribution Officer', 'Driver'];
+  roleDropdownOptions = ['Distribution Centre Manager', 'Distribution Officer', this.jobRoleTypes.lightWeightDriver, this.jobRoleTypes.heavyWeightDriver];
 
   toggleRoleDropdown() {
     this.isRoleDropdownOpen = !this.isRoleDropdownOpen;
@@ -274,18 +276,18 @@ export class ViewDistributedOfficersComponent implements OnInit {
         // Approve Button
         document.getElementById('approveButton')?.addEventListener('click', () => {
           Swal.close();
-          this.handleStatusChange(swalInstance, item.id, 'Approved');
+          this.handleStatusChange(swalInstance, item.id, 'Approved', item.jobRole);
         });
 
         document.getElementById('rejectButton')?.addEventListener('click', () => {
           Swal.close();
-          this.handleStatusChange(swalInstance, item.id, 'Rejected');
+          this.handleStatusChange(swalInstance, item.id, 'Rejected', item.jobRole);
         });
       }
     });
   }
 
-  private handleStatusChange(swalInstance: any, id: number, status: 'Approved' | 'Rejected') {
+  private handleStatusChange(swalInstance: any, id: number, status: 'Approved' | 'Rejected', jobRole: string) {
     // Show loading state
     this.isLoading = true;
     swalInstance.update({
@@ -309,11 +311,11 @@ export class ViewDistributedOfficersComponent implements OnInit {
           this.isLoading = false;
           swalInstance.close();
           const action = status === 'Approved' ? 'approved' : 'rejected';
-          this.toastSrv.success(`The Distribution Officer was ${action} successfully.`);
+          this.toastSrv.success(`The ${jobRole} was ${action} successfully.`);
           this.fetchByRole();
         } else {
           this.isLoading = false;
-          this.toastSrv.error(`Failed to ${status.toLowerCase()} the Distribution Officer.`);
+          this.toastSrv.error(`Failed to ${status.toLowerCase()} the ${jobRole}.`);
         }
       },
       error: (err) => {

@@ -11,6 +11,7 @@ import { HttpClient } from '@angular/common/http';
 import { Location } from '@angular/common';
 import { DistributedManageOfficersService } from '../../../services/Distributed-manage-officers-service/distributed-manage-officers.service';
 import { Country, COUNTRIES } from '../../../../assets/country-data';
+import { JOB_ROLE_TYPES, JobRoleTypes } from '../../../../assets/job-roles-data';
 import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
 import { CustomDatepickerComponent } from '../../../components/custom-datepicker/custom-datepicker.component';
 import { firstValueFrom } from 'rxjs';
@@ -82,6 +83,7 @@ export class AddDistributedOfficerComponent implements OnInit {
   managerDropdownOpen = false;
   selectedManagerName: string = "";
   jobRoles: string[] = [];
+  jobRoleTypes: JobRoleTypes = JOB_ROLE_TYPES;
   jobRoleInputTouched = false;
   vehicleTypeDropdownOpen = false;
   vehicleTypeTouched = false;
@@ -169,11 +171,23 @@ export class AddDistributedOfficerComponent implements OnInit {
 
   districtItems = this.districts.map(d => ({ value: d.name, label: d.name }));
 
-  VehicleTypes = [
+  lightVehicleTypes = [
     { name: 'Mahindra Bollero', capacity: 272 },
     { name: 'Dimo Batta', capacity: 750 },
     { name: 'Three Wheeler', capacity: 100 },
   ]
+
+  heavyVehicleTypes = [
+    { name: 'Double Cab Pickup (4x4)', capacity: 900 },
+    { name: 'Isuzu Elf / Canter Lorry', capacity: 3000 },
+    { name: 'Lorry (6-8 Ton)', capacity: 7500 },
+  ]
+
+  get VehicleTypes() {
+    return this.personalData.jobRole === this.jobRoleTypes.heavyWeightDriver
+      ? this.heavyVehicleTypes
+      : this.lightVehicleTypes;
+  }
 
   ngOnInit(): void {
     this.getAllDriverCategory();
@@ -181,6 +195,10 @@ export class AddDistributedOfficerComponent implements OnInit {
     this.loadBranches()
     this.getAllDistributionCenters();
     this.setJobRoles();
+  }
+
+  isDriverRole(role: string | null | undefined): boolean {
+    return role === this.jobRoleTypes.lightWeightDriver || role === this.jobRoleTypes.heavyWeightDriver;
   }
 
   onDatePickerClicked() {
@@ -210,7 +228,11 @@ export class AddDistributedOfficerComponent implements OnInit {
 
   getJobRole(role: string) {
     this.personalData.jobRole = role;
-    if (this.personalData.jobRole === 'Driver') {
+    if (this.selectVehicletype?.name && !this.VehicleTypes.some(v => v.name === this.selectVehicletype.name)) {
+      this.selectVehicletype = { name: '', capacity: '' };
+      this.vehicleChange();
+    }
+    if (this.isDriverRole(this.personalData.jobRole)) {
       this.personalData.firstNameSinhala = '';
       this.personalData.lastNameSinhala = ''
       this.personalData.firstNameTamil = ''
@@ -223,14 +245,15 @@ export class AddDistributedOfficerComponent implements OnInit {
   setJobRoles() {
     if (this.logingRole === 'Distribution Centre Manager') {
       // Only allow Collection Officer
-      this.jobRoles = ['Distribution Officer', 'Driver'];
+      this.jobRoles = ['Distribution Officer', this.jobRoleTypes.lightWeightDriver, this.jobRoleTypes.heavyWeightDriver];
     }
     else if (this.logingRole === 'Distribution Centre Head') {
       // Allow all roles
       this.jobRoles = [
         'Distribution Centre Manager',
         'Distribution Officer',
-        'Driver'
+        this.jobRoleTypes.lightWeightDriver,
+        this.jobRoleTypes.heavyWeightDriver
       ];
     }
     else {
@@ -430,7 +453,7 @@ export class AddDistributedOfficerComponent implements OnInit {
       );
     }
 
-    if (this.personalData.jobRole === 'Driver') {
+    if (this.isDriverRole(this.personalData.jobRole)) {
       const driverUploads: [File | null, keyof Drivers, string][] = [
         [this.licenseFrontImageFile, 'licFrontImg', 'licFront'],
         [this.licenseBackImageFile, 'licBackImg', 'licBack'],
@@ -456,7 +479,7 @@ export class AddDistributedOfficerComponent implements OnInit {
   }
 
   // Builds and shows the "Duplicate Information" dialog from a list of
-  // backend error codes (NIC/Email/PhoneNumber01/PhoneNumber02).
+  // backend error codes (NIC/Email/PhoneNumber01/PhoneNumber02/LicNo/InsNo/VRegNo).
   private showDuplicateErrorDialog(errors: string[]): void {
     const messages = errors.map((err: string) => {
       switch (err) {
@@ -468,6 +491,12 @@ export class AddDistributedOfficerComponent implements OnInit {
           return 'Mobile Number 1 already exists.';
         case 'PhoneNumber02':
           return 'Mobile Number 2 already exists.';
+        case 'LicNo':
+          return 'Driving License Number already exists.';
+        case 'InsNo':
+          return 'Insurance Number already exists.';
+        case 'VRegNo':
+          return 'Vehicle Registration Number already exists.';
         default:
           return 'Validation error: ' + err;
       }
@@ -500,7 +529,7 @@ export class AddDistributedOfficerComponent implements OnInit {
     this.isLoading = true;
 
     try {
-      await firstValueFrom(this.DistributedManageOfficerSrv.checkDuplicateOfficer(this.personalData));
+      await firstValueFrom(this.DistributedManageOfficerSrv.checkDuplicateOfficer(this.personalData, undefined, this.isDriverRole(this.personalData.jobRole) ? this.driverObj : undefined));
     } catch (error: any) {
       this.isLoading = false;
       const duplicateErrors = error?.error?.errors;
@@ -527,7 +556,7 @@ export class AddDistributedOfficerComponent implements OnInit {
 
     } else {
       if (this.logingRole === 'Distribution Centre Manager') {
-        if (this.personalData.jobRole === 'Driver') {
+        if (this.isDriverRole(this.personalData.jobRole)) {
           if (!this.licenseFrontImageFileName || !this.licenseBackImageFileName || !this.insurenceFrontImageFileName || !this.insurenceBackImageFileName || !this.vehicleFrontImageFileName || !this.vehicleBackImageFileName || !this.vehicleSideAImageFileName || !this.vehicleSideBImageFileName) {
             this.isLoading = false;
             this.toastSrv.warning('Pleace fill all required vehicle image upload fields')
@@ -600,7 +629,7 @@ export class AddDistributedOfficerComponent implements OnInit {
           }
         });
       } else if (this.logingRole === 'Distribution Centre Head') {
-        if (this.personalData.jobRole === 'Driver') {
+        if (this.isDriverRole(this.personalData.jobRole)) {
           if (!this.licenseFrontImageFileName || !this.licenseBackImageFileName || !this.insurenceFrontImageFileName || !this.insurenceBackImageFileName || !this.vehicleFrontImageFileName || !this.vehicleBackImageFileName || !this.vehicleSideAImageFileName || !this.vehicleSideBImageFileName) {
             this.isLoading = false;
             this.toastSrv.warning('Pleace fill all required vehicle image upload fields')
@@ -804,7 +833,7 @@ export class AddDistributedOfficerComponent implements OnInit {
       missingFields.push('Job Role is required');
     }
 
-    if (this.personalData.jobRole === 'Driver' && !this.personalData.drvCategory) {
+    if (this.isDriverRole(this.personalData.jobRole) && !this.personalData.drvCategory) {
       missingFields.push('Driver Category is required');
     }
 
@@ -816,19 +845,19 @@ export class AddDistributedOfficerComponent implements OnInit {
       missingFields.push('Last Name (in English) is required');
     }
 
-    if (!this.personalData.firstNameSinhala && this.personalData.jobRole !== 'Driver') {
+    if (!this.personalData.firstNameSinhala && !this.isDriverRole(this.personalData.jobRole)) {
       missingFields.push('First Name (in Sinhala) is required');
     }
 
-    if (!this.personalData.lastNameSinhala && this.personalData.jobRole !== 'Driver') {
+    if (!this.personalData.lastNameSinhala && !this.isDriverRole(this.personalData.jobRole)) {
       missingFields.push('Last Name (in Sinhala) is required');
     }
 
-    if (!this.personalData.firstNameTamil && this.personalData.jobRole !== 'Driver') {
+    if (!this.personalData.firstNameTamil && !this.isDriverRole(this.personalData.jobRole)) {
       missingFields.push('First Name (in Tamil) is required');
     }
 
-    if (!this.personalData.lastNameTamil && this.personalData.jobRole !== 'Driver') {
+    if (!this.personalData.lastNameTamil && !this.isDriverRole(this.personalData.jobRole)) {
       missingFields.push('Last Name (in Tamil) is required');
     }
 
@@ -1775,6 +1804,19 @@ export class AddDistributedOfficerComponent implements OnInit {
     if (!allowedPattern.test(inputChar)) {
       event.preventDefault();
     }
+  }
+
+  preventSpaces(event: KeyboardEvent) {
+    if (event.key === ' ') {
+      event.preventDefault();
+    }
+  }
+
+  removeSpaces(event: Event, modelRef: any, fieldName: string): void {
+    const inputElement = event.target as HTMLInputElement;
+    const cleanedValue = inputElement.value.replace(/\s/g, '');
+    modelRef[fieldName] = cleanedValue;
+    inputElement.value = cleanedValue;
   }
 
   preventSpecialCharactersPaste(event: ClipboardEvent) {

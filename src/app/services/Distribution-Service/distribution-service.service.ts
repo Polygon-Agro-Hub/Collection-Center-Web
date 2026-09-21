@@ -429,6 +429,7 @@ export class DistributionServiceService {
     return this.http.get(url, { headers, responseType: 'blob' });
   }
 
+
   downloadOutForDeliveryTargetProgressReport(
     status: string,
     searchText: string = '',
@@ -436,6 +437,7 @@ export class DistributionServiceService {
     row: number | null,
     timeSlot: string = '',
     date: Date | string | null,
+    cenId: number | null
   ): Observable<Blob> {
     let url = `${this.apiUrl}/download-out-for-delivery-target-progress?test=${1}`;
 
@@ -461,6 +463,10 @@ export class DistributionServiceService {
 
     if (date) {
       url += `&date=${date}`;
+    }
+
+    if (cenId) {
+      url += `&cenId=${cenId}`
     }
 
 

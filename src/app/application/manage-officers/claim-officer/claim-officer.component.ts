@@ -76,7 +76,7 @@ export class ClaimOfficerComponent implements OnInit {
       empId = 'DRV' + this.inputId
     }
 
-    this.ManageOficerSrv.getOfficerByEmpId(empId).subscribe(
+    this.ManageOficerSrv.getOfficerByEmpId(empId, this.selectJobRole).subscribe(
       (res) => {
         if (res.status) {
           this.officerObj = res.data

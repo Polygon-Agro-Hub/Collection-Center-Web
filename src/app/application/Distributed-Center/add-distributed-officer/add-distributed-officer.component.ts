@@ -492,7 +492,7 @@ export class AddDistributedOfficerComponent implements OnInit {
         case 'PhoneNumber02':
           return 'Mobile Number 2 already exists.';
         case 'LicNo':
-          return 'Driving License Number already exists.';
+          return 'Driving License ID already exists.';
         case 'InsNo':
           return 'Insurance Number already exists.';
         case 'VRegNo':

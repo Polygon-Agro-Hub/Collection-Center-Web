@@ -36,6 +36,9 @@ export class ViewDailyTargetComponent implements OnInit, OnDestroy {
   assignTotalItems: number = 0;
   assignItemsPerPage: number = 10;
   assignSearch: string = '';
+  // The search text actually submitted to the backend (set by filterAssignStatus()),
+  // kept separate from assignSearch so typing alone doesn't change the empty-state UI.
+  appliedAssignSearch: string = '';
   selectAssignStatus: string = ''
   assignDate: string = '';
 
@@ -159,6 +162,24 @@ export class ViewDailyTargetComponent implements OnInit, OnDestroy {
     }
     const deadline = new Date(bannerDate.getFullYear(), bannerDate.getMonth(), bannerDate.getDate(), 19, 0, 0, 0);
     return new Date() < deadline;
+  }
+
+  get isAssignSearchingOrFiltering(): boolean {
+    return !!this.appliedAssignSearch || !!this.selectAssignStatus;
+  }
+
+  // Before the deadline the target data for the selected date hasn't been released yet,
+  // so the table stays hidden no matter what. Whether that shows the waiting animation
+  // or the plain "no data" state depends on whether a search/filter was submitted.
+  get showAssignWaitingState(): boolean {
+    return this.isBeforeAssignDeadline && !this.isAssignSearchingOrFiltering;
+  }
+
+  get showAssignNoDataState(): boolean {
+    if (this.isBeforeAssignDeadline) {
+      return this.isAssignSearchingOrFiltering;
+    }
+    return !this.assignHasData;
   }
 
   toOrdinalDateLabel(date: Date): string {
@@ -339,6 +360,7 @@ export class ViewDailyTargetComponent implements OnInit, OnDestroy {
 
   filterAssignStatus() {
     this.isLoading = true;
+    this.appliedAssignSearch = this.assignSearch;
     this.TargetSrv.AssignAllDailyTarget(1, 10, this.assignSearch, this.assignDate).subscribe(
       (res) => {
         this.assignTargetArr = res || []; // fallback if response is null or undefined

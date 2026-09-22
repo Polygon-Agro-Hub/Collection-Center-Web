@@ -80,7 +80,8 @@
                                 {{item.varietyNameEnglish}}</td>
 
                             <!-- Grade A Column -->
-                            <td class="px-6 py-3 text-base text-[#000000] dark:text-gray-300 align-top">
+                            <td class="px-6 py-3 text-base text-[#000000] dark:text-gray-300 align-top"
+                                [class.grade-editing-cell]="item.editingA">
                                 <input type="number" [(ngModel)]="item.targetA" step="any" name="targetA" min="0"
                                     (change)="checkNegativeValue(item, 'A')"
                                     (input)="restrictDecimal($event, item, 'A')"
@@ -88,8 +89,10 @@
                                     [ngClass]="isGradeInvalid(item, 'A') ? 'border-[#FF0000]' : 'border-[#415CFF]'"
                                     [disabled]="!item.isNew && !item.editingA" />
                                 <button *ngIf="!item.isNew && !item.editingA && isDateValid"
+                                    [disabled]="isAnyGradeEditing"
                                     (click)="(item.editingA = true) && pressEditIcon(item,'A')">
-                                    <i class="fa-solid fa-pen-to-square text-[#415CFF] text-xl"></i>
+                                    <i class="fa-solid fa-pen-to-square text-xl"
+                                        [ngClass]="isAnyGradeEditing ? 'text-gray-400 cursor-not-allowed' : 'text-[#415CFF]'"></i>
                                 </button>
                                 <button *ngIf="!item.isNew && item.editingA && isDateValid"
                                     class="px-3 py-2 text-white rounded-lg" [ngClass]="{
@@ -109,7 +112,8 @@
                             </td>
 
                             <!-- Grade B Column -->
-                            <td class="px-6 py-3 text-base text-[#000000] dark:text-gray-300 align-top">
+                            <td class="px-6 py-3 text-base text-[#000000] dark:text-gray-300 align-top"
+                                [class.grade-editing-cell]="item.editingB">
                                 <input type="number" [(ngModel)]="item.targetB" step="any" name="targetB" min="0"
                                     (change)="checkNegativeValue(item, 'B')"
                                     (input)="restrictDecimal($event, item, 'B')"
@@ -117,8 +121,10 @@
                                     [ngClass]="isGradeInvalid(item, 'B') ? 'border-[#FF0000]' : 'border-[#415CFF]'"
                                     [disabled]="!item.isNew && !item.editingB" />
                                 <button *ngIf="!item.isNew && !item.editingB && isDateValid"
+                                    [disabled]="isAnyGradeEditing"
                                     (click)="(item.editingB = true) && pressEditIcon(item,'B')">
-                                    <i class="fa-solid fa-pen-to-square text-[#415CFF] text-xl"></i>
+                                    <i class="fa-solid fa-pen-to-square text-xl"
+                                        [ngClass]="isAnyGradeEditing ? 'text-gray-400 cursor-not-allowed' : 'text-[#415CFF]'"></i>
                                 </button>
                                 <button *ngIf="!item.isNew && item.editingB && isDateValid" [ngClass]="{
                                 'bg-[#415CFF]': item.preValueB !== item.targetB && !isQtyExceeded(item),
@@ -131,7 +137,8 @@
                             </td>
 
                             <!-- Grade C Column -->
-                            <td class="px-6 py-3 text-base text-[#000000] dark:text-gray-300 align-top">
+                            <td class="px-6 py-3 text-base text-[#000000] dark:text-gray-300 align-top"
+                                [class.grade-editing-cell]="item.editingC">
                                 <input type="number" [(ngModel)]="item.targetC" step="any" name="targetC" min="0"
                                     (change)="checkNegativeValue(item, 'C')"
                                     (input)="restrictDecimal($event, item, 'C')"
@@ -139,8 +146,10 @@
                                     [ngClass]="isGradeInvalid(item, 'C') ? 'border-[#FF0000]' : 'border-[#415CFF]'"
                                     [disabled]="!item.isNew && !item.editingC" />
                                 <button *ngIf="!item.isNew && !item.editingC && isDateValid"
+                                    [disabled]="isAnyGradeEditing"
                                     (click)="(item.editingC = true) && pressEditIcon(item,'C')">
-                                    <i class="fa-solid fa-pen-to-square text-[#415CFF] text-xl"></i>
+                                    <i class="fa-solid fa-pen-to-square text-xl"
+                                        [ngClass]="isAnyGradeEditing ? 'text-gray-400 cursor-not-allowed' : 'text-[#415CFF]'"></i>
                                 </button>
                                 <button *ngIf="!item.isNew && item.editingC && isDateValid" [ngClass]="{
                                 'bg-[#415CFF]': item.preValueC !== item.targetC && !isQtyExceeded(item),

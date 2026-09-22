@@ -95,11 +95,9 @@
                                         [ngClass]="isAnyGradeEditing ? 'text-gray-400 cursor-not-allowed' : 'text-[#415CFF]'"></i>
                                 </button>
                                 <button *ngIf="!item.isNew && item.editingA && isDateValid"
-                                    class="px-3 py-2 text-white rounded-lg" [ngClass]="{
-                                    'bg-[#415CFF]': item.preValueA !== item.targetA && !isQtyExceeded(item),
-                                    'bg-[#6B7D8C]': item.preValueA === item.targetA || item.targetA < 0 || item.targetA < item.preValueA || isQtyExceeded(item)
-                                  }"
-                                    [disabled]="item.preValueA === item.targetA || item.targetA < 0 || item.targetA < item.preValueA || isQtyExceeded(item)"
+                                    class="px-3 py-2 text-white rounded-lg"
+                                    [ngClass]="isSaveDisabled(item, 'A') ? 'bg-[#6B7D8C]' : 'bg-[#415CFF]'"
+                                    [disabled]="isSaveDisabled(item, 'A')"
                                     (click)="saveGrade('A', item, item.targetA, item.idA)">
                                     Save
                                 </button>
@@ -126,11 +124,10 @@
                                     <i class="fa-solid fa-pen-to-square text-xl"
                                         [ngClass]="isAnyGradeEditing ? 'text-gray-400 cursor-not-allowed' : 'text-[#415CFF]'"></i>
                                 </button>
-                                <button *ngIf="!item.isNew && item.editingB && isDateValid" [ngClass]="{
-                                'bg-[#415CFF]': item.preValueB !== item.targetB && !isQtyExceeded(item),
-                                'bg-[#6B7D8C]': item.preValueB === item.targetB || item.targetB < 0 || item.targetB < item.preValueB || isQtyExceeded(item)
-                              }" class="px-3 py-2 text-white rounded-lg"
-                                    [disabled]="item.preValueB === item.targetB || item.targetB < 0 || item.targetB < item.preValueB || isQtyExceeded(item)"
+                                <button *ngIf="!item.isNew && item.editingB && isDateValid"
+                                    class="px-3 py-2 text-white rounded-lg"
+                                    [ngClass]="isSaveDisabled(item, 'B') ? 'bg-[#6B7D8C]' : 'bg-[#415CFF]'"
+                                    [disabled]="isSaveDisabled(item, 'B')"
                                     (click)="saveGrade('B', item, item.targetB, item.idB)">
                                     Save
                                 </button>
@@ -151,11 +148,10 @@
                                     <i class="fa-solid fa-pen-to-square text-xl"
                                         [ngClass]="isAnyGradeEditing ? 'text-gray-400 cursor-not-allowed' : 'text-[#415CFF]'"></i>
                                 </button>
-                                <button *ngIf="!item.isNew && item.editingC && isDateValid" [ngClass]="{
-                                'bg-[#415CFF]': item.preValueC !== item.targetC && !isQtyExceeded(item),
-                                'bg-[#6B7D8C]': (item.preValueC === item.targetC) || item.targetC < 0 || item.targetC < item.preValueC || isQtyExceeded(item)
-                              }" class="px-3 py-2 text-white rounded-lg"
-                                    [disabled]="item.preValueC === item.targetC || item.targetC < 0 || item.targetC < item.preValueC || isQtyExceeded(item)"
+                                <button *ngIf="!item.isNew && item.editingC && isDateValid"
+                                    class="px-3 py-2 text-white rounded-lg"
+                                    [ngClass]="isSaveDisabled(item, 'C') ? 'bg-[#6B7D8C]' : 'bg-[#415CFF]'"
+                                    [disabled]="isSaveDisabled(item, 'C')"
                                     (click)="saveGrade('C', item, item.targetC, item.idC)">
                                     Save
                                 </button>

@@ -238,11 +238,6 @@ export class ShortageHistoryComponent implements OnInit {
     return this.assignedItems.length.toString().padStart(2, '0');
   }
 
-  truncateText(value: string | undefined, maxLength: number = 20): string {
-    if (!value) return '----';
-    return value.length > maxLength ? `${value.slice(0, maxLength)}...` : value;
-  }
-
   goBack(): void {
     this.location.back();
   }

@@ -101,6 +101,7 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
   selectPackageId: number | string = '';
   selectCategoryId: number | string = '';
   newItem: OrderItem = new OrderItem();
+  limitMassage: string = '';
 
   constructor(
     private procurementService: ProcurementsService,
@@ -131,7 +132,6 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
   }
 
   ngOnInit() {
-    // this.recalculatePackageTotal();
     this.route.queryParamMap.subscribe((params) => {
       const id = params.get('id');
       if (!id) {
@@ -251,7 +251,7 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
 
   // Transform marketplace items to dropdown format
   getMarketplaceDropdownItems(typeId: number) {
-    
+
     const prfIds = this.preferItemsArr.map(p => p.id);
     const exlIds = this.excludeItemsArr.map(e => e.id);
 
@@ -350,10 +350,29 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
       this.totalPackagePrice += +pkg.productPrice || 0;
     });
 
+    console.log('totalPackagePrice', this.totalPackagePrice)
+    console.log('totalDefinePkgPrice', this.totalDefinePkgPrice)
 
     // Compare against 1.08 * totalPackagePrice
     const limit = 1.08 * this.totalPackagePrice;
-    this.isWithinLimit = this.totalDefinePkgPrice <= limit;
+
+    this.isWithinLimit =
+      this.totalPackagePrice <= this.totalDefinePkgPrice &&
+      this.totalDefinePkgPrice <= limit;
+
+    console.log('isWithinLimit', this.isWithinLimit)
+
+    if (this.totalDefinePkgPrice < this.totalPackagePrice) {
+      this.limitMassage = `The calculated price is below the minimum limit of Rs.${this.totalPackagePrice.toFixed(2)}. To save the order, the calculated price must be equal to or within 8% above the target price.`
+    } else if (this.totalDefinePkgPrice > limit) {
+      this.limitMassage = `The calculated price exceeds the allowed limit ( ${this.totalPackagePrice.toFixed(2)} + ${this.totalPackagePrice.toFixed(2)} x 8% = Rs.${limit.toFixed(2)} ). To save the order, it must be within 8% of the target price.`
+    } else {
+      this.limitMassage = `Allowed limit: ${this.totalPackagePrice.toFixed(2)} + ${this.totalPackagePrice.toFixed(2)} x 8% = Rs.${limit.toFixed(2)}.`
+    }
+
+    console.log('massage',  this.limitMassage)
+
+    // this.isWithinLimit = this.totalDefinePkgPrice <= limit;
 
   }
 
@@ -361,20 +380,46 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
 
 
   calculateTotalPrice() {
-    if (this.orderDetails && this.orderDetails.length) {
+    console.log('ran')
+    console.log('od', this.orderdetailsArr)
+    if (this.orderdetailsArr && this.orderdetailsArr.length) {
       this.totalPrice = this.getCombinedProductPrice();
+
+      console.log('totalPrice', this.totalPrice)
 
       // Calculate the allowed limit (8% of the total price)
       const allowedLimit = this.totalPrice * 1.08;
 
       // Calculate the current total (sum of all package totals)
-      const currentTotal = this.orderDetails.reduce(
-        (sum: number, pkg: OrderDetailItem) => sum + this.getPackageTotal(pkg),
+      const currentTotal = this.orderdetailsArr.reduce(
+        (sum: number, pkg: OrderDetails) =>
+          sum + pkg.items.reduce((pkgSum, item) => pkgSum + (+item.price || 0), 0),
         0
       );
 
+      console.log('currentTotal', currentTotal)
+
       // Validate if current total is within the allowed limit
-      this.isWithinLimit = currentTotal <= allowedLimit;
+      // this.isWithinLimit = currentTotal <= allowedLimit;
+
+       this.isWithinLimit =
+      this.totalPrice <= currentTotal &&
+      currentTotal <= allowedLimit;
+
+    console.log('isWithinLimit', this.isWithinLimit)
+
+    const minLimitText = this.totalPrice.toFixed(2);
+
+    if (currentTotal < this.totalPrice) {
+      this.limitMassage = `The calculated price is below the minimum limit of Rs.${minLimitText}. To save the order, the calculated price must be equal to or within 8% above the target price.`
+    } else if (currentTotal > allowedLimit) {
+      this.limitMassage = `The calculated price exceeds the allowed limit ( ${minLimitText} + ${minLimitText} x 8% = Rs.${allowedLimit.toFixed(2)} ). To save the order, it must be within 8% of the target price.`
+    } else {
+      this.limitMassage = `Allowed limit: ${minLimitText} + ${minLimitText} x 8% = Rs.${allowedLimit.toFixed(2)}.`
+    }
+
+    console.log('massage',  this.limitMassage)
+
     } else {
       this.totalPrice = 0;
       this.isWithinLimit = true;
@@ -609,12 +654,12 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
   }
 
   getCombinedProductPrice(): number {
-    if (!this.orderDetails || this.orderDetails.length === 0) {
+    if (!this.orderdetailsArr || this.orderdetailsArr.length === 0) {
       return 0;
     }
 
     // Sum of all package product prices
-    return this.orderDetails.reduce(
+    return this.orderdetailsArr.reduce(
       (sum, pkg) => sum + (pkg.productPrice || 0),
       0
     );

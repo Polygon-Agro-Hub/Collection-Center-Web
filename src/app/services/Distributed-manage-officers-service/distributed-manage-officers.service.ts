@@ -252,7 +252,7 @@ export class DistributedManageOfficersService {
    * Checks NIC/email/phone duplicates before any images are uploaded.
    * Pass `id` for an edit (excludes the officer's own row); omit it for create.
    */
-  checkDuplicateOfficer(person: any, id?: number): Observable<{ status: boolean; errors?: string[] }> {
+  checkDuplicateOfficer(person: any, id?: number, driver?: any): Observable<{ status: boolean; errors?: string[] }> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
@@ -264,6 +264,11 @@ export class DistributedManageOfficersService {
       phoneNumber01: person.phoneNumber01,
       phoneNumber02: person.phoneNumber02,
     };
+    if (driver) {
+      body.licNo = driver.licNo;
+      body.insNo = driver.insNo;
+      body.vRegNo = driver.vRegNo;
+    }
     if (id) {
       body.id = id;
     }

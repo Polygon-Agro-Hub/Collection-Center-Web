@@ -36,6 +36,10 @@ export class ViewDailyTargetComponent implements OnInit, OnDestroy {
   assignTotalItems: number = 0;
   assignItemsPerPage: number = 10;
   assignSearch: string = '';
+  // The search text actually submitted to the backend (set by filterAssignStatus()),
+  // kept separate from assignSearch so typing alone doesn't change the empty-state UI.
+  appliedAssignSearch: string = '';
+  selectAssignStatus: string = ''
   assignDate: string = '';
 
 
@@ -54,7 +58,7 @@ export class ViewDailyTargetComponent implements OnInit, OnDestroy {
         renderer: 'svg',
         loop: true,
         autoplay: true,
-        path: '/assets/json/NoRowAvailable.json',
+        path: 'assets/json/NoRowAvailable.json',
       });
     }
   }
@@ -70,6 +74,19 @@ export class ViewDailyTargetComponent implements OnInit, OnDestroy {
     this.selectStatus = option;
     this.isStatusDropdownOpen = false;
     this.filterStatus();
+  }
+
+  isAssignStatusDropdownOpen = false;
+  assignStatusDropdownOptions = ['Updated', 'Assigned', 'Not Assigned'];
+
+  toggleAssignStatusDropdown() {
+    this.isAssignStatusDropdownOpen = !this.isAssignStatusDropdownOpen;
+  }
+
+  selectAssignStatusOption(option: string) {
+    this.selectAssignStatus = option;
+    this.isAssignStatusDropdownOpen = false;
+    this.filterAssignStatus();
   }
 
   constructor(
@@ -147,6 +164,24 @@ export class ViewDailyTargetComponent implements OnInit, OnDestroy {
     return new Date() < deadline;
   }
 
+  get isAssignSearchingOrFiltering(): boolean {
+    return !!this.appliedAssignSearch || !!this.selectAssignStatus;
+  }
+
+  // Before the deadline the target data for the selected date hasn't been released yet,
+  // so the table stays hidden no matter what. Whether that shows the waiting animation
+  // or the plain "no data" state depends on whether a search/filter was submitted.
+  get showAssignWaitingState(): boolean {
+    return this.isBeforeAssignDeadline && !this.isAssignSearchingOrFiltering;
+  }
+
+  get showAssignNoDataState(): boolean {
+    if (this.isBeforeAssignDeadline) {
+      return this.isAssignSearchingOrFiltering;
+    }
+    return !this.assignHasData;
+  }
+
   toOrdinalDateLabel(date: Date): string {
     const day = date.getDate();
     const suffix = (day % 10 === 1 && day !== 11) ? 'st'
@@ -162,8 +197,15 @@ export class ViewDailyTargetComponent implements OnInit, OnDestroy {
     const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
     const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
 
+    const assignStatusDropdownElement = document.querySelector('.custom-assign-status-dropdown-container');
+    const assignStatusDropdownClickedInside = assignStatusDropdownElement?.contains(event.target as Node);
+
     if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
       this.isStatusDropdownOpen = false;
+    }
+
+    if (!assignStatusDropdownClickedInside && this.isAssignStatusDropdownOpen) {
+      this.isAssignStatusDropdownOpen = false;
     }
 
   }
@@ -236,12 +278,19 @@ export class ViewDailyTargetComponent implements OnInit, OnDestroy {
   selectPrograss() {
     this.isSelectPrograss = true;
     this.isSelectAssign = false;
+    this.rememberSelectedTab();
   }
 
   selectAssign() {
     this.isSelectPrograss = false;
     this.isSelectAssign = true;
-    this.AssignAllDailyTarget();
+    this.rememberSelectedTab();
+    this.filterAssignStatus();
+  }
+
+  // Keeps the active tab in this history entry so browser/back navigation restores it.
+  private rememberSelectedTab() {
+    history.replaceState({ ...history.state, selectAssign: this.isSelectAssign }, '');
   }
 
   AssignAllDailyTarget(page: number = 1, limit: number = this.itemsPerPage, search: string = this.assignSearch, date: string = this.assignDate) {
@@ -298,15 +347,67 @@ export class ViewDailyTargetComponent implements OnInit, OnDestroy {
 
     this.assignDate = dateString;
     this.assignPage = 1;
-    this.AssignAllDailyTarget();
+    this.filterAssignStatus();
   }
 
   assignOnSearch() {
-    this.AssignAllDailyTarget();
+    this.filterAssignStatus();
   }
   assignOffSearch() {
     this.assignSearch = '';
-    this.AssignAllDailyTarget()
+    this.filterAssignStatus();
+  }
+
+  filterAssignStatus() {
+    this.isLoading = true;
+    this.appliedAssignSearch = this.assignSearch;
+    this.TargetSrv.AssignAllDailyTarget(1, 10, this.assignSearch, this.assignDate).subscribe(
+      (res) => {
+        this.assignTargetArr = res || []; // fallback if response is null or undefined
+        // Apply filtering
+        if (this.selectAssignStatus === 'Updated') {
+          this.assignTargetArr = this.assignTargetArr.filter(item =>
+            item.isAssign === 1 &&
+            (item.assignStatusA === 0 || item.assignStatusB === 0 || item.assignStatusC === 0)
+          );
+        } else if (this.selectAssignStatus === 'Assigned') {
+          this.assignTargetArr = this.assignTargetArr.filter(item =>
+            item.isAssign === 1 &&
+            item.assignStatusA === 1 &&
+            item.assignStatusB === 1 &&
+            item.assignStatusC === 1
+          );
+        } else if (this.selectAssignStatus === 'Not Assigned') {
+          this.assignTargetArr = this.assignTargetArr.filter(item =>
+            item.isAssign === 0 &&
+            item.assignStatusA === 0 &&
+            item.assignStatusB === 0 &&
+            item.assignStatusC === 0
+          );
+        }
+
+        this.isLoading = false;
+
+        this.assignHasData = this.assignTargetArr.length > 0;
+
+        this.assignTotalItems = this.assignTargetArr.length;
+        this.assignPage = 1;
+      },
+      (err) => {
+        this.isLoading = false;
+        console.error('Failed to load data', err);
+        this.assignTargetArr = [];
+        this.assignHasData = false;
+      }
+    );
+  }
+
+  cancelAssignStatus(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
+    this.selectAssignStatus = '';
+    this.filterAssignStatus();
   }
 
   checkLeadingSpace() {

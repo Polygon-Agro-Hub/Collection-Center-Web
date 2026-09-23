@@ -189,11 +189,23 @@ export class EditDistributedOfficerComponent implements OnInit {
 
   districtItems = this.districts.map(d => ({ value: d.name, label: d.name }));
 
-  VehicleTypes = [
+  lightVehicleTypes = [
     { name: 'Mahindra Bollero', capacity: 272 },
     { name: 'Dimo Batta', capacity: 750 },
     { name: 'Three Wheeler', capacity: 100 },
   ]
+
+  heavyVehicleTypes = [
+    { name: 'Double Cab Pickup (4x4)', capacity: 900 },
+    { name: 'Isuzu Elf / Canter Lorry', capacity: 3000 },
+    { name: 'Lorry (6-8 Ton)', capacity: 7500 },
+  ]
+
+  get VehicleTypes() {
+    return this.personalData.jobRole === this.jobRoleTypes.heavyWeightDriver
+      ? this.heavyVehicleTypes
+      : this.lightVehicleTypes;
+  }
 
   ngOnInit(): void {
     this.loadBanks();
@@ -246,6 +258,10 @@ export class EditDistributedOfficerComponent implements OnInit {
 
   getJobRole(role: string) {
     this.personalData.jobRole = role;
+    if (this.selectVehicletype?.name && !this.VehicleTypes.some(v => v.name === this.selectVehicletype.name)) {
+      this.selectVehicletype = { name: '', capacity: '' };
+      this.vehicleChange();
+    }
     if (this.isDriverRole(this.personalData.jobRole)) {
       this.personalData.firstNameSinhala = '';
       this.personalData.lastNameSinhala = ''
@@ -633,6 +649,12 @@ export class EditDistributedOfficerComponent implements OnInit {
           return 'Mobile Number 1 already exists.';
         case 'PhoneNumber02':
           return 'Mobile Number 2 already exists.';
+        case 'LicNo':
+          return 'Driving License ID already exists.';
+        case 'InsNo':
+          return 'Insurance Number already exists.';
+        case 'VRegNo':
+          return 'Vehicle Registration Number already exists.';
         default:
           return 'Validation error: ' + err;
       }
@@ -663,7 +685,7 @@ export class EditDistributedOfficerComponent implements OnInit {
     this.isLoading = true;
 
     try {
-      await firstValueFrom(this.DistributedManageOfficerSrv.checkDuplicateOfficer(this.personalData, this.editOfficerId));
+      await firstValueFrom(this.DistributedManageOfficerSrv.checkDuplicateOfficer(this.personalData, this.editOfficerId, this.isDriverRole(this.personalData.jobRole) ? this.driverObj : undefined));
     } catch (error: any) {
       this.isLoading = false;
       const duplicateErrors = error?.error?.errors;
@@ -2056,6 +2078,19 @@ export class EditDistributedOfficerComponent implements OnInit {
     if (!allowedPattern.test(inputChar)) {
       event.preventDefault();
     }
+  }
+
+  preventSpaces(event: KeyboardEvent) {
+    if (event.key === ' ') {
+      event.preventDefault();
+    }
+  }
+
+  removeSpaces(event: Event, modelRef: any, fieldName: string): void {
+    const inputElement = event.target as HTMLInputElement;
+    const cleanedValue = inputElement.value.replace(/\s/g, '');
+    modelRef[fieldName] = cleanedValue;
+    inputElement.value = cleanedValue;
   }
 
   preventSpecialCharactersPaste(event: ClipboardEvent) {

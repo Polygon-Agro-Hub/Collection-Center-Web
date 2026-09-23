@@ -879,8 +879,8 @@
                     <label for="insNo" class="block text-sm font-medium text-gray-700 dark:text-textDark">
                         Insurance Number *
                     </label>
-                    <input id="insNo" type="text" maxlength="13" (input)="onTrimInput($event, driverObj, 'insNo')"
-                        #insurenceNoInput="ngModel" name="insNo" [(ngModel)]="driverObj.insNo"
+                    <input id="insNo" type="text" maxlength="13" (keypress)="preventSpaces($event)"
+                        (input)="removeSpaces($event, driverObj, 'insNo')" #insurenceNoInput="ngModel" name="insNo" [(ngModel)]="driverObj.insNo"
                         class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
                     <div>
                         <span class="text-red-500 text-sm" *ngIf="insurenceNoInput.touched && !driverObj.insNo">
@@ -894,7 +894,8 @@
                         Confirm Insurance Number *
                     </label>
                     <input id="insNo" type="text" maxlength="13" #confirmInsurenceNoInput="ngModel" name="insNo"
-                        [(ngModel)]="driverObj.confirmInsNo"
+                        [(ngModel)]="driverObj.confirmInsNo" (keypress)="preventSpaces($event)"
+                        (input)="removeSpaces($event, driverObj, 'confirmInsNo')"
                         class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]" />
 
                     <div>

@@ -14,11 +14,8 @@ export class DistributionServiceService {
   private role!: string | null;
 
   constructor(private http: HttpClient, private tokenSrv: TokenServiceService) {
-    console.log('ran',)
     this.token = this.tokenSrv.getToken()
     this.role = this.tokenSrv.getUserDetails().role
-    
-    console.log('tokenc', this.token, this.tokenSrv.getUserDetails());
   }
 
 
@@ -176,7 +173,6 @@ export class DistributionServiceService {
       Authorization: `Bearer ${this.token}`
     });
 
-    console.log('role', this.role);
 
 
     let url = `${this.apiUrl}/get-all-assign-orders?test=${1}`;

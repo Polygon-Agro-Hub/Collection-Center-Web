@@ -184,11 +184,11 @@ export class OfficerProfileComponent implements OnInit {
         empCode = 'COO';
         break;
       case this.jobRoleTypes.lightWeightDriver:
-        empType = this.jobRoleTypes.lightWeightDriver;
+        empType = 'Driver';
         empCode = 'DVR';
         break;
       case this.jobRoleTypes.heavyWeightDriver:
-        empType = this.jobRoleTypes.heavyWeightDriver;
+        empType = 'Driver';
         empCode = 'DVR';
         break;
       case 'Distribution Centre Head':
@@ -210,8 +210,11 @@ export class OfficerProfileComponent implements OnInit {
 
     const isDriver = this.officerObj.jobRole === this.jobRoleTypes.lightWeightDriver
       || this.officerObj.jobRole === this.jobRoleTypes.heavyWeightDriver;
-    if (isDriver && this.officerObj.slvCatName) {
-      empCodeText += `  |  ${this.officerObj.slvCatName}`;
+    if (isDriver) {
+      empCodeText += `  |  ${getValueOrNA(this.officerObj.jobRole)}`;
+      if (this.officerObj.slvCatName) {
+        empCodeText += `  |  ${this.officerObj.slvCatName}`;
+      }
     }
 
     let empTypeText = `${getValueOrNA(empType)} - `;

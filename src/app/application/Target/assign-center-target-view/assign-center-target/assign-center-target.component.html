@@ -80,7 +80,8 @@
                                 {{item.varietyNameEnglish}}</td>
 
                             <!-- Grade A Column -->
-                            <td class="px-6 py-3 text-base text-[#000000] dark:text-gray-300 align-top">
+                            <td class="px-6 py-3 text-base text-[#000000] dark:text-gray-300 align-top"
+                                [class.grade-editing-cell]="item.editingA">
                                 <input type="number" [(ngModel)]="item.targetA" step="any" name="targetA" min="0"
                                     (change)="checkNegativeValue(item, 'A')"
                                     (input)="restrictDecimal($event, item, 'A')"
@@ -88,15 +89,15 @@
                                     [ngClass]="isGradeInvalid(item, 'A') ? 'border-[#FF0000]' : 'border-[#415CFF]'"
                                     [disabled]="!item.isNew && !item.editingA" />
                                 <button *ngIf="!item.isNew && !item.editingA && isDateValid"
+                                    [disabled]="isAnyGradeEditing"
                                     (click)="(item.editingA = true) && pressEditIcon(item,'A')">
-                                    <i class="fa-solid fa-pen-to-square text-[#415CFF] text-xl"></i>
+                                    <i class="fa-solid fa-pen-to-square text-xl"
+                                        [ngClass]="isAnyGradeEditing ? 'text-gray-400 cursor-not-allowed' : 'text-[#415CFF]'"></i>
                                 </button>
                                 <button *ngIf="!item.isNew && item.editingA && isDateValid"
-                                    class="px-3 py-2 text-white rounded-lg" [ngClass]="{
-                                    'bg-[#415CFF]': item.preValueA !== item.targetA && !isQtyExceeded(item),
-                                    'bg-[#6B7D8C]': item.preValueA === item.targetA || item.targetA < 0 || item.targetA < item.preValueA || isQtyExceeded(item)
-                                  }"
-                                    [disabled]="item.preValueA === item.targetA || item.targetA < 0 || item.targetA < item.preValueA || isQtyExceeded(item)"
+                                    class="px-3 py-2 text-white rounded-lg"
+                                    [ngClass]="isSaveDisabled(item, 'A') ? 'bg-[#6B7D8C]' : 'bg-[#415CFF]'"
+                                    [disabled]="isSaveDisabled(item, 'A')"
                                     (click)="saveGrade('A', item, item.targetA, item.idA)">
                                     Save
                                 </button>
@@ -109,7 +110,8 @@
                             </td>
 
                             <!-- Grade B Column -->
-                            <td class="px-6 py-3 text-base text-[#000000] dark:text-gray-300 align-top">
+                            <td class="px-6 py-3 text-base text-[#000000] dark:text-gray-300 align-top"
+                                [class.grade-editing-cell]="item.editingB">
                                 <input type="number" [(ngModel)]="item.targetB" step="any" name="targetB" min="0"
                                     (change)="checkNegativeValue(item, 'B')"
                                     (input)="restrictDecimal($event, item, 'B')"
@@ -117,21 +119,23 @@
                                     [ngClass]="isGradeInvalid(item, 'B') ? 'border-[#FF0000]' : 'border-[#415CFF]'"
                                     [disabled]="!item.isNew && !item.editingB" />
                                 <button *ngIf="!item.isNew && !item.editingB && isDateValid"
+                                    [disabled]="isAnyGradeEditing"
                                     (click)="(item.editingB = true) && pressEditIcon(item,'B')">
-                                    <i class="fa-solid fa-pen-to-square text-[#415CFF] text-xl"></i>
+                                    <i class="fa-solid fa-pen-to-square text-xl"
+                                        [ngClass]="isAnyGradeEditing ? 'text-gray-400 cursor-not-allowed' : 'text-[#415CFF]'"></i>
                                 </button>
-                                <button *ngIf="!item.isNew && item.editingB && isDateValid" [ngClass]="{
-                                'bg-[#415CFF]': item.preValueB !== item.targetB && !isQtyExceeded(item),
-                                'bg-[#6B7D8C]': item.preValueB === item.targetB || item.targetB < 0 || item.targetB < item.preValueB || isQtyExceeded(item)
-                              }" class="px-3 py-2 text-white rounded-lg"
-                                    [disabled]="item.preValueB === item.targetB || item.targetB < 0 || item.targetB < item.preValueB || isQtyExceeded(item)"
+                                <button *ngIf="!item.isNew && item.editingB && isDateValid"
+                                    class="px-3 py-2 text-white rounded-lg"
+                                    [ngClass]="isSaveDisabled(item, 'B') ? 'bg-[#6B7D8C]' : 'bg-[#415CFF]'"
+                                    [disabled]="isSaveDisabled(item, 'B')"
                                     (click)="saveGrade('B', item, item.targetB, item.idB)">
                                     Save
                                 </button>
                             </td>
 
                             <!-- Grade C Column -->
-                            <td class="px-6 py-3 text-base text-[#000000] dark:text-gray-300 align-top">
+                            <td class="px-6 py-3 text-base text-[#000000] dark:text-gray-300 align-top"
+                                [class.grade-editing-cell]="item.editingC">
                                 <input type="number" [(ngModel)]="item.targetC" step="any" name="targetC" min="0"
                                     (change)="checkNegativeValue(item, 'C')"
                                     (input)="restrictDecimal($event, item, 'C')"
@@ -139,14 +143,15 @@
                                     [ngClass]="isGradeInvalid(item, 'C') ? 'border-[#FF0000]' : 'border-[#415CFF]'"
                                     [disabled]="!item.isNew && !item.editingC" />
                                 <button *ngIf="!item.isNew && !item.editingC && isDateValid"
+                                    [disabled]="isAnyGradeEditing"
                                     (click)="(item.editingC = true) && pressEditIcon(item,'C')">
-                                    <i class="fa-solid fa-pen-to-square text-[#415CFF] text-xl"></i>
+                                    <i class="fa-solid fa-pen-to-square text-xl"
+                                        [ngClass]="isAnyGradeEditing ? 'text-gray-400 cursor-not-allowed' : 'text-[#415CFF]'"></i>
                                 </button>
-                                <button *ngIf="!item.isNew && item.editingC && isDateValid" [ngClass]="{
-                                'bg-[#415CFF]': item.preValueC !== item.targetC && !isQtyExceeded(item),
-                                'bg-[#6B7D8C]': (item.preValueC === item.targetC) || item.targetC < 0 || item.targetC < item.preValueC || isQtyExceeded(item)
-                              }" class="px-3 py-2 text-white rounded-lg"
-                                    [disabled]="item.preValueC === item.targetC || item.targetC < 0 || item.targetC < item.preValueC || isQtyExceeded(item)"
+                                <button *ngIf="!item.isNew && item.editingC && isDateValid"
+                                    class="px-3 py-2 text-white rounded-lg"
+                                    [ngClass]="isSaveDisabled(item, 'C') ? 'bg-[#6B7D8C]' : 'bg-[#415CFF]'"
+                                    [disabled]="isSaveDisabled(item, 'C')"
                                     (click)="saveGrade('C', item, item.targetC, item.idC)">
                                     Save
                                 </button>
@@ -173,7 +178,7 @@
 
     <div *ngIf="!hasData"
         class="flex flex-col items-center w-full h-screen px-10 py-7 bg-tileLight dark:bg-[#363636] rounded-lg dark:text-black">
-        <p class="text-[#494949] my-6 dark:text-[#FFFFFF]">--No Data Availabale--</p>
+        <p class="text-[#494949] my-6 dark:text-[#FFFFFF]">--No Data Available--</p>
         <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20 dark:text-black" />
     </div>
 

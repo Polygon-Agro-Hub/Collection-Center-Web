@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, Input, OnDestroy, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnDestroy, OnInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { TargetService } from '../../../../services/Target-service/target.service';
@@ -234,6 +234,65 @@ onSubmit() {
 
   get hasNewItems(): boolean {
     return this.assignCropsArr.some(crop => crop.isNew);
+  }
+
+  // True while any grade, in any row, is mid-edit (pencil clicked, not yet saved).
+  // Used to lock out every other edit pencil so only one grade can be edited at a time.
+  get isAnyGradeEditing(): boolean {
+    return this.assignCropsArr.some(crop => crop.editingA || crop.editingB || crop.editingC);
+  }
+
+  // Whether that grade's Save button is currently disabled (no change made yet,
+  // negative, below the last saved value, or would exceed the remaining quantity).
+  // Shared by the template's [disabled] binding and the click-outside handler below.
+  isSaveDisabled(item: AssignCrops, grade: string): boolean {
+    const target = grade === 'A' ? item.targetA : grade === 'B' ? item.targetB : item.targetC;
+    const preValue = grade === 'A' ? item.preValueA : grade === 'B' ? item.preValueB : item.preValueC;
+    return target === preValue || target < 0 || target < preValue || this.isQtyExceeded(item);
+  }
+
+  private getActiveGradeEdit(): { item: AssignCrops, grade: string } | null {
+    for (const item of this.assignCropsArr) {
+      if (item.editingA) return { item, grade: 'A' };
+      if (item.editingB) return { item, grade: 'B' };
+      if (item.editingC) return { item, grade: 'C' };
+    }
+    return null;
+  }
+
+  // Clicking outside the cell currently being edited cancels that edit (reverts
+  // to the last saved value) instead of leaving it stuck until the page reloads.
+  // Only kicks in while Save is disabled - a valid, ready-to-save edit is left alone.
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent) {
+    if (!this.isAnyGradeEditing) return;
+
+    const activeEdit = this.getActiveGradeEdit();
+    if (!activeEdit || !this.isSaveDisabled(activeEdit.item, activeEdit.grade)) {
+      return;
+    }
+
+    const activeCell = document.querySelector('.grade-editing-cell');
+    if (activeCell && !activeCell.contains(event.target as Node)) {
+      this.cancelActiveGradeEdit();
+    }
+  }
+
+  private cancelActiveGradeEdit() {
+    for (const item of this.assignCropsArr) {
+      if (item.editingA) {
+        item.targetA = item.preValueA;
+        item.editingA = false;
+      }
+      if (item.editingB) {
+        item.targetB = item.preValueB;
+        item.editingB = false;
+      }
+      if (item.editingC) {
+        item.targetC = item.preValueC;
+        item.editingC = false;
+      }
+    }
   }
 
   isQtyExceeded(item: AssignCrops): boolean {

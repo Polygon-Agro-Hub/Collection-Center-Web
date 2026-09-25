@@ -196,7 +196,7 @@
 
             <div class="flex flex-row items-center gap-8 ">
 
-                <p class="text-[#4A4A4A] dark:text-white">Collection Date: </p>
+                <p class="text-[#4A4A4A] dark:text-white whitespace-nowrap">Collection Date: </p>
 
                 <div class="w-48">
                     <app-custom-datepicker [placeholder]="'Target Date'" [selectedDate]="assignDate"
@@ -282,7 +282,7 @@
 
         </div>
 
-        <div *ngIf="!assignHasData && isBeforeAssignDeadline"
+        <div *ngIf="showAssignWaitingState"
             class="flex items-center gap-2 mt-8 mr-5 px-4 py-3 rounded-lg bg-[#EDF5FC] text-sm font-[400] text-[#000000] dark:text-gray-800">
             <i class="fa-solid fa-circle-info text-[#415CFF]"></i>
             <p>The target will appear in the system on {{ assignBannerDateLabel }} after 7.00 PM once the CCH officer
@@ -291,19 +291,19 @@
         </div>
 
 
-        <div *ngIf="!assignHasData && isBeforeAssignDeadline"
+        <div *ngIf="showAssignWaitingState"
             class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6 ">
             <div #lottieContainer class="w-40 h-40"></div>
             <p class="text-[#494949] my-6 dark:text-textDark">--No Target Available--</p>
         </div>
 
-        <div *ngIf="!assignHasData && !isBeforeAssignDeadline"
+        <div *ngIf="showAssignNoDataState"
             class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6 ">
             <p class="text-[#494949] my-6 dark:text-textDark">--No Data Available--</p>
             <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
         </div>
 
-        <div *ngIf="assignHasData"
+        <div *ngIf="!isBeforeAssignDeadline && assignHasData"
             class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
             <table class="w-full divide-y-2 overflow-hidden">
                 <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">

@@ -114,7 +114,7 @@ export class ViewCentresComponent implements OnInit {
     }
 
     offSearch() {
-        this.searchText = this.searchText?.trim() || '';
+        this.searchText = '';
         this.fetchAllDistributionCenterDetails();
     }
 

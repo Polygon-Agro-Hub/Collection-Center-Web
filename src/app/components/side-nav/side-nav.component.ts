@@ -342,12 +342,15 @@ export class SideNavComponent {
   }
 
   confirmLogOut() {
-    this.logOutView = !this.logOutView;
-    this.tokenSrv.clearLoginDetails();
-    this.router.navigate(['login']);
-    this.toastSrv.success(`<b>Logged Out!`);
-  }
+  this.logOutView = !this.logOutView;
+  this.tokenSrv.clearLoginDetails();
 
+  this.router.navigate(['login']).then(() => {
+    window.location.reload();
+  });
+
+  this.toastSrv.success(`<b>Logged Out!</b>`);
+}
   cancelLogOut() {
     this.logOutView = !this.logOutView;
   }

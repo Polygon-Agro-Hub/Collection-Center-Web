@@ -11,14 +11,14 @@
           <!-- Profile Image with border and size adjustment -->
           <!-- <img class="w-28 h-28 rounded-full border-4 border-[#F1F7FA]"
                      src="https://images.pexels.com/photos/845457/pexels-photo-845457.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" /> -->
-          <div *ngIf="officerObj.image" >
+          <div *ngIf="officerObj.image">
             <img class="w-28 h-28 rounded-full object-cover" [src]="officerObj.image" />
           </div>
 
-          <div *ngIf="!officerObj.image" 
-                            class="flex rounded-full border-solid border-2 justify-center items-center w-32 h-32">
-                            <i class="fa-regular fa-user text-6xl dark:text-white"></i>
-                        </div>
+          <div *ngIf="!officerObj.image"
+            class="flex rounded-full border-solid border-2 justify-center items-center w-32 h-32">
+            <i class="fa-regular fa-user text-6xl dark:text-white"></i>
+          </div>
           <div class="ml-6">
             <!-- Profile Text with proper spacing -->
             <p class="text-lg font-semibold text-[#030308] dark:text-white">
@@ -26,7 +26,7 @@
             </p>
             <p class="text-[#627189] dark:text-textDark">
               {{
-                officerObj.jobRole
+              officerObj.jobRole
               }}
               - <span class="text-[#030308] dark:text-textDark">{{ officerObj.empId }}</span>
             </p>
@@ -34,7 +34,8 @@
               {{ officerObj.regCode }} Centre
             </p>
 
-            <p *ngIf="logingRole === 'Distribution Centre Manager'" class="font-semibold text-[#030308] dark:text-white">
+            <p *ngIf="logingRole === 'Distribution Centre Manager'"
+              class="font-semibold text-[#030308] dark:text-white">
               {{ officerObj.distributionRegCode }} Centre
             </p>
 
@@ -43,13 +44,13 @@
         </div>
 
         <!-- Buttons with consistent size and styling -->
-        <div class="flex flex-row space-x-4 self-start mt-2" *ngIf="logingRole === 'Collection Centre Manager' || logingRole === 'Distribution Centre Manager'">
+        <div class="flex flex-row space-x-4 self-start mt-2">
           <button (click)="goToChangePassword()"
             class="bg-[#415CFF] text-white font-semibold rounded-lg shadow-md px-4 py-2">
             Change Password
           </button>
-          <button class="bg-[#415CFF] text-white font-semibold rounded-lg shadow-md px-4 py-2"
-            (click)="navigateToTarget()">
+          <button *ngIf="logingRole === 'Collection Centre Manager'"
+            class="bg-[#415CFF] text-white font-semibold rounded-lg shadow-md px-4 py-2" (click)="navigateToTarget()">
             View My Target
           </button>
         </div>
@@ -94,8 +95,8 @@
 
             <p class="font-semibold dark:text-white text-black">{{ officerObj.phoneNumber01 ?
               officerObj.phoneCode01 + officerObj.phoneNumber01 : ' - ' }}
-          </p>
-          
+            </p>
+
             <!-- <p class="font-semibold text-[#000000] dark:text-white">
               {{ phone1 }}
             </p> -->
@@ -105,7 +106,7 @@
             <p class="text-[#627189] dark:text-textDark">Mobile Number - 2</p>
             <p class="font-semibold dark:text-white text-black">
               {{ officerObj.phoneNumber02 ? officerObj.phoneCode02 + officerObj.phoneNumber02 : ' - ' }}
-          </p>
+            </p>
             <!-- <p class="font-semibold text-[#000000] dark:text-white">
               {{ phone2 }}
             </p> -->

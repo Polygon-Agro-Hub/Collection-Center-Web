@@ -1,18 +1,18 @@
 <app-loading-spinner *ngIf="isLoading" />
 
 <div *ngIf="!isLoading">
-    <div class="flex flex-row items-center justify-end gap-8 ">
-        <i class="fa-solid fa-list text-2xl dark:text-white"></i>
+    <div class="flex flex-row items-center justify-end gap-5 ">
+        <i class="fa-solid text-[#4A4A4A] fa-list text-lg dark:text-white"></i>
 
-        <p class="text-lg dark:text-white">Filter By</p>
+        <p class="text-[#4A4A4A] dark:text-white">Filter By</p>
 
-        <div class="relative w-36 custom-employee-dropdown-container">
+        <div class="relative w-44 custom-employee-dropdown-container">
             <!-- Hidden native select -->
             <select [(ngModel)]="selectEmployee" class="hidden" (change)="filterEmployee()">
                 <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300" value="Own">
                     Own Complaints</option>
                 <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300" value="Other">
-                    Other Complaints</option>
+                    Other Employees</option>
             </select>
 
             <!-- Custom dropdown trigger -->
@@ -36,13 +36,17 @@
 
             <!-- Custom dropdown options -->
             <div *ngIf="isEmployeeDropdownOpen"
-                class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
-                <div class="py-1">
-                    <div *ngFor="let option of employeeDropdownOptions" (click)="selectEmployeeOption(option)"
-                        class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
-                        <span class="flex-grow">{{ option }}</span>
-                        <i
-                            class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
+                class="absolute z-10 overflow-hidden w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
+                <div class="">
+                    <div *ngFor="let option of employeeDropdownOptions; let i = index"
+                        (click)="selectEmployeeOption(option.value)"
+                        class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center"
+                        [ngClass]="{
+                            'rounded-t-xl': i === 0,
+                            'rounded-b-xl': i === employeeDropdownOptions.length - 1
+                          }">
+                        <span class="flex-grow">{{ option.label }}</span>
+                        <i class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
                     </div>
                 </div>
             </div>
@@ -51,12 +55,10 @@
         <div class="relative w-36 custom-status-dropdown-container">
             <!-- Hidden native select -->
             <select [(ngModel)]="selectStatus" class="hidden" (change)="filterStatus()">
-                <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                        value="Opened">
-                        Opend</option>
-                    <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                        value="Closed">
-                        Closed</option>
+                <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300" value="Opened">
+                    Opend</option>
+                <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300" value="Closed">
+                    Closed</option>
             </select>
 
             <!-- Custom dropdown trigger -->
@@ -80,20 +82,24 @@
 
             <!-- Custom dropdown options -->
             <div *ngIf="isStatusDropdownOpen"
-                class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
-                <div class="py-1">
-                    <div *ngFor="let option of statusDropdownOptions" (click)="selectStatusOption(option)"
-                        class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
+                class="absolute z-10 w-full mt-1 overflow-hidden bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
+                <div class="">
+                    <div *ngFor="let option of statusDropdownOptions; let i = index"
+                        (click)="selectStatusOption(option)"
+                        class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center"
+                        [ngClass]="{
+                            'rounded-t-xl': i === 0,
+                            'rounded-b-xl': i === statusDropdownOptions.length - 1
+                          }">
                         <span class="flex-grow">{{ option }}</span>
-                        <i
-                            class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
+                        <i class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
                     </div>
                 </div>
             </div>
         </div>
 
 
-        <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+        <div class="flex mr-5 items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
             <input type="text" placeholder="Search by Ref No, EMP ID" [(ngModel)]="searchText"
                 class="bg-transparent outline-none w-full text-textLight dark:text-textDark" (keyup.enter)="onSearch()"
                 (keyup.esc)="offSearch()" />
@@ -124,68 +130,71 @@
     <div *ngIf="hasData"
         class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
         <table class="w-full divide-y-2 overflow-hidden">
-            <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
+            <thead class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
                 <tr>
                     <th class="px-6 py-3 text-left text-sm font-medium">Ref. No</th>
                     <th class="px-6 py-3 text-left text-sm font-medium">EMP ID</th>
                     <th class="px-6 py-3 text-left text-sm font-medium">Category</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium">Description</th>
-                    <th class="px-6 py-3 text-center text-sm font-medium">Submitted At</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium min-w-[300px]">Description</th>
+                    <th class="px-6 py-3 text-left text-sm font-medium whitespace-nowrap">Submitted At</th>
                     <th class="px-6 py-3 text-center text-sm font-medium">Status</th>
-                    <th class="px-6 py-3 text-left text-sm font-medium">Action</th>
+                    <th class="px-6 py-3 text-center text-sm font-medium">Action</th>
                 </tr>
             </thead>
-            <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F] cursor-default">
-                <tr
-                    *ngFor="let item of complainArr | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index">
-                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.refNo}}</td>
-                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
-                        <span *ngIf="item.officerId === officerId" class="text-[#415CFF] italic">Own Complaint</span>
+            <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
+                <tr *ngFor="let item of complainArr | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index"
+                    class="dark:text-gray-300">
+
+                    <td class="px-6 py-4 align-top text-sm text-gray-900 dark:text-gray-300 text-left">
+                        {{item.refNo}}
+                    </td>
+
+                    <td class="px-6 py-4 align-top text-sm text-gray-900 dark:text-gray-300 text-left">
+                        <span *ngIf="item.officerId === officerId" class="text-[#415CFF] italic whitespace-nowrap">Own
+                            Complaint</span>
                         <span *ngIf="item.officerId !== officerId">{{item.empId}}</span>
                     </td>
-                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.complainCategory}}</td>
-                    <!-- <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
-                        {{ truncateText(item.complain) }}
-                    </td> -->
 
-                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
+                    <td
+                        class="px-6 py-4 align-top text-sm text-gray-900 dark:text-gray-300 whitespace-nowrap text-left">
+                        {{item.complainCategory}}
+                    </td>
+
+                    <td class="px-6 py-4 align-top text-sm text-gray-900 dark:text-gray-300 min-w-[300px] text-left">
                         {{ truncateText(item.complain, item.id) }}
                         <ng-container *ngIf="item.complain.length > 150">
-                          <span 
-                            (click)="toggleText(item.id)" 
-                            class="text-blue-500 cursor-pointer ml-1"
-                          >
-                            {{ expandedItems[item.id] ? 'Read less' : 'Read more' }}
-                          </span>
+                            <span (click)="toggleText(item.id)" class="text-blue-500 cursor-pointer ml-1">
+                                {{ expandedItems[item.id] ? 'Read less' : 'Read more' }}
+                            </span>
                         </ng-container>
-                      </td>
-                      
-                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
+                    </td>
+
+                    <td class="px-6 py-4 align-top text-sm text-gray-900 dark:text-gray-300 text-left">
                         <div class="flex flex-col items-center justify-center">
                             <p class="text-[#3E3E3E] dark:text-gray-300">{{ item.createdAt | date:'yyyy/MM/dd' }}</p>
                             <p class="text-[#3E3E3E] dark:text-gray-300">{{ item.createdAt | date:'hh.mm a' }}</p>
-                          </div>
-                          
-                    </td>
-                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300 align-middle">
-                        <div class="flex items-center justify-center">
-                          <span *ngIf="item.status === 'Opened'" class="bg-[#C8E0FF] text-[#415CFF] px-3 py-1 rounded-lg">
-                            Opened
-                          </span>
-                      
-                          <span *ngIf="item.status === 'Closed'" class="bg-[#B7FFBE] text-[#02BB3D] px-3 py-1 rounded-lg">
-                            Closed
-                          </span>
                         </div>
-                      </td>
-                      
-                    <td class="px-6 py-4">
-                        <i class="fa-solid fa-reply text-[#415CFF] text-lg cursor-pointer"
-                            [ngClass]="{'text-gray-200 cursor-not-allowed': item.reply === null}"
+                    </td>
+
+                    <td class="px-6 align-top py-4 pt-5 text-sm text-gray-900 dark:text-gray-300">
+                        <div class="flex items-center justify-center">
+                            <span *ngIf="item.status === 'Opened'"
+                                class="bg-[#C8E0FF] text-center text-[#415CFF] py-1 w-20 rounded-lg">
+                                Opened
+                            </span>
+                            <span *ngIf="item.status === 'Closed'"
+                                class="bg-[#B7FFBE] text-center text-[#02BB3D] py-1 w-20 rounded-lg">
+                                Closed
+                            </span>
+                        </div>
+                    </td>
+
+                    <td class="px-6 py-4 text-center align-top mt-2">
+                        <i class="fa-solid fa-file-circle-check text-lg" [ngClass]="{'text-gray-200 cursor-not-allowed': item.reply === null,
+                    'text-[#415CFF] cursor-pointer': item.reply !== null}"
                             (click)="item.reply !== null && viewReply(item.id)">
                         </i>
                     </td>
-
 
                 </tr>
             </tbody>
@@ -201,76 +210,86 @@
     </div>
 
     <div *ngIf="isReplyView" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-    <div class="bg-white dark:bg-[#363636] shadow-lg rounded-lg p-6 w-1/2">
-        <div class="flex flex-col items-center justify-center gap-5">
-            <div class="bg-[#F6F6F6] rounded-full shadow-md p-5">
-                <i class="fa-regular fa-envelope text-4xl"></i>
-            </div>
-
-            <p class="text-3xl font-bold dark:text-white">Reply from Centre Head</p>
-
-            <div class="flex flex-col  w-full border-[1px] border-[#D9D9D9] dark:text-white py-4 px-5 rounded-lg">
-                <div class="gap-y-2">
-                    <p class="mb-1">
-                        {{replyObj.language === 'Sinhala' ? 'හිතවත් ': replyObj.language === 'Tamil' ? 'அன்புள்ள ' : 'Dear '}}
-                        <span class="font-semibold">{{replyObj.firstNameEnglish}} {{replyObj.lastNameEnglish}},</span>
-                    </p>
-    
-                    <p class="mb-2" *ngIf="replyObj.language === 'Sinhala'">
-                        ඔබගේ පැමිණිල්ල නිරාකරණය කර ඇති බව ඔබට දැනුම් දීමට අපි සතුටු වෙමු.
-                    </p>
-                    
-                    <p class="mb-1" *ngIf="replyObj.language === 'Tamil'">
-                        உங்கள் முறையீடு தீர்வு செய்யப்பட்டதாக தெரிவித்து மகிழ்ச்சியடைகிறோம்.
-                    </p>
-    
-                    <p class="mb-1" *ngIf="replyObj.language !== 'Sinhala' && replyObj.language !== 'Tamil'">
-                        We are pleased to inform you that your complaint has been resolved.
-                      </p>
-    
-                    <div  class="border-none outline-none bg-[#F6F6F6] dark:bg-[#363636] rounded-lg w-full  p-1">
-                        <textarea rows="5" class="bg-[#F6F6F6] dark:bg-[#363636] w-full border-none outline-none resize-none" cols="6" [(ngModel)]="replyObj.reply" name="reply" placeholder="[ Add message here... ]" disabled=""></textarea>
-                    </div>
-    
-                    <p class="mb-2 mt-2">
-                        {{
-                            replyObj.language === 'Sinhala' ? 'ඔබට තවත් ගැටළු හෝ ප්‍රශ්න තිබේ නම්, කරුණාකර අප හා සම්බන්ධ වන්න. ඔබේ ඉවසීම සහ අවබෝධය වෙනුවෙන් ස්තූතියි. '
-                            : replyObj.language === 'Tamil' ? 'உங்களுக்கு மேலும் ஏதேனும் சிக்கல்கள் அல்லது கேள்விகள் இருந்தால், தயவுசெய்து எங்களைத் தொடர்பு கொள்ளவும். உங்கள் பொறுமைக்கும் புரிதலுக்கும் நன்றி. ' 
-                            : 'If you have any further concerns or questions, feel free to reach out.Thank you for your patience and understanding. '
-                        }}
-    
-                    </p>
+        <div class="bg-white dark:bg-[#363636] shadow-lg rounded-lg p-6 w-2/5">
+            <div class="flex flex-col items-center justify-center gap-5">
+                <div class="bg-[#F6F6F6] rounded-full shadow-md px-3 py-2">
+                    <i class="fa-regular fa-envelope text-xl"></i>
                 </div>
-                <p *ngIf="replyObj.language === 'Sinhala'">
-                    මෙයට,<br />
-                    {{ templateData.EngName }}
-                  </p>
-                  
-                  <p *ngIf="replyObj.language === 'Tamil'">
-                    இதற்கு,<br />
-                    {{ templateData.TamName }}
-                  </p>
-                  
-                  <p *ngIf="replyObj.language !== 'Sinhala' && replyObj.language !== 'Tamil'">
-                    Sincerely,<br />
-                    {{ templateData.EngName }}
-                  </p>
-                <p>
-                    {{
+
+                <p class="text-lg font-bold dark:text-white">Reply from Centre Head</p>
+
+                <div class="flex flex-col  w-full border-[1px] border-[#D9D9D9] dark:text-white py-4 px-5 rounded-lg">
+                    <div class="gap-y-2">
+                        <p class="mb-1">
+                            {{replyObj.language === 'Sinhala' ? 'හිතවත් ': replyObj.language === 'Tamil' ? 'அன்புள்ள ' :
+                            'Dear '}}
+                            <span class="font-semibold">{{replyObj.firstNameEnglish}}
+                                {{replyObj.lastNameEnglish}},</span>
+                        </p>
+
+                        <p class="mb-2" *ngIf="replyObj.language === 'Sinhala'">
+                            ඔබගේ පැමිණිල්ල නිරාකරණය කර ඇති බව ඔබට දැනුම් දීමට අපි සතුටු වෙමු.
+                        </p>
+
+                        <p class="mb-1" *ngIf="replyObj.language === 'Tamil'">
+                            உங்கள் முறையீடு தீர்வு செய்யப்பட்டதாக தெரிவித்து மகிழ்ச்சியடைகிறோம்.
+                        </p>
+
+                        <p class="mb-1" *ngIf="replyObj.language !== 'Sinhala' && replyObj.language !== 'Tamil'">
+                            We are pleased to inform you that your complaint has been resolved.
+                        </p>
+
+                        <div class="border-none outline-none bg-[#F6F6F6] dark:bg-[#363636] rounded-lg w-full  p-1">
+                            <textarea rows="5"
+                                class="bg-[#F6F6F6] dark:bg-[#363636] w-full border-none outline-none resize-none"
+                                cols="6" [(ngModel)]="replyObj.reply" name="reply" placeholder="[ Add message here... ]"
+                                disabled=""></textarea>
+                        </div>
+
+                        <p class="mb-2 mt-2">
+                            {{
+                            replyObj.language === 'Sinhala' ? 'ඔබට තවත් ගැටළු හෝ ප්‍රශ්න තිබේ නම්, කරුණාකර අප හා සම්බන්ධ
+                            වන්න. ඔබේ ඉවසීම සහ අවබෝධය වෙනුවෙන් ස්තූතියි. '
+                            : replyObj.language === 'Tamil' ? 'உங்களுக்கு மேலும் ஏதேனும் சிக்கல்கள் அல்லது கேள்விகள்
+                            இருந்தால், தயவுசெய்து எங்களைத் தொடர்பு கொள்ளவும். உங்கள் பொறுமைக்கும் புரிதலுக்கும் நன்றி. '
+                            : 'If you have any further concerns or questions, feel free to reach out.'
+                            }}
+                            <br *ngIf="replyObj.language !== 'Sinhala' && replyObj.language !== 'Tamil'">
+                            <span *ngIf="replyObj.language !== 'Sinhala' && replyObj.language !== 'Tamil'">
+                                Thank you for your patience and understanding.
+                            </span>
+                        </p>
+                    </div>
+                    <p *ngIf="replyObj.language === 'Sinhala'">
+                        මෙයට,<br />
+                        {{ templateData.EngName }}
+                    </p>
+
+                    <p *ngIf="replyObj.language === 'Tamil'">
+                        இதற்கு,<br />
+                        {{ templateData.TamName }}
+                    </p>
+
+                    <p *ngIf="replyObj.language !== 'Sinhala' && replyObj.language !== 'Tamil'">
+                        Sincerely,<br />
+                        {{ templateData.EngName }}
+                    </p>
+                    <p>
+                        {{
                         replyObj.language === 'Sinhala' ? 'Collection Centre Head of ' + templateData.companyNameSinhala
                         : replyObj.language === 'Tamil' ? 'Collection Centre Head of ' + templateData.companyNameTamil
                         : 'Collection Centre Head of ' + templateData.companyNameEnglish
-                    }}
-                </p>
-            </div>
+                        }}
+                    </p>
+                </div>
 
-           
-            <button
-                class="bg-[#F6F7F9] text-[#6B7D8C] text-lg border-2 border-gray-400 rounded-lg px-6 py-2 font-medium shadow-md hover:bg-gray-100"
-                (click)="cancelViewReply()">
-                Close
-            </button>
+
+                <button
+                    class="bg-[#F6F7F9] text-[#6B7D8C] text-lg border-2 border-gray-400 rounded-lg px-6 py-2 font-medium shadow-md hover:bg-gray-100"
+                    (click)="cancelViewReply()">
+                    Close
+                </button>
+            </div>
         </div>
     </div>
-</div>
 </div>

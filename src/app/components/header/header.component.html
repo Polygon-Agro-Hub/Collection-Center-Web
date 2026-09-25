@@ -6,21 +6,10 @@
     class="fa-solid fa-bell text-xl sm:text-2xl text-gray-500 mx-4 sm:mx-6 md:mx-8 lg:mx-10 cursor-pointer"
   ></i>
 
-  <!-- <i
-    *ngIf="userImage === null"
-    class="fa-solid fa-user text-lg sm:text-xl mx-4 sm:mx-6 md:mx-8 lg:mx-10"
-    (click)="navigate('/profile')"
-  ></i> -->
-
-  <i *ngIf="!userImage"
+  <i *ngIf="!userImage || userImage === ''"
     class="fa-solid fa-user text-lg sm:text-xl dark:text-textDark cursor-pointer"
     (click)="navigate('/profile')"
   ></i>
-
-  <!-- <i
-    class="fa-solid fa-user text-lg sm:text-xl mx-4 sm:mx-6 md:mx-8 lg:mx-10"
-    (click)="navigate('/profile')"
-  ></i> -->
 
   <img
     *ngIf="userImage"

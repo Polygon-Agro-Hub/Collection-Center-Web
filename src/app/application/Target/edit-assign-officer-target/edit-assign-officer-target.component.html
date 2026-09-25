@@ -1,17 +1,20 @@
 <app-loading-spinner *ngIf="isLoading" />
 
-<div *ngIf="!isLoading" class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-8 mx-5 cursor-pointer">
-    <p onclick="history.back()"> Centre Target</p>
-    <p>Edit Officer Target</p>
-  </div>
+<div *ngIf="!isLoading" class="flex gap-0 cursor-pointer">
+    <p class="font-semibold text[#424242] mb-4 mr-5 ml-0 dark:text-[#FFFFFF] dark:bg-blacks" onclick="history.back()">
+        Centre Target</p>
+    <p class="font-semibold text[#424242] mb-4 mr-5 ml-0 dark:text-[#FFFFFF] dark:bg-blacks">Edit Officer Target</p>
+</div>
 
-<div *ngIf="!isLoading">
-    <div class="font-semibold text[#424242] mb-8 mx-0 dark:bg-[#363636] dark:text-[#FFFFFF] ">
-        <div class="flex flex-col items-center justify-center dark:bg-[#363636] dark-border-[tileBlack] bg-[#FFFFFF] rounded-lg pt-6 mx-0 pb-4 border border-[#E5E7EB]">
+<div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg overflow-x-auto">
+    <div class="font-semibold text[#424242] mb-8 mr-6 dark:bg-[#363636] dark:text-[#FFFFFF] ">
+        <div
+            class="flex flex-col items-center justify-center dark:bg-[#363636] dark-border-[tileBlack] bg-[#FFFFFF] rounded-lg pt-6 mx-0 pb-4 border border-[#E5E7EB]">
             <p class="text-lg text-black dark:text-[#FFFFFF] font-bold">{{targetVerity.cropNameEnglish}} :
                 {{targetVerity.varietyNameEnglish}}
             </p>
-            <p class="text-black font-semibold dark:text-[#FFFFFF]">Daily Target for <span class="text-[#415CFF]">{{targetVerity.formattedToDate}}</span></p>
+            <p class="text-black font-semibold dark:text-[#FFFFFF]">Daily Target for <span
+                    class="text-[#415CFF]">{{targetVerity.formattedToDate}}</span></p>
 
             <div class="border-[1px] border-[#E5E7EB] my-5 rounded-lg">
                 <table>
@@ -31,17 +34,20 @@
                     </tr>
                     <tr>
                         <th class="px-8 py-4 text-[#4B5563] font-normal">
-                            <div class="bg-[#F6F7F9] dark:bg-slate-500 border-[1px] border-[#415CFF] rounded-lg px-3 py-1">
+                            <div
+                                class="bg-[#F6F7F9] dark:bg-slate-500 border-[1px] border-[#415CFF] rounded-lg px-3 py-1">
                                 <p class="text-black dark:text-white font-semibold">{{targetVerity.qtyA}}</p>
                             </div>
                         </th>
                         <th class="px-8 py-4 text-[#4B5563] font-normal">
-                            <div class="bg-[#F6F7F9] dark:bg-slate-500 border-[1px] border-[#415CFF] rounded-lg px-3 py-1">
+                            <div
+                                class="bg-[#F6F7F9] dark:bg-slate-500 border-[1px] border-[#415CFF] rounded-lg px-3 py-1">
                                 <p class="text-black dark:text-white font-semibold">{{targetVerity.qtyB}}</p>
                             </div>
                         </th>
                         <th class="px-8 py-4 text-[#4B5563] font-normal">
-                            <div class="bg-[#F6F7F9] dark:bg-slate-500 border-[1px] border-[#415CFF] rounded-lg px-3 py-1">
+                            <div
+                                class="bg-[#F6F7F9] dark:bg-slate-500 border-[1px] border-[#415CFF] rounded-lg px-3 py-1">
                                 <p class="text-black dark:text-white font-semibold">{{targetVerity.qtyC}}</p>
                             </div>
                         </th>
@@ -51,93 +57,90 @@
         </div>
     </div>
 
-    <div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg my-8">
-        <div class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg">
-            <table class="w-full min-w-max divide-y-2 border-[1px] border-gray-300 rounded-lg overflow-hidden">
-                <thead class=" text-[#4B5563] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
-                    <tr>
-                        <th class="px-6 py-3 text-left font-medium">No</th>
-                        <th class="px-6 py-3 text-left font-medium">EMP ID</th>
-                        <th class="px-6 py-3 text-left font-medium">Full Name</th>
-                        <th class="px-6 py-3 text-left font-medium">Grade A</th>
-                        <th class="px-6 py-3 text-left font-medium">Grade B</th>
-                        <th class="px-6 py-3 text-left font-medium">Grade C</th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white text-[#000000] dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
-                    <tr *ngFor="let item of officerArr; let i = index">
-                        <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
-                            {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }} </td>
-                        <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.empId}}</td>
-                        <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.firstNameEnglish}}
-                            {{item.lastNameEnglish}}</td>
-                        <td class="px-6 py-4 text-sm text-gray-900">
-                            <input type="number" [(ngModel)]="officerArr[i].targetA" name="targetA"
-                                (ngModelChange)="updateTotals(i, 'A')"
-                                class="border-[#415CFF] dark:text-white border-[2px] dark:bg-slate-500 border-dotted rounded-lg w-16 px-2 py-1" />
+    <div class=" min-w-max mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021] overflow-hidden">
+        <table class="w-full min-w-max divide-y-2">
+            <thead class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
+                <tr>
+                    <th class="px-6 py-3 text-left font-medium">No</th>
+                    <th class="px-6 py-3 text-left font-medium">EMP ID</th>
+                    <th class="px-6 py-3 text-left font-medium">Full Name</th>
+                    <th class="px-6 py-3 text-left font-medium">Grade A</th>
+                    <th class="px-6 py-3 text-left font-medium">Grade B</th>
+                    <th class="px-6 py-3 text-left font-medium">Grade C</th>
+                </tr>
+            </thead>
+            <tbody class="bg-white text-[#000000] dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
+                <tr *ngFor="let item of officerArr; let i = index" class="border-b">
+                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
+                        {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }} </td>
+                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.empId}}</td>
+                    <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.firstNameEnglish}}
+                        {{item.lastNameEnglish}}</td>
+                    <td class="px-6 py-4 text-sm text-gray-900">
+                        <input type="number" step="0.001" [(ngModel)]="officerArr[i].targetA" name="targetA"
+                            (ngModelChange)="updateTotals(i, 'A')"
+                            class="border-[#415CFF] dark:text-white border-[2px] dark:bg-slate-500 border-dotted rounded-lg w-20 px-2 py-1" />
 
-                        </td>
-                        <td class="px-6 py-4 text-sm text-gray-900">
-                            <input type="number" [(ngModel)]="officerArr[i].targetB" name="targetB"
-                                (ngModelChange)="updateTotals(i, 'B')"
-                                class="border-[#415CFF] border-[2px] dark:text-white dark:bg-slate-500 border-dotted rounded-lg w-16 px-2 py-1" />
+                    </td>
+                    <td class="px-6 py-4 text-sm text-gray-900">
+                        <input type="number" step="0.001" [(ngModel)]="officerArr[i].targetB" name="targetB"
+                            (ngModelChange)="updateTotals(i, 'B')"
+                            class="border-[#415CFF] border-[2px] dark:text-white dark:bg-slate-500 border-dotted rounded-lg w-20 px-2 py-1" />
 
-                        </td>
-                        <td class="px-6 py-4 text-sm text-gray-900">
-                            <input type="number" [(ngModel)]="officerArr[i].targetC" name="targetC"
-                                (ngModelChange)="updateTotals(i, 'C')"
-                                class="border-[#415CFF] dark:text-white border-[2px] dark:bg-slate-500 border-dotted rounded-lg w-16 px-2 py-1" />
-                        </td>
-                    </tr>
-                    <tr class="border-t-2 border-[#E5E7EB]">
-                        <td class="px-6 py-3 text-gray-900 dark:text-gray-300"></td>
-                        <td class="px-6 py-3text-gray-900 dark:text-gray-300"></td>
-                        <td class="px-6 py-3 font-bold text-end text-gray-900 dark:text-gray-300">Total : </td>
-                        <td class="px-6 py-3 text-gray-900 dark:text-gray-300">
-                            <div class="flex flex-row gap-2">
-                                <input type="number" [value]="totTargetA" disabled
-                                    class="border-[#415CFF] dark:text-white dark:bg-slate-500 border-[2px] border-dotted rounded-lg w-16 px-2 py-1  text-gray-900" />
-                                <i class="fa-solid fa-circle-check text-2xl text-blue-600"
-                                    *ngIf="+totTargetA === +targetVerity.qtyA"></i>
+                    </td>
+                    <td class="px-6 py-4 text-sm text-gray-900">
+                        <input type="number" step="0.001" [(ngModel)]="officerArr[i].targetC" name="targetC"
+                            (ngModelChange)="updateTotals(i, 'C')"
+                            class="border-[#415CFF] dark:text-white border-[2px] dark:bg-slate-500 border-dotted rounded-lg w-20 px-2 py-1" />
+                    </td>
+                </tr>
+                <tr class="border-t-2 border-[#E5E7EB]">
+                    <td class="px-6 py-3 text-gray-900 dark:text-gray-300"></td>
+                    <td class="px-6 py-3text-gray-900 dark:text-gray-300"></td>
+                    <td class="px-6 py-3 font-bold text-end text-gray-900 dark:text-gray-300">Total : </td>
+                    <td class="px-6 py-3 text-gray-900 dark:text-gray-300">
+                        <div class="flex flex-row gap-2">
+                            <input type="number" step="any" [value]="totTargetA" disabled
+                                class="border-[#415CFF] dark:text-white dark:bg-slate-500 border-[2px] border-dotted rounded-lg w-20 px-2 py-1  text-gray-900" />
+                            <i class="fa-solid fa-circle-check text-2xl text-blue-600"
+                                *ngIf="+totTargetA === +targetVerity.qtyA"></i>
 
-                            </div>
+                        </div>
 
-                        </td>
-                        <td class="px-6 py-3  text-gray-900 dark:text-gray-300">
-                            <div class="flex flex-row gap-2">
-                                <input type="number" [value]="totTargetB" disabled
-                                    class="border-[#415CFF] dark:text-white dark:bg-slate-500 border-[2px] border-dotted rounded-lg w-16 px-2 py-1  text-gray-900" />
-                                <i class="fa-solid fa-circle-check text-2xl text-blue-600"
-                                    *ngIf="+totTargetB === +targetVerity.qtyB"></i>
-                            </div>
+                    </td>
+                    <td class="px-6 py-3  text-gray-900 dark:text-gray-300">
+                        <div class="flex flex-row gap-2">
+                            <input type="number" step="any" [value]="totTargetB" disabled
+                                class="border-[#415CFF] dark:text-white dark:bg-slate-500 border-[2px] border-dotted rounded-lg w-20 px-2 py-1  text-gray-900" />
+                            <i class="fa-solid fa-circle-check text-2xl text-blue-600"
+                                *ngIf="+totTargetB === +targetVerity.qtyB"></i>
+                        </div>
 
-                        </td>
-                        <td class="px-6 py-3 text-gray-900 dark:text-gray-300">
-                            <div class="flex flex-row gap-2">
-                                <input type="number" [value]="totTargetC" disabled
-                                    class="border-[#415CFF] dark:text-white dark:bg-slate-500 border-[2px] border-dotted rounded-lg w-16 px-2 py-1  text-gray-900" />
-                                <i class="fa-solid fa-circle-check text-2xl text-blue-600"
-                                    *ngIf="+totTargetC == +targetVerity.qtyC"></i>
-                            </div>
+                    </td>
+                    <td class="px-6 py-3 text-gray-900 dark:text-gray-300">
+                        <div class="flex flex-row gap-2">
+                            <input type="number" step="any" [value]="totTargetC" disabled
+                                class="border-[#415CFF] dark:text-white dark:bg-slate-500 border-[2px] border-dotted rounded-lg w-20 px-2 py-1  text-gray-900" />
+                            <i class="fa-solid fa-circle-check text-2xl text-blue-600"
+                                *ngIf="+totTargetC == +targetVerity.qtyC"></i>
+                        </div>
 
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
-        </div>
-
-        <div class="flex flex-row justify-center items-center my-7 gap-8">
-            <button class="bg-[#FFFFFF] text-[#6B7D8C] border-[2px] border-[#95A1AC] rounded-lg px-5 py-2"
-               (click)="onCancel()"
-            >
-                Cancel
-            </button>
-            <button class="rounded-lg px-7 py-2"
-                [ngClass]="isFormValid ? 'bg-[#415CFF] text-[#FFFFFF]' : 'bg-[#95A1AC] text-[#6B7D8C]'"
-                (click)="isFormValid && onSubmit()">
-                Save
-            </button>
-        </div>
-
+                    </td>
+                </tr>
+            </tbody>
+        </table>
     </div>
+
+    <div class="flex flex-row justify-center items-center my-7 gap-8">
+        <button class="bg-[#FFFFFF] text-[#6B7D8C] border-[2px] border-[#95A1AC] rounded-lg px-5 py-2"
+            (click)="onCancel()">
+            Cancel
+        </button>
+        <button class="rounded-lg px-7 py-2"
+            [ngClass]="isFormValid ? 'bg-[#415CFF] text-[#FFFFFF]' : 'bg-[#95A1AC] text-[#6B7D8C]'"
+            (click)="isFormValid && onSubmit()">
+            Save
+        </button>
+    </div>
+
 </div>

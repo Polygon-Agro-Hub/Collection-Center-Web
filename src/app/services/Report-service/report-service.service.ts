@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { TokenServiceService } from '../Token/token-service.service';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -15,8 +15,7 @@ export class ReportServiceService {
     this.token = this.tokenSrv.getToken()
   }
 
-  getAllCollectionReport(role: string, page: number = 1, limit: number = 10, searchText: string = '', centerId:string=''): Observable<any> {
-    console.log('this is seacrch', searchText)
+  getAllCollectionReport(role: string, page: number, limit: number = 10, searchText: string = '', centerId:string=''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
@@ -129,7 +128,6 @@ export class ReportServiceService {
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
     });
-    console.log('to', toDate, 'from', fromDate, 'saerch', searchText);
     // Base URL with date range
     let url = `${this.apiUrl}/get-all-payments?page=${page}&limit=${limit}&fromDate=${fromDate}&toDate=${toDate}`;
 
@@ -163,15 +161,10 @@ export class ReportServiceService {
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
-      // Optional: 'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     });
 
     return this.http.get(url, { headers, responseType: 'blob' });
   }
-
-
-
-
 
   getAllCollections(
     page: number = 1,
@@ -216,7 +209,6 @@ export class ReportServiceService {
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
-      // Optional: 'Accept': 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet'
     });
 
     return this.http.get(url, { headers, responseType: 'blob' });
@@ -252,7 +244,6 @@ export class ReportServiceService {
     searchText: string = ''
   ): Observable<Blob> {
     let url = `${this.apiUrl}/download-center-payment-report?fromDate=${fromDate}&toDate=${toDate}&centerId=${centerId}`;
-
 
     if (searchText) {
       url += `&searchText=${searchText}`;

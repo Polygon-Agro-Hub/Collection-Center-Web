@@ -79,7 +79,7 @@ export const MENU_ITEMS = [
     id: 21,
     key: 'procurement',
     path: '/procurement',
-    label: 'procurement',
+    label: 'Procurement',
     icon: 'fa-solid fa-box-open',
     permission: ['Collection Centre Head'],
 
@@ -141,6 +141,15 @@ export const MENU_ITEMS = [
     permission: ['Distribution Centre Head', 'Distribution Centre Manager'],
   },
 
+  {
+    id: 24,
+    key: 'product-shortage',
+    path: '/product-shortage',
+    label: 'Product Shortage',
+    icon: 'fa-solid fa-question',
+    permission: ['Distribution Centre Manager'],
+  },
+
 
   {
     id: 13,
@@ -160,14 +169,14 @@ export const MENU_ITEMS = [
     permission: ['Distribution Centre Manager'],
   },
 
-  {
-    id: 15,
-    key: 'officer-targets',
-    path: '/officer-targets',
-    label: 'Officer Targets',
-    icon: 'fa-solid fa-user-plus',
-    permission: ['Distribution Centre Manager'],
-  },
+  // {
+  //   id: 15,
+  //   key: 'officer-targets',
+  //   path: '/officer-targets',
+  //   label: 'Officer Targets',
+  //   icon: 'fa-solid fa-user-plus',
+  //   permission: ['Distribution Centre Manager'],
+  // },
 
 
   {
@@ -179,14 +188,14 @@ export const MENU_ITEMS = [
     permission: ['Distribution Centre Manager'],
   },
 
-  {
-    id: 23,
-    key: 'dispatched',
-    path: '/dispatched',
-    label: 'Dispatched',
-    icon: 'fa-solid fa-truck-fast',
-    permission: ['Distribution Centre Manager'],
-  },
+  // {
+  //   id: 23,
+  //   key: 'dispatched',
+  //   path: '/dispatched',
+  //   label: 'Dispatched',
+  //   icon: 'fa-solid fa-truck-fast',
+  //   permission: ['Distribution Centre Manager'],
+  // },
 
   {
     id: 18,
@@ -207,6 +216,16 @@ export const MENU_ITEMS = [
   },
 
   {
+    id: 25,
+    key: 'distribution-procurement',
+    path: '/distribution-procurement',
+    label: 'Procurement',
+    icon: 'fa-solid fa-box-open',
+    permission: ['Distribution Centre Head'],
+  },
+
+
+  {
     id: 20,
     key: 'dcm-complaints',
     path: '/dcm-complaints',
@@ -214,6 +233,15 @@ export const MENU_ITEMS = [
     icon: 'fa-solid fa-triangle-exclamation',
     permission: ['Distribution Centre Manager'],
   },
+
+  // {
+  //   id: 11,
+  //   key: 'cash-activity',
+  //   path: '/cash-activity',
+  //   label: 'Cash-Activity',
+  //   icon: 'fas fa-th-large',
+  //   permission: ['Distribution Centre Manager'],
+  // },
 
 ];
 
@@ -250,7 +278,6 @@ export class SideNavComponent {
 
   ) {
     this.role = tokenSrv.getUserDetails().role;
-    console.log('role', this.role)
     this.companyLogo = tokenSrv.getUserDetails().logo;
     this.companyFavicon = tokenSrv.getUserDetails().favicon;
     this.setActiveTabFromRoute();
@@ -315,12 +342,15 @@ export class SideNavComponent {
   }
 
   confirmLogOut() {
-    this.logOutView = !this.logOutView;
-    this.tokenSrv.clearLoginDetails();
-    this.router.navigate(['login']);
-    this.toastSrv.success(`<b>Logged Out!`);
-  }
+  this.logOutView = !this.logOutView;
+  this.tokenSrv.clearLoginDetails();
 
+  this.router.navigate(['login']).then(() => {
+    window.location.reload();
+  });
+
+  this.toastSrv.success(`<b>Logged Out!</b>`);
+}
   cancelLogOut() {
     this.logOutView = !this.logOutView;
   }

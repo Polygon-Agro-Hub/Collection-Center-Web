@@ -34,17 +34,17 @@ export class ViewCentersComponent implements OnInit {
     isProvinceDropdownOpen = false;
     isDistrictDropdownOpen = false;
 
-    provinces: string[] = [
-        'Western',
-        'Central',
-        'Southern',
-        'Northern',
-        'Eastern',
-        'North Western',
-        'North Central',
-        'Uva',
-        'Sabaragamuwa'
-    ];
+provinces: string[] = [
+    'Central',
+    'Eastern',
+    'North Central',
+    'North Western',
+    'Northern',
+    'Sabaragamuwa',
+    'Southern',
+    'Uva',
+    'Western'
+];
 
     // Define all districts with their provinces
     allDistricts = [
@@ -75,9 +75,6 @@ export class ViewCentersComponent implements OnInit {
         { name: 'Vavuniya', province: 'Northern' },
     ];
 
-    // Districts filtered by selected province
-    // filteredDistricts: { name: string, province: string }[] = [];
-
     constructor(
         private router: Router,
         private TargetSrv: TargetService,
@@ -89,58 +86,58 @@ export class ViewCentersComponent implements OnInit {
     }
 
     // Convert arrays to dropdown items format
-get provinceItems() {
-    return this.provinces.map(province => ({
-        value: province,
-        label: province
-    }));
-}
+    get provinceItems() {
+        return this.provinces.map(province => ({
+            value: province,
+            label: province
+        }));
+    }
 
-get districtItems() {
-    const districts = this.selectProvince 
-        ? this.allDistricts.filter(d => d.province === this.selectProvince)
-        : this.allDistricts;
-    
-    return districts.map(district => ({
-        value: district.name,
-        label: district.name
-    }));
-}
+    get districtItems() {
+        const districts = this.selectProvince
+            ? this.allDistricts.filter(d => d.province === this.selectProvince)
+            : this.allDistricts;
 
-// Handle province selection change
-onProvinceChange(selectedProvince: string | null): void {
-    this.selectProvince = selectedProvince || '';
-    
-    // Clear district selection when province changes
-    if (!selectedProvince) {
-        this.selectDistrict = '';
-    } else {
-        // Check if current district is still valid for the selected province
-        const isDistrictValid = this.allDistricts.some(d => 
-            d.name === this.selectDistrict && d.province === selectedProvince
-        );
-        if (!isDistrictValid) {
+        return districts.map(district => ({
+            value: district.name,
+            label: district.name
+        }));
+    }
+
+    // Handle province selection change
+    onProvinceChange(selectedProvince: string | null): void {
+        this.selectProvince = selectedProvince || '';
+
+        // Clear district selection when province changes
+        if (!selectedProvince) {
             this.selectDistrict = '';
+        } else {
+            // Check if current district is still valid for the selected province
+            const isDistrictValid = this.allDistricts.some(d =>
+                d.name === this.selectDistrict && d.province === selectedProvince
+            );
+            if (!isDistrictValid) {
+                this.selectDistrict = '';
+            }
         }
-    }
-    
-    this.fetchAllCenterDetails();
-}
 
-// Handle district selection change
-onDistrictChange(selectedDistrict: string | null): void {
-    this.selectDistrict = selectedDistrict || '';
-    
-    // When district is selected, automatically set the province
-    if (selectedDistrict) {
-        const district = this.allDistricts.find(d => d.name === selectedDistrict);
-        if (district && district.province !== this.selectProvince) {
-            this.selectProvince = district.province;
-        }
+        this.fetchAllCenterDetails();
     }
-    
-    this.fetchAllCenterDetails();
-}
+
+    // Handle district selection change
+    onDistrictChange(selectedDistrict: string | null): void {
+        this.selectDistrict = selectedDistrict || '';
+
+        // When district is selected, automatically set the province
+        if (selectedDistrict) {
+            const district = this.allDistricts.find(d => d.name === selectedDistrict);
+            if (district && district.province !== this.selectProvince) {
+                this.selectProvince = district.province;
+            }
+        }
+
+        this.fetchAllCenterDetails();
+    }
 
 
     @HostListener('document:click', ['$event'])
@@ -186,101 +183,16 @@ onDistrictChange(selectedDistrict: string | null): void {
     }
 
     offSearch() {
-        this.searchText='';
+        this.searchText = '';
         this.fetchAllCenterDetails();
     }
-
-    // toggleProvinceDropdown() {
-    //     this.isProvinceDropdownOpen = !this.isProvinceDropdownOpen;
-    //     // Close district dropdown when opening province dropdown
-    //     if (this.isProvinceDropdownOpen) {
-    //         this.isDistrictDropdownOpen = false;
-    //     }
-    // }
-
-    // selectProvinceOption(province: string) {
-    //     this.selectProvince = province;
-    //     this.isProvinceDropdownOpen = false;
-    //     this.filterProvince();
-    // }
-
-    // clearProvinceFilter(event?: MouseEvent) {
-    //     if (event) {
-    //         event.stopPropagation(); // Prevent triggering the dropdown toggle
-    //     }
-    //     this.selectProvince = '';
-    //     this.selectDistrict = ''; // Also clear district when province is cleared
-    //     this.updateFilteredDistricts(); // Update district list
-    //     this.fetchAllCenterDetails();
-    // }
-
-    // // District dropdown methods
-    // toggleDistrictDropdown() {
-    //     this.isDistrictDropdownOpen = !this.isDistrictDropdownOpen;
-    //     // Close province dropdown when opening district dropdown
-    //     if (this.isDistrictDropdownOpen) {
-    //         this.isProvinceDropdownOpen = false;
-    //     }
-    // }
-
-    // selectDistrictOption(districtName: string) {
-    //     this.selectDistrict = districtName;
-    //     this.isDistrictDropdownOpen = false;
-    //     this.filterDistrict();
-    // }
-
-    // clearDistrictFilter(event?: MouseEvent) {
-    //     if (event) {
-    //         event.stopPropagation(); // Prevent triggering the dropdown toggle
-    //     }
-    //     this.selectDistrict = '';
-    //     this.fetchAllCenterDetails();
-    // }
-
-    // // Updated existing methods
-    // filterProvince() {
-    //     this.selectDistrict = ''; // Clear district selection when province changes
-    //     this.updateFilteredDistricts(); // Update district list based on selected province
-    //     this.fetchAllCenterDetails();
-    // }
-
-    // filterDistrict() {
-    //     // When district is selected, automatically set the province
-    //     if (this.selectDistrict) {
-    //         const district = this.allDistricts.find(d => d.name === this.selectDistrict);
-    //         if (district) {
-    //             this.selectProvince = district.province;
-    //             // Update filtered districts based on the selected province
-    //             this.updateFilteredDistricts();
-    //         }
-    //     }
-    //     this.fetchAllCenterDetails();
-    // }
-
-    // // Update the filtered districts based on selected province
-    // updateFilteredDistricts() {
-    //     if (this.selectProvince) {
-    //         this.filteredDistricts = this.allDistricts.filter(d => d.province === this.selectProvince);
-    //     } else {
-    //         this.filteredDistricts = this.allDistricts;
-    //     }
-    // }
-
-    // // Legacy methods (kept for compatibility, but now called by new methods)
-    // cancelProvince() {
-    //     this.clearProvinceFilter();
-    // }
-
-    // cancelDistrict() {
-    //     this.clearDistrictFilter();
-    // }
 
     getTotalPages(): number {
         return Math.ceil(this.totalItems / this.itemsPerPage);
     }
 
     navigateToDashboard(id: number) {
-        this.router.navigate([`/centers/center-shashbord/${id}`]);
+        this.router.navigate([`/centers/center-dashboard/${id}`]);
     }
 
 
@@ -288,25 +200,6 @@ onDistrictChange(selectedDistrict: string | null): void {
         this.router.navigate([`/centers/add-a-center`]);
     }
 
-//     dropdownItems = [
-//     { value: 'us', label: 'United States' },
-//     { value: 'ca', label: 'Canada' },
-//     { value: 'uk', label: 'United Kingdom' },
-//     { value: 'au', label: 'Australia' },
-//     { value: 'de', label: 'Germany' },
-//     { value: 'fr', label: 'France' },
-//     { value: 'jp', label: 'Japan' },
-//     { value: 'in', label: 'India' },
-//     { value: 'br', label: 'Brazil' },
-//     { value: 'mx', label: 'Mexico' }
-//   ];
-
-//   selectedValue: any = null;
-
-//   onSelectionChange(value: any): void {
-//     this.selectedValue = value;
-//     console.log('Selected:', value);
-//   }
 }
 
 class CenterData {

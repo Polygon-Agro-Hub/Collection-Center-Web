@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, inject } from '@angular/core';
+import { Component, ViewChild, ElementRef, AfterViewInit } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { TargetService } from '../../../services/Target-service/target.service';
@@ -10,16 +10,20 @@ import { ToastrModule } from 'ngx-toastr';   // Import ToastrModule
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import Swal from 'sweetalert2';
+import { CustomDatepickerComponent } from '../../../components/custom-datepicker/custom-datepicker.component';
 
 @Component({
   selector: 'app-download-target',
   standalone: true,
-  imports: [CommonModule, FormsModule, ToastrModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, ToastrModule, CustomDatepickerComponent, LoadingSpinnerComponent],
   templateUrl: './download-target.component.html',
   styleUrls: ['./download-target.component.css'],
   providers: [DatePipe]
 })
 export class DownloadTargetComponent {
+  @ViewChild('fromDatePicker') fromDatePicker!: any;
+  @ViewChild('toDatePicker') toDatePicker!: any;
+
   targetArr!: DailyTargets[];
 
   fromDate: Date | string = '';
@@ -63,40 +67,106 @@ export class DownloadTargetComponent {
     );
   }
 
-  validateToDate() {
-    // Case 1: User hasn't selected fromDate yet
-    if (!this.fromDate) {
-      this.toDate = ''; // Reset toDate
-      this.toastSrv.warning("Please select the 'From' date first.");
+  onDateFromDateChange(newDate: string | Date | null) {
+    let dateString: string;
+
+    if (!newDate) {
+      this.fromDate = '';
+      return;
+    } else if (newDate instanceof Date) {
+      dateString = newDate.toISOString().split('T')[0];
+    } else {
+      dateString = newDate;
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const [y, m, d] = dateString.split('-').map(Number);
+    const selectedFrom = new Date(y, m - 1, d);
+
+    if (selectedFrom > today) {
+      this.fromDate = '';
+      this.toastSrv.warning("From Date cannot be a future date.");
+      // Clear the datepicker by resetting the selected date
+      if (this.fromDatePicker) {
+        this.fromDatePicker.selectedDate = null;
+        this.fromDatePicker.writeValue(null);
+      }
       return;
     }
 
-    // Case 2: toDate is earlier than fromDate
-    if (this.toDate) {
-      const from = new Date(this.fromDate);
-      const to = new Date(this.toDate);
+    this.fromDate = dateString;
 
-      if (to <= from) {
-        this.toDate = ''; // Reset toDate
-        this.toastSrv.warning("The 'To' date cannot be earlier than or same to the 'From' date.");
-      }
-    }
-  }
-
-  validateFromDate() {
-    // Case 1: User hasn't selected fromDate yet
     if (!this.toDate) {
       return;
     }
 
-    // Case 2: toDate is earlier than fromDate
+    const from = new Date(this.fromDate);
+    const to = new Date(this.toDate);
+
+    if (to <= from) {
+      this.fromDate = '';
+      this.toastSrv.warning("The 'From' date cannot be later than or the same as the 'To' date.");
+      // Clear the datepicker
+      if (this.fromDatePicker) {
+        this.fromDatePicker.selectedDate = null;
+        this.fromDatePicker.writeValue(null);
+      }
+    }
+  }
+
+  onDateToDateChange(newDate: string | Date | null) {
+    let dateString: string;
+
+    if (!newDate) {
+      this.toDate = '';
+      return;
+    } else if (newDate instanceof Date) {
+      dateString = newDate.toISOString().split('T')[0];
+    } else {
+      dateString = newDate;
+    }
+
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+
+    const [y, m, d] = dateString.split('-').map(Number);
+    const selectedTo = new Date(y, m - 1, d);
+
+    if (selectedTo > today) {
+      this.toDate = '';
+      this.toastSrv.warning("To Date cannot be a future date.");
+      if (this.toDatePicker) {
+        this.toDatePicker.selectedDate = null;
+        this.toDatePicker.writeValue(null);
+      }
+      return;
+    }
+
+    this.toDate = dateString;
+
+    if (!this.fromDate) {
+      this.toDate = '';
+      this.toastSrv.warning("Please select the 'From' date first.");
+      if (this.toDatePicker) {
+        this.toDatePicker.selectedDate = null;
+        this.toDatePicker.writeValue(null);
+      }
+      return;
+    }
+
     if (this.toDate) {
       const from = new Date(this.fromDate);
       const to = new Date(this.toDate);
 
       if (to <= from) {
-        this.fromDate = ''; // Reset toDate
-        this.toastSrv.warning("The 'From' date cannot be Later than or same to the 'From' date.");
+        this.toDate = '';
+        this.toastSrv.warning("The 'To' date cannot be earlier than or same to the 'From' date.");
+        if (this.toDatePicker) {
+          this.toDatePicker.selectedDate = null;
+          this.toDatePicker.writeValue(null);
+        }
       }
     }
   }
@@ -118,11 +188,6 @@ export class DownloadTargetComponent {
       return;
     }
 
-    
-    // if (!this.fromDate || !this.toDate) {
-    //   this.toastSrv.warning("Please fill in all fields");
-    //   return;
-    // }
     this.hasDataAndTime = true;
     this.fetchDownloadTarget();
   }
@@ -138,8 +203,11 @@ export class DownloadTargetComponent {
       'Crop Name': item.cropNameEnglish,
       'Variety Name': item.varietyNameEnglish,
       Grade: item.grade,
-      'Target (kg)': item.target ? Number(item.target).toFixed(2) : '-',
-      'Completed (kg)': item.complete ? Number(item.complete).toFixed(2) : '-',
+      'Target (kg)': item.target ? item.target : '-',
+      'Completed (kg)': item.complete ? item.complete : '-',
+      'Target Date': item.date
+        ? new Date(item.date).toISOString().split('T')[0].replace(/-/g, '/')
+        : '',
       Status: item.status,
       Validity: item.validity,
     }));
@@ -148,14 +216,14 @@ export class DownloadTargetComponent {
 
     // Set column widths (in characters)
     worksheet['!cols'] = [
-      { wch: 5 },    // No (column A)
-      { wch: 20 },   // Crop Name (column B)
-      { wch: 20 },   // Variety Name (column C)
-      { wch: 10 },   // Grade (column D)
-      { wch: 12 },   // Target (kg) (column E)
-      { wch: 15 },   // Completed (kg) (column F)
-      { wch: 12 },   // Status (column G)
-      { wch: 12 }    // Validity (column H)
+      { wch: 5 },   
+      { wch: 20 },  
+      { wch: 20 },  
+      { wch: 10 },  
+      { wch: 12 },  
+      { wch: 15 },  
+      { wch: 12 },  
+      { wch: 12 }   
     ];
 
     // Auto-filter (optional)
@@ -171,7 +239,7 @@ export class DownloadTargetComponent {
 
     const data: Blob = new Blob([excelBuffer], { type: 'application/octet-stream' });
     saveAs(data, `Target-Report (${this.fromDate} - ${this.toDate}).xlsx`);
-    this.toastSrv.success(`Target-Report (${this.fromDate} - ${this.toDate}).xlsx Downloaded`);
+    this.toastSrv.success(`File Downloaded Successfully`);
   }
 
 }
@@ -182,6 +250,7 @@ class DailyTargets {
   toDate!: string;
   toTime!: string;
   grade!: string;
+  date!: Date;
   target!: string;
   complete!: string;
   status!: string;

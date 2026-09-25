@@ -8,29 +8,23 @@
         <div class="w-full dark:bg-[#363636]">
             <div class="flex flex-row items-center justify-center">
                 <p class="text-lg font-semibold text-[#292929] mx-3 dark:text-white">From :</p>
-        
+
                 <div class="relative w-56 mr-10">
-                    <app-custom-datepicker 
-                        #fromDatePicker
-                        [placeholder]="'--Select Date--'"
-                        [(selectedDate)]="fromDate"
+                    <app-custom-datepicker #fromDatePicker [placeholder]="'--Select Date--'" [(selectedDate)]="fromDate"
                         (dateChange)="onFromDateChange($event)">
                     </app-custom-datepicker>
                 </div>
-        
+
                 <p class="text-lg font-semibold text-[#292929] mx-3 dark:text-white">To :</p>
-        
+
                 <div class="relative w-56 mr-6">
-                    <app-custom-datepicker 
-                        #toDatePicker
-                        [placeholder]="'--Select Date--'" 
-                        [selectedDate]="toDate" 
+                    <app-custom-datepicker #toDatePicker [placeholder]="'--Select Date--'" [selectedDate]="toDate"
                         (dateChange)="onToDateChange($event)">
                     </app-custom-datepicker>
                 </div>
-        
+
                 <button (click)="goBtn()"
-                    class="bg-[#415CFF] text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-lg ml-5 dark:text-textDark">
+                    class="bg-[#415CFF] text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-lg ml-5 dark:text-white">
                     Go
                 </button>
             </div>
@@ -41,42 +35,39 @@
     <hr />
 
     <div *ngIf="hasData && isDateFilterSet">
-        <div class="flex flex-row items-center justify-between mt-6">
+        <div class="flex flex-row items-center justify-between mt-6 mr-5">
             <div class="flex flex-row gap-4">
                 <div class="flex flex-col justify-between flex-shrink-0">
                     <p class="font-semibold mb-1 text-lg dark:text-white whitespace-nowrap">All Transactions
-                        ( {{totalItems}} )</p>
+                        ( {{totalItems | number:'2.0-0'}} )</p>
                 </div>
             </div>
 
             <div class="flex flex-row items-center gap-5 ">
                 <i *ngIf="logingRole === 'Collection Centre Head'"
-                    class="fa-solid fa-list text-2xl dark:text-white ml-8"></i>
+                    class="fa-solid fa-list text-lg text-[#4A4A4A] dark:text-white ml-8"></i>
 
-                <p *ngIf="logingRole === 'Collection Centre Head'" class="font-normal dark:text-white">Filter By</p>
+                <p *ngIf="logingRole === 'Collection Centre Head'"
+                    class="font-normal text-[16px] text-[#4A4A4A] dark:text-white">
+                    Filter By
+                </p>
 
                 <div class="relative w-52 custom-center-dropdown-container">
                     <div *ngIf="logingRole === 'Collection Centre Head'">
-                        <app-searchable-dropdown
-                        [items]="centerDropdownItems"
-                        placeholder="Select Centre..."
-                        searchPlaceholder="Search centre..."
-                        [(ngModel)]="selectCenters"
-                        (selectionChange)="onCenterSelectionChange($event)"
-                        [clearable]="true"
-                        [showSelected]="true"
-                        [disabled]="false"
-                        class="w-full"
-                      ></app-searchable-dropdown>
-                        
+                        <app-searchable-dropdown [items]="centerDropdownItems" placeholder="Select Centre..."
+                            searchPlaceholder="Search centre..." [(ngModel)]="selectCenters"
+                            (selectionChange)="onCenterSelectionChange($event)" [clearable]="true" [showSelected]="true"
+                            [disabled]="false" class="w-full"></app-searchable-dropdown>
+
                     </div>
                 </div>
 
 
 
                 <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
-                    <input type="text" placeholder="Search by GRN No & NIC..." [(ngModel)]="searchText" (keyup.enter)="onSearch()"  (input)="checkLeadingSpace()"
-                        (keyup.esc)="offSearch()" (ngModelChange)="searchText = $event.trimStart()"
+                    <input type="text" placeholder="Search by GRN No, NIC..." [(ngModel)]="searchText"
+                        (keyup.enter)="onSearch()" (input)="checkLeadingSpace()" (keyup.esc)="offSearch()"
+                        (ngModelChange)="searchText = $event.trimStart()"
                         class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
                     <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                         (click)="onSearch()">
@@ -103,7 +94,7 @@
         <div class="flex justify-between items-center mb-5 mt-3"> <!-- Changed this line -->
             <div class="text-lg font-medium">
                 <p class="font-semibold mb-1 text-lg dark:text-white whitespace-nowrap">
-                    <span class="text-gray-500 dark:textDark">Total : </span>Rs {{ totalPaymentsAmount | number:'1.2-2'
+                    <span class="text-gray-500 dark:textDark">Total : </span>Rs {{ grandTotal | number:'1.2-2'
                     }}
                 </p>
             </div>
@@ -120,61 +111,63 @@
 
 
 
-        <div class="min-w-max mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
-
-
-            <table class="w-full min-w-max divide-y-2 border-[1px] border-gray-300 rounded-lg overflow-hidden">
-                <thead class=" dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] text-[#4B5563]">
-                    <tr>
-                        <th class="px-2 py-3 text-left text-sm font-medium">No</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium">GRN No</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium">Amount (Rs.)</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium"
-                            *ngIf="logingRole === 'Collection Centre Head'">Centre Code</th>
-                        <th class="px-3 py-3 text-left text-sm font-medium"
-                            *ngIf="logingRole === 'Collection Centre Head'">Centre Name</th>
-                        <th class="px-3 py-3 text-center text-sm font-medium ">Farmer NIC</th>
-                        <th class="px-3 py-3 text-center text-sm font-medium">Collected Time</th>
-                        <th class="px-3 py-3 text-center text-sm font-medium"></th>
-                    </tr>
-                </thead>
-                <tbody class="bg-white text-[#000000] font-semibold dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
-                    <tr *ngFor="let item of farmerPaymentsArr | paginate
+        <div *ngIf="hasData" class="min-w-max overflow-hidden  mt-5 mr-5">
+            <div class=" border-gray-100 border-[2px] dark:border-[#202021] rounded-lg">
+                <table class="w-full min-w-max divide-y-2">
+                    <thead class=" dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] text-[#4B5563]">
+                        <tr>
+                            <th class="px-2 py-3 text-center  font-medium">No</th>
+                            <th class="px-3 py-3 text-left  font-medium">GRN No</th>
+                            <th class="px-3 py-3 text-left  font-medium">Amount (Rs.)</th>
+                            <th class="px-3 py-3 text-left  font-medium"
+                                *ngIf="logingRole === 'Collection Centre Head'">
+                                Centre Code</th>
+                            <th class="px-3 py-3 text-left font-medium" *ngIf="logingRole === 'Collection Centre Head'">
+                                Centre Name</th>
+                            <th class="px-3 py-3 text-left font-medium ">Farmer NIC</th>
+                            <th class="px-3 py-3 text-center font-medium">Collected Time</th>
+                            <th class="px-3 py-3 text-center font-medium"></th>
+                        </tr>
+                    </thead>
+                    <tbody class="bg-white text-[#000000] font-semibold dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
+                        <tr *ngFor="let item of farmerPaymentsArr | paginate
                 : {
                     itemsPerPage: itemsPerPage,
                     currentPage: page,
                     totalItems: totalItems
                   };  let i = index">
-                        <td class="px-2 py-4 text-sm text-gray-900 dark:text-gray-300 ">
-                            {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i + 1)
-                                : (((page - 1) * itemsPerPage) + i + 1) }} </td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.invNo}}</td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300 ">
-                            {{item.totalAmount | number:'1.2-2'}}
-                        </td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300"
-                            *ngIf="logingRole === 'Collection Centre Head'">{{item.centerCode}}</td>
-                        <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300"
-                            *ngIf="logingRole === 'Collection Centre Head'">{{item.centerName}}</td>
-                        <td class="px-3 py-4 text-sm text-center text-gray-900 dark:text-gray-300">{{item.nic}}</td>
-                        <td class="px-3 py-4 text-center text-[#646464] dark:text-gray-300">
-                            <span class="block">{{ item.createdAt | date:'MMM d, y' }}</span>
-                            <span class="block">{{ item.createdAt | date:'h:mm a' }}</span>
-                        </td>
-                        <td class="px-3 py-4 text-center dark:text-gray-300">
-                            <i (click)="navigateToFarmerReport(item.invNo)"
-                                class="fa-solid fa-arrow-up-right-from-square cursor-pointer text-[#415CFF]"></i>
-                        </td>
-                    </tr>
-                </tbody>
-            </table>
+                            <td class="px-2 py-4 text-center text-gray-900 dark:text-gray-300 ">
+                                {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i +
+                                    1) : (((page - 1) * itemsPerPage) + i + 1) }} </td>
+                            <td class="px-3 py-4 text-gray-900 dark:text-gray-300">{{item.invNo}}</td>
+                            <td class="px-3 py-4 text-gray-900 dark:text-gray-300 ">
+                                {{item.totalAmount | number:'1.2-2'}}
+                            </td>
+                            <td class="px-3 py-4  text-gray-900 dark:text-gray-300"
+                                *ngIf="logingRole === 'Collection Centre Head'">{{item.centerCode}}</td>
+                            <td class="px-3 py-4 text-gray-900 dark:text-gray-300"
+                                *ngIf="logingRole === 'Collection Centre Head'">{{item.centerName}}</td>
+                            <td class="px-3 py-4  text-left text-gray-900 dark:text-gray-300">{{item.nic}}</td>
+                            <td class="px-3 py-4 text-center text-[#646464] dark:text-gray-300">
+                                <span class="block">{{ item.createdAt | date: 'MMMM d, y'}}</span>
+                                <span class="block">{{ item.createdAt | date: 'hh:mm a' }}</span>
+                            </td>
+                            <td class="px-3 py-4 text-center dark:text-gray-300">
+                                <i (click)="navigateToFarmerReport(item.invNo)"
+                                    class="fa-solid fa-arrow-up-right-from-square cursor-pointer text-[#415CFF]"></i>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="flex justify-end items-center my-5 pt-3 dark:bg-[#1D1D1F] text-right">
+                <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true"
+                    [previousLabel]="'Previous'" [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'"
+                    [screenReaderPageLabel]="'page'" [screenReaderCurrentLabel]="'Youre on page'">
+                </pagination-controls>
+            </div>
         </div>
-        <div class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#1D1D1F] text-right">
-            <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
-                [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
-                [screenReaderCurrentLabel]="'Youre on page'">
-            </pagination-controls>
-        </div>
+
     </div>
 
     <!-- <div *ngIf="!isDateFilterSet" class="flex justify-center items-center mt-8 mr-5 h-[500px] dark:bg-[#292929] ">
@@ -191,61 +184,28 @@
             <div class="flex flex-row gap-4">
                 <div class="flex flex-col justify-between flex-shrink-0">
                     <p class="font-semibold mb-1 text-lg dark:text-white whitespace-nowrap">All Transactions
-                        ( {{totalItems}} )</p>
+                        ( {{totalItems < 10 ? '0' + totalItems : totalItems }} )</p>
                 </div>
             </div>
 
             <div class="flex flex-row items-center gap-5 ">
-                <i class="fa-solid fa-list text-2xl dark:text-white ml-8"></i>
+                <i *ngIf="logingRole === 'Collection Centre Head'"
+                    class="fa-solid fa-list text-lg text-[#4A4A4A] dark:text-white ml-8"></i>
 
-                <p class="font-normal dark:text-white">Filter By</p>
-
-
-                <!-- <div class="relative w-46">
-                    <div
-                        class="border-2 rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark flex flex-row justify-between items-center">
-                        <select [(ngModel)]="selectCenters" (change)="applyCompanyFilters()"
-                            class="block w-full appearance-none dark:bg-[#292929] text-textLight dark:text-textDark px-3 py-2 pr-8 rounded-xl focus:outline-none cursor-pointer">
-                            <option value="" selected disabled>Centers</option>
-                            <option *ngFor="let item of centerArr"
-                                class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                                [value]="item.id">{{item.regCode}} - {{item.centerName}}</option>
-                        </select>
-
-
-                        <div *ngIf="!selectCenters"
-                            class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300">
-                            <i class="fa-solid fa-angle-down text-lg mr-3"></i>
-                        </div>
-
-
-                        <div (click)="clearCompanyFilter()" *ngIf="selectCenters"
-                            class="absolute inset-y-0 right-0 flex items-center px-2 text-gray-700 dark:text-gray-300 cursor-pointer z-10">
-                            <i class="fa-solid fa-xmark text-lg mr-3"></i>
-                        </div>
-                    </div>
-                </div> -->
+                <p *ngIf="logingRole === 'Collection Centre Head'" class="font-normal dark:text-white">Filter By</p>
 
                 <div class="relative w-64 custom-center-dropdown-container"
                     *ngIf="logingRole === 'Collection Centre Head'">
-                    <app-searchable-dropdown
-                        [items]="centerDropdownItems"
-                        placeholder="Select Centre..."
-                        searchPlaceholder="Search centre..."
-                        [(ngModel)]="selectCenters"
-                        (selectionChange)="onCenterSelectionChange($event)"
-                        [clearable]="true"
-                        [showSelected]="true"
-                        [disabled]="false"
-                        class="w-full"
-                      ></app-searchable-dropdown>
+                    <app-searchable-dropdown [items]="centerDropdownItems" placeholder="Select Centre..."
+                        searchPlaceholder="Search centre..." [(ngModel)]="selectCenters"
+                        (selectionChange)="onCenterSelectionChange($event)" [clearable]="true" [showSelected]="true"
+                        [disabled]="false" class="w-full"></app-searchable-dropdown>
                 </div>
 
-
-
                 <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
-                    <input type="text" placeholder="Search by GRN No & NIC..." [(ngModel)]="searchText" (keyup.enter)="onSearch()"
-                        (keyup.esc)="offSearch()" (ngModelChange)="searchText = $event.trimStart()"
+                    <input type="text" placeholder="Search by GRN No & NIC..." [(ngModel)]="searchText"
+                        (keyup.enter)="onSearch()" (keyup.esc)="offSearch()"
+                        (ngModelChange)="searchText = $event.trimStart()"
                         class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
                     <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                         (click)="onSearch()">
@@ -264,9 +224,7 @@
                         </svg>
                     </button>
                 </div>
-
             </div>
-
         </div>
 
         <div class="flex flex-col items-center w-full px-10 py-7 mt-6 ">

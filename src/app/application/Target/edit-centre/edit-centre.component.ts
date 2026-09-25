@@ -99,7 +99,6 @@ allDistricts = [
   ngOnInit() {
     const idParam = this.route.snapshot.paramMap.get('id');
     this.centreId = idParam !== null ? Number(idParam) : null;
-    console.log('Received ID:', this.centreId);
     this.fetchCentreData(this.centreId!)
   }
 
@@ -123,9 +122,10 @@ get districtItems() {
 
 
   @HostListener('document:click', ['$event.target'])
-onClick(targetElement: HTMLElement) {
-  const insideDropdown1 = targetElement.closest('.dropdown-wrapper-1');
-  const insideDropdown2 = targetElement.closest('.dropdown-wrapper-2');
+onClick(targetElement: EventTarget | null) {
+  const target = targetElement as HTMLElement | null;
+  const insideDropdown1 = target?.closest('.dropdown-wrapper-1');
+  const insideDropdown2 = target?.closest('.dropdown-wrapper-2');
 
   // Close dropdowns only if click is outside their wrapper
   if (!insideDropdown1) {
@@ -139,14 +139,12 @@ onClick(targetElement: HTMLElement) {
 selectCountry1(country: Country) {
   this.selectedCountry1 = country;
   this.centerData.phoneNumber01Code = country.dialCode; // update ngModel
-  console.log('sdsf', this.centerData.phoneNumber01Code)
   this.dropdownOpen = false;
 }
 
 selectCountry2(country: Country) {
   this.selectedCountry2 = country;
   this.centerData.phoneNumber02Code = country.dialCode; // update ngModel
-  console.log('sdsf', this.centerData.phoneNumber02Code)
   this.dropdownOpen2 = false;
 }
 
@@ -157,12 +155,10 @@ getFlagUrl(code: string): string {
 
   fetchCentreData(centreId: number) {
     this.isLoading = true;
-    console.log('fetching')
     this.targetService.getCentreData(centreId).subscribe(
       (res) => {
         this.isLoading = false;
         this.centerData = res.centreData[0];
-        console.log(this.centerData)
         this.isLoading = false;
       }
     );
@@ -170,13 +166,9 @@ getFlagUrl(code: string): string {
   }
   onProvinceChange(selectedProvince: string | null): void {
     this.centerData.province = selectedProvince || '';
-
-    console.log('this.centerData.province 1 ', this.centerData.province )
-    
     // Clear district selection when province changes
     if (!selectedProvince) {
         this.centerData.province = '';
-        console.log('this.centerData.province 2', this.centerData.province )
     } else {
         // Check if current district is still valid for the selected province
         const isDistrictValid = this.allDistricts.some(d => 
@@ -193,16 +185,11 @@ getFlagUrl(code: string): string {
 // Handle district selection change
 onDistrictChange(selectedDistrict: string | null): void {
     this.centerData.district = selectedDistrict || '';
-
-    console.log('this.centerData.district 1', this.centerData.district )
-    
     // When district is selected, automatically set the province
     if (selectedDistrict) {
         const district = this.allDistricts.find(d => d.name === selectedDistrict);
         if (district && district.province !== this.centerData.province) {
             this.centerData.province = district.province;
-
-            console.log('this.centerData.province 1', this.centerData.province )
         }
     }
 
@@ -240,8 +227,6 @@ onDistrictChange(selectedDistrict: string | null): void {
   }
 
   onSubmitForm(form: NgForm) {
-
-    console.log('submitting')
 
     form.form.markAllAsTouched();
 
@@ -403,13 +388,9 @@ onDistrictChange(selectedDistrict: string | null): void {
   }
 
   updateRegCode() {
-    console.log('update reg code');
     const province = this.centerData.province;
     const district = this.centerData.district;
     const city = this.centerData.city;
-
-    console.log('province', province, 'district', district, 'city', city);
-
     if (province && district && city) {
       this.isLoadingregcode = true;
       this.targetService
@@ -425,7 +406,6 @@ onDistrictChange(selectedDistrict: string | null): void {
             const regCode = `${province.slice(0, 2).toUpperCase()}${district
               .slice(0, 1)
               .toUpperCase()}${city.slice(0, 1).toUpperCase()}`;
-            console.log('regCode fallback', regCode);
             this.centerData.regCode = '';
             this.isLoadingregcode = false;
           }
@@ -436,7 +416,7 @@ onDistrictChange(selectedDistrict: string | null): void {
   onCancel() {
     Swal.fire({
       title: 'Are you sure?',
-      text: 'Do you really want to clear this form?',
+      text: 'You may lose the added data after canceling!',
       icon: 'warning',
       showCancelButton: true,
       confirmButtonColor: '#d33',

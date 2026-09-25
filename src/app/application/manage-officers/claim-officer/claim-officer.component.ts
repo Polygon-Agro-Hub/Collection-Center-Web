@@ -7,11 +7,13 @@ import { ToastAlertService } from '../../../services/toast-alert/toast-alert.ser
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import Swal from 'sweetalert2';
 import { TokenServiceService } from '../../../services/Token/token-service.service';
+import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
+import { JOB_ROLE_TYPES, JobRoleTypes } from './../../../../assets/job-roles-data';
 
 @Component({
   selector: 'app-claim-officer',
   standalone: true,
-  imports: [CommonModule, FormsModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent, SerchableDropdownComponent],
   templateUrl: './claim-officer.component.html',
   styleUrl: './claim-officer.component.css'
 })
@@ -22,13 +24,13 @@ export class ClaimOfficerComponent implements OnInit {
   inputId: string = '';
   isOfficerExist: boolean = false;
   hasData!: boolean
-
-  isLoading:boolean = false;
-
+  isLoading: boolean = false;
   showClaimView = false;
-
   logingRole: string | null = null;
+  isReset: boolean = false;
 
+  jobRoleItems: { value: string; label: string }[] = []
+  jobRoleTypes: JobRoleTypes = JOB_ROLE_TYPES;
 
   constructor(
     private ManageOficerSrv: ManageOfficersService,
@@ -37,61 +39,71 @@ export class ClaimOfficerComponent implements OnInit {
     private tokenSrv: TokenServiceService
   ) {
     this.logingRole = tokenSrv.getUserDetails().role
-   }
+  }
 
   ngOnInit(): void {
-    
     if (this.logingRole === 'Distribution Centre Manager') {
-      this.selectJobRole = 'Distribution Officer';
+      // Distribution Centre Manager picks from an interactive dropdown, so leave it
+      // unselected and force a deliberate choice.
+      this.selectJobRole = '';
+      this.jobRoleItems = [
+        { value: 'Distribution Officer', label: 'Distribution Officer' },
+        { value: this.jobRoleTypes.lightWeightDriver, label: this.jobRoleTypes.lightWeightDriver },
+        { value: this.jobRoleTypes.heavyWeightDriver, label: this.jobRoleTypes.heavyWeightDriver }
+      ];
     } else if (this.logingRole === 'Collection Centre Manager') {
-       this.selectJobRole = 'Collection Officer'
+      // Collection Centre Manager only sees a readonly field with no way to pick a value,
+      // so it must be pre-selected here or the search can never be run.
+      this.selectJobRole = 'Collection Officer';
     }
   }
 
   fetchOfficer() {
-
-    console.log('seelectedJbRole', this.selectJobRole)
     if (!this.inputId) {
-      return this.toastSrv.warning('Pleace enter valid employee id!');
+      return this.toastSrv.warning('Please fill in all fields');
     }
-    
+
     this.inputId = this.inputId?.trim();
     this.isLoading = true;
     let empId;
     if (this.selectJobRole === 'Customer Officer') {
       empId = 'CUO' + this.inputId
-    } else if (this.selectJobRole === 'Collection Officer'){
+    } else if (this.selectJobRole === 'Collection Officer') {
       empId = 'COO' + this.inputId
-    } else {
+    } else if (this.selectJobRole === 'Distribution Officer') {
       empId = 'DIO' + this.inputId
+    } else {
+      empId = 'DRV' + this.inputId
     }
 
-    this.ManageOficerSrv.getOfficerByEmpId(empId).subscribe(
+    this.ManageOficerSrv.getOfficerByEmpId(empId, this.selectJobRole).subscribe(
       (res) => {
         if (res.status) {
           this.officerObj = res.data
           this.isOfficerExist = true
           this.hasData = false
           this.isLoading = false;
+          // this.selectJobRole = '';
         } else {
           this.isOfficerExist = false;
           this.hasData = true
           this.isLoading = false;
-
         }
       }
     )
+  }
+
+  onJobRoleSelectionChange(selectedValue: string) {
+    this.selectJobRole = selectedValue || '';
+
   }
 
   toggleClaimView() {
     this.showClaimView = !this.showClaimView; // Toggle the boolean value
   }
 
-  
-
   cancelClaim() {
     this.showClaimView = false;
-    this.router.navigate(['/distribution-officers']);
   }
 
   confirmClaim(id: number) {
@@ -100,10 +112,13 @@ export class ClaimOfficerComponent implements OnInit {
       (res) => {
         this.isLoading = false;
         if (res.status) {
-          this.toastSrv.success(`${this.officerObj.firstNameEnglish} ${this.officerObj.lastNameEnglish} (EMP ID - "${this.officerObj.empId}") Claim Successful`);
+          this.toastSrv.success(`${this.officerObj.firstNameEnglish} ${this.officerObj.lastNameEnglish} (EMP ID - "${this.officerObj.empId}") Claimed Successfully`);
           this.showClaimView = false;
+          this.inputId = ''
+          this.isReset = true;
+          // this.selectJobRole = '';
           // Call fetchOfficer directly without navigation
-          this.fetchOfficer();
+          // this.fetchOfficer();
         } else {
           this.toastSrv.error(`${this.officerObj.firstNameEnglish} ${this.officerObj.lastNameEnglish} (EMP ID - "${this.officerObj.empId}") Claim Unsuccessful!`);
         }
@@ -114,9 +129,6 @@ export class ClaimOfficerComponent implements OnInit {
       }
     );
   }
-  
-  
-  
 
 }
 

@@ -66,7 +66,6 @@ export class AddComplaintComponent implements OnInit {
           this.category = '';
           this.complaint = '';
           this.isLoading = false;
-
         } else {
           this.isLoading = false;
           this.toastSrv.warning('Please try again')

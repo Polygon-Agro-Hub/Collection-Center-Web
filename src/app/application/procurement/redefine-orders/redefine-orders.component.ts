@@ -6,6 +6,7 @@ import { ToastAlertService } from '../../../services/toast-alert/toast-alert.ser
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { RedefineTodoOrdersComponent } from '../redefine-todo-orders/redefine-todo-orders.component';
 import { RedefineSentToDispatchOrdersComponent } from '../redefine-sent-to-dispatch-orders/redefine-sent-to-dispatch-orders.component';
+import { ActivatedRoute } from '@angular/router';
 
 
 @Component({
@@ -19,15 +20,29 @@ export class RedefineOrdersComponent implements OnInit {
 
   isLoading: boolean = false;
 
-  isSelectToDo: boolean = true;
+  isSelectToDo: boolean = false;
   isSelectSentToDispatch: boolean = false;
 
   constructor(
-    private toastSrv: ToastAlertService
+    private toastSrv: ToastAlertService,
+    private route: ActivatedRoute
   ) { }
 
   ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      const route = params['route'] || null;
+      if (route === 'dispatch') {
+        this.isSelectToDo = false;
+        this.isSelectSentToDispatch = true;
+      } else {
+        this.isSelectToDo = true;
+        this.isSelectSentToDispatch = false;
+      }
+    });
+  }
 
+  onSwitchToOutForDelivery() {
+    this.selectSentToDispatch();
   }
 
   selectToDo() {
@@ -39,6 +54,5 @@ export class RedefineOrdersComponent implements OnInit {
     this.isSelectSentToDispatch = true;
     this.isSelectToDo = false;
   }
-
 
 }

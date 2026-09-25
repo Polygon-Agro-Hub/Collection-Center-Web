@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { TokenServiceService } from '../Token/token-service.service';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -48,7 +48,6 @@ export class PriceListService {
   }
 
   getAllRequestPrice(page: number = 1, limit: number = 10, grade: string = '', status: string = '', searchText: string = ''): Observable<any> {
-    console.log('grade', grade, 'status', status, 'search', searchText)
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
@@ -140,7 +139,6 @@ export class PriceListService {
   }
 
   getAllRequestPriceCCH(page: number = 1, limit: number = 10, grade: string = '', status: string = '', searchText: string = ''): Observable<any> {
-    console.log('grade', grade, 'status', status, 'search', searchText)
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',

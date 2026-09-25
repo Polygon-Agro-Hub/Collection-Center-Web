@@ -1,194 +1,212 @@
 <app-loading-spinner *ngIf="isLoading" />
+<div *ngIf="!isLoading" class="flex flex-col h-screen overflow-hidden min-h-0">
+    <div class="flex mb-4 mr-5 ml-0 gap-5 flex-row cursor-pointer flex-shrink-0">
+        <p class="font-semibold text-[#424242]  dark:text-[#FFFFFF] dark:bg-[#0F0F0F] text-md"
+            (click)="navigateToManageOfficers()">Manage Officers</p>
+        <p class="font-semibold text-[#424242]  dark:text-[#FFFFFF] dark:bg-[#0F0F0F] text-md "
+            onclick="history.back()">
+            Officer Profile</p>
+        <p class="font-semibold text-[#424242]  dark:text-[#FFFFFF] dark:bg-[#0F0F0F] text-md">View Officer Target
+        </p>
+    </div>
 
-<div *ngIf="!isLoading" class="flex mb-4 mr-5 ml-0 gap-5 flex-row cursor-pointer">
-    <p class="font-semibold text-[#424242]  dark:text-[#FFFFFF] dark:bg-[#0F0F0F] text-l"
-        (click)="navigateToManageOfficers()">Manage Officers</p>
-    <p class="font-semibold text-[#424242]  dark:text-[#FFFFFF] dark:bg-[#0F0F0F] text-l " onclick="history.back()">
-        Officer Profile</p>
-    <p class="font-semibold text-[#424242]  dark:text-[#FFFFFF] dark:bg-[#0F0F0F] text-l">View Officer Target
-    </p>
-</div>
+    <!-- Removed overflow-x-auto from this div -->
+    <div
+        class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg flex flex-col flex-1 min-h-0 overflow-hidden">
+        <div class="flex-shrink-0">
+            <div class="flex flex-row items-center justify-between min-w-max max-w-[80vw] mx-auto">
+                <div class="flex flex-col justify-between flex-shrink-0">
+                    <p class="font-normal text-[#030308] font-[500] text-base mb-1 dark:text-white">Current Active
+                        Target</p>
+                    <p class="font-normal text-[#030308] font-[500] text-base mb-1 dark:text-white">EMP ID :
+                        {{empId}}</p>
+                    <p class="font-semibold text-base mb-1 dark:text-white text-[#545454]">
+                        Centre : {{ centerName ? centerName : 'N/A' }}
+                    </p>
+                </div>
+                <div class="flex flex-row items-center gap-5 relative z-20">
+                    <i class="fa-solid fa-list text-[#4A4A4A] text-lg dark:text-white"></i>
 
+                    <p class="text-[#4A4A4A] dark:text-white">Filter By</p>
 
-<div *ngIf="!isLoading" class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg ">
-    <div class="flex flex-row items-center justify-between">
-        <div class="flex flex-col justify-between gap-1">
-            <p class="font-semibold text-lg mb-1 dark:text-white">Current Active Target</p>
-            <p *ngIf="hasData" class="font-semibold text-lg mb-1 dark:text-white">EMP ID :
-                {{selectedOfficerDataArr[0].empId}}</p>
-                <p class="font-semibold text-base mb-1 dark:text-white text-[#545454]">
-                    Centre : {{ centerName ? centerName : 'N/A' }}
-                  </p>
-        </div>
-        <div class="flex flex-row items-center gap-8 ">
-            <i class="fa-solid fa-list text-2xl dark:text-white"></i>
+                    <div class="relative w-40 custom-status-dropdown-container">
+                        <!-- Hidden native select -->
+                        <select [(ngModel)]="selectStatus" class="hidden" (change)="filterStatus()">
+                            <option value="" selected disabled>Status</option>
+                            <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                                value="Pending">Pending</option>
+                            <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                                value="Completed">Completed</option>
+                            <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                                value="Exceeded">Exceeded</option>
+                            <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
+                                value="Extra">Extra</option>
+                        </select>
 
-            <p class="text-lg dark:text-white">Filter By</p>
+                        <!-- Custom dropdown trigger -->
+                        <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
+                            (click)="toggleStatusDropdown()">
+                            <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
+                                <span class="text-sm">{{ selectStatus || 'Status' }}</span>
+                                <div class="flex items-center">
+                                    <i *ngIf="selectStatus" (click)="cancelStatus($event)"
+                                        class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
+                                    <i *ngIf="isStatusDropdownOpen || !selectStatus"
+                                        class="fa-solid text-lg text-[#828282] transition-transform duration-200"
+                                        [class.fa-angle-down]="!isStatusDropdownOpen"
+                                        [class.fa-angle-up]="isStatusDropdownOpen"></i>
+                                </div>
+                            </div>
+                        </div>
 
-            <div class="relative w-40 custom-status-dropdown-container">
-                <!-- Hidden native select -->
-                <select [(ngModel)]="selectStatus" class="hidden" (change)="filterStatus()">
-                    <option value="" selected disabled>Status</option>
-                    <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                        value="Pending">Pending</option>
-                    <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                        value="Completed">Completed</option>
-                    <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                        value="Exceeded">Exceeded</option>
-                    <option class=" dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
-                        value="Extra">Extra</option>
-                </select>
-
-                <!-- Custom dropdown trigger -->
-                <div class="border-[1.8px] border-[#828282] rounded-xl dark:bg-[#292929] text-textLight dark:text-textDark"
-                    (click)="toggleStatusDropdown()">
-                    <div class="flex flex-row justify-between items-center px-3 py-2 cursor-pointer">
-                        <span>{{ selectStatus || 'Status' }}</span>
-                        <div class="flex items-center">
-                            <!-- X icon (shown ONLY when option is selected) -->
-                            <i *ngIf="selectStatus" (click)="cancelStatus($event)"
-                                class="fa-solid fa-xmark text-lg text-[#828282] mr-2 hover:text-[#555] dark:hover:text-[#aaa] cursor-pointer"></i>
-
-                            <!-- Arrow icon (shown when EITHER: dropdown is open OR no selection exists) -->
-                            <i *ngIf="isStatusDropdownOpen || !selectStatus"
-                                class="fa-solid text-lg text-[#828282] transition-transform duration-200"
-                                [class.fa-angle-down]="!isStatusDropdownOpen"
-                                [class.fa-angle-up]="isStatusDropdownOpen"></i>
+                        <!-- Custom dropdown options - Fixed z-index -->
+                        <div *ngIf="isStatusDropdownOpen"
+                            class="absolute z-[100] w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282] overflow-hidden"
+                            style="min-width: 160px;">
+                            <div *ngFor="let option of statusDropdownOptions; let first = first; let last = last"
+                                (click)="selectStatusOption(option)"
+                                class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center"
+                                [class.rounded-t-xl]="first" [class.rounded-b-xl]="last">
+                                <span class="flex-grow text-sm">{{ option }}</span>
+                            </div>
                         </div>
                     </div>
-                </div>
-
-                <!-- Custom dropdown options -->
-                <div *ngIf="isStatusDropdownOpen"
-                    class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
-                    <div class="py-1">
-                        <div *ngFor="let option of statusDropdownOptions" (click)="selectStatusOption(option)"
-                            class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
-                            <span class="flex-grow">{{ option }}</span>
-                            <i
-                                class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
-                        </div>
+                    <div class="flex items-center mr-5 rounded-full px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+                        <input type="text" placeholder="Search by Crop / Variety name.." [(ngModel)]="searchText"
+                            (keyup.enter)="onSearch()" (keyup.esc)="offSearch()"
+                            class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
+                        <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
+                            (click)="onSearch()">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
+                            </svg>
+                        </button>
+                        <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none"
+                            (click)="offSearch()">
+                            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+                                stroke="currentColor">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                                    d="M6 18L18 6M6 6l12 12" />
+                            </svg>
+                        </button>
                     </div>
                 </div>
             </div>
-
-
-            <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
-                <input type="text" placeholder="Search by Crop / Variety name.." [(ngModel)]="searchText"
-                    (keyup.enter)="onSearch()" (keyup.esc)="offSearch()"
-                    class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
-                <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
-                    (click)="onSearch()">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
-                    </svg>
-                </button>
-                <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none"
-                    (click)="offSearch()">
-                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                        stroke="currentColor">
-                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                            d="M6 18L18 6M6 6l12 12" />
-                    </svg>
-                </button>
-            </div>
-
         </div>
 
-    </div>
+        <div *ngIf="!hasData" class="flex flex-col items-center w-full h-screen mt-6">
+            <p class="text-[#494949] my-6 dark:text-white">--No Data Available--</p>
+            <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
+        </div>
 
-    <div *ngIf="!hasData" class="flex flex-col items-center w-full h-screen mt-6">
-        <p class="text-[#494949] my-6 dark:text-white">--No Data Available--</p>
-        <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
-    </div>
+        <div *ngIf="hasData" class="mt-5 mr-5 relative flex-1 min-h-0">
+            <div class="border-gray-100 border-[2px] rounded-lg dark:border-[#202021] overflow-auto h-full"
+                #tableContainer>
+                <table class="w-full min-w-max divide-y-2">
+                    <thead
+                        class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default bg-white dark:bg-[#0F0F0F]">
+                        <tr>
+                            <th class="px-2 py-3 text-left font-normal whitespace-nowrap">No</th>
+                            <th class="px-3 py-3 text-left font-normal whitespace-nowrap">Crop Name</th>
+                            <th class="px-3 py-3 text-left font-normal whitespace-nowrap">Variety Name</th>
+                            <th class="px-3 py-3 text-center font-normal whitespace-nowrap">Grade</th>
+                            <th class="px-5 py-3 text-left font-normal whitespace-nowrap">Target (kg)</th>
+                            <th class="px-5 py-3 text-left font-normal whitespace-nowrap">To Do (kg)</th>
+                            <th class="px-5 py-3 text-left font-normal whitespace-nowrap">Completed (kg)</th>
+                            <th class="px-3 py-3 text-center font-normal whitespace-nowrap">Status</th>
 
+                            <th class="px-3 py-3 text-left font-normal whitespace-nowrap"
+                                *ngIf="logingRole === 'Collection Centre Manager'">
+                            </th>
+                        </tr>
+                    </thead>
 
-    <div *ngIf="hasData"
-        class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
-        <table class="w-full divide-y-2 overflow-hidden">
-            <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
-                <tr>
-                    <th class="px-2 py-3 text-left font-semibold">No</th>
-                    <th class="px-3 py-3 text-left font-semibold">Crop Name</th>
-                    <th class="px-3 py-3 text-left font-semibold">Variety Name</th>
-                    <th class="px-3 py-3 text-center font-semibold">Grade</th>
-                    <th class="px-3 py-3 text-left font-semibold">Target (kg)</th>
-                    <th class="px-3 py-3 text-left font-semibold">To Do (kg)</th>
-                    <th class="px-3 py-3 text-left font-semibold">Completed (kg)</th>
-                    <th class="px-3 py-3 text-center font-semibold">Status</th>
-                    <th class="px-3 py-3 text-left font-semibold">Ends At</th>
-                    <th class="px-3 py-3 text-left font-semibold" *ngIf="logingRole === 'Collection Centre Manager'">
-                    </th>
-                </tr>
-            </thead>
-            <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
-                <tr *ngFor="let item of selectedOfficerDataArr; let i = index">
-                    <td class="px-2 py-4 text-gray-900 dark:text-gray-300">
-                        {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }} </td>
-                    <td class="px-3 py-4 text-black font-semibold dark:text-gray-300 text-left">{{item.cropNameEnglish}}
-                    </td>
-                    <td class="px-3 py-4 text-black font-semibold dark:text-gray-300 text-left">
-                        {{item.varietyNameEnglish}}</td>
-                    <td class="px-3 py-4 text-black font-semibold dark:text-gray-300 text-center">{{item.grade}}</td>
-                    <td class="px-3 py-4 text-black font-semibold dark:text-gray-300 text-left">{{item.target}}</td>
-                    <td class="px-3 py-4 text-black font-semibold dark:text-gray-300 text-left">{{item.remaining}}</td>
-                    <td class="px-3 py-4 text-black font-semibold dark:text-gray-300 text-left">{{item.complete}}</td>
-                    <td class="px-6 py-4 text-gray-[#000000] font-semibold dark:text-gray-300">
-                        <div class="flex justify-center">
-                          <span *ngIf="item.status === 'Pending'"
-                            class="bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-8 py-1 h-full flex items-center">
-                            Pending
-                          </span>
-                          <span *ngIf="item.status === 'Exceeded'"
-                            class="bg-[#C8E0FF] text-[#415CFF] text-center rounded-lg px-6 py-1 h-full flex items-center">
-                            Exceeded
-                          </span>
-                          <span *ngIf="item.status === 'Completed'"
-                            class="bg-[#c0f8ac] text-[#30911a] text-center rounded-lg px-4 py-1 h-full flex items-center">
-                            Completed
-                          </span>
+                    <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
+                        <tr *ngFor="let item of selectedOfficerDataArr; let i = index">
 
-                          <span *ngIf="item.status === 'Extra'"
-                            class="bg-[#FFE4C9] text-[#CD6700] text-center rounded-lg px-10 py-1 h-full flex items-center">
-                            Extra
-                          </span>
+                            <td class="px-2 py-4 text-gray-900 dark:text-gray-300">
+                                {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }} </td>
 
-                        
+                            <td class="px-3 py-4 text-black font-normal dark:text-gray-300 text-left whitespace-nowrap">
+                                {{item.cropNameEnglish}}
+                            </td>
 
-                        </div>
-                      </td>
-                    <td class="px-3 py-4 text-gray-900 dark:text-textDark">
-                        <p class="text-[#646464] dark:text-textDark text-sm">{{ item.toDate | date: 'yyyy/MM/dd' }}</p>
-                        <p class="text-[#646464] dark:text-textDark text-sm">{{ item.toDate | date: 'hh:mm a' }}</p>
-                    </td>
-                    <td class="px-3 py-4 text-gray-900 dark:text-gray-300"
-                        *ngIf="logingRole === 'Collection Centre Manager'">
-                        <i *ngIf="item.status === 'Pending'"
-                            class="fa-solid fa-pen-to-square text-blue-600 cursor-pointer"
-                            (click)="navigateToNewPage(item.id)">
-                        </i>
-                        <i *ngIf="item.status !== 'Pending'" class="fa-solid fa-pen-to-square text-gray-400">
-                        </i>
-                    </td>
-                </tr>
-            </tbody>
+                            <td class="px-3 py-4 text-black font-normal dark:text-gray-300 text-left whitespace-nowrap">
+                                {{item.varietyNameEnglish}}
+                            </td>
 
-        </table>
+                            <td class="px-3 py-4 text-black font-normal dark:text-gray-300 text-center">
+                                {{item.grade}}
+                            </td>
 
+                            <td class="px-5 py-4 text-black font-normal dark:text-gray-300 text-left">
+                                {{item.target}}
+                            </td>
 
-    </div>
+                            <td class="px-5 py-4 text-black font-normal dark:text-gray-300 text-left">
+                                {{item.remaining}}
+                            </td>
 
-    <div *ngIf="hasData" class="flex items-center justify-center text-center mt-6">
-        <button
+                            <td class="px-5 py-4 text-black font-normal dark:text-gray-300 text-left">
+                                {{item.complete}}
+                            </td>
+
+                            <td class="px-6 py-4 text-gray-[#000000] font-semibold dark:text-gray-300">
+                                <div class="flex justify-center">
+
+                                    <span *ngIf="item.status === 'Pending'"
+                                        class="bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-8 py-1 h-full flex items-center">
+                                        Pending
+                                    </span>
+
+                                    <span *ngIf="item.status === 'Exceeded'"
+                                        class="bg-[#C8E0FF] text-[#415CFF] text-center rounded-lg px-6 py-1 h-full flex items-center">
+                                        Exceeded
+                                    </span>
+
+                                    <span *ngIf="item.status === 'Completed'"
+                                        class="bg-[#c0f8ac] text-[#30911a] text-center rounded-lg px-4 py-1 h-full flex items-center">
+                                        Completed
+                                    </span>
+
+                                    <span *ngIf="item.status === 'Extra'"
+                                        class="bg-[#FFE4C9] text-[#CD6700] text-center rounded-lg px-10 py-1 h-full flex items-center">
+                                        Extra
+                                    </span>
+
+                                </div>
+                            </td>
+
+                            <td class="px-3 py-4 text-gray-900 dark:text-gray-300"
+                                *ngIf="logingRole === 'Collection Centre Manager'">
+
+                                <i *ngIf="item.status === 'Pending'"
+                                    class="fa-solid fa-pen-to-square text-blue-600 text-2xl cursor-pointer"
+                                    (click)="navigateToNewPage(item.id)">
+                                </i>
+
+                                <i *ngIf="item.status !== 'Pending'"
+                                    class="fa-solid fa-pen-to-square text-2xl text-gray-400">
+                                </i>
+
+                            </td>
+
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div *ngIf="hasData" class="flex-shrink-0 flex items-center justify-center text-center mt-6">
+            <button
                 class="bg-[#415CFF] text-white text-center shadow-md font-medium rounded-lg py-2 px-5 mr-5 text-lg flex items-center"
                 (click)="downloadTemplate1()">
                 <i class="fa-solid fa-download px-2" *ngIf="!isDownloading"></i>
                 <i class="fa-solid fa-spinner fa-spin px-2" *ngIf="isDownloading"></i>
                 {{ isDownloading ? " Downloading..." : " Download" }}
             </button>
+        </div>
     </div>
-
-    
 </div>

@@ -21,11 +21,19 @@ export class ChangePasswordComponent implements OnInit {
   conformPassword: string = '';
 
   isLoading: boolean = false;
+  passwordTouched: boolean = false;
+  confirmTouched: boolean = false;
 
-  constructor(private authService: AuthService, private http: HttpClient, private router: Router) {
-  }
-  ngOnInit(): void {
-  }
+  passwordRules = {
+    minLength: false,
+    hasUppercase: false,
+    hasNumber: false,
+    hasSpecial: false,
+  };
+
+  constructor(private authService: AuthService, private http: HttpClient, private router: Router) { }
+
+  ngOnInit(): void { }
 
   togglePasswordVisibility(): void {
     this.showPassword = !this.showPassword;
@@ -35,22 +43,41 @@ export class ChangePasswordComponent implements OnInit {
     this.showPassword1 = !this.showPassword1;
   }
 
-  updatePassword(): void {
-    if (!this.changePassword || !this.conformPassword) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'Password cannot be empty.',
-      });
-      return;
-    }
+  onPasswordChange(): void {
+    this.changePassword = this.changePassword.trimStart();
+    const p = this.changePassword;
+    this.passwordRules.minLength = p.length >= 6;
+    this.passwordRules.hasUppercase = /[A-Z]/.test(p);
+    this.passwordRules.hasNumber = /[0-9]/.test(p);
+    this.passwordRules.hasSpecial = /[!@#$%^&*()\-_=+\[\]{};':"\\|,.<>\/?`~]/.test(p);
+  }
 
-    if (this.changePassword !== this.conformPassword) {
-      Swal.fire({
-        icon: 'error',
-        title: 'Error',
-        text: 'New Password and Conform Password does not match!',
-      });
+  onConfirmPasswordChange(): void {
+    this.conformPassword = this.conformPassword.trimStart();
+  }
+
+  get passwordValid(): boolean {
+    return this.passwordRules.minLength && this.passwordRules.hasUppercase
+      && this.passwordRules.hasNumber && this.passwordRules.hasSpecial;
+  }
+
+  get passwordErrorMessage(): string {
+    if (!this.passwordRules.minLength) return 'Password must be at least 6 characters.';
+    if (!this.passwordRules.hasUppercase) return 'Add at least 1 uppercase letter.';
+    if (!this.passwordRules.hasNumber) return 'Add at least 1 number.';
+    if (!this.passwordRules.hasSpecial) return 'Add at least 1 special character (!@#$%^&* etc).';
+    return '';
+  }
+
+  get passwordsMatch(): boolean {
+    return this.changePassword === this.conformPassword;
+  }
+
+  updatePassword(): void {
+    this.passwordTouched = true;
+    this.confirmTouched = true;
+
+    if (!this.changePassword || !this.conformPassword || !this.passwordValid || !this.passwordsMatch) {
       return;
     }
 
@@ -68,6 +95,16 @@ export class ChangePasswordComponent implements OnInit {
         this.authService.changePassword(this.changePassword).subscribe(
           (response) => {
             this.isLoading = false;
+
+            if (!response.status) {
+              Swal.fire({
+                icon: 'error',
+                title: 'Error',
+                text: response.message || 'Failed to update password. Please try again.',
+              });
+              return;
+            }
+
             Swal.fire({
               icon: 'success',
               title: 'Success',
@@ -81,7 +118,7 @@ export class ChangePasswordComponent implements OnInit {
             Swal.fire({
               icon: 'error',
               title: 'Error',
-              text: 'Failed to update password. Please try again.',
+              text: error?.error?.message || 'Failed to update password. Please try again.',
             });
           }
         );

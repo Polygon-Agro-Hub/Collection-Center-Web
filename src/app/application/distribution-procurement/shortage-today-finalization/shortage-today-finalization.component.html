@@ -1,0 +1,212 @@
+<app-loading-spinner *ngIf="isLoading" />
+
+<div *ngIf="!isLoading"
+    class="flex flex-row items-center gap-6 font-semibold text-[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
+    <p onclick="history.back()">Procurement</p>
+    <p>Shortage Finalization Today</p>
+</div>
+
+<!-- Error banner -->
+<div *ngIf="errorMessage"
+    class="mb-4 px-4 py-3 rounded-lg bg-red-50 dark:bg-red-900/30 border border-red-200 dark:border-red-800 text-red-700 dark:text-red-300">
+    {{ errorMessage }}
+</div>
+
+<!-- Container -->
+<div
+    class="fixed-width-container overflow-x-auto scrollbar-thin scrollbar-thumb-[#FACD07] scrollbar-track-transparent scrollbar-thumb-rounded-full">
+    <div class="pt-5 pr-8 pl-8 pb-5 min-w-max min-h-[80vh] bg-tileLight dark:bg-tileBlack rounded-lg">
+
+        <!-- Header -->
+        <div class="flex justify-between items-center mb-6 pb-4 border-b" style="border-color: #7F7F7F;">
+            <h2 class="text-[16px] font-semibold text-[#000000] dark:text-textDark whitespace-nowrap">
+                Shortage Today Finalization ({{ shortageItems.length | number:'2.0' }})
+            </h2>
+        </div>
+
+        <!-- No Data -->
+        <div *ngIf="shortageItems.length === 0 && !isLoading"
+            class="flex flex-col items-center justify-center w-full py-20">
+            <p class="text-[#494949] my-6 dark:text-textDark">-- No Data Available --</p>
+            <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20 opacity-80" />
+        </div>
+
+        <!-- To Finalize Section -->
+        <div *ngIf="toFinalizeList.length > 0" class="mb-8">
+            <h3 class="font-[600] text-[#000000] dark:text-textDark mb-3">
+                To Finalize ({{ toFinalizeList.length | number:'2.0' }})
+            </h3>
+
+            <div class="flex flex-col gap-3">
+                <div *ngFor="let item of toFinalizeList"
+                    class="grid grid-cols-[14rem_8rem_12rem_8rem_6rem_7rem_7rem] justify-between items-center gap-4 border border-[#C3C3D2] dark:border-gray-700 rounded-lg px-5 py-4 w-full bg-white dark:bg-[#1E263B]">
+
+                    <!-- Image + Name -->
+                    <div class="flex items-center gap-3">
+                        <img [src]="item.imageUrl" [alt]="item.itemName"
+                            class="w-14 h-14 rounded object-cover bg-gray-50 dark:bg-gray-800" />
+                        <span class="text-[#000000] dark:text-textDark font-medium">{{ item.itemName }}</span>
+                    </div>
+
+                    <!-- Shortage Badge -->
+                    <div>
+                        <div
+                            class="inline-block min-w-[120px] text-left bg-[#FEF7EF] dark:bg-[#4A3B2A] px-4 py-2 rounded-lg">
+                            <div class="text-xs text-[#000000] dark:text-textDark mb-1">Shortage</div>
+                            <div class="text-[#000000] dark:text-textDark text-base font-bold text-left">{{
+                                item.shortageKg | number:'1.0-2' }} kg
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Distribution Center Dropdown -->
+                    <div class="flex flex-col justify-center">
+                        <label class="text-[12px] font-normal text-textLight dark:text-textDark mb-1">Select
+                            Centre</label>
+                        <app-searchable-dropdown [items]="getCentreDropdownItems(item)" placeholder="--Select Centre--"
+                            searchPlaceholder="Search..." [ngModel]="item.selectedDC"
+                            [ngModelOptions]="{standalone: true}" (selectionChange)="onCentreSelected(item, $event)"
+                            [clearable]="true" [showSelected]="true" borderClass="border border-[#828282]"
+                            class="block w-full">
+                        </app-searchable-dropdown>
+                    </div>
+
+                    <!-- Market Price -->
+                    <div>
+                        <div class="text-xs text-[#000000] dark:text-textDark mb-1">Market Price per kg</div>
+                        <div class="text-[#000000] dark:text-textDark font-semibold">Rs. {{
+                            item.marketPricePerKg | number: '1.2-2' }}</div>
+                    </div>
+
+                    <!-- Ceiling % -->
+                    <div>
+                        <div class="text-xs text-[#000000] dark:text-textDark mb-1">Ceiling (%)</div>
+                        <input type="number" [(ngModel)]="item.ceilingPercent" min="1" max="99" step="1"
+                            (input)="onCeilingInput($event, item)" (keydown)="onCeilingKeydown($event)"
+                            (blur)="onCeilingBlur(item)"
+                            class="inline-block w-20 text-center font-bold text-base border border-[#E9E9E9] bg-[#F8F9F9] dark:border-gray-600 dark:bg-[#2A3350] rounded-lg px-4 py-2 text-[#000000] dark:text-textDark outline-none" />
+                    </div>
+
+                    <!-- 1st Assigned By -->
+                    <div class="min-w-0">
+                        <div class="text-xs text-[#000000] dark:text-textDark mb-1">1st Assigned By</div>
+                        <div class="text-[#000000] dark:text-textDark font-semibold break-words">{{ item.assignedBy }}</div>
+                    </div>
+
+                    <!-- Finalize Button -->
+                    <div class="flex justify-center">
+                        <button class="bg-[#415CFF] text-[#FFFFFF] font-medium py-2 px-5 rounded"
+                            (click)="onFinalizeClick(item)">
+                            Finalize
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Finalized Section -->
+        <div *ngIf="finalizedList.length > 0">
+            <h3 class="font-[600] text-[#000000] dark:text-textDark mb-3">
+                Finalized ({{ finalizedList.length | number:'2.0' }})
+            </h3>
+
+            <div class="flex flex-col gap-3">
+                <div *ngFor="let item of finalizedList"
+                    class="grid grid-cols-[14rem_8rem_12rem_8rem_6rem_7rem_7rem] justify-between items-center gap-4 border border-[#C3C3D2] dark:border-gray-700 rounded-lg px-5 py-4 w-full bg-white dark:bg-[#1E263B]">
+
+                    <div class="flex items-center gap-3">
+                        <img [src]="item.imageUrl" [alt]="item.itemName"
+                            class="w-14 h-14 rounded object-cover bbg-gray-50 dark:bg-gray-800" />
+                        <span class="text-[#000000] dark:text-textDark font-medium">{{ item.itemName }}</span>
+                    </div>
+
+                    <div>
+                        <div
+                            class="inline-block min-w-[120px] text-left bg-[#FEF7EF] dark:bg-[#4A3B2A] px-4 py-2 rounded-lg">
+                            <div class="text-xs text-[#000000] dark:text-textDark mb-1">Shortage</div>
+                            <div class="text-[#000000] dark:text-textDark text-base font-bold">{{ item.shortageKg |
+                                number:'1.0-2' }} kg
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col justify-center">
+                        <div class="text-[12px] font-normal text-textLight dark:text-textDark mb-1">Select Centre</div>
+                        <div class="h-11 w-full min-w-0 flex items-center border border-[#828282] rounded-lg px-3 py-2 bg-white dark:bg-[#1D1D1F] text-[#000000] dark:text-textDark"
+                            [title]="item.selectedDC?.label || ''">
+                            <span class="block w-full truncate">{{ item.selectedDC?.label }}</span>
+                        </div>
+                    </div>
+
+                    <div>
+                        <div class="text-xs text-[#000000] dark:text-textDark mb-1">Market Price per kg</div>
+                        <div class="text-[#000000] dark:text-textDark font-semibold">Rs. {{
+                            item.marketPricePerKg | number: '1.2-2' }}</div>
+                    </div>
+
+                    <div>
+                        <div class="text-xs text-[#000000] dark:text-textDark mb-1">Ceiling (%)</div>
+                        <div
+                            class="inline-block w-20 text-center font-bold text-base border border-[#E9E9E9] bg-[#F8F9F9] dark:border-gray-600 dark:bg-[#2A3350] rounded-lg px-4 py-2 text-[#000000] dark:text-textDark">
+                            {{ item.ceilingPercent }}
+                        </div>
+                    </div>
+
+                    <div class="min-w-0">
+                        <div class="text-xs text-[#000000] dark:text-textDark mb-1">1st Assigned By</div>
+                        <div class="text-[#000000] dark:text-textDark font-semibold break-words">{{ item.assignedBy }}</div>
+                    </div>
+
+                    <div class="flex justify-center">
+                        <button disabled
+                            class="border border-[#415CFF] text-[#415CFF] dark:text-[#6FA8DC] font-medium py-2 px-5 rounded cursor-default">
+                            Finalized
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<!-- Finalize Confirmation Modal -->
+<div *ngIf="showConfirmModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+    <div class="bg-white dark:bg-[#1E263B] rounded-2xl shadow-2xl w-[480px] max-w-[90vw] p-8 text-center">
+
+        <!-- Warning Icon -->
+        <div class="flex justify-center mb-5">
+            <div class="w-12 h-12 rounded-xl bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+                <i class="fa-solid fa-triangle-exclamation text-gray-500 dark:text-gray-300 text-xl"></i>
+            </div>
+        </div>
+
+        <p class="text-[#4B5563] dark:text-textDark text-base leading-relaxed mb-7" *ngIf="itemPendingFinalize">
+            Are you sure you want to finalize {{ itemPendingFinalize.shortageKg | number:'1.0-2' }} kg of {{
+            itemPendingFinalize.itemName
+            }}
+            to {{ itemPendingFinalize.selectedDC?.value }}
+            ({{ getCentreNameOnly(itemPendingFinalize.selectedDC) }})?
+        </p>
+
+        <div class="flex justify-center gap-4">
+            <button
+                class="bg-[#F6F7F9] hover:bg-[#e5e7eb] text-[#6B7D8C] font-semibold py-2 px-10 rounded-xl shadow-lg border border-[#95A1AC] transition-colors leading-tight"
+                [disabled]="isFinalizing" (click)="onCancelFinalize()">
+                No<br>
+                <span class="font-normal text-sm">Go Back</span>
+            </button>
+            <button
+                class="bg-[#415CFF] hover:bg-[#3549e0] text-white font-semibold py-2 px-10 rounded-xl shadow-lg transition-colors disabled:opacity-60 leading-tight"
+                [disabled]="isFinalizing" (click)="onConfirmFinalize()">
+                <ng-container *ngIf="!isFinalizing">
+                    Yes<br>
+                    <span class="font-normal text-sm">Finalize</span>
+                </ng-container>
+                <ng-container *ngIf="isFinalizing">
+                    Finalizing...
+                </ng-container>
+            </button>
+        </div>
+    </div>
+</div>

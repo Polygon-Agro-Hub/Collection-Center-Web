@@ -8,11 +8,12 @@ import Swal from 'sweetalert2';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { Location } from '@angular/common';
 import { Country, COUNTRIES } from '../../../../assets/country-data';
+import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
 
 @Component({
   selector: 'app-add-center',
   standalone: true,
-  imports: [CommonModule, FormsModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, LoadingSpinnerComponent, SerchableDropdownComponent],
   templateUrl: './add-center.component.html',
   styleUrl: './add-center.component.css'
 })
@@ -26,6 +27,11 @@ export class AddCenterComponent implements OnInit {
 
   isLoadingregcode: boolean = false;
 
+  allowedPrefixes = ['70', '71', '72', '75', '76', '77', '78'];
+  isPhoneInvalidMap: { [key: string]: boolean } = {
+    phone01: false,
+    phone02: false,
+  };
 
   provinces: string[] = [
     'Western',
@@ -38,12 +44,6 @@ export class AddCenterComponent implements OnInit {
     'Uva',
     'Sabaragamuwa'
   ];
-
-  allowedPrefixes = ['70', '71', '72', '75', '76', '77', '78'];
-  isPhoneInvalidMap: { [key: string]: boolean } = {
-  phone01: false,
-  phone02: false,
-};
 
   // Define all districts with their provinces
   allDistricts = [
@@ -74,8 +74,23 @@ export class AddCenterComponent implements OnInit {
     { name: 'Vavuniya', province: 'Northern' },
   ];
 
-  // Districts filtered by selected province
-  filteredDistricts: { name: string, province: string }[] = [];
+  get provinceItems() {
+    return this.provinces.map(province => ({
+      value: province,
+      label: province
+    }));
+  }
+
+  get districtItems() {
+    const districts = this.centerData.province
+      ? this.allDistricts.filter(d => d.province === this.centerData.province)
+      : this.allDistricts;
+
+    return districts.map(district => ({
+      value: district.name,
+      label: district.name
+    }));
+  }
 
   countries: Country[] = COUNTRIES;
   selectedCountry1: Country | null = null;
@@ -96,67 +111,23 @@ export class AddCenterComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.updateFilteredDistricts(); // Initialize filtered districts
   }
 
-  @HostListener('document:click', ['$event.target'])
-onClick(targetElement: HTMLElement) {
-  const insideDropdown1 = targetElement.closest('.dropdown-wrapper-1');
-  const insideDropdown2 = targetElement.closest('.dropdown-wrapper-2');
-
-  // Close dropdowns only if click is outside their wrapper
-  if (!insideDropdown1) {
+  selectCountry1(country: Country) {
+    this.selectedCountry1 = country;
+    this.centerData.phoneNumber01Code = country.dialCode; // update ngModel
     this.dropdownOpen = false;
   }
-  if (!insideDropdown2) {
+
+  selectCountry2(country: Country) {
+    this.selectedCountry2 = country;
+    this.centerData.phoneNumber02Code = country.dialCode; // update ngModel
     this.dropdownOpen2 = false;
   }
-}
 
-selectCountry1(country: Country) {
-  this.selectedCountry1 = country;
-  this.centerData.phoneNumber01Code = country.dialCode; // update ngModel
-  console.log('sdsf', this.centerData.phoneNumber01Code)
-  this.dropdownOpen = false;
-}
-
-selectCountry2(country: Country) {
-  this.selectedCountry2 = country;
-  this.centerData.phoneNumber02Code = country.dialCode; // update ngModel
-  console.log('sdsf', this.centerData.phoneNumber02Code)
-  this.dropdownOpen2 = false;
-}
-
-// get flag
-getFlagUrl(code: string): string {
-  return `https://flagcdn.com/24x18/${code}.png`;
-}
-
-  // Update the filtered districts based on selected province
-  updateFilteredDistricts() {
-    if (this.centerData.province) {
-      this.filteredDistricts = this.allDistricts.filter(d => d.province === this.centerData.province);
-    } else {
-      this.filteredDistricts = this.allDistricts;
-    }
-    this.centerData.district = ''; // Clear district selection when province changes
-    this.updateRegCode();
-  }
-
-  
-
-  // When district is selected, automatically set the province
-  filterDistrict() {
-    if (this.centerData.district) {
-      const selectedDistrict = this.allDistricts.find(d => d.name === this.centerData.district);
-      if (selectedDistrict) {
-        // Update the province based on the selected district
-        this.centerData.province = selectedDistrict.province;
-
-        // Update filtered districts for the selected province
-        this.filteredDistricts = this.allDistricts.filter(d => d.province === this.centerData.province);
-      }
-    }
+  // get flag
+  getFlagUrl(code: string): string {
+    return `https://flagcdn.com/24x18/${code}.png`;
   }
 
   validateSriLankanPhone(input: string, key: string): void {
@@ -164,27 +135,27 @@ getFlagUrl(code: string): string {
       this.isPhoneInvalidMap[key] = false;
       return;
     }
-  
+
     const firstDigit = input.charAt(0);
     const prefix = input.substring(0, 2);
     const isValidPrefix = this.allowedPrefixes.includes(prefix);
     const isValidLength = input.length === 9;
-  
+
     if (firstDigit !== '7') {
       this.isPhoneInvalidMap[key] = true;
       return;
     }
-  
+
     if (!isValidPrefix && input.length >= 2) {
       this.isPhoneInvalidMap[key] = true;
       return;
     }
-  
+
     if (input.length === 9 && isValidPrefix) {
       this.isPhoneInvalidMap[key] = false;
       return;
     }
-  
+
     this.isPhoneInvalidMap[key] = false;
   }
 
@@ -198,14 +169,30 @@ getFlagUrl(code: string): string {
   capitalizeFirstLetter(field: keyof CenterData) {
     if (this.centerData[field]) {
       let value = this.centerData[field] as unknown as string;
-  
+
       // Trim spaces
       value = value.trim();
-  
+
       // Capitalize first letter
       value = value.charAt(0).toUpperCase() + value.slice(1);
-  
+
       this.centerData[field] = value as never; // assign back safely
+    }
+  }
+
+  onFormatInput(event: Event, modelRef: any, fieldName: string): void {
+    const inputElement = event.target as HTMLInputElement;
+
+    if (inputElement && inputElement.value) {
+      // Remove only leading spaces
+      let value = inputElement.value.replace(/^\s+/, '');
+
+      // Capitalize first letter (if exists)
+      value = value.charAt(0).toUpperCase() + value.slice(1);
+
+      // Update model and input box
+      modelRef[fieldName] = value;
+      inputElement.value = value;
     }
   }
 
@@ -225,7 +212,7 @@ getFlagUrl(code: string): string {
     } else if (!/^[0-9]{9}$/.test(this.centerData.phoneNumber01) || this.isPhoneInvalidMap['phone01']) {
       missingFields.push('Contact Number - 1 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
     }
-  
+
     if (this.centerData.phoneNumber02) {
       if (!/^[0-9]{9}$/.test(this.centerData.phoneNumber02) || this.isPhoneInvalidMap['phone02']) {
         missingFields.push('Contact Number - 2 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
@@ -265,7 +252,7 @@ getFlagUrl(code: string): string {
         errorMessage += `<li>${field}</li>`;
       });
       errorMessage += '</ul></div>';
-  
+
       Swal.fire({
         icon: 'error',
         title: 'Missing or Invalid Information',
@@ -368,14 +355,46 @@ getFlagUrl(code: string): string {
     });
   }
 
+
+  onProvinceChange(selectedProvince: string | null): void {
+    this.centerData.province = selectedProvince || '';
+
+    if (!selectedProvince) {
+      this.centerData.province = '';
+    } else {
+      // Check if current district is still valid for the selected province
+      const isDistrictValid = this.allDistricts.some(d =>
+        d.name === this.centerData.district && d.province === selectedProvince
+      );
+      if (!isDistrictValid) {
+        this.centerData.district = '';
+      }
+    }
+
+    this.updateRegCode();
+  }
+
+  // Handle district selection change
+  onDistrictChange(selectedDistrict: string | null): void {
+    this.centerData.district = selectedDistrict || '';
+
+    // When district is selected, automatically set the province
+    if (selectedDistrict) {
+      const district = this.allDistricts.find(d => d.name === selectedDistrict);
+      if (district && district.province !== this.centerData.province) {
+        this.centerData.province = district.province;
+
+      }
+    }
+
+    this.updateRegCode();
+
+  }
+
   updateRegCode() {
-    console.log('update reg code');
     const province = this.centerData.province;
     const district = this.centerData.district;
     const city = this.centerData.city;
-
-    console.log('province', province, 'district', district, 'city', city);
-
     if (province && district && city) {
       this.isLoadingregcode = true;
       this.targetService
@@ -391,7 +410,6 @@ getFlagUrl(code: string): string {
             const regCode = `${province.slice(0, 2).toUpperCase()}${district
               .slice(0, 1)
               .toUpperCase()}${city.slice(0, 1).toUpperCase()}`;
-            console.log('regCode fallback', regCode);
             this.centerData.regCode = '';
             this.isLoadingregcode = false;
           }
@@ -404,10 +422,6 @@ getFlagUrl(code: string): string {
     this.updateRegCode();
   }
 
-  onDistrictChange(newDistrict: string) {
-    console.log('District changed to:', newDistrict);
-    this.updateRegCode();
-  }
 
 }
 

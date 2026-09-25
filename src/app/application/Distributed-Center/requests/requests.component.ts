@@ -23,6 +23,8 @@ import { CustomDatepickerComponent } from '../../../components/custom-datepicker
 export class RequestsComponent implements OnInit {
 
   requestArr!: Request[];
+  exlItemsArr: number[] = [];
+  prfItemsArr: number[] = [];
   productsArr: Products[] = [];
   productReplacementObj!: ProductReplacement
   selectedRequestObj!: Request
@@ -82,37 +84,16 @@ export class RequestsComponent implements OnInit {
 
   ngOnInit(): void {
     this.date = new Date().toISOString().split('T')[0];
-    console.log('date', this.date)
-    this.today = new Date().toISOString().split('T')[0];
     this.fetchAllRequests();
-    
+
   }
 
-  // @HostListener('document:click', ['$event'])
-  // onDocumentClick(event: MouseEvent) {
-  //   const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
-  //   const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
-
-  //   if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
-  //     this.isStatusDropdownOpen = false;
-  //   }
-
-  // }
-
-  fetchAllRequests(date: string = this.date, status: string = '', search: string = this.searchText) {
+  fetchAllRequests(date: string = this.date, status: string = this.selectStatus, search: string = this.searchText) {
     this.isLoading = true;
     this.distributionSrv.getAllRequests(date, status, search).subscribe(
       (res) => {
-        console.log('res', res)
         this.requestArr = res.items;
-        console.log('requestArr', this.requestArr)
         this.totalItems = res.total;
-        console.log(res)
-        console.log(res.items)
-
-        this.productsArr = res.products;
-        console.log('productsArr', this.productsArr)
-
         if (res.items.length === 0) {
           this.hasData = false;
         } else {
@@ -127,18 +108,19 @@ export class RequestsComponent implements OnInit {
 
   closePopup() {
     this.isReplacePopUpOpen = false;
+    this.fetchAllRequests();
   }
 
   onDateChange(newDate: string | Date | null) {
     let formattedDate: string = '';
-  
+
     if (newDate instanceof Date) {
       // Convert Date object to string (YYYY-MM-DD)
       formattedDate = newDate.toISOString().split('T')[0];
     } else if (typeof newDate === 'string') {
       formattedDate = newDate;
     }
-  
+
     this.date = formattedDate;
     this.fetchAllRequests(this.date, this.selectStatus, this.searchText);
   }
@@ -171,14 +153,36 @@ export class RequestsComponent implements OnInit {
   }
 
   openReplacePopUp(item: Request) {
-    this.selectedRequestObj = item
-    console.log('selectedRequestObj', this.selectedRequestObj);
+    this.selectedRequestObj = item;
+    this.selectedRequestObj.replaceQty = this.selectedRequestObj.reqreplaceQty
+    this.onQtyChange();
+    // Start loading
+    this.isLoading = true;
+    this.hasData = false;
 
-    this.productId =  String(this.selectedRequestObj.replaceProductId)
+    this.distributionSrv
+      .getProductsForUser(this.selectedRequestObj.rrId)
+      .subscribe(
+        (res) => {
+          this.productsArr = res?.products || [];
+          this.exlItemsArr = res?.exlItems || [];
+          this.prfItemsArr = res?.prfItems || [];
+          this.hasData = this.productsArr.length > 0;
+
+          this.productId = String(this.selectedRequestObj?.replaceProductId || '');
+          this.isLoading = false;
+        },
+        (error) => {
+          console.error('Error fetching products:', error);
+
+          this.productsArr = [];
+          this.hasData = false;
+          this.isLoading = false;
+        }
+      );
 
     this.isReplacePopUpOpen = true;
   }
-
   onReject() {
     this.isReplacePopUpOpen = false;
     this.selectedRequestObj.status = 'Rejected'
@@ -186,11 +190,8 @@ export class RequestsComponent implements OnInit {
 
     this.distributionSrv.rejectRequest(this.selectedRequestObj).subscribe({
       next: (res) => {
-        console.log('Approval response:', res);
-        console.log('res', res)
-
         if (res.data.success) {
-          this.toastSrv.success('The Request has been Rejected successfully.')
+          this.toastSrv.success('Request rejected successfully.')
           this.fetchAllRequests();
         } else {
           this.toastSrv.error('Request Rejection failed. Please try again.');
@@ -208,16 +209,13 @@ export class RequestsComponent implements OnInit {
 
   onApprove() {
     this.isReplacePopUpOpen = false;
-    console.log('selectedRequestObj', this.selectedRequestObj);
     this.isLoading = true;
 
     this.distributionSrv.approveRequest(this.selectedRequestObj).subscribe({
       next: (res) => {
-        console.log('Approval response:', res);
-
         if (res.data.success) {
 
-          this.toastSrv.success('The Request has been Approved and product replaced successfully.')
+          this.toastSrv.success('Request approved successfully.')
 
           this.fetchAllRequests();
         } else {
@@ -235,11 +233,32 @@ export class RequestsComponent implements OnInit {
   }
 
   get categoryDropdownItems() {
-    return this.productsArr.map(product => ({
-      value: product.id.toString(),
-      label: product.displayName,
-      disabled: false
-    }));
+    const prfIds = this.prfItemsArr || [];
+    const exlIds = this.exlItemsArr || [];
+
+    const toItem = (product: Products) => {
+      const isPreferred = prfIds.includes(product.id);
+      const isExcluded = exlIds.includes(product.id);
+
+      return {
+        value: product.id.toString(),
+        label: product.displayName,
+        disabled: isExcluded,
+        iconClass: isPreferred
+          ? 'fa-solid fa-heart text-green-500'
+          : isExcluded
+            ? 'fa-solid fa-ban text-red-500'
+            : 'fa-solid fa-check text-blue-500'
+      };
+    };
+
+    const preferredItems = this.productsArr.filter(p => prfIds.includes(p.id)).map(toItem);
+    const excludedItems = this.productsArr.filter(p => exlIds.includes(p.id)).map(toItem);
+    const normalItems = this.productsArr
+      .filter(p => !prfIds.includes(p.id) && !exlIds.includes(p.id))
+      .map(toItem);
+
+    return [...preferredItems, ...normalItems, ...excludedItems];
   }
 
   onProductChange(selectedValue: string) {
@@ -247,8 +266,6 @@ export class RequestsComponent implements OnInit {
 
     const numericId = Number(this.productId); // convert string to number
     const selectedProduct = this.productsArr.find(p => p.id === numericId);
-
-    console.log('Selected Product:', selectedProduct);
 
     if (selectedProduct) {
       this.selectedRequestObj.replaceProductId = selectedProduct.id;
@@ -258,8 +275,6 @@ export class RequestsComponent implements OnInit {
       this.selectedRequestObj.replaceUnitType = selectedProduct.unitType
       this.setIsPriceValid();
     }
-
-    console.log('prodid', this.selectedRequestObj.replaceProductId)
   }
 
   onQtyChange() {
@@ -270,7 +285,7 @@ export class RequestsComponent implements OnInit {
 
   allowOnlyNumbers(event: KeyboardEvent) {
     const charCode = event.which ? event.which : event.keyCode;
-  
+
     // Allow: digits (0–9) and dot (.)
     if (
       (charCode < 48 || charCode > 57) && // not a digit
@@ -278,18 +293,17 @@ export class RequestsComponent implements OnInit {
     ) {
       event.preventDefault();
     }
-  
+
     // Prevent multiple dots
     const input = event.target as HTMLInputElement;
     if (charCode === 46 && input.value.includes('.')) {
       event.preventDefault();
     }
   }
-  
+
 
   setIsPriceValid() {
     this.isPriceValid = true;
-    console.log('called')
     if ((this.selectedRequestObj.replacePrice > this.selectedRequestObj.prevDefineProductPrice) && this.selectedRequestObj.status === 'Approved') {
       this.isPriceValid = false;
     } else if ((this.selectedRequestObj.replacePrice > this.selectedRequestObj.currentProductPrice) && this.selectedRequestObj.status === 'Not Approved') {
@@ -299,14 +313,6 @@ export class RequestsComponent implements OnInit {
 
   openViewProductReplacementPopup(item: Request) {
     this.selectedRequestObj = item
-    console.log('selectedRequestObj', this.selectedRequestObj);
-
-    // this.productReplacementObj.replacedProductId = item.replaceProductId
-    // this.productReplacementObj.replacedProduct = item.replaceProduct
-    // this.productReplacementObj.definedProductPrice = item.replacePrice
-    // this.productReplacementObj.replacedProductQty = item.replaceQty
-    // this.productReplacementObj.replacedUnitPrice = item.replaceUnitPrice
-
     this.isViewProductReplacement = true;
   }
 
@@ -336,6 +342,7 @@ class Request {
   currentProduct!: string
   replaceProductId!: number
   replaceQty!: number
+  reqreplaceQty!: number
   replaceProduct!: string
   replacePrice!: number
   replaceProductType!: string;

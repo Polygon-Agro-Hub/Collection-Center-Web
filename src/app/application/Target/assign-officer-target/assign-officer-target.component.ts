@@ -7,7 +7,6 @@ import { ManageOfficersService } from '../../../services/manage-officers-service
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import Swal from 'sweetalert2';
-import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-assign-officer-target',
@@ -39,7 +38,6 @@ export class AssignOfficerTargetComponent implements OnInit {
     private route: ActivatedRoute,
     private toastSrv: ToastAlertService,
     private cdRef: ChangeDetectorRef,
-    private location: Location,
     private datePipe: DatePipe
   ) { }
 
@@ -98,13 +96,14 @@ export class AssignOfficerTargetComponent implements OnInit {
       return;
     }
 
-    console.log('ob',this.AssignTargetObj)
     this.targetSrv.assignOfficerTartget(this.AssignTargetObj).subscribe(
       (res) => {
         if (res.status) {
           this.isLoading = false;
           this.toastSrv.success('Successfully assigned the target!');
-          this.router.navigate(['/target'])
+          this.router.navigate(['/target'], {
+            state: { selectAssign: true }
+          });
         } else {
           this.isLoading = false;
           this.toastSrv.error('Failed to assign the target!');
@@ -136,42 +135,91 @@ export class AssignOfficerTargetComponent implements OnInit {
       if (result.isConfirmed) {
 
         this.toastSrv.warning('Assign Officer Target Operation Canceled.')
-        this.location.back();
+        this.router.navigate(['/target'], {
+          state: { selectAssign: true }
+        });
       }
     });
   }
 
   updateTotals(index: number, grade: 'A' | 'B' | 'C') {
-    this.totTargetA = this.officerArr.reduce((sum, officer) => sum + (officer.targetA || 0), 0);
-    this.totTargetB = this.officerArr.reduce((sum, officer) => sum + (officer.targetB || 0), 0);
-    this.totTargetC = this.officerArr.reduce((sum, officer) => sum + (officer.targetC || 0), 0);
+    this.totTargetA = Number(
+        this.officerArr
+            .reduce((sum, officer) => sum + (officer.targetA || 0), 0)
+            .toFixed(3)
+    );
+        
+    this.totTargetB = Number(
+        this.officerArr
+          .reduce((sum, officer) => sum + Number(officer.targetB || 0), 0)
+          .toFixed(3)
+    );
 
-    let remainingA = this.targetVerity.qtyA - (this.totTargetA - this.officerArr[index].targetA);
-    let remainingB = this.targetVerity.qtyB - (this.totTargetB - this.officerArr[index].targetB);
-    let remainingC = this.targetVerity.qtyC - (this.totTargetC - this.officerArr[index].targetC);
+      
+    this.totTargetC = Number(
+        this.officerArr
+          .reduce((sum, officer) => sum + Number(officer.targetC || 0), 0)
+          .toFixed(3)
+    );
 
+  
+    let remainingA = this.targetVerity.qtyA - (this.totTargetA - (this.officerArr[index].targetA || 0));
+    let remainingB = this.targetVerity.qtyB - (this.totTargetB - (this.officerArr[index].targetB || 0));
+    let remainingC = this.targetVerity.qtyC - (this.totTargetC - (this.officerArr[index].targetC || 0));
+  
     if (grade === 'A' && this.totTargetA > this.targetVerity.qtyA) {
       this.toastSrv.warning(`Total Grade A target cannot exceed ${this.targetVerity.qtyA}!`);
-      this.officerArr[index].targetA = Math.max(0, remainingA);
+      setTimeout(() => {
+        this.officerArr[index].targetA = Math.max(0, Math.round(remainingA * 1000) / 1000);
+        this.cdRef.detectChanges();
+      }, 0);
     }
 
     if (grade === 'B' && this.totTargetB > this.targetVerity.qtyB) {
       this.toastSrv.warning(`Total Grade B target cannot exceed ${this.targetVerity.qtyB}!`);
-      this.officerArr[index].targetB = Math.max(0, remainingB);
+      setTimeout(() => {
+        this.officerArr[index].targetB = Math.max(0, Math.round(remainingB * 1000) / 1000);
+        this.cdRef.detectChanges();
+      }, 0);
     }
 
     if (grade === 'C' && this.totTargetC > this.targetVerity.qtyC) {
       this.toastSrv.warning(`Total Grade C target cannot exceed ${this.targetVerity.qtyC}!`);
-      this.officerArr[index].targetC = Math.max(0, remainingC);
+      setTimeout(() => {
+        this.officerArr[index].targetC = Math.max(0, Math.round(remainingC * 1000) / 1000);
+        this.cdRef.detectChanges();
+      }, 0);
     }
-
-    this.totTargetA = this.officerArr.reduce((sum, officer) => sum + (officer.targetA || 0), 0);
-    this.totTargetB = this.officerArr.reduce((sum, officer) => sum + (officer.targetB || 0), 0);
-    this.totTargetC = this.officerArr.reduce((sum, officer) => sum + (officer.targetC || 0), 0);
-
-    this.cdRef.detectChanges();
+  
+    setTimeout(() => {
+      this.totTargetA = Number(this.officerArr.reduce((sum, officer) => sum + (officer.targetA || 0), 0).toFixed(3));
+      this.totTargetB = Number(this.officerArr.reduce((sum, officer) => sum + (officer.targetB || 0), 0).toFixed(3));
+      this.totTargetC = Number(this.officerArr.reduce((sum, officer) => sum + (officer.targetC || 0), 0).toFixed(3));
+    }, 10);
   }
 
+  restrictDecimals(event: Event, index: number, grade: 'A' | 'B' | 'C') {
+  const input = event.target as HTMLInputElement;
+  let value = input.value;
+
+  // Allow empty, digits, and up to 3 decimal places only
+  const regex = /^\d*\.?\d{0,3}$/;
+
+  if (!regex.test(value)) {
+    // strip extra decimals beyond 3
+    const match = value.match(/^\d*\.?\d{0,3}/);
+    value = match ? match[0] : '';
+    input.value = value;
+
+    // keep ngModel in sync since we're mutating the DOM value directly
+    const numericValue = value === '' ? 0 : parseFloat(value);
+    if (grade === 'A') this.officerArr[index].targetA = numericValue;
+    if (grade === 'B') this.officerArr[index].targetB = numericValue;
+    if (grade === 'C') this.officerArr[index].targetC = numericValue;
+
+    this.updateTotals(index, grade);
+  }
+}
 }
 
 class TargetVerity {

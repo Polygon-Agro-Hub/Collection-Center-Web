@@ -1,10 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, EventEmitter, Output } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import Swal from 'sweetalert2';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { ProcurementsService } from '../../../services/Procurement-service/procurements.service';
-
+import { Location } from '@angular/common';
 
 interface OrderDetailItem {
   packageId: number;
@@ -54,6 +54,9 @@ interface AdditionalItem {
   styleUrl: './sent-to-dispatch-premade-orders.component.css'
 })
 export class SentToDispatchPremadeOrdersComponent implements OnInit {
+
+  @Output() switchToOutForDelivery = new EventEmitter<void>();
+
   excludedItemsArr: ExcludeItems[] = [];
   orderDetails: OrderDetailItem[] = [];
   marketplaceItems: MarketplaceItem[] = [];
@@ -74,7 +77,8 @@ export class SentToDispatchPremadeOrdersComponent implements OnInit {
   constructor(
     private procurementService: ProcurementsService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private location: Location
   ) { }
 
   goBack() {
@@ -82,10 +86,8 @@ export class SentToDispatchPremadeOrdersComponent implements OnInit {
   }
 
   ngOnInit() {
-    // console.log('Component initialized');
     this.route.queryParamMap.subscribe((params) => {
       const id = params.get('id');
-      // console.log('Query parameter ID:', id);
       if (!id) {
         this.error = 'No order ID provided in URL';
         this.loading = false;
@@ -110,11 +112,7 @@ export class SentToDispatchPremadeOrdersComponent implements OnInit {
       .getExcludedItems(orderId)
       .subscribe(
         (response) => {
-          // console.log('response', response);
-
           this.excludedItemsArr = response;
-          // console.log('excludeItemsArr', this.excludedItemsArr)
-
           this.loading = false;
         },
         (error) => {
@@ -129,7 +127,6 @@ export class SentToDispatchPremadeOrdersComponent implements OnInit {
       .subscribe({
         next: (items) => {
           this.packageItems = Array.isArray(items) ? items : [items];
-          // console.log('Fetched package items:', this.packageItems);
           this.updateProductSelections();
         },
         error: (err) => {
@@ -179,7 +176,6 @@ export class SentToDispatchPremadeOrdersComponent implements OnInit {
           discountedPrice: item.discountedPrice,
           isExcluded: false,
         }));
-        // console.log('Fetched marketplace items:', this.marketplaceItems);
         if (callback) callback();
         this.isLoading = false;
       },
@@ -192,19 +188,14 @@ export class SentToDispatchPremadeOrdersComponent implements OnInit {
   }
 
   fetchOrderDetails(id: string) {
-    // console.log('Fetching order details for ID:', id);
     this.loading = true;
     this.error = '';
 
     this.procurementService.getOrderPackagesByOrderId(Number(id)).subscribe({
 
-      next: (response) => {
-        // console.log('Full API Response:', response); 
+      next: (response) => { 
         this.additionalItems = response.additionalItems
         this.additionalItemsCount = response.additionalItems.length || 0;
-        console.log("additional Items", this.additionalItems);
-
-
         if (!response || !response.packages) {
           throw new Error('Invalid response structure from API');
         }
@@ -293,10 +284,6 @@ export class SentToDispatchPremadeOrdersComponent implements OnInit {
       // Validate if current total is within the allowed limit
       this.isWithinLimit = currentTotal <= allowedLimit;
 
-      // console.log('Calculated total price:', this.totalPrice);
-      // console.log('Allowed limit:', allowedLimit);
-      // console.log('Current total:', currentTotal);
-      // console.log('Is within limit:', this.isWithinLimit);
     } else {
       this.totalPrice = 0;
       this.isWithinLimit = true;
@@ -424,8 +411,6 @@ export class SentToDispatchPremadeOrdersComponent implements OnInit {
   }
 
   openAdditionalItemsModal() {
-    console.log("Trigger additional Items");
-
     this.showAdditionalItemsModal = true;
   }
 
@@ -439,7 +424,16 @@ export class SentToDispatchPremadeOrdersComponent implements OnInit {
 
   navigateToProdurement() {
     this.router.navigate(['/procurement']);
+  }  
+
+  navigateToDispatch() {
+    this.switchToOutForDelivery.emit();
+    const route = 'dispatch'
+    this.router.navigate(['/procurement/redefine-orders'], {
+      queryParams: { route },
+    });
   }
+    
 }
 
 class ExcludeItems {

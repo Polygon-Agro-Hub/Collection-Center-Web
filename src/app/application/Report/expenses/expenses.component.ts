@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, HostListener, OnInit, ViewChild  } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ReportServiceService } from '../../../services/Report-service/report-service.service';
@@ -15,7 +15,7 @@ import { CustomDatepickerComponent } from '../../../components/custom-datepicker
 @Component({
   selector: 'app-expenses',
   standalone: true,
-  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent, SerchableDropdownComponent, CustomDatepickerComponent ],
+  imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent, SerchableDropdownComponent, CustomDatepickerComponent],
   templateUrl: './expenses.component.html',
   styleUrl: './expenses.component.css',
   providers: [DatePipe]
@@ -53,6 +53,7 @@ export class ExpensesComponent implements OnInit {
 
   isCenterDropdownOpen = false;
   centerDropdownOptions = [];
+  grandTotal: number = 0;
 
   toggleCenterDropdown() {
     this.isCenterDropdownOpen = !this.isCenterDropdownOpen;
@@ -97,11 +98,13 @@ export class ExpensesComponent implements OnInit {
 
   // 5. Update your methods
   onCenterSelectionChange(selectedValue: string) {
+
     this.selectCenters = selectedValue || '';
     this.applyCompanyFilters();
   }
 
   applyCompanyFilters() {
+    this.page = 1;
     this.fetchFilteredPayments();
   }
 
@@ -122,7 +125,7 @@ export class ExpensesComponent implements OnInit {
 
   fetchFilteredPayments(page: number = 1, limit: number = this.itemsPerPage) {
     this.isLoading = true;
-  
+
     this.ReportSrv.getAllPayments(
       page,
       limit,
@@ -134,6 +137,7 @@ export class ExpensesComponent implements OnInit {
       (res) => {
         this.farmerPaymentsArr = res.items;
         this.totalItems = res.total;
+        this.grandTotal = res.grandTotal;
         this.hasData = res.items.length > 0;
         this.isLoading = false;
         this.calculateTotalPayments();
@@ -160,9 +164,13 @@ export class ExpensesComponent implements OnInit {
   }
 
   onSearch() {
+    this.page = 1;
     this.searchText = this.searchText.trimStart();
-    this.fetchFilteredPayments();
+    // Reset to page 1 when searching
+    this.page = 1;
+    this.fetchFilteredPayments(this.page, this.itemsPerPage);
   }
+
 
   offSearch() {
     this.searchText = '';
@@ -189,7 +197,7 @@ export class ExpensesComponent implements OnInit {
 
   onFromDateChange(date: string | Date | null) {
     const selectedDate = date as string || '';
-    
+
     // Validate against max date (today)
     if (selectedDate && selectedDate > this.maxDate) {
       this.fromDate = null; // Set to null instead of empty string
@@ -197,18 +205,17 @@ export class ExpensesComponent implements OnInit {
       if (this.fromDatePicker) {
         this.fromDatePicker.selectedDate = null;
       }
-      console.log('this.fromDate', this.fromDate)
       this.toastSrv.warning("From date cannot be in the future.");
       return;
     }
-    
+
     this.fromDate = selectedDate;
     this.validateFromDate();
-}
-  
+  }
+
   onToDateChange(date: string | Date | null) {
     const selectedDate = date as string || '';
-    
+
     // Validate against max date (today)
     if (selectedDate && selectedDate > this.maxDate) {
 
@@ -220,16 +227,16 @@ export class ExpensesComponent implements OnInit {
       this.toastSrv.warning("To date cannot be in the future.");
       return;
     }
-    
-    
+
+
     this.toDate = selectedDate;
     this.validateToDate();
   }
-  
+
   validateToDate() {
     const from = this.fromDate ? new Date(this.fromDate) : null;
     const to = this.toDate ? new Date(this.toDate) : null;
-  
+
     // Always clear toDate if fromDate is not properly set
     if (!from || isNaN(from.getTime())) {
       if (this.toDate) {
@@ -237,12 +244,11 @@ export class ExpensesComponent implements OnInit {
         if (this.toDatePicker) {
           this.toDatePicker.selectedDate = null;
         }
-        console.log(this.toDate);
       }
       this.toastSrv.warning("Please select the 'From' date first.");
       return;
     }
-  
+
     // If toDate is set, check if it's valid against fromDate
     if (to && !isNaN(to.getTime())) {
       if (to <= from) {
@@ -254,16 +260,16 @@ export class ExpensesComponent implements OnInit {
       }
     }
   }
-  
+
   validateFromDate() {
     if (!this.toDate) {
       return;
     }
-  
+
     if (this.toDate) {
       const from = new Date(this.fromDate!);
       const to = new Date(this.toDate);
-  
+
       if (to <= from) {
         this.toDate = null; // Set to null instead of empty string
         if (this.toDatePicker) {
@@ -272,16 +278,36 @@ export class ExpensesComponent implements OnInit {
         this.toastSrv.warning("The 'To' date has been cleared because it was earlier than or same as the new 'From' date.");
       }
     }
-}
-  
+  }
+
   goBtn() {
-    if (!this.fromDate || !this.toDate) {
+    if (!this.fromDate && !this.toDate) {
       this.toastSrv.warning("Please select a date range to view the data");
+
       this.hasData = false;
       this.isDateFilterSet = false;
+
       return;
     }
-  
+
+    if (!this.fromDate) {
+      this.toastSrv.warning("Please select a From Date");
+
+      this.hasData = false;
+      this.isDateFilterSet = false;
+
+      return;
+    }
+
+    if (!this.toDate) {
+      this.toastSrv.warning("Please select a To Date");
+
+      this.hasData = false;
+      this.isDateFilterSet = false;
+
+      return;
+    }
+
     this.isDateFilterSet = true;
     this.fetchFilteredPayments();
   }
@@ -309,27 +335,11 @@ export class ExpensesComponent implements OnInit {
           a.click();
           window.URL.revokeObjectURL(url);
 
-          Swal.fire({
-            icon: "success",
-            title: "Downloaded",
-            text: "Please check your downloads folder",
-            customClass: {
-              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-              title: 'dark:text-white',
-            }
-          });
+          this.toastSrv.success('File Downloaded Successfully')
           this.isDownloading = false;
         },
         error: (error) => {
-          Swal.fire({
-            icon: "error",
-            title: "Download Failed",
-            text: error.message,
-            customClass: {
-              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-              title: 'dark:text-white',
-            }
-          });
+          this.toastSrv.error('File Download Failed')
           this.isDownloading = false;
         }
       });
@@ -343,6 +353,24 @@ export class ExpensesComponent implements OnInit {
     if (this.searchText && this.searchText.startsWith(' ')) {
       this.searchText = this.searchText.trim();
     }
+  }
+
+  formatDateLine(s: string): string {
+    if (!s) return '';
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+    const year = s.substring(0, 4);              // '2026'
+    const month = months[Number(s.substring(5, 7)) - 1];  // '06' -> 'Jun'
+    const day = Number(s.substring(8, 10));     // 4  (no leading zero)
+    return `${month} ${day}, ${year}`;            // 'Jun 4, 2026'
+  }
+
+  formatTimeLine(s: string): string {
+    if (!s) return '';
+    let h = Number(s.substring(11, 13));          // 13
+    const m = s.substring(14, 16);                // '34'
+    const ampm = h >= 12 ? 'PM' : 'AM';
+    h = h % 12 || 12;                             // 13 -> 1
+    return `${h}:${m} ${ampm}`;                   // '1:34 PM'
   }
 
 
@@ -363,7 +391,7 @@ class FarmerPayments {
   gradeBquan!: number;
   gradeCquan!: number;
   status!: string;
-  createdAt!: string | Date;
+  createdAt!: Date;
   companyId!: number;
 }
 

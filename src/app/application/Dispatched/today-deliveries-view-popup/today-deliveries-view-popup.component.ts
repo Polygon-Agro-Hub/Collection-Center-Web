@@ -4,7 +4,7 @@ import { DistributionServiceService } from '../../../services/Distribution-Servi
 
 interface HoldDetail {
   holdId: number;
-  holdTime: Date;
+  holdTime: string;
   holdReason: string;
   restartedTime: string | null;
 }
@@ -44,15 +44,15 @@ interface TrackingDetails {
 
 interface TimelineStep {
   type:
-    | 'out'
-    | 'pickedup'
-    | 'collected'
-    | 'started'
-    | 'hold'
-    | 'restart'
-    | 'return'
-    | 'delivered'
-    | 'return recieved';
+  | 'out'
+  | 'pickedup'
+  | 'collected'
+  | 'started'
+  | 'hold'
+  | 'restart'
+  | 'return'
+  | 'delivered'
+  | 'return recieved';
   payload: any;
 }
 
@@ -65,10 +65,9 @@ interface TimelineStep {
 })
 
 
-export class TodayDeliveriesViewPopupComponent implements OnInit, OnChanges
-{
+export class TodayDeliveriesViewPopupComponent implements OnInit, OnChanges {
   @Input() visible: boolean = false;
-  @Input() deliveryId!: number; 
+  @Input() deliveryId!: number;
   @Output() closePopup = new EventEmitter<void>();
 
   trackingDetails: TrackingDetails | null = null;
@@ -76,10 +75,9 @@ export class TodayDeliveriesViewPopupComponent implements OnInit, OnChanges
   error: string = '';
   steps: TimelineStep[] = [];
 
-  constructor(private distributionService: DistributionServiceService) {}
+  constructor(private distributionService: DistributionServiceService) { }
 
   ngOnInit(): void {
-    console.log('deliveryId', this.deliveryId)
     if (this.visible) {
       this.loadTrackingDetails();
     }
@@ -102,7 +100,6 @@ export class TodayDeliveriesViewPopupComponent implements OnInit, OnChanges
         next: (response) => {
           this.trackingDetails = response;
           this.steps = this.buildSteps();
-          console.log('steps', this.steps)
           this.loading = false;
         },
         error: (err) => {
@@ -126,7 +123,7 @@ export class TodayDeliveriesViewPopupComponent implements OnInit, OnChanges
 
     steps.push({
       type: 'out',
-      payload: { outDlvrDate: c.outDlvrDate, regCode: c.regCode || '', centerName: c.centerName || '', empId: c.empId  }
+      payload: { outDlvrDate: c.outDlvrDate, regCode: c.regCode || '', centerName: c.centerName || '', empId: c.empId }
     });
 
     if (c.deliveredTime && c.centerId !== null) {
@@ -134,8 +131,6 @@ export class TodayDeliveriesViewPopupComponent implements OnInit, OnChanges
         type: 'pickedup',
         payload: { deliveredTime: c.deliveredTime }
       });
-
-      console.log('steps', steps)
     }
 
     if (!d) return steps;
@@ -143,7 +138,7 @@ export class TodayDeliveriesViewPopupComponent implements OnInit, OnChanges
     if (d.collectTime) {
       steps.push({ type: 'collected', payload: { empId: d.empId, driverName: d.driverName, driverPhone: d.driverPhone, collectTime: d.collectTime } });
     } else {
-      return steps; 
+      return steps;
     }
 
     if (d.startTime) {
@@ -171,13 +166,33 @@ export class TodayDeliveriesViewPopupComponent implements OnInit, OnChanges
     if (d.returnRecivedTime) {
       steps.push({ type: 'return recieved', payload: { returnRecivedTime: d.returnRecivedTime } });
     }
-
     return steps;
   }
 
   close(): void {
     this.closePopup.emit();
   }
+
+  formatUTCStringToLocal(dateStr: string): string {
+    // Convert "2026-02-10 09:51:50" -> "2026-02-10T09:51:50Z" (UTC)
+    const utcString = dateStr.replace(" ", "T") + "Z";
+    const date = new Date(utcString);
+
+    const time = date.toLocaleTimeString("en-US", {
+      hour: "2-digit",
+      minute: "2-digit",
+      hour12: true
+    });
+
+    const fullDate = date.toLocaleDateString("en-US", {
+      month: "long",
+      day: "2-digit",
+      year: "numeric"
+    });
+
+    return `${time} on ${fullDate}`;
+  }
+
 
   formatDateTime(dateString: string | null): string {
     if (!dateString) return 'N/A';

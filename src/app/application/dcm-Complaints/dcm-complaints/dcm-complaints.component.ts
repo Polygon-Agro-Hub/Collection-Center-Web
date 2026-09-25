@@ -68,8 +68,7 @@ export class DcmComplaintsComponent implements OnInit {
   // 5. Add selection change handler
   onCategorySelectionChange(selectedValue: string) {
     this.category = selectedValue || '';
-    // Add any additional logic you need when category changes
-    console.log('Category selected:', selectedValue);
+
   }
 
   onSubmit() {
@@ -91,7 +90,7 @@ export class DcmComplaintsComponent implements OnInit {
     this.DistributionComplaintsSrv.dcmSubmitComplaint(formData).subscribe(
       (response) => {
         if (response.status) {
-          this.toastSrv.success('Your complaint has been submitted successfully!');
+          this.toastSrv.success('Your Complaint was submitted');
           // Reset the form fields
           this.isAddComplaintOpen = false;
           this.category = '';
@@ -137,7 +136,7 @@ export class DcmComplaintsComponent implements OnInit {
 
 
   fetchAllCategory() {
-    this.complaintsService.getComplainCategory().subscribe(
+    this.DistributionComplaintsSrv.getComplainCategory().subscribe(
       (res) => {
         this.categoryArr = res;
       }

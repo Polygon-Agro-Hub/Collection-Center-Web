@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { Observable } from 'rxjs';
 import { HttpClient, HttpHeaders, } from '@angular/common/http';
 import { TokenServiceService } from '../Token/token-service.service';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
+import { JOB_ROLE_TYPES, JobRoleTypes } from './../../../assets/job-roles-data';
 
 @Injectable({
   providedIn: 'root'
@@ -10,6 +11,8 @@ import { environment } from '../../environments/environment.development';
 export class ManageOfficersService {
   private apiUrl = `${environment.API_BASE_URL}`;
   private token!: string | null;
+
+  jobRoleTypes: JobRoleTypes = JOB_ROLE_TYPES;
 
   constructor(private http: HttpClient, private tokenSrv: TokenServiceService) {
     this.token = this.tokenSrv.getToken()
@@ -35,10 +38,12 @@ export class ManageOfficersService {
     });
   }
 
-  createCollectiveOfficer(person: any, selectedImage: any): Observable<any> {
+  createCollectiveOfficer(person: any, selectedFile: File | null): Observable<any> {
     const formData = new FormData();
     formData.append('officerData', JSON.stringify(person));
-    formData.append('file', selectedImage);
+    if (selectedFile) {
+      formData.append('file', selectedFile); 
+    }
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
     });
@@ -77,8 +82,6 @@ export class ManageOfficersService {
     if (searchText) {
       url += `&searchText=${searchText}`
     }
-
-
 
     return this.http.get(url, {
       headers,
@@ -122,10 +125,12 @@ export class ManageOfficersService {
     });
   }
 
-  updateCollectiveOfficer(person: any, id: number, image: any): Observable<any> {
+  updateCollectiveOfficer(person: any, id: number, selectedFile: File | null): Observable<any> {
     const formData = new FormData();
     formData.append('officerData', JSON.stringify(person));
-    formData.append('file', image);
+    if (selectedFile) {
+      formData.append('file', selectedFile); 
+    }
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
@@ -139,18 +144,17 @@ export class ManageOfficersService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
     });
-  console.log('id', id)
     return this.http.put(`${this.apiUrl}/manage-officers/disclaim-officer/${id}`, {}, {
       headers,
     });
   }
 
-  getOfficerByEmpId(role: string): Observable<any> {
+  getOfficerByEmpId(role: string, jobRole: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
     });
-    return this.http.get(`${this.apiUrl}/manage-officers/get-officer-by-empId/${role}`, {
+    return this.http.get(`${this.apiUrl}/manage-officers/get-officer-by-empId/${role}/${jobRole}`, {
       headers,
     });
   }
@@ -166,7 +170,7 @@ export class ManageOfficersService {
   }
 
 
-  editOfficerTarget(id: number | null, targetItemId: number, amount: number): Observable<any> {
+  editOfficerTarget(id: number | string | null, targetItemId: number, amount: number): Observable<any> {
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
@@ -248,12 +252,20 @@ export class ManageOfficersService {
     });
   }
 
-  CCHcreateCollectiveOfficer(person: any, selectedImage: any, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
+  getCenterManagersForEdit(id: number | string, officerId: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.get(`${this.apiUrl}/manage-officers/get-center-managers-for-edit/${id}/${officerId}`, {
+      headers,
+    });
+  }
+
+  CCHcreateCollectiveOfficer(person: any, selectedFile: File | null, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
     const formData = new FormData();
-
-    console.log('person', person)
-
-    if (person.jobRole === 'Driver') {
+    if (person.jobRole === this.jobRoleTypes.lightWeightDriver || person.jobRole === this.jobRoleTypes.heavyWeightDriver) {
       formData.append('driverData', JSON.stringify(driver));
       formData.append('licFront', licFront);
       formData.append('licBack', licBack);
@@ -266,9 +278,9 @@ export class ManageOfficersService {
     }
 
     formData.append('officerData', JSON.stringify(person));
-    formData.append('file', selectedImage);
-
-    console.log('formData', formData)
+    if (selectedFile) {
+      formData.append('file', selectedFile); 
+    }
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
@@ -278,11 +290,10 @@ export class ManageOfficersService {
     });
   }
 
-  CCHupdateCollectiveOfficer(person: any, id: number, image: any, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
+  CCHupdateCollectiveOfficer(person: any, id: number, selectedFile: File | null, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
     const formData = new FormData();
 
-    console.log('person for edit' , person)
-    if (person.jobRole === 'Driver') {
+    if (person.jobRole === this.jobRoleTypes.lightWeightDriver || person.jobRole === this.jobRoleTypes.heavyWeightDriver) {
       formData.append('driverData', JSON.stringify(driver));
       formData.append('licFront', licFront);
       formData.append('licBack', licBack);
@@ -295,7 +306,9 @@ export class ManageOfficersService {
     }
 
     formData.append('officerData', JSON.stringify(person));
-    formData.append('file', image);
+    if (selectedFile) {
+      formData.append('file', selectedFile); 
+    }
 
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,

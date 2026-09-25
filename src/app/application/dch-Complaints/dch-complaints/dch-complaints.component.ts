@@ -31,7 +31,6 @@ export class DchComplaintsComponent implements OnInit {
   isLoading: boolean = false;
 
   constructor(
-    private complaintsService: ComplaintsService,
     private toastSrv: ToastAlertService,
     private DistributionComplaintsSrv: DistributionComplaintsService
   ) { }
@@ -48,11 +47,8 @@ export class DchComplaintsComponent implements OnInit {
     }));
   }
 
-  // 5. Add selection change handler
   onCategorySelectionChange(selectedValue: string) {
     this.category = selectedValue || '';
-    // Add any additional logic you need when category changes
-    console.log('Category selected:', selectedValue);
   }
 
   onSubmit() {
@@ -62,7 +58,6 @@ export class DchComplaintsComponent implements OnInit {
     }
 
     this.isLoading = true;
-
     const formData = {
       category: this.category,
       complaint: this.complaint,
@@ -71,7 +66,7 @@ export class DchComplaintsComponent implements OnInit {
     this.DistributionComplaintsSrv.submitDCHComplaint(formData).subscribe(
       (response) => {
         if (response.status) {
-          this.toastSrv.success('Your complaint has been submitted successfully!');
+          this.toastSrv.success('Your Complaint was submitted');
           this.isAddComplaintOpen = false;
           this.category = '';
           this.complaint = '';
@@ -80,8 +75,7 @@ export class DchComplaintsComponent implements OnInit {
           this.isLoading = false;
           this.toastSrv.warning('Please try again')
         }
-          this.isLoading = false;
-
+        this.isLoading = false;
       },
       (error) => {
         this.isLoading = false;
@@ -111,15 +105,13 @@ export class DchComplaintsComponent implements OnInit {
     this.isAddComplaintOpen = true;
   }
 
-
   fetchAllCategory() {
-    this.complaintsService.getComplainCategory().subscribe(
+    this.DistributionComplaintsSrv.getComplainCategory().subscribe(
       (res) => {
         this.categoryArr = res;
       }
     )
   }
-
 }
 
 class Category {

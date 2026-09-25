@@ -1,0 +1,10 @@
+/* In your component's CSS or global styles */
+.custom-center-dropdown-container {
+    position: relative;
+    z-index: 50;
+}
+
+/* Ensure dropdown appears above other elements */
+.absolute.z-50 {
+    z-index: 9999 !important;
+}

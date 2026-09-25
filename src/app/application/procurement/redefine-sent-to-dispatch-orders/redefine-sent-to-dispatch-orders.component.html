@@ -1,101 +1,77 @@
 <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
-<div class="w-full overflow-x-auto">
+<div class="w-full min-h-screen overflow-x-auto">
   <div>
-    <div
-      class="pt-5 px-12 pb-5 min-w-[1550px] bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg"
-    >
-      <div class="flex justify-between items-center mb-8">
-        <div class="flex items-center">
-          <h2 class="text-2xl font-normal text-textLight dark:text-textDark">
-            All Orders ({{
-              totalItems === 0
-                ? "0"
-                : totalItems < 10
-                ? "0" + totalItems
-                : totalItems
-            }})
-          </h2>
-        </div>
+    <div class="flex justify-between items-center mb-8">
+      <div class="flex items-center">
+        <h2 class="text-[16px] font-semibold text-[#000000] dark:text-textDark">
+          All ({{
+          totalItems === 0
+          ? "0"
+          : totalItems < 10 ? "0" + totalItems : totalItems }}) </h2>
+      </div>
 
-        <div class="flex flex-row items-center justify-end gap-5 ">
-        
-          <i class="fa-solid fa-list text-2xl dark:text-white"></i>
-  
-          <p class="text-lg dark:text-white">Filter By</p>
+      <div class="flex flex-row items-center justify-end gap-5 ">
+
+        <i class="fa-solid text-[#4A4A4A] fa-list text-lg dark:text-white"></i>
+
+        <p class="text-[#4A4A4A] dark:text-white">Filter By</p>
 
 
         <div class="w-44">
-          <app-custom-datepicker
-          [placeholder]="'Dispatched Date'"
-          [selectedDate]="dateFilter"
-          (dateChange)="onDateChange($event)"
-        ></app-custom-datepicker>
+          <app-custom-datepicker [placeholder]="'Dispatched Date'" [selectedDate]="dateFilter"
+            (dateChange)="onDateChange($event)"></app-custom-datepicker>
         </div>
 
-        <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+        <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929] mr-5">
           <input type="text" placeholder=" Search by Invoice No.." [(ngModel)]="searchTerm" (keyup.enter)="onSearch()"
-          (keyup.esc)="offSearch()"
-              class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
-          <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
-              (click)="onSearch()">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                  stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-                      d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
-              </svg>
+            (keyup.esc)="offSearch()" class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
+          <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2" (click)="onSearch()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
+            </svg>
           </button>
-          <button *ngIf="searchTerm" type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none" (click)="offSearch()">
-              <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
-                  stroke="currentColor">
-                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
-              </svg>
+          <button *ngIf="searchTerm" type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none"
+            (click)="offSearch()">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
+              stroke="currentColor">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12" />
+            </svg>
           </button>
         </div>
 
       </div>
 
-       
-      </div>
-      <div class=" min-w-max mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
-        <table *ngIf="hasData" class="w-full min-w-max divide-y-2">
-          <thead class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
-            <tr>
-              <th
-                class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-left"
-              >
-                No
-              </th>
-              <th
-                class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-left"
-              >
-                Invoice No
-              </th>
-              <th
-                class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-left"
-              >
-                Application
-              </th>
-              <th
-                class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-left"
-              >
-                Total Price of Products (Rs.)
-              </th>
-              <th
-                class="px-2 py-3 font-normal text-[#4B5563] dark:text-textDark text-left"
-              >
-                Sent By
-              </th>
-              <th
-                class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-center"
-              >
-                Sent To Dispatch
-              </th>
 
-            </tr>
-          </thead>
-          <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
-            <tr (click)="viewPremadePackages(order.processOrderId)"
-              *ngFor="
+    </div>
+    <div class=" min-w-max mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021] overflow-hidden">
+      <table *ngIf="hasData" class="w-full min-w-max divide-y-2">
+        <thead class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
+          <tr>
+            <th class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-left">
+              No
+            </th>
+            <th class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-left">
+              Invoice No
+            </th>
+            <th class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-left">
+              Application
+            </th>
+            <th class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-left">
+              Total Price of Products (Rs.)
+            </th>
+            <th class="px-2 py-3 font-normal text-[#4B5563] dark:text-textDark text-left">
+              Sent By
+            </th>
+            <th class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-center">
+              Sent To Dispatch
+            </th>
+
+          </tr>
+        </thead>
+        <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
+          <tr (click)="viewPremadePackages(order.processOrderId)" *ngFor="
                 let order of orders
                   | paginate
                     : {
@@ -104,74 +80,51 @@
                         totalItems: totalItems
                       };
                 let i = index
-              "
-              class="hover:bg-[#415CFF] text-textLight dark:text-textDark hover:text-[#FFFFFF]  cursor-pointer"
-            >
-              <td class="px-4 py-3 text-left text-[#000000] dark:text-textDark">
-                {{ (page - 1) * itemsPerPage + i + 1 }}
-              </td>
-              <td class="px-4 py-3 text-left text-[#000000] dark:text-textDark">
-                {{ order.invNo || "N/A" }}
-              </td>
-              <td class="px-4 py-3 text-left text-textLight dark:text-textDark">
-                {{
-                  order.orderApp === "Dash"
-                    ? "SalesDash"
-                    : order.orderApp === "Marketplace"
-                    ? "GoviMart"
-                    : order.orderApp
-                }}
-              </td>
-              <td class="px-4 py-3 text-left text-[#000000] dark:text-textDark">
-                {{ order.total | number : "1.2-2" }}
-              </td>
-              <td class="px-2 py-3 text-left text-[#000000] dark:text-textDark">
-                {{ order.dispatchedBy === null ? '--': order.dispatchedBy }}
-              </td>
-              <td
-                class="px-4 py-3 text-center text-[#000000] dark:text-textDark"
-              >
-                {{ order.sheduleDate | date : "d MMM, y" }}<br />
-                {{ order.sheduleDate | date : "hh:mm a" }}
-              </td>
+              " class="hover:bg-[#415CFF] text-textLight dark:text-textDark hover:text-[#FFFFFF]  cursor-pointer">
+            <td class="px-4 py-3 text-left text-[#000000] dark:text-textDark">
+              {{ (page - 1) * itemsPerPage + i + 1 }}
+            </td>
+            <td class="px-4 py-3 text-left text-[#000000] dark:text-textDark">
+              {{ order.invNo || "N/A" }}
+            </td>
+            <td class="px-4 py-3 text-left text-textLight dark:text-textDark">
+              {{
+              order.orderApp === "Dash"
+              ? "SalesDash"
+              : order.orderApp === "Marketplace"
+              ? "GoviMart"
+              : order.orderApp
+              }}
+            </td>
+            <td class="px-4 py-3 text-left text-[#000000] dark:text-textDark">
+              {{ order.total | number : "1.2-2" }}
+            </td>
+            <td class="px-2 py-3 text-left text-[#000000] dark:text-textDark">
+              {{ order.dispatchedBy === null ? '--': order.dispatchedBy }}
+            </td>
+            <td class="px-4 py-3 text-center text-[#000000] dark:text-textDark">
+              <p>{{ getDatePart(order.processCreatedAt)}}</p>
+              <p>{{ getTimePart(order.processCreatedAt)}}</p>
+            </td>
 
-              
-            </tr>
-            <!-- <tr *ngIf="orders.length === 0 && !isLoading">
-              <td
-                colspan="8"
-                class="px-4 py-6 text-center text-textLight dark:text-textDark"
-              >
-                No orders found
-              </td>
-            </tr> -->
-          </tbody>
-        </table>
-        
-        <div
-          *ngIf="!hasData"
-          class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6"
-        >
-          <p class="text-[#494949] my-6 dark:text-textDark">
-            --No Data Available--
-          </p>
-          <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
-        </div>
+          </tr>
+        </tbody>
+      </table>
+
+      <div *ngIf="!hasData" class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6">
+        <p class="text-[#494949] my-6 dark:text-textDark">
+          --No Data Available--
+        </p>
+        <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
       </div>
-
-      <div *ngIf="hasData" class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#1D1D1F] text-right">
-        <pagination-controls
-          (pageChange)="onPageChange($event)"
-          [responsive]="true"
-          [previousLabel]="'Previous'"
-          [nextLabel]="'Next'"
-          [screenReaderPaginationLabel]="'Pagination'"
-          [screenReaderPageLabel]="'page'"
-          [screenReaderCurrentLabel]="'Youre on page'"
-        >
-        </pagination-controls>
-      </div>
-
     </div>
+
+    <div *ngIf="hasData" class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#1D1D1F] text-right">
+      <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
+        [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"
+        [screenReaderCurrentLabel]="'Youre on page'">
+      </pagination-controls>
+    </div>
+
   </div>
 </div>

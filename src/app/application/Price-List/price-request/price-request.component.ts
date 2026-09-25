@@ -40,9 +40,10 @@ export class PriceRequestComponent implements OnInit {
   today!: string;
   isPopupVisible: boolean = false
   isLoading: boolean = false;
-  isChangeStatusViewOpen =  false;
+  isChangeStatusViewOpen = false;
   requestPrice!: string;
   requestId!: number;
+  originalProce!: number;
 
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Pending', 'Approved', 'Rejected'];
@@ -83,7 +84,7 @@ export class PriceRequestComponent implements OnInit {
     private datePipe: DatePipe,
     private tokenSrv: TokenServiceService,
     private toastSrv: ToastAlertService,
-  ) {this.logingRole = tokenSrv.getUserDetails().role}
+  ) { this.logingRole = tokenSrv.getUserDetails().role }
 
   ngOnInit(): void {
     this.today = this.datePipe.transform(new Date(), 'yyyy/MM/dd') || '';
@@ -114,10 +115,6 @@ export class PriceRequestComponent implements OnInit {
       (res) => {
         this.reqPriceArr = res.items;
         this.totalItems = res.total;
-        console.log(res)
-        console.log(res.items)
-
-
         if (res.items.length === 0) {
           this.hasData = false;
         } else {
@@ -134,8 +131,6 @@ export class PriceRequestComponent implements OnInit {
     this.PriceListSrv.getCropGroup().subscribe(
       (res) => {
         this.cropGroupArr = res.items;
-        console.log(res)
-        console.log(this.cropGroupArr)
         this.isLoading = false;
       }
     )
@@ -146,23 +141,17 @@ export class PriceRequestComponent implements OnInit {
     this.PriceListSrv.getCropVariety(cropGroupId).subscribe(
       (res) => {
         this.cropVarietyArr = res.items;
-        console.log(res)
-        console.log(this.cropVarietyArr)
         this.isLoading = false;
       }
     )
   }
 
   fetchCurrentPrice(cropGroupId: number, cropVarietyId: number, grade: string) {
-    console.log('called', cropVarietyId, cropGroupId, grade)
     this.isLoading = true;
-    this.PriceListSrv.getCurrentPrice(cropGroupId, cropVarietyId, grade ).subscribe(
+    this.PriceListSrv.getCurrentPrice(cropGroupId, cropVarietyId, grade).subscribe(
       (res) => {
-        console.log('res', res)
         this.priceRequestObject.currentPrice = res.items[0].price;
         this.priceRequestObject.id = res.items[0].id;
-        
-        console.log(this.priceRequestObject.currentPrice)
         this.isLoading = false;
       }
     )
@@ -178,7 +167,6 @@ export class PriceRequestComponent implements OnInit {
 
   onCropGroupSelectionChange(selectedValue: number) {
     this.priceRequestObject.cropGroupId = selectedValue || null;
-    console.log('crop selected:', this.priceRequestObject.cropGroupId);
     this.priceRequestObject.cropVarietyId = null;
     this.priceRequestObject.grade = '';
     this.priceRequestObject.requstPrice = null;
@@ -196,7 +184,6 @@ export class PriceRequestComponent implements OnInit {
 
   onCropVarietySelectionChange(selectedValue: number) {
     this.priceRequestObject.cropVarietyId = selectedValue || null;
-    console.log('crop selected:', this.priceRequestObject.cropVarietyId);
     this.priceRequestObject.grade = '';
     this.priceRequestObject.requstPrice = null;
     this.priceRequestObject.currentPrice = null;
@@ -212,7 +199,6 @@ export class PriceRequestComponent implements OnInit {
 
   onGradeSelectionChange(selectedValue: string) {
     this.priceRequestObject.grade = selectedValue || 'null';
-    console.log('crop selected:', this.priceRequestObject.cropVarietyId);
     this.priceRequestObject.requstPrice = null;
     this.priceRequestObject.currentPrice = null;
     this.fetchCurrentPrice(this.priceRequestObject.cropGroupId!, this.priceRequestObject.cropVarietyId!, this.priceRequestObject.grade!);
@@ -405,17 +391,15 @@ export class PriceRequestComponent implements OnInit {
 
   forwardRequest(id: number) {
     this.forwardId = id;
-    
+
     this.isForwardViewOpen = true;
   }
 
   confirmForward() {
     this.isForwardViewOpen = !this.isForwardViewOpen;
-
-    console.log(this.forwardId);
     this.isLoading = true;
     this.PriceListSrv.forwardRequest(this.forwardId).subscribe(
-      
+
       (res) => {
         if (res.status) {
           Swal.fire({
@@ -472,9 +456,8 @@ export class PriceRequestComponent implements OnInit {
 
   submitRequest() {
     this.isLoading = true;
-    console.log('price', this.priceRequestObject)
     this.PriceListSrv.addRequest(this.priceRequestObject).subscribe(
-      
+
       (res) => {
         if (res.status) {
           Swal.fire({
@@ -516,7 +499,7 @@ export class PriceRequestComponent implements OnInit {
         }
       }
     )
-       
+
   }
 
   preventMinus(event: KeyboardEvent) {
@@ -526,37 +509,25 @@ export class PriceRequestComponent implements OnInit {
   }
 
   log() {
-    console.log('log', this.priceRequestObject.requstPrice)
   }
 
-  openChangeStatusPopUp(requestId: number, requestPrice: string) {
+  openChangeStatusPopUp(requestId: number, requestPrice: string, price: number) {
     this.requestId = requestId
     this.requestPrice = requestPrice
+    this.originalProce = Number(price)
     this.isChangeStatusViewOpen = true;
-    
+
   }
 
   RejectStatus() {
     this.isLoading = true;
-    console.log('price', this.requestId)
     this.PriceListSrv.rejectStatus(this.requestId).subscribe(
-      
+
       (res) => {
         if (res.status) {
           this.toastSrv.success(
             'The request Rejected successfully.'
           );
-          // Swal.fire({
-          //   icon: 'success',
-          //   title: 'Success!',
-          //   text: 'The request Rejected successfully.',
-          //   showConfirmButton: false,
-          //   timer: 3000,
-          //   customClass: {
-          //     popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-          //     title: 'dark:text-white',
-          //   },
-          // });
           this.isChangeStatusViewOpen = false;
           this.fetchAllRequestPrice(this.page, this.itemsPerPage, this.selectGrade, this.selectStatus, this.searchText);
         } else {
@@ -564,7 +535,7 @@ export class PriceRequestComponent implements OnInit {
           this.toastSrv.error(
             'Something went wrong while Rejecting the request. Please try again.'
           );
-          
+
           this.isChangeStatusViewOpen = false;
         }
       }
@@ -572,9 +543,19 @@ export class PriceRequestComponent implements OnInit {
   }
 
   ApproveStatus() {
+
+    if (Number(this.requestPrice) > (this.originalProce + 15)) {
+      this.toastSrv.error('Approval is restricted to a maximum 15 rupees range from original market price.');
+      return;
+    } else if (Number(this.requestPrice) < (this.originalProce - 15)) {
+      this.toastSrv.error('Approval is restricted to a maximum 15 rupees range from original market price.');
+      return;
+    }
+
     this.isLoading = true;
-    this.PriceListSrv.changeStatusCCM(this.requestId, this.requestPrice ).subscribe(
-      
+
+    this.PriceListSrv.changeStatusCCM(this.requestId, this.requestPrice).subscribe(
+
       (res) => {
         if (res.status) {
           this.toastSrv.success(
@@ -587,7 +568,7 @@ export class PriceRequestComponent implements OnInit {
           this.toastSrv.success(
             'Something went wrong while Approving the request. Please try again.'
           );
-          
+
           this.isChangeStatusViewOpen = false;
         }
       }
@@ -597,7 +578,7 @@ export class PriceRequestComponent implements OnInit {
   closeChangeStatus() {
     this.isChangeStatusViewOpen = false;
   }
-  
+
 
 }
 
@@ -608,6 +589,7 @@ class RequestPrice {
   status!: string
   empId!: string
   grade!: string
+  price!: number;
   varietyNameEnglish!: string
   cropNameEnglish!: string
   createdAt!: string

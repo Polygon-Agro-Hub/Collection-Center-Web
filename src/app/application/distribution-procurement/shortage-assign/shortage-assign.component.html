@@ -1,0 +1,193 @@
+<app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+<div *ngIf="!isLoading"
+  class="flex flex-row items-center gap-6 font-semibold text-[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
+  <p (click)="goDashboard()">Product Shortage</p>
+  <p (click)="goBack()">Shortage Today</p>
+  <p>Shortage Assign</p>
+</div>
+
+<div class="min-h-max">
+
+  <div *ngIf="selectedItem" class="bg-white dark:bg-tileBlack rounded-lg shadow-sm overflow-hidden min-h-[80vh]">
+
+    <div class="flex items-center justify-between px-7 py-5 border-b border-gray-100 dark:border-gray-700">
+      <div class="flex items-center gap-4">
+        <img [src]="selectedItem.image" [alt]="selectedItem.name"
+          class="w-14 h-14 object-cover rounded-md bg-gray-50 dark:bg-gray-800" />
+        <div>
+          <p class=" dark:text-textDark font-[600] text-[#000000] m-0">{{ selectedItem.name }}</p>
+          <p class=" dark:text-textDark font-[600] text-[#000000] m-0">
+            {{ formatNumber(selectedItem.shortageQty) }} {{ selectedItem.unit }}
+          </p>
+        </div>
+      </div>
+
+      <div class="text-left">
+        <p class="text-sm text-[#000000] font-[400] dark:text-gray-400 m-0">Market Price per kg</p>
+        <p class="font-[600] text-[#000000] dark:text-textDark m-0">
+          Rs. {{ selectedItem.marketPrice | number: '1.2-2' }}
+        </p>
+      </div>
+    </div>
+
+    <div class="p-7" *ngIf="selectedItem.shortageQty > 0">
+      <p class="font-[600] text-[#000000] dark:text-textDark mb-4">To Assign</p>
+
+      <div
+        class="w-fit grid grid-cols-[100px_260px_100px_120px] items-stretch gap-4 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-3">
+
+        <div class="flex flex-col justify-center">
+          <label class="text-sm font-[400] text-[#000000] dark:text-textDark mb-1">
+            Enter Qty ({{ selectedItem.unit }})
+          </label>
+          <input type="number" min="0" step="0.001" [max]="selectedItem.shortageQty" [(ngModel)]="assignQty"
+            (input)="onQtyInput($event)"
+            class="w-full h-10 p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-tileBlack text-[#000000] dark:text-textDark font-semibold text-center" />
+        </div>
+
+        <div class="flex flex-col justify-center">
+          <label class="text-sm font-[400] text-[#000000] dark:text-textDark mb-1">Select Centre</label>
+          <div class="relative w-full" #centreDropdownRef>
+            <!-- Trigger -->
+            <div (click)="toggleCentreDropdown()"
+              class="w-full h-10 px-3 flex items-center justify-between rounded-lg border border-[#828282] cursor-pointer text-sm font-[500] text-[#000000] dark:text-textDark bg-white dark:bg-[#292929]">
+              <span [ngClass]="{'text-[#000000] font-[500]': !selectedCentre}">
+                {{ selectedCentre ? selectedCentre.label : '--Select Centre--' }}
+              </span>
+              <i class="fa-solid fa-chevron-down text-xs text-[#828282] transition-transform"
+                [ngClass]="{ 'rotate-180': isCentreDropdownOpen }"></i>
+            </div>
+
+            <!-- Panel -->
+            <div *ngIf="isCentreDropdownOpen"
+              class="absolute z-10 overflow-hidden w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
+
+              <div class="p-2 border-b border-gray-200 dark:border-gray-600">
+                <input type="text" [(ngModel)]="centreSearchTerm" (ngModelChange)="onCentreSearch()"
+                  (click)="$event.stopPropagation()" placeholder="Search centre..."
+                  class="w-full px-3 py-1.5 text-sm font-[500] rounded-md border border-gray-300 dark:border-gray-600 bg-gray-50 dark:bg-tileBlack text-[#000000] dark:text-textDark focus:outline-none focus:ring-1 focus:ring-[#415CFF]" />
+              </div>
+
+              <div class="max-h-60 overflow-y-auto">
+                <div *ngFor="let option of filteredCentres; let i = index" (click)="selectCentreOption(option)"
+                  class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center text-sm font-[500] text-[#000000]"
+                  [ngClass]="{
+          'rounded-t-xl': i === 0,
+          'rounded-b-xl': i === filteredCentres.length - 1,
+          'bg-gray-200 dark:bg-gray-700': selectedCentreId === option.id
+        }">
+                  <span class="flex-grow">{{ option.label }}</span>
+                  <i class="fa-solid text-sm font-[500] fa-hand-pointer ml-2 text-[#000000] opacity-0 group-hover:opacity-100"></i>
+                </div>
+
+                <div *ngIf="filteredCentres.length === 0" class="px-3 py-2 text-sm text-[#000000]">
+                  No centres found
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="flex flex-col justify-center">
+          <label class="text-sm font-[400] text-[#000000] dark:text-textDark mb-1 text-center">Ceiling (%)</label>
+          <input type="number" min="1" max="99" step="1" [(ngModel)]="ceilingPercent" (input)="onCeilingInput($event)"
+            (keydown)="blockInvalidKey($event)" (blur)="onCeilingBlur($event)"
+            class="w-full h-10 p-2 border border-gray-300 dark:border-gray-600 rounded-md bg-gray-50 dark:bg-tileBlack text-textLight dark:text-textDark font-semibold text-center" />
+        </div>
+
+        <div class="flex flex-col justify-center">
+          <button (click)="onAssign()" [disabled]="!canAssign"
+            class="w-full h-full rounded-md font-medium text-white transition-colors flex items-center justify-center"
+            [class.bg-[#C1C1C1]]="!canAssign" [class.cursor-not-allowed]="!canAssign" [class.bg-[#415CFF]]="canAssign"
+            [class.hover:bg-[#415CFF]]="canAssign">
+            Assign
+          </button>
+        </div>
+
+      </div>
+    </div>
+
+    <div class="px-7 pb-7" [class.pt-7]="selectedItem.shortageQty === 0" *ngIf="selectedItem.assignments.length > 0">
+      <div class="border-t border-gray-100 dark:border-gray-700 pt-6" *ngIf="selectedItem.shortageQty > 0"></div>
+
+      <p class="font-[600] text-[#000000] dark:text-textDark mb-4 mt-4">Assigned</p>
+
+      <div class="flex flex-col gap-3">
+        <div *ngFor="let a of selectedItem.assignments"
+          class="w-fit grid grid-cols-[100px_260px_100px_120px] items-stretch gap-4 border border-gray-200 dark:border-gray-700 rounded-lg px-3 py-3">
+
+          <div class="flex flex-col justify-center">
+            <p class="text-sm text-[#000000] font-[400] dark:text-gray-400 m-0">Qty ({{ selectedItem.unit }})</p>
+            <div class="bg-[#E1ECFF] dark:bg-blue-900/20 rounded-md px-3 py-1.5 mt-1 text-center">
+              <span class="text-sm font-semibold text-[#0000000] dark:text-textDark">{{ formatNumber(a.qty) }}</span>
+            </div>
+          </div>
+
+          <div class="flex flex-col justify-center">
+            <p class="text-sm text-[#000000] font-[400] dark:text-gray-400 m-0">Centre</p>
+            <div class="bg-[#E1ECFF] dark:bg-blue-900/20 rounded-md px-3 py-1.5 mt-1 truncate">
+              <span class="text-sm font-semibold text-[#000000] dark:text-textDark truncate">{{ a.centreLabel }}</span>
+            </div>
+          </div>
+
+          <div class="flex flex-col justify-center">
+            <p class="text-sm text-[#000000] font-[400] dark:text-gray-400 m-0 text-center">Ceiling (%)</p>
+            <div class="bg-[#E1ECFF] dark:bg-blue-900/20 rounded-md px-3 py-1.5 mt-1 text-center">
+              <span class="font-semibold text-[#000000] dark:text-textDark">{{ a.ceiling }}</span>
+            </div>
+          </div>
+
+          <div class="flex flex-col justify-center">
+            <div class="mt-1 flex items-center justify-center">
+              <span
+                class="w-full h-full border-2  border-[#415CFF] text-[#415CFF] font-medium text-sm px-6 py-5 rounded-md whitespace-nowrap">
+                Assigned
+              </span>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ===================== ASSIGN CONFIRMATION MODAL ===================== -->
+  <div *ngIf="showConfirmModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
+    <div class="bg-white dark:bg-[#1E263B] rounded-2xl shadow-2xl w-[480px] max-w-[90vw] p-8 text-center">
+
+      <!-- Warning Icon -->
+      <div class="flex justify-center mb-5">
+        <div class="w-12 h-12 rounded-xl bg-gray-100 dark:bg-gray-700 flex items-center justify-center">
+          <i class="fa-solid fa-triangle-exclamation text-gray-500 dark:text-gray-300 text-xl"></i>
+        </div>
+      </div>
+
+      <p class="text-[#4B5563] dark:text-textDark text-base leading-relaxed mb-7">
+        Are you sure you want to assign {{ formatNumber(assignQty) }} {{ selectedItem?.unit }} of {{ selectedItem?.name
+        }}
+        to {{ selectedCentre?.code }} ({{ selectedCentre?.name }})?
+      </p>
+
+      <div class="flex justify-center gap-4">
+        <button
+          class="bg-[#F6F7F9] hover:bg-[#e5e7eb] text-[#6B7D8C] font-semibold py-2 px-10 rounded-xl shadow-md border border-[#95A1AC] transition-colors leading-tight"
+          [disabled]="isLoading" (click)="cancelAssign()">
+          No<br>
+          <span class="font-normal text-sm">Go Back</span>
+        </button>
+        <button
+          class="bg-[#415CFF] hover:bg-[#3549e0] text-white font-semibold py-2 px-10 rounded-xl shadow-md transition-colors disabled:opacity-60 leading-tight"
+          [disabled]="isLoading" (click)="confirmAssign()">
+          <ng-container *ngIf="!isLoading">
+            Yes<br>
+            <span class="font-normal text-sm">Assign</span>
+          </ng-container>
+          <ng-container *ngIf="isLoading">
+            Assigning...
+          </ng-container>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>

@@ -7,6 +7,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { TokenServiceService } from '../../../services/Token/token-service.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import Swal from 'sweetalert2';
+import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 
 @Component({
   selector: 'app-view-officer-target',
@@ -35,6 +36,8 @@ export class ViewOfficerTargetComponent implements OnInit {
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Pending', 'Completed', 'Exceeded', 'Extra'];
 
+  empId!: string;
+
   toggleStatusDropdown() {
     this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
   }
@@ -50,7 +53,8 @@ export class ViewOfficerTargetComponent implements OnInit {
     private router: Router,
     private route: ActivatedRoute,
     private datePipe: DatePipe,
-    private tokenSrv: TokenServiceService
+    private tokenSrv: TokenServiceService,
+    private toastSrv: ToastAlertService
 
   ) {
     this.logingRole = tokenSrv.getUserDetails().role
@@ -60,8 +64,6 @@ export class ViewOfficerTargetComponent implements OnInit {
   ngOnInit(): void {
     this.officerId = this.route.snapshot.params['officerId'];
     this.centerName = this.route.snapshot.params['newCenterName']
-
-    console.log('centerName', this.centerName)
     this.fetchSelectedOfficerTarget(this.officerId);
   }
 
@@ -69,7 +71,6 @@ export class ViewOfficerTargetComponent implements OnInit {
   onDocumentClick(event: MouseEvent) {
     const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
     const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
-
     if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
       this.isStatusDropdownOpen = false;
     }
@@ -81,6 +82,7 @@ export class ViewOfficerTargetComponent implements OnInit {
     this.TargetSrv.getSelectedOfficerTargetData(officerId, status, search).subscribe(
       (res) => {
         this.selectedOfficerDataArr = res.items;
+        this.empId = res.empId
         if (res.items.length === 0) {
           this.hasData = false;
         } else {
@@ -106,27 +108,11 @@ export class ViewOfficerTargetComponent implements OnInit {
           a.click();
           window.URL.revokeObjectURL(url);
 
-          Swal.fire({
-            icon: "success",
-            title: "Downloaded",
-            text: "Please check your downloads folder",
-            customClass: {
-              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-              title: 'dark:text-white',
-            }
-          });
+          this.toastSrv.success('File Downloaded Successfully', 'Downloaded!');
           this.isDownloading = false;
         },
         error: (error) => {
-          Swal.fire({
-            icon: "error",
-            title: "Download Failed",
-            text: error.message,
-            customClass: {
-              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-              title: 'dark:text-white',
-            }
-          });
+          this.toastSrv.error(error.message || 'Download failed', 'Error');
           this.isDownloading = false;
         }
       });

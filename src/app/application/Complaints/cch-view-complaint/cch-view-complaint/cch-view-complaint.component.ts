@@ -65,7 +65,7 @@ export class CchViewComplaintComponent implements OnInit {
     this.complaintsService.submitCCHComplaint(formData).subscribe(
       (response) => {
         if (response.status) {
-          this.toastSrv.success('Your complaint has been submitted successfully!');
+          this.toastSrv.success('Your complaint was submitted');
           this.isAddComplaintOpen = false;
           this.category = '';
           this.complaint = '';
@@ -74,7 +74,7 @@ export class CchViewComplaintComponent implements OnInit {
           this.isLoading = false;
           this.toastSrv.warning('Please try again')
         }
-          this.isLoading = false;
+        this.isLoading = false;
 
       },
       (error) => {
@@ -126,7 +126,7 @@ export class CchViewComplaintComponent implements OnInit {
     if (this.complaint) {
       // Trim spaces
       this.complaint = this.complaint.trim();
-  
+
       // Capitalize first letter
       this.complaint =
         this.complaint.charAt(0).toUpperCase() +

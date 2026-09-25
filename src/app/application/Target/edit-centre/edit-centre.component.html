@@ -1,7 +1,7 @@
 <app-loading-spinner *ngIf="isLoading" />
 
 <div class="flex flex-row items-center gap-6 font-semibold text[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
-  <p onclick="history.back()" >Centres</p>
+  <p (click)="onCancel()" >Centres</p>
   <p>Edit Centre</p>
 </div>
 <div class="p-8 mx-auto bg-tileLight dark:bg-[#363636] shadow-lg dark:text-[White] rounded-lg w-full">
@@ -12,7 +12,7 @@
     <div class="grid grid-cols-2 gap-4">
     <!-- Collection Centre Name -->
     <div>
-      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Collection Centre Name</label>
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Collection Centre Name *</label>
       <input
         type="text"
         class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F] "
@@ -25,9 +25,9 @@
         Centre Name is required.
       </p>
     </div>
-    <!-- Country -->
+
     <div>
-      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Country</label>
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Country *</label>
       
       <input
         type="text"
@@ -46,7 +46,7 @@
 
     <div>
       <label for="phoneNumber01" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">
-          Contact Number - 1
+          Contact Number - 1 *
       </label>
       <div class="mt-1 flex">
         <div class="dropdown-wrapper-1 relative inline-block w-36 mr-2">
@@ -76,7 +76,7 @@
       </div>
           <input id="phoneNumber01" name="phoneNumber01" type="tell"
               [(ngModel)]="centerData.phoneNumber01"
-              class="block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-r-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+              class="block w-full p-2 border border-gray-300  rounded-r-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
               placeholder="Enter your contact number" #phoneNumber01Input="ngModel" required (ngModelChange)="validateSriLankanPhone($event, 'phone01')"
               pattern="^[0-9]{9}$" minlength="9" maxlength="9"
               (keypress)="($event.charCode >= 48 && $event.charCode <= 57) ? true : $event.preventDefault()" />
@@ -127,7 +127,7 @@
     </div>
         <input id="phoneNumber02" name="phoneNumber02" type="tell" #phoneNumber02Input="ngModel"
             [(ngModel)]="centerData.phoneNumber02"
-            class="block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-r-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
+            class="block w-full p-2 border border-gray-300 rounded-r-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
             placeholder="Enter your contact number" pattern="^[0-9]{9}$" minlength="9" maxlength="9"
             maxlength="9" (ngModelChange)="validateSriLankanPhone($event, 'phone02')"
             (keypress)="($event.charCode >= 48 && $event.charCode <= 57) ? true : $event.preventDefault()"/>
@@ -149,19 +149,21 @@
 
     <!-- Province -->
     <div>
-      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Province</label>
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Province *</label>
 
 
-      <div class="w-full">
+      <div class="w-full text-textLight dark:text-textDark">
         <app-searchable-dropdown
             [items]="provinceItems"
-            [placeholder]="'Province'"
+            [placeholder]="'--Select a Province--'"
             [searchPlaceholder]="'Search provinces...'"
             [clearable]="true"
             [showSelected]="true"
             id="province" name="province"
             [(ngModel)]="centerData.province"
             #provinceInput="ngModel"
+            borderClass="border border-gray-300"
+            searchInputClass="text-textLight dark:text-textDark"
             (selectionChange)="onProvinceChange($event)">
         </app-searchable-dropdown>
     </div>
@@ -172,21 +174,23 @@
     </div>
     <!-- District -->
     <div>
-      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">District</label>
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">District *</label>
       
-      <div class="w-full">
-                        <app-searchable-dropdown
-                            [items]="districtItems"
-                            [placeholder]="'District'"
-                            [searchPlaceholder]="'Search districts...'"
-                            [clearable]="true"
-                            [showSelected]="true"
-                            id="district" name="district"
-                            [(ngModel)]="centerData.province"
-                            #districtInput="ngModel"
-                            (selectionChange)="onDistrictChange($event)">
-                        </app-searchable-dropdown>
-                    </div>
+      <div class="w-full text-textLight dark:text-textDark">
+         <app-searchable-dropdown
+             [items]="districtItems"
+             [placeholder]="'--Select a District--'"
+             [searchPlaceholder]="'Search districts...'"
+             [clearable]="true"
+             [showSelected]="true"
+             id="district" name="district"
+             [(ngModel)]="centerData.district"
+             #districtInput="ngModel"
+             borderClass="border border-gray-300"
+             searchInputClass="text-textLight dark:text-textDark"
+             (selectionChange)="onDistrictChange($event)">
+         </app-searchable-dropdown>
+      </div>
       
       
       <p *ngIf="!centerData.district && districtInput.touched" class="text-red-500 text-sm">
@@ -195,7 +199,7 @@
     </div>
     <!-- Building Number -->
     <div>
-      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Building No</label>
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Building No *</label>
       <input
         type="text"
         class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
@@ -210,7 +214,7 @@
     </div>
     <!-- Street Name -->
     <div>
-      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Street Name</label>
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Street Name *</label>
       <input
         type="text"
         class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
@@ -225,7 +229,7 @@
     </div>
     <!-- City -->
     <div>
-      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">City</label>
+      <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">City *</label>
       <input
         (input)="capitalizeFirstLetter('city'); onCityChange()"
         type="text"
@@ -239,6 +243,7 @@
         City is required.
       </p>
     </div>
+
     <!-- Registration Code -->
     <div>
       <label class="mb-1 block text-sm font-medium text-[#534E4E] dark:text-textDark">Collection Centre Reg Code</label>
@@ -255,6 +260,7 @@
         Registration Code is required.
       </p>
     </div>
+    
   </div>
 
     <div class="flex justify-end mt-6 space-x-4">

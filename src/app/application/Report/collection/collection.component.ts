@@ -175,7 +175,8 @@ export class CollectionComponent implements OnInit {
 
   onSearch() {
     this.searchText = this.searchText.trimStart();
-    this.fetchFilteredPayments();
+    this.page = 1;
+    this.fetchFilteredPayments(this.page, this.itemsPerPage);
   }
 
   offSearch() {
@@ -209,7 +210,6 @@ export class CollectionComponent implements OnInit {
       if (this.fromDatePicker) {
         this.fromDatePicker.selectedDate = null;
       }
-      console.log('this.fromDate', this.fromDate)
       this.toastSrv.warning("From date cannot be in the future.");
       return;
     }
@@ -285,10 +285,31 @@ export class CollectionComponent implements OnInit {
   }
   
   goBtn() {
-    if (!this.fromDate || !this.toDate) {
-      this.toastSrv.warning("Please fill in all fields");
+
+    if (!this.fromDate && !this.toDate) {
+      this.toastSrv.warning("Please select a date range to view the data");
+
       this.hasData = false;
       this.isDateFilterSet = false;
+
+      return;
+    }
+
+    if (!this.fromDate) {
+      this.toastSrv.warning("Please select a From Date");
+
+      this.hasData = false;
+      this.isDateFilterSet = false;
+
+      return;
+    }
+
+    if (!this.toDate) {
+      this.toastSrv.warning("Please select a To Date");
+
+      this.hasData = false;
+      this.isDateFilterSet = false;
+
       return;
     }
   
@@ -314,35 +335,30 @@ export class CollectionComponent implements OnInit {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
-          a.download = `Collection Report From ${this.fromDate} To ${this.toDate}.xlsx`;
+          
+          const selectedCenter = this.centerArr.find(
+            center => center.id.toString() === this.selectCenters
+          );
+          
+          // Build filename without leading underscore
+          let fileName = `Collection Report From ${this.fromDate} To ${this.toDate}.xlsx`;
+          if (selectedCenter) {
+            fileName = `${selectedCenter.regCode} ${fileName}`;
+          }
+          
+          a.download = fileName;
           a.click();
           window.URL.revokeObjectURL(url);
 
-          Swal.fire({
-            icon: "success",
-            title: "Downloaded",
-            text: "Please check your downloads folder",
-            customClass: {
-              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-              title: 'dark:text-white',
-            }
-          });
+          this.toastSrv.success('File Downloaded Successfully');
           this.isDownloading = false;
         },
         error: (error) => {
-          Swal.fire({
-            icon: "error",
-            title: "Download Failed",
-            text: error.message,
-            customClass: {
-              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-              title: 'dark:text-white',
-            }
-          });
+          this.toastSrv.error('File Download Failed');
           this.isDownloading = false;
         }
       });
-  }
+}
 
   checkLeadingSpace() {
     if (this.searchText && this.searchText.startsWith(' ')) {

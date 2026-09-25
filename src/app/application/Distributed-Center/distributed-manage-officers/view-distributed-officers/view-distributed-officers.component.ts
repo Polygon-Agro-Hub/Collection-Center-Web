@@ -9,11 +9,12 @@ import { DropdownModule } from 'primeng/dropdown';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
 import { DistributedManageOfficersService } from '../../../../services/Distributed-manage-officers-service/distributed-manage-officers.service';
-
+import { SerchableDropdownComponent } from './../../../../components/serchable-dropdown/serchable-dropdown.component';
+import { JOB_ROLE_TYPES, JobRoleTypes } from './../../../../../assets/job-roles-data';
 @Component({
   selector: 'app-view-distributed-officers',
   standalone: true,
-  imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, LoadingSpinnerComponent],
+  imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, LoadingSpinnerComponent, SerchableDropdownComponent],
   templateUrl: './view-distributed-officers.component.html',
   styleUrl: './view-distributed-officers.component.css'
 })
@@ -36,6 +37,8 @@ export class ViewDistributedOfficersComponent implements OnInit {
   logingRole: string | null = null;
   isLoading: boolean = true;
 
+  jobRoleTypes: JobRoleTypes = JOB_ROLE_TYPES;
+
   constructor(
     private router: Router,
     private ManageOficerSrv: DistributedManageOfficersService,
@@ -47,12 +50,9 @@ export class ViewDistributedOfficersComponent implements OnInit {
 
 
   ngOnInit(): void {
-    console.log('1st sdsdddddddddddddddddddddddddddddddddddddddddddddddddddddd')
     this.getAllcompany();
     this.getAllCenters();
     this.fetchByRole();
-    console.log('2nd sdddsdsdddddddddddddddddddddddddddddddddddddddddddddddddd')
-
   }
 
   isStatusDropdownOpen = false;
@@ -69,7 +69,7 @@ export class ViewDistributedOfficersComponent implements OnInit {
   }
 
   isRoleDropdownOpen = false;
-  roleDropdownOptions = ['Distribution Centre Manager', 'Distribution Officer', 'Driver'];
+  roleDropdownOptions = ['Distribution Centre Manager', 'Distribution Officer', this.jobRoleTypes.lightWeightDriver, this.jobRoleTypes.heavyWeightDriver];
 
   toggleRoleDropdown() {
     this.isRoleDropdownOpen = !this.isRoleDropdownOpen;
@@ -94,34 +94,6 @@ export class ViewDistributedOfficersComponent implements OnInit {
     this.applyCompanyFilters();
   }
 
-
-
-
-
-  // @HostListener('document:click', ['$event'])
-  // onDocumentClick(event: MouseEvent) {
-  //   const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
-  //   const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
-
-  //   const roleDropdownElement = document.querySelector('.custom-role-dropdown-container');
-  //   const roleDropdownClickedInside = roleDropdownElement?.contains(event.target as Node);
-
-  //   const centerDropdownElement = document.querySelector('.custom-center-dropdown-container');
-  //   const centerDropdownClickedInside = centerDropdownElement?.contains(event.target as Node);
-
-  //   if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
-  //     this.isStatusDropdownOpen = false;
-  //   }
-
-  //   if (!roleDropdownClickedInside && this.isRoleDropdownOpen) {
-  //     this.isRoleDropdownOpen = false;
-  //   }
-
-  //   if (!centerDropdownClickedInside && this.isCenterDropdownOpen) {
-  //     this.isCenterDropdownOpen = false;
-  //   }
-  // }
-
   navigate(path: string) {
     this.router.navigate([`${path}`])
   }
@@ -135,11 +107,9 @@ export class ViewDistributedOfficersComponent implements OnInit {
   }
 
   fetchAllOfficers(page: number = this.page, limit: number = this.itemsPerPage, status: string = this.selectStatus, role: string = this.selectRole, searchText: string = this.searchText) {
-    console.log('fetching dcm')
     this.isLoading = true;
     this.ManageOficerSrv.getAllOfficers(page, limit, status, role, searchText).subscribe(
       (res) => {
-
         this.OfficerArr = res.items
         this.totalItems = res.total
         if (res.items.length === 0) {
@@ -148,7 +118,6 @@ export class ViewDistributedOfficersComponent implements OnInit {
           this.hasData = true;
         }
         this.isLoading = false;
-
       }
     )
   }
@@ -156,7 +125,6 @@ export class ViewDistributedOfficersComponent implements OnInit {
 
   //add to center filter
   fetchAllOfficersForDCH(page: number = this.page, limit: number = this.itemsPerPage, status: string = this.selectStatus, role: string = this.selectRole, searchText: string = this.searchText, selectCompany: string = this.selectCenters) {
-    console.log('fetching dch')
     this.isLoading = true;
     this.ManageOficerSrv.getAllOfficersForDCH(page, limit, status, role, searchText, selectCompany).subscribe(
       (res) => {
@@ -168,8 +136,6 @@ export class ViewDistributedOfficersComponent implements OnInit {
           this.hasData = true;
         }
         this.isLoading = false;
-
-
       }
     )
   }
@@ -187,13 +153,12 @@ export class ViewDistributedOfficersComponent implements OnInit {
   getAllcompany() {
     this.ManageOficerSrv.getCompanyNames().subscribe(
       (res) => {
-
         this.companyArr = res
       }
     )
   }
 
-  deleteCollectionOfficer(id: number) {
+  deleteCollectionOfficer(id: number, jobRole: string) {
     Swal.fire({
       title: 'Are you sure?',
       text: 'Do you really want to delete this Distribution Officer? This action cannot be undone.',
@@ -207,7 +172,7 @@ export class ViewDistributedOfficersComponent implements OnInit {
         popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
         title: 'dark:text-white',
         icon: '!border-gray-200 dark:!border-gray-500',
-        confirmButton: 'hover:!bg-[#3085d6] dark:hover:!bg[#3085d6]',
+        confirmButton: 'hover:!bg-[#0c77db] dark:hover:!bg-[#0c77db]',
         cancelButton: '',
         actions: 'gap-2'
       }
@@ -218,22 +183,37 @@ export class ViewDistributedOfficersComponent implements OnInit {
           this.ManageOficerSrv.deleteOfficer(id).subscribe(
             (data) => {
               if (data.status) {
-                this.toastSrv.success('The Officer has been deleted.')
+                this.toastSrv.success(`${jobRole} deleted successfully.`)
                 this.fetchByRole()
                 this.isLoading = false;
               } else {
                 this.isLoading = false;
-                this.toastSrv.error('There was an error deleting the ofiicer')
+                this.toastSrv.error('There was an error while deleting the officer.')
               }
             },
             (error) => {
-              console.error('Error deleting news:', error);
+              console.error(`Error deleting ${jobRole}:`, error);
               this.isLoading = false;
-              this.toastSrv.error('There was an error deleting the ofiicer')
+              this.toastSrv.error(`There was an error while deleting the ${jobRole}.`)
             }
           );
         }
       });
+  }
+
+    get centerDropdownItems() {
+    return this.centerArr.map(center => ({
+      value: center.id.toString(),
+      label: `${center.regCode} - ${center.centerName}`,
+      disabled: false
+    }));
+  }
+
+  // 5. Update your methods
+  onCenterSelectionChange(selectedValue: string) {
+    this.selectCenters = selectedValue || '';
+    this.page = 1;
+    this.applyCompanyFilters();
   }
 
 
@@ -242,43 +222,43 @@ export class ViewDistributedOfficersComponent implements OnInit {
 
     let message = '';
 
-if (item.status === 'Approved') {
-  message = `Are you sure you want to reject this ${item.jobRole} ?`;
-} 
-else if (item.status === 'Rejected') {
-  message = `Are you sure you want to approve this ${item.jobRole} ?`;
-} 
-else if (item.status === 'Not Approved') {
-  message = `Are you sure you want to approve or reject this ${item.jobRole} ?`;
-} 
-else {
-  message = ``;
-}
+    if (item.status === 'Approved') {
+      message = `Are you sure you want to reject this ${item.jobRole} ?`;
+    }
+    else if (item.status === 'Rejected') {
+      message = `Are you sure you want to approve this ${item.jobRole} ?`;
+    }
+    else if (item.status === 'Not Approved') {
+      message = `Are you sure you want to approve or reject this ${item.jobRole} ?`;
+    }
+    else {
+      message = ``;
+    }
 
-const rejectButton = (item.status === 'Approved' || item.status === 'Not Approved')
-  ? `<button id="rejectButton" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg mr-2">
-       Reject
-     </button>`
-  : '';
+    const rejectButton = (item.status === 'Approved' || item.status === 'Not Approved')
+      ? `<button id="rejectButton" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg mr-2 focus:outline-none focus:ring-0">
+           Reject
+         </button>`
+      : '';
 
-const approveButton = (item.status === 'Rejected' || item.status === 'Not Approved')
-  ? `<button id="approveButton" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
-       Approve
-     </button>`
-  : '';
+    const approveButton = (item.status === 'Rejected' || item.status === 'Not Approved')
+      ? `<button id="approveButton" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg focus:outline-none focus:ring-0">
+           Approve
+         </button>`
+      : '';
 
-const tableHtml = `
-  <div class="container mx-auto">
-    <h1 class="text-center text-2xl font-bold mb-4 dark:text-white">Officer Name: ${item.firstNameEnglish}</h1>
-    <div>
-      <p class="text-center dark:text-white">${message}</p>
-    </div>
-    <div class="flex justify-center mt-4">
-      ${rejectButton}
-      ${approveButton}
-    </div>
-  </div>
-`;
+    const tableHtml = `
+      <div class="container mx-auto">
+        <h1 class="text-center text-2xl font-bold mb-4 dark:text-white">Officer Name: ${item.firstNameEnglish}</h1>
+        <div>
+          <p class="text-center dark:text-white">${message}</p>
+        </div>
+        <div class="flex justify-center mt-4">
+          ${rejectButton}
+          ${approveButton}
+        </div>
+      </div>
+    `;
 
 
     const swalInstance = Swal.fire({
@@ -295,18 +275,19 @@ const tableHtml = `
       didOpen: () => {
         // Approve Button
         document.getElementById('approveButton')?.addEventListener('click', () => {
-          this.handleStatusChange(swalInstance, item.id, 'Approved');
+          Swal.close();
+          this.handleStatusChange(swalInstance, item.id, 'Approved', item.jobRole);
         });
 
-        // Reject Button
         document.getElementById('rejectButton')?.addEventListener('click', () => {
-          this.handleStatusChange(swalInstance, item.id, 'Rejected');
+          Swal.close();
+          this.handleStatusChange(swalInstance, item.id, 'Rejected', item.jobRole);
         });
       }
     });
   }
 
-  private handleStatusChange(swalInstance: any, id: number, status: 'Approved' | 'Rejected') {
+  private handleStatusChange(swalInstance: any, id: number, status: 'Approved' | 'Rejected', jobRole: string) {
     // Show loading state
     this.isLoading = true;
     swalInstance.update({
@@ -330,12 +311,11 @@ const tableHtml = `
           this.isLoading = false;
           swalInstance.close();
           const action = status === 'Approved' ? 'approved' : 'rejected';
-          this.toastSrv.success(`The Distribution Officer was ${action} successfully.`);
+          this.toastSrv.success(`The ${jobRole} was ${action} successfully.`);
           this.fetchByRole();
         } else {
           this.isLoading = false;
-          this.toastSrv.error(`Failed to ${status.toLowerCase()} the Distribution Officer.`);
-          console.log(`Failed to ${status.toLowerCase()} the Distribution Officer.`)
+          this.toastSrv.error(`Failed to ${status.toLowerCase()} the ${jobRole}.`);
         }
       },
       error: (err) => {
@@ -357,32 +337,26 @@ const tableHtml = `
 
   // Keep your existing methods
   applyStatusFilters() {
+    this.page = 1;
     this.fetchByRole();
   }
 
-  // applyStatusFilters() {
-  //   this.fetchByRole();
-  // }
-
-  // clearStatusFilter() {
-  //   this.selectStatus = ''
-  //   this.fetchByRole();
-  // }
-
   applyRoleFilters() {
+    this.page = 1;
     this.fetchByRole();
   }
 
   clearRoleFilter(event?: MouseEvent) {
     if (event) {
-      event.stopPropagation(); // Prevent triggering the dropdown toggle
+      event.stopPropagation();
     }
     this.selectRole = ''
     this.fetchByRole();
   }
 
   onSearch() {
-    this.searchText = this.searchText?.trim() || '';   // ✅ remove spaces
+    this.page = 1;
+    this.searchText = this.searchText?.trim() || '';
     this.fetchByRole();
   }
 
@@ -397,6 +371,7 @@ const tableHtml = `
   }
 
   applyCompanyFilters() {
+    this.page = 1;
     this.fetchByRole();
   }
 
@@ -410,14 +385,12 @@ const tableHtml = `
     this.ManageOficerSrv.getDCHOwnCenters().subscribe(
       (res) => {
         this.centerArr = res
-
       }
     )
   }
 
   get selectedCenterDisplay(): string {
     if (!this.selectCenters) return 'Centre';
-
     const selectedCenter = this.centerArr.find(center => center.id.toString() === this.selectCenters);
     return selectedCenter ? `${selectedCenter.regCode} - ${selectedCenter.centerName}` : 'Centre';
   }
@@ -438,8 +411,6 @@ class CollectionOfficers {
   status!: string;
   created_at!: string;
   phoneCode01!: string;
-
-  // cch
   centerName!: string;
 }
 

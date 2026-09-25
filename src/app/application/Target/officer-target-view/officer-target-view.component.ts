@@ -40,6 +40,25 @@ export class OfficerTargetViewComponent {
   isDownloading: boolean = false;
   hasData2: boolean = true;
 
+  isStatusDropdownOpen = false;
+  isValidityDropdownOpen = false;
+
+  targetItemId!: number;
+  toDate!: string;
+  fromDate!: string;
+  officerId!: string;
+
+  statusDropdownOptions = ['Pending', 'Completed', 'Exceeded', 'Extra'];
+  validityDropdownOptions = ['Expired', 'Active', 'Unassigned'];
+
+  thisValidityAfterLabelFix: string = '';
+
+  private validityLabelToValue: Record<string, string> = {
+    'Expired': 'Expired',
+    'Active': 'Valid',
+    'Unassigned': 'Unassigned'
+  };
+
   constructor(
     private router: Router,
     private TargetSrv: TargetService,
@@ -47,8 +66,59 @@ export class OfficerTargetViewComponent {
     private route: ActivatedRoute
   ) { }
 
-  onInit(): void {
-    this.onSubmit()
+  toggleStatusDropdown() {
+    this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
+    this.isValidityDropdownOpen = false; // close the other
+  }
+
+  toggleValidityDropdown() {
+    this.isValidityDropdownOpen = !this.isValidityDropdownOpen;
+    this.isStatusDropdownOpen = false; // close the other
+  }
+
+  selectStatusOption(option: string) {
+    this.selectStatus = option;
+    this.isStatusDropdownOpen = false;
+    this.applyStatusFilters();
+  }
+
+  selectValidityOption(option: string) {
+    this.selectValidity = option;
+    this.isValidityDropdownOpen = false;
+    this.page = 1;
+    this.applyValidityFilters();
+  }
+
+  clearStatusFilter(event: Event) {
+    event.stopPropagation();
+    this.selectStatus = '';
+    this.page = 1;
+    this.isStatusDropdownOpen = false;
+    this.applyStatusFilters();
+  }
+
+  clearValidityFilter(event: Event) {
+    event.stopPropagation();
+    this.selectValidity = '';
+    this.isValidityDropdownOpen = false;
+    this.page = 1;
+    this.applyValidityFilters();
+  }
+
+  ngOnInit(): void {
+    this.route.queryParams.subscribe(params => {
+      this.targetItemId = params['id'];
+      this.toDate = params['toDate'];
+      this.fromDate = params['fromDate'];
+      this.officerId = params['officerId'];
+
+      if (this.officerId) {
+        this.OfficerObj.officerId = this.officerId
+        this.OfficerObj.fromDate = this.fromDate
+        this.OfficerObj.toDate = this.toDate
+        this.onSubmit();
+      }
+    });
   }
 
   fetchAllOfficers(page: number = this.page, limit: number = this.itemsPerPage, status: string = this.selectStatus, validity: string = this.selectValidity, searchText: string = this.searchText) {
@@ -58,14 +128,14 @@ export class OfficerTargetViewComponent {
     }
 
     this.TargetSrv.getOfficerAvailabeTarget(this.OfficerObj, page, limit, status, validity, searchText).subscribe(
-      
+
       (res) => {
         if (res.status) {
-          this.responseTitle = res.message;
           this.targetArr = res.result;
           this.totalItems = res.total;
           if (res.total === 0) {
             this.hasData = false;
+            this.responseTitle = '--No data available--';
           } else {
             this.hasData = true;
           }
@@ -77,21 +147,16 @@ export class OfficerTargetViewComponent {
 
         }
 
-        console.log(this.responseTitle, this.hasData);
-        
       }
     )
   }
 
   onSubmit(page: number = this.page, limit: number = this.itemsPerPage, status: string = this.selectStatus, validity: string = this.selectValidity, searchText: string = this.searchText) {
-    console.log('subbimiting');
-    console.log(this.hasData);
     this.isLoading = true
 
-    console.log('from', this.OfficerObj.fromDate, 'to', this.OfficerObj.toDate)
     if (!this.OfficerObj.jobRole || !this.OfficerObj.officerId || !this.OfficerObj.fromDate || !this.OfficerObj.toDate) {
       this.responseTitle = 'Fill input fields first'
-      this.toastSrv.warning('Fill All Input feilds')
+      this.toastSrv.warning('Fill all Input fields')
       this.isLoading = false;
       this.hasData = false;
       this.isInitialDataSet = false;
@@ -113,8 +178,6 @@ export class OfficerTargetViewComponent {
 
       (res) => {
 
-        console.log('res', res)
-        
         if (res.status) {
           this.responseTitle = res.message;
           if (res.result.length === 0) {
@@ -131,8 +194,6 @@ export class OfficerTargetViewComponent {
           this.isLoading = false;
 
         }
-        console.log('fetched');
-        console.log(this.hasData);
       }
     )
   }
@@ -154,23 +215,42 @@ export class OfficerTargetViewComponent {
 
   }
 
+  private isValidDate(dateStr: string): boolean {
+    const [year, month, day] = dateStr.split('-').map(Number);
+    const selected = new Date(year, month - 1, day); // local time, no timezone shift
+    const today = new Date();
+    today.setHours(0, 0, 0, 0);
+    return selected <= today;
+  }
+
+
   checkFromDate(date: string | Date | null) {
     const selectedDate = date as string || '';
-    
+
+    if (selectedDate && !this.isValidDate(selectedDate)) {
+      this.toastSrv.warning('From Date cannot be a future date.');
+      if (this.fromDatePicker) this.fromDatePicker.selectedDate = null;
+      this.OfficerObj.fromDate = '';
+      return;
+    }
+
     this.OfficerObj.fromDate = selectedDate;
-    console.log('from date', this.OfficerObj.fromDate)
-}
+  }
 
   checkToDate(date: string | Date | null) {
-
     const selectedDate = date as string || '';
     this.OfficerObj.toDate = selectedDate;
 
     if (!this.OfficerObj.fromDate) {
-      if (this.toDatePicker) {
-        this.toDatePicker.selectedDate = null;
-      }
       this.toastSrv.warning('Please select the "From" date first.');
+      if (this.toDatePicker) this.toDatePicker.selectedDate = null;
+      this.OfficerObj.toDate = '';
+      return;
+    }
+
+    if (selectedDate && !this.isValidDate(selectedDate)) {
+      this.toastSrv.warning('To Date cannot be a future date.');
+      if (this.toDatePicker) this.toDatePicker.selectedDate = null;
       this.OfficerObj.toDate = '';
       return;
     }
@@ -180,36 +260,31 @@ export class OfficerTargetViewComponent {
 
     if (to < from) {
       this.toastSrv.warning('"To" date cannot be earlier than "From" date.');
-      if (this.toDatePicker) {
-        this.toDatePicker.selectedDate = null;
-      }
+      if (this.toDatePicker) this.toDatePicker.selectedDate = null;
       this.OfficerObj.toDate = '';
     }
   }
 
-  editOfficerTarget(id: number, toDate: string, fromDate: string) {
-    this.router.navigate(['/officer-target/edit-officer-target', id, toDate, fromDate]);
+  editOfficerTarget(id: number, toDate: string, fromDate: string, officerId: string, empId: string) {
+    this.router.navigate(['/officer-target/edit-officer-target', id, toDate, fromDate],
+      {
+        queryParams: { officerId: officerId, empId: empId }
+      }
+    );
   }
 
   applyStatusFilters() {
-    this.fetchAllOfficers();
-  }
-
-  clearStatusFilter() {
-    this.selectStatus = ''
+    this.page = 1;
     this.fetchAllOfficers();
   }
 
   applyValidityFilters() {
-    this.fetchAllOfficers();
-  }
-
-  clearValidityFilter() {
-    this.selectValidity = ''
+    this.page = 1;
     this.fetchAllOfficers();
   }
 
   onSearch() {
+    this.page = 1;
     this.fetchAllOfficers();
   }
 
@@ -232,7 +307,7 @@ export class OfficerTargetViewComponent {
           a.click();
           window.URL.revokeObjectURL(url);
 
-          this.toastSrv.success('Please check your downloads folder')
+          this.toastSrv.success('File Downloaded Successfully')
           this.isDownloading = false;
         },
         error: (error) => {

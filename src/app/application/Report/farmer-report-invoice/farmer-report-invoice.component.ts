@@ -64,7 +64,7 @@ export class FarmerReportInvoiceComponent implements OnInit {
   }
 
   navigateToCollectionReports() {
-    this.router.navigate(['/reports/collection-reports']); // Change '/reports' to your desired route
+    this.router.navigate(['/reports']); // Change '/reports' to your desired route
   }
 
   navigateToOfficerReports() {
@@ -147,11 +147,11 @@ export class FarmerReportInvoiceComponent implements OnInit {
     ): number => {
       let currentY = startY;
       const originalFont = doc.getFont(); // Store original font settings
-    
+
       data.forEach((row, rowIndex) => {
         let maxLines = 1;
         const cellLines: string[][] = [];
-    
+
         // First determine how many lines we need for this row
         row.forEach((cell, colIndex) => {
           const cellContent = cell.toString();
@@ -160,21 +160,21 @@ export class FarmerReportInvoiceComponent implements OnInit {
           cellLines.push(lines);
           maxLines = Math.max(maxLines, lines.length);
         });
-    
+
         // Calculate total row height
         const rowHeight = maxLines * lineHeight + padding * 2;
-    
+
         // Set text style based on row type
         const isHeader = rowIndex === 0;
         doc.setTextColor(isHeader ? headerTextColor : bodyTextColor);
-        
+
         // Set font to bold for headers
         if (isHeader) {
           doc.setFont(originalFont.fontName, 'bold');
         } else {
           doc.setFont(originalFont.fontName, 'normal');
         }
-    
+
         // Draw each cell
         let currentX = startX;
         row.forEach((cell, colIndex) => {
@@ -185,12 +185,12 @@ export class FarmerReportInvoiceComponent implements OnInit {
             columnWidths[colIndex],
             rowHeight
           );
-    
+
           // Draw text (centered vertically)
           const lines = cellLines[colIndex];
           const textHeight = lines.length * lineHeight;
           const verticalOffset = (rowHeight - textHeight) / 1.5;
-    
+
           lines.forEach((line, lineIndex) => {
             doc.text(
               line,
@@ -198,13 +198,13 @@ export class FarmerReportInvoiceComponent implements OnInit {
               currentY + verticalOffset + (lineIndex * lineHeight) + padding
             );
           });
-    
+
           currentX += columnWidths[colIndex];
         });
-    
+
         currentY += rowHeight;
       });
-    
+
       // Reset to original font settings
       doc.setFont(originalFont.fontName, originalFont.fontStyle);
       doc.setTextColor('#000000');
@@ -229,7 +229,7 @@ export class FarmerReportInvoiceComponent implements OnInit {
     y += yIncrement * 2;
 
     // Add Personal Details section
-    y += yIncrement*0.25;
+    y += yIncrement * 0.25;
     doc.setFontSize(11);
     doc.setTextColor('#000000');
     doc.text('Personal Details', x, y);
@@ -260,7 +260,7 @@ export class FarmerReportInvoiceComponent implements OnInit {
     ) + yIncrement;
 
     // Add Bank Details section
-    y += yIncrement*0.25;
+    y += yIncrement * 0.25;
     y += yIncrement;
     doc.setFontSize(11);
     doc.text('Bank Details', x, y);
@@ -280,7 +280,7 @@ export class FarmerReportInvoiceComponent implements OnInit {
       ],
       x,
       y,
-      [40, 50, 30, 30], // Column widths
+      [40, 45, 50, 45], // Column widths
       7,  // lineHeight
       3,  // padding
       '#434343',  // Header text color (red)
@@ -288,7 +288,7 @@ export class FarmerReportInvoiceComponent implements OnInit {
     ) + yIncrement;
 
     // Add Crop Details section
-    y += yIncrement*0.25;
+    y += yIncrement * 0.25;
     y += yIncrement;
     doc.setFontSize(11);
     doc.text('Crop Details', x, y);
@@ -296,9 +296,9 @@ export class FarmerReportInvoiceComponent implements OnInit {
     doc.setFontSize(9);
 
     // Prepare crop details data for table
-    const cropTableHeaders = ['Crop Name', 'Variety', 'Unit Price (A)', 'Quantity', 
-                            'Unit Price (B)', 'Quantity', 'Unit Price (C)', 'Quantity', 'Total (Rs.)'];
-    
+    const cropTableHeaders = ['Crop Name', 'Variety', 'Unit Price (A)', 'Quantity',
+      'Unit Price (B)', 'Quantity', 'Unit Price (C)', 'Quantity', 'Total (Rs.)'];
+
     const cropTableData = this.CropArr.map(crop => [
       formatValue(crop.cropNameEnglish),
       formatValue(crop.varietyNameEnglish),
@@ -316,7 +316,7 @@ export class FarmerReportInvoiceComponent implements OnInit {
       [cropTableHeaders, ...cropTableData],
       x,
       y,
-      [22, 24, 23, 20, 23, 18, 23, 17, 23 ], // Column widths
+      [22, 24, 23, 20, 23, 18, 23, 17, 23], // Column widths
       5, // Line height
       2, // Padding
       '#434343',  // Header text color (red)
@@ -324,26 +324,26 @@ export class FarmerReportInvoiceComponent implements OnInit {
     ) + yIncrement;
 
     // Add Full Total
-    doc.setFontSize(10);
+    doc.setFontSize(11);
     y += yIncrement
-    doc.text('Full Total(Rs.) : '  + formatValueForAmounts(this.calculateOverallTotalforReport().toFixed(2)) , x, y);
+    doc.text('Full Total(Rs.) : ' + formatValueForAmounts(this.calculateOverallTotalforReport().toFixed(2)), x, y);
     y += yIncrement * 2.5;
 
     // QR Code Image Loading Function
     const loadImageAsBase64 = (url: string): Promise<string> => {
       return new Promise((resolve, reject) => {
         const xhr = new XMLHttpRequest();
-        xhr.onload = function() {
+        xhr.onload = function () {
           const reader = new FileReader();
-          reader.onloadend = function() {
+          reader.onloadend = function () {
             resolve(reader.result as string);
           };
           reader.readAsDataURL(xhr.response);
         };
-        xhr.onerror = function() {
+        xhr.onerror = function () {
           const img = new Image();
           img.crossOrigin = 'Anonymous';
-          img.onload = function() {
+          img.onload = function () {
             const canvas = document.createElement('canvas');
             const ctx = canvas.getContext('2d');
             canvas.width = img.width;
@@ -351,7 +351,7 @@ export class FarmerReportInvoiceComponent implements OnInit {
             ctx?.drawImage(img, 0, 0);
             resolve(canvas.toDataURL('image/png'));
           };
-          img.onerror = function() {
+          img.onerror = function () {
             resolve('');
           };
           img.src = url;
@@ -372,7 +372,7 @@ export class FarmerReportInvoiceComponent implements OnInit {
     // Load QR codes
     let farmerQrImagebase64 = '';
     let officerQrImagebase64 = '';
-    
+
     try {
       if (this.userObj.farmerQr) {
         farmerQrImagebase64 = await loadImageAsBase64(appendCacheBuster(this.userObj.farmerQr));
@@ -407,8 +407,8 @@ export class FarmerReportInvoiceComponent implements OnInit {
       doc.text('Available', farmerQrX + 10, qrY + 23);
     }
     doc.setTextColor('#000000');
-    doc.setFontSize(12);
-    doc.text('Farmer Qr Code', farmerQrX + 6, labelY);
+    doc.setFontSize(11);
+    doc.text('Farmer’s QR Code', farmerQrX + 3, labelY);
 
     // Add officer QR code
     if (officerQrImagebase64) {
@@ -420,15 +420,15 @@ export class FarmerReportInvoiceComponent implements OnInit {
       doc.text('Available', officerQrX + 10, qrY + 23);
     }
     doc.setTextColor('#000000');
-    doc.setFontSize(12);
-    doc.text('Officer Qr Code', officerQrX + 6, labelY);
+    doc.setFontSize(11);
+    doc.text('Officer’s QR Code', officerQrX + 3, labelY);
 
     // Save the PDF
     doc.save(`Invoice_${this.userObj.invNo}.pdf`);
     this.isLoading = false;
-}
+  }
 
-  
+
 }
 
 class User {

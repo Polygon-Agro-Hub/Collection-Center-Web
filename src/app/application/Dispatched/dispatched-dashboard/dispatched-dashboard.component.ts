@@ -17,37 +17,28 @@ import { CustomDatepickerComponent } from '../../../components/custom-datepicker
     LoadingSpinnerComponent,
     DropdownModule,
     FormsModule,
-    SerchableDropdownComponent,
     TodayDeliveriesViewPopupComponent,
     CustomDatepickerComponent
-],
+  ],
   templateUrl: './dispatched-dashboard.component.html',
   styleUrl: './dispatched-dashboard.component.css'
 })
 export class DispatchedDashboardComponent implements OnInit {
   isLoading: boolean = false;
   activeTab: string = 'all';
-
   placeholderDate: string = 'Date';
-
   selectedDate: string | Date | null = null;
-  
-  // Data from backend
   allDeliveries: Delivery[] = [];
   deliveryObj: Partial<Delivery> = {};
-
-  // Filtered data for tabs
   allFilteredDeliveries: Delivery[] = [];
   outForDeliveryData: Delivery[] = [];
   onTheWayData: Delivery[] = [];
   holdData: Delivery[] = [];
   returnData: Delivery[] = [];
   deliveredData: Delivery[] = []; // This will hold Delivered status data
-
   displayedDeliveries: Delivery[] = [];
   showDetailsPopup: boolean = false;
   selectedDeliveryId!: number;
-
   hasData: boolean = false;
 
   searchPlaceHolder: string = "Search By Order ID...";
@@ -62,7 +53,7 @@ export class DispatchedDashboardComponent implements OnInit {
     { label: 'Hold', value: 'Hold' },
     { label: 'Return Received', value: 'Return Received' },
     { label: 'Delivered', value: 'Delivered' },
-    
+
   ];
 
   selectedStatus: any = null;
@@ -71,7 +62,7 @@ export class DispatchedDashboardComponent implements OnInit {
 
   showInfoModal: boolean = false;
 
-  constructor(private DistributionSrv: DistributionServiceService) {}
+  constructor(private DistributionSrv: DistributionServiceService) { }
 
   ngOnInit(): void {
     this.fetchDeliveries();
@@ -94,10 +85,10 @@ export class DispatchedDashboardComponent implements OnInit {
   }
 
   timeSlotOptionsArr = [
-   
+
     { label: '8AM - 2PM', value: '8AM - 2PM' },
     { label: '2PM - 8PM', value: '2PM - 8PM' },
-    
+
   ];
 
   filterTimeSlot() {
@@ -113,7 +104,6 @@ export class DispatchedDashboardComponent implements OnInit {
     this.fetchDeliveries();
   }
 
-
   isStatusDropdownOpen = false;
 
   toggleStatusDropdown() {
@@ -127,7 +117,7 @@ export class DispatchedDashboardComponent implements OnInit {
   }
 
   statusOptionsArr = [
-   
+
     { label: 'Ready to Pickup', value: 'Ready to Pickup' },
     { label: 'Picked up', value: 'Picked up' },
     { label: 'Out for Delivery', value: 'Out For Delivery' },
@@ -164,8 +154,6 @@ export class DispatchedDashboardComponent implements OnInit {
   // 5. Add selection change handler
   onStatusSelectionChange(selectedValue: string) {
     this.selectedStatus = selectedValue || '';
-    // Add any additional logic you need when category changes
-    console.log('Category selected:', selectedValue);
     this.fetchDeliveries();
   }
 
@@ -183,22 +171,22 @@ export class DispatchedDashboardComponent implements OnInit {
     this.activeTab = tabName;
 
     switch (tabName) {
-    
+
       case 'all':
         this.placeholderDate = 'Date'
         this.searchPlaceHolder = 'Search By Order ID..'
         break;
-  
+
       case 'Ready to Pickup':
         this.placeholderDate = 'Time Slot'
         this.searchPlaceHolder = 'Search by Order ID, Phone Numbers..'
         break;
-      
+
       case 'Picked Up':
         this.placeholderDate = 'Picked Up Date'
         this.searchPlaceHolder = 'Search by Order ID, Any Phone..'
         break;
-    
+
       case 'out-for-delivery':
         this.placeholderDate = 'Out Date'
         this.searchPlaceHolder = 'Search by Order ID, Any Phone..'
@@ -227,8 +215,6 @@ export class DispatchedDashboardComponent implements OnInit {
       next: (response) => {
         if (response.status && response.data) {
           this.allDeliveries = response.data;
-          console.log('allDeliveries', this.allDeliveries)
-
           this.hasData = this.allDeliveries.length > 0
           this.prepareDeliveryData();
           this.filterDataByStatus();
@@ -244,48 +230,43 @@ export class DispatchedDashboardComponent implements OnInit {
 
   prepareDeliveryData(): void {
     this.allDeliveries = this.allDeliveries.map((delivery, index) => {
-      // Format return time from createdAt or outDlvrTime
       const returnTime = this.formatToReturnTime(delivery.createdAt || delivery.outDlvrTime);
-      
-      // Format delivery time slot from sheduleTime
       const deliveryTimeSlot = this.formatDeliveryTimeSlot(delivery.sheduleTime);
-      
-      // Format delivery time for delivered items (use outDlvrTime or createdAt)
       const deliveryTime = this.formatToReturnTime(delivery.outDlvrTime || delivery.createdAt);
-      
+
       return {
         ...delivery,
         no: index + 1,
-        driver: 'DIV000001', // Placeholder - update with actual data if available
-        phoneNumber: '0781112300', // Placeholder - update with actual data if available
+        driver: 'DIV000001',
+        phoneNumber: '0781112300',
         returnTime: returnTime,
         deliveryTimeSlot: deliveryTimeSlot,
-        deliveryTime: deliveryTime, // Add deliveryTime for delivered tab
-        orderId: delivery.invNo, // Map invNo to orderId
-        centre: delivery.regCode // Map regCode to centre
+        deliveryTime: deliveryTime,
+        orderId: delivery.invNo,
+        centre: delivery.regCode
       };
     });
   }
 
   private formatToReturnTime(timeString: string): string {
     if (!timeString) return 'N/A';
-    
+
     try {
       const date = new Date(timeString);
       if (isNaN(date.getTime())) {
         if (timeString.includes('.')) return timeString;
         return 'N/A';
       }
-      
+
       let hours = date.getHours();
       const minutes = date.getMinutes();
       const ampm = hours >= 12 ? 'PM' : 'AM';
-      
+
       hours = hours % 12;
       hours = hours ? hours : 12;
-      
+
       const minutesStr = minutes < 10 ? '0' + minutes : minutes.toString();
-      
+
       return `${hours}.${minutesStr}${ampm}`;
     } catch (error) {
       console.error('Error formatting return time:', error);
@@ -295,15 +276,15 @@ export class DispatchedDashboardComponent implements OnInit {
 
   private formatDeliveryTimeSlot(sheduleTime: string): string {
     if (!sheduleTime) return 'N/A';
-    
+
     try {
       const date = new Date(sheduleTime);
       if (isNaN(date.getTime())) {
         return sheduleTime;
       }
-      
+
       const hours = date.getHours();
-      
+
       if (hours >= 8 && hours < 14) {
         return '8AM - 2PM';
       } else if (hours >= 14 && hours < 20) {
@@ -358,15 +339,13 @@ export class DispatchedDashboardComponent implements OnInit {
 
   formatTimeRange(sheduleTime: string): string {
     if (!sheduleTime) return 'N/A';
-    
+
     // Remove "Within " prefix if present
     let timeRange = sheduleTime;
     if (timeRange.startsWith('Within ')) {
       timeRange = timeRange.substring(7);
     }
-    
-    // Convert "8-12 PM" to "8AM - 12PM"
-    // Handle various formats
+
     if (timeRange.includes('AM') || timeRange.includes('PM')) {
       // If it already has AM/PM indicators
       return timeRange.replace('-', ' - ');
@@ -376,22 +355,22 @@ export class DispatchedDashboardComponent implements OnInit {
       if (parts.length === 2) {
         const start = parts[0].trim();
         const end = parts[1].trim();
-        
+
         // Determine AM/PM based on the hour
         const startNum = parseInt(start);
         const endNum = parseInt(end);
-        
+
         const startSuffix = startNum < 12 ? 'AM' : 'PM';
         const endSuffix = endNum < 12 ? 'AM' : 'PM';
-        
+
         // Convert to 12-hour format if needed
         const startHour = startNum > 12 ? startNum - 12 : startNum;
         const endHour = endNum > 12 ? endNum - 12 : endNum;
-        
+
         return `${startHour}${startSuffix} - ${endHour}${endSuffix}`;
       }
     }
-    
+
     return timeRange;
   }
 
@@ -423,7 +402,7 @@ export class DispatchedDashboardComponent implements OnInit {
   openDetailsPopup(delivery: Delivery): void {
     if (delivery.id == null) {
       console.warn('Delivery id is missing for selected row:', delivery);
-      return; 
+      return;
     }
     this.selectedDeliveryId = delivery.id;
     this.showDetailsPopup = true;
@@ -438,7 +417,7 @@ export class DispatchedDashboardComponent implements OnInit {
   openInfoPopup(delivery: Delivery): void {
     if (delivery.id == null) {
       console.warn('Delivery id is missing for selected row:', delivery);
-      return; 
+      return;
     }
     this.deliveryObj = delivery;
     this.showInfoModal = true;
@@ -451,20 +430,16 @@ export class DispatchedDashboardComponent implements OnInit {
 
   onDateChange(newDate: string | Date | null) {
     let dateString: string;
-  
+
     if (!newDate) {
-      
       dateString = '';
-    } 
+    }
     else if (newDate instanceof Date) {
-      
       dateString = newDate.toISOString().split('T')[0];
-    } 
+    }
     else {
-      
       dateString = newDate;
     }
-  
     this.selectedDate = dateString;
     this.fetchDeliveries();
   }
@@ -472,7 +447,7 @@ export class DispatchedDashboardComponent implements OnInit {
 
 
 class Delivery {
-  id! :number;
+  id!: number;
   invNo!: string;
   regCode!: string;
   sheduleTime!: string;
@@ -485,7 +460,6 @@ class Delivery {
   phoneCode1!: string;
   returnTime!: string;
   deliveryTimeSlot!: string;
-  // Add these properties for child component compatibility
   orderId!: string;
   centre!: string;
   deliveryTime!: string;

@@ -14,6 +14,7 @@ import { TokenServiceService } from '../../../services/Token/token-service.servi
 import { ProcurementsService } from '../../../services/Procurement-service/procurements.service';
 import { CustomDatepickerComponent } from '../../../components/custom-datepicker/custom-datepicker.component';
 import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
+import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 
 interface PurchaseReport {
   id: number;
@@ -79,7 +80,8 @@ export class RecievedOrdersComponent {
   constructor(
     private procumentService: ProcurementsService,
     private router: Router,
-    public tokenService: TokenServiceService
+    public tokenService: TokenServiceService,
+    private toastSrv: ToastAlertService
   ) { }
 
   ngOnInit() {
@@ -90,9 +92,9 @@ export class RecievedOrdersComponent {
     this.isLoading = true;
 
     // Reset to page 1 when searching or filtering
-    if (this.search || this.filterType) {
-      page = 1;
-    }
+    // if (this.search || this.filterType) {
+    //   page = 1;
+    // }
 
     this.procumentService
       .getRecievedOrdersQuantity(page, limit, this.filterType, this.date, this.search)
@@ -138,6 +140,7 @@ export class RecievedOrdersComponent {
     this.date = '';
     this.selectedFilterType = null;
     this.filterApplied = false;
+    this.displayDate = '';
     this.page = 1; // Reset to first page when clearing filter
     this.fetchAllPurchaseReport();
   }
@@ -168,13 +171,12 @@ export class RecievedOrdersComponent {
   // 5. Add selection change handler
   onCategorySelectionChange(selectedValue: string) {
     this.filterType = selectedValue || '';
-  
+
     // Find the matching filter type object
     this.selectedFilterType = this.filterTypes.find(
       filter => filter.value === selectedValue
     ) || null;
-  
-    console.log('Category selected:', selectedValue, this.selectedFilterType);
+
   }
 
   // Popup filter methods
@@ -308,10 +310,10 @@ export class RecievedOrdersComponent {
       .subscribe(
         (response) => {
           // Aggregate the data
-          const aggregatedData = this.aggregatePurchaseData(response.items);
+          // const aggregatedData = this.aggregatePurchaseData(response.items);
 
           // Now proceed with download using the aggregated data
-          this.downloadAggregatedReport(aggregatedData);
+          this.downloadAggregatedReport(response.items);
         },
         (error) => {
           console.error('Error fetching data for download:', error);
@@ -321,32 +323,7 @@ export class RecievedOrdersComponent {
       );
   }
 
-  private aggregatePurchaseData(items: any[]): any[] {
-    const aggregationMap = new Map();
-
-    items.forEach(item => {
-      // Create a unique key based on crop, variety, order date, and schedule date
-      const key = `${item.cropNameEnglish}_${item.varietyNameEnglish}_${item.OrderDate}_${item.scheduleDate}`;
-
-      if (aggregationMap.has(key)) {
-        // If the key exists, add the quantity to the existing entry
-        const existingItem = aggregationMap.get(key);
-        existingItem.quantity += item.quantity;
-      } else {
-        // If the key doesn't exist, create a new entry
-        aggregationMap.set(key, {
-          ...item,
-          // Make sure to clone the object to avoid reference issues
-          quantity: item.quantity
-        });
-      }
-    });
-
-    // Convert the map back to an array
-    return Array.from(aggregationMap.values());
-  }
-
-  private downloadAggregatedReport(aggregatedData: any[]) {
+  private downloadAggregatedReport(items: any[]) {
     let queryParams = [];
 
     if (this.filterType) {
@@ -363,20 +340,8 @@ export class RecievedOrdersComponent {
 
     const queryString = queryParams.length > 0 ? `?${queryParams.join('&')}` : '';
 
-    // Sort the aggregated data by Crop (A-Z) and then by Variety (A-Z)
-    const sortedData = aggregatedData.sort((a, b) => {
-      // First sort by crop name
-      const cropComparison = a.cropNameEnglish.localeCompare(b.cropNameEnglish);
-      if (cropComparison !== 0) {
-        return cropComparison;
-      }
-
-      // If crops are the same, sort by variety name
-      return a.varietyNameEnglish.localeCompare(b.varietyNameEnglish);
-    });
-
-    // Create a Blob from the sorted aggregated data
-    const worksheet = XLSX.utils.json_to_sheet(sortedData.map(item => ({
+    // No aggregation — each item becomes a row
+    const worksheet = XLSX.utils.json_to_sheet(items.map(item => ({
       'Crop': item.cropNameEnglish,
       'Variety': item.varietyNameEnglish,
       'Quantity (kg)': item.quantity,
@@ -389,9 +354,10 @@ export class RecievedOrdersComponent {
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, 'Procurement Report');
 
-    // Generate Excel file
     const excelBuffer = XLSX.write(workbook, { bookType: 'xlsx', type: 'array' });
-    this.saveAsExcelFile(excelBuffer, 'Procument_Items_Report');
+
+    // Keep your original naming (with query params if you plan to use it)
+    this.saveAsExcelFile(excelBuffer, `Procument_Items_Report`);
   }
 
   private formatDateForExcel(dateString: string): string {
@@ -405,13 +371,17 @@ export class RecievedOrdersComponent {
 
     let finalFileName = fileName;
     if (this.filterType) {
-      finalFileName += `_${this.filterType}`;
+      const matched = this.filterTypes.find(f => f.value === this.filterType);
+      if (matched) {
+        finalFileName += `_${matched.display.replace(/\s+/g, '_')}`;
+      }
     }
+
     if (this.date) {
       finalFileName += `_${this.date}`;
     }
     if (this.search) {
-      finalFileName += `_search_${this.search.substring(0, 10)}`;
+      finalFileName += `_Search_${this.search.substring(0, 10)}`;
     }
     finalFileName += '.xlsx';
 
@@ -426,32 +396,24 @@ export class RecievedOrdersComponent {
       link.click();
       document.body.removeChild(link);
 
-      Swal.fire({
-        icon: 'success',
-        title: 'Downloaded',
-        text: 'Please check your downloads folder',
-        customClass: {
-          popup: 'bg-tileLight dark:bg-tileBlack text-black dark:text-white',
-          title: 'font-semibold',
-        }
-      });
+      this.toastSrv.success('File Downloaded Successfully.');
     } else {
       // Fallback for older browsers
-      window.open(URL.createObjectURL(data));
+      this.toastSrv.error('File Download Failed.');
     }
 
     this.isDownloading = false;
   }
 
   onDateChange(newDate: string | Date | null) {
-    this.displayDate =  newDate
+    this.displayDate = newDate
     let convertedDate: Date | null = null;
-  
+
     if (newDate) {
       convertedDate = typeof newDate === 'string' ? new Date(newDate) : newDate;
     }
-  
+
     this.dateTemp = convertedDate;
   }
-  
+
 }

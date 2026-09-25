@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, HostListener, OnInit, ViewChild  } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { ReportServiceService } from '../../../services/Report-service/report-service.service';
@@ -30,8 +30,8 @@ export class RedefineTodoOrdersComponent implements OnInit {
   totalItems: number = 0;
 
   statusFilter: string = '';
-  dateFilter:string = ''; // Changed to Date type for p-calendar
-  dateFilter1:string = ''; // Changed to Date type for p-calendar
+  dateFilter: string = ''; // Changed to Date type for p-calendar
+  dateFilter1: string = ''; // Changed to Date type for p-calendar
   deliveryDateFilter: string = '';
   searchTerm: string = '';
   hasData: boolean = false;
@@ -76,23 +76,13 @@ export class RedefineTodoOrdersComponent implements OnInit {
       )
       .subscribe({
         next: (response) => {
-          console.log('API Response:', response);
-
           if (response && response.data) {
             this.orders = response.data
-            // .filter(
-            //   (order: { packingStatus: string }) =>
-            //     order.packingStatus === 'Todo'
-            // );
-            console.log('Filtered Orders:', this.orders);
             this.totalItems = response.total || response.totalCount || 0;
             this.hasData = response.total === 0 ? false : true;
           } else {
             const allOrders = Array.isArray(response) ? response : [];
             this.orders = allOrders
-            // .filter(
-            //   (order) => order.packingStatus === 'Todo'
-            // );
             this.totalItems = this.orders.length;
           }
 
@@ -138,10 +128,8 @@ export class RedefineTodoOrdersComponent implements OnInit {
   }
 
   onDateChange(newDate: string | Date | null) {
-    console.log('newDate', newDate);
-  
     let dateString = '';
-  
+
     if (newDate instanceof Date) {
       // Convert Date object to "YYYY-MM-DD" format
       dateString = newDate.toISOString().split('T')[0];
@@ -149,16 +137,14 @@ export class RedefineTodoOrdersComponent implements OnInit {
       // Already a string
       dateString = newDate;
     }
-  
+
     this.dateFilter1 = dateString; // ✅ assign as string
     this.fetchOrders();
   }
 
   onDateChange2(newDate: string | Date | null) {
-    console.log('newDate', newDate);
-  
     let dateString = '';
-  
+
     if (newDate instanceof Date) {
       // Convert Date object to "YYYY-MM-DD" format
       dateString = newDate.toISOString().split('T')[0];
@@ -166,33 +152,17 @@ export class RedefineTodoOrdersComponent implements OnInit {
       // Already a string
       dateString = newDate;
     }
-  
+
     this.dateFilter = dateString; // ✅ assign as string
     this.fetchOrders();
   }
-  // onDateSelect(): void {
-  //   this.page = 1;
-  //   this.fetchOrders();
-  // }
-
-  // onDateClear(): void {
-  //   this.dateFilter1 = null;
-  //   this.page = 1;
-  //   this.fetchOrders();
-  // }
-
-  // onDateFilterClear(): void {
-  //   this.dateFilter = null;
-  //   this.page = 1;
-  //   this.fetchOrders();
-  // }
 
   onPageChange(event: number): void {
     this.page = event;
     this.fetchOrders();
   }
 
-  
+
 
   getStatusClass(status: string): string {
     switch (status?.toLowerCase()) {

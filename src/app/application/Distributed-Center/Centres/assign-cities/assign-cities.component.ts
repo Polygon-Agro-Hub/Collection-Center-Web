@@ -11,8 +11,8 @@ import { DistributionServiceService } from '../../../../services/Distribution-Se
   selector: 'app-assign-cities',
   standalone: true,
   imports: [
-    CommonModule, 
-    FormsModule, 
+    CommonModule,
+    FormsModule,
     LoadingSpinnerComponent,
     SerchableDropdownComponent
 
@@ -28,52 +28,52 @@ export class AssignCitiesComponent implements OnInit {
   citiesArr: Cities[] = [];
   centersArr: Centers[] = [];
   centersArrWithDups: Centers[] = [];
-  
+
   // Store assignments (cityId -> centerId)
   assignments: Map<number, number> = new Map();
-  
+
   itemId1: number | null = null;
   itemId2: number | null = null;
   provinceItems = [
-      { value: 'Western', label: 'Western' },
-      { value: 'Central', label: 'Central' },
-      { value: 'Southern', label: 'Southern' },
-      { value: 'Northern', label: 'Northern' },
-      { value: 'Eastern', label: 'Eastern' },
-      { value: 'North Western', label: 'North Western' },
-      { value: 'North Central', label: 'North Central' },
-      { value: 'Uva', label: 'Uva' },
-      { value: 'Sabaragamuwa', label: 'Sabaragamuwa' }
-    ];
+    { value: 'Western', label: 'Western' },
+    { value: 'Central', label: 'Central' },
+    { value: 'Southern', label: 'Southern' },
+    { value: 'Northern', label: 'Northern' },
+    { value: 'Eastern', label: 'Eastern' },
+    { value: 'North Western', label: 'North Western' },
+    { value: 'North Central', label: 'North Central' },
+    { value: 'Uva', label: 'Uva' },
+    { value: 'Sabaragamuwa', label: 'Sabaragamuwa' }
+  ];
   // Define all districts with their provinces
   allDistricts = [
-      { name: 'Ampara', province: 'Eastern' },
-      { name: 'Anuradhapura', province: 'North Central' },
-      { name: 'Badulla', province: 'Uva' },
-      { name: 'Batticaloa', province: 'Eastern' },
-      { name: 'Colombo', province: 'Western' },
-      { name: 'Galle', province: 'Southern' },
-      { name: 'Gampaha', province: 'Western' },
-      { name: 'Hambantota', province: 'Southern' },
-      { name: 'Jaffna', province: 'Northern' },
-      { name: 'Kalutara', province: 'Western' },
-      { name: 'Kandy', province: 'Central' },
-      { name: 'Kegalle', province: 'Sabaragamuwa' },
-      { name: 'Kilinochchi', province: 'Northern' },
-      { name: 'Kurunegala', province: 'North Western' },
-      { name: 'Mannar', province: 'Northern' },
-      { name: 'Matale', province: 'Central' },
-      { name: 'Matara', province: 'Southern' },
-      { name: 'Monaragala', province: 'Uva' },
-      { name: 'Mullaitivu', province: 'Northern' },
-      { name: 'Nuwara Eliya', province: 'Central' },
-      { name: 'Polonnaruwa', province: 'North Central' },
-      { name: 'Puttalam', province: 'North Western' },
-      { name: 'Rathnapura', province: 'Sabaragamuwa' },
-      { name: 'Trincomalee', province: 'Eastern' },
-      { name: 'Vavuniya', province: 'Northern' },
+    { name: 'Ampara', province: 'Eastern' },
+    { name: 'Anuradhapura', province: 'North Central' },
+    { name: 'Badulla', province: 'Uva' },
+    { name: 'Batticaloa', province: 'Eastern' },
+    { name: 'Colombo', province: 'Western' },
+    { name: 'Galle', province: 'Southern' },
+    { name: 'Gampaha', province: 'Western' },
+    { name: 'Hambantota', province: 'Southern' },
+    { name: 'Jaffna', province: 'Northern' },
+    { name: 'Kalutara', province: 'Western' },
+    { name: 'Kandy', province: 'Central' },
+    { name: 'Kegalle', province: 'Sabaragamuwa' },
+    { name: 'Kilinochchi', province: 'Northern' },
+    { name: 'Kurunegala', province: 'North Western' },
+    { name: 'Mannar', province: 'Northern' },
+    { name: 'Matale', province: 'Central' },
+    { name: 'Matara', province: 'Southern' },
+    { name: 'Monaragala', province: 'Uva' },
+    { name: 'Mullaitivu', province: 'Northern' },
+    { name: 'Nuwara Eliya', province: 'Central' },
+    { name: 'Polonnaruwa', province: 'North Central' },
+    { name: 'Puttalam', province: 'North Western' },
+    { name: 'Rathnapura', province: 'Sabaragamuwa' },
+    { name: 'Trincomalee', province: 'Eastern' },
+    { name: 'Vavuniya', province: 'Northern' },
   ];
- 
+
   filteredDistricts: { name: string, province: string }[] = [];
   districtItems = this.filteredDistricts.map(d => ({ value: d.name, label: d.name }));
 
@@ -90,29 +90,23 @@ export class AssignCitiesComponent implements OnInit {
     // Convert provinces to objects for PrimeNG dropdown
     this.updateFilteredDistricts();
 
-    this.fetchData();
+    // this.fetchData();
   }
 
   fetchData() {
     this.isLoading = true;
     this.hasData = false;
 
-    
+
     this.distributionSrv.getAssignForCityes(this.selectProvince, this.selectDistrict).subscribe(
       (res) => {
-        console.log(res);
         this.citiesArr = res.cities;
 
         this.centersArrWithDups = (res.centers);
-        
-        // Filter out duplicate centers by id
         this.centersArr = this.removeDuplicateCenters(res.centers);
-
-        console.log('centers', this.centersArr)
-        
         this.isLoading = false;
         this.hasData = true;
-        
+
         this.initializeAssignments();
       },
       (error) => {
@@ -125,69 +119,54 @@ export class AssignCitiesComponent implements OnInit {
 
   filterDistrict(districtName: string | null) {
     if (this.itemId1 !== null) {
-        this.selectDistrict = ''
-        
+      this.selectDistrict = ''
+
     } // keep your original guard
 
     const selected = this.allDistricts.find(d => d.name === districtName || '');
     this.selectProvince = selected ? selected.province : '';
-    console.log('selectProvince', this.selectProvince)
-    console.log('selectDistrict', this.selectDistrict)
-
-    
   }
 
   filterProvince(provinceName: string | null) {
     if (this.itemId2 !== null) {
-        this.selectProvince = ''
-        
+      this.selectProvince = ''
+
     }; // keep your original guard
 
     const selected = this.provinceItems.find(p => p.value === provinceName || '');
-    this.updateFilteredDistricts(); 
-    // this.selectProvince = selected ? selected.province : '';
-    console.log('selectProvince', this.selectProvince)
-    console.log('selectDistrict', this.selectDistrict)
+    this.selectDistrict = '';
+    this.updateFilteredDistricts();
 
-   
   }
 
   removeDuplicateCenters(centers: Centers[]): Centers[] {
     const uniqueCenters = new Map<number, Centers>();
-    
+
     centers.forEach(center => {
       if (!uniqueCenters.has(center.id)) {
         uniqueCenters.set(center.id, center);
       }
     });
-    
+
     return Array.from(uniqueCenters.values());
   }
 
   updateFilteredDistricts() {
     if (this.selectProvince) {
-        this.filteredDistricts = this.allDistricts.filter(d => d.province === this.selectProvince);
-       this.districtItems = this.filteredDistricts.map(d => ({ value: d.name, label: d.name }));
+      this.filteredDistricts = this.allDistricts.filter(d => d.province === this.selectProvince);
+      this.districtItems = this.filteredDistricts.map(d => ({ value: d.name, label: d.name }));
     } else {
-        this.filteredDistricts = this.allDistricts;
-        console.log('filteredDistricts', this.filteredDistricts)
-        this.districtItems = this.filteredDistricts.map(d => ({ value: d.name, label: d.name }));
+      this.filteredDistricts = this.allDistricts;
+      this.districtItems = this.filteredDistricts.map(d => ({ value: d.name, label: d.name }));
     }
-}
+  }
 
   initializeAssignments(): void {
 
-    console.log('initialize assignments')
     this.assignments.clear();
-
-    console.log('cities arr', this.citiesArr)
-    
     this.citiesArr.forEach(city => {
       this.assignments.set(city.id, -1);
     });
-
-    console.log('centers arr', this.centersArrWithDups)
-    
     this.centersArrWithDups.forEach(center => {
       if (center.ownCityId) {
         const cityId = parseInt(center.ownCityId, 10);
@@ -196,8 +175,7 @@ export class AssignCitiesComponent implements OnInit {
         }
       }
     });
-    
-    console.log('Initialized assignments:', this.assignments);
+
   }
 
   isCityAssignedToCenter(cityId: number, centerId: number): boolean {
@@ -212,7 +190,7 @@ export class AssignCitiesComponent implements OnInit {
   toggleAssignment(cityId: number, centerId: number, event: Event): void {
     const isChecked = (event.target as HTMLInputElement).checked;
     const previousCenterId = this.assignments.get(cityId);
-    
+
     if (isChecked) {
       this.assignments.set(cityId, centerId);
       this.saveAssignment(cityId, centerId);
@@ -220,76 +198,67 @@ export class AssignCitiesComponent implements OnInit {
       this.assignments.set(cityId, -1);
       this.removeAssignment(cityId, previousCenterId as any);
     }
-    
-    console.log('Updated assignments:', this.assignments);
+
   }
 
   saveAssignment(cityId: number, centerId: number): void {
     this.isLoading = true;
-    
     const assignmentToSave = { cityId, centerId };
-    
-    console.log('Saving assignment:', assignmentToSave);
-    
     this.isLoading = true;
 
-this.distributionSrv.AssigCityToDistributedCenter(assignmentToSave).subscribe(
-  (res) => {
-    this.isLoading = false;
+    this.distributionSrv.AssigCityToDistributedCenter(assignmentToSave).subscribe(
+      (res) => {
+        this.isLoading = false;
 
-    // Handle backend failure response
-    if (!res || res.status === false) {
-      Swal.fire({
-        title: 'Error',
-        text: res?.message || 'Failed to assign city to center',
-        icon: 'error',
-        customClass: {
-          popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-          title: 'dark:text-white',
-        },
-      });
-      this.assignments.set(cityId, -1);
-      return;
-    }
+        // Handle backend failure response
+        if (!res || res.status === false) {
+          Swal.fire({
+            title: 'Error',
+            text: res?.message || 'Failed to assign city to centre',
+            icon: 'error',
+            customClass: {
+              popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+              title: 'dark:text-white',
+            },
+          });
+          this.assignments.set(cityId, -1);
+          return;
+        }
 
-    // Success alert
-    Swal.fire({
-      title: 'Success',
-      text: 'City assigned to center successfully!',
-      icon: 'success',
-      customClass: {
-        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-        title: 'dark:text-white',
+        // Success alert
+        Swal.fire({
+          title: 'Success',
+          text: 'City assigned to centre successfully!',
+          icon: 'success',
+          customClass: {
+            popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+            title: 'dark:text-white',
+          },
+        });
       },
-    });
-  },
-  (error) => {
-    this.isLoading = false;
-    console.error('Error while assigning city:', error);
+      (error) => {
+        this.isLoading = false;
+        console.error('Error while assigning city:', error);
 
-    Swal.fire({
-      title: 'Error',
-      text: 'Failed to assign city to center',
-      icon: 'error',
-      customClass: {
-        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-        title: 'dark:text-white',
-      },
-    });
+        Swal.fire({
+          title: 'Error',
+          text: 'Failed to assign city to centre',
+          icon: 'error',
+          customClass: {
+            popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
+            title: 'dark:text-white',
+          },
+        });
 
-    this.assignments.set(cityId, -1);
-  }
-);
+        this.assignments.set(cityId, -1);
+      }
+    );
 
   }
 
   removeAssignment(cityId: number, centerId: number): void {
     this.isLoading = true;
-    
     const assignmentToRemove = { cityId, centerId };
-    
-    console.log('Removing assignment:', assignmentToRemove);
-    
     this.distributionSrv.removeAssigCityToDistributedCenter(assignmentToRemove).subscribe(
       (res) => {
         this.isLoading = false;
@@ -319,17 +288,20 @@ this.distributionSrv.AssigCityToDistributedCenter(assignmentToSave).subscribe(
     );
   }
 
-  selectStatusChange(){
+  selectStatusChange() {
     this.hasData = false;
   }
 
   clearDistrictFilter(event?: MouseEvent) {
     if (event) {
-        event.stopPropagation(); // Prevent triggering the dropdown toggle
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
     }
     this.selectDistrict = '';
-   
-}
+  }
+
+  back() {
+    this.location.back();
+  }
 }
 
 interface Cities {

@@ -21,7 +21,7 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
   filteredOfficers: Officers[] = [];
 
   targetItemId!: number;
-  toDate! :string;
+  toDate!: string;
   fromDate!: string;
 
   passAmount: number = 0.00;
@@ -32,6 +32,9 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
   officer1: string = '';
 
   isLoading: boolean = true;
+
+  officerId!: string;
+  empId!: string;
 
 
   constructor(
@@ -45,13 +48,18 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
     this.targetItemId = this.route.snapshot.params['id'];
     this.toDate = this.route.snapshot.params['toDate'];
     this.fromDate = this.route.snapshot.params['fromDate'];
-  
+
+    this.route.queryParams.subscribe(params => {
+      this.officerId = params['officerId'];
+      this.empId = params['empId'];
+    });
+
     this.fetchTargetDetalis();
   }
 
   fetchTargetDetalis() {
     this.isLoading = true;
-    this.TargetSrv.getOfficerTartgetItem(this.targetItemId).subscribe(
+    this.TargetSrv.getOfficerTartgetItem2(this.targetItemId, this.empId).subscribe(
       (res) => {
 
         this.targetObj = res.resultTarget;
@@ -61,6 +69,8 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
         this.filteredOfficers = [...this.officerArr];
 
         this.isLoading = false;
+        this.officerDropdownItems
+
       }
     );
   }
@@ -76,18 +86,7 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
   // 5. Add selection change handler
   onOfficerSelectionChange(selectedValue: string) {
     this.selectedOfficerId = selectedValue || '';
-    // Add any additional logic you need when category changes
-    console.log('Category selected:', selectedValue);
-
-    console.log('officer', this.selectedOfficerId)
   }
-
-  // onOfficerSelectionChange(selectedValue: string) {
-  //   this.selectedOfficerId = selectedValue ? Number(selectedValue) : null;
-  
-  //   console.log('Officer selected:', this.selectedOfficerId);
-  //   console.log('officer', this.officer1);
-  // }
 
   filterOfficer() {
     if (!this.officerArr) return;
@@ -108,11 +107,15 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
   }
 
   onSubmit() {
-    this.isLoading = true;
-
     if (!this.selectedOfficerId) {
       this.isLoading = false;
-      this.toastSrv.warning('Pleace fill all feild!')
+      this.toastSrv.warning('Please fill all fields!')
+      return;
+    }
+
+    if (!this.passAmount || this.passAmount <= 0) {
+      this.isLoading = false;
+      this.toastSrv.warning('Amount must be greater than 0.');
       return;
     }
 
@@ -130,7 +133,9 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
           this.toastSrv.success("Successfully changed the Target Amount");
           this.isLoading = false;
           this.fetchTargetDetalis()
-          this.router.navigate(['/officer-target'])
+          this.router.navigate(['/officer-target'], {
+            queryParams: { id: this.targetItemId, toDate: this.toDate, fromDate: this.fromDate, officerId: this.officerId },
+          });
         } else {
           this.isLoading = false;
           this.toastSrv.error(res.message);
@@ -138,6 +143,12 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
       }
     )
 
+  }
+
+  back() {
+    this.router.navigate(['/officer-target'], {
+      queryParams: { id: this.targetItemId, toDate: this.toDate, fromDate: this.fromDate, officerId: this.officerId },
+    });
   }
 
   formatDate(dateString: string | Date): string {
@@ -185,34 +196,58 @@ export class OfficerTargetPassOfficerComponent implements OnInit {
     }).then((result) => {
       if (result.isConfirmed) {
         this.toastSrv.warning('Officer Target Edit Canceled.')
-        this.router.navigate(['/officer-target']);
+        this.router.navigate(['/officer-target'], {
+          queryParams: { id: this.targetItemId, toDate: this.toDate, fromDate: this.fromDate, officerId: this.officerId },
+        });
 
       }
     });
   }
 
-  // Prevent typing zero or negative values
-preventZeroAndNegative(event: KeyboardEvent) {
-  const inputChar = event.key;
-  const currentValue = (event.target as HTMLInputElement).value;
-  
-  // Prevent typing '-' or '0' as first character
-  if ((inputChar === '-' || inputChar === '0') && currentValue === '') {
-      event.preventDefault();
-  }
-  
-  // Prevent typing '0' after existing '0' (like "00")
-  if (inputChar === '0' && currentValue === '0') {
-      event.preventDefault();
-  }
-}
+  preventZeroAndNegative(event: KeyboardEvent) {
+    const inputChar = event.key;
 
-// Validate the input value
-validatePassAmount() {
-  if (this.passAmount <= 0) {
-      this.passAmount = 1; // Reset to minimum valid value
+    // Block minus sign entirely
+    if (inputChar === '-') {
+      event.preventDefault();
+    }
   }
-}
+
+  validatePassAmount() {
+    const input = document.getElementById('passAmount') as HTMLInputElement;
+    const raw = input?.value ?? '';
+
+    // Block negative
+    if (this.passAmount < 0) {
+      this.passAmount = 0.1;
+      return;
+    }
+
+    // If it looks like "0", "00", "0.0", "0.00" etc. (all zeros, no non-zero digit)
+    const allZeros = /^0*\.?0*$/.test(raw) && raw !== '' && !raw.includes('e');
+    if (allZeros) {
+      this.passAmount = 0.1;
+    }
+  }
+
+  onBlurPassAmount() {
+    const input = document.getElementById('passAmount') as HTMLInputElement;
+    const raw = input?.value ?? '';
+
+    // On blur: if last digit makes it 0.00...0, force last digit to 1
+    // e.g. "0.000" → "0.001", "0.00" → "0.01", "0" → "0.1"
+    if (/^0\.0*$/.test(raw)) {
+      // Replace trailing zero with 1 → e.g. "0.00" → "0.01"
+      const fixed = raw.replace(/0$/, '1');
+      this.passAmount = parseFloat(fixed);
+      return;
+    }
+
+    // Catch any remaining <= 0 edge cases
+    if (!this.passAmount || this.passAmount <= 0) {
+      this.passAmount = 0.1;
+    }
+  }
 
 }
 

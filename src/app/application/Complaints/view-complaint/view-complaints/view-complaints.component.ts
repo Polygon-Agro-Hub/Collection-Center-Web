@@ -46,8 +46,6 @@ export class ViewComplaintsComponent implements OnInit {
   // 5. Add selection change handler
   onCategorySelectionChange(selectedValue: string) {
     this.category = selectedValue || '';
-    // Add any additional logic you need when category changes
-    console.log('Category selected:', selectedValue);
   }
 
   selectRecevied() {
@@ -89,13 +87,13 @@ export class ViewComplaintsComponent implements OnInit {
     this.complaintsService.submitComplaint(formData).subscribe(
       (response) => {
         if (response.status) {
-          this.toastSrv.success('Your complaint has been submitted successfully!');
+          this.toastSrv.success('Your complaint was submitted');
           // Reset the form fields
           this.isAddComplaintOpen = false;
           this.category = '';
           this.complaint = '';
           this.isLoading = false;
-          this.selectSent();
+          this.selectRecevied();
 
         } else {
           this.isLoading = false;
@@ -147,7 +145,7 @@ export class ViewComplaintsComponent implements OnInit {
     if (this.complaint) {
       // Trim spaces
       this.complaint = this.complaint.trim();
-  
+
       // Capitalize first letter
       this.complaint =
         this.complaint.charAt(0).toUpperCase() +

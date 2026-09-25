@@ -1,6 +1,5 @@
 <app-loading-spinner *ngIf="isLoading" />
 
-
 <div *ngIf="!isLoading"
   class="flex flex-row items-center gap-6 font-semibold text[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
   <p onclick="history.back()"> Manage Officers</p>
@@ -13,28 +12,27 @@
   </div>
 
   <div class="grid grid-cols-1 md:grid-cols-2 gap-8 my-10 px-10">
-    <div *ngIf="logingRole === 'Collection Centre Manager'" >
-      <label for="jobRole" class="block  font-medium text-gray-700 dark:text-textDark">
-        Select Job Role
-      </label>
-
-      <input 
-        id="jobRole"
-        [(ngModel)]="selectJobRole"
-        name="selectJobRole"
-        readonly
-        class="form-control mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 
-               rounded-md text-[#534E4E] bg-gray-200 dark:text-textDark dark:bg-[#1D1D1F]"
-      >
-    </div>
-
-    <div *ngIf="logingRole === 'Distribution Centre Manager'">
+    <div *ngIf="logingRole === 'Collection Centre Manager'">
       <label for="jobRole" class="block  font-medium text-gray-700 dark:text-textDark">
         Job Role
       </label>
 
-      <input type="text" [(ngModel)]="selectJobRole" name="jobRole" id="jobRole" readonly
-      class="form-control mt-1 block w-full p-2  border border-gray-300 dark:border-gray-600 rounded-md text-[#534E4E] bg-gray-200 dark:text-textDark  dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500">
+      <input id="jobRole" [(ngModel)]="selectJobRole" name="selectJobRole" readonly class="form-control mt-1 block w-full p-2 border border-gray-300 dark:border-gray-600 
+               rounded-md text-[#534E4E] bg-gray-200 dark:text-textDark dark:bg-[#1D1D1F]">
+    </div>
+
+    <div *ngIf="logingRole === 'Distribution Centre Manager'">
+      <label for="jobRole" class="block  font-medium text-gray-700 dark:text-textDark mb-1">
+        Job Role
+      </label>
+
+      <app-searchable-dropdown [items]="jobRoleItems" placeholder=" --Select Job Role-- "
+        searchPlaceholder="Search Job Role..." [(ngModel)]="selectJobRole"
+        (selectionChange)="onJobRoleSelectionChange($event)" [clearable]="true" [showSelected]="true" [disabled]="false"
+        class="block w-full mb-4"></app-searchable-dropdown>
+
+      <!-- <input type="text" [(ngModel)]="selectJobRole" name="jobRole" id="jobRole" readonly
+      class="form-control mt-1 block w-full p-2  border border-gray-300 dark:border-gray-600 rounded-md text-[#534E4E] bg-gray-200 dark:text-textDark  dark:bg-[#1D1D1F] appearance-none focus:ring-indigo-500 focus:border-indigo-500"> -->
 
     </div>
 
@@ -47,29 +45,32 @@
           <p *ngIf="selectJobRole === 'Collection Officer'">COO</p>
           <p *ngIf="selectJobRole === 'Customer Officer'">CUO</p>
           <p *ngIf="selectJobRole === 'Distribution Officer'">DIO</p>
+          <p *ngIf="selectJobRole === this. jobRoleTypes.lightWeightDriver">DVR</p>
+          <p *ngIf="selectJobRole === this. jobRoleTypes.heavyWeightDriver">DVR</p>
         </span>
-        <input type="text" [(ngModel)]="inputId" name="inputId" placeholder="ex : 0122"
+        <input type="text" [(ngModel)]="inputId" name="inputId" placeholder="ex : 00001"
           class="rounded-none rounded-e-lg placeholder:text bg-gray-50 border border-gray-300 dark:border-gray-600 text-[#534E4E] focus:ring-blue-500 focus:border-blue-500 block flex-1 min-w-0 w-full  pl-4 dark:text-textDark  dark:bg-[#1D1D1F] dark:placeholder-gray-400  dark:focus:ring-blue-500 dark:focus:border-blue-500" />
       </div>
     </div>
   </div>
 
-  <div class="flex justify-center items-center" >
-    <button class="bg-[#415CFF] text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-md" (click)="fetchOfficer()">
+  <div class="flex justify-center items-center">
+    <button class="bg-[#415CFF] text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-md"
+      (click)="fetchOfficer()">
       Search
     </button>
   </div>
 
-  <hr *ngIf="isOfficerExist" class="border-gray-300 border-[1px] my-8" />
+  <hr *ngIf="isOfficerExist && !isReset" class="border-gray-300 border-[1px] my-8" />
 
-  <div *ngIf="isOfficerExist && officerObj.claimStatus === 0"
+  <div *ngIf="isOfficerExist && officerObj.claimStatus === 0 && !isReset"
     class="flex flex-row justify-between items-center border-[#F1F7FA] border-[3px] rounded-lg shadowmd p-8 mx-[10%]">
     <div class="flex flex-row items-center">
       <img *ngIf="officerObj.image" class="w-28 h-28 rounded-full " [src]="officerObj.image" />
 
-      <div *ngIf="!officerObj.image" 
-          class="flex rounded-full border-solid border-2 justify-center items-center w-32 h-32">
-          <i class="fa-regular fa-user text-6xl dark:text-white"></i>
+      <div *ngIf="!officerObj.image"
+        class="flex rounded-full border-solid border-2 justify-center items-center w-32 h-32">
+        <i class="fa-regular fa-user text-6xl dark:text-white"></i>
       </div>
 
       <div class="ml-6">
@@ -89,7 +90,7 @@
   </div>
 
   <div *ngIf="isOfficerExist && officerObj.claimStatus === 1"
-    class="flex flex-col items-center w-full h-screen px-10 py-7 dark:bg-[#363636] bg-tileLight shadow-lg rounded-lg mt-6">
+    class="flex flex-col items-center w-full h-screen px-10 py-7 dark:bg-[#363636] bg-tileLight mt-6">
     <p *ngIf="logingRole === 'Distribution Centre Manager'" class="text-[#494949] my-6 dark:text-white">
       --The user already claimed By {{ officerObj.distributedCenterRegCode }} Centre.--
     </p>
@@ -124,17 +125,13 @@
             Are you sure you want to Claim the officer
           </p>
           <p class="font-semibold text-lg dark:text-white">
-            "{{officerObj.firstNameEnglish}} {{officerObj.lastNameEnglish}} (EMP ID -
-            "{{officerObj.empId}}")
+            "{{officerObj.firstNameEnglish}} {{officerObj.lastNameEnglish}}" (EMP ID -
+            {{officerObj.empId}})?
           </p>
         </div>
 
         <!-- Buttons -->
         <div class="flex justify-center gap-4 mb-4">
-          <!-- <button class="bg-[#E8E8E8] border-[1px] border-[#6B7D8C] px-10 py-0.35 rounded-lg shadow-md"
-                    (click)="confirmClaim(officerObj.id)"><span class="font-semibold text-[#6B7D8C]">Yes,</span> <br>
-                    <span class="text-light text-whight-700 button-text text-[#6B7D8C]">Discharge</span>
-                </button> -->
           <button class="bg-[#E8E8E8] border-[1px] border-[#6B7D8C] px-10 py-0.35 rounded-lg shadow-md"
             (click)="cancelClaim()"><span class="font-semibold text-[#6B7D8C]">No,</span> <br>
             <span class="text-light text-whight-700 button-text text-[#6B7D8C]">Go Back</span>

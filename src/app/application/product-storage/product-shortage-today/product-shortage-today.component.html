@@ -1,0 +1,30 @@
+<div class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
+    <p (click)="goBack()" >Product Shortage</p>
+    <p>Product Shortage Today</p>
+</div>
+
+<div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg">
+    <div class="flex flex-row justify-between items-center">
+        <div class="flex flex-row gap-6">
+            <div class="flex flex-row items-center gap-2 border-[2px] rounded-2xl px-4 py-2 dark:bg-[#292929] cursor-pointer"
+                [ngClass]="{'text-[#415CFF] border-[#415CFF]': isSelectToDo}" (click)="selectToDo()">
+                <i *ngIf="isSelectToDo" class="fa-solid fa-check"></i>
+                <p class="dark:text-white">To Do</p>
+            </div>
+
+            <div class="flex flex-row items-center gap-2 border-[2px] rounded-2xl px-4 py-2 dark:bg-[#292929] cursor-pointer"
+                [ngClass]="{'text-[#415CFF] border-[#415CFF]': isSelectCompleted}" (click)="selectCompleted()">
+                <i *ngIf="isSelectCompleted" class="fa-solid fa-check"></i>
+                <p class="dark:text-white">Completed</p>
+            </div>
+        </div>
+
+    </div>
+
+    <hr class="my-8 border-[1px] border-[#7F7F7F] dark:border-[#292929]" />
+
+    <app-product-shortage-today-todo *ngIf="isSelectToDo" />
+
+    <app-product-shortage-today-completed *ngIf="isSelectCompleted" />
+</div>
+

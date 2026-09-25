@@ -149,7 +149,7 @@ export class CenterViewOfficersComponent implements OnInit {
         this.ManageOficerSrv.deleteOfficer(id).subscribe(
           (data) => {
             if (data.status) {
-              this.toastSrv.success('The Officer has been deleted successfully.')
+              this.toastSrv.success('Officer deleted successfully.')
               this.getAllOfficers(this.centerId, this.page, this.itemsPerPage, this.selectRole, this.selectStatus, this.searchText);
             } else {
               this.toastSrv.error('There was an error deleting the ofiicer')
@@ -174,30 +174,30 @@ export class CenterViewOfficersComponent implements OnInit {
 
     this.selectedJobRole = item.jobRole;
 
-if (item.status === 'Approved') {
-  message = `Are you sure you want to reject this ${item.jobRole} ?`;
-} 
-else if (item.status === 'Rejected') {
-  message = `Are you sure you want to approve this ${item.jobRole} ?`;
-} 
-else if (item.status === 'Not Approved') {
-  message = `Are you sure you want to approve or reject this ${item.jobRole} ?`;
-} 
-else {
-  message = ``;
-}
+    if (item.status === 'Approved') {
+      message = `Are you sure you want to reject this ${item.jobRole} ?`;
+    }
+    else if (item.status === 'Rejected') {
+      message = `Are you sure you want to approve this ${item.jobRole} ?`;
+    }
+    else if (item.status === 'Not Approved') {
+      message = `Are you sure you want to approve or reject this ${item.jobRole} ?`;
+    }
+    else {
+      message = ``;
+    }
 
-const rejectButton = (item.status === 'Approved' || item.status === 'Not Approved')
-  ? `<button id="rejectButton" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg mr-2">
+    const rejectButton = (item.status === 'Approved' || item.status === 'Not Approved')
+      ? `<button id="rejectButton" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg mr-2">
        Reject
      </button>`
-  : '';
+      : '';
 
-const approveButton = (item.status === 'Rejected' || item.status === 'Not Approved')
-  ? `<button id="approveButton" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
+    const approveButton = (item.status === 'Rejected' || item.status === 'Not Approved')
+      ? `<button id="approveButton" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
        Approve
      </button>`
-  : '';
+      : '';
 
     const tableHtml = `
     <div class="container mx-auto">
@@ -253,20 +253,20 @@ const approveButton = (item.status === 'Rejected' || item.status === 'Not Approv
         swalInstance.close();
         if (res.status) {
           const action = status === 'Approved' ? 'approved' : 'rejected';
-          this.toastSrv.success(`The ${this.selectedJobRole} was ${action} successfully.`);
+          this.toastSrv.success(`Officer ${action} successfully.`);
           this.getAllOfficers();
         } else {
-          this.toastSrv.error(res.message || `Failed to ${status.toLowerCase()} the ${this.selectedJobRole}.`);
+          this.toastSrv.error(`Failed to ${status.toLowerCase()} the ${this.selectedJobRole}.`);
         }
       },
       error: (err) => {
         swalInstance.close();
-        if (status  === 'Approved' ) {
+        if (status === 'Approved') {
           this.toastSrv.error(`An error occurred while Approving. Please try again.`);
         } else {
           this.toastSrv.error(`An error occurred while Rejecting. Please try again.`);
         }
-        
+
       }
     });
   }
@@ -305,6 +305,7 @@ const approveButton = (item.status === 'Rejected' || item.status === 'Not Approv
 
   onSearch() {
     this.searchText = this.searchText.trimStart();
+    this.page = 1;
     this.getAllOfficers(this.centerId, this.page, this.itemsPerPage, this.selectRole, this.selectStatus, this.searchText)
 
   }
@@ -314,16 +315,17 @@ const approveButton = (item.status === 'Rejected' || item.status === 'Not Approv
     this.getAllOfficers(this.centerId, this.page, this.itemsPerPage, this.selectRole, this.selectStatus, this.searchText)
   }
 
+
   onPageChange(event: number) {
     this.page = event;
-    this.getAllOfficers(this.page, this.itemsPerPage);
+    this.getAllOfficers(this.centerId, this.page, this.itemsPerPage, this.selectRole, this.selectStatus, this.searchText);
   }
 
   navigateToCenters() {
     this.router.navigate(['/centers']); // Change '/reports' to your desired route
   }
 
-  
+
 
 }
 

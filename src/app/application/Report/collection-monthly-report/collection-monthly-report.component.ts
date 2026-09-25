@@ -35,6 +35,8 @@ export class CollectionMonthlyReportComponent implements OnInit {
 
   hasData: boolean = false;
   isLoading: boolean = false;
+  totalFarmersSum: number = 0;
+
 
   constructor(
     private ReportSrv: ReportServiceService,
@@ -52,15 +54,16 @@ export class CollectionMonthlyReportComponent implements OnInit {
 
   fetchOfficerData() {
     this.isLoading = true;
-    
+
     // Convert string dates to Date objects for API call if needed
     const startDateObj = this.startDate ? new Date(this.startDate) : null;
     const endDateObj = this.endDate ? new Date(this.endDate) : null;
-    
+
     this.ReportSrv.getCollectionmonthlyReportOfficerData(this.officerId, startDateObj, endDateObj).subscribe(
       (res) => {
         this.officerDataObj = res.officer;
         this.farmerDataArr = res.dates;
+        this.totalFarmersSum = res.dates.reduce((sum: number, item: FarmerDetails) => sum + (Number(item.TotalFarmers) || 0), 0);
         if (res.dates.length > 0) {
           this.hasData = true;
         } else {
@@ -76,42 +79,37 @@ export class CollectionMonthlyReportComponent implements OnInit {
   }
 
   filterDate() {
-    console.log('filtering');
     const startEntered = !!this.startDate;
     const endEntered = !!this.endDate;
-
-    console.log(this.startDate, this.endDate);
-
     if (startEntered && endEntered) {
       this.fetchOfficerData();
     } else {
-      let msg = '';
 
       if (!startEntered && !endEntered) {
-        msg = 'Please enter both Start Date and End Date.';
+        this.toastSrv.warning("Please select a date range to view the data");
       } else if (!startEntered) {
-        msg = 'Please enter the Start Date.';
+        this.toastSrv.warning("Please select a Start Date.");
       } else if (!endEntered) {
-        msg = 'Please enter the End Date.';
+        this.toastSrv.warning("Please select an End Date.");
       }
 
-      Swal.fire({
-        icon: 'warning',
-        title: 'Missing Date Input',
-        text: msg,
-        confirmButtonText: 'OK'
-      });
     }
 
     this.hasData = false;
 
   }
-  
+
 
   navigateToReports() {
     this.router.navigate(['/reports']); // Change '/reports' to your desired route
   }
 
+  private clearDatePicker(pickerName: 'fromDatePicker' | 'toDatePicker') {
+    const picker = pickerName === 'fromDatePicker' ? this.fromDatePicker : this.toDatePicker;
+    if (picker) {
+      picker.selectedDate = null;
+    }
+  }
 
   onStartDateChange(selectedDate: string | Date | null) {
     if (!selectedDate) {
@@ -119,12 +117,12 @@ export class CollectionMonthlyReportComponent implements OnInit {
       return;
     }
 
-    // Convert to Date if it's a string
     const dateToValidate = typeof selectedDate === 'string' ? new Date(selectedDate) : selectedDate;
-    
-    // Validate the start date
+
     if (this.validateStartDate(dateToValidate)) {
       this.startDate = typeof selectedDate === 'string' ? selectedDate : this.formatDateToString(selectedDate);
+    } else {
+      this.clearDatePicker('fromDatePicker');
     }
   }
 
@@ -135,31 +133,29 @@ export class CollectionMonthlyReportComponent implements OnInit {
       return;
     }
 
-    // Convert to Date if it's a string
     const dateToValidate = typeof selectedDate === 'string' ? new Date(selectedDate) : selectedDate;
-    
-    // Validate the end date
+
     if (this.validateEndDate(dateToValidate)) {
       this.endDate = typeof selectedDate === 'string' ? selectedDate : this.formatDateToString(selectedDate);
+    } else {
+      this.clearDatePicker('toDatePicker');
     }
   }
 
   // Start date validation logic
   private validateStartDate(selectedDate: Date): boolean {
     const today = new Date();
-    today.setHours(23, 59, 59, 999); // Set to end of today for comparison
+    today.setHours(23, 59, 59, 999);
 
-    // Check if start date is in the future
     if (selectedDate > today) {
-      this.toastSrv.warning('<b>Start date</b> cannot be a future date.');
-      this.startDate = this.formatDateToString(new Date());
+      this.toastSrv.warning('From Date cannot be a future date.');
+      this.startDate = null;
       return false;
     }
 
-    // Check if end date is already selected and start date is after end date
     if (this.endDate && selectedDate > new Date(this.endDate)) {
-      this.toastSrv.warning('<b>Start date</b> cannot be after the selected end date.');
-      this.startDate = this.endDate;
+      this.toastSrv.warning('Start date cannot be after the selected end date.');
+      this.startDate = null;
       return false;
     }
 
@@ -169,23 +165,23 @@ export class CollectionMonthlyReportComponent implements OnInit {
   // End date validation logic
   private validateEndDate(selectedDate: Date): boolean {
     const today = new Date();
-    today.setHours(23, 59, 59, 999); // Set to end of today for comparison
+    today.setHours(23, 59, 59, 999);
 
-    if (!this.startDate) {
-      this.toastSrv.success('Please select a <b>start date</b> before selecting an end date.');
+    if (selectedDate > today) {
+      this.toastSrv.warning('To date cannot be a future date.');
       this.endDate = null;
       return false;
     }
 
-    if (selectedDate > today) {
-      this.toastSrv.error('<b>End date cannot be a future date.');
-      this.endDate = this.formatDateToString(new Date());
+    if (!this.startDate) {
+      this.toastSrv.warning('Please select a From date before selecting a To date.');
+      this.endDate = null;
       return false;
     }
 
-    // Check if end date is before start date
     if (selectedDate < new Date(this.startDate)) {
-      this.toastSrv.warning('<b>End date</b> cannot be before the start date.');
+      this.toastSrv.warning('The To Date cannot be earlier than or same as the From Date.');
+      this.endDate = null;
       return false;
     }
 
@@ -217,27 +213,27 @@ export class CollectionMonthlyReportComponent implements OnInit {
       const height = 10;
       const borderRadius = 2;
       const labelWidth = width / 3;
-    
+
       // Set border color to #D9D9D9 and draw rounded rectangle
       doc.setDrawColor(217, 217, 217);
       doc.setFillColor(255, 255, 255);
       doc.roundedRect(x, y, width, height, borderRadius, borderRadius, 'S');
-    
+
       // Divider line between label and value
       doc.line(x + labelWidth, y, x + labelWidth, y + height);
-    
+
       // Set text font and color
       doc.setFont('helvetica', 'normal');
       doc.setFontSize(9);
       doc.setTextColor(41, 41, 41);  // #292929
-    
+
       // Add label and value text
       doc.text(label, x + 2, y + 6);
       doc.text(value, x + labelWidth + 2, y + 6);
-    
+
       return y + height;
     };
-    
+
 
     // Add title
     doc.setFont('helvetica', 'bold');
@@ -276,51 +272,51 @@ export class CollectionMonthlyReportComponent implements OnInit {
     // Table
     // Table header
     const colWidths = [contentWidth * 0.3, contentWidth * 0.35, contentWidth * 0.35];
-const startX = margin + 5;
+    const startX = margin + 5;
 
-// Table header background and border
-doc.setFillColor(228, 220, 211); // #E4DCD3
-doc.setDrawColor(130, 130, 130); // #828282
+    // Table header background and border
+    doc.setFillColor(228, 220, 211); // #E4DCD3
+    doc.setDrawColor(130, 130, 130); // #828282
 
-// Header rectangles
-doc.rect(startX, y, colWidths[0], 10, 'FD');
-doc.rect(startX + colWidths[0], y, colWidths[1], 10, 'FD');
-doc.rect(startX + colWidths[0] + colWidths[1], y, colWidths[2], 10, 'FD');
+    // Header rectangles
+    doc.rect(startX, y, colWidths[0], 10, 'FD');
+    doc.rect(startX + colWidths[0], y, colWidths[1], 10, 'FD');
+    doc.rect(startX + colWidths[0] + colWidths[1], y, colWidths[2], 10, 'FD');
 
-// Header text
-doc.setTextColor(0, 0, 0); // #000000
-doc.setFont('helvetica', 'bold');
-doc.setFontSize(10);
-doc.text('Date', startX + colWidths[0] / 2, y + 6, { align: 'center' });
-doc.text('Total Weight', startX + colWidths[0] + colWidths[1] / 2, y + 6, { align: 'center' });
-doc.text('Total Collections', startX + colWidths[0] + colWidths[1] + colWidths[2] / 2, y + 6, { align: 'center' });
+    // Header text
+    doc.setTextColor(0, 0, 0); // #000000
+    doc.setFont('helvetica', 'bold');
+    doc.setFontSize(10);
+    doc.text('Date', startX + colWidths[0] / 2, y + 6, { align: 'center' });
+    doc.text('Total Weight', startX + colWidths[0] + colWidths[1] / 2, y + 6, { align: 'center' });
+    doc.text('Total Collections', startX + colWidths[0] + colWidths[1] + colWidths[2] / 2, y + 6, { align: 'center' });
 
-y += 10;
+    y += 10;
 
-// Table body
-this.farmerDataArr.forEach(row => {
-  doc.setDrawColor(130, 130, 130); // border #828282
-  doc.setFont('helvetica', 'normal'); // not bold
-  doc.setFontSize(9);
-  doc.setTextColor(0, 0, 0); // text color black
+    // Table body
+    this.farmerDataArr.forEach(row => {
+      doc.setDrawColor(130, 130, 130); // border #828282
+      doc.setFont('helvetica', 'normal'); // not bold
+      doc.setFontSize(9);
+      doc.setTextColor(0, 0, 0); // text color black
 
-  // Rectangles for each column
-  doc.rect(startX, y, colWidths[0], 10, 'S');
-  doc.rect(startX + colWidths[0], y, colWidths[1], 10, 'S');
-  doc.rect(startX + colWidths[0] + colWidths[1], y, colWidths[2], 10, 'S');
+      // Rectangles for each column
+      doc.rect(startX, y, colWidths[0], 10, 'S');
+      doc.rect(startX + colWidths[0], y, colWidths[1], 10, 'S');
+      doc.rect(startX + colWidths[0] + colWidths[1], y, colWidths[2], 10, 'S');
 
-  // Format date
-  const formattedDate = row.ReportDate
-    ? new Date(row.ReportDate).toISOString().split('T')[0].replace(/-/g, '-')
-    : '-';
+      // Format date
+      const formattedDate = row.ReportDate
+        ? new Date(row.ReportDate).toISOString().split('T')[0].replace(/-/g, '-')
+        : '-';
 
-  // Body text
-  doc.text(formattedDate, startX + colWidths[0] / 2, y + 6, { align: 'center' });
-  doc.text(String(row.TotalQty) + ' kg', startX + colWidths[0] + colWidths[1] / 2, y + 6, { align: 'center' });
-  doc.text(String(row.TotalFarmers), startX + colWidths[0] + colWidths[1] + colWidths[2] / 2, y + 6, { align: 'center' });
+      // Body text
+      doc.text(formattedDate, startX + colWidths[0] / 2, y + 6, { align: 'center' });
+      doc.text(String(row.TotalQty) + ' kg', startX + colWidths[0] + colWidths[1] / 2, y + 6, { align: 'center' });
+      doc.text(String(row.TotalFarmers), startX + colWidths[0] + colWidths[1] + colWidths[2] / 2, y + 6, { align: 'center' });
 
-  y += 10;
-});
+      y += 10;
+    });
 
     y += 10;
     // Timestamp
@@ -331,8 +327,9 @@ this.farmerDataArr.forEach(row => {
     doc.text(timestamp, margin + 5, y);
 
     // Save the PDF
-    const fileName = `${this.officerDataObj.empId}_from_${this.startDate}_to_${this.endDate}.pdf`;
+    const fileName = `Monthly Report_${this.officerDataObj.empId}_From ${this.startDate} To ${this.endDate}.pdf`;
     doc.save(fileName);
+    this.toastSrv.success('File Downloaded Successfully')
 
   }
 

@@ -12,11 +12,11 @@ import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/
   imports: [CommonModule, FormsModule, NgxPaginationModule, LoadingSpinnerComponent],
   templateUrl: './cch-recevied-complaint.component.html',
   styleUrl: './cch-recevied-complaint.component.css',
-    providers: [DatePipe]
-  
+  providers: [DatePipe]
+
 })
-export class CchReceviedComplaintComponent implements OnInit{
-complainArr!: RecivedComplaint[];
+export class CchReceviedComplaintComponent implements OnInit {
+  complainArr!: RecivedComplaint[];
   replyObj: Reply = new Reply();
   templateData!: TemplateData;
 
@@ -31,7 +31,7 @@ complainArr!: RecivedComplaint[];
   itemsPerPage: number = 10;
   hasData: boolean = true;
 
-  isLoading:boolean = true;
+  isLoading: boolean = true;
 
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Assigned', 'Closed'];
@@ -73,7 +73,6 @@ complainArr!: RecivedComplaint[];
       (res) => {
         this.complainArr = res.items
         this.totalItems = res.total;
-        
         if (res.items.length === 0) {
           this.hasData = false;
         } else {
@@ -107,6 +106,7 @@ complainArr!: RecivedComplaint[];
   }
 
   onSearch() {
+    this.page = 1;
     this.searchText = this.searchText?.trim() || '';
     this.fetchAllreciveComplaint();
 
@@ -119,6 +119,7 @@ complainArr!: RecivedComplaint[];
   }
 
   filterStatus() {
+    this.page = 1;
     this.fetchAllreciveComplaint();
   }
 
@@ -141,7 +142,7 @@ complainArr!: RecivedComplaint[];
     this.fetchAllreciveComplaint(this.page, this.itemsPerPage);
   }
 
-  navigateViewReply(id:number){
+  navigateViewReply(id: number) {
     this.router.navigate([`/cch-complaints/view-recive-reply/${id}`])
   }
 
@@ -162,8 +163,8 @@ class Reply {
   id!: number
   reply!: string
   language!: string
-  firstNameEnglish:string = '';
-  lastNameEnglish:string = '';
+  firstNameEnglish: string = '';
+  lastNameEnglish: string = '';
 }
 
 interface TemplateData {

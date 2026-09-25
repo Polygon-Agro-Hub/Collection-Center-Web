@@ -24,7 +24,7 @@ export class SelectVarietyListComponent implements OnInit {
   totalItems: number = 0;
   itemsPerPage: number = 10;
   isLoading: boolean = true;
-  
+
   isInitialData: boolean = false;
 
   cropCount: number = 0;
@@ -47,11 +47,9 @@ export class SelectVarietyListComponent implements OnInit {
         this.cropsArr = res.items
         this.cropCount = res.items.length;
         this.hasData = this.cropsArr.length > 0 ? true : false;
-        console.log('hasData', this.hasData)
         this.totalItems = res.total;
         this.isLoading = false;
         this.isInitialData = this.cropsArr.length > 0 ? true : false;
-        console.log('isInitialData', this.isInitialData)
       }
     )
   }
@@ -63,15 +61,14 @@ export class SelectVarietyListComponent implements OnInit {
         this.cropsArr = res.items
         this.cropCount = res.items.length;
         this.hasData = this.cropsArr.length > 0 ? true : false;
-        console.log('hasData', this.hasData)
         this.totalItems = res.total;
         this.isLoading = false;
-        console.log('isInitialData', this.isInitialData)
       }
     )
   }
 
   onAdd(isAssing: number, cropId: number) {
+    this.isLoading = true;
     let isSelected = 0;
     if (isAssing === 1) {
       isSelected = 0;
@@ -105,6 +102,7 @@ export class SelectVarietyListComponent implements OnInit {
   }
 
   onSearchVarity() {
+    this.page = 1;
     this.fetchCenterCrops();
   }
 

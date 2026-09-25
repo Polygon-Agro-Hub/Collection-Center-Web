@@ -16,7 +16,7 @@ export class ProfileComponent implements OnInit {
   officerObj: Officer = new Officer();
 
   logingRole: string | null = null;
-  isLoading:boolean = true;
+  isLoading: boolean = true;
 
   phone1: string = '';
   phone2: string = '';
@@ -48,11 +48,10 @@ export class ProfileComponent implements OnInit {
   navigateToTarget() {
     if (this.logingRole === 'Collection Centre Manager') {
       this.router.navigate(['/profile/view-my-target']);
-    } else if (this.logingRole === 'Distribution Centre Manager'){
-      console.log('id', this.officerObj)
+    } else if (this.logingRole === 'Distribution Centre Manager') {
       this.router.navigate(['/profile/view-my-target-dcm', this.officerObj.id]);
     }
-    
+
   }
 }
 

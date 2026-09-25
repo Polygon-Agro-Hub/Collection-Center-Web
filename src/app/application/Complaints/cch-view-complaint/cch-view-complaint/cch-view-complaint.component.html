@@ -40,7 +40,7 @@
             </div> -->
             <div>
                 <h2 class="text-lg font-semibold text-center mb-2 dark:text-white">Tell us the problem</h2>
-                <p class="text-sm text-gray-500 text-center mb-4 dark:text-textDark">
+                <p class=" text-gray-500 text-center mb-4 dark:text-textDark">
                     We will respond to you within 2 days <br />
                     of receiving your message.
                 </p>
@@ -55,17 +55,11 @@
                     <option *ngFor="let item of categoryArr" [value]="item.id">{{item.categoryEnglish}}</option>
                 </select> -->
 
-                <app-searchable-dropdown
-              [items]="categoryDropdownItems"
-              placeholder="Select Category"
-              searchPlaceholder="Search categories..."
-              [(ngModel)]="category"
-              (selectionChange)="onCategorySelectionChange($event)"
-              [clearable]="true"
-              [showSelected]="true"
-              [disabled]="false"
-              class="block w-full mb-4"
-            ></app-searchable-dropdown>
+                <app-searchable-dropdown [items]="categoryDropdownItems" placeholder="Select Category"
+                    searchPlaceholder="Search categories..." [(ngModel)]="category"
+                    (selectionChange)="onCategorySelectionChange($event)" [clearable]="true" [showSelected]="true"
+                    [disabled]="false" borderClass="border-[1.8px] border-[#D9D9D9]"
+                    class="block w-full mb-4"></app-searchable-dropdown>
 
                 <!-- Textarea -->
                 <textarea rows="4" [(ngModel)]="complaint" placeholder="Kindly submit your complaint here"

@@ -13,9 +13,9 @@
                 </p>
             </div>
             <div class="flex flex-row items-center gap-8 ">
-                <i class="fa-solid fa-list text-2xl dark:text-white"></i>
+                <i class="fa-solid fa-list text-[#4A4A4A] text-lg dark:text-white"></i>
 
-                <p class="text-lg dark:text-white">Filter By</p>
+                <p class="text-[#4A4A4A] dark:text-white">Filter By</p>
                 <div class="relative w-36 custom-grade-dropdown-container">
                     <!-- Hidden native select -->
                     <select [(ngModel)]="selectGrade" class="hidden" (change)="filterGrade()">
@@ -51,10 +51,14 @@
 
                     <!-- Custom dropdown options -->
                     <div *ngIf="isGradeDropdownOpen"
-                        class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282]">
-                        <div class="py-1">
-                            <div *ngFor="let option of gradeDropdownOptions" (click)="selectGradeOption(option)"
-                                class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center">
+                        class="absolute z-10 w-full mt-1 bg-white dark:bg-[#292929] rounded-xl shadow-lg border border-[#828282] overflow-hidden">
+                        <div class="">
+                            <div *ngFor="let option of gradeDropdownOptions; let i = index" (click)="selectGradeOption(option)"
+                                class="px-3 py-2 hover:bg-gray-300 dark:text-textDark dark:hover:bg-gray-600 cursor-pointer flex items-center"
+                                [ngClass]="{
+                                    'rounded-t-xl': i === 0,
+                                    'rounded-b-xl': i === gradeDropdownOptions.length - 1
+                                  }">
                                 <span class="flex-grow">{{ option }}</span>
                                 <i
                                     class="fa-solid fa-hand-pointer ml-2 text-[#828282] opacity-0 group-hover:opacity-100"></i>
@@ -64,7 +68,7 @@
                 </div>
 
 
-                <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+                <div class="flex mr-5 items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
                     <input type="text" placeholder="Search by Crop / Variety name.." [(ngModel)]="searchText" (keyup.enter)="onSearch()" (keyup.esc)="offSearch()"
                         class="bg-transparent outline-none w-full text-textLight dark:text-textDark " />
                     <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
@@ -75,7 +79,7 @@
                                 d="M21 21l-6-6m2-5a7 7 0 10-14 0 7 7 0 0014 0z" />
                         </svg>
                     </button>
-                    <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none"
+                    <button *ngIf="searchText" type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none"
                         (click)="offSearch()">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
                             stroke="currentColor">
@@ -105,7 +109,7 @@
                         <th class=" px-6 py-3 text-center text-sm font-medium">Grade</th>
                         <th class=" px-6 py-3 text-center text-sm font-medium">Indicate Price (Rs.)</th>
                         <th class=" px-6 py-3 text-center text-sm font-medium">Average Price (Rs.)</th>
-                        <th class=" px-6 py-3 text-center text-sm font-medium">Price (Rs.)</th>
+                        <th class=" px-6 py-3 text-center text-sm font-medium">Centre Price (Rs.)</th>
                         <th class=" px-6 py-3 text-center text-sm font-medium"></th>
                     </tr>
                 </thead>
@@ -142,7 +146,7 @@
                             </button>
                             <button *ngIf="editingIndex === i" 
                                 [ngClass]="{
-                                'bg-[#415CFF] text-white hover:text-blue-500': !isInvalidInput() && isUpdateAllowed,
+                                'bg-[#415CFF] text-white hover:text-blue-100': !isInvalidInput() && isUpdateAllowed,
                                 'bg-gray-400 text-gray-200 cursor-not-allowed': isInvalidInput() || !isUpdateAllowed
                                 }" 
                                 class="px-2 py-1 rounded-lg" [disabled]="isInvalidInput() || !isUpdateAllowed"

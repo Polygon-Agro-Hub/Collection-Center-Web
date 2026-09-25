@@ -32,7 +32,7 @@ export class DchRecievedComplaintsComponent implements OnInit {
   itemsPerPage: number = 10;
   hasData: boolean = true;
 
-  isLoading:boolean = true;
+  isLoading: boolean = true;
 
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Assigned', 'Closed'];
@@ -58,24 +58,13 @@ export class DchRecievedComplaintsComponent implements OnInit {
     this.fetchAllreciveComplaint();
   }
 
-  // @HostListener('document:click', ['$event'])
-  // onDocumentClick(event: MouseEvent) {
-  //   const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
-  //   const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
-
-  //   if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
-  //     this.isStatusDropdownOpen = false;
-  //   }
-
-  // }
-
   fetchAllreciveComplaint(page: number = 1, limit: number = this.itemsPerPage, status: string = this.selectStatus, search: string = this.searchText) {
     this.isLoading = true;
     this.DistributionComplainSrv.getAllDCHReciveComplaints(page, limit, status, search).subscribe(
       (res) => {
         this.complainArr = res.items
         this.totalItems = res.total;
-        
+
         if (res.items.length === 0) {
           this.hasData = false;
         } else {
@@ -92,17 +81,14 @@ export class DchRecievedComplaintsComponent implements OnInit {
     this.isLoading = true;
     this.DistributionComplainSrv.dchGetComplainById(id).subscribe(
       (res) => {
-        console.log('res', res)
         this.replyObj = res.data;
         this.templateData = res.template
-        console.log('replyObj', this.replyObj)
         this.isLoading = false;
       }
     )
   }
 
   viewReply(id: number) {
-    console.log('fetching')
     this.isReplyView = true;
     this.fetchGetReply(id);
   }
@@ -135,29 +121,23 @@ export class DchRecievedComplaintsComponent implements OnInit {
     this.fetchAllreciveComplaint();
   }
 
-  // cancelStatus() {
-  //   this.selectStatus = '';
-  //   this.fetchAllreciveComplaint();
-  // }
-
-
   onPageChange(event: number) {
     this.page = event;
     this.fetchAllreciveComplaint(this.page, this.itemsPerPage);
   }
 
-  navigateViewReply(id:number){
+  navigateViewReply(id: number) {
     this.router.navigate([`/dch-complaints/view-recieve-complaint/${id}`])
   }
 
   preventLeadingSpace(event: KeyboardEvent) {
-  const input = event.target as HTMLInputElement;
-  
-  // If space is pressed and cursor is at the beginning or the field is empty
-  if (event.key === ' ' && (input.selectionStart === 0 || this.searchText === '')) {
-    event.preventDefault();
+    const input = event.target as HTMLInputElement;
+
+    // If space is pressed and cursor is at the beginning or the field is empty
+    if (event.key === ' ' && (input.selectionStart === 0 || this.searchText === '')) {
+      event.preventDefault();
+    }
   }
-}
 
 }
 
@@ -176,8 +156,8 @@ class Reply {
   id!: number
   reply!: string
   language!: string
-  firstNameEnglish:string = '';
-  lastNameEnglish:string = '';
+  firstNameEnglish: string = '';
+  lastNameEnglish: string = '';
 }
 
 interface TemplateData {

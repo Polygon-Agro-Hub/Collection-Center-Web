@@ -2,7 +2,8 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable, from, switchMap } from 'rxjs';
 import { TokenServiceService } from '../Token/token-service.service';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
+import { JOB_ROLE_TYPES } from '../../../assets/job-roles-data';
 
 @Injectable({
   providedIn: 'root'
@@ -12,8 +13,14 @@ export class DistributedManageOfficersService {
   private apiUrl = `${environment.API_BASE_URL}/distributed`;
   private token!: string | null;
 
+  private readonly driverRoles = [JOB_ROLE_TYPES.lightWeightDriver, JOB_ROLE_TYPES.heavyWeightDriver];
+
   constructor(private http: HttpClient, private tokenSrv: TokenServiceService) {
     this.token = this.tokenSrv.getToken()
+  }
+
+  private isDriverRole(role: string): boolean {
+    return this.driverRoles.includes(role);
   }
 
   getAllOfficers(page: number = 1, limit: number = 10, status: string = '', role: string = '', searchText: string = ''): Observable<any> {
@@ -35,8 +42,6 @@ export class DistributedManageOfficersService {
     if (searchText) {
       url += `&searchText=${searchText}`
     }
-
-
 
     return this.http.get(url, {
       headers,
@@ -108,14 +113,35 @@ export class DistributedManageOfficersService {
     });
   }
 
+
+  getDriverCategory(): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+    return this.http.get(`${this.apiUrl}/manage-officers/get-driver-category`, {
+      headers,
+    });
+  }
+
   getDistributionCenterManagers(id: number | string): Observable<any> {
-    console.log('id', id)
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
       'Content-Type': 'application/json',
     });
 
     return this.http.get(`${this.apiUrl}/manage-officers/get-distribution-center-managers/${id}`, {
+      headers,
+    });
+  }
+
+  getDistributionCenterManagersEdit(id: number | string, officerId: number): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    return this.http.get(`${this.apiUrl}/manage-officers/get-distribution-center-managers-edit/${id}/${officerId}`, {
       headers,
     });
   }
@@ -130,56 +156,34 @@ export class DistributedManageOfficersService {
     });
   }
 
-  createDistributionOfficer(person: any, selectedImage: any, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
-    console.log('person', person)
-    console.log('selectedImage', selectedImage)
-    const formData = new FormData();
-
-    if (person.jobRole === 'Driver') {
-      formData.append('driverData', JSON.stringify(driver));
-      formData.append('licFront', licFront);
-      formData.append('licBack', licBack);
-      formData.append('insFront', insFront);
-      formData.append('insBack', insBack);
-      formData.append('vehiFront', vehiFront);
-      formData.append('vehiBack', vehiBack);
-      formData.append('vehiSideA', vehiSideA);
-      formData.append('vehiSideB', vehiSideB);
-    }
-    
-    formData.append('officerData', JSON.stringify(person));
-    formData.append('file', selectedImage);
+  createDistributionOfficer(person: any, driver: any): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
     });
-    return this.http.post(`${this.apiUrl}/manage-officers/create-officer`, formData, {
+
+    const body: any = { officerData: person };
+    if (this.isDriverRole(person.jobRole)) {
+      body.driverData = driver;
+    }
+
+    return this.http.post(`${this.apiUrl}/manage-officers/create-officer`, body, {
       headers,
     });
   }
 
-  createDistributionOfficerDIO(person: any, selectedImage: any, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
-    console.log('person', person)
-    console.log('selectedImage', selectedImage)
-    const formData = new FormData();
-
-    if (person.jobRole === 'Driver') {
-      formData.append('driverData', JSON.stringify(driver));
-      formData.append('licFront', licFront);
-      formData.append('licBack', licBack);
-      formData.append('insFront', insFront);
-      formData.append('insBack', insBack);
-      formData.append('vehiFront', vehiFront);
-      formData.append('vehiBack', vehiBack);
-      formData.append('vehiSideA', vehiSideA);
-      formData.append('vehiSideB', vehiSideB);
-    }
-    
-    formData.append('officerData', JSON.stringify(person));
-    formData.append('file', selectedImage);
+  createDistributionOfficerDIO(person: any, driver: any): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
     });
-    return this.http.post(`${this.apiUrl}/manage-officers/create-officer-dio`, formData, {
+
+    const body: any = { officerData: person };
+    if (this.isDriverRole(person.jobRole)) {
+      body.driverData = driver;
+    }
+
+    return this.http.post(`${this.apiUrl}/manage-officers/create-officer-dio`, body, {
       headers,
     });
   }
@@ -193,54 +197,83 @@ export class DistributedManageOfficersService {
     });
   }
 
-  updateDistributionOfficer(person: any, id: number, image: any, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
-    const formData = new FormData();
-
-    if (person.jobRole === 'Driver') {
-      formData.append('driverData', JSON.stringify(driver));
-      formData.append('licFront', licFront);
-      formData.append('licBack', licBack);
-      formData.append('insFront', insFront);
-      formData.append('insBack', insBack);
-      formData.append('vehiFront', vehiFront);
-      formData.append('vehiBack', vehiBack);
-      formData.append('vehiSideA', vehiSideA);
-      formData.append('vehiSideB', vehiSideB);
-    }
-
-    formData.append('officerData', JSON.stringify(person));
-    formData.append('file', image);
-
+  updateDistributionOfficer(person: any, id: number, driver: any): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
     });
-    return this.http.put(`${this.apiUrl}/manage-officers/update-officer/${id}`, formData, {
+
+    const body: any = { officerData: person };
+    if (this.isDriverRole(person.jobRole)) {
+      body.driverData = driver;
+    }
+
+    return this.http.put(`${this.apiUrl}/manage-officers/update-officer/${id}`, body, {
       headers,
     });
   }
 
-  updateDistributionOfficerDIO(person: any, id: number, image: any, driver: any, licFront: any, licBack: any, insFront: any, insBack: any, vehiFront: any, vehiBack: any, vehiSideA: any, vehiSideB: any): Observable<any> {
-    const formData = new FormData();
+  updateDistributionOfficerDIO(person: any, id: number, driver: any): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
 
-    if (person.jobRole === 'Driver') {
-      formData.append('driverData', JSON.stringify(driver));
-      formData.append('licFront', licFront);
-      formData.append('licBack', licBack);
-      formData.append('insFront', insFront);
-      formData.append('insBack', insBack);
-      formData.append('vehiFront', vehiFront);
-      formData.append('vehiBack', vehiBack);
-      formData.append('vehiSideA', vehiSideA);
-      formData.append('vehiSideB', vehiSideB);
+    const body: any = { officerData: person };
+    if (this.isDriverRole(person.jobRole)) {
+      body.driverData = driver;
     }
-    
-    formData.append('officerData', JSON.stringify(person));
-    formData.append('file', image);
 
+    return this.http.put(`${this.apiUrl}/manage-officers/update-officer-dio/${id}`, body, {
+      headers,
+    });
+  }
+
+  /**
+   * Uploads a single officer image to the backend, which forwards it to R2
+   * and returns the resulting public URL. `type` must match one of the
+   * backend's IMAGE_TYPE_PREFIXES keys (e.g. 'profile', 'licFront', 'vehSideB').
+   */
+  uploadOfficerImage(file: File, type: string): Observable<{ status: boolean; url: string }> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`,
     });
-    return this.http.put(`${this.apiUrl}/manage-officers/update-officer-dio/${id}`, formData, {
+
+    const formData = new FormData();
+    formData.append('file', file);
+    formData.append('type', type);
+
+    return this.http.post<{ status: boolean; url: string }>(`${this.apiUrl}/manage-officers/upload-image`, formData, {
+      headers,
+    });
+  }
+
+  /**
+   * Checks NIC/email/phone duplicates before any images are uploaded.
+   * Pass `id` for an edit (excludes the officer's own row); omit it for create.
+   */
+  checkDuplicateOfficer(person: any, id?: number, driver?: any): Observable<{ status: boolean; errors?: string[] }> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`,
+      'Content-Type': 'application/json',
+    });
+
+    const body: any = {
+      nic: person.nic,
+      email: person.email,
+      phoneNumber01: person.phoneNumber01,
+      phoneNumber02: person.phoneNumber02,
+    };
+    if (driver) {
+      body.licNo = driver.licNo;
+      body.insNo = driver.insNo;
+      body.vRegNo = driver.vRegNo;
+    }
+    if (id) {
+      body.id = id;
+    }
+
+    return this.http.post<{ status: boolean; errors?: string[] }>(`${this.apiUrl}/manage-officers/check-duplicate`, body, {
       headers,
     });
   }
@@ -253,7 +286,5 @@ export class DistributedManageOfficersService {
     let url = `${this.apiUrl}/manage-officers/reset-password/${id}`;
     return this.http.get<any>(url, { headers });
   }
-
-
 
 }

@@ -143,11 +143,11 @@ export class FarmerReportComponent implements OnInit {
     ): number => {
       let currentY = startY;
       const originalFont = doc.getFont(); // Store original font settings
-    
+
       data.forEach((row, rowIndex) => {
         let maxLines = 1;
         const cellLines: string[][] = [];
-    
+
         // First determine how many lines we need for this row
         row.forEach((cell, colIndex) => {
           const cellContent = cell.toString();
@@ -156,21 +156,21 @@ export class FarmerReportComponent implements OnInit {
           cellLines.push(lines);
           maxLines = Math.max(maxLines, lines.length);
         });
-    
+
         // Calculate total row height
         const rowHeight = maxLines * lineHeight + padding * 2;
-    
+
         // Set text style based on row type
         const isHeader = rowIndex === 0;
         doc.setTextColor(isHeader ? headerTextColor : bodyTextColor);
-        
+
         // Set font to bold for headers
         if (isHeader) {
           doc.setFont(originalFont.fontName, 'bold');
         } else {
           doc.setFont(originalFont.fontName, 'normal');
         }
-    
+
         // Draw each cell
         let currentX = startX;
         row.forEach((cell, colIndex) => {
@@ -181,12 +181,12 @@ export class FarmerReportComponent implements OnInit {
             columnWidths[colIndex],
             rowHeight
           );
-    
+
           // Draw text (centered vertically)
           const lines = cellLines[colIndex];
           const textHeight = lines.length * lineHeight;
           const verticalOffset = (rowHeight - textHeight) / 1.5;
-    
+
           lines.forEach((line, lineIndex) => {
             doc.text(
               line,
@@ -194,13 +194,13 @@ export class FarmerReportComponent implements OnInit {
               currentY + verticalOffset + (lineIndex * lineHeight) + padding
             );
           });
-    
+
           currentX += columnWidths[colIndex];
         });
-    
+
         currentY += rowHeight;
       });
-    
+
       // Reset to original font settings
       doc.setFont(originalFont.fontName, originalFont.fontStyle);
       doc.setTextColor('#000000');
@@ -276,8 +276,8 @@ export class FarmerReportComponent implements OnInit {
       ],
       x,
       y,
-      [40, 50, 30, 30], // Column widths
-      7,  // lineHeight
+      [40, 45, 50, 45], // Column widths
+      5,  // lineHeight
       3,  // padding
       '#434343',  // Header text color (red)
       '#000000'   // Body text color (dark gray)
@@ -286,7 +286,7 @@ export class FarmerReportComponent implements OnInit {
     // Add Crop Details section
     y += yIncrement * 0.25;
     y += yIncrement;
-    doc.setFontSize(11);
+    doc.setFontSize(12);
     doc.text('Crop Details', x, y);
     y += yIncrement;
     doc.setFontSize(9);
@@ -321,9 +321,9 @@ export class FarmerReportComponent implements OnInit {
 
     // Add Full Total
     y += yIncrement
-    doc.setFontSize(10);
+    doc.setFontSize(12);
     doc.setTextColor('#000000');
-    doc.text('Full Total(Rs.) : ' + formatValueForAmounts(this.calculateOverallTotalforReport().toFixed(2)), x, y);
+    doc.text('Full Total (Rs.) : ' + formatValueForAmounts(this.calculateOverallTotalforReport().toFixed(2)), x, y);
     y += yIncrement * 2.5;
 
     // QR Code Image Loading Function
@@ -406,7 +406,7 @@ export class FarmerReportComponent implements OnInit {
     doc.setTextColor('#000000');
 
     doc.setFontSize(12);
-    doc.text('Farmer Qr Code', farmerQrX + 6, labelY);
+    doc.text('Farmer’s QR Code', farmerQrX + 3, labelY);
 
     // Add officer QR code
     if (officerQrImagebase64) {
@@ -419,10 +419,10 @@ export class FarmerReportComponent implements OnInit {
     }
     doc.setTextColor('#000000');
     doc.setFontSize(12);
-    doc.text('Officer Qr Code', officerQrX + 6, labelY);
+    doc.text('Officer’s QR Code', officerQrX + 3, labelY);
 
     // Save the PDF
-    doc.save(`invoice_${this.userObj.invNo}.pdf`);
+    doc.save(`Invoice_${this.userObj.invNo}.pdf`);
     this.isLoading = false;
   }
 

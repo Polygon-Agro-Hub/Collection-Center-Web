@@ -1,0 +1,336 @@
+import { Component, OnInit, ElementRef, HostListener, ViewChild } from '@angular/core';
+import { CommonModule, Location } from '@angular/common';
+import { FormsModule } from '@angular/forms';
+import { ActivatedRoute, Router } from '@angular/router';
+import { DropdownModule } from 'primeng/dropdown';
+import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
+import { DistributionProcurementService } from '../../../services/disribution-procuement-service/distribution-procurement.service';
+
+interface AssignmentRecord {
+  qty: number;
+  centreLabel: string;
+  ceiling: number;
+}
+
+interface ShortageItem {
+  id: number;
+  name: string;
+  image: string;
+  shortageQty: number;
+  assignedQty: number;
+  unit: string;
+  marketPrice: number;
+  assignments: AssignmentRecord[];
+}
+
+interface Centre {
+  id: number;
+  code: string;
+  name: string;
+  label: string;
+}
+
+@Component({
+  selector: 'app-shortage-assign',
+  standalone: true,
+  imports: [CommonModule, FormsModule, DropdownModule, LoadingSpinnerComponent],
+  templateUrl: './shortage-assign.component.html',
+  styleUrl: './shortage-assign.component.css',
+})
+export class ShortageAssignComponent implements OnInit {
+  isLoading = false;
+
+  itemId!: number;
+  selectedItem: ShortageItem | null = null;
+  centres: Centre[] = [];
+  filteredCentres: Centre[] = [];   // new
+  centreSearchTerm: string = '';    // new
+
+  assignQty: number = 0;
+  selectedCentreId: number | null = null;
+  ceilingPercent: number = 1;
+
+  showConfirmModal = false;
+
+  isCentreDropdownOpen = false;
+
+  @ViewChild('centreDropdownRef') centreDropdownRef!: ElementRef;
+
+  constructor(
+    private route: ActivatedRoute,
+    private router: Router,
+    private location: Location,
+    private procumentService: DistributionProcurementService,
+  ) { }
+
+  ngOnInit(): void {
+    this.itemId = Number(this.route.snapshot.paramMap.get('id'));
+
+    if (!this.itemId) {
+      this.router.navigate(['/shortage-today']);
+      return;
+    }
+
+    this.loadShortageDetails();
+  }
+
+  loadShortageDetails(): void {
+    this.isLoading = true;
+
+    this.procumentService.getShortageDetailsById(this.itemId).subscribe({
+      next: (res: any) => {
+        this.centres = (res.centers || []).map((c: any) => ({
+          id: c.id,
+          code: c.regCode,
+          name: c.centerName,
+          label: `${c.regCode} ${c.centerName}`,
+        }));
+        this.filteredCentres = this.centres; // new
+
+        this.selectedItem = {
+          id: this.itemId,
+          name: res.displayName,
+          image: res.image,
+          shortageQty: res.shortageQty,
+          assignedQty: 0,
+          unit: res.unitType || 'kg',
+          marketPrice: res.buyPrice,
+          assignments: [],
+        };
+
+        this.loadAssignedDetails();
+      },
+      error: (err) => {
+        console.error('Error fetching shortage details:', err);
+        this.isLoading = false;
+        this.router.navigate(['/shortage-today']);
+      },
+    });
+  }
+
+  onCentreSearch(): void {
+    const term = this.centreSearchTerm.trim().toLowerCase();
+
+    if (!term) {
+      this.filteredCentres = this.centres;
+      return;
+    }
+
+    this.filteredCentres = this.centres.filter((c) =>
+      c.label.toLowerCase().includes(term)
+    );
+  }
+
+  loadAssignedDetails(): void {
+    this.procumentService.getShortageAssignedDetails(this.itemId).subscribe({
+      next: (res: any[]) => {
+        if (this.selectedItem) {
+          this.selectedItem.assignments = (res || []).map((a: any) => {
+            const centre = this.centres.find((c) => c.id === a.comCenId);
+            return {
+              qty: a.qty,
+              centreLabel: centre
+                ? `${centre.code} ${centre.name}`
+                : `Centre #${a.comCenId}`,
+              ceiling: a.ceilling,
+            };
+          });
+
+          const totalAssigned = this.selectedItem.assignments.reduce(
+            (sum, a) => sum + a.qty,
+            0,
+          );
+          this.selectedItem.assignedQty = totalAssigned;
+        }
+        this.isLoading = false;
+      },
+      error: (err) => {
+        console.error('Error fetching shortage assigned details:', err);
+        this.isLoading = false;
+      },
+    });
+  }
+
+  goBack(): void {
+    this.location.back();
+  }
+
+  get canAssign(): boolean {
+    return (
+      this.assignQty > 0 &&
+      this.assignQty <= (this.selectedItem?.shortageQty ?? 0) &&
+      this.selectedCentreId !== null
+    );
+  }
+
+  get selectedCentre(): Centre | null {
+    return this.centres.find((c) => c.id === this.selectedCentreId) || null;
+  }
+
+  onAssign(): void {
+    if (!this.canAssign) {
+      return;
+    }
+    this.showConfirmModal = true;
+  }
+
+  cancelAssign(): void {
+    this.showConfirmModal = false;
+  }
+
+  confirmAssign(): void {
+    if (!this.selectedItem || !this.selectedCentre) {
+      return;
+    }
+
+    const centre = this.selectedCentre;
+    const qty = this.assignQty;
+    const ceiling = this.ceilingPercent;
+
+    this.isLoading = true;
+
+    this.procumentService
+      .assignShortage(this.itemId, {
+        comCenId: centre.id,
+        qty: qty,
+        ceilling: ceiling,
+      })
+      .subscribe({
+        next: (res: any) => {
+          this.showConfirmModal = false;
+          window.location.reload();
+        },
+        error: (err) => {
+          console.error('Error assigning shortage:', err);
+          this.showConfirmModal = false;
+          this.isLoading = false;
+        },
+      });
+  }
+
+  private resetAssignForm(): void {
+    this.assignQty = 0;
+    this.selectedCentreId = null;
+    this.ceilingPercent = 1;
+  }
+
+  onQtyInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+    let value = input.value;
+
+    // Match up to 2 decimal places, discard anything beyond
+    const match = value.match(/^\d*(\.\d{0,3})?/);
+    const trimmed = match ? match[0] : value;
+
+    if (trimmed !== value) {
+      input.value = trimmed;
+    }
+
+    this.assignQty = trimmed === '' ? 0 : Number(trimmed);
+  }
+
+  blockDecimalKey(event: KeyboardEvent): void {
+    if (event.key === '.' || event.key === ',') {
+      event.preventDefault();
+    }
+  }
+
+  onCeilingInput(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    // Strip anything that isn't a digit
+    let sanitized = input.value.replace(/\D/g, '');
+
+    // Strip leading zeros (e.g. "01" -> "1", "00" -> "")
+    sanitized = sanitized.replace(/^0+(?=\d)/, '');
+
+    // Cap to max 2 digits while typing (prevents "999" -> stops at "99")
+    if (sanitized.length > 2) {
+      sanitized = sanitized.slice(0, 2);
+    }
+
+    if (sanitized === '' || sanitized === '0') {
+      input.value = '';
+      this.ceilingPercent = 0; // treated as "invalid/empty" until blur
+      return;
+    }
+
+    let num = parseInt(sanitized, 10);
+
+    // Clamp to 99 in case of edge cases (e.g. "99" typed then another digit pasted)
+    if (num > 99) {
+      num = 99;
+    }
+
+    input.value = String(num);
+    this.ceilingPercent = num;
+  }
+
+  onCeilingBlur(event: Event): void {
+    const input = event.target as HTMLInputElement;
+
+    // Enforce min 1 once the user is done typing (covers 0, empty, and leading zeros)
+    if (!this.ceilingPercent || this.ceilingPercent < 1) {
+      this.ceilingPercent = 1;
+      input.value = '1';
+    }
+  }
+
+  formatNumber(value: number): string {
+    // Convert to string and remove trailing zeros
+    return value.toString().replace(/\.?0+$/, '');
+  }
+
+  toggleCentreDropdown(): void {
+    this.isCentreDropdownOpen = !this.isCentreDropdownOpen;
+    if (this.isCentreDropdownOpen) {
+      this.centreSearchTerm = '';
+      this.filteredCentres = this.centres;
+    }
+  }
+
+  selectCentreOption(option: Centre): void {
+    this.selectedCentreId = option.id;
+    this.isCentreDropdownOpen = false;
+    this.centreSearchTerm = '';
+    this.filteredCentres = this.centres;
+  }
+
+  @HostListener('document:click', ['$event'])
+  onDocumentClick(event: MouseEvent): void {
+    if (
+      this.isCentreDropdownOpen &&
+      this.centreDropdownRef &&
+      !this.centreDropdownRef.nativeElement.contains(event.target)
+    ) {
+      this.isCentreDropdownOpen = false;
+    }
+  }
+
+  blockInvalidKey(event: KeyboardEvent): void {
+    // Keys that must always be allowed through (navigation/editing)
+    const allowedKeys = [
+      'Backspace', 'Delete', 'Tab', 'Escape', 'Enter',
+      'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', 'Home', 'End',
+    ];
+
+    if (allowedKeys.includes(event.key)) {
+      return;
+    }
+
+    // Allow copy/paste/select-all/cut shortcuts (Ctrl/Cmd + A/C/V/X)
+    if ((event.ctrlKey || event.metaKey) && ['a', 'c', 'v', 'x'].includes(event.key.toLowerCase())) {
+      return;
+    }
+
+    // Only allow digits 0-9; block everything else (e, E, +, -, ., ,, etc.)
+    if (!/^[0-9]$/.test(event.key)) {
+      event.preventDefault();
+    }
+  }
+
+  goDashboard() {
+    this.router.navigate([`/distribution-procurement`])
+  }
+
+}

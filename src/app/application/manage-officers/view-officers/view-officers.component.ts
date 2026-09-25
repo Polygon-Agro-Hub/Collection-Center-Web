@@ -10,6 +10,7 @@ import { ToastAlertService } from '../../../services/toast-alert/toast-alert.ser
 import { TokenServiceService } from '../../../services/Token/token-service.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
+import { JOB_ROLE_TYPES, JobRoleTypes } from './../../../../assets/job-roles-data';
 
 @Component({
   selector: 'app-view-officers',
@@ -39,6 +40,8 @@ export class ViewOfficersComponent implements OnInit {
 
   isStatusDropdownOpen = false;
   statusDropdownOptions = ['Approved', 'Not Approved', 'Rejected'];
+
+  jobRoleTypes: JobRoleTypes = JOB_ROLE_TYPES;
 
   toggleStatusDropdown() {
     this.isStatusDropdownOpen = !this.isStatusDropdownOpen;
@@ -106,10 +109,12 @@ export class ViewOfficersComponent implements OnInit {
   // 5. Update your methods
   onCenterSelectionChange(selectedValue: string) {
     this.selectCenters = selectedValue || '';
+    this.page = 1;
     this.applyCompanyFilters();
   }
 
   applyCompanyFilters() {
+    this.page = 1;
     this.fetchByRole();
   }
 
@@ -175,8 +180,6 @@ export class ViewOfficersComponent implements OnInit {
       (res) => {
         this.OfficerArr = res.items
         this.totalItems = res.total
-
-        console.log('total', this.totalItems)
         if (res.items.length === 0) {
           this.hasData = false;
         } else {
@@ -222,33 +225,33 @@ export class ViewOfficersComponent implements OnInit {
         popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
         title: 'dark:text-white',
         icon: '!border-gray-200 dark:!border-gray-500',
-        confirmButton: 'hover:!bg-[#3085d6] dark:hover:!bg[#3085d6]', 
+        confirmButton: '',
         cancelButton: '',
         actions: 'gap-2'
       }
     })
-    .then((result) => {
-      if (result.isConfirmed) {
-        this.isLoading = true;
-        this.ManageOficerSrv.deleteOfficer(id).subscribe(
-          (data) => {
-            if (data.status) {
-              this.toastSrv.success('The Officer has been deleted.')
-              this.fetchByRole()
-              this.isLoading = false;
-            } else {
+      .then((result) => {
+        if (result.isConfirmed) {
+          this.isLoading = true;
+          this.ManageOficerSrv.deleteOfficer(id).subscribe(
+            (data) => {
+              if (data.status) {
+                this.toastSrv.success('Officer deleted successfully.')
+                this.fetchByRole()
+                this.isLoading = false;
+              } else {
+                this.isLoading = false;
+                this.toastSrv.error('There was an error deleting the ofiicer')
+              }
+            },
+            (error) => {
+              console.error('Error deleting news:', error);
               this.isLoading = false;
               this.toastSrv.error('There was an error deleting the ofiicer')
             }
-          },
-          (error) => {
-            console.error('Error deleting news:', error);
-            this.isLoading = false;
-            this.toastSrv.error('There was an error deleting the ofiicer')
-          }
-        );
-      }
-    });
+          );
+        }
+      });
   }
 
 
@@ -257,30 +260,30 @@ export class ViewOfficersComponent implements OnInit {
 
     let message = '';
 
-if (item.status === 'Approved') {
-  message = `Are you sure you want to reject this ${item.jobRole} ?`;
-} 
-else if (item.status === 'Rejected') {
-  message = `Are you sure you want to approve this ${item.jobRole} ?`;
-} 
-else if (item.status === 'Not Approved') {
-  message = `Are you sure you want to approve or reject this ${item.jobRole} ?`;
-} 
-else {
-  message = ``;
-}
+    if (item.status === 'Approved') {
+      message = `Are you sure you want to reject this ${item.jobRole} ?`;
+    }
+    else if (item.status === 'Rejected') {
+      message = `Are you sure you want to approve this ${item.jobRole} ?`;
+    }
+    else if (item.status === 'Not Approved') {
+      message = `Are you sure you want to approve or reject this ${item.jobRole} ?`;
+    }
+    else {
+      message = ``;
+    }
 
-const rejectButton = (item.status === 'Approved' || item.status === 'Not Approved')
-  ? `<button id="rejectButton" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg mr-2">
+    const rejectButton = (item.status === 'Approved' || item.status === 'Not Approved')
+      ? `<button id="rejectButton" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg mr-2 focus:outline-none">
        Reject
      </button>`
-  : '';
+      : '';
 
-const approveButton = (item.status === 'Rejected' || item.status === 'Not Approved')
-  ? `<button id="approveButton" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
+    const approveButton = (item.status === 'Rejected' || item.status === 'Not Approved')
+      ? `<button id="approveButton" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg focus:outline-none">
        Approve
      </button>`
-  : '';
+      : '';
 
     const tableHtml = `
     <div class="container mx-auto">
@@ -331,12 +334,12 @@ const approveButton = (item.status === 'Rejected' || item.status === 'Not Approv
         popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
         title: 'dark:text-white',
       },
-      
+
       didOpen: () => {
         Swal.showLoading();
       }
     });
-
+    swalInstance.close();
     this.ManageOficerSrv.ChangeStatus(id, status).subscribe({
       next: (res) => {
         swalInstance.close();
@@ -344,11 +347,11 @@ const approveButton = (item.status === 'Rejected' || item.status === 'Not Approv
           this.isLoading = false;
           swalInstance.close();
           const action = status === 'Approved' ? 'approved' : 'rejected';
-          this.toastSrv.success(`The collection officer was ${action} successfully.`);
+          this.toastSrv.success(`Officer ${action} successfully.`);
           this.fetchByRole();
         } else {
           this.isLoading = false;
-          this.toastSrv.error(`Failed to ${status.toLowerCase()} the collection officer.`);
+          this.toastSrv.error(`Failed to ${status.toLowerCase()} the Officer.`);
         }
       },
       error: (err) => {
@@ -370,20 +373,12 @@ const approveButton = (item.status === 'Rejected' || item.status === 'Not Approv
 
   // Keep your existing methods
   applyStatusFilters() {
+    this.page = 1;
     this.fetchByRole();
   }
 
-  // applyStatusFilters() {
-  //   this.fetchByRole();
-  // }
-
-  // clearStatusFilter() {
-  //   this.selectStatus = ''
-  //   this.fetchByRole();
-  // }
-
   applyRoleFilters() {
-    console.log('selectRole', this.selectRole)
+    this.page = 1;
     this.fetchByRole();
   }
 
@@ -432,7 +427,7 @@ const approveButton = (item.status === 'Rejected' || item.status === 'Not Approv
 
   get selectedCenterDisplay(): string {
     if (!this.selectCenters) return 'Centre';
-    
+
     const selectedCenter = this.centerArr.find(center => center.id.toString() === this.selectCenters);
     return selectedCenter ? `${selectedCenter.regCode} - ${selectedCenter.centerName}` : 'Centre';
   }

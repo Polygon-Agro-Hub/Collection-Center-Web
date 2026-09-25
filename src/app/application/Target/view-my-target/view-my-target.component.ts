@@ -26,6 +26,20 @@ export class ViewMyTargetComponent implements OnInit {
 
   isDownloading = false;
 
+  iStatusDropdownOpen = false;
+  statusDropdownOptions = ['Pending', 'Completed', 'Exceeded', 'Extra'];
+
+  toggleStatusDropdown() {
+    this.iStatusDropdownOpen = !this.iStatusDropdownOpen;
+  }
+
+  selectStatusOption(option: string) {
+    this.selectStatus = option;
+    this.iStatusDropdownOpen = false;
+    this.filterStatus();
+  }
+
+
   constructor(
     private router: Router,
     private TargetSrv: TargetService,
@@ -67,7 +81,7 @@ export class ViewMyTargetComponent implements OnInit {
           const url = window.URL.createObjectURL(blob);
           const a = document.createElement("a");
           a.href = url;
-          a.download = `Officer Target Report_${this.officerDataArr[0].empId  }.xlsx`;
+          a.download = `Officer Target Report_${this.officerDataArr[0].empId}.xlsx`;
           a.click();
           window.URL.revokeObjectURL(url);
 
@@ -101,9 +115,12 @@ export class ViewMyTargetComponent implements OnInit {
     this.router.navigate([`/target/edit-my-target/${id}`]);
   }
 
-  cancelStatus() {
-    this.selectStatus = '';
-    this.fetchOfficerTarget(this.selectStatus, this.searchText);
+  cancelStatus(event?: MouseEvent) {
+    if (event) {
+      event.stopPropagation(); // Prevent triggering the dropdown toggle
+    }
+    this.selectStatus = ''
+    this.fetchOfficerTarget(this.selectStatus, this.searchText)
   }
 
   filterStatus() {

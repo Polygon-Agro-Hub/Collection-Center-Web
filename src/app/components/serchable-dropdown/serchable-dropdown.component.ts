@@ -5,6 +5,7 @@ interface DropdownItem {
   value: any;
   label: string;
   disabled?: boolean;
+  iconClass?: string;
 }
 
 @Component({
@@ -31,6 +32,11 @@ export class SerchableDropdownComponent {
   @Output() selectionChange = new EventEmitter<any>();
   @Input() customStyles: string = '';
   @Input() searchInputClass: string = '';
+  @Input() dropdownMenuClass: string = '';
+  @Input() dropdownTriggerClass: string | string[] | { [klass: string]: boolean } = '';
+  @Input() showClearIcon: boolean = true;  // existing behavior x icon upon selected
+  @Input() borderClass: string = 'border-[1.8px] border-[#828282]';
+  @Input() placeholderClass: string = 'text-[#5C5C5C] dark:text-textDark italic';
 
   isOpen: boolean = false;
   searchTerm: string = '';

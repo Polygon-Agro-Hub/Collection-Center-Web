@@ -1,5 +1,5 @@
 import { CommonModule, DatePipe } from '@angular/common';
-import { Component, HostListener, OnInit, ViewChild  } from '@angular/core';
+import { Component, HostListener, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { ReportServiceService } from '../../../services/Report-service/report-service.service';
@@ -23,7 +23,7 @@ import { ProcurementsService } from '../../../services/Procurement-service/procu
     NgxPaginationModule,
     FormsModule,
     CustomDatepickerComponent
-],
+  ],
   templateUrl: './redefine-sent-to-dispatch-orders.component.html',
   styleUrl: './redefine-sent-to-dispatch-orders.component.css'
 })
@@ -34,7 +34,7 @@ export class RedefineSentToDispatchOrdersComponent implements OnInit {
   itemsPerPage: number = 10;
   totalItems: number = 0;
 
-  dateFilter:string = '';
+  dateFilter: string = '';
 
   statusFilter: string = '';
   // dateFilter: Date | null = null; // Changed to Date type
@@ -77,9 +77,7 @@ export class RedefineSentToDispatchOrdersComponent implements OnInit {
       )
       .subscribe({
         next: (response) => {
-          console.log('API Response:', response);
           this.hasData = response.total === 0 ? false : true;
-
           if (response && response.data) {
             this.orders = response.data
             this.totalItems = response.total || 0;
@@ -87,7 +85,6 @@ export class RedefineSentToDispatchOrdersComponent implements OnInit {
             this.orders = response.data
             this.totalItems = this.orders.length;
           }
-          console.log('Orders:', this.orders.length, 'Total:', this.totalItems);
           this.isLoading = false;
         },
         error: (error) => {
@@ -99,19 +96,10 @@ export class RedefineSentToDispatchOrdersComponent implements OnInit {
       });
   }
 
-  // Helper method to format Date to YYYY-MM-DD string
-  // private formatDate(date: Date): string {
-  //   const year = date.getFullYear();
-  //   const month = (date.getMonth() + 1).toString().padStart(2, '0');
-  //   const day = date.getDate().toString().padStart(2, '0');
-  //   return `${year}-${month}-${day}`;
-  // }
-
   onDateChange(newDate: string | Date | null) {
-    console.log('newDate', newDate);
-  
+
     let dateString = '';
-  
+
     if (newDate instanceof Date) {
       // Convert Date object to "YYYY-MM-DD" format
       dateString = newDate.toISOString().split('T')[0];
@@ -119,8 +107,9 @@ export class RedefineSentToDispatchOrdersComponent implements OnInit {
       // Already a string
       dateString = newDate;
     }
-  
+
     this.dateFilter = dateString; // ✅ assign as string
+    this.page = 1;
     this.fetchOrders();
   }
 
@@ -170,6 +159,28 @@ export class RedefineSentToDispatchOrdersComponent implements OnInit {
       this.searchTerm = this.searchTerm.trimStart();
     }
   }
+
+  getDatePart(dateStr: string): string {
+    const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
+
+    const date = dateStr.split(' ')[0];
+    const [y, m, d] = date.split('-');
+
+    return `${d} ${months[+m - 1]}, ${y}`;
+  }
+
+  getTimePart(dateStr: string): string {
+    const time = dateStr.split(' ')[1];
+
+    let [hh, mm] = time.split(':');
+
+    let hour = +hh;
+    const ampm = hour >= 12 ? 'PM' : 'AM';
+    hour = hour % 12 || 12;
+
+    return `${hour.toString().padStart(2, '0')}:${mm} ${ampm}`;
+  }
+
 }
 
 class ExcludeItems {

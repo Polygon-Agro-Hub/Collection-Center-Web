@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, HostListener, OnInit } from '@angular/core';
+import { Component, HostListener, OnInit, ElementRef, ViewChild } from '@angular/core';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { ManageOfficersService } from '../../../services/manage-officers-service/manage-officers.service';
@@ -11,6 +11,7 @@ import { HttpClient } from '@angular/common/http';
 import { Location } from '@angular/common';
 import { Country, COUNTRIES } from '../../../../assets/country-data';
 import { SerchableDropdownComponent } from '../../../components/serchable-dropdown/serchable-dropdown.component';
+import { JOB_ROLE_TYPES, JobRoleTypes } from './../../../../assets/job-roles-data';
 
 @Component({
   selector: 'app-edit-officer',
@@ -20,6 +21,7 @@ import { SerchableDropdownComponent } from '../../../components/serchable-dropdo
   styleUrl: './edit-officer.component.css'
 })
 export class EditOfficerComponent implements OnInit {
+  @ViewChild('scrollTarget') scrollTarget!: ElementRef;
   personalData: Personal = new Personal();
   centerArr: Center[] = [];
   managerArr: Manager[] = [];
@@ -76,9 +78,9 @@ export class EditOfficerComponent implements OnInit {
 
   allowedPrefixes = ['70', '71', '72', '75', '76', '77', '78'];
   isPhoneInvalidMap: { [key: string]: boolean } = {
-  phone01: false,
-  phone02: false,
-};
+    phone01: false,
+    phone02: false,
+  };
 
   filteredCenterArr: Center[] = [];
   filteredManagerArr: Manager[] = [];
@@ -129,7 +131,7 @@ export class EditOfficerComponent implements OnInit {
   vehicleSideBImagePreview: string | ArrayBuffer | null = null;
   vehicleSideBImageFile: File | null = null;
 
-
+  jobRoleTypes: JobRoleTypes = JOB_ROLE_TYPES;
 
   constructor(
     private ManageOficerSrv: ManageOfficersService,
@@ -179,7 +181,7 @@ export class EditOfficerComponent implements OnInit {
   districtItems = this.districts.map(d => ({ value: d.name, label: d.name }));
 
   VehicleTypes = [
-    { name: 'Mahindra Bollero', capacity: 272},
+    { name: 'Mahindra Bollero', capacity: 272 },
     { name: 'Dimo Batta', capacity: 750 },
     { name: 'Three Wheeler', capacity: 100 },
   ]
@@ -203,7 +205,7 @@ export class EditOfficerComponent implements OnInit {
   // onClick(targetElement: HTMLElement) {
   //   const insideDropdown1 = targetElement.closest('.dropdown-wrapper-1');
   //   const insideDropdown2 = targetElement.closest('.dropdown-wrapper-2');
-  
+
   //   // Close dropdowns only if click is outside their wrapper
   //   if (!insideDropdown1) {
   //     this.dropdownOpen = false;
@@ -217,14 +219,14 @@ export class EditOfficerComponent implements OnInit {
     if (this.logingRole === 'Collection Centre Manager') {
       // Only allow Collection Officer
       this.jobRoles = ['Collection Officer'];
-    } 
+    }
     else if (this.logingRole === 'Collection Centre Head') {
       // Allow all roles
       this.jobRoles = [
         'Collection Centre Manager',
         'Collection Officer'
       ];
-    } 
+    }
     else {
       // Default (if needed)
       this.jobRoles = [];
@@ -233,57 +235,50 @@ export class EditOfficerComponent implements OnInit {
 
   toggleJobRoleDropdown() {
     this.isJobRoleOpen = !this.isJobRoleOpen;
-
     this.jobRoleInputTouched = true;
-
-    console.log('jobRoleInputTouched', this.jobRoleInputTouched)
   }
 
   getJobRole(role: string) {
     this.personalData.jobRole = role;
     this.isJobRoleOpen = false;
     this.jobRoleInputTouched = true;
-
-    console.log('jobRoleInputTouched', this.jobRoleInputTouched)
   }
 
   onSearchInput(event: Event) {
     const input = event.target as HTMLInputElement;
     const value = input.value.toLowerCase();
-    console.log('value', value);
-  
-    this.filteredCenterArr = this.centerArr.filter(c =>
-      (c.centerName || '').toLowerCase().includes(value)
+    this.filteredCenterArr = this.centerArr.filter(c => {
+      const combined1 = `${c.regCode}-${c.centerName}`.toLowerCase();
+      const combined2 = `${c.regCode} - ${c.centerName}`.toLowerCase();
+      return combined1.includes(value) || combined2.includes(value);
+    }
     );
-  
-    console.log('filtered centers', this.filteredCenterArr);
-  
+
   }
-  
-  
-  
+
+
+
   toggleDropdown() {
     this.centreDropdownOpen = !this.centreDropdownOpen;
   }
-  
+
   toggleManagerDropdown() {
     this.managerDropdownOpen = !this.managerDropdownOpen;
   }
-  
+
   selectCenter(item: Center) {
-    console.log('center selected');
-  
+
     this.personalData.centerId = item.id;
-    this.selectedCenterName = item.centerName;
+    this.selectedCenterName = item.regCode + ' - ' + item.centerName;
     this.centreDropdownOpen = false; // close dropdown
-  
+
     // Reset search input and filtered array
     this.filteredCenterArr = [...this.centerArr]; // show full list next time
     const searchInput = document.querySelector<HTMLInputElement>('.dropdown-search-input');
     if (searchInput) {
       searchInput.value = '';
     }
-  
+
     this.changeCenter();
   }
 
@@ -291,41 +286,34 @@ export class EditOfficerComponent implements OnInit {
     this.personalData.jobRole = ''
     this.personalData.irmId = null
     this.selectedManager = ''
-   this.getAllManagers()
- }
-  
+    this.getAllManagers()
+  }
+
   onManagerSearchInput(event: Event) {
     const input = event.target as HTMLInputElement;
     const value = input.value.toLowerCase().trim(); // remove leading/trailing spaces
-    console.log('search value', value);
-  
+
     this.filteredManagerArr = this.managerArr.filter(m => {
-      const fullName = `${m.firstNameEnglish} ${m.lastNameEnglish}`.toLowerCase();
-      return fullName.includes(value);
-    });
-  
-    console.log('filtered managers', this.filteredManagerArr);
+      const fullName = `${m.empId}-${m.firstNameEnglish} ${m.lastNameEnglish}`.toLowerCase();
+      const fullName2 = `${m.empId} - ${m.firstNameEnglish} ${m.lastNameEnglish}`.toLowerCase();
+      return fullName.includes(value) || fullName2.includes(value);
+    }
+    );
   }
-  
-  
+
+
   selectManager(item: Manager) {
-    console.log('Manager selected');
-  
     this.personalData.irmId = item.id;
-    this.selectedManager = item.firstNameEnglish + ' ' + item.lastNameEnglish;
-    console.log('name', item.firstNameEnglish )
+    this.selectedManager = item.empId + ' - ' + item.firstNameEnglish + ' ' + item.lastNameEnglish;
     this.managerDropdownOpen = false; // close dropdown
-  
+
     // Reset search input and filtered array
     this.filteredManagerArr = [...this.managerArr]; // show full list next time
     const searchInput = document.querySelector<HTMLInputElement>('.dropdown-manager-search-input');
     if (searchInput) {
       searchInput.value = '';
     }
-  
-    console.log('id', this.personalData.irmId)
-  
-    // this.changeCenter();
+
   }
 
   fetchOffierById(id: number) {
@@ -336,13 +324,13 @@ export class EditOfficerComponent implements OnInit {
         this.personalData = res.officerData.collectionOfficer;
         this.personalData.previousJobRole = res.officerData.collectionOfficer.jobRole;
         this.personalData.conformAccNumber = this.personalData.accNumber
-        
-        console.log(this.personalData);
         this.ExistirmId = res.officerData.irmId;
 
-        this.selectedCenterName = res.officerData.collectionOfficer.centerName
+        this.selectedCenterName = (res.officerData.collectionOfficer.centerId && res.officerData.collectionOfficer.regCode && res.officerData.collectionOfficer.centerName)
+          ? res.officerData.collectionOfficer.regCode + ' - ' + res.officerData.collectionOfficer.centerName
+          : ''
         if (res.officerData.collectionOfficer.irmId) {
-          this.selectedManager = res.managerName.firstNameEnglish + ' ' + res.managerName.lastNameEnglish
+          this.selectedManager = res.managerName.empId + ' - ' + res.managerName.firstNameEnglish + ' ' + res.managerName.lastNameEnglish
         } else {
           this.selectedManager = ''
         }
@@ -387,17 +375,15 @@ export class EditOfficerComponent implements OnInit {
   selectCountry1(country: Country) {
     this.selectedCountry1 = country;
     this.personalData.phoneCode01 = country.dialCode; // update ngModel
-    console.log('sdsf', this.personalData.phoneCode01)
     this.dropdownOpen = false;
   }
 
   selectCountry2(country: Country) {
     this.selectedCountry2 = country;
     this.personalData.phoneCode01 = country.dialCode; // update ngModel
-    console.log('sdsf', this.personalData.phoneCode01)
     this.dropdownOpen2 = false;
   }
-  
+
   // get flag
   getFlagUrl(code: string): string {
     return `https://flagcdn.com/24x18/${code}.png`;
@@ -408,27 +394,17 @@ export class EditOfficerComponent implements OnInit {
       this.isPhoneInvalidMap[key] = false;
       return;
     }
-  
+
     const firstDigit = input.charAt(0);
     const prefix = input.substring(0, 2);
     const isValidPrefix = this.allowedPrefixes.includes(prefix);
     const isValidLength = input.length === 9;
-  
-    if (firstDigit !== '7') {
-      this.isPhoneInvalidMap[key] = true;
-      return;
-    }
-  
-    if (!isValidPrefix && input.length >= 2) {
-      this.isPhoneInvalidMap[key] = true;
-      return;
-    }
-  
+
     if (input.length === 9 && isValidPrefix) {
       this.isPhoneInvalidMap[key] = false;
       return;
     }
-  
+
     this.isPhoneInvalidMap[key] = false;
   }
 
@@ -462,15 +438,18 @@ export class EditOfficerComponent implements OnInit {
 
   validateLanguages() {
     this.languagesRequired = !this.personalData.languages || this.personalData.languages.trim() === '';
-    console.log('language', this.languagesRequired)
   }
 
 
   nextForm(page: 'pageOne' | 'pageTwo' | 'pageThree') {
-
     this.selectedPage = page;
+    this.scrollToTop();
+  }
 
-
+  scrollToTop() {
+    if (this.scrollTarget) {
+      this.scrollTarget.nativeElement.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
   }
 
   triggerFileInput(event: Event): void {
@@ -485,14 +464,34 @@ export class EditOfficerComponent implements OnInit {
     const file: File = event.target.files[0];
 
     if (file) {
-      if (file.size > 5000000) {
-        this.toastSrv.error('File size should not exceed 5MB');
+
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+      const allowedExtensions = ['jpg', 'jpeg', 'png'];
+
+      if (!fileExtension || !allowedExtensions.includes(fileExtension)) {
+        this.toastSrv.error('Only JPEG, JPG and PNG files are allowed');
+        this.selectedFile = null;
+        this.selectedFileName = '';
+        event.target.value = '';
         return;
       }
 
+
+      if (file.size > 3 * 1024 * 1024) {
+        this.toastSrv.error('File size should not exceed 3MB');
+        this.selectedFile = null;
+        this.selectedFileName = '';
+        event.target.value = '';
+        return;
+      }
+
+      // Check MIME type (additional safety)
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
         this.toastSrv.error('Only JPEG, JPG and PNG files are allowed');
+        this.selectedFile = null;
+        this.selectedFileName = '';
+        event.target.value = '';
         return;
       }
 
@@ -518,9 +517,6 @@ export class EditOfficerComponent implements OnInit {
 
 
   onSubmit() {
-
-    console.log('personal data', this.personalData)
-
     this.personalData.empId = this.upateEmpID;
 
     if (this.personalData.accNumber !== this.personalData.conformAccNumber) {
@@ -529,7 +525,7 @@ export class EditOfficerComponent implements OnInit {
 
     if (this.personalData.phoneNumber01 == this.personalData.phoneNumber02) {
       this.toastSrv.warning('Pleace enter 2 different Mobile numbers')
-   }
+    }
 
     else if (!this.personalData.accHolderName || !this.personalData.accNumber || !this.personalData.bankName || !this.personalData.branchName || !this.personalData.city || !this.personalData.country || !this.personalData.district || !this.personalData.houseNumber) {
       this.toastSrv.warning('Pleace fill all required feilds')
@@ -538,7 +534,7 @@ export class EditOfficerComponent implements OnInit {
       this.isLoading = true;
 
       if (this.logingRole === 'Collection Centre Manager') {
-        this.ManageOficerSrv.updateCollectiveOfficer(this.personalData, this.editOfficerId, this.selectedImage).subscribe(
+        this.ManageOficerSrv.updateCollectiveOfficer(this.personalData, this.editOfficerId, this.selectedFile).subscribe(
           (res: any) => {
             this.officerId = res.officerId;
             this.isLoading = false;
@@ -602,7 +598,7 @@ export class EditOfficerComponent implements OnInit {
           this.personalData.irmId = null;
         }
 
-        if (this.personalData.jobRole === 'Driver') {
+        if (this.personalData.jobRole === this.jobRoleTypes.lightWeightDriver || this.personalData.jobRole === this.jobRoleTypes.heavyWeightDriver) {
 
           this.driverObj.licFrontName = this.licenseFrontImageFileName
           this.driverObj.licBackName = this.licenseBackImageFileName
@@ -614,7 +610,7 @@ export class EditOfficerComponent implements OnInit {
           this.driverObj.vSideBName = this.vehicleSideBImageFileName
         }
 
-        this.ManageOficerSrv.CCHupdateCollectiveOfficer(this.personalData, this.editOfficerId, this.selectedImage, this.driverObj, this.licenseFrontImagePreview, this.licenseBackImagePreview, this.insurenceFrontImagePreview, this.insurenceBackImagePreview, this.vehicleFrontImagePreview, this.vehicleBackImagePreview, this.vehicleSideAImagePreview, this.vehicleSideBImagePreview).subscribe(
+        this.ManageOficerSrv.CCHupdateCollectiveOfficer(this.personalData, this.editOfficerId, this.selectedFile, this.driverObj, this.licenseFrontImagePreview, this.licenseBackImagePreview, this.insurenceFrontImagePreview, this.insurenceBackImagePreview, this.vehicleFrontImagePreview, this.vehicleBackImagePreview, this.vehicleSideAImagePreview, this.vehicleSideBImagePreview).subscribe(
           (res: any) => {
             this.isLoading = false;
 
@@ -676,8 +672,6 @@ export class EditOfficerComponent implements OnInit {
         );
       }
 
-
-
     }
   }
 
@@ -710,19 +704,16 @@ export class EditOfficerComponent implements OnInit {
       (res) => {
         this.centerArr = res
         this.filteredCenterArr = [...this.centerArr];
-        console.log('centerArr', this.centerArr)
-
       }
     )
   }
 
   getAllManagers() {
-    this.ManageOficerSrv.getCenterManagers(this.personalData.centerId).subscribe(
+    this.ManageOficerSrv.getCenterManagersForEdit(this.personalData.centerId, Number(this.personalData.cofId)).subscribe(
       (res) => {
 
         this.managerArr = res
         this.filteredManagerArr = [...this.managerArr];
-        console.log('managerArr', this.managerArr)
 
       }
     )
@@ -755,7 +746,7 @@ export class EditOfficerComponent implements OnInit {
       );
     });
   }
-  
+
   loadBranches(): Promise<void> {
     return new Promise((resolve, reject) => {
       this.http.get<BranchesData>('assets/json/branches.json').subscribe(
@@ -773,20 +764,20 @@ export class EditOfficerComponent implements OnInit {
       );
     });
   }
-  
+
   matchExistingBankToDropdown() {
     // Only proceed if both banks and branches are loaded and we have existing data
     if (this.bankItems.length > 0 && Object.keys(this.allBranches).length > 0 &&
       this.personalData && this.personalData.bankName) {
-  
+
       // Find the bank ID that matches the existing bank name
       const matchedBank = this.bankItems.find(bank => bank.label === this.personalData.bankName);
-  
+
       if (matchedBank) {
         this.selectedBankId = matchedBank.value;
         // Load branches for this bank
         this.updateBranchItems(this.selectedBankId);
-  
+
         // If we also have a branch name, try to match it
         if (this.personalData.branchName) {
           const matchedBranch = this.branchItems.find(branch => branch.label === this.personalData.branchName);
@@ -797,7 +788,7 @@ export class EditOfficerComponent implements OnInit {
       }
     }
   }
-  
+
   updateBranchItems(bankId: number | null) {
     if (bankId) {
       this.branches = this.allBranches[bankId.toString()] || [];
@@ -810,25 +801,25 @@ export class EditOfficerComponent implements OnInit {
       this.branchItems = [];
     }
   }
-  
+
   onBankChange(bankId: number | null) {
     if (bankId) {
       this.selectedBankId = bankId;
-  
+
       // Update branches
       this.branches = this.allBranches[bankId.toString()] || [];
       this.branchItems = this.branches.map(br => ({
         value: br.ID,
         label: br.name
       }));
-  
+
       // Update personalData
       const selectedBank = this.banks.find(bank => bank.ID === bankId);
       if (selectedBank) {
         this.personalData.bankName = selectedBank.name;
         this.invalidFields.delete('bankName');
       }
-  
+
       // Reset branch selection
       this.selectedBranchId = null;
       this.personalData.branchName = '';
@@ -838,10 +829,10 @@ export class EditOfficerComponent implements OnInit {
       this.personalData.bankName = '';
     }
   }
-  
+
   onBranchChange(selectedBranchId: number | null) {
     this.selectedBranchId = selectedBranchId;
-    
+
     if (this.selectedBranchId) {
       // Update company data with branch name
       const selectedBranchItem = this.branchItems.find(branch => branch.value === this.selectedBranchId);
@@ -862,94 +853,80 @@ export class EditOfficerComponent implements OnInit {
 
   onSubmitForm1(form: NgForm) {
 
-    console.log('personal data', this.personalData);
     form.form.markAllAsTouched();
     this.jobRoleInputTouched = true;
 
     this.validateLanguages();
-
-
     const missingFields: string[] = [];
 
-  // Validation for pageOne fields
-  // if (!this.personalData.empType) {
-  //   missingFields.push('Staff Employee Type');
-  // }
-
-  if (!this.personalData.centerId && this.logingRole === 'Collection Centre Head') {
-    missingFields.push('Collection Centre Name is required');
-  }
-
-  if (!this.personalData.jobRole) {
-    missingFields.push('Job Role is required');
-  }
-
-  if (!this.personalData.irmId && this.personalData.jobRole === 'Collection Officer' && this.logingRole === 'Collection Centre Head') {
-    missingFields.push('Collection Centre Manager is required');
-  }
-
-  if (this.languagesRequired) {
-    missingFields.push('Please select at least one preferred language');
-  }
-
-  if (!this.personalData.employeeType) {
-    missingFields.push('Employee Type is required');
-  }
-
-  
-
-  // if (!this.personalData.companyId) {
-  //   missingFields.push('Company Name');
-  // }
-
-  if (!this.personalData.firstNameEnglish) {
-    missingFields.push('First Name (in English) is required');
-  }
-
-  if (!this.personalData.lastNameEnglish ) {
-    missingFields.push('Last Name (in English) is required');
-  }
-
-  if (!this.personalData.firstNameSinhala) {
-    missingFields.push('First Name (in Sinhala) is required');
-  }
-
-  if (!this.personalData.lastNameSinhala) {
-    missingFields.push('Last Name (in Sinhala) is required');
-  }
-
-  if (!this.personalData.firstNameTamil) {
-    missingFields.push('First Name (in Tamil) is required');
-  }
-
-  if (!this.personalData.lastNameTamil) {
-    missingFields.push('Last Name (in Tamil) is required');
-  }
-
-  if (!this.personalData.phoneNumber01) {
-    missingFields.push('Mobile Number - 1 is required');
-  } else if (!/^[0-9]{9}$/.test(this.personalData.phoneNumber01) || this.isPhoneInvalidMap['phone01']) {
-    missingFields.push('Mobile Number - 1 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
-  }
-
-  if (this.personalData.phoneNumber02) {
-    if (!/^[0-9]{9}$/.test(this.personalData.phoneNumber02) || this.isPhoneInvalidMap['phone02']) {
-      missingFields.push('Mobile Number - 2 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+    if (!this.personalData.centerId && this.logingRole === 'Collection Centre Head') {
+      missingFields.push('Collection Centre Name is required');
     }
-    if (this.personalData.phoneNumber01 === this.personalData.phoneNumber02) {
-      missingFields.push('Mobile Number - 2 - Must be different from Mobile Number - 1');
+
+    if (!this.personalData.jobRole) {
+      missingFields.push('Job Role is required');
     }
-  }
 
-  if (!this.personalData.nic) {
-    missingFields.push('NIC Number is required');
-  } else if (!/^(\d{9}[V]|\d{12})$/.test(this.personalData.nic)) {
-    missingFields.push('NIC Number - Must be 9 digits followed by V or 12 digits');
-  }
+    if (!this.personalData.irmId && this.personalData.jobRole === 'Collection Officer' && this.logingRole === 'Collection Centre Head') {
+      missingFields.push('Collection Centre Manager is required');
+    }
 
-  if (!this.personalData.email) {
+    if (this.languagesRequired) {
+      missingFields.push('Please select at least one Preferred Language');
+    }
+
+    if (!this.personalData.employeeType) {
+      missingFields.push('Employee Type is required');
+    }
+
+    if (!this.personalData.firstNameEnglish) {
+      missingFields.push('First Name (in English) is required');
+    }
+
+    if (!this.personalData.lastNameEnglish) {
+      missingFields.push('Last Name (in English) is required');
+    }
+
+    if (!this.personalData.firstNameSinhala) {
+      missingFields.push('First Name (in Sinhala) is required');
+    }
+
+    if (!this.personalData.lastNameSinhala) {
+      missingFields.push('Last Name (in Sinhala) is required');
+    }
+
+    if (!this.personalData.firstNameTamil) {
+      missingFields.push('First Name (in Tamil) is required');
+    }
+
+    if (!this.personalData.lastNameTamil) {
+      missingFields.push('Last Name (in Tamil) is required');
+    }
+
+    if (!this.personalData.phoneNumber01) {
+      missingFields.push('Mobile Number - 1 is required');
+    } else if (!/^[0-9]{9}$/.test(this.personalData.phoneNumber01) || this.isPhoneInvalidMap['phone01']) {
+      missingFields.push('Mobile Number - 1 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+    }
+
+    if (this.personalData.phoneNumber02) {
+      if (!/^[0-9]{9}$/.test(this.personalData.phoneNumber02) || this.isPhoneInvalidMap['phone02']) {
+        missingFields.push('Mobile Number - 2 - Must be a valid 9-digit number (format: +947XXXXXXXX)');
+      }
+      if (this.personalData.phoneNumber01 === this.personalData.phoneNumber02) {
+        missingFields.push('Mobile Number - 2 - Must be different from Mobile Number - 1');
+      }
+    }
+
+    if (!this.personalData.nic) {
+      missingFields.push('NIC Number is required');
+    } else if (!/^(\d{9}[V]|\d{12})$/.test(this.personalData.nic)) {
+      missingFields.push('NIC Number - Must be 9 digits followed by V or 12 digits');
+    }
+
+    if (!this.personalData.email) {
       missingFields.push('Email is required');
-    } else if (!/^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$/.test(this.personalData.email)) {
+    } else if (!/^[a-zA-Z0-9]+([._-][a-zA-Z0-9]+)*@[a-zA-Z0-9]+([.-][a-zA-Z0-9]+)*\.[a-zA-Z]{2,}$/.test(this.personalData.email)) {
       missingFields.push('Email - Must be in a valid format (format: example&#64;domain.com)');
     }
 
@@ -959,7 +936,7 @@ export class EditOfficerComponent implements OnInit {
         errorMessage += `<li>${field}</li>`;
       });
       errorMessage += '</ul></div>';
-  
+
       Swal.fire({
         icon: 'error',
         title: 'Missing or Invalid Information',
@@ -976,8 +953,6 @@ export class EditOfficerComponent implements OnInit {
   }
 
   onSubmitForm2(form: NgForm) {
-    console.log('page2')
-
     form.form.markAllAsTouched();
 
     const missingFields: string[] = [];
@@ -985,45 +960,45 @@ export class EditOfficerComponent implements OnInit {
     if (!this.personalData.houseNumber) {
       missingFields.push('House Number is required');
     }
-  
+
     if (!this.personalData.streetName) {
       missingFields.push('Street Name is required');
     }
-  
+
     if (!this.personalData.city) {
       missingFields.push('City is required');
     }
-  
+
     if (!this.personalData.district) {
       missingFields.push('District is required');
     }
-  
+
     if (!this.personalData.province) {
       missingFields.push('Province is required');
     }
-  
+
     if (!this.personalData.accHolderName) {
       missingFields.push('Account Holder’s Name is required');
     }
-  
+
     if (!this.personalData.accNumber) {
       missingFields.push('Account Number is required');
     }
-  
+
     if (!this.personalData.conformAccNumber) {
       missingFields.push('Confirm Account Number is required');
     } else if (this.personalData.accNumber !== this.personalData.conformAccNumber) {
       missingFields.push('Confirm Account Number - Must match Account Number');
     }
-  
+
     if (!this.selectedBankId) {
       missingFields.push('Bank Name is required');
     }
-  
+
     if (!this.selectedBranchId) {
       missingFields.push('Branch Name is required');
     }
-  
+
     // Display errors if any
     if (missingFields.length > 0) {
       let errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following issues:</p><ul class="list-disc pl-5">';
@@ -1031,7 +1006,7 @@ export class EditOfficerComponent implements OnInit {
         errorMessage += `<li>${field}</li>`;
       });
       errorMessage += '</ul></div>';
-  
+
       Swal.fire({
         icon: 'error',
         title: 'Missing or Invalid Information',
@@ -1045,11 +1020,10 @@ export class EditOfficerComponent implements OnInit {
       });
       return;
     }
- 
+
   }
 
   onSubmitForm3(form: NgForm) {
-    console.log('page3')
     form.form.markAllAsTouched();
 
     const missingFields: string[] = [];
@@ -1058,11 +1032,11 @@ export class EditOfficerComponent implements OnInit {
       missingFields.push('License Number is Required');
     }
 
-    if (!this.licenseFrontImageFileName && !this.driverObj.licFrontImg ) {
+    if (!this.licenseFrontImageFileName && !this.driverObj.licFrontImg) {
       missingFields.push("License's Front Image is required");
     }
-  
-    if (!this.licenseBackImageFileName && !this.driverObj.licBackImg ) {
+
+    if (!this.licenseBackImageFileName && !this.driverObj.licBackImg) {
       missingFields.push("License's Back Image is required");
     }
 
@@ -1073,11 +1047,11 @@ export class EditOfficerComponent implements OnInit {
     if (!this.driverObj.insExpDate) {
       missingFields.push('Insurance Expire Date is required');
     }
-  
+
     if (!this.insurenceFrontImageFileName && !this.driverObj.insFrontImg) {
       missingFields.push("Insurance's Front Image is required");
     }
-  
+
     if (!this.insurenceBackImageFileName && !this.driverObj.insBackImg) {
       missingFields.push("Insurance's Back Image is required");
     }
@@ -1085,7 +1059,7 @@ export class EditOfficerComponent implements OnInit {
     if (!this.driverObj.vRegNo) {
       missingFields.push('Vehicle Registration Number is required');
     }
-  
+
     if (!this.driverObj.vType) {
       missingFields.push('Vehicle Type is required');
     }
@@ -1101,7 +1075,7 @@ export class EditOfficerComponent implements OnInit {
     if (!this.vehicleBackImageFileName && !this.driverObj.vehBackImg) {
       missingFields.push("Vehicle's Back Image Image is required");
     }
-  
+
     if (!this.vehicleSideAImageFileName && !this.driverObj.vehSideImgA) {
       missingFields.push("Vehicle's Side Image - 1 is required");
     }
@@ -1109,7 +1083,7 @@ export class EditOfficerComponent implements OnInit {
     if (!this.vehicleSideBImageFileName && !this.driverObj.vehSideImgB) {
       missingFields.push("Vehicle's Side Image - 2 is required");
     }
-  
+
     // Display errors if any
     if (missingFields.length > 0) {
       let errorMessage = '<div class="text-left"><p class="mb-2">Please fix the following issues:</p><ul class="list-disc pl-5">';
@@ -1117,7 +1091,7 @@ export class EditOfficerComponent implements OnInit {
         errorMessage += `<li>${field}</li>`;
       });
       errorMessage += '</ul></div>';
-  
+
       Swal.fire({
         icon: 'error',
         title: 'Missing or Invalid Information',
@@ -1136,9 +1110,23 @@ export class EditOfficerComponent implements OnInit {
   onLicenseFrontImageSelected(event: any): void {
     const file: File = event.target.files[0];
     if (file) {
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+      const allowedExtensions = ['jpg', 'jpeg', 'png'];
+
+      if (!fileExtension || !allowedExtensions.includes(fileExtension)) {
+        this.toastSrv.error('Only JPEG, JPG and PNG files are allowed');
+        this.licenseFrontImageFile = null;
+        this.licenseFrontImageFileName = '';
+        event.target.value = '';
+        return;
+      }
+
       // Validate file size (5MB max)
-      if (file.size > 5000000) {
+      if (file.size > 5 * 1024 * 1024) {
         this.toastSrv.error('License image size should not exceed 5MB');
+        this.licenseFrontImageFile = null;
+        this.licenseFrontImageFileName = '';
+        event.target.value = '';
         return;
       }
 
@@ -1146,6 +1134,9 @@ export class EditOfficerComponent implements OnInit {
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
         this.toastSrv.error('License image must be JPEG, JPG or PNG format');
+        this.licenseFrontImageFile = null;
+        this.licenseFrontImageFileName = '';
+        event.target.value = '';
         return;
       }
 
@@ -1179,9 +1170,24 @@ export class EditOfficerComponent implements OnInit {
   onLicenseBackImageSelected(event: any): void {
     const file: File = event.target.files[0];
     if (file) {
+      // Check file extension first
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+      const allowedExtensions = ['jpg', 'jpeg', 'png'];
+
+      if (!fileExtension || !allowedExtensions.includes(fileExtension)) {
+        this.toastSrv.error('Only JPEG, JPG and PNG files are allowed');
+        this.licenseBackImageFile = null;
+        this.licenseBackImageFileName = '';
+        event.target.value = '';
+        return;
+      }
+
       // Validate file size (5MB max)
-      if (file.size > 5000000) {
+      if (file.size > 5 * 1024 * 1024) {
         this.toastSrv.error('License image size should not exceed 5MB');
+        this.licenseBackImageFile = null;
+        this.licenseBackImageFileName = '';
+        event.target.value = '';
         return;
       }
 
@@ -1189,6 +1195,9 @@ export class EditOfficerComponent implements OnInit {
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
         this.toastSrv.error('License image must be JPEG, JPG or PNG format');
+        this.licenseBackImageFile = null;
+        this.licenseBackImageFileName = '';
+        event.target.value = '';
         return;
       }
 
@@ -1216,9 +1225,24 @@ export class EditOfficerComponent implements OnInit {
   onInsurenceFrontImageSelected(event: any): void {
     const file: File = event.target.files[0];
     if (file) {
+      // Check file extension first
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+      const allowedExtensions = ['jpg', 'jpeg', 'png'];
+
+      if (!fileExtension || !allowedExtensions.includes(fileExtension)) {
+        this.toastSrv.error('Only JPEG, JPG and PNG files are allowed');
+        this.insurenceFrontImageFile = null;
+        this.insurenceFrontImageFileName = '';
+        event.target.value = '';
+        return;
+      }
+
       // Validate file size (5MB max)
-      if (file.size > 5000000) {
+      if (file.size > 5 * 1024 * 1024) {
         this.toastSrv.error('Insurence image size should not exceed 5MB');
+        this.insurenceFrontImageFile = null;
+        this.insurenceFrontImageFileName = '';
+        event.target.value = '';
         return;
       }
 
@@ -1226,6 +1250,9 @@ export class EditOfficerComponent implements OnInit {
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
         this.toastSrv.error('Insurence image must be JPEG, JPG or PNG format');
+        this.insurenceFrontImageFile = null;
+        this.insurenceFrontImageFileName = '';
+        event.target.value = '';
         return;
       }
 
@@ -1254,9 +1281,24 @@ export class EditOfficerComponent implements OnInit {
   onInsurenceBackImageSelected(event: any): void {
     const file: File = event.target.files[0];
     if (file) {
+      // Check file extension first
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+      const allowedExtensions = ['jpg', 'jpeg', 'png'];
+
+      if (!fileExtension || !allowedExtensions.includes(fileExtension)) {
+        this.toastSrv.error('Only JPEG, JPG and PNG files are allowed');
+        this.insurenceBackImageFile = null;
+        this.insurenceBackImageFileName = '';
+        event.target.value = '';
+        return;
+      }
+
       // Validate file size (5MB max)
-      if (file.size > 5000000) {
+      if (file.size > 5 * 1024 * 1024) {
         this.toastSrv.error('Insurence image size should not exceed 5MB');
+        this.insurenceBackImageFile = null;
+        this.insurenceBackImageFileName = '';
+        event.target.value = '';
         return;
       }
 
@@ -1264,6 +1306,9 @@ export class EditOfficerComponent implements OnInit {
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
         this.toastSrv.error('Insurence image must be JPEG, JPG or PNG format');
+        this.insurenceBackImageFile = null;
+        this.insurenceBackImageFileName = '';
+        event.target.value = '';
         return;
       }
 
@@ -1292,9 +1337,24 @@ export class EditOfficerComponent implements OnInit {
   onVehicleFrontImageSelected(event: any): void {
     const file: File = event.target.files[0];
     if (file) {
+      // Check file extension first
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+      const allowedExtensions = ['jpg', 'jpeg', 'png'];
+
+      if (!fileExtension || !allowedExtensions.includes(fileExtension)) {
+        this.toastSrv.error('Only JPEG, JPG and PNG files are allowed');
+        this.vehicleFrontImageFile = null;
+        this.vehicleFrontImageFileName = '';
+        event.target.value = '';
+        return;
+      }
+
       // Validate file size (5MB max)
-      if (file.size > 5000000) {
+      if (file.size > 5 * 1024 * 1024) {
         this.toastSrv.error('License image size should not exceed 5MB');
+        this.vehicleFrontImageFile = null;
+        this.vehicleFrontImageFileName = '';
+        event.target.value = '';
         return;
       }
 
@@ -1302,6 +1362,9 @@ export class EditOfficerComponent implements OnInit {
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
         this.toastSrv.error('License image must be JPEG, JPG or PNG format');
+        this.vehicleFrontImageFile = null;
+        this.vehicleFrontImageFileName = '';
+        event.target.value = '';
         return;
       }
 
@@ -1330,9 +1393,24 @@ export class EditOfficerComponent implements OnInit {
   onVehicleBackImageSelected(event: any): void {
     const file: File = event.target.files[0];
     if (file) {
+      // Check file extension first
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+      const allowedExtensions = ['jpg', 'jpeg', 'png'];
+
+      if (!fileExtension || !allowedExtensions.includes(fileExtension)) {
+        this.toastSrv.error('Only JPEG, JPG and PNG files are allowed');
+        this.vehicleBackImageFile = null;
+        this.vehicleBackImageFileName = '';
+        event.target.value = '';
+        return;
+      }
+
       // Validate file size (5MB max)
-      if (file.size > 5000000) {
+      if (file.size > 5 * 1024 * 1024) {
         this.toastSrv.error('Vehicle Back image size should not exceed 5MB');
+        this.vehicleBackImageFile = null;
+        this.vehicleBackImageFileName = '';
+        event.target.value = '';
         return;
       }
 
@@ -1340,6 +1418,9 @@ export class EditOfficerComponent implements OnInit {
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
         this.toastSrv.error('Vehicle Back image must be JPEG, JPG or PNG format');
+        this.vehicleBackImageFile = null;
+        this.vehicleBackImageFileName = '';
+        event.target.value = '';
         return;
       }
 
@@ -1367,9 +1448,24 @@ export class EditOfficerComponent implements OnInit {
   onVehicleSideAImageSelected(event: any): void {
     const file: File = event.target.files[0];
     if (file) {
+      // Check file extension first
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+      const allowedExtensions = ['jpg', 'jpeg', 'png'];
+
+      if (!fileExtension || !allowedExtensions.includes(fileExtension)) {
+        this.toastSrv.error('Only JPEG, JPG and PNG files are allowed');
+        this.vehicleSideAImageFile = null;
+        this.vehicleSideAImageFileName = '';
+        event.target.value = '';
+        return;
+      }
+
       // Validate file size (5MB max)
-      if (file.size > 5000000) {
+      if (file.size > 5 * 1024 * 1024) {
         this.toastSrv.error('Vehicle Back image size should not exceed 5MB');
+        this.vehicleSideAImageFile = null;
+        this.vehicleSideAImageFileName = '';
+        event.target.value = '';
         return;
       }
 
@@ -1377,6 +1473,9 @@ export class EditOfficerComponent implements OnInit {
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
         this.toastSrv.error('Vehicle Back image must be JPEG, JPG or PNG format');
+        this.vehicleSideAImageFile = null;
+        this.vehicleSideAImageFileName = '';
+        event.target.value = '';
         return;
       }
 
@@ -1406,9 +1505,23 @@ export class EditOfficerComponent implements OnInit {
   onVehicleSideBImageSelected(event: any): void {
     const file: File = event.target.files[0];
     if (file) {
+      // Check file extension first
+      const fileExtension = file.name.split('.').pop()?.toLowerCase();
+      const allowedExtensions = ['jpg', 'jpeg', 'png'];
+
+      if (!fileExtension || !allowedExtensions.includes(fileExtension)) {
+        this.toastSrv.error('Only JPEG, JPG and PNG files are allowed');
+        this.vehicleSideBImageFile = null;
+        this.vehicleSideBImageFileName = '';
+        event.target.value = '';
+        return;
+      }
       // Validate file size (5MB max)
-      if (file.size > 5000000) {
+      if (file.size > 5 * 1024 * 1024) {
         this.toastSrv.error('Vehicle Back image size should not exceed 5MB');
+        this.vehicleSideBImageFile = null;
+        this.vehicleSideBImageFileName = '';
+        event.target.value = '';
         return;
       }
 
@@ -1416,6 +1529,9 @@ export class EditOfficerComponent implements OnInit {
       const allowedTypes = ['image/jpeg', 'image/png', 'image/jpg'];
       if (!allowedTypes.includes(file.type)) {
         this.toastSrv.error('Vehicle Back image must be JPEG, JPG or PNG format');
+        this.vehicleSideBImageFile = null;
+        this.vehicleSideBImageFileName = '';
+        event.target.value = '';
         return;
       }
 
@@ -1450,7 +1566,7 @@ export class EditOfficerComponent implements OnInit {
   }
 
   navigateToCenterDashboard() {
-    this.router.navigate(['/centers/center-shashbord', this.centerId]); // Change '/reports' to your desired route
+    this.router.navigate(['/centers/center-dashboard', this.centerId]); // Change '/reports' to your desired route
   }
 
   blockSpecialChars(event: KeyboardEvent) {
@@ -1458,10 +1574,10 @@ export class EditOfficerComponent implements OnInit {
     const allowedKeys = [
       'Backspace', 'Delete', 'ArrowLeft', 'ArrowRight', 'ArrowUp', 'ArrowDown', ' '
     ];
-  
+
     // Regex: Only allow alphabets and spaces
     const regex = /^[a-zA-Z\s]*$/;
-  
+
     // Block if key is not allowed
     if (!allowedKeys.includes(event.key) && !regex.test(event.key)) {
       event.preventDefault();
@@ -1472,7 +1588,7 @@ export class EditOfficerComponent implements OnInit {
   //   if (this.personalData[field]) {
   //     // Trim spaces
   //     this.personalData[field] = this.personalData[field].trim();
-  
+
   //     // Capitalize first letter
   //     this.personalData[field] =
   //       this.personalData[field].charAt(0).toUpperCase() +
@@ -1480,46 +1596,64 @@ export class EditOfficerComponent implements OnInit {
   //   }
   // }
 
-  onTrimInput(event: Event, modelRef: any, fieldName: string): void {
+  onTrimInput(event: Event, modelRef: any, fieldName: string): void {  // no spaces at all
     const inputElement = event.target as HTMLInputElement;
-  
+
     if (inputElement) {
       // Trim spaces at start and end
       const trimmedValue = inputElement.value.trim();
-  
+
       // Update model and input
       modelRef[fieldName] = trimmedValue;
       inputElement.value = trimmedValue;
     }
   }
 
+  onFormatInput2(event: Event, modelRef: any, fieldName: string): void {  //trim spaces only from start
+    const inputElement = event.target as HTMLInputElement;
+
+    if (inputElement && inputElement.value) {
+      // Trim spaces only at the start
+      let value = inputElement.value.trimStart();
+
+      // Capitalize first letter
+      value = value.charAt(0).toUpperCase() + value.slice(1);
+
+      // Update model
+      modelRef[fieldName] = value;
+
+      // Update input box value
+      inputElement.value = value;
+    }
+  }
+
   onTrimInputAccountNumber(event: Event, modelRef: any, fieldName: string): void {
     const inputElement = event.target as HTMLInputElement;
-  
+
     if (inputElement) {
       // Remove **all spaces** (not just trim)
       const noSpaceValue = inputElement.value.replace(/\s+/g, '');
-  
+
       // Update model and input
       modelRef[fieldName] = noSpaceValue;
       inputElement.value = noSpaceValue;
     }
   }
-  
+
 
   onFormatInput(event: Event, modelRef: any, fieldName: string): void {
     const inputElement = event.target as HTMLInputElement;
-  
+
     if (inputElement && inputElement.value) {
       // Trim spaces at start & end
       let value = inputElement.value.trim();
-  
+
       // Capitalize first letter
       value = value.charAt(0).toUpperCase() + value.slice(1);
-  
+
       // Update model
       modelRef[fieldName] = value;
-  
+
       // Update input box value
       inputElement.value = value;
     }
@@ -1529,51 +1663,49 @@ export class EditOfficerComponent implements OnInit {
   onNicInput(event: any) {
     // Get value and trim leading/trailing spaces
     let value: string = event.target.value.trimStart().toUpperCase();
-  
+
     // Remove all invalid characters except digits and V
     value = value.replace(/[^0-9V]/g, '');
-  
+
     // Prevent entering V anywhere except last character of 10-char NIC
     if (value.includes('V') && value.length !== 10) {
       value = value.replace(/V/g, '');
     }
-  
+
     // Handle 10-char NIC ending with V
     if (value.length === 10 && value.endsWith('V')) {
       value = value.slice(0, 10);
     }
-  
+
     // Limit 12-digit NIC
     if (value.length > 12) {
       value = value.slice(0, 12);
     }
-  
+
     // Update the model
     this.personalData.nic = value;
   }
 
 
   openPopup(item: Personal) {
-    console.log('personal', item);
-    console.log('officerId', this.editOfficerId);
     this.isPopupVisible = true;
-  
+
     const message = `Are you sure you want to reset password for this ${item.jobRole}?`;
-  
+
     const approveButton = `
       <button id="approveButton" 
         class="bg-[#415CFF] hover:bg-[#415CFF] text-white px-4 py-2 rounded-lg mx-2">
         Reset Password
       </button>
     `;
-  
+
     const cancelButton = `
       <button id="cancelButton" 
         class="bg-[#FF0000] hover:bg-[#FF0000] text-white px-4 py-2 rounded-lg mx-2">
         Cancel
       </button>
     `;
-  
+
     const tableHtml = `
       <div class="rounded-xl container mx-auto">
         <h1 class="text-center text-2xl font-bold mb-4 dark:text-white">
@@ -1588,7 +1720,7 @@ export class EditOfficerComponent implements OnInit {
         </div>
       </div>
     `;
-  
+
     const swalInstance = Swal.fire({
       html: tableHtml,
       showConfirmButton: false,
@@ -1601,19 +1733,19 @@ export class EditOfficerComponent implements OnInit {
         title: 'dark:text-white',
       },
       didOpen: () => {
-        
+
         document.getElementById('approveButton')?.addEventListener('click', () => {
           Swal.close();
           this.handleStatusChange(swalInstance, this.editOfficerId);
         });
-  
+
         document.getElementById('cancelButton')?.addEventListener('click', () => {
           Swal.close();
         });
       },
     });
   }
-  
+
 
   private handleStatusChange(swalInstance: any, id: number) {
     // Show loading state
@@ -1638,10 +1770,9 @@ export class EditOfficerComponent implements OnInit {
         if (res.status) {
           this.isLoading = false;
           swalInstance.close();
-          this.toastSrv.success(`The Collection Officer Password was reseted successfully.`);
+          this.toastSrv.success(`Officer password reset successfully.`);
         } else {
           this.isLoading = false;
-          console.log(`Failed to reset the Collection Officer's password.`)
         }
       },
       error: (err) => {
@@ -1652,12 +1783,70 @@ export class EditOfficerComponent implements OnInit {
     });
   }
 
+  blockInvalidKeypressForPhone(event: KeyboardEvent) {
+
+    const input = event.target as HTMLInputElement;
+
+    // Allow control keys
+    if (['Backspace', 'Tab', 'ArrowLeft', 'ArrowRight', 'Delete'].includes(event.key)) {
+      return;
+    }
+
+    // Only allow digits
+    if (!/^[0-9]$/.test(event.key)) {
+      event.preventDefault();
+      return;
+    }
+
+    // If first digit and not 7 → force 7
+    if (input.value.length === 0 && event.key !== '7') {
+      event.preventDefault();
+
+      input.value = '7';                 // visually set
+      input.dispatchEvent(new Event('input')); // update ngModel
+    }
+  }
+
+  blockInvalidPasteForPhone(event: ClipboardEvent) {
+
+    const pastedData = event.clipboardData?.getData('text') || '';
+
+    // Must match 7XXXXXXXX
+    if (!/^7[0-9]{0,8}$/.test(pastedData)) {
+      event.preventDefault();
+    }
+  }
+
+  onPhoneInput(event: Event) {
+    const input = event.target as HTMLInputElement;
+
+    // Remove non-digits (extra safety)
+    let value = input.value.replace(/\D/g, '');
+
+    // If empty → do nothing
+    if (value.length === 0) {
+      input.value = '';
+      return;
+    }
+
+    // If first digit is not 7 → force it
+    if (value[0] !== '7') {
+      value = '7' + value.substring(1);
+    }
+
+    input.value = value;
+
+    // Trigger ngModel update
+    input.dispatchEvent(new Event('input'));
+  }
+
 }
 
 
 
 
 class Personal {
+  cofId!: number;
   firstNameEnglish!: string;
   firstNameSinhala!: string;
   firstNameTamil!: string;
@@ -1699,7 +1888,7 @@ class Personal {
   centerId: number | string = '';
   irmId: number | string | null = '';
   previousJobRole!: string;
-  
+
 
 }
 
@@ -1707,10 +1896,12 @@ class Personal {
 class Center {
   id!: number
   centerName!: string
+  regCode!: string;
 }
 
 class Manager {
   id!: number;
+  empId!: string;
   firstNameEnglish!: string;
   lastNameEnglish!: string;
 }

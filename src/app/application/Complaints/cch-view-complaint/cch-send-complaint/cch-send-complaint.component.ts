@@ -50,7 +50,10 @@ export class CchSendComplaintComponent implements OnInit {
   }
 
   isEmployeeDropdownOpen = false;
-  employeeDropdownOptions = ['Own', 'Other'];
+  employeeDropdownOptions = [
+    { value: 'Own', label: 'Own Complaints' },
+    { value: 'Other', label: 'Other Employees' }
+  ];
 
   toggleEmployeeDropdown() {
     this.isEmployeeDropdownOpen = !this.isEmployeeDropdownOpen;
@@ -121,6 +124,7 @@ export class CchSendComplaintComponent implements OnInit {
   }
 
   filterStatus() {
+    this.page = 1;
     this.fetchAllreciveComplaint();
   }
 
@@ -138,6 +142,7 @@ export class CchSendComplaintComponent implements OnInit {
   // }
 
   filterEmployee() {
+    this.page = 1;
     this.fetchAllreciveComplaint();
   }
 
@@ -150,6 +155,7 @@ export class CchSendComplaintComponent implements OnInit {
   }
 
   onSearch() {
+    this.page = 1;
     this.searchText = this.searchText?.trim() || '';
     this.fetchAllreciveComplaint();
 
@@ -189,10 +195,10 @@ export class CchSendComplaintComponent implements OnInit {
     const lineHeight = 24; // adjust if your text line spacing is different
     const maxRows = 5;
     const maxHeight = lineHeight * maxRows;
-  
+
     textarea.style.height = 'auto';
     const newHeight = textarea.scrollHeight;
-  
+
     // If content exceeds 5 rows → cap height and allow scrolling
     if (newHeight > maxHeight) {
       textarea.style.height = maxHeight + 'px';

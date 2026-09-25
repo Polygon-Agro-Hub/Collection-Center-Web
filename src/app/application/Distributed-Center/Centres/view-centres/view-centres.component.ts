@@ -7,18 +7,17 @@ import { DropdownModule } from 'primeng/dropdown';
 import { DistributionServiceService } from '../../../../services/Distribution-Service/distribution-service.service'
 import { LoadingSpinnerComponent } from '../../../../components/loading-spinner/loading-spinner.component';
 import { SerchableDropdownComponent } from '../../../../components/serchable-dropdown/serchable-dropdown.component';
-// import { AddCenterComponent } from '../add-center/add-center.component';
 
 @Component({
-  selector: 'app-view-centres',
-  standalone: true,
-  imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, LoadingSpinnerComponent, SerchableDropdownComponent],
-  templateUrl: './view-centres.component.html',
-  styleUrl: './view-centres.component.css'
+    selector: 'app-view-centres',
+    standalone: true,
+    imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, LoadingSpinnerComponent, SerchableDropdownComponent],
+    templateUrl: './view-centres.component.html',
+    styleUrl: './view-centres.component.css'
 })
 export class ViewCentresComponent implements OnInit {
 
-  itemsArr!: CenterData[];
+    itemsArr!: CenterData[];
     searchText: string = '';
     selectProvince: string = '';
     selectDistrict: string = '';
@@ -37,16 +36,16 @@ export class ViewCentresComponent implements OnInit {
     itemId1: number | null = null;
     itemId2: number | null = null;
     provinceItems = [
-        { value: 'Western', label: 'Western' },
         { value: 'Central', label: 'Central' },
-        { value: 'Southern', label: 'Southern' },
-        { value: 'Northern', label: 'Northern' },
         { value: 'Eastern', label: 'Eastern' },
-        { value: 'North Western', label: 'North Western' },
         { value: 'North Central', label: 'North Central' },
+        { value: 'North Western', label: 'North Western' },
+        { value: 'Northern', label: 'Northern' },
+        { value: 'Sabaragamuwa', label: 'Sabaragamuwa' },
+        { value: 'Southern', label: 'Southern' },
         { value: 'Uva', label: 'Uva' },
-        { value: 'Sabaragamuwa', label: 'Sabaragamuwa' }
-      ];
+        { value: 'Western', label: 'Western' }
+    ];
 
     // Define all districts with their provinces
     allDistricts = [
@@ -77,9 +76,6 @@ export class ViewCentresComponent implements OnInit {
         { name: 'Vavuniya', province: 'Northern' },
     ];
 
-    // districtItems = this.allDistricts.map(d => ({ value: d.name, label: d.name }));
-
-    // Districts filtered by selected province
     filteredDistricts: { name: string, province: string }[] = [];
     districtItems = this.filteredDistricts.map(d => ({ value: d.name, label: d.name }));
 
@@ -93,211 +89,135 @@ export class ViewCentresComponent implements OnInit {
         this.fetchAllDistributionCenterDetails();
     }
 
-    // @HostListener('document:click', ['$event'])
-    // onDocumentClick(event: MouseEvent) {
-    //     const provinceDropdownElement = document.querySelector('.custom-province-dropdown-container');
-    //     const proinceDropdownClickedInside = provinceDropdownElement?.contains(event.target as Node);
-
-    //     if (!proinceDropdownClickedInside && this.isProvinceDropdownOpen) {
-    //         this.isProvinceDropdownOpen = false;
-    //     }
-
-    //     const districtDropdownElement = document.querySelector('.custom-district-dropdown-container');
-    //     const districtDropdownClickedInside = districtDropdownElement?.contains(event.target as Node);
-
-    //     if (!districtDropdownClickedInside && this.isDistrictDropdownOpen) {
-    //         this.isDistrictDropdownOpen = false;
-    //     }
-
-    // }
-
     fetchAllDistributionCenterDetails(province: string = this.selectProvince, district: string = this.selectDistrict, search: string = this.searchText) {
-      this.isLoading = true;
-      this.DistributionSrv.getDistributionCenterDetails(this.currentPage, this.itemsPerPage, province, district, search).subscribe(
-          (res) => {
-            console.log('res', res)
-              this.itemsArr = res.items;
-              this.totalItems = res.totalItems;
-              this.countOfOfficers = res.items.length;
-              this.hasData = res.items.length > 0 ? true : false;
-              this.isLoading = false;
-          }
-      );
-  }
-
-  onSearch() {
-    this.currentPage = 1; // Reset to first page on new search
-    this.fetchAllDistributionCenterDetails();
-}
-
-onPageChange(page: number) {
-  this.currentPage = page;
-  this.fetchAllDistributionCenterDetails();
-}
-
-offSearch() {
-    this.searchText = '';
-    this.fetchAllDistributionCenterDetails();
-}
-
-toggleProvinceDropdown() {
-    this.isProvinceDropdownOpen = !this.isProvinceDropdownOpen;
-    // Close district dropdown when opening province dropdown
-    if (this.isProvinceDropdownOpen) {
-        this.isDistrictDropdownOpen = false;
+        this.isLoading = true;
+        this.DistributionSrv.getDistributionCenterDetails(this.currentPage, this.itemsPerPage, province, district, search).subscribe(
+            (res) => {
+                this.itemsArr = res.items;
+                this.totalItems = res.totalItems;
+                this.countOfOfficers = res.items.length;
+                this.hasData = res.items.length > 0 ? true : false;
+                this.isLoading = false;
+            }
+        );
     }
-}
 
-// selectProvinceOption(province: string) {
-//     this.selectProvince = province;
-//     this.isProvinceDropdownOpen = false;
-//     this.filterProvince();
-// }
-
-// clearProvinceFilter(event?: MouseEvent) {
-//     if (event) {
-//         event.stopPropagation(); // Prevent triggering the dropdown toggle
-//     }
-//     this.selectProvince = '';
-//     this.selectDistrict = ''; // Also clear district when province is cleared
-//     this.updateFilteredDistricts(); // Update district list
-//     this.fetchAllDistributionCenterDetails();
-// }
-
-// District dropdown methods
-toggleDistrictDropdown() {
-    this.isDistrictDropdownOpen = !this.isDistrictDropdownOpen;
-    // Close province dropdown when opening district dropdown
-    if (this.isDistrictDropdownOpen) {
-        this.isProvinceDropdownOpen = false;
-    }
-}
-
-// selectDistrictOption(districtName: string) {
-//     this.selectDistrict = districtName;
-//     this.isDistrictDropdownOpen = false;
-//     this.filterDistrict();
-// }
-
-clearDistrictFilter(event?: MouseEvent) {
-    if (event) {
-        event.stopPropagation(); // Prevent triggering the dropdown toggle
-    }
-    this.selectDistrict = '';
-    this.fetchAllDistributionCenterDetails();
-}
-
-// Updated existing methods
-// filterProvince() {
-//     this.selectDistrict = ''; // Clear district selection when province changes
-//     this.updateFilteredDistricts(); // Update district list based on selected province
-//     this.fetchAllDistributionCenterDetails();
-// }
-
-filterDistrict(districtName: string | null) {
-    if (this.itemId1 !== null) {
-        this.selectDistrict = ''
+    onSearch() {
+        this.searchText = this.searchText?.trim() || '';
+        this.currentPage = 1; // Reset to first page on new search
         this.fetchAllDistributionCenterDetails();
-    } // keep your original guard
-
-    const selected = this.allDistricts.find(d => d.name === districtName || '');
-    this.selectProvince = selected ? selected.province : '';
-    console.log('selectProvince', this.selectProvince)
-    console.log('selectDistrict', this.selectDistrict)
-
-    this.fetchAllDistributionCenterDetails();
-  }
-
-  filterProvince(provinceName: string | null) {
-    if (this.itemId2 !== null) {
-        this.selectProvince = ''
-        this.fetchAllDistributionCenterDetails();
-    }; // keep your original guard
-
-    const selected = this.provinceItems.find(p => p.value === provinceName || '');
-    this.updateFilteredDistricts(); 
-    // this.selectProvince = selected ? selected.province : '';
-    console.log('selectProvince', this.selectProvince)
-    console.log('selectDistrict', this.selectDistrict)
-
-    this.fetchAllDistributionCenterDetails();
-  }
-
-
-// filterDistrict() {
-//     // When district is selected, automatically set the province
-//     if (this.selectDistrict) {
-//         const district = this.allDistricts.find(d => d.name === this.selectDistrict);
-//         if (district) {
-//             this.selectProvince = district.province;
-//             // Update filtered districts based on the selected province
-//             this.updateFilteredDistricts();
-//         }
-//     }
-//     this.fetchAllDistributionCenterDetails();
-// }
-
-// Update the filtered districts based on selected province
-updateFilteredDistricts() {
-    if (this.selectProvince) {
-        this.filteredDistricts = this.allDistricts.filter(d => d.province === this.selectProvince);
-       this.districtItems = this.filteredDistricts.map(d => ({ value: d.name, label: d.name }));
-    } else {
-        this.filteredDistricts = this.allDistricts;
-        console.log('filteredDistricts', this.filteredDistricts)
-        this.districtItems = this.filteredDistricts.map(d => ({ value: d.name, label: d.name }));
     }
-}
 
-// Legacy methods (kept for compatibility, but now called by new methods)
-// cancelProvince() {
-//     this.clearProvinceFilter();
-// }
+    onPageChange(page: number) {
+        this.currentPage = page;
+        this.fetchAllDistributionCenterDetails();
+    }
 
-cancelDistrict() {
-    this.clearDistrictFilter();
-}
+    offSearch() {
+        this.searchText = '';
+        this.fetchAllDistributionCenterDetails();
+    }
 
-getTotalPages(): number {
-    return Math.ceil(this.totalItems / this.itemsPerPage);
-}
+    toggleProvinceDropdown() {
+        this.isProvinceDropdownOpen = !this.isProvinceDropdownOpen;
+        // Close district dropdown when opening province dropdown
+        if (this.isProvinceDropdownOpen) {
+            this.isDistrictDropdownOpen = false;
+        }
+    }
 
-navigateToDashboard(id: number, centerName: string, regCode: string) {
-    this.router.navigate([
-      `/distribution-center/center-dashboard`,
-      id,
-      centerName,
-      regCode
-    ]);
-  }
+    toggleDistrictDropdown() {
+        this.isDistrictDropdownOpen = !this.isDistrictDropdownOpen;
+        if (this.isDistrictDropdownOpen) {
+            this.isProvinceDropdownOpen = false;
+        }
+    }
 
 
-addCenter() {
-    this.router.navigate([`/distribution-center/create-distribution-centre`]);
-}
+    clearDistrictFilter(event?: MouseEvent) {
+        if (event) {
+            event.stopPropagation(); // Prevent triggering the dropdown toggle
+        }
+        this.selectDistrict = '';
+        this.fetchAllDistributionCenterDetails();
+    }
 
-navigateToAssignCities() {
-    this.router.navigate([`/distribution-center/assign-cities`]);
-}
+    filterDistrict(districtName: string | null) {
+        if (this.itemId1 !== null) {
+            this.selectDistrict = ''
+            this.fetchAllDistributionCenterDetails();
+        } // keep your original guard
 
+        const selected = this.allDistricts.find(d => d.name === districtName || '');
+        this.selectProvince = selected ? selected.province : '';
+        this.fetchAllDistributionCenterDetails();
+    }
+
+    filterProvince(provinceName: string | null) {
+        if (this.itemId2 !== null) {
+            this.selectProvince = ''
+            this.fetchAllDistributionCenterDetails();
+        };
+
+        const selected = this.provinceItems.find(p => p.value === provinceName || '');
+        this.updateFilteredDistricts();
+        this.fetchAllDistributionCenterDetails();
+    }
+
+
+    updateFilteredDistricts() {
+        if (this.selectProvince) {
+            this.filteredDistricts = this.allDistricts.filter(d => d.province === this.selectProvince);
+            this.districtItems = this.filteredDistricts.map(d => ({ value: d.name, label: d.name }));
+        } else {
+            this.filteredDistricts = this.allDistricts;
+            this.districtItems = this.filteredDistricts.map(d => ({ value: d.name, label: d.name }));
+        }
+    }
+
+    cancelDistrict() {
+        this.clearDistrictFilter();
+    }
+
+    getTotalPages(): number {
+        return Math.ceil(this.totalItems / this.itemsPerPage);
+    }
+
+    navigateToDashboard(id: number, centerName: string, regCode: string) {
+        this.router.navigate([
+            `/distribution-center/center-dashboard`,
+            id,
+            centerName,
+            regCode
+        ]);
+    }
+
+
+    addCenter() {
+        this.router.navigate([`/distribution-center/create-distribution-centre`]);
+    }
+
+    navigateToAssignCities() {
+        this.router.navigate([`/distribution-center/assign-cities`]);
+    }
 
 }
 
 class CenterData {
-  centerId!: number
-  centerName!: string
-  province!: string
-  district!: string
-  city!: string
-  contact01!: string
-  collectionOfficerCount!: number
-  customerOfficerCount!: number
-  collectionCenterManagerCount!: number
-  customerServiceCount!: number
-  regCode!: string
-  distributionOfficerCount!: number
-  distributionCenterManagerCount!: number
-  latitude!: string;
-  longitude!: string;
+    centerId!: number
+    centerName!: string
+    province!: string
+    district!: string
+    city!: string
+    contact01!: string
+    collectionOfficerCount!: number
+    customerOfficerCount!: number
+    collectionCenterManagerCount!: number
+    customerServiceCount!: number
+    regCode!: string
+    distributionOfficerCount!: number
+    distributionCenterManagerCount!: number
+    latitude!: string;
+    longitude!: string;
 
 }

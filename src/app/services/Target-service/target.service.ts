@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { TokenServiceService } from '../Token/token-service.service';
-import { environment } from '../../environments/environment.development';
+import { environment } from '../../environments/environment';
 
 @Injectable({
   providedIn: 'root'
@@ -28,9 +28,7 @@ export class TargetService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
-
-    console.log(limit, 'searchText', searchText);
-
+    
     let url = `${this.apiUrl}/get-daily-target`;
 
     if (searchText) {
@@ -129,17 +127,19 @@ export class TargetService {
     });
   }
 
-  AssignAllDailyTarget(page: number = 1, limit: number = 10, search: string = ''): Observable<any> {
+  AssignAllDailyTarget(page: number = 1, limit: number = 10, search: string = '', date: string = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
-
-    // console.log(limit);
 
     let url = `${this.apiUrl}/assign-all-daily-target?page=${page}&limit=${limit}`;
 
     if (search) {
       url += `&searchText=${search}`
+    }
+
+    if (date) {
+      url += `&toDate=${date}`
     }
 
     return this.http.get<any>(url, { headers });
@@ -341,10 +341,6 @@ export class TargetService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
-
-    console.log('page', page, 'limit', limit, 'status', status, 'validity', validity)
-    console.log('data', data);
-
     let url = `${this.apiUrl}/officer-target-check-available?page=${page}&limit=${limit}`;
 
     if (status) {
@@ -428,7 +424,7 @@ export class TargetService {
   }
 
   getCentreData(centreId: number): Observable<any> {
-    console.log('fetchinh')
+
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
@@ -507,6 +503,16 @@ export class TargetService {
     });
 
     return this.http.get(url, { headers, responseType: 'blob' });
+  }
+
+  getOfficerTartgetItem2(id: number, empId: string): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/get-officer-target-by-id-2/${id}/${empId}`;
+
+    return this.http.get<any>(url, { headers });
   }
 
   

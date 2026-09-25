@@ -46,17 +46,19 @@
                     <div class="ml-6">
                         <p class="text-lg font-semibold">{{officerObj.firstNameEnglish}} {{officerObj.lastNameEnglish}}
                         </p>
-                        <p class="text-[#627189] dark:text-textDark">{{officerObj.jobRole}} - <span
+                        <p class="text-[#627189] dark:text-textDark"><ng-container
+                                *ngIf="officerObj.jobRole === jobRoleTypes.lightWeightDriver || officerObj.jobRole === jobRoleTypes.heavyWeightDriver; else roleLabel">Driver</ng-container><ng-template
+                                #roleLabel>{{officerObj.jobRole}}</ng-template> - <span
                                 class="text-black font-semibold dark:text-white">
                                 <span *ngIf="officerObj.jobRole ==='Customer Officer'">CUO</span>
                                 <span *ngIf="officerObj.jobRole ==='Collection Centre Manager'">CCM</span>
                                 <span *ngIf="officerObj.jobRole ==='Collection Centre Head'">CCH</span>
-                                <span *ngIf="officerObj.jobRole ==='Driver'">DVR</span>
+                                <span *ngIf="officerObj.jobRole === jobRoleTypes.lightWeightDriver || officerObj.jobRole === jobRoleTypes.heavyWeightDriver">DVR</span>
                                 <span *ngIf="officerObj.jobRole ==='Collection Officer'">COO</span>
                                 <span *ngIf="officerObj.jobRole ==='Distribution Officer'">DIO</span>
                                 <span *ngIf="officerObj.jobRole ==='Distribution Centre Manager'">DCM</span>
-                                <span
-                                    *ngIf="officerObj.jobRole ==='Distribution Centre Head'">DCH</span>{{officerObj.empId}}</span>
+                                <span *ngIf="officerObj.jobRole ==='Distribution Centre Head'">DCH</span>{{officerObj.empId}} <span *ngIf="officerObj.jobRole === jobRoleTypes.lightWeightDriver || officerObj.jobRole === jobRoleTypes.heavyWeightDriver">  |  {{officerObj.jobRole}}  |  {{officerObj.slvCatName}}</span>
+                            </span>
                         </p>
                         <p class="font-semibold" *ngIf="officerObj.jobRole === 'Collection Centre Manager' 
                             || officerObj.jobRole === 'Collection Centre Head' 
@@ -68,7 +70,7 @@
                         <p class="font-semibold" *ngIf="officerObj.jobRole === 'Distribution Centre Manager' 
                             || officerObj.jobRole === 'Distribution Centre Head' 
                             || officerObj.jobRole === 'Distribution Officer'
-                            || officerObj.jobRole === 'Driver'">
+                            || officerObj.jobRole === jobRoleTypes.lightWeightDriver || officerObj.jobRole === jobRoleTypes.heavyWeightDriver">
                             {{ officerObj.distributedCenterRegCode ? officerObj.distributedCenterRegCode + ' Centre' : 'Officer has been disclaimed - No Assigned Centre' }}
                         </p>
                         <p class="text-[#627189] dark:text-textDark">{{officerObj.companyNameEnglish}}</p>
@@ -83,8 +85,8 @@
                     </span>
                     <button *ngIf="(logingRole === 'Collection Centre Manager' || logingRole === 'Collection Centre Head')" class="bg-blue-600 text-white font-semibold rounded-lg shadow-md px-5 py-2"
                         (click)="viewOfficerTarget(officerId, officerObj.centerName)">View Target</button>
-                    <button *ngIf="(logingRole === 'Distribution Centre Manager' || logingRole === 'Distribution Centre Head')" class="bg-blue-600 text-white font-semibold rounded-lg shadow-md px-5 py-2"
-                        (click)="viewOfficerTargetDistribution(officerId, officerObj.distributedCenterName, officerObj.distributedCenterId, officerObj.empIdPrefix)">View Target</button>
+                    <!-- <button *ngIf="(logingRole === 'Distribution Centre Manager' || logingRole === 'Distribution Centre Head') && (officerObj.jobRole === 'Distribution Centre Manager' || officerObj.jobRole === 'Distribution Officer') && officerObj.distributedCenterRegCode" class="bg-blue-600 text-white font-semibold rounded-lg shadow-md px-5 py-2"
+                        (click)="viewOfficerTargetDistribution(officerId, officerObj.distributedCenterName, officerObj.distributedCenterId, officerObj.empIdPrefix)">View Target</button> -->
                 </div>
 
             </div>
@@ -207,7 +209,7 @@
             </div>
 
 
-            <div *ngIf="officerObj.jobRole === 'Driver'" class="border-[#F1F7FA] border-[3px] rounded-lg shadowmd p-6">
+            <div *ngIf="officerObj.jobRole === jobRoleTypes.lightWeightDriver || officerObj.jobRole === jobRoleTypes.heavyWeightDriver" class="border-[#F1F7FA] border-[3px] rounded-lg shadowmd p-6">
                 <p class="font-semibold">Driving Details</p>
 
 
@@ -239,7 +241,7 @@
             </div>
 
 
-            <div *ngIf="officerObj.jobRole === 'Driver'" class="border-[#F1F7FA] border-[3px] rounded-lg shadowmd p-6">
+            <div *ngIf="officerObj.jobRole === jobRoleTypes.lightWeightDriver || officerObj.jobRole === jobRoleTypes.heavyWeightDriver" class="border-[#F1F7FA] border-[3px] rounded-lg shadowmd p-6">
                 <p class="font-semibold">Vehicle Insurance Details</p>
 
 
@@ -274,7 +276,7 @@
 
             </div>
 
-            <div *ngIf="officerObj.jobRole === 'Driver'" class="border-[#F1F7FA] border-[3px] rounded-lg shadowmd p-6">
+            <div *ngIf="officerObj.jobRole === jobRoleTypes.lightWeightDriver || officerObj.jobRole === jobRoleTypes.heavyWeightDriver" class="border-[#F1F7FA] border-[3px] rounded-lg shadowmd p-6">
                 <p class="font-semibold">Vehicle Details</p>
 
 
@@ -324,12 +326,8 @@
                             <i class="fa-solid fa-image text-3xl text-black"></i>
                         </a>
                     </div>
-
                 </div>
-
             </div>
-
-
         </div>
     </div>
 
@@ -345,14 +343,15 @@
 
                 <div class="mb-4 text-center dark:text-textDark">
                     <p class="text-lg mb-2">
-                        Are you sure you want to Discharge the officer
+                        Are you sure you want to Disclaim the officer
                     </p>
                     <p class="font-semibold text-lg dark:text-white">
-                        "{{officerObj.firstNameEnglish}} {{officerObj.lastNameEnglish}}"" (EMP ID -
+                        "{{officerObj.firstNameEnglish}} {{officerObj.lastNameEnglish}}" (EMP ID -
                         "{{officerObj.empIdPrefix}}")
                         <span class="font-normal">from centre</span> <br>
                         <span *ngIf="officerObj.jobRole ==='Collection Officer'">"{{officerObj.regCode}}"?</span>
                         <span *ngIf="officerObj.jobRole ==='Distribution Officer'">"{{officerObj.distributedCenterRegCode}}"?</span>
+                        <span *ngIf="officerObj.jobRole === jobRoleTypes.lightWeightDriver || officerObj.jobRole === jobRoleTypes.heavyWeightDriver">"{{officerObj.distributedCenterRegCode}}"?</span>
                     </p>
 
                     <p class="text-red-500 mb-6 italic">
@@ -364,7 +363,7 @@
                 <div class="flex justify-center gap-4">
                     <button class="bg-[#E8E8E8] border-[1px] border-[#6B7D8C] px-10 py-0.35 rounded-lg shadow-md"
                         (click)="confirmDisclaim(officerId)"><span class="font-semibold text-[#6B7D8C]">Yes,</span> <br>
-                        <span class="text-light text-whight-700 button-text text-[#6B7D8C]">Discharge</span>
+                        <span class="text-light text-whight-700 button-text text-[#6B7D8C]">Disclaim</span>
                     </button>
                     <button class="bg-[#415CFF] border-[1px] border-[#415CFF] px-10 py-0.35 rounded-lg shadow-md"
                         (click)="cancelDisclaim()"><span class="font-semibold text-white">No,</span> <br>
@@ -373,6 +372,5 @@
                 </div>
             </div>
         </div>
-
     </div>
 </div>

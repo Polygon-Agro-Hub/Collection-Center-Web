@@ -19,7 +19,7 @@ export class SendedComplaintComponent implements OnInit {
   complainArr!: SentComplaint[];
   replyObj: Reply = new Reply();
   templateData!: TemplateData;
-  
+
   officerId!: number
 
   selectStatus: string = '';
@@ -52,7 +52,10 @@ export class SendedComplaintComponent implements OnInit {
   }
 
   isEmployeeDropdownOpen = false;
-  employeeDropdownOptions = ['Own', 'Other'];
+  employeeDropdownOptions = [
+    { value: 'Own', label: 'Own Complaints' },
+    { value: 'Other', label: 'Other Employees' }
+  ];
 
   toggleEmployeeDropdown() {
     this.isEmployeeDropdownOpen = !this.isEmployeeDropdownOpen;
@@ -97,10 +100,8 @@ export class SendedComplaintComponent implements OnInit {
     this.ComplainSrv.getAllSentComplains(page, limit, status, emptype, search).subscribe(
       (res) => {
         this.complainArr = res.items
-        console.log(this.complainArr);
         this.totalItems = res.total;
         this.officerId = res.userId
-
 
         if (res.items.length === 0) {
           this.hasData = false;
@@ -116,8 +117,6 @@ export class SendedComplaintComponent implements OnInit {
     this.isLoading = true;
     this.ComplainSrv.getComplainById(id).subscribe(
       (res) => {
-
-        console.log('res', res)
         this.replyObj = res.data;
         this.templateData = res.template
         this.isLoading = false;
@@ -213,8 +212,8 @@ class Reply {
   id!: number
   reply!: string
   language!: string
-  firstNameEnglish:string = '';
-  lastNameEnglish:string = '';
+  firstNameEnglish: string = '';
+  lastNameEnglish: string = '';
 }
 
 interface TemplateData {

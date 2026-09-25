@@ -50,11 +50,7 @@ export class ViewRecivedComplaintComponent implements OnInit {
     this.isLoading = true;
     this.ComplainSrv.getComplainById(id).subscribe(
       (res) => {
-        console.log('getting');
-        console.log('res', res)
         this.compalintObj = res.data;
-        console.log('compalintObj', this.compalintObj)
-
         this.officerName =
           (this.compalintObj?.firstNameEnglish || '') + ' ' +
           (this.compalintObj?.lastNameEnglish || '');
@@ -116,24 +112,24 @@ export class ViewRecivedComplaintComponent implements OnInit {
         actions: 'gap-2'
       }
     })
-    .then((result) => {
-      if (result.isConfirmed) {
-        this.isLoading = true
-        this.ComplainSrv.forwordComplain(this.compalinId).subscribe(
-          (res) => {
-            if (res.status) {
-              this.isLoading = false;
-              this.toastSrv.success(res.message)
-              this.router.navigate(['/complaints']);
-            } else {
-              this.isLoading = false;
-              this.toastSrv.error(res.message)
+      .then((result) => {
+        if (result.isConfirmed) {
+          this.isLoading = true
+          this.ComplainSrv.forwordComplain(this.compalinId).subscribe(
+            (res) => {
+              if (res.status) {
+                this.isLoading = false;
+                this.toastSrv.success(res.message)
+                this.router.navigate(['/complaints']);
+              } else {
+                this.isLoading = false;
+                this.toastSrv.error(res.message)
 
+              }
             }
-          }
-        );
-      }
-    });
+          );
+        }
+      });
   }
 
   // forwordComplain() {

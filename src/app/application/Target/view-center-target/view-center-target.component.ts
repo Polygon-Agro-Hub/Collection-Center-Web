@@ -6,6 +6,7 @@ import { NgxPaginationModule } from 'ngx-pagination';
 import { TargetService } from '../../../services/Target-service/target.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import Swal from 'sweetalert2';
+import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 
 @Component({
   selector: 'app-view-center-target',
@@ -51,7 +52,8 @@ export class ViewCenterTargetComponent implements OnInit {
   constructor(
     private router: Router,
     private route: ActivatedRoute,
-    private TargetSrv: TargetService
+    private TargetSrv: TargetService,
+    private toastSrv: ToastAlertService,
   ) { }
 
   ngOnInit(): void {
@@ -79,16 +81,11 @@ export class ViewCenterTargetComponent implements OnInit {
 
   fetchAllTarget(centerId: number = this.centerId, page: number = 1, limit: number = this.itemsPerPage, status: string = this.selectStatus, search: string = this.searchText) {
     this.isLoading = true;
-    console.log('fetching')
-    console.log(this.hasData);
     this.TargetSrv.getAllCenterDailyTarget(centerId, page, limit, status, search).subscribe(
       (res) => {
         this.targetArr = res.items;
-        console.log(res.items)
         if (res.items.length > 0) {
           this.hasData = true;
-          console.log('fetched')
-          console.log(this.hasData);
         } else {
           this.hasData = false;
         }
@@ -109,11 +106,6 @@ export class ViewCenterTargetComponent implements OnInit {
   filterStatus() {
     this.fetchAllTarget();
   }
-
-  // cancelStatus() {
-  //   this.selectStatus = '';
-  //   this.fetchAllTarget();
-  // }
 
   cancelStatus(event?: MouseEvent) {
     if (event) {
@@ -210,25 +202,12 @@ export class ViewCenterTargetComponent implements OnInit {
           a.download = `Current Centre Target Report For ${this.today}.xlsx`;
           a.click();
           window.URL.revokeObjectURL(url);
-          Swal.fire({
-            icon: "success",
-            title: "Downloaded",
-            text: "Please check your downloads folder",
-            customClass: {
-              popup: 'bg-white dark:bg-[#363636]', // Light mode: white, Dark mode: gray-800
-              title: 'text-gray-800 dark:text-textDark', // Title text (dark: almost white)
-              htmlContainer: 'text-gray-600 dark:text-white', // Body text (dark: light gray)
-            }
-          });
 
+          this.toastSrv.success('File Downloaded Successfully');
           this.isDownloading = false;
         },
         error: (error) => {
-          Swal.fire({
-            icon: "error",
-            title: "Download Failed",
-            text: error.message,
-          });
+          this.toastSrv.error('File Download Failed');
           this.isDownloading = false;
         }
       });

@@ -16,10 +16,17 @@
             "outputPath": "dist/collection-center",
             "index": "src/index.html",
             "browser": "src/main.ts",
-            "polyfills": ["zone.js"],
+            "polyfills": [
+              "zone.js"
+            ],
             "tsConfig": "tsconfig.app.json",
-            "assets": ["src/favicon.ico", "src/assets"],
-            "styles": ["src/styles.css"],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
+            "styles": [
+              "src/styles.css"
+            ],
             "scripts": [],
             "server": "src/main.server.ts",
             "prerender": false,
@@ -63,6 +70,26 @@
               "sourceMap": true,
               "baseHref": "/cc/",
               "deployUrl": "/cc/"
+            },
+            "uat": {
+              "fileReplacements": [
+                {
+                  "replace": "src/app/environments/environment.ts",
+                  "with": "src/app/environments/environment.uat.ts"
+                }
+              ],
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "baseHref": "/",
+              "deployUrl": "/"
+            },
+            "local": {
+              "optimization": false,
+              "extractLicenses": false,
+              "sourceMap": true,
+              "baseHref": "/cc/",
+              "deployUrl": "/cc/"
             }
           },
           "defaultConfiguration": "production"
@@ -75,6 +102,12 @@
             },
             "development": {
               "buildTarget": "collection-center:build:development"
+            },
+            "uat": {
+              "buildTarget": "collection-center:build:uat"
+            },
+            "local": {
+              "buildTarget": "collection-center:build:local"
             }
           },
           "defaultConfiguration": "development"
@@ -88,9 +121,15 @@
         "test": {
           "builder": "@angular-devkit/build-angular:karma",
           "options": {
-            "polyfills": ["zone.js", "zone.js/testing"],
+            "polyfills": [
+              "zone.js",
+              "zone.js/testing"
+            ],
             "tsConfig": "tsconfig.spec.json",
-            "assets": ["src/favicon.ico", "src/assets"],
+            "assets": [
+              "src/favicon.ico",
+              "src/assets"
+            ],
             "styles": [
               "@angular/material/prebuilt-themes/purple-green.css",
               "src/styles.css"

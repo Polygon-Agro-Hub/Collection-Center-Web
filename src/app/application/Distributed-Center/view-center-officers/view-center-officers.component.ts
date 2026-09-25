@@ -9,7 +9,7 @@ import { DropdownModule } from 'primeng/dropdown';
 import { NgxPaginationModule } from 'ngx-pagination';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { DistributedManageOfficersService } from '../../../services/Distributed-manage-officers-service/distributed-manage-officers.service';
-import { DistributionServiceService }  from '../../../services/Distribution-Service/distribution-service.service'
+import { DistributionServiceService } from '../../../services/Distribution-Service/distribution-service.service'
 
 @Component({
   selector: 'app-view-center-officers',
@@ -90,44 +90,6 @@ export class ViewCenterOfficersComponent implements OnInit {
     this.isRoleDropdownOpen = false;
     this.applyRoleFilters();
   }
-
-  // isCenterDropdownOpen = false;
-  // centerDropdownOptions = [];
-
-  // toggleCenterDropdown() {
-  //   this.isCenterDropdownOpen = !this.isCenterDropdownOpen;
-  // }
-
-  // selectCenterOption(center: Center) {
-  //   this.selectCenters = center.id.toString(); // convert id to string
-  //   this.isCenterDropdownOpen = false;
-  //   this.applyCompanyFilters();
-  // }
-
-
-  // @HostListener('document:click', ['$event'])
-  // onDocumentClick(event: MouseEvent) {
-  //   const statusDropdownElement = document.querySelector('.custom-status-dropdown-container');
-  //   const statusDropdownClickedInside = statusDropdownElement?.contains(event.target as Node);
-
-  //   const roleDropdownElement = document.querySelector('.custom-role-dropdown-container');
-  //   const roleDropdownClickedInside = roleDropdownElement?.contains(event.target as Node);
-
-  //   // const centerDropdownElement = document.querySelector('.custom-center-dropdown-container');
-  //   // const centerDropdownClickedInside = centerDropdownElement?.contains(event.target as Node);
-
-  //   if (!statusDropdownClickedInside && this.isStatusDropdownOpen) {
-  //     this.isStatusDropdownOpen = false;
-  //   }
-
-  //   if (!roleDropdownClickedInside && this.isRoleDropdownOpen) {
-  //     this.isRoleDropdownOpen = false;
-  //   }
-
-  //   // if (!centerDropdownClickedInside && this.isCenterDropdownOpen) {
-  //   //   this.isCenterDropdownOpen = false;
-  //   // }
-  // }
 
   navigate(path: string) {
     this.router.navigate([`${path}`])
@@ -210,7 +172,7 @@ export class ViewCenterOfficersComponent implements OnInit {
         popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
         title: 'dark:text-white',
         icon: '!border-gray-200 dark:!border-gray-500',
-        confirmButton: 'hover:!bg-[#3085d6] dark:hover:!bg[#3085d6]',
+        confirmButton: 'hover:!bg-[#0c77db] dark:hover:!bg-[#0c77db]',
         cancelButton: '',
         actions: 'gap-2'
       }
@@ -245,32 +207,32 @@ export class ViewCenterOfficersComponent implements OnInit {
 
     let message = '';
 
-if (item.status === 'Approved') {
-  message = `Are you sure you want to reject this ${item.jobRole} ?`;
-} 
-else if (item.status === 'Rejected') {
-  message = `Are you sure you want to approve this ${item.jobRole} ?`;
-} 
-else if (item.status === 'Not Approved') {
-  message = `Are you sure you want to approve or reject this ${item.jobRole} ?`;
-} 
-else {
-  message = ``;
-}
+    if (item.status === 'Approved') {
+      message = `Are you sure you want to reject this ${item.jobRole} ?`;
+    }
+    else if (item.status === 'Rejected') {
+      message = `Are you sure you want to approve this ${item.jobRole} ?`;
+    }
+    else if (item.status === 'Not Approved') {
+      message = `Are you sure you want to approve or reject this ${item.jobRole} ?`;
+    }
+    else {
+      message = ``;
+    }
 
-const rejectButton = (item.status === 'Approved' || item.status === 'Not Approved')
-  ? `<button id="rejectButton" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg mr-2">
+    const rejectButton = (item.status === 'Approved' || item.status === 'Not Approved')
+      ? `<button id="rejectButton" class="bg-red-500 hover:bg-red-600 text-white px-6 py-2 rounded-lg mr-2">
        Reject
      </button>`
-  : '';
+      : '';
 
-const approveButton = (item.status === 'Rejected' || item.status === 'Not Approved')
-  ? `<button id="approveButton" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
+    const approveButton = (item.status === 'Rejected' || item.status === 'Not Approved')
+      ? `<button id="approveButton" class="bg-green-500 hover:bg-green-600 text-white px-4 py-2 rounded-lg">
        Approve
      </button>`
-  : '';
+      : '';
 
-const tableHtml = `
+    const tableHtml = `
   <div class="container mx-auto">
     <h1 class="text-center text-2xl font-bold mb-4 dark:text-white">Officer Name: ${item.firstNameEnglish}</h1>
     <div>
@@ -283,7 +245,7 @@ const tableHtml = `
   </div>
 `;
 
-    const swalInstance = Swal.fire({
+    Swal.fire({
       html: tableHtml,
       showConfirmButton: false,
       width: 'auto',
@@ -297,50 +259,34 @@ const tableHtml = `
       didOpen: () => {
         // Approve Button
         document.getElementById('approveButton')?.addEventListener('click', () => {
-          this.handleStatusChange(swalInstance, item.id, 'Approved');
+          this.handleStatusChange(item.id, 'Approved');
         });
 
         // Reject Button
         document.getElementById('rejectButton')?.addEventListener('click', () => {
-          this.handleStatusChange(swalInstance, item.id, 'Rejected');
+          this.handleStatusChange(item.id, 'Rejected');
         });
       }
     });
   }
 
-  private handleStatusChange(swalInstance: any, id: number, status: 'Approved' | 'Rejected') {
-    // Show loading state
+  private handleStatusChange(id: number, status: 'Approved' | 'Rejected') {
+    // Close the popup right away and hand loading off to the app's default loader
+    Swal.close();
     this.isLoading = true;
-    swalInstance.update({
-      showConfirmButton: false,
-      allowEscapeKey: false,
-      allowOutsideClick: false,
-      customClass: {
-        popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
-        title: 'dark:text-white',
-      },
-
-      didOpen: () => {
-        Swal.showLoading();
-      }
-    });
 
     this.ManageOficerSrv.ChangeStatus(id, status).subscribe({
       next: (res) => {
-        swalInstance.close();
+        this.isLoading = false;
         if (res.status) {
-          this.isLoading = false;
-          swalInstance.close();
           const action = status === 'Approved' ? 'approved' : 'rejected';
           this.toastSrv.success(`The Distribution Officer ${action} successfully.`);
           this.fetchByRole();
         } else {
-          this.isLoading = false;
           this.toastSrv.error(res.message || `Failed to ${status.toLowerCase()} the collection.`);
         }
       },
       error: (err) => {
-        swalInstance.close();
         this.isLoading = false;
         this.toastSrv.error(`An error occurred while ${status.toLowerCase()}ing. Please try again.`);
       }
@@ -358,20 +304,12 @@ const tableHtml = `
 
   // Keep your existing methods
   applyStatusFilters() {
+    this.page = 1;
     this.fetchByRole();
   }
 
-  // applyStatusFilters() {
-  //   this.fetchByRole();
-  // }
-
-  // clearStatusFilter() {
-  //   this.selectStatus = ''
-  //   this.fetchByRole();
-  // }
-
   applyRoleFilters() {
-
+    this.page = 1;
     if (this.selectRole === 'Distribution Centre Manager') {
       this.selectRole = 'Distribution Centre Manager'
     }
@@ -388,6 +326,7 @@ const tableHtml = `
   }
 
   onSearch() {
+    this.page = 1;
     if (this.searchText) {
       this.searchText = this.searchText.trim();
     }
@@ -403,16 +342,6 @@ const tableHtml = `
     this.page = event;
     this.fetchByRole();
   }
-
-  // applyCompanyFilters() {
-  //   this.fetchByRole();
-  // }
-
-  // clearCompanyFilter(event: MouseEvent) {
-  //   event.stopPropagation();
-  //   this.selectCenters = '';
-  //   this.applyCompanyFilters();
-  // }
 
   getAllCenters() {
     this.ManageOficerSrv.getDCHOwnCenters().subscribe(
@@ -445,8 +374,6 @@ class CollectionOfficers {
   status!: string;
   created_at!: string;
   phoneCode01!: string;
-
-  // cch
   centerName!: string;
 }
 

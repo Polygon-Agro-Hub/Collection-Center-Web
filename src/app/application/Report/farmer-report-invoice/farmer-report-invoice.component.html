@@ -14,7 +14,7 @@
                 <p class="font-semibold dark:text-white mb-1">INV NO : {{userObj.invNo}}</p>
                 <p class="dark:text-textDark text-[#575757]">
                     Date : {{ userObj.createdAt | date:'yyyy/MM/dd At hh:mm a' }}
-                  </p>
+                </p>
             </div>
 
             <div class="mt-6 mb-4">
@@ -22,28 +22,43 @@
                 <table>
                     <thead>
                         <tr>
-                            <th class="text-[#434343] border-[2px] border-[#b3b1b1] text-center py-2 px-8 dark:text-white">First Name
+                            <th
+                                class="text-[#434343] border-[2px] border-[#b3b1b1] text-center py-2 px-8 dark:text-white">
+                                First Name
                             </th>
-                            <th class="text-[#434343] border-[2px] border-[#b3b1b1] text-center py-2 px-8 dark:text-white">Last Name
+                            <th
+                                class="text-[#434343] border-[2px] border-[#b3b1b1] text-center py-2 px-8 dark:text-white">
+                                Last Name
                             </th>
-                            <th class="text-[#434343] border-[2px] border-[#b3b1b1] text-center py-2 px-8 dark:text-white">NIC Number
+                            <th
+                                class="text-[#434343] border-[2px] border-[#b3b1b1] text-center py-2 px-8 dark:text-white">
+                                NIC Number
                             </th>
-                            <th class="text-[#434343] border-[2px] border-[#b3b1b1] text-center py-2 px-8 dark:text-white">Phone Number
+                            <th
+                                class="text-[#434343] border-[2px] border-[#b3b1b1] text-center py-2 px-8 dark:text-white">
+                                Phone Number
                             </th>
-                            <th class="text-[#434343] border-[2px] border-[#b3b1b1] text-center py-2 px-8 dark:text-white">Address</th>
+                            <th
+                                class="text-[#434343] border-[2px] border-[#b3b1b1] text-center py-2 px-8 dark:text-white">
+                                Address</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr>
-                            <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-8 dark:text-textDark">
+                            <td
+                                class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-8 dark:text-textDark">
                                 {{userObj.firstName}}</td>
-                            <td class="border-[2px] border-[#b3b1b1] text-[#000000]text-center py-2 px-8 dark:text-textDark">
+                            <td
+                                class="border-[2px] border-[#b3b1b1] text-[#000000]text-center py-2 px-8 dark:text-textDark">
                                 {{userObj.lastName}}</td>
-                            <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-8 dark:text-textDark">
+                            <td
+                                class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-8 dark:text-textDark">
                                 {{userObj.NICnumber}}</td>
-                            <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-8 dark:text-textDark">
+                            <td
+                                class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-8 dark:text-textDark">
                                 {{userObj.phoneNumber}}</td>
-                            <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-8 dark:text-textDark">
+                            <td
+                                class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-8 dark:text-textDark">
                                 <span *ngIf="userObj.houseNo && userObj.streetName && userObj.city; else noAddress">
                                     {{ userObj.houseNo }}, {{ userObj.streetName }}, {{ userObj.city }}
                                 </span>
@@ -65,26 +80,38 @@
                 <table>
                     <thead>
                         <tr>
-                            <th class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-8 dark:text-white">Account
+                            <th
+                                class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-8 dark:text-white">
+                                Account
                                 Number
                             </th>
-                            <th class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-8 dark:text-white">Account
+                            <th
+                                class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-8 dark:text-white">
+                                Account
                                 Holder’s
                                 Name</th>
-                            <th class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-8 dark:text-white">Bank Name
+                            <th
+                                class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-8 dark:text-white">
+                                Bank Name
                             </th>
-                            <th class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-8 dark:text-white">Branch Name
+                            <th
+                                class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-8 dark:text-white">
+                                Branch Name
                             </th>
                         </tr>
                     </thead>
                     <tbody>
-                        <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-8 dark:text-textDark">
+                        <td
+                            class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-8 dark:text-textDark">
                             {{userObj.accNumber}}</td>
-                        <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-8 dark:text-textDark">
+                        <td
+                            class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-8 dark:text-textDark">
                             {{userObj.accHolderName}}</td>
-                        <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-8 dark:text-textDark">
+                        <td
+                            class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-8 dark:text-textDark">
                             {{userObj.bankName}}</td>
-                        <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-8 dark:text-textDark">
+                        <td
+                            class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-8 dark:text-textDark">
                             {{userObj.branchName}}</td>
                     </tbody>
                 </table>
@@ -97,49 +124,77 @@
                 <table>
                     <thead>
                         <tr>
-                            <th class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white">Crop Name
+                            <th
+                                class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white text-[14px]">
+                                Crop Name
                             </th>
-                            <th class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white">Variety</th>
-                            <th class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white">Unit Price
+                            <th
+                                class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white text-[14px]">
+                                Variety</th>
+                            <th
+                                class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white text-[14px]">
+                                Unit Price
                                 (A)
                             </th>
-                            <th class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white">Quantity
+                            <th
+                                class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white text-[14px]">
+                                Quantity
                             </th>
-                            <th class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white">Unit Price
+                            <th
+                                class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white text-[14px]">
+                                Unit Price
                                 (B)
                             </th>
-                            <th class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white">Quantity
+                            <th
+                                class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white text-[14px]">
+                                Quantity
                             </th>
-                            <th class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white">Unit Price
+                            <th
+                                class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white text-[14px]">
+                                Unit Price
                                 (C)
                             </th>
-                            <th class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white">Quantity
+                            <th
+                                class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white text-[14px]">
+                                Quantity
                             </th>
-                            <th class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white">Total (Rs.)</th>
+                            <th
+                                class="border-[2px] border-[#b3b1b1] text-[#434343] text-center py-2 px-4 dark:text-white text-[14px]">
+                                Total (Rs.)</th>
 
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let item of CropArr">
-                            <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark">
+                            <td
+                                class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark text-[14px]">
                                 {{item.cropNameEnglish}}</td>
-                            <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark">
+                            <td
+                                class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark text-[14px]">
                                 {{item.varietyNameEnglish}}</td>
-                            <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark">
+                            <td
+                                class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark text-[14px]">
                                 {{item.gradeAprice}}</td>
-                            <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark">
+                            <td
+                                class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark text-[14px]">
                                 {{(item.gradeAquan | number: '1.2-2' )}}</td>
-                            <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark">
+                            <td
+                                class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark text-[14px]">
                                 {{item.gradeBprice}}</td>
-                            <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark">
+                            <td
+                                class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark text-[14px]">
                                 {{(item.gradeBquan | number: '1.2-2' )}}</td>
-                            <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark">
+                            <td
+                                class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark text-[14px]">
                                 {{item.gradeCprice}}</td>
-                            <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark">
+                            <td
+                                class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark text-[14px]">
                                 {{(item.gradeCquan | number: '1.2-2' )}}</td>
-                            <td class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark">
-                                
-                                {{ calculateRowTotal(item) != null ? (calculateRowTotal(item) | number: '1.2-2') : '0.00' }}
+                            <td
+                                class="border-[2px] border-[#b3b1b1] text-[#000000] text-center py-2 px-4 dark:text-textDark text-[14px]">
+
+                                {{ calculateRowTotal(item) != null ? (calculateRowTotal(item) | number: '1.2-2') :
+                                '0.00' }}
                             </td>
 
                         </tr>
@@ -148,12 +203,12 @@
             </div>
 
 
-            <p class="text-lg font-medium my-8 dark:text-white">
+            <p class="font-medium my-8 text-[#000000] dark:text-white">
                 Full Total (Rs.) :
                 <span class="dark:text-textDark">
-                  {{ totalAmount != null ? (totalAmount | number: '1.2-2') : '0.00' }}
+                    {{ totalAmount != null ? (totalAmount | number: '1.2-2') : '0.00' }}
                 </span>
-              </p>
+            </p>
 
             <div class="flex flex-row items-center justify-center gap-[15%]">
                 <div class="flex flex-col gap-2 items-center">
@@ -163,7 +218,7 @@
                     <ng-template #farmerPlaceholder>
                         <div class="w-36 h-36"></div>
                     </ng-template>
-                    <p class="text-lg font-medium dark:text-textDark">Farmer’s QR Code</p>
+                    <p class="text-[#000000] font-medium dark:text-textDark">Farmer’s QR Code</p>
                 </div>
 
                 <div class="flex flex-col gap-2 items-center">
@@ -173,14 +228,15 @@
                     <ng-template #officerPlaceholder>
                         <div class="w-36 h-36"></div>
                     </ng-template>
-                    <p class="text-lg font-medium dark:text-textDark">Officer’s QR Code</p>
+                    <p class=" text-[#000000] font-medium dark:text-textDark">Officer’s QR Code</p>
                 </div>
             </div>
 
         </div>
 
         <div class="flex items-center justify-center mt-10">
-            <button (click)="downloadReport()" class="bg-[#415CFF] text-lg text-white px-6 py-2 rounded-lg shadow-lg">
+            <button (click)="downloadReport()"
+                class="bg-[#415CFF] text-[18px] text-white px-6 py-2 rounded-lg shadow-lg">
                 Download
             </button>
 

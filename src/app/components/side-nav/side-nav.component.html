@@ -3,7 +3,7 @@
 >
   <!-- Header -->
   <div
-  class="flex items-center gap-3 p-5 cursor-pointer mx-2"
+  class="flex items-center gap-3 px-5 py-2 cursor-pointer mx-2"
   (click)="toggleSidebar()"
 >
   <img [src]="companyLogo || 'assets/images/logo.png'" class="w-10 h-10" />
@@ -18,7 +18,7 @@
 
   <!-- Dynamic Menu -->
   <div class="flex-1 overflow-y-auto scrollbar-none dark:bg-[#1D1D1F]">
-    <ul class="space-y-1  pb-4 pt-2">
+    <ul class="space-y-1  pb-2 pt-2">
       <ng-container *ngFor="let item of filteredMenuItems">
         <li
           class="flex flex-row items-center gap-4 p-3 rounded-lg cursor-pointer hover:bg-[#EDF5FC] group"
@@ -50,7 +50,7 @@
   </div>
 
   <!-- Theme Toggle & Logout -->
-  <div class="mx-5 space-y-4 pb-5">
+  <div class="mx-5 space-y-1 pb-2">
     <!-- Theme Toggle -->
     <div
       *ngIf="!isCollapsed && isDarkTheme()"
@@ -130,7 +130,7 @@
     <div class="flex items-center dark:hover:text-black">
       <button
         *ngIf="!isCollapsed"
-        class="hover:bg-[#EDF5FC] w-full rounded-lg flex flex-row items-center gap-x-4 dark:text-red-500 text-red-500 p-4 pl-5 dark:hover:text-[#272F45]"
+        class="hover:bg-[#EDF5FC] w-full rounded-lg flex flex-row items-center gap-x-4 dark:text-red-500 text-red-500 px-4 py-2 pl-5 dark:hover:text-[#272F45]"
         (click)="logOut()"
       >
         <i class="fas fa-sign-out-alt text-lg"></i>

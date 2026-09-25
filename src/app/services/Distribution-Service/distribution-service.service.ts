@@ -10,11 +10,14 @@ import { environment } from '../../environments/environment';
 export class DistributionServiceService {
 
   private apiUrl = `${environment.API_BASE_URL}/distribution`;
-  private token!: string | null;
+  private token!: string | null; 
+  private role!: string | null;
 
   constructor(private http: HttpClient, private tokenSrv: TokenServiceService) {
     this.token = this.tokenSrv.getToken()
+    this.role = this.tokenSrv.getUserDetails().role
   }
+
 
   getDistributionCenterDetails(page: number = 1, limit: number = 10, province: string = '', district: string = '', search: string = ''): Observable<any> {
     const headers = new HttpHeaders({
@@ -169,6 +172,7 @@ export class DistributionServiceService {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
+
 
 
     let url = `${this.apiUrl}/get-all-assign-orders?test=${1}`;

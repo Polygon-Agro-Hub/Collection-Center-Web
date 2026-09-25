@@ -350,9 +350,6 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
       this.totalPackagePrice += +pkg.productPrice || 0;
     });
 
-    console.log('totalPackagePrice', this.totalPackagePrice)
-    console.log('totalDefinePkgPrice', this.totalDefinePkgPrice)
-
     // Compare against 1.08 * totalPackagePrice
     const limit = 1.08 * this.totalPackagePrice;
 
@@ -360,7 +357,6 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
       this.totalPackagePrice <= this.totalDefinePkgPrice &&
       this.totalDefinePkgPrice <= limit;
 
-    console.log('isWithinLimit', this.isWithinLimit)
 
     if (this.totalDefinePkgPrice < this.totalPackagePrice) {
       this.limitMassage = `The calculated price is below the minimum limit of Rs.${this.totalPackagePrice.toFixed(2)}. To save the order, the calculated price must be equal to or within 8% above the target price.`
@@ -370,22 +366,14 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
       this.limitMassage = `Allowed limit: ${this.totalPackagePrice.toFixed(2)} + ${this.totalPackagePrice.toFixed(2)} x 8% = Rs.${limit.toFixed(2)}.`
     }
 
-    console.log('massage',  this.limitMassage)
-
-    // this.isWithinLimit = this.totalDefinePkgPrice <= limit;
-
   }
 
 
 
 
   calculateTotalPrice() {
-    console.log('ran')
-    console.log('od', this.orderdetailsArr)
     if (this.orderdetailsArr && this.orderdetailsArr.length) {
       this.totalPrice = this.getCombinedProductPrice();
-
-      console.log('totalPrice', this.totalPrice)
 
       // Calculate the allowed limit (8% of the total price)
       const allowedLimit = this.totalPrice * 1.08;
@@ -397,17 +385,9 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
         0
       );
 
-      console.log('currentTotal', currentTotal)
-
-      // Validate if current total is within the allowed limit
-      // this.isWithinLimit = currentTotal <= allowedLimit;
-
        this.isWithinLimit =
       this.totalPrice <= currentTotal &&
       currentTotal <= allowedLimit;
-
-    console.log('isWithinLimit', this.isWithinLimit)
-
     const minLimitText = this.totalPrice.toFixed(2);
 
     if (currentTotal < this.totalPrice) {
@@ -417,8 +397,6 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
     } else {
       this.limitMassage = `Allowed limit: ${minLimitText} + ${minLimitText} x 8% = Rs.${allowedLimit.toFixed(2)}.`
     }
-
-    console.log('massage',  this.limitMassage)
 
     } else {
       this.totalPrice = 0;

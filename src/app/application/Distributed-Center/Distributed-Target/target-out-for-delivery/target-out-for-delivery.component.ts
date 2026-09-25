@@ -128,7 +128,6 @@ export class TargetOutForDeliveryComponent implements OnInit {
     this.DistributionSrv.getOutForDeliveryOrders(status, search, type, timeSlot, row, selectDate, centerId).subscribe(
       (res) => {
         this.ordersArr = res.items
-        console.log('ordersArr', this.ordersArr)
         this.rowIndexes = res.rowIndexes;
         this.rowDropdownOptions = this.rowIndexes
         this.centerName = res.centerName;

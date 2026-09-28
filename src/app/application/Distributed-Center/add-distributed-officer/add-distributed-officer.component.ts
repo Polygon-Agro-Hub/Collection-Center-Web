@@ -48,7 +48,8 @@ export class AddDistributedOfficerComponent implements OnInit {
   selectedImage: string | ArrayBuffer | null = null;
   selectedFile: File | null = null;
   logingRole: string | null = null;
-  languagesRequired: boolean = false;
+  // null = not yet validated (treated as no value, same as true); false = a language is selected.
+  languagesRequired: boolean | null = null;
   isLoading: boolean = false;
   banks: Bank[] = [];
   branches: Branch[] = [];
@@ -369,6 +370,7 @@ export class AddDistributedOfficerComponent implements OnInit {
 
   validateLanguages() {
     this.languagesRequired = !this.personalData.languages || this.personalData.languages.trim() === '';
+    console.log('la', this.languagesRequired);
   }
 
 
@@ -821,7 +823,7 @@ export class AddDistributedOfficerComponent implements OnInit {
       missingFields.push('Distribution Centre Manager is required');
     }
 
-    if (this.languagesRequired) {
+    if (this.languagesRequired !== false) {
       missingFields.push('Please select at least one Preferred Language');
     }
 

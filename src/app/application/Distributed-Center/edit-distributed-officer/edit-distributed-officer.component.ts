@@ -51,7 +51,8 @@ export class EditDistributedOfficerComponent implements OnInit {
 
   centerId!: number;
 
-  languagesRequired: boolean = false;
+  // null = not yet validated (treated as no value, same as true); false = a language is selected.
+  languagesRequired: boolean | null = null;
 
   selectedFileName!: string
   selectedImage: string | ArrayBuffer | null = null;
@@ -425,6 +426,7 @@ export class EditDistributedOfficerComponent implements OnInit {
         } else if (!this.personalData.languages) {
           this.personalData.languages = '';
         }
+        this.validateLanguages();
 
         // driverCategoryDropdownItems values are stringified ids; coerce so the
         // searchable dropdown's writeValue() strict-equality match succeeds.
@@ -1084,7 +1086,7 @@ export class EditDistributedOfficerComponent implements OnInit {
       missingFields.push('Distribution Centre Manager is required');
     }
 
-    if (this.languagesRequired) {
+    if (this.languagesRequired !== false) {
       missingFields.push('Please select at least one Preferred Language');
     }
 

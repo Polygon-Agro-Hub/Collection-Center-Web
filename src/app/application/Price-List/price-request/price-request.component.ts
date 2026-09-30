@@ -545,10 +545,10 @@ export class PriceRequestComponent implements OnInit {
   ApproveStatus() {
 
     if (Number(this.requestPrice) > (this.originalProce + 15)) {
-      this.toastSrv.error('Approval is restricted to a maximum 15 rupees range from original market price.');
+      this.toastSrv.error('Approval is restricted to a maximum 15 rupees range from original market price. Please forward this request to CCH.');
       return;
     } else if (Number(this.requestPrice) < (this.originalProce - 15)) {
-      this.toastSrv.error('Approval is restricted to a maximum 15 rupees range from original market price.');
+      this.toastSrv.error('Approval is restricted to a maximum 15 rupees range from original market price. Please forward this request to CCH.');
       return;
     }
 

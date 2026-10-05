@@ -38,26 +38,26 @@ body {
 
 
 /* Shared pagination bar (ngx-pagination) dark-mode styles */
-.dark .pagination-bar .ngx-pagination {
+.dark .ngx-pagination {
     color: #d1d5db;
 }
 
-.dark .pagination-bar .ngx-pagination a {
+.dark .ngx-pagination a {
     color: #1f2937 !important;
     background-color: #F3F4F6;
     transition: background-color 0.15s ease;
 }
 
-.dark .pagination-bar .ngx-pagination a:hover {
-    background-color: #E5E7EB;
+.dark .ngx-pagination a:hover {
+    background-color: #D1D5DB;
 }
 
-.dark .pagination-bar .ngx-pagination .current {
+.dark .ngx-pagination .current {
     color: #ffffff !important;
     background-color: #415CFF;
 }
 
-.dark .pagination-bar .ngx-pagination .disabled {
+.dark .ngx-pagination .disabled {
     color: #6b7280 !important;
     background-color: #1f2937;
 }

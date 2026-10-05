@@ -188,14 +188,14 @@ export const MENU_ITEMS = [
     permission: ['Distribution Centre Manager'],
   },
 
-  // {
-  //   id: 23,
-  //   key: 'dispatched',
-  //   path: '/dispatched',
-  //   label: 'Dispatched',
-  //   icon: 'fa-solid fa-truck-fast',
-  //   permission: ['Distribution Centre Manager'],
-  // },
+  {
+    id: 23,
+    key: 'dispatched',
+    path: '/dispatched',
+    label: 'Dispatched',
+    icon: 'fa-solid fa-truck-fast',
+    permission: ['Distribution Centre Manager'],
+  },
 
   {
     id: 18,

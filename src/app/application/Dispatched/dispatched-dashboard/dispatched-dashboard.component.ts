@@ -188,7 +188,7 @@ export class DispatchedDashboardComponent implements OnInit {
         break;
 
       case 'out-for-delivery':
-        this.placeholderDate = 'Out Date'
+        this.placeholderDate = 'Pack Date'
         this.searchPlaceHolder = 'Search by Order ID, Any Phone..'
         break;
 

@@ -305,7 +305,7 @@
                             </div>
                         </div>
 
-                        <p *ngIf="languagesRequired" class="text-red-500 text-sm mt-2">
+                        <p *ngIf="languagesRequired === true" class="text-red-500 text-sm mt-2">
                             Please select at least one Preferred Language.
                         </p>
                     </div>
@@ -544,8 +544,8 @@
                         class="px-6 py-2 bg-[#F6F7F9] border-gray-400 border-[2px] text-[#6B7D8C] rounded-lg mr-2"
                         (click)="onCancel()">Cancel</button>
                     <button (click)="
-      !PageOneForm.invalid 
-      && !this.languagesRequired
+      !PageOneForm.invalid
+      && this.languagesRequired === false
       && personalData.phoneNumber02 !== personalData.phoneNumber01 
       && personalData.jobRole 
       && (!isDriverRole(personalData.jobRole) || personalData.drvCategory)

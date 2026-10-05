@@ -611,18 +611,18 @@ export const routes: Routes = [
                 ]
             },
 
-            // {
-            //     path: 'dispatched',
-            //     canActivate:[RoleGuardService],
-            //     data: { roles: ['Distribution Centre Manager'] },
-            //     children: [
-            //         {
-            //             path: '',
-            //             component: DispatchedDashboardComponent,
-            //         },
+            {
+                path: 'dispatched',
+                canActivate:[RoleGuardService],
+                data: { roles: ['Distribution Centre Manager'] },
+                children: [
+                    {
+                        path: '',
+                        component: DispatchedDashboardComponent,
+                    },
                     
-            //     ]
-            // },
+                ]
+            },
 
 
             {

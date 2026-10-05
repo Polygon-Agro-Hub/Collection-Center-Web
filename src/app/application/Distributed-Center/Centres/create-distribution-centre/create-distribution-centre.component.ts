@@ -137,7 +137,7 @@ export class CreateDistributionCentreComponent implements OnInit {
         .generateRegCode(province, district, city)
         .subscribe({
           next: (response) => {
-            this.centerData.regCode = `D-${response.regCode}`;
+            this.centerData.regCode = response.regCode;
             this.isLoadingregcode = false;
           },
           error: (error) => {
@@ -397,7 +397,7 @@ export class CreateDistributionCentreComponent implements OnInit {
       Swal.fire({
         icon: 'warning',
         title: 'Invalid Latitude',
-        text: 'Latitude cannot be greater than 90°.',
+        text: 'Latitude cannot be greater than 90.',
         confirmButtonColor: '#3085d6',
         customClass: {
           popup: 'bg-white dark:bg-[#363636] text-[#534E4E] dark:text-textDark',
@@ -411,7 +411,7 @@ export class CreateDistributionCentreComponent implements OnInit {
       Swal.fire({
         icon: 'warning',
         title: 'Invalid Latitude',
-        text: 'Latitude cannot be less than -90°.',
+        text: 'Latitude cannot be less than -90.',
         confirmButtonColor: '#3085d6',
         customClass: {
           popup: 'bg-white dark:bg-[#363636] text-[#534E4E] dark:text-textDark',

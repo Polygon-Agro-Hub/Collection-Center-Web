@@ -100,6 +100,7 @@ export class TodayDeliveriesViewPopupComponent implements OnInit, OnChanges {
         next: (response) => {
           this.trackingDetails = response;
           this.steps = this.buildSteps();
+          console.log('steps', this.steps)
           this.loading = false;
         },
         error: (err) => {
@@ -114,6 +115,8 @@ export class TodayDeliveriesViewPopupComponent implements OnInit, OnChanges {
     const steps: TimelineStep[] = [];
     const c = this.trackingDetails?.centerDetails;
     const d = this.trackingDetails?.driverDetails;
+
+    console.log('d', d)
 
     if (!c) return steps;
 
@@ -135,11 +138,19 @@ export class TodayDeliveriesViewPopupComponent implements OnInit, OnChanges {
 
     if (!d) return steps;
 
+    if (d) {
+      console.log('d', d)
+    } else {
+      console.log('mot d', d)
+    }
+
     if (d.collectTime) {
+          console.log('collectTime', d.collectTime)
       steps.push({ type: 'collected', payload: { empId: d.empId, driverName: d.driverName, driverPhone: d.driverPhone, collectTime: d.collectTime } });
     } else {
       return steps;
     }
+
 
     if (d.startTime) {
       steps.push({ type: 'started', payload: { startTime: d.startTime } });

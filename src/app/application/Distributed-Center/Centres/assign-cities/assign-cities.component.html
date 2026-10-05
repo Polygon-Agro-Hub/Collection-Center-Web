@@ -39,7 +39,7 @@
 <div class="h-[20px]"></div>
 
 <div class="mx-auto p-6 bg-white dark:bg-[#363636] rounded-lg shadow-mg relative overflow-x-auto">
-    <div *ngIf="hasData && citiesArr.length > 0 && centersArr.length > 0">
+    <div *ngIf="hasData">
         <table class="min-w-full divide-y divide-gray-200 table-auto">
             <thead>
                 <tr>
@@ -71,14 +71,14 @@
         </table>
     </div>
 
-    <div *ngIf="!selectDistrict || !selectProvince || !hasData"
+    <div *ngIf="!fetched"
         class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6 ">
         <p class="text-[#494949] my-6 dark:text-textDark">--Please select the province and district first--</p>
         <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
     </div>
 
     <!-- No Data Message -->
-    <div *ngIf="hasData && (citiesArr.length === 0 || centersArr.length === 0)"
+    <div *ngIf="!hasData && fetched"
         class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6 ">
         <p class="text-[#494949] my-6 dark:text-textDark">--No Centres in this district--</p>
         <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />

@@ -1,9 +1,10 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, HostListener, ElementRef, ViewChild } from '@angular/core';
+import { Component, OnInit, HostListener, ElementRef, ViewChild, DestroyRef, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormsModule, NgForm, ReactiveFormsModule } from '@angular/forms';
 import Swal from 'sweetalert2';
 import { ManageOfficersService } from '../../../services/manage-officers-service/manage-officers.service';
-import { ActivatedRoute, Router } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router } from '@angular/router';
 import { ToastAlertService } from '../../../services/toast-alert/toast-alert.service';
 import { TokenServiceService } from '../../../services/Token/token-service.service';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
@@ -14,7 +15,7 @@ import { SerchableDropdownComponent } from '../../../components/serchable-dropdo
 import { Country, COUNTRIES } from '../../../../assets/country-data';
 import { JOB_ROLE_TYPES, JobRoleTypes } from '../../../../assets/job-roles-data';
 import { CustomDatepickerComponent } from '../../../components/custom-datepicker/custom-datepicker.component';
-import { firstValueFrom } from 'rxjs';
+import { filter, firstValueFrom } from 'rxjs';
 
 @Component({
   selector: 'app-edit-distributed-officer',
@@ -51,7 +52,8 @@ export class EditDistributedOfficerComponent implements OnInit {
 
   centerId!: number;
 
-  languagesRequired: boolean = false;
+  // null = not yet validated (treated as no value, same as true); false = a language is selected.
+  languagesRequired: boolean | null = null;
 
   selectedFileName!: string
   selectedImage: string | ArrayBuffer | null = null;
@@ -72,6 +74,8 @@ export class EditDistributedOfficerComponent implements OnInit {
 
   invalidFields: Set<string> = new Set();
   naviPath!: string
+  isFromDistributionCenter = false;
+  private destroyRef = inject(DestroyRef);
 
   countries: Country[] = COUNTRIES;
   selectedCountry1: Country | null = null;
@@ -221,8 +225,23 @@ export class EditDistributedOfficerComponent implements OnInit {
       this.fetchOffierById(this.editOfficerId);
     });
 
-    this.setJobRoles();
+    this.trackUrlSegments();
     this.setActiveTabFromRoute()
+
+    this.router.events
+      .pipe(
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe(() => this.trackUrlSegments());
+  }
+
+  // e.g. /distribution-center/edit-distribution-officer/232 -> drivers are not allowed
+  private trackUrlSegments(): void {
+    const segments = this.router.parseUrl(this.router.url).root.children['primary']?.segments.map(s => s.path) ?? [];
+    const editIndex = segments.indexOf('edit-distribution-officer');
+    this.isFromDistributionCenter = editIndex > 0 && segments[editIndex - 1] === 'distribution-center';
+    this.setJobRoles();
   }
 
   isDriverRole(role: string | null | undefined): boolean {
@@ -246,6 +265,10 @@ export class EditDistributedOfficerComponent implements OnInit {
     else {
       // Default (if needed)
       this.jobRoles = [];
+    }
+
+    if (this.isFromDistributionCenter) {
+      this.jobRoles = this.jobRoles.filter(role => !this.isDriverRole(role));
     }
   }
 
@@ -425,6 +448,7 @@ export class EditDistributedOfficerComponent implements OnInit {
         } else if (!this.personalData.languages) {
           this.personalData.languages = '';
         }
+        this.validateLanguages();
 
         // driverCategoryDropdownItems values are stringified ids; coerce so the
         // searchable dropdown's writeValue() strict-equality match succeeds.
@@ -1084,7 +1108,7 @@ export class EditDistributedOfficerComponent implements OnInit {
       missingFields.push('Distribution Centre Manager is required');
     }
 
-    if (this.languagesRequired) {
+    if (this.languagesRequired !== false) {
       missingFields.push('Please select at least one Preferred Language');
     }
 

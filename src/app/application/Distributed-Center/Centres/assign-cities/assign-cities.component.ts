@@ -79,6 +79,7 @@ export class AssignCitiesComponent implements OnInit {
 
   isLoading: boolean = false;
   hasData: boolean = false;
+  fetched: boolean = false;
 
   constructor(
     private router: Router,
@@ -94,6 +95,7 @@ export class AssignCitiesComponent implements OnInit {
   }
 
   fetchData() {
+    this.fetched = true;
     this.isLoading = true;
     this.hasData = false;
 
@@ -105,7 +107,9 @@ export class AssignCitiesComponent implements OnInit {
         this.centersArrWithDups = (res.centers);
         this.centersArr = this.removeDuplicateCenters(res.centers);
         this.isLoading = false;
-        this.hasData = true;
+        this.hasData = this.centersArr.length > 0;
+
+        console.log('hasData', this.hasData, this.centersArr)
 
         this.initializeAssignments();
       },

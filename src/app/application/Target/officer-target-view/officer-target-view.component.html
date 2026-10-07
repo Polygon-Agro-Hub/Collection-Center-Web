@@ -73,25 +73,25 @@
 
 
     <div *ngIf="isInitialDataSet"
-        class="w-full overflow-x-auto px-10 py-7 bg-tileLight dark:bg-[#363636] rounded-lg mt-8">
+        class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] rounded-lg mt-8">
 
         <div class="">
             <p class="font-semibold mb-1 text-lg dark:text-white whitespace-nowrap">
                 {{OfficerObj.fromDate + ' - ' + OfficerObj.toDate}} </p>
         </div>
 
-        <div class="flex flex-row items-center justify-between mb-8">
-            <div class="flex flex-row gap-4 ">
+        <div class="flex flex-row flex-wrap items-center justify-between gap-4 mb-8">
+            <div class="flex flex-row gap-4 flex-shrink-0">
 
                 <p class="font-semibold mb-1 text-lg dark:text-white whitespace-nowrap">EMP ID:
                     {{OfficerObj.empId}} </p>
             </div>
-            <div class="flex flex-row items-center gap-5 ">
+            <div class="flex flex-row flex-wrap items-center justify-end gap-5 flex-1 min-w-0">
                 <!-- <i class="fa-solid fa-list text-2xl dark:text-white ml-8"></i>
 
             <p class="font-normal dark:text-white">Filter By</p> -->
 
-                <div class="relative w-40 custom-status-dropdown-container ml-8">
+                <div class="relative w-40 flex-shrink-0 custom-status-dropdown-container">
                     <select [(ngModel)]="selectStatus" class="hidden" (change)="applyStatusFilters()">
                         <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
                             value="Pending">Pending</option>
@@ -133,7 +133,7 @@
                 </div>
 
                 <!-- Validity Dropdown -->
-                <div class="relative w-40 custom-validity-dropdown-container">
+                <div class="relative w-40 flex-shrink-0 custom-validity-dropdown-container">
                     <select [(ngModel)]="selectValidity" class="hidden">
                         <option class="dark:bg-[#292929] text-textLight dark:text-textDark hover:bg-gray-300"
                             value="Expired">Expired</option>
@@ -173,10 +173,10 @@
                 </div>
 
 
-                <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+                <div class="flex items-center rounded-full px-4 py-2 flex-1 min-w-48 max-w-xs bg-[#F1F1F1] dark:bg-[#292929]">
                     <input type="text" placeholder="Search by Variety Name" [(ngModel)]="searchText"
                         (input)="trimedSearchText()" (keyup.enter)="onSearch()" (keyup.esc)="offSearch()"
-                        class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
+                        class="bg-transparent outline-none w-full min-w-0 text-textLight dark:text-textDark" />
                     <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                         (click)="onSearch()">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -205,13 +205,13 @@
         </div>
 
 
-        <div *ngIf="hasData && isInitialDataSet"
-            class=" mr-5 min-w-max border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
-            <table class="w-full min-w-max divide-y-2 overflow-hidden">
-                <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
+        <div *ngIf="hasData && isInitialDataSet">
+          <div class="isolate overflow-auto max-h-[max(440px,calc(100vh-920px))] border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+            <table class="w-full min-w-max divide-y-2">
+                <thead class="sticky top-0 z-20 bg-white text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
                     <tr>
-                        <th class="px-6 py-3 text-left font-medium">No</th>
-                        <th class="px-6 py-3 text-left font-medium">Crop Name</th>
+                        <th class="sticky left-0 bg-white dark:bg-[#0F0F0F] w-20 min-w-20 px-6 py-3 text-left font-medium">No</th>
+                        <th class="sticky left-20 bg-white dark:bg-[#0F0F0F] w-44 min-w-44 px-6 py-3 text-left font-medium">Crop Name</th>
                         <th class="px-6 py-3 text-left font-medium">Variety Name</th>
                         <th class="px-6 py-3 text-left font-medium">Grade</th>
                         <th class="px-6 py-3 text-left font-medium">Target (kg)</th>
@@ -226,10 +226,10 @@
                 <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
                     <tr
                         *ngFor="let item of targetArr | paginate : { itemsPerPage: itemsPerPage, currentPage: page, totalItems: totalItems }; let i = index">
-                        <td class="px-6 py-4 text-gray-900 dark:text-gray-300">
+                        <td class="sticky left-0 z-10 bg-white dark:bg-[#1D1D1F] px-6 py-4 text-gray-900 dark:text-gray-300">
                             {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i + 1)
                                 : (((page - 1) * itemsPerPage) + i + 1) }} </td>
-                        <td class="px-6 py-4 text-black dark:text-gray-300 ">{{item.cropNameEnglish}}</td>
+                        <td class="sticky left-20 z-10 bg-white dark:bg-[#1D1D1F] px-6 py-4 text-black dark:text-gray-300 break-words">{{item.cropNameEnglish}}</td>
                         <td class="px-6 py-4 text-black dark:text-gray-300 ">{{item.varietyNameEnglish}}</td>
                         <td class="px-6 py-4 text-black dark:text-gray-300 text-center">{{item.grade}}</td>
                         <td class="px-6 py-4 text-black dark:text-gray-300">
@@ -303,7 +303,8 @@
                     </tr>
                 </tbody>
             </table>
-            <div *ngIf="hasData" class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#1D1D1F] text-right">
+          </div>
+            <div class="flex justify-end items-center my-5 pt-3 dark:bg-[#1D1D1F] text-right">
                 <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true"
                     [previousLabel]="'Previous'" [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'"
                     [screenReaderPageLabel]="'page'" [screenReaderCurrentLabel]="'Youre on page'">
@@ -314,7 +315,7 @@
 
         <div class="flex justify-center my-5 ">
             <button *ngIf="hasData"
-                class="flex justify-center bg-[#415CFF] text-white shadow-md font-medium rounded-lg py-2 px-5  mr-5 text-lg items-center"
+                class="flex justify-center bg-[#415CFF] text-white shadow-md font-medium rounded-lg py-2 px-5 text-lg items-center"
                 (click)="downloadTemplate1()">
                 <i class="fa-solid fa-download px-2" *ngIf="!isDownloading"></i>
                 <i class="fa-solid fa-spinner fa-spin px-2" *ngIf="isDownloading"></i>

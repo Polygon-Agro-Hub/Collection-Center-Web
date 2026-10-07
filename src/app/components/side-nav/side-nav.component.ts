@@ -179,14 +179,14 @@ export const MENU_ITEMS = [
   // },
 
 
-  {
-    id: 16,
-    key: 'requests',
-    path: '/requests',
-    label: 'Requests',
-    icon: 'fa-solid fa-arrow-right-arrow-left',
-    permission: ['Distribution Centre Manager'],
-  },
+  // {
+  //   id: 16,
+  //   key: 'requests',
+  //   path: '/requests',
+  //   label: 'Requests',
+  //   icon: 'fa-solid fa-arrow-right-arrow-left',
+  //   permission: ['Distribution Centre Manager'],
+  // },
 
   {
     id: 23,

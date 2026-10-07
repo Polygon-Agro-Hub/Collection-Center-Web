@@ -71,7 +71,7 @@ export class ShortageTodayComponent
     const target = this.availableDate.getTime();
 
     this.currentTime = new Date()
-    this.afterSixPm = this.currentTime.getHours() >= 1;
+    this.afterSixPm = this.currentTime.getHours() >= 18;
 
     if (now >= target) {
       this.isWaiting = false;

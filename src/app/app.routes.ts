@@ -284,7 +284,7 @@ export const routes: Routes = [
                         component: DownloadTargetComponent
                     },
                     {
-                        path: 'assing-target/:varietyId/:companyCenterId',
+                        path: 'assing-target/:varietyId/:companyCenterId/:passingDate',
                         component: AssignOfficerTargetComponent
                     },
                     
@@ -293,7 +293,7 @@ export const routes: Routes = [
                         component: EditMyTargetComponent
                     },
                     {
-                        path: 'edit-assing-target/:varietyId/:companyCenterId',
+                        path: 'edit-assing-target/:varietyId/:companyCenterId/:passingDate',
                         component: EditAssignOfficerTargetComponent
                     }
 

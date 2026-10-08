@@ -354,7 +354,7 @@
                                     [class.text-gray-400]="isAssignDateBeforeToday"
                                     [class.cursor-pointer]="!isAssignDateBeforeToday"
                                     [class.cursor-not-allowed]="isAssignDateBeforeToday"
-                                    (click)="!isAssignDateBeforeToday && navigateToAssignTarget(item.varietyId, item.companyCenterId)">
+                                    (click)="!isAssignDateBeforeToday && navigateToAssignTarget(item.varietyId, item.companyCenterId, item.passingDate)">
                                 </i>
                             </span>
 
@@ -365,7 +365,7 @@
                                     [class.text-gray-400]="isAssignDateBeforeToday"
                                     [class.cursor-pointer]="!isAssignDateBeforeToday"
                                     [class.cursor-not-allowed]="isAssignDateBeforeToday"
-                                    (click)="!isAssignDateBeforeToday && navigateToEditAssignTarget(item.varietyId, item.companyCenterId)">
+                                    (click)="!isAssignDateBeforeToday && navigateToEditAssignTarget(item.varietyId, item.companyCenterId, item.passingDate)">
                                 </i>
                             </span>
 
@@ -376,7 +376,7 @@
                                     [class.text-gray-400]="isAssignDateBeforeToday"
                                     [class.cursor-pointer]="!isAssignDateBeforeToday"
                                     [class.cursor-not-allowed]="isAssignDateBeforeToday"
-                                    (click)="!isAssignDateBeforeToday && navigateToEditAssignTarget(item.varietyId, item.companyCenterId)">
+                                    (click)="!isAssignDateBeforeToday && navigateToEditAssignTarget(item.varietyId, item.companyCenterId, item.passingDate)">
                                 </i>
                             </span>
                         </td>

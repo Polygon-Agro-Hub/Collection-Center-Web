@@ -103,8 +103,9 @@
     <!-- Filter Section - Fixed, no scroll -->
     <div class="flex flex-row items-center justify-between min-w-max max-w-[80vw] mx-auto">
       <div class="flex justify-start items-center">
-        <h2 class="text-lg font-semibold text-textLight dark:text-textDark whitespace-nowrap">
-          All ({{ allDeliveries.length < 10 ? ('0' + allDeliveries.length) : allDeliveries.length }}) </h2>
+<h2 class="text-lg font-semibold text-textLight dark:text-textDark whitespace-nowrap">
+  All ({{ allDeliveries.length < 10 ? '0' + allDeliveries.length : allDeliveries.length }})
+</h2>
       </div>
       <div class="flex w-full flex-row items-center justify-end gap-x-5 mr-5">
 
@@ -160,7 +161,9 @@
 
         <div
           *ngIf="activeTab === 'all' || activeTab === 'out-for-delivery' || activeTab === 'Return Received' || activeTab === 'Picked Up'"
-          class="w-36" [ngClass]="{
+          title="Schedule Date"
+          class="w-36" 
+          [ngClass]="{
           'w-44': activeTab === 'Return Received' || activeTab === 'Picked Up',
           'w-32': activeTab === 'all'
         }">
@@ -451,7 +454,7 @@
         <span class="text-sm text-[#000000] dark:text-textDark font-medium flex-1">
           {{
           deliveryObj.orderApp === 'Marketplace'
-          ? 'GoVi Mart'
+          ? 'Polygon'
           : deliveryObj.orderApp === 'Dash'
           ? 'SalesDash'
           : deliveryObj.orderApp

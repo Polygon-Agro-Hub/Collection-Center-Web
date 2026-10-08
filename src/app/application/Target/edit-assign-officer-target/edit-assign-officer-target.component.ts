@@ -28,6 +28,7 @@ export class EditAssignOfficerTargetComponent {
   targetId!: number;
   varietyId!: number;
   companyCenterId!: number;
+  passingDate!: string;
 
 
   isLoading: boolean = false;
@@ -45,12 +46,13 @@ export class EditAssignOfficerTargetComponent {
   ngOnInit(): void {
     this.varietyId = this.route.snapshot.params['varietyId'];
     this.companyCenterId = this.route.snapshot.params['companyCenterId'];
+    this.passingDate = this.route.snapshot.params['passingDate'];
     this.fetchTargetVerity();
   }
 
   fetchTargetVerity() {
     this.isLoading = true;
-    this.targetSrv.getExistTargetVerity(this.varietyId, this.companyCenterId).subscribe(
+    this.targetSrv.getExistTargetVerity(this.varietyId, this.companyCenterId, this.passingDate).subscribe(
       (res) => {
 
         this.targetVerity = res.crop;

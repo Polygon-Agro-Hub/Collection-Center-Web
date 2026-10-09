@@ -185,11 +185,11 @@ export class OfficerProfileComponent implements OnInit {
         break;
       case this.jobRoleTypes.lightWeightDriver:
         empType = 'Driver';
-        empCode = 'DVR';
+        empCode = 'DRV';
         break;
       case this.jobRoleTypes.heavyWeightDriver:
         empType = 'Driver';
-        empCode = 'DVR';
+        empCode = 'DRV';
         break;
       case 'Distribution Centre Head':
         empType = 'Distribution Centre Head';

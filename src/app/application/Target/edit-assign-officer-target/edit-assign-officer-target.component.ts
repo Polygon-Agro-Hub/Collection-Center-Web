@@ -19,6 +19,7 @@ import Swal from 'sweetalert2';
 export class EditAssignOfficerTargetComponent {
   targetVerity: TargetVerity = new TargetVerity();
   officerArr!: Officer[];
+  assignedTargets: { targetA: number; targetB: number; targetC: number }[] = [];
   AssignTargetObj: AssignTarget = new AssignTarget();
 
   totTargetA: number = 0;
@@ -62,9 +63,12 @@ export class EditAssignOfficerTargetComponent {
 
         this.officerArr = res.officer.map((officer: Officer) => ({
           ...officer,
-          targetA: officer.targetA ?? 0,
-          targetB: officer.targetB ?? 0,
-          targetC: officer.targetC ?? 0,
+          targetA: Number(officer.targetA ?? 0),
+          targetB: Number(officer.targetB ?? 0),
+          targetC: Number(officer.targetC ?? 0),
+        }));
+        this.assignedTargets = this.officerArr.map(({ targetA, targetB, targetC }) => ({
+          targetA, targetB, targetC
         }));
         this.checkTotals();
         this.AssignTargetObj.targetIds = res.targetId
@@ -78,6 +82,7 @@ export class EditAssignOfficerTargetComponent {
 
   get isFormValid(): boolean {
     return (
+      this.hasValidAssignedTargets() &&
       +this.totTargetA === +this.targetVerity.qtyA &&
       +this.totTargetB === +this.targetVerity.qtyB &&
       +this.totTargetC === +this.targetVerity.qtyC
@@ -90,7 +95,7 @@ export class EditAssignOfficerTargetComponent {
     this.AssignTargetObj.varietyId = this.targetVerity.varietyId;
     this.AssignTargetObj.OfficerData = this.officerArr;
     this.AssignTargetObj.id = this.targetVerity.id;
-    if (+this.totTargetA !== +this.targetVerity.qtyA || +this.totTargetB !== +this.targetVerity.qtyB || +this.totTargetC !== +this.targetVerity.qtyC) {
+    if (!this.hasValidAssignedTargets() || +this.totTargetA !== +this.targetVerity.qtyA || +this.totTargetB !== +this.targetVerity.qtyB || +this.totTargetC !== +this.targetVerity.qtyC) {
       this.toastSrv.warning('Please assign the correct target!');
       this.isLoading = false;
       return;
@@ -141,66 +146,52 @@ export class EditAssignOfficerTargetComponent {
     });
   }
 
+  private hasValidAssignedTargets(): boolean {
+    return !!this.officerArr && this.officerArr.every((officer, index) => {
+      const assigned = this.assignedTargets[index];
+      return !!assigned && (['targetA', 'targetB', 'targetC'] as const).every(key =>
+        officer[key] !== null && Number.isFinite(Number(officer[key])) &&
+        Number(officer[key]) >= assigned[key]
+      );
+    });
+  }
+
   updateTotals(index: number, grade: 'A' | 'B' | 'C') {
-    this.totTargetA = Number(
-        this.officerArr
-            .reduce((sum, officer) => sum + (officer.targetA || 0), 0)
-            .toFixed(3)
-    );
-        
-    this.totTargetB = Number(
-        this.officerArr
-          .reduce((sum, officer) => sum + Number(officer.targetB || 0), 0)
-          .toFixed(3)
-    );
+    const key = `target${grade}` as 'targetA' | 'targetB' | 'targetC';
+    const minimum = this.assignedTargets[index][key];
+    const entered = this.officerArr[index][key];
+    let value = Number(entered);
 
-      
-    this.totTargetC = Number(
-        this.officerArr
-          .reduce((sum, officer) => sum + Number(officer.targetC || 0), 0)
-          .toFixed(3)
-    );
-
-    let remainingA = this.targetVerity.qtyA - (this.totTargetA - this.officerArr[index].targetA);
-    let remainingB = this.targetVerity.qtyB - (this.totTargetB - this.officerArr[index].targetB);
-    let remainingC = this.targetVerity.qtyC - (this.totTargetC - this.officerArr[index].targetC);
-
-    if (grade === 'A' && this.totTargetA > this.targetVerity.qtyA) {
-      this.toastSrv.warning(`Total Grade A target cannot exceed ${this.targetVerity.qtyA}!`);
-      setTimeout(() => {
-        this.officerArr[index].targetA = Math.max(0, Math.round(remainingA * 1000) / 1000);
-        this.cdRef.detectChanges();
-      }, 0);
+    if (entered === null || !Number.isFinite(value) || value < minimum) {
+      this.toastSrv.warning(`Grade ${grade} target cannot be lower than the already assigned target of ${minimum}!`);
+      value = minimum;
     }
 
-    if (grade === 'B' && this.totTargetB > this.targetVerity.qtyB) {
-      this.toastSrv.warning(`Total Grade B target cannot exceed ${this.targetVerity.qtyB}!`);
-      setTimeout(() => {
-        this.officerArr[index].targetB = Math.max(0, Math.round(remainingB * 1000) / 1000);
-        this.cdRef.detectChanges();
-      }, 0);
+    const otherTotal = this.officerArr.reduce((sum, officer, officerIndex) =>
+      sum + (officerIndex === index ? 0 : Number(officer[key] || 0)), 0);
+    const maximum = Math.max(minimum, Math.round((Number(this.targetVerity[`qty${grade}`]) - otherTotal) * 1000) / 1000);
+
+    if (value > maximum) {
+      this.toastSrv.warning(`Total Grade ${grade} target cannot exceed ${this.targetVerity[`qty${grade}`]}!`);
+      value = maximum;
     }
 
-    if (grade === 'C' && this.totTargetC > this.targetVerity.qtyC) {
-      this.toastSrv.warning(`Total Grade C target cannot exceed ${this.targetVerity.qtyC}!`);
-      setTimeout(() => {
-        this.officerArr[index].targetC = Math.max(0, Math.round(remainingC * 1000) / 1000);
-        this.cdRef.detectChanges();
-      }, 0);
-    }
+    this.checkTotals();
+    this.cdRef.detectChanges();
 
+    // Let Angular observe the entered value before restoring the allowed value,
+    // so the visible input resets even when it returns to its previous value.
     setTimeout(() => {
-      this.totTargetA = Number(this.officerArr.reduce((sum, officer) => sum + (officer.targetA || 0), 0).toFixed(3));
-      this.totTargetB = Number(this.officerArr.reduce((sum, officer) => sum + (officer.targetB || 0), 0).toFixed(3));
-      this.totTargetC = Number(this.officerArr.reduce((sum, officer) => sum + (officer.targetC || 0), 0).toFixed(3));
-    }, 10);
-
+      this.officerArr[index][key] = value;
+      this.checkTotals();
+      this.cdRef.detectChanges();
+    }, 0);
   }
 
   checkTotals() {
-      this.totTargetA = Number(this.officerArr.reduce((sum, officer) => sum + (officer.targetA || 0), 0).toFixed(3));
-      this.totTargetB = Number(this.officerArr.reduce((sum, officer) => sum + (officer.targetB || 0), 0).toFixed(3));
-      this.totTargetC = Number(this.officerArr.reduce((sum, officer) => sum + (officer.targetC || 0), 0).toFixed(3));
+      this.totTargetA = Number(this.officerArr.reduce((sum, officer) => sum + Number(officer.targetA || 0), 0).toFixed(3));
+      this.totTargetB = Number(this.officerArr.reduce((sum, officer) => sum + Number(officer.targetB || 0), 0).toFixed(3));
+      this.totTargetC = Number(this.officerArr.reduce((sum, officer) => sum + Number(officer.targetC || 0), 0).toFixed(3));
 
     if (
       +this.totTargetA === +this.targetVerity.qtyA &&

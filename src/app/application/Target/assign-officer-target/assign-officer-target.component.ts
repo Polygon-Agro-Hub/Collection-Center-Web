@@ -122,7 +122,7 @@ export class AssignOfficerTargetComponent implements OnInit {
       showCancelButton: true,
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, cancel it!',
+      confirmButtonText: 'Yes, Cancel it!',
       cancelButtonText: 'No, Stay On Page',
       customClass: {
         popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',

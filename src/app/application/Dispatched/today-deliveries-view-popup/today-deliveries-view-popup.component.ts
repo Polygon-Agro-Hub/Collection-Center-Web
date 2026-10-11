@@ -35,6 +35,7 @@ interface CenterDetails {
   centerId: number;
   empId: string;
   deliveredTime: Date;
+  sheduleDate: Date
 }
 
 interface TrackingDetails {
@@ -46,6 +47,7 @@ interface TimelineStep {
   type:
   | 'out'
   | 'pickedup'
+  | 'pickupReturned'
   | 'collected'
   | 'started'
   | 'hold'
@@ -134,6 +136,14 @@ export class TodayDeliveriesViewPopupComponent implements OnInit, OnChanges {
         type: 'pickedup',
         payload: { deliveredTime: c.deliveredTime }
       });
+    }
+
+    if (c.status === 'Return Received' && c.centerId !== null) {
+      steps.push({
+        type: 'pickupReturned',
+        payload: { sheduleDate: c.sheduleDate }
+      });
+      console.log('steps', steps)
     }
 
     if (!d) return steps;

@@ -145,12 +145,12 @@ export class TargetService {
     return this.http.get<any>(url, { headers });
   }
 
-  getTargetVerity(varietyId: number, companyCenterId: number): Observable<any> {
+  getTargetVerity(varietyId: number, companyCenterId: number, passingDate: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
 
-    let url = `${this.apiUrl}/get-target-verity/${varietyId}/${companyCenterId}`;
+    let url = `${this.apiUrl}/get-target-verity/${varietyId}/${companyCenterId}/${passingDate}`;
 
     return this.http.get<any>(url, { headers });
   }
@@ -242,12 +242,12 @@ export class TargetService {
   }
 
 
-  getExistTargetVerity(varietyId: number, companyCenterId: number): Observable<any> {
+  getExistTargetVerity(varietyId: number, companyCenterId: number, passingDate: string): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`
     });
 
-    let url = `${this.apiUrl}/get-exist-veriety-target/${varietyId}/${companyCenterId}`;
+    let url = `${this.apiUrl}/get-exist-veriety-target/${varietyId}/${companyCenterId}/${passingDate}`;
 
     return this.http.get<any>(url, { headers });
   }

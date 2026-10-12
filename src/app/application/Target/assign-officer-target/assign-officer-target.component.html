@@ -79,16 +79,19 @@
                         <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
                             <input step="any" type="number" [(ngModel)]="officerArr[i].targetA" name="targetA"
                                 (ngModelChange)="updateTotals(i, 'A')" (input)="restrictDecimals($event, i, 'A')"
+                                (keydown.-)="$event.preventDefault()" (paste)="preventNegativePaste($event)"
                                 class="border-[#415CFF] border-[2px] border-dotted dark:bg-slate-500 rounded-lg w-28 px-2 py-1" />
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
                             <input step="any" type="number" [(ngModel)]="officerArr[i].targetB" name="targetB"
                                 (ngModelChange)="updateTotals(i, 'B')" (input)="restrictDecimals($event, i, 'B')"
+                                (keydown.-)="$event.preventDefault()" (paste)="preventNegativePaste($event)"
                                 class="border-[#415CFF] border-[2px] border-dotted dark:bg-slate-500 rounded-lg w-28 px-2 py-1" />
                         </td>
                         <td class="px-6 py-4 text-sm text-gray-900 dark:text-gray-300">
                             <input step="any" type="number" [(ngModel)]="officerArr[i].targetC" name="targetC"
                                 (ngModelChange)="updateTotals(i, 'C')" (input)="restrictDecimals($event, i, 'C')"
+                                (keydown.-)="$event.preventDefault()" (paste)="preventNegativePaste($event)"
                                 class="border-[#415CFF] border-[2px] border-dotted dark:bg-slate-500 rounded-lg w-28 px-2 py-1" />
                         </td>
                     </tr>

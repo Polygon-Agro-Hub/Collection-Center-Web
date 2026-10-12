@@ -1,5 +1,5 @@
 import { CommonModule, Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { ActivatedRoute, Router } from '@angular/router';
 import { SelectVarietyListComponent } from '../select-variety-list/select-variety-list.component';
@@ -15,6 +15,8 @@ import { ToastAlertService } from '../../../../services/toast-alert/toast-alert.
   styleUrl: './assign-center-target-view.component.css'
 })
 export class AssignCenterTargetViewComponent implements OnInit {
+  @ViewChild(AssignCenterTargetComponent) assignTargetComponent?: AssignCenterTargetComponent;
+
   centerDetailsObj: CenterDetails = new CenterDetails();
 
   isAssignTarget: boolean = true;
@@ -45,14 +47,14 @@ export class AssignCenterTargetViewComponent implements OnInit {
   }
 
   navigateToCenters() {
-    if (this.isAssignTarget) {
+    if (this.isAssignTarget && this.assignTargetComponent?.hasData) {
       this.toastSrv.warning('Cancel Add New Center Target');
     }
     this.router.navigate(['/centers']);
   }
 
   navigateToCentreDashboard() {
-    if (this.isAssignTarget) {
+    if (this.isAssignTarget && this.assignTargetComponent?.hasData) {
       this.toastSrv.warning('Cancel Add New Center Target');
     }
     this.location.back();

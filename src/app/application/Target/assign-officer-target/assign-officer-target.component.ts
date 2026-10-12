@@ -122,7 +122,7 @@ export class AssignOfficerTargetComponent implements OnInit {
       showCancelButton: true,
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, cancel it!',
+      confirmButtonText: 'Yes, Cancel it!',
       cancelButtonText: 'No, Stay On Page',
       customClass: {
         popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
@@ -144,6 +144,8 @@ export class AssignOfficerTargetComponent implements OnInit {
     });
   }
 
+  private cappedInputs = new Set<string>();
+
   updateTotals(index: number, grade: 'A' | 'B' | 'C') {
     this.totTargetA = Number(
         this.officerArr
@@ -164,13 +166,31 @@ export class AssignOfficerTargetComponent implements OnInit {
           .toFixed(3)
     );
 
-  
+
+    const inputKey = `${index}:${grade}`;
+    for (const currentGrade of ['A', 'B', 'C'] as const) {
+      if (this[`totTarget${currentGrade}`] < Number(this.targetVerity[`qty${currentGrade}`])) {
+        for (const key of this.cappedInputs) {
+          if (key.endsWith(`:${currentGrade}`)) this.cappedInputs.delete(key);
+        }
+      }
+    }
+    const currentValue = this.officerArr[index][`target${grade}`];
+    if (currentValue == null || currentValue === 0) {
+      this.cappedInputs.delete(inputKey);
+    } else if (this[`totTarget${grade}`] === Number(this.targetVerity[`qty${grade}`])) {
+      this.cappedInputs.add(inputKey);
+    }
+
     let remainingA = this.targetVerity.qtyA - (this.totTargetA - (this.officerArr[index].targetA || 0));
     let remainingB = this.targetVerity.qtyB - (this.totTargetB - (this.officerArr[index].targetB || 0));
     let remainingC = this.targetVerity.qtyC - (this.totTargetC - (this.officerArr[index].targetC || 0));
   
     if (grade === 'A' && this.totTargetA > this.targetVerity.qtyA) {
-      this.toastSrv.warning(`Total Grade A target cannot exceed ${this.targetVerity.qtyA}!`);
+      if (!this.cappedInputs.has(inputKey)) {
+        this.toastSrv.warning(`Total Grade A target cannot exceed ${this.targetVerity.qtyA}!`);
+      }
+      this.cappedInputs.add(inputKey);
       setTimeout(() => {
         this.officerArr[index].targetA = Math.max(0, Math.round(remainingA * 1000) / 1000);
         this.cdRef.detectChanges();
@@ -178,7 +198,10 @@ export class AssignOfficerTargetComponent implements OnInit {
     }
 
     if (grade === 'B' && this.totTargetB > this.targetVerity.qtyB) {
-      this.toastSrv.warning(`Total Grade B target cannot exceed ${this.targetVerity.qtyB}!`);
+      if (!this.cappedInputs.has(inputKey)) {
+        this.toastSrv.warning(`Total Grade B target cannot exceed ${this.targetVerity.qtyB}!`);
+      }
+      this.cappedInputs.add(inputKey);
       setTimeout(() => {
         this.officerArr[index].targetB = Math.max(0, Math.round(remainingB * 1000) / 1000);
         this.cdRef.detectChanges();
@@ -186,7 +209,10 @@ export class AssignOfficerTargetComponent implements OnInit {
     }
 
     if (grade === 'C' && this.totTargetC > this.targetVerity.qtyC) {
-      this.toastSrv.warning(`Total Grade C target cannot exceed ${this.targetVerity.qtyC}!`);
+      if (!this.cappedInputs.has(inputKey)) {
+        this.toastSrv.warning(`Total Grade C target cannot exceed ${this.targetVerity.qtyC}!`);
+      }
+      this.cappedInputs.add(inputKey);
       setTimeout(() => {
         this.officerArr[index].targetC = Math.max(0, Math.round(remainingC * 1000) / 1000);
         this.cdRef.detectChanges();
@@ -198,6 +224,12 @@ export class AssignOfficerTargetComponent implements OnInit {
       this.totTargetB = Number(this.officerArr.reduce((sum, officer) => sum + (officer.targetB || 0), 0).toFixed(3));
       this.totTargetC = Number(this.officerArr.reduce((sum, officer) => sum + (officer.targetC || 0), 0).toFixed(3));
     }, 10);
+  }
+
+  preventNegativePaste(event: ClipboardEvent): void {
+    if (event.clipboardData?.getData('text').includes('-')) {
+      event.preventDefault();
+    }
   }
 
   restrictDecimals(event: Event, index: number, grade: 'A' | 'B' | 'C') {

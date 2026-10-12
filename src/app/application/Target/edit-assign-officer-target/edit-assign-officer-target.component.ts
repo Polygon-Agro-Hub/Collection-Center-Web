@@ -124,7 +124,7 @@ export class EditAssignOfficerTargetComponent {
       showCancelButton: true,
       confirmButtonColor: '#d33',
       cancelButtonColor: '#3085d6',
-      confirmButtonText: 'Yes, cancel it!',
+      confirmButtonText: 'Yes, Cancel it!',
       cancelButtonText: 'No, Stay On Page',
       customClass: {
         popup: 'bg-white dark:bg-[#363636] text-gray-800 dark:text-white',
@@ -156,14 +156,27 @@ export class EditAssignOfficerTargetComponent {
     });
   }
 
+  private inputWarnings = new Map<string, 'minimum' | 'maximum'>();
+
+  preventNegativePaste(event: ClipboardEvent): void {
+    if (event.clipboardData?.getData('text').includes('-')) {
+      event.preventDefault();
+    }
+  }
+
   updateTotals(index: number, grade: 'A' | 'B' | 'C') {
+    const inputKey = `${index}:${grade}`;
+    let warning: 'minimum' | 'maximum' | undefined;
     const key = `target${grade}` as 'targetA' | 'targetB' | 'targetC';
     const minimum = this.assignedTargets[index][key];
     const entered = this.officerArr[index][key];
     let value = Number(entered);
 
     if (entered === null || !Number.isFinite(value) || value < minimum) {
-      this.toastSrv.warning(`Grade ${grade} target cannot be lower than the already assigned target of ${minimum}!`);
+      warning = 'minimum';
+      if (this.inputWarnings.get(inputKey) !== warning) {
+        this.toastSrv.warning(`Grade ${grade} target cannot be lower than the already assigned target of ${minimum}!`);
+      }
       value = minimum;
     }
 
@@ -172,8 +185,21 @@ export class EditAssignOfficerTargetComponent {
     const maximum = Math.max(minimum, Math.round((Number(this.targetVerity[`qty${grade}`]) - otherTotal) * 1000) / 1000);
 
     if (value > maximum) {
-      this.toastSrv.warning(`Total Grade ${grade} target cannot exceed ${this.targetVerity[`qty${grade}`]}!`);
+      warning = 'maximum';
+      if (this.inputWarnings.get(inputKey) !== warning) {
+        this.toastSrv.warning(`Total Grade ${grade} target cannot exceed ${this.targetVerity[`qty${grade}`]}!`);
+      }
       value = maximum;
+    }
+
+    if (warning) {
+      this.inputWarnings.set(inputKey, warning);
+    } else {
+      const previousWarning = this.inputWarnings.get(inputKey);
+      if ((previousWarning === 'minimum' && value > minimum) ||
+          (previousWarning === 'maximum' && value < maximum)) {
+        this.inputWarnings.delete(inputKey);
+      }
     }
 
     this.checkTotals();

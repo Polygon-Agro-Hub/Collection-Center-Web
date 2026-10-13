@@ -52,9 +52,10 @@ export class AssignCenterTargetComponent implements OnInit, OnDestroy {
     const today = new Date();
     const tomorrow = new Date(today);
 
-    tomorrow.setDate(today.getDate() + 1);
+    tomorrow.setDate(tomorrow.getDate() + 1);
 
-    this.selectDate = tomorrow.toISOString().split('T')[0];
+    this.selectDate =
+      `${tomorrow.getFullYear()}-${String(tomorrow.getMonth() + 1).padStart(2, '0')}-${String(tomorrow.getDate()).padStart(2, '0')}`;
     this.selectDatePickerDate = this.selectDate;
     this.fetchSavedCenterCrops()
   }

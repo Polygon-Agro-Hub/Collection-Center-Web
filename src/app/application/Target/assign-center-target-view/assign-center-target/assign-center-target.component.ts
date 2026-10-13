@@ -58,6 +58,14 @@ export class AssignCenterTargetComponent implements OnInit, OnDestroy {
 
   this.selectDate = `${year}-${month}-${day}`;
 
+  // Log local and UTC dates
+  console.log('Local Date:', this.selectDate);
+  console.log('UTC Date:', tomorrow.toISOString().split('T')[0]);
+
+  // Log complete timestamps
+  console.log('Local Time:', tomorrow.toString());
+  console.log('UTC Time:', tomorrow.toISOString());
+
   this.selectDatePickerDate = this.selectDate;
   this.fetchSavedCenterCrops();
 }

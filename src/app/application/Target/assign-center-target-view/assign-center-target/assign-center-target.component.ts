@@ -49,16 +49,18 @@ export class AssignCenterTargetComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-    const today = new Date();
-    const tomorrow = new Date(today);
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
 
-    tomorrow.setDate(tomorrow.getDate() + 1);
+  const year = tomorrow.getFullYear();
+  const month = String(tomorrow.getMonth() + 1).padStart(2, '0');
+  const day = String(tomorrow.getDate()).padStart(2, '0');
 
-    this.selectDate =
-      `${tomorrow.getFullYear()}-${String(tomorrow.getMonth() + 1).padStart(2, '0')}-${String(tomorrow.getDate()).padStart(2, '0')}`;
-    this.selectDatePickerDate = this.selectDate;
-    this.fetchSavedCenterCrops()
-  }
+  this.selectDate = `${year}-${month}-${day}`;
+
+  this.selectDatePickerDate = this.selectDate;
+  this.fetchSavedCenterCrops();
+}
 
   ngOnDestroy(): void {
     this.stopConfirmCountdown();

@@ -101,6 +101,7 @@ export class AssignCenterTargetComponent implements OnInit, OnDestroy {
     this.stopConfirmCountdown();
 
     const newCrops = this.assignCropsArr.filter(crop => crop.isNew);
+    newCrops.forEach(crop => this.resetEmptyTargets(crop));
     const invalidCrop = newCrops.find(crop =>
       crop.targetA < 0 || crop.targetB < 0 || crop.targetC < 0 || this.isQtyExceeded(crop)
     );
@@ -174,6 +175,8 @@ export class AssignCenterTargetComponent implements OnInit, OnDestroy {
   }
 
   saveGrade(grade: string, item: any, qty: number, editId: number | null) {
+    this.resetEmptyTargets(item);
+    qty = qty ?? 0;
     if (grade === 'A') {
       if (this.round3(item.targetA) < this.round3(item.preValueA)) {
         return this.toastSrv.warning('Value must be greater than the current saved value')
@@ -389,6 +392,13 @@ export class AssignCenterTargetComponent implements OnInit, OnDestroy {
     if (grade === 'A') item.preValueA = item.targetA;
     if (grade === 'B') item.preValueB = item.targetB;
     if (grade === 'C') item.preValueC = item.targetC;
+  }
+
+  resetEmptyTargets(item: AssignCrops) {
+    item.targetA = item.targetA ?? 0;
+    item.targetB = item.targetB ?? 0;
+    item.targetC = item.targetC ?? 0;
+    this.validateForm();
   }
 
   checkNegativeValue(item: AssignCrops, grade: string) {

@@ -79,6 +79,7 @@ export class AssignCitiesComponent implements OnInit {
 
   isLoading: boolean = false;
   hasData: boolean = false;
+  fetched: boolean = false;
 
   constructor(
     private router: Router,
@@ -94,6 +95,7 @@ export class AssignCitiesComponent implements OnInit {
   }
 
   fetchData() {
+    this.fetched = true;
     this.isLoading = true;
     this.hasData = false;
 
@@ -105,7 +107,9 @@ export class AssignCitiesComponent implements OnInit {
         this.centersArrWithDups = (res.centers);
         this.centersArr = this.removeDuplicateCenters(res.centers);
         this.isLoading = false;
-        this.hasData = true;
+        this.hasData = this.fetched && this.centersArr.length > 0;
+
+        console.log('hasData', this.hasData, this.centersArr)
 
         this.initializeAssignments();
       },
@@ -118,6 +122,7 @@ export class AssignCitiesComponent implements OnInit {
   }
 
   filterDistrict(districtName: string | null) {
+    this.selectStatusChange();
     if (this.itemId1 !== null) {
       this.selectDistrict = ''
 
@@ -128,6 +133,7 @@ export class AssignCitiesComponent implements OnInit {
   }
 
   filterProvince(provinceName: string | null) {
+    this.selectStatusChange();
     if (this.itemId2 !== null) {
       this.selectProvince = ''
 
@@ -289,6 +295,7 @@ export class AssignCitiesComponent implements OnInit {
   }
 
   selectStatusChange() {
+    this.fetched = false;
     this.hasData = false;
   }
 
@@ -297,6 +304,7 @@ export class AssignCitiesComponent implements OnInit {
       event.stopPropagation(); // Prevent triggering the dropdown toggle
     }
     this.selectDistrict = '';
+    this.selectStatusChange();
   }
 
   back() {

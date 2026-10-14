@@ -1,6 +1,6 @@
 <app-loading-spinner *ngIf="isLoading" />
 
-<div *ngIf="!isLoading && listView" class="w-full min-h-screen overflow-x-auto">
+<div *ngIf="!isLoading && listView" class="w-full">
 
     <div *ngIf="tab === 'distribution-center'">
         <p class="font-[500] text-[#030308] dark:text-white whitespace-nowrap">{{ regCode }} {{
@@ -15,13 +15,13 @@
         {{ isDownloading ? " Downloading..." : " Download" }}
     </button>
 
-    <div class="flex flex-row items-center justify-between gap-4 mt-2">
-        <div>
+    <div class="flex flex-row flex-wrap items-center justify-between gap-4 mt-2">
+        <div class="flex-shrink-0">
             <p class=" dark:text-white whitespace-nowrap">All ({{ totalItems < 10 ? ('0' + totalItems) :
                     totalItems }})</p>
         </div>
-        <div class="flex flex-row items-center justify-end gap-5 ">
-            <div class="relative w-24 custom-status-dropdown-container">
+        <div class="flex flex-row flex-wrap items-center justify-end gap-5 flex-1 min-w-0">
+            <div class="relative w-24 flex-shrink-0 custom-status-dropdown-container">
                 <!-- Hidden native select -->
                 <select [(ngModel)]="selectType" class="hidden" (change)="filterType()">
                     <option value="" selected disabled>Type</option>
@@ -69,7 +69,7 @@
                 </div>
             </div>
 
-            <div class="relative w-52 custom-status-dropdown-container">
+            <div class="relative w-52 flex-shrink-0 custom-status-dropdown-container">
                 <!-- Hidden native select -->
                 <select [(ngModel)]="selectTimeSlot" class="hidden" (change)="filterTimeSlot()">
                     <option value="" selected disabled>TimeSlot</option>
@@ -118,7 +118,7 @@
             </div>
 
 
-            <div class="relative w-28 custom-status-dropdown-container">
+            <div class="relative w-28 flex-shrink-0 custom-status-dropdown-container">
                 <!-- Hidden native select -->
                 <select [(ngModel)]="selectRow" class="hidden" (change)="filterRow()">
                     <option value="" selected disabled>Type</option>
@@ -165,7 +165,7 @@
                 </div>
             </div>
 
-            <div class="relative w-28 custom-status-dropdown-container">
+            <div class="relative w-28 flex-shrink-0 custom-status-dropdown-container">
                 <!-- Hidden native select -->
                 <select [(ngModel)]="selectStatus" class="hidden" (change)="filterStatus()">
                     <option value="" selected disabled>Status</option>
@@ -207,16 +207,16 @@
                     </div>
                 </div>
             </div>
-            <div class="relative w-32">
+            <div class="relative w-32 flex-shrink-0">
                 <app-custom-datepicker [placeholder]="'Date'" [selectedDate]="selectedDate"
                     (dateChange)="onDateChange($event)"></app-custom-datepicker>
             </div>
 
             <div
-                class="flex items-center rounded-full mr-5 px-4 py-2 w-96 sm:w-64 md:w-64 bg-[#F1F1F1] dark:bg-[#292929]">
+                class="flex items-center rounded-full px-4 py-2 flex-1 min-w-48 max-w-xs bg-[#F1F1F1] dark:bg-[#292929]">
                 <input type="text" placeholder="Search by Order ID.." [(ngModel)]="searchText"
                     (keyup.enter)="onSearch()" (keyup.esc)="offSearch()"
-                    class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
+                    class="bg-transparent outline-none w-full min-w-0 text-textLight dark:text-textDark" />
                 <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                     (click)="onSearch()">
                     <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -245,12 +245,12 @@
 
 
     <div *ngIf="hasData"
-        class="overflow-hidden min-w-max mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
-        <table class="w-full divide-y-2 overflow-hidden">
-            <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
+        class="isolate mt-5 overflow-auto max-h-[max(390px,calc(100vh-440px))] border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+        <table class="w-full min-w-max divide-y-2">
+            <thead class="sticky top-0 z-20 bg-white text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
                 <tr>
-                    <th class="px-6 py-3 text-left font-medium text-[#4B5563] dark:text-white">No</th>
-                    <th class="px-6 py-3 text-left font-medium text-[#4B5563] dark:text-white">Order ID</th>
+                    <th class="sticky left-0 bg-white dark:bg-[#0F0F0F] w-20 min-w-20 px-6 py-3 text-left font-medium text-[#4B5563] dark:text-white">No</th>
+                    <th class="sticky left-20 bg-white dark:bg-[#0F0F0F] w-44 min-w-44 px-6 py-3 text-left font-medium text-[#4B5563] dark:text-white">Order ID</th>
                     <th class="px-6 py-3 text-left font-medium text-[#4B5563] dark:text-white">Type</th>
                     <th class="px-6 py-3 text-left font-medium text-[#4B5563] dark:text-white">Assigned Row</th>
                     <th class="px-6 py-3 text-left font-medium text-[#4B5563] dark:text-white">QC Done By</th>
@@ -264,9 +264,9 @@
             <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
                 <tr *ngFor="let item of ordersArr let i = index">
                     <!-- <tr *ngFor="let item of complainArr"> -->
-                    <td class="px-6 py-4 font-medium text-gray-900 dark:text-[#C5C5C5]">
+                    <td class="sticky left-0 z-10 bg-white dark:bg-[#1D1D1F] px-6 py-4 font-medium text-gray-900 dark:text-[#C5C5C5]">
                         {{ (i + 1) < 10 ? ('0' + (i + 1)) : (i + 1) }} </td>
-                    <td class="px-6 py-4 font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.invNo}}</td>
+                    <td class="sticky left-20 z-10 bg-white dark:bg-[#1D1D1F] px-6 py-4 font-medium text-gray-900 dark:text-[#C5C5C5] break-all">{{item.invNo}}</td>
                     <td class="px-6 py-4 font-medium text-gray-900 dark:text-[#C5C5C5]">{{item.delivaryMethod}}</td>
                     <td class="px-6 py-4 font-medium  text-left  text-gray-900 dark:text-[#C5C5C5]">Row
                         {{item.rowIndex}}</td>

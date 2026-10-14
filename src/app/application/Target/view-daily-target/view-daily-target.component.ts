@@ -309,12 +309,12 @@ export class ViewDailyTargetComponent implements OnInit, OnDestroy {
     );
   }
 
-  navigateToAssignTarget(varietyId: number, companyCenterId: number) {
-    this.router.navigate([`/target/assing-target/${varietyId}/${companyCenterId}`]);
+  navigateToAssignTarget(varietyId: number, companyCenterId: number, passingDate: string) {
+    this.router.navigate([`/target/assing-target/${varietyId}/${companyCenterId}/${passingDate}`]);
   }
 
-  navigateToEditAssignTarget(varietyId: number, companyCenterId: number) {
-    this.router.navigate([`/target/edit-assing-target/${varietyId}/${companyCenterId}`]);
+  navigateToEditAssignTarget(varietyId: number, companyCenterId: number, passingDate: string) {
+    this.router.navigate([`/target/edit-assing-target/${varietyId}/${companyCenterId}/${passingDate}`]);
   }
 
   formatTime(time: string): string {
@@ -441,6 +441,7 @@ class AssignDailyTarget {
   varietyId!: number;
   companyCenterId!: number;
   isAssign!: number;
+  passingDate!: string;
 }
 
 class DailyTargets {

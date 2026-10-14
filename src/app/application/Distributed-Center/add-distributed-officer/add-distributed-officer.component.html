@@ -290,7 +290,7 @@
                             </div>
                         </div>
                         <!-- Error Message -->
-                        <p *ngIf="languagesRequired" class="text-red-500 text-sm mt-2">
+                        <p *ngIf="languagesRequired === true" class="text-red-500 text-sm mt-2">
                             Please select at least one Preferred Language.
                         </p>
                     </div>
@@ -528,8 +528,8 @@
 
 
                     <button (click)="
-                          !PageOneForm.invalid 
-                          && !this.languagesRequired
+                          !PageOneForm.invalid
+                          && this.languagesRequired === false
                           && personalData.phoneNumber02 !== personalData.phoneNumber01 
                           && personalData.jobRole 
                            && (!isDriverRole(personalData.jobRole) || personalData.drvCategory)

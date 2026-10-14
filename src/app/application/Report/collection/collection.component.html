@@ -1,7 +1,7 @@
 <app-loading-spinner *ngIf="isLoading" />
 
 
-<div *ngIf="!isLoading" class="w-full overflow-x-auto">
+<div *ngIf="!isLoading" class="w-full">
 
     <div class="w-full px-10 pb-7 pt-4 bg-tileLight dark:bg-[#363636] rounded-lg ">
 
@@ -35,7 +35,7 @@
     <hr />
 
     <div *ngIf="hasData && isDateFilterSet">
-        <div class="flex flex-row items-center justify-between mt-6 mr-5">
+        <div class="flex flex-row flex-wrap items-center justify-between gap-4 mt-6">
             <div class="flex flex-row gap-4">
                 <div class="flex flex-col justify-between flex-shrink-0">
                     <p class="font-semibold mb-1 text-lg dark:text-white whitespace-nowrap">All
@@ -43,7 +43,7 @@
                 </div>
             </div>
 
-            <div class="flex flex-row items-center gap-5 ">
+            <div class="flex flex-row flex-wrap items-center justify-end gap-5 flex-1 min-w-0">
                 <i *ngIf="logingRole === 'Collection Centre Head'"
                     class="fa-solid fa-list text-lg text-[#4A4A4A] dark:text-white ml-8"></i>
 
@@ -52,7 +52,7 @@
                     Filter By
                 </p>
 
-                <div class="relative w-64 custom-center-dropdown-container"
+                <div class="relative w-64 flex-shrink-0 custom-center-dropdown-container"
                     *ngIf="logingRole === 'Collection Centre Head'">
 
                     <app-searchable-dropdown [items]="centerDropdownItems" placeholder="Select Centre..."
@@ -64,10 +64,10 @@
 
 
 
-                <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+                <div class="flex items-center rounded-full px-4 py-2 flex-1 min-w-48 max-w-xs bg-[#F1F1F1] dark:bg-[#292929]">
                     <input type="text" placeholder="Search by Crop, Variety Name..." [(ngModel)]="searchText"
                         (keyup.enter)="onSearch()" (input)="checkLeadingSpace()"
-                        class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
+                        class="bg-transparent outline-none w-full min-w-0 text-textLight dark:text-textDark" />
                     <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                         (click)="onSearch()">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -99,7 +99,7 @@
             </div> -->
 
             <button
-                class="bg-[#415CFF] text-white shadow-md font-medium rounded-lg py-2 px-5 mr-5 text-lg flex items-center"
+                class="bg-[#415CFF] text-white shadow-md font-medium rounded-lg py-2 px-5 text-lg flex items-center"
                 (click)="downloadTemplate1()">
                 <i class="fa-solid fa-download px-2" *ngIf="!isDownloading"></i>
                 <i class="fa-solid fa-spinner fa-spin px-2" *ngIf="isDownloading"></i>
@@ -107,17 +107,18 @@
             </button>
         </div>
 
-        <div *ngIf="hasData" class="min-w-max overflow-hidden  mt-5 mr-5">
-            <div class=" border-gray-100 border-[2px] dark:border-[#202021] rounded-lg">
+        <div *ngIf="hasData" class="mt-5">
+            <div class="isolate overflow-auto max-h-[max(390px,calc(100vh-760px))] border-gray-100 border-[2px] dark:border-[#202021] rounded-lg">
                 <table class="w-full min-w-max divide-y-2">
-                    <thead class=" dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] text-[#4B5563]">
+                    <thead class="sticky top-0 z-20 bg-white dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] text-[#4B5563]">
                         <tr>
-                            <th class="px-2 py-3 text-base text-center font-medium">No</th>
-                            <th class="px-3 py-3 text-left text-base font-medium"
+                            <th class="sticky left-0 bg-white dark:bg-[#0F0F0F] w-14 min-w-14 px-2 py-3 text-base text-center font-medium">No</th>
+                            <th class="sticky left-14 bg-white dark:bg-[#0F0F0F] w-36 min-w-36 px-3 py-3 text-left text-base font-medium"
                                 *ngIf="logingRole === 'Collection Centre Head'">Centre Code</th>
                             <th class="px-3 py-3 text-left text-base font-medium"
                                 *ngIf="logingRole === 'Collection Centre Head'">Centre Name</th>
-                            <th class="px-3 py-3 text-left text-base font-medium">Crop</th>
+                            <th class="w-36 min-w-36 px-3 py-3 text-left text-base font-medium"
+                                [ngClass]="{'sticky left-14 bg-white dark:bg-[#0F0F0F]': logingRole !== 'Collection Centre Head'}">Crop</th>
                             <th class="px-1 py-3 text-left text-base font-medium w-52">Variety</th>
                             <th class="px-3 py-3 text-center text-base font-medium ">Quantity A (kg)</th>
                             <th class="px-3 py-3 text-center text-base font-medium">Quantity B (kg)</th>
@@ -132,14 +133,15 @@
                     currentPage: page,
                     totalItems: totalItems
                   };  let i = index">
-                            <td class="px-2 py-4 text-center text-base text-gray-900 dark:text-gray-300 ">
+                            <td class="sticky left-0 z-10 bg-white dark:bg-[#1D1D1F] px-2 py-4 text-center text-base text-gray-900 dark:text-gray-300">
                                 {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) + i +
                                     1) : (((page - 1) * itemsPerPage) + i + 1) }} </td>
-                            <td class="px-3 py-4 text-base text-gray-900 dark:text-gray-300"
+                            <td class="sticky left-14 z-10 bg-white dark:bg-[#1D1D1F] px-3 py-4 text-base text-gray-900 dark:text-gray-300 break-all"
                                 *ngIf="logingRole === 'Collection Centre Head'">{{item.centerCode}}</td>
                             <td class="px-3 py-4 text-base text-gray-900 dark:text-gray-300"
                                 *ngIf="logingRole === 'Collection Centre Head'">{{item.centerName}}</td>
-                            <td class="px-3 py-4 text-base text-gray-900 dark:text-gray-300">
+                            <td class="px-3 py-4 text-base text-gray-900 dark:text-gray-300"
+                                [ngClass]="{'sticky left-14 z-10 bg-white dark:bg-[#1D1D1F]': logingRole !== 'Collection Centre Head'}">
                                 {{ item.cropNameEnglish || '-' }}
                             </td>
                             <td class="px-1 py-4 w-52 text-base text-left text-gray-900 dark:text-gray-300">
@@ -180,7 +182,7 @@
     </div>
 
     <div *ngIf="!hasData && isDateFilterSet" class="h-[500px]">
-        <div class="flex flex-row items-center justify-between mt-6">
+        <div class="flex flex-row flex-wrap items-center justify-between gap-4 mt-6">
             <div class="flex flex-row gap-4">
                 <div class="flex flex-col justify-between flex-shrink-0">
                     <p class="font-semibold mb-1 text-lg dark:text-white whitespace-nowrap">All
@@ -188,14 +190,14 @@
                 </div>
             </div>
 
-            <div class="flex flex-row items-center gap-5 ">
+            <div class="flex flex-row flex-wrap items-center justify-end gap-5 flex-1 min-w-0">
                 <i *ngIf="logingRole === 'Collection Centre Head'"
                     class="fa-solid fa-list text-[#4A4A4A] text-lg dark:text-white ml-8"></i>
 
                 <p *ngIf="logingRole === 'Collection Centre Head'" class="font-normal dark:text-white">Filter By</p>
 
 
-                <div class="relative w-64 custom-center-dropdown-container"
+                <div class="relative w-64 flex-shrink-0 custom-center-dropdown-container"
                     *ngIf="logingRole === 'Collection Centre Head'">
                     <app-searchable-dropdown [items]="centerDropdownItems" placeholder="Select Centre..."
                         searchPlaceholder="Search centre..." [(ngModel)]="selectCenters"
@@ -205,10 +207,10 @@
 
 
 
-                <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+                <div class="flex items-center rounded-full px-4 py-2 flex-1 min-w-48 max-w-xs bg-[#F1F1F1] dark:bg-[#292929]">
                     <input type="text" placeholder="Search by Crop & Variety Name..." [(ngModel)]="searchText"
                         (keyup.enter)="onSearch()" (keyup.esc)="offSearch()" (input)="checkLeadingSpace()"
-                        class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
+                        class="bg-transparent outline-none w-full min-w-0 text-textLight dark:text-textDark" />
                     <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                         (click)="onSearch()">
                         <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"

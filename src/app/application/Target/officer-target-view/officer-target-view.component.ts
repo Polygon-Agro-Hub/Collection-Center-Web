@@ -48,6 +48,8 @@ export class OfficerTargetViewComponent {
   fromDate!: string;
   officerId!: string;
 
+  noPermission: boolean = false;
+
   statusDropdownOptions = ['Pending', 'Completed', 'Exceeded', 'Extra'];
   validityDropdownOptions = ['Expired', 'Active', 'Unassigned'];
 
@@ -180,6 +182,7 @@ export class OfficerTargetViewComponent {
 
         if (res.status) {
           this.responseTitle = res.message;
+          
           if (res.result.length === 0) {
             this.hasData = false;
           } else {
@@ -188,8 +191,13 @@ export class OfficerTargetViewComponent {
           this.targetArr = res.result;
           this.totalItems = res.total;
           this.isLoading = false;
+          this.noPermission = false;
         } else {
           this.responseTitle = res.message;
+          console.log('responseTitlef',  res.message);
+          if (this.responseTitle === "--You don't have permission to access this data--") {
+            this.noPermission = true;
+          }
           this.hasData = false;
           this.isLoading = false;
 

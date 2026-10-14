@@ -1,5 +1,6 @@
 import { CommonModule, DatePipe } from '@angular/common';
 import { Component, HostListener, OnInit } from '@angular/core';
+import { Subscription } from 'rxjs';
 import { FormsModule } from '@angular/forms';
 import { Router, ActivatedRoute } from '@angular/router';
 import { DistributionServiceService } from '../../../../services/Distribution-Service/distribution-service.service'
@@ -30,6 +31,7 @@ export class TargetProgressOngoingComponent implements OnInit {
   totalItems: number = 0;
   hasData: boolean = true;
   isLoading: boolean = false;
+  private ordersSub?: Subscription;
   isStatusDropdownOpen = false;
   isTypeDropdownOpen = false;
   isTimeSlotDropdownOpen = false;
@@ -120,29 +122,36 @@ export class TargetProgressOngoingComponent implements OnInit {
 
   fetchAllAssignOrders(status: string = this.selectStatus, search: string = this.searchText, selectDate: string | Date | null = this.selectedDate, type: string = this.selectType, timeSlot: string = this.selectTimeSlot, row: number | null = this.selectRow, centerId: number | null = this.centerId) {
     this.isLoading = true;
-    this.DistributionSrv.getAllAssignOrders(status, search, selectDate, type, timeSlot, row, centerId).subscribe(
-      (res) => {
-        this.totalItems = res.items.length;
-        this.ordersArr = res.items;
-        this.rowIndexes = res.rowIndexes;
-        this.rowDropdownOptions = this.rowIndexes
-        this.hasData = res.items.length > 0;
+    this.ordersSub?.unsubscribe(); // drop stale responses from earlier filter changes
+    this.ordersSub = this.DistributionSrv.getAllAssignOrders(status, search, selectDate, type, timeSlot, row, centerId).subscribe({
+      next: (res) => {
+        const items = res?.items ?? [];
+        this.totalItems = items.length;
+        this.ordersArr = items;
+        this.rowIndexes = res?.rowIndexes ?? [];
+        this.rowDropdownOptions = this.rowIndexes;
+        this.hasData = items.length > 0;
+        this.isLoading = false;
+      },
+      error: () => {
+        this.totalItems = 0;
+        this.ordersArr = [];
+        this.hasData = false;
         this.isLoading = false;
       }
-    );
+    });
   }
 
   fetchCenterData() {
-    this.isLoading = true;
-    this.DistributionSrv.getCenterData().subscribe(
-      (res) => {
+    // Only provides the center name; table state is owned by fetchAllAssignOrders
+    this.DistributionSrv.getCenterData().subscribe({
+      next: (res) => {
         this.centerName = res?.centerName ?? '';
-        const items = res?.items ?? []; // safe fallback
-        this.totalItems = items.length;
-        this.hasData = items.length > 0;
-        this.isLoading = false;
+      },
+      error: () => {
+        this.centerName = '';
       }
-    );
+    });
   }
 
   onSearch() {

@@ -27,6 +27,9 @@ export class EditDistributionCenterComponent implements OnInit {
   isLoading: boolean = false;
 
   isLoadingregcode = false;
+  originalRegCode = '';
+  originalRegPrefix = '';
+  private regCodeRequestId = 0;
 
   allowedPrefixes = ['70', '71', '72', '75', '76', '77', '78'];
   isPhoneInvalidMap: { [key: string]: boolean } = {
@@ -144,6 +147,12 @@ export class EditDistributionCenterComponent implements OnInit {
       (res) => {
         this.isLoading = false;
         this.centerData = res.centreData[0];
+        this.originalRegCode = this.centerData.regCode;
+        this.originalRegPrefix = this.buildRegPrefix(
+          this.centerData.province,
+          this.centerData.district,
+          this.centerData.city
+        );
         this.isLoading = false;
       }
     );
@@ -379,16 +388,26 @@ export class EditDistributionCenterComponent implements OnInit {
     const province = this.centerData.province;
     const district = this.centerData.district;
     const city = this.centerData.city;
+    const requestId = ++this.regCodeRequestId;
     if (province && district && city) {
+      // Keep the existing code if the location still maps to the same prefix
+      if (this.originalRegCode && this.buildRegPrefix(province, district, city) === this.originalRegPrefix) {
+        this.centerData.regCode = this.originalRegCode;
+        this.isLoadingregcode = false;
+        return;
+      }
       this.isLoadingregcode = true;
       this.DistributionSrv
         .generateRegCode(province, district, city)
         .subscribe({
           next: (response) => {
-            this.centerData.regCode = `D-${response.regCode}`;
+            // Ignore responses from outdated requests
+            if (requestId !== this.regCodeRequestId) return;
+            this.centerData.regCode = response.regCode;
             this.isLoadingregcode = false;
           },
           error: (error) => {
+            if (requestId !== this.regCodeRequestId) return;
             console.error('Error generating reg code:', error);
             // Fallback to manual generation if API fails
             const regCode = `${province.slice(0, 2).toUpperCase()}${district
@@ -399,6 +418,13 @@ export class EditDistributionCenterComponent implements OnInit {
           }
         });
     }
+  }
+
+  buildRegPrefix(province: string, district: string, city: string): string {
+    if (!province || !district || !city) return '';
+    return `D-${province.slice(0, 2).toUpperCase()}${district
+      .slice(0, 1)
+      .toUpperCase()}${city.slice(0, 1).toUpperCase()}`;
   }
 
   onCancel() {
@@ -439,7 +465,7 @@ export class EditDistributionCenterComponent implements OnInit {
       Swal.fire({
         icon: 'warning',
         title: 'Invalid Latitude',
-        text: 'Latitude cannot be greater than 90°.',
+        text: 'Latitude cannot be greater than 90.',
         confirmButtonColor: '#3085d6',
         customClass: {
           popup: 'bg-white dark:bg-[#363636] text-[#534E4E] dark:text-textDark',
@@ -453,7 +479,7 @@ export class EditDistributionCenterComponent implements OnInit {
       Swal.fire({
         icon: 'warning',
         title: 'Invalid Latitude',
-        text: 'Latitude cannot be less than -90°.',
+        text: 'Latitude cannot be less than -90.',
         confirmButtonColor: '#3085d6',
         customClass: {
           popup: 'bg-white dark:bg-[#363636] text-[#534E4E] dark:text-textDark',

@@ -160,7 +160,7 @@
                         {{item.complainCategory}}
                     </td>
 
-                    <td class="px-6 py-4 align-top text-sm text-gray-900 dark:text-gray-300 min-w-[300px] text-left">
+                    <td class="px-6 py-4 align-top text-sm text-gray-900 dark:text-gray-300 min-w-[300px] text-left break-words whitespace-pre-line">
                         {{ truncateText(item.complain, item.id) }}
                         <ng-container *ngIf="item.complain.length > 150">
                             <span (click)="toggleText(item.id)" class="text-blue-500 cursor-pointer ml-1">

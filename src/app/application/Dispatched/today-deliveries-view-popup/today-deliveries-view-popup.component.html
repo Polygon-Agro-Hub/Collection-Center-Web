@@ -65,6 +65,15 @@
                                     date:'h:mm a on MMMM d, y' }}
                                 </ng-container>
 
+                                <ng-container
+                                    *ngIf="step.type === 'pickupReturned' && trackingDetails?.centerDetails?.centerId !== null ">
+                                    Driver marked this order’s status as <span class="font-bold">Return</span> at 09:30 PM on {{ step.payload.sheduleDate |
+                                    date:'MMMM d, y' }}.
+                                    <div class="mt-1 dark:text-gray-400">
+                                        <span class="font-semibold">Reason : “Customer did not picked up the order during the day.</span>
+                                        </div>
+                                </ng-container>
+
                                 <!-- COLLECTED -->
                                 <ng-container *ngIf="step.type === 'collected'">
                                     {{ step.payload.empId }} – {{ step.payload.driverName }} – {{

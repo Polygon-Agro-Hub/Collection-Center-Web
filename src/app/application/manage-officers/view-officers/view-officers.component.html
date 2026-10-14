@@ -8,10 +8,10 @@
     </div>
 
 
-    <div class="w-full bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg overflow-x-auto">
-        <div class="min-w-max px-10 py-7">
-            <div class="flex flex-row items-center justify-between min-w-max max-w-[80vw] mx-auto">
-                <div class="flex flex-row gap-4">
+    <div class="w-full bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg">
+        <div class="px-10 py-7">
+            <div class="flex flex-row flex-wrap items-center justify-between gap-4 w-full">
+                <div class="flex flex-row gap-4 flex-shrink-0">
                     <button
                         class="w-28  bg-[#415CFF] text-[#FFFFFF] dark:text-white rounded-lg shadow-lg px-4 py-2 whitespace-nowrap"
                         (click)="navigate('/manage-officers/create-officer')">
@@ -26,10 +26,10 @@
                         </button>
                     </span>
                 </div>
-                <div class="flex flex-row items-center gap-5 ">
+                <div class="flex flex-row items-center justify-end gap-5 flex-1 min-w-0">
 
 
-                    <div class="relative ml-28 w-52 md:w-52 lg:w-44 custom-role-dropdown-container">
+                    <div class="relative w-52 md:w-52 lg:w-44 flex-shrink-0 custom-role-dropdown-container">
                         <!-- Hidden native select -->
                         <select [(ngModel)]="selectRole" class="hidden" (change)="applyRoleFilters()">
                             <option value="Collection Centre Manager">Collection Centre Manager</option>
@@ -78,7 +78,7 @@
 
 
                     <!-- <div *ngIf="isDropdownOpen" class="dropdown-backdrop" (click)="isDropdownOpen = false"></div> -->
-                    <div class="relative w-40 md:w-40 lg:w-36 custom-status-dropdown-container">
+                    <div class="relative w-40 md:w-40 lg:w-36 flex-shrink-0 custom-status-dropdown-container">
                         <!-- Hidden native select -->
                         <select [(ngModel)]="selectStatus" class="hidden" (change)="applyStatusFilters()">
                             <option class="hover:bg-gray-300 dark:hover:bg-gray-300" value=""></option>
@@ -126,7 +126,7 @@
                         </div>
                     </div>
 
-                    <div class="relative w-64 custom-center-dropdown-container"
+                    <div class="relative w-64 flex-shrink-0 custom-center-dropdown-container"
                         *ngIf="logingRole === 'Collection Centre Head'">
                         <app-searchable-dropdown [items]="centerDropdownItems" placeholder="Centre"
                             searchPlaceholder="Search centre..." [(ngModel)]="selectCenters"
@@ -136,11 +136,11 @@
                     </div>
 
                     <div
-                        class="flex items-center mr-5 md:w-96 lg:w-72 text-[#95A1AC] rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+                        class="flex items-center text-[#95A1AC] rounded-full px-4 py-2 flex-1 min-w-48 max-w-xs bg-[#F1F1F1] dark:bg-[#292929]">
 
                         <input type="text" placeholder="Search..." [(ngModel)]="searchText" (keyup.enter)="onSearch()"
                             (keyup.esc)="offSearch()"
-                            class="bg-transparent outline-none w-full text-textLight dark:text-textDark"
+                            class="bg-transparent outline-none w-full min-w-0 text-textLight dark:text-textDark"
                             title="Search by Emp ID, NIC, First name, Last name" />
                         <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                             (click)="onSearch()">
@@ -172,13 +172,13 @@
                 </div>
 
                 <div
-                    class=" min-w-max mt-5 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021] overflow-hidden">
+                    class="isolate mt-5 overflow-auto max-h-[max(410px,calc(100vh-380px))] border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
                     <table class="w-full min-w-max divide-y-2">
                         <thead
-                            class="text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
+                            class="sticky top-0 z-20 bg-white text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
                             <tr>
-                                <th class="px-2 py-3 text-left text-sm font-medium">No</th>
-                                <th class="px-3 py-3 text-left text-sm font-medium">EMP ID</th>
+                                <th class="sticky left-0 bg-white dark:bg-[#0F0F0F] w-14 min-w-14 px-2 py-3 text-left text-sm font-medium">No</th>
+                                <th class="sticky left-14 bg-white dark:bg-[#0F0F0F] w-32 min-w-32 px-3 py-3 text-left text-sm font-medium">EMP ID</th>
                                 <th class="px-3 py-3 text-left text-sm font-medium">First Name</th>
                                 <th class="px-3 py-3 text-left text-sm font-medium">Last Name</th>
                                 <th class="px-3 py-3 text-left text-sm font-medium"
@@ -200,10 +200,10 @@
                     currentPage: page,
                     totalItems: totalItems
                   };  let i = index">
-                                <td class="px-2 py-4 text-sm text-gray-900 dark:text-gray-300 ">
+                                <td class="sticky left-0 z-10 bg-white dark:bg-[#1D1D1F] px-2 py-4 text-sm text-gray-900 dark:text-gray-300">
                                     {{ (((page - 1) * itemsPerPage) + i + 1) < 10 ? '0' + (((page - 1) * itemsPerPage) +
                                         i + 1) : (((page - 1) * itemsPerPage) + i + 1) }} </td>
-                                <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.empId}}</td>
+                                <td class="sticky left-14 z-10 bg-white dark:bg-[#1D1D1F] px-3 py-4 text-sm text-gray-900 dark:text-gray-300 break-all">{{item.empId}}</td>
                                 <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.firstNameEnglish}}
                                 </td>
                                 <td class="px-3 py-4 text-sm text-gray-900 dark:text-gray-300">{{item.lastNameEnglish}}
@@ -273,7 +273,7 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#1D1D1F] text-right">
+                <div class="flex justify-end items-center my-5 pt-3 dark:bg-[#1D1D1F] text-right">
                     <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true"
                         [previousLabel]="'Previous'" [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'"
                         [screenReaderPageLabel]="'page'" [screenReaderCurrentLabel]="'Youre on page'">

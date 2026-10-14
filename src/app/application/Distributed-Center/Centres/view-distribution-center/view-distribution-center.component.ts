@@ -378,7 +378,7 @@ export class ViewDistributionCenterComponent implements OnInit {
         .generateRegCode(province, district, city)
         .subscribe({
           next: (response) => {
-            this.centerData.regCode = `D-${response.regCode}`;
+            this.centerData.regCode = response.regCode;
             this.isLoadingregcode = false;
           },
           error: (error) => {

@@ -49,15 +49,26 @@ export class AssignCenterTargetComponent implements OnInit, OnDestroy {
   ) { }
 
   ngOnInit(): void {
-const today = new Date();
-const tomorrow = new Date(today);
+  const tomorrow = new Date();
+  tomorrow.setDate(tomorrow.getDate() + 1);
 
-tomorrow.setDate(today.getDate() + 1);
+  const year = tomorrow.getFullYear();
+  const month = String(tomorrow.getMonth() + 1).padStart(2, '0');
+  const day = String(tomorrow.getDate()).padStart(2, '0');
 
-this.selectDate = tomorrow.toISOString().split('T')[0];
-    this.selectDatePickerDate = this.selectDate;
-    this.fetchSavedCenterCrops()
-  }
+  this.selectDate = `${year}-${month}-${day}`;
+
+  // Log local and UTC dates
+  console.log('Local Date:', this.selectDate);
+  console.log('UTC Date:', tomorrow.toISOString().split('T')[0]);
+
+  // Log complete timestamps
+  console.log('Local Time:', tomorrow.toString());
+  console.log('UTC Time:', tomorrow.toISOString());
+
+  this.selectDatePickerDate = this.selectDate;
+  this.fetchSavedCenterCrops();
+}
 
   ngOnDestroy(): void {
     this.stopConfirmCountdown();
@@ -66,8 +77,8 @@ this.selectDate = tomorrow.toISOString().split('T')[0];
   onDateChange(newDate: string | Date | null) {
     this.selectDatePickerDate = newDate;
     this.selectDate = this.selectDatePickerDate
-  ? this.selectDatePickerDate.toString().split('T')[0]
-  : '';
+      ? this.selectDatePickerDate.toString().split('T')[0]
+      : '';
     this.fetchSavedCenterCrops();
   }
 
@@ -90,7 +101,7 @@ this.selectDate = tomorrow.toISOString().split('T')[0];
     )
   }
 
-onSubmit() {
+  onSubmit() {
     this.showConfirmModal = true;
     this.startConfirmCountdown();
   }
@@ -100,6 +111,7 @@ onSubmit() {
     this.stopConfirmCountdown();
 
     const newCrops = this.assignCropsArr.filter(crop => crop.isNew);
+    newCrops.forEach(crop => this.resetEmptyTargets(crop));
     const invalidCrop = newCrops.find(crop =>
       crop.targetA < 0 || crop.targetB < 0 || crop.targetC < 0 || this.isQtyExceeded(crop)
     );
@@ -173,17 +185,19 @@ onSubmit() {
   }
 
   saveGrade(grade: string, item: any, qty: number, editId: number | null) {
+    this.resetEmptyTargets(item);
+    qty = qty ?? 0;
     if (grade === 'A') {
-      if (item.targetA < item.preValueA) {
+      if (this.round3(item.targetA) < this.round3(item.preValueA)) {
         return this.toastSrv.warning('Value must be greater than the current saved value')
       }
 
     } else if (grade === 'B') {
-      if (item.targetB < item.preValueB) {
+      if (this.round3(item.targetB) < this.round3(item.preValueB)) {
         return this.toastSrv.warning('Value must be greater than the current saved value')
       }
     } else {
-      if (item.targetC < item.preValueC) {
+      if (this.round3(item.targetC) < this.round3(item.preValueC)) {
         return this.toastSrv.warning('Value must be greater than the current saved value')
       }
     }
@@ -201,7 +215,7 @@ onSubmit() {
       varietyId: item.varietyId
     }
     this.TargetSrv.updateTargetQty(data).subscribe(
-      
+
       (res) => {
         if (res.status) {
           this.toastSrv.success(res.message)
@@ -245,10 +259,18 @@ onSubmit() {
   // Whether that grade's Save button is currently disabled (no change made yet,
   // negative, below the last saved value, or would exceed the remaining quantity).
   // Shared by the template's [disabled] binding and the click-outside handler below.
+  // isSaveDisabled(item: AssignCrops, grade: string): boolean {
+  //   const target = grade === 'A' ? item.targetA : grade === 'B' ? item.targetB : item.targetC;
+  //   const preValue = grade === 'A' ? item.preValueA : grade === 'B' ? item.preValueB : item.preValueC;
+  //   return target === preValue || target < 0 || target < preValue || this.isQtyExceeded(item);
+  // }
+
   isSaveDisabled(item: AssignCrops, grade: string): boolean {
     const target = grade === 'A' ? item.targetA : grade === 'B' ? item.targetB : item.targetC;
     const preValue = grade === 'A' ? item.preValueA : grade === 'B' ? item.preValueB : item.preValueC;
-    return target === preValue || target < 0 || target < preValue || this.isQtyExceeded(item);
+    const t = this.round3(target);
+    const p = this.round3(preValue);
+    return t === p || t < 0 || t < p || this.isQtyExceeded(item);
   }
 
   private getActiveGradeEdit(): { item: AssignCrops, grade: string } | null {
@@ -295,21 +317,39 @@ onSubmit() {
     }
   }
 
+  // isQtyExceeded(item: AssignCrops): boolean {
+  //   if (item.isNew) {
+  //     const total = (item.targetA || 0) + (item.targetB || 0) + (item.targetC || 0);
+  //     return total > item.remaining;
+  //   }
+
+  //   const addedA = item.editingA ? (item.targetA || 0) - (item.preValueA || 0) : 0;
+  //   const addedB = item.editingB ? (item.targetB || 0) - (item.preValueB || 0) : 0;
+  //   const addedC = item.editingC ? (item.targetC || 0) - (item.preValueC || 0) : 0;
+
+  //   return (addedA + addedB + addedC) > item.remaining;
+  // }
+
   isQtyExceeded(item: AssignCrops): boolean {
     if (item.isNew) {
-      const total = (item.targetA || 0) + (item.targetB || 0) + (item.targetC || 0);
-      return total > item.remaining;
+      const total = this.round3((item.targetA || 0) + (item.targetB || 0) + (item.targetC || 0));
+      return total > this.round3(item.remaining);
     }
 
     const addedA = item.editingA ? (item.targetA || 0) - (item.preValueA || 0) : 0;
     const addedB = item.editingB ? (item.targetB || 0) - (item.preValueB || 0) : 0;
     const addedC = item.editingC ? (item.targetC || 0) - (item.preValueC || 0) : 0;
 
-    return (addedA + addedB + addedC) > item.remaining;
+    const added = this.round3(addedA + addedB + addedC);
+    return added > this.round3(item.remaining);
+  }
+
+  private round3(n: number): number {
+    return Math.round(n * 1000) / 1000;
   }
 
   maxQty(item: AssignCrops): number {
-    return Math.round((item.remaining * 1.02) * 100) / 100;
+    return this.round3(item.remaining * 1.02);
   }
 
   isGradeInvalid(item: AssignCrops, grade: string): boolean {
@@ -362,6 +402,13 @@ onSubmit() {
     if (grade === 'A') item.preValueA = item.targetA;
     if (grade === 'B') item.preValueB = item.targetB;
     if (grade === 'C') item.preValueC = item.targetC;
+  }
+
+  resetEmptyTargets(item: AssignCrops) {
+    item.targetA = item.targetA ?? 0;
+    item.targetB = item.targetB ?? 0;
+    item.targetC = item.targetC ?? 0;
+    this.validateForm();
   }
 
   checkNegativeValue(item: AssignCrops, grade: string) {

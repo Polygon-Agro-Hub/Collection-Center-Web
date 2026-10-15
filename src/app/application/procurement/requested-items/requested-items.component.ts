@@ -271,7 +271,7 @@ class RequestedItems {
   qty!: number
   productName!: string
   productId!: number
-  sheduleDate!: Date
+  sheduleDate!: string
 }
 
 class Center {

@@ -72,7 +72,7 @@
 
 
                     <!-- <div *ngIf="isDropdownOpen" class="dropdown-backdrop" (click)="isDropdownOpen = false"></div> -->
-                    <div class="relative w-36 flex-shrink-0 custom-status-dropdown-container">
+                    <div class="relative w-28 flex-shrink-0 custom-status-dropdown-container">
                         <!-- Hidden native select -->
                         <select [(ngModel)]="selectStatus" class="hidden" (change)="applyStatusFilters()">
                             <option class="hover:bg-gray-300 dark:hover:bg-gray-300" value=""></option>
@@ -118,7 +118,7 @@
                     </div>
 
 
-                    <div class="relative w-64 flex-shrink-0 custom-center-dropdown-container"
+                    <div class="relative w-52 flex-shrink-0 custom-center-dropdown-container"
                         *ngIf="logingRole === 'Distribution Centre Head'">
                         <app-searchable-dropdown [items]="centerDropdownItems" placeholder="Centre"
                             searchPlaceholder="Search centre..." [(ngModel)]="selectCenters"

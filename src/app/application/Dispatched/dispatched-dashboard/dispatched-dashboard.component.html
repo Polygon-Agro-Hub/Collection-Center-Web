@@ -161,7 +161,7 @@
 
         <div
           *ngIf="activeTab === 'all' || activeTab === 'out-for-delivery' || activeTab === 'Return Received' || activeTab === 'Picked Up'"
-          title="Schedule Date"
+          [title]="activeTab === 'Return Received' ? 'Received Date' : activeTab === 'Picked Up' ? 'Picked Up Date' : activeTab === 'out-for-delivery' ? 'Out Date' : 'Schedule Date'"
           class="w-36" 
           [ngClass]="{
           'w-44': activeTab === 'Return Received' || activeTab === 'Picked Up',

@@ -108,9 +108,6 @@ export class AssignCitiesComponent implements OnInit {
         this.centersArr = this.removeDuplicateCenters(res.centers);
         this.isLoading = false;
         this.hasData = this.fetched && this.centersArr.length > 0;
-
-        console.log('hasData', this.hasData, this.centersArr)
-
         this.initializeAssignments();
       },
       (error) => {

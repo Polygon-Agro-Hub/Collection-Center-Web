@@ -9,8 +9,7 @@
     <div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg">
         <div class="flex flex-row items-center justify-between gap-4 w-full">
             <div class="flex flex-col justify-between flex-shrink-0">
-                <p class="font-semibold md:text-lg lg:text-lg mb-1 dark:text-white whitespace-nowrap">Total Distribution
-                    Centres
+                <p class="font-semibold md:text-lg lg:text-lg mb-1 dark:text-white whitespace-nowrap">Centres
                     ({{totalItems < 10 ? '0' + totalItems : totalItems}})</p>
             </div>
             <div class="flex flex-row items-center justify-end gap-4 flex-1 min-w-0">
@@ -36,6 +35,7 @@
                 <div
                     class="flex items-center rounded-full px-4 py-2 flex-1 min-w-0 max-w-xs bg-[#F1F1F1] dark:bg-[#292929]">
                     <input type="text" placeholder="Search by Reg Code / Centre Name.." [(ngModel)]="searchText"
+                        title="Search by Reg Code or Centre Name"
                         class="bg-transparent outline-none w-full min-w-0 text-textLight dark:text-textDark"
                         (keydown.enter)="onSearch()" (keydown.esc)="offSearch()" />
                     <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"

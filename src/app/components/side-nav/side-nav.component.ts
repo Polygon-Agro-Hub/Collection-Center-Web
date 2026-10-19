@@ -288,9 +288,6 @@ export class SideNavComponent {
       }
     });
 
-    if (this.companyFavicon !== '') {
-      this.changeFavicon(this.companyFavicon);
-    }
   }
 
   private setActiveTabFromRoute(): void {
@@ -355,6 +352,14 @@ export class SideNavComponent {
     this.logOutView = !this.logOutView;
   }
 
+  changeFavicon(iconUrl: string) {
+    const link: HTMLLinkElement = this.document.querySelector("link[rel*='icon']") || this.document.createElement('link');
+    link.type = 'image/x-icon';
+    link.rel = 'shortcut icon';
+    link.href = iconUrl;
+    this.document.getElementsByTagName('head')[0].appendChild(link);
+  }
+
   selectIdealTab() {
     if (this.role === 'Collection Centre Manager') {
       this.isSelectTab = 'dashboard';
@@ -367,11 +372,4 @@ export class SideNavComponent {
     }
   }
 
-  changeFavicon(iconUrl: string) {
-    const link: HTMLLinkElement = this.document.querySelector("link[rel*='icon']") || this.document.createElement('link');
-    link.type = 'image/x-icon';
-    link.rel = 'shortcut icon';
-    link.href = iconUrl;
-    this.document.getElementsByTagName('head')[0].appendChild(link);
-  }
 }

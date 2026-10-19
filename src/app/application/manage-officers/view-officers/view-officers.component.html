@@ -29,7 +29,7 @@
                 <div class="flex flex-row items-center justify-end gap-5 flex-1 min-w-0">
 
 
-                    <div class="relative w-52 md:w-52 lg:w-44 flex-shrink-0 custom-role-dropdown-container">
+                    <div class="relative w-44 md:w-44 lg:w-44 flex-shrink-0 custom-role-dropdown-container">
                         <!-- Hidden native select -->
                         <select [(ngModel)]="selectRole" class="hidden" (change)="applyRoleFilters()">
                             <option value="Collection Centre Manager">Collection Centre Manager</option>
@@ -78,7 +78,7 @@
 
 
                     <!-- <div *ngIf="isDropdownOpen" class="dropdown-backdrop" (click)="isDropdownOpen = false"></div> -->
-                    <div class="relative w-40 md:w-40 lg:w-36 flex-shrink-0 custom-status-dropdown-container">
+                    <div class="relative w-28 md:w-28 lg:w-28 flex-shrink-0 custom-status-dropdown-container">
                         <!-- Hidden native select -->
                         <select [(ngModel)]="selectStatus" class="hidden" (change)="applyStatusFilters()">
                             <option class="hover:bg-gray-300 dark:hover:bg-gray-300" value=""></option>
@@ -126,7 +126,7 @@
                         </div>
                     </div>
 
-                    <div class="relative w-64 flex-shrink-0 custom-center-dropdown-container"
+                    <div class="relative w-52 flex-shrink-0 custom-center-dropdown-container"
                         *ngIf="logingRole === 'Collection Centre Head'">
                         <app-searchable-dropdown [items]="centerDropdownItems" placeholder="Centre"
                             searchPlaceholder="Search centre..." [(ngModel)]="selectCenters"

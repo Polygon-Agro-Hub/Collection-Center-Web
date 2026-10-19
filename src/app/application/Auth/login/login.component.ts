@@ -112,10 +112,6 @@ export class LoginComponent {
             res.companyFavicon === null ? '' : res.companyFavicon
           );
 
-          if (res.companyFavicon !== null) {
-            this.changeFavicon(res.companyFavicon);
-          }
-
           Swal.fire({
             icon: 'success',
             title: 'Logged',
@@ -197,6 +193,7 @@ export class LoginComponent {
     link.href = iconUrl;
     this.document.getElementsByTagName('head')[0].appendChild(link);
   }
+
 }
 
 

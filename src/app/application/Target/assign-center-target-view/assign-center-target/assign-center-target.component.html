@@ -3,10 +3,10 @@
 
 <div *ngIf="!isLoading" class="">
     <div class="flex flex-row justify-between items-center">
-        <p class="text-[16px] font-bold ml-10 text-right dark:text-white text-[#030308]">{{centerDetails.regCode}}
+        <p class="text-[16px] font-bold ml-8 text-right dark:text-white text-[#030308]">{{centerDetails.regCode}}
             {{centerDetails.centerName}}</p>
         <div class="flex flex-row items-center gap-5 ">
-            <i class="fa-solid fa-list text-lg text-[#4A4A4A] dark:text-white ml-8"></i>
+            <i class="fa-solid fa-list text-lg text-[#4A4A4A] dark:text-white ml-5"></i>
 
             <p class="font-[400] text-[#4A4A4A] dark:text-white text-sm">Collection Date:</p>
 
@@ -15,7 +15,7 @@
                     (dateChange)="onDateChange($event)"></app-custom-datepicker>
             </div>
 
-            <div class="flex items-center rounded-full mr-16 ml-0 px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+            <div class="flex items-center rounded-full mr-16 ml-0 px-4 py-2 w-80 bg-[#F1F1F1] dark:bg-[#292929]">
                 <input type="text" placeholder="Search by Crop / Variety Name" [(ngModel)]="searchText"
                     (keyup.enter)="onSearch()" (keyup.esc)="offSearch()"
                     (ngModelChange)="searchText = $event.trimStart()"
@@ -41,7 +41,7 @@
         </div>
     </div>
 
-    <div *ngIf="hasData" class="w-full px-10  bg-tileLight dark:bg-[#363636] ">
+    <div *ngIf="hasData" class="w-full pl-8 pr-10 bg-tileLight dark:bg-[#363636] ">
         <div
             class="flex items-center gap-2 mt-8 mr-5 px-4 py-3 rounded-lg bg-[#EDF5FC] text-sm font-[400] text-[#000000] dark:text-gray-800">
             <i class="fa-solid fa-circle-info text-[#415CFF]"></i>

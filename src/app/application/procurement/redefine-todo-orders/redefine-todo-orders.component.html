@@ -19,17 +19,17 @@
         <p class="text-[#4A4A4A] text-[14px] dark:text-white">Filter By</p>
       </div>
 
-      <div class="w-56">
+      <div class="w-36">
         <app-custom-datepicker [placeholder]="'Ordered Date'" [selectedDate]="dateFilter1"
           (dateChange)="onDateChange($event)" placeholderClass="italic text-[14px]"></app-custom-datepicker>
       </div>
 
-      <div class="w-56">
+      <div class="w-36">
         <app-custom-datepicker [placeholder]="'Delivery Date'" [selectedDate]="dateFilter"
           (dateChange)="onDateChange2($event)" placeholderClass="italic text-[14px]"></app-custom-datepicker>
       </div>
 
-      <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929] mr-5">
+      <div class="flex items-center rounded-full  px-4 py-2 w-80 bg-[#F1F1F1] dark:bg-[#292929] mr-5">
         <input type="text" placeholder=" Search by Invoice No.." [(ngModel)]="searchTerm" (keyup.enter)="onSearch()"
           (keyup.esc)="offSearch()" class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
         <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2" (click)="onSearch()">

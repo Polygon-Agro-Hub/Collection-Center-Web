@@ -14,6 +14,7 @@ import { SerchableDropdownComponent } from '../../../components/serchable-dropdo
 @Component({
   selector: 'app-cch-price-request',
   standalone: true,
+    host: { class: 'block w-full min-w-0 max-w-full [container-type:inline-size]' },
   imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, LoadingSpinnerComponent, SerchableDropdownComponent],
   templateUrl: './cch-price-request.component.html',
   styleUrl: './cch-price-request.component.css',

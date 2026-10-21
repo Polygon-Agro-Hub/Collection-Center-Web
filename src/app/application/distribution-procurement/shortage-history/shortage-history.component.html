@@ -79,9 +79,9 @@
           Assigned ({{ getAssignedCount() }})
         </h3>
 
-        <div class="flex flex-col gap-3">
+        <div class="flex flex-col gap-3 overflow-x-auto pb-2">
           <div *ngFor="let item of assignedItems"
-            class="flex items-center border border-[#C3C3D2] dark:border-[#3A3F55] rounded-lg px-4 py-3 flex-wrap gap-y-2">
+            class="flex flex-nowrap items-center w-max min-w-full whitespace-nowrap border border-[#C3C3D2] dark:border-[#3A3F55] rounded-lg px-4 py-3">
             <img [src]="item.imageUrl" [alt]="item.itemName"
               class="w-16 h-16 rounded-md object-cover mr-4 flex-shrink-0" />
             <span class="font-medium text-[#000000] dark:text-textDark w-40 flex-shrink-0">

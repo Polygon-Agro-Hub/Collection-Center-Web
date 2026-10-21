@@ -13,6 +13,7 @@ import { SerchableDropdownComponent } from '../../../components/serchable-dropdo
 @Component({
     selector: 'app-view-centers',
     standalone: true,
+    host: { class: 'block w-full min-w-0 max-w-full [container-type:inline-size]' },
     imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, LoadingSpinnerComponent, SerchableDropdownComponent],
     templateUrl: './view-centers.component.html',
     styleUrl: './view-centers.component.css'

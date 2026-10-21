@@ -1,13 +1,14 @@
+<div class="block min-w-0" style="container: target-view / inline-size;">
 <div
-    class="flex flex-row items-center gap-5 font-semibold text-[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
+    class="[@container_target-view_(max-width:48rem)]:flex-wrap flex flex-row items-center gap-5 font-semibold text-[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
     <p (click)="navigateToCenters()">Centre</p>
     <p (click)="navigateToCentreDashboard()">Centre Dashboard</p>
     <p>Assign Centre Target</p>
 </div>
 
-<div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg mt-4">
+<div class="[@container_target-view_(max-width:48rem)]:px-4 w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg mt-4">
     <div class="flex flex-row justify-between items-center">
-        <div class="flex flex-row gap-6">
+        <div class="[@container_target-view_(max-width:48rem)]:flex-wrap flex flex-row gap-6">
             <div class="flex flex-row items-center gap-2 border-[2px] rounded-2xl px-4 py-2 dark:bg-[#292929] cursor-pointer"
                 [ngClass]="{'text-[#415CFF] border-[#415CFF]': isAssignTarget}" (click)="selectAssignTarget()">
                 <i *ngIf="isAssignTarget" class="fa-solid fa-check"></i>
@@ -24,7 +25,9 @@
 
     <hr class="my-8 border-[1px] border-[#7F7F7F] dark:border-[#292929]" />
 
-    <app-assign-center-target [centerDetails]="centerDetailsObj" *ngIf="isAssignTarget" />
+    <app-assign-center-target class="block min-w-0" [centerDetails]="centerDetailsObj" *ngIf="isAssignTarget" />
 
-    <app-select-variety-list [centerDetails]="centerDetailsObj" *ngIf="isVariety" />
+    <app-select-variety-list class="block min-w-0" [centerDetails]="centerDetailsObj" *ngIf="isVariety" />
+</div>
+
 </div>

@@ -29,7 +29,7 @@
 
             <p class="text-[#4A4A4A] dark:text-white">Filter By</p>
 
-            <div class="relative w-40 custom-grade-dropdown-container">
+            <div class="relative w-28 custom-grade-dropdown-container">
                 <!-- Hidden native select -->
                 <select [(ngModel)]="selectGrade" class="hidden" (change)="filterGrade()">
                     <option value="" selected disabled>Status</option>
@@ -69,7 +69,7 @@
             </div>
 
 
-            <div class="flex items-center rounded-full mr-5 px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+            <div class="flex items-center rounded-full mr-5 px-4 py-2 w-80 bg-[#F1F1F1] dark:bg-[#292929]">
                 <input type="text" placeholder="Search by Crop / Variety name.." [(ngModel)]="searchText"
                     class="bg-transparent outline-none w-full text-textLight dark:text-textDark"
                     (keydown.esc)="offSearch()" (keydown.enter)="onSearch()" />

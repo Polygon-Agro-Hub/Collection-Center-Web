@@ -3,23 +3,23 @@
 
 <div *ngIf="!isLoading">
 
-    <div class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
+    <div class="max-[1024px]:flex-wrap flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
     <p (click)="goBack()" >Product Shortage</p>
     <p>Product Shortage History</p>
 </div>
 
 
-  <div class="w-full min-h-screen px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg overflow-x-auto">
-    <div class="flex flex-row items-center justify-between gap-8 ">
+  <div class="max-[640px]:px-4 w-full min-w-0 min-h-screen px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg overflow-x-auto">
+    <div class="flex flex-row flex-nowrap max-[1024px]:flex-wrap items-center justify-between gap-8 ">
 
-        <p class="class-[#030308] dark:text-white font-500">Product Shortage History</p>
+        <p class="min-w-0 dark:text-white font-500">Product Shortage History</p>
 
-        <div class="flex flex-row items-center justify-end gap-8">
-            <i class="fa-solid fa-list text-lg text-[#4A4A4A] dark:text-white"></i>
+        <div class="flex flex-row flex-nowrap max-[1024px]:flex-wrap max-[1024px]:basis-full max-[1024px]:justify-start items-center justify-end gap-8 flex-1 min-w-0">
+            <i class="shrink-0 fa-solid fa-list text-lg text-[#4A4A4A] dark:text-white"></i>
 
-            <p class="text-[#4A4A4A] dark:text-white">Filter By</p>
+            <p class="shrink-0 whitespace-nowrap text-[#4A4A4A] dark:text-white">Filter By</p>
 
-            <div class="w-44">
+            <div class="w-36 shrink-0 max-[640px]:w-full">
             <app-custom-datepicker
             [placeholder]="'Date'"
               [selectedDate]="selectedDate"
@@ -27,9 +27,9 @@
             ></app-custom-datepicker>
         </div>
 
-            <div class="flex mr-5 items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+            <div class="flex-1 min-w-32 max-w-96 max-[640px]:basis-full max-[640px]:max-w-none max-[1024px]:mr-0 [&_button]:shrink-0 flex mr-5 items-center rounded-full px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
                 <input type="text" placeholder="Search By Product & Assignee.." [(ngModel)]="searchText"
-                    class="bg-transparent outline-none w-full text-textLight dark:text-textDark"
+                    class="bg-transparent outline-none w-full min-w-0 text-textLight dark:text-textDark"
                     (keyup.enter)="onSearch()" (keyup.esc)="offSearch()" />
                 <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                     (click)="onSearch()">
@@ -54,8 +54,8 @@
 
 
     <div *ngIf="hasData"
-        class="overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
-        <table class="w-full divide-y-2 overflow-hidden">
+        class="max-[1024px]:mr-0 min-w-0 overflow-x-auto mt-8 mr-5 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+        <table class="w-full min-w-max divide-y-2 overflow-hidden">
             <thead class=" text-gray-700 dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] cursor-default">
                 <tr>
                     <th class="px-6 py-3 whitespace-nowrap text-[#4B5563] text-left font-medium">No</th>
@@ -104,7 +104,7 @@
 
     </div>
 
-    <div *ngIf="!hasData" class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6 ">
+    <div *ngIf="!hasData" class="flex flex-col items-center w-full h-screen max-[640px]:px-2 max-[640px]:text-center px-10 py-7 mt-6 ">
         <p class="text-[#494949] my-6 dark:text-textDark">--No Data Available--</p>
         <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
     </div>

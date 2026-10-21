@@ -1,15 +1,15 @@
 <app-loading-spinner *ngIf="isLoading" />
 
-<div *ngIf="!isLoading">
+<div *ngIf="!isLoading" class="w-full min-w-0 max-w-full [container-type:inline-size]">
     <div class="flex gap-3 mb-4 mr-5 ml-0">
         <p class="font-semibold text-[#424242] mb-4 mr-5 ml-0 dark:text-[#FFFFFF] cursor-pointer">Manage
             Officers</p>
     </div>
 
     <div class="w-full bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg">
-        <div class="px-10 py-7">
-            <div class="flex flex-row flex-wrap items-center justify-between gap-4 w-full">
-                <div class="flex flex-row gap-4 flex-shrink-0">
+        <div class="px-10 py-7 min-w-0 [@container(max-width:640px)]:px-4">
+            <div class="flex flex-row flex-wrap items-center justify-between gap-4 w-full [@container(min-width:761px)]:flex-nowrap">
+                <div class="flex flex-row gap-4 flex-shrink-0 [@container(max-width:480px)]:flex-wrap [@container(max-width:480px)]:shrink">
                     <button
                         class="w-28  bg-[#415CFF] text-[#FFFFFF] dark:text-white rounded-lg shadow-lg px-4 py-2 whitespace-nowrap"
                         (click)="navigate('/distribution-officers/create-distribution-officer')">
@@ -24,9 +24,9 @@
                         </button>
                     </span>
                 </div>
-                <div class="flex flex-row items-center justify-end gap-5 flex-1 min-w-0">
+                <div class="flex flex-row items-center justify-end gap-5 flex-1 min-w-0 [@container(max-width:760px)]:basis-full [@container(max-width:760px)]:flex-wrap [@container(max-width:1000px)]:gap-3 [@container(max-width:640px)]:justify-start">
 
-                    <div class="ml-1 relative w-44 flex-shrink-0 custom-role-dropdown-container">
+                    <div class="ml-1 relative w-44 flex-shrink-0 [@container(max-width:1000px)]:w-40 [@container(max-width:640px)]:ml-0 [@container(max-width:640px)]:!w-full custom-role-dropdown-container">
                         <!-- Hidden native select -->
                         <select [(ngModel)]="selectRole" class="hidden" (change)="applyRoleFilters()">
                             <option value="Distribution Centre Manager">Distribution Centre Manager</option>
@@ -72,7 +72,7 @@
 
 
                     <!-- <div *ngIf="isDropdownOpen" class="dropdown-backdrop" (click)="isDropdownOpen = false"></div> -->
-                    <div class="relative w-28 flex-shrink-0 custom-status-dropdown-container">
+                    <div class="relative w-28 flex-shrink-0 [@container(max-width:640px)]:!w-full custom-status-dropdown-container">
                         <!-- Hidden native select -->
                         <select [(ngModel)]="selectStatus" class="hidden" (change)="applyStatusFilters()">
                             <option class="hover:bg-gray-300 dark:hover:bg-gray-300" value=""></option>
@@ -118,7 +118,7 @@
                     </div>
 
 
-                    <div class="relative w-52 flex-shrink-0 custom-center-dropdown-container"
+                    <div class="relative w-52 flex-shrink-0 [@container(max-width:1000px)]:w-40 [@container(max-width:640px)]:!w-full custom-center-dropdown-container"
                         *ngIf="logingRole === 'Distribution Centre Head'">
                         <app-searchable-dropdown [items]="centerDropdownItems" placeholder="Centre"
                             searchPlaceholder="Search centre..." [(ngModel)]="selectCenters"
@@ -128,7 +128,7 @@
                     </div>
 
                     <div
-                        class="flex items-center text-[#95A1AC] text-normal rounded-full px-4 py-2 flex-1 min-w-48 max-w-xs bg-[#F1F1F1] dark:bg-[#292929]">
+                        class="flex items-center text-[#95A1AC] text-normal rounded-full px-4 py-2 flex-1 min-w-0 max-w-xs [@container(max-width:1000px)]:[&_button]:shrink-0 [@container(max-width:640px)]:basis-full [@container(max-width:640px)]:min-w-0 [@container(max-width:640px)]:max-w-none bg-[#F1F1F1] dark:bg-[#292929]">
                         <input type="text" placeholder="Search by EMP ID, First / Last name,NIC"
                             title="Search by EMP ID, First Name, Last Name or NIC"
                             [(ngModel)]="searchText" (keyup.enter)="onSearch()" (keyup.esc)="offSearch()"

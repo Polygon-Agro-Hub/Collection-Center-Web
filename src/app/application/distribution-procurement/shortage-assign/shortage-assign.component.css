@@ -1,0 +1,6 @@
+.centre-dropdown-options {
+  max-height: min(120px, 25vh);
+  overflow-y: auto;
+  overscroll-behavior-y: contain;
+  scrollbar-gutter: stable;
+}

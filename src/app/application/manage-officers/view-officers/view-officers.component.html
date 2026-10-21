@@ -8,10 +8,10 @@
     </div>
 
 
-    <div class="w-full bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg">
-        <div class="px-10 py-7">
+    <div class="officers-panel w-full bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg">
+        <div class="officers-content px-10 py-7">
             <div class="flex flex-row flex-wrap items-center justify-between gap-4 w-full">
-                <div class="flex flex-row gap-4 flex-shrink-0">
+                <div class="officer-actions flex flex-row gap-4 flex-shrink-0">
                     <button
                         class="w-28  bg-[#415CFF] text-[#FFFFFF] dark:text-white rounded-lg shadow-lg px-4 py-2 whitespace-nowrap"
                         (click)="navigate('/manage-officers/create-officer')">
@@ -26,7 +26,7 @@
                         </button>
                     </span>
                 </div>
-                <div class="flex flex-row items-center justify-end gap-5 flex-1 min-w-0">
+                <div class="officer-filters flex flex-row items-center justify-end gap-5 flex-1 min-w-0">
 
 
                     <div class="relative w-44 md:w-44 lg:w-44 flex-shrink-0 custom-role-dropdown-container">

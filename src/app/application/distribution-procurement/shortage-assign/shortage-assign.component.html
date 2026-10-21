@@ -1,4 +1,6 @@
 <app-loading-spinner *ngIf="isLoading"></app-loading-spinner>
+<div class="w-full min-w-0 overflow-x-auto pb-2">
+<div class="min-w-[712px]">
 <div *ngIf="!isLoading"
   class="flex flex-row items-center gap-6 font-semibold text-[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
   <p (click)="goDashboard()">Product Shortage</p>
@@ -13,7 +15,7 @@
     <div class="flex items-center justify-between px-7 py-5 border-b border-gray-100 dark:border-gray-700">
       <div class="flex items-center gap-4">
         <img [src]="selectedItem.image" [alt]="selectedItem.name"
-          class="w-14 h-14 object-cover rounded-md bg-gray-50 dark:bg-gray-800" />
+          class="shrink-0 w-14 h-14 object-cover rounded-md bg-gray-50 dark:bg-gray-800" />
         <div>
           <p class=" dark:text-textDark font-[600] text-[#000000] m-0">{{ selectedItem.name }}</p>
           <p class=" dark:text-textDark font-[600] text-[#000000] m-0">
@@ -153,8 +155,8 @@
   </div>
 
   <!-- ===================== ASSIGN CONFIRMATION MODAL ===================== -->
-  <div *ngIf="showConfirmModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50">
-    <div class="bg-white dark:bg-[#1E263B] rounded-2xl shadow-2xl w-[480px] max-w-[90vw] p-8 text-center">
+  <div *ngIf="showConfirmModal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/50 p-4">
+    <div class="bg-white dark:bg-[#1E263B] rounded-2xl shadow-2xl w-[480px] max-w-[90vw] max-h-[calc(100dvh-2rem)] overflow-y-auto max-[640px]:p-4 p-8 text-center">
 
       <!-- Warning Icon -->
       <div class="flex justify-center mb-5">
@@ -169,7 +171,7 @@
         to {{ selectedCentre?.code }} ({{ selectedCentre?.name }})?
       </p>
 
-      <div class="flex justify-center gap-4">
+      <div class="max-[640px]:flex-wrap flex justify-center gap-4">
         <button
           class="bg-[#F6F7F9] hover:bg-[#e5e7eb] text-[#6B7D8C] font-semibold py-2 px-10 rounded-xl shadow-md border border-[#95A1AC] transition-colors leading-tight"
           [disabled]="isLoading" (click)="cancelAssign()">
@@ -190,4 +192,7 @@
       </div>
     </div>
   </div>
+</div>
+
+</div>
 </div>

@@ -11,16 +11,16 @@
     <div class="w-full overflow-x-auto px-10 py-7 bg-tileLight shadow-lg rounded-lg dark:bg-[#363636]">
         <div class="flex flex-row items-center justify-between">
             <div class="flex flex-row gap-3">
-                <h1 class="font-semibold text-black dark:text-white">All ({{totalItems === 0 ? '0' : totalItems < 10
+                <h1 class="font-semibold text-black dark:text-white whitespace-nowrap">All ({{totalItems === 0 ? '0' : totalItems < 10
                         ? '0' + totalItems : totalItems}})</h1>
 
             </div>
             <div class="flex flex-row items-center gap-5 ">
                 <i class="fa-solid fa-list text-[#4A4A4A] text-lg dark:text-white ml-8"></i>
 
-                <p class="text-[#4A4A4A] text-[14px] dark:text-white">Filter By</p>
+                <p class="text-[#4A4A4A] text-[14px] dark:text-white whitespace-nowrap">Filter By</p>
 
-                <div class="relative w-64 custom-role-dropdown-container">
+                <div class="relative w-44 custom-role-dropdown-container">
                     <!-- Hidden native select -->
                     <select [(ngModel)]="selectRole" class="hidden" (change)="applyRoleFilters()">
                         <option value="" selected disabled>Role</option>

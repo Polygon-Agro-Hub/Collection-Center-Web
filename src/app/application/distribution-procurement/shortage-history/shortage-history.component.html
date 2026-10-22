@@ -84,7 +84,7 @@
             class="flex flex-nowrap items-center w-max min-w-full whitespace-nowrap border border-[#C3C3D2] dark:border-[#3A3F55] rounded-lg px-4 py-3">
             <img [src]="item.imageUrl" [alt]="item.itemName"
               class="w-16 h-16 rounded-md object-cover mr-4 flex-shrink-0" />
-            <span class="font-medium text-[#000000] dark:text-textDark w-40 flex-shrink-0">
+            <span class="font-medium text-[#000000] dark:text-textDark min-w-40 w-max mr-4 whitespace-nowrap flex-shrink-0">
               {{ item.itemName }}
             </span>
 
@@ -126,21 +126,21 @@
               </p>
             </div>
 
-            <div class="mr-8 w-[140px] flex-shrink-0">
+            <div class="mr-8 min-w-[140px] w-max flex-shrink-0">
               <p class="text-xs text-[#000000] dark:text-textDark mb-1">
                 1st Assigned By
               </p>
-              <p class="font-semibold text-[#292929] dark:text-textDark break-words" [title]="item.firstAssignedBy || '----'">
-                {{ item.firstAssignedBy || "----" }}
+              <p class="font-semibold text-[#292929] dark:text-textDark whitespace-nowrap" [title]="item.firstAssignedBy || '----'">
+                ssssssssssssssssssssssssssssssssssssss
               </p>
             </div>
 
-            <div class="w-[140px] flex-shrink-0">
+            <div class="min-w-[140px] w-max flex-shrink-0">
               <p class="text-xs text-[#000000] dark:text-textDark mb-1">
                 Finalized By
               </p>
-              <p class="font-semibold text-[#292929] dark:text-textDark break-words" [title]="item.finalizedBy || '----'">
-                {{ item.finalizedBy || "----" }}
+              <p class="font-semibold text-[#292929] dark:text-textDark whitespace-nowrap" [title]="item.finalizedBy || '----'">
+                sssssssssssssssssssssssssssssssssssss
               </p>
             </div>
           </div>

@@ -63,7 +63,7 @@ afterSixPm!: boolean;
 
   ngOnInit(): void {
     this.currentTime = new Date();
-    this.afterSixPm = this.currentTime.getHours() >= 18;
+    this.afterSixPm = this.currentTime.getHours() >= 1;
     this.getAllShortageTodayToDo();
   }
 

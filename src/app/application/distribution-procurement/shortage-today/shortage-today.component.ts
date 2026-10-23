@@ -77,14 +77,6 @@ export class ShortageTodayComponent
       this.isWaiting = false;
       this.fetchShortageDetails();
     }
-    //  else {
-    //   this.isWaiting = true;
-    //   this.waitTimer = setTimeout(() => {
-    //     this.isWaiting = false;
-    //     this.animationItem?.destroy();
-    //     this.fetchShortageDetails();
-    //   }, target - now);
-    // }
   }
 
   fetchShortageDetails(): void {

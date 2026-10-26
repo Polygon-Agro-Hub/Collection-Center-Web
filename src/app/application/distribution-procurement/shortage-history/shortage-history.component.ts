@@ -1,10 +1,11 @@
 import { CommonModule, Location } from '@angular/common';
-import { Component, OnInit } from '@angular/core';
+import { Component, ElementRef, OnDestroy, OnInit, ViewChild } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 import { LoadingSpinnerComponent } from '../../../components/loading-spinner/loading-spinner.component';
 import { DistributionProcurementService } from '../../../services/disribution-procuement-service/distribution-procurement.service';
 import { CustomDatepickerComponent } from '../../../components/custom-datepicker/custom-datepicker.component';
+import lottie, { AnimationItem } from 'lottie-web';
 
 interface ShortageItem {
   id: number;
@@ -35,7 +36,29 @@ interface ShortageItem {
   templateUrl: './shortage-history.component.html',
   styleUrl: './shortage-history.component.css'
 })
-export class ShortageHistoryComponent implements OnInit {
+export class ShortageHistoryComponent implements OnInit, OnDestroy {
+  private noDataAnimInstance?: AnimationItem;
+
+  @ViewChild('shortageNoDataAnim')
+  set shortageNoDataAnim(container: ElementRef<HTMLDivElement> | undefined) {
+    this.noDataAnimInstance?.destroy();
+    this.noDataAnimInstance = undefined;
+
+    if (container) {
+      this.noDataAnimInstance = lottie.loadAnimation({
+        container: container.nativeElement,
+        renderer: 'svg',
+        loop: true,
+        autoplay: true,
+        path: 'assets/json/blue%20loading.json'
+      });
+    }
+  }
+
+  ngOnDestroy(): void {
+    this.noDataAnimInstance?.destroy();
+  }
+
   isLoading = false;
   hasData: boolean = true;
 

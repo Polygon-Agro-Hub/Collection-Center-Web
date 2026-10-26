@@ -90,7 +90,7 @@
                     <!-- 1st Assigned By -->
                     <div class="min-w-0">
                         <div class="text-xs text-[#000000] dark:text-textDark mb-1">1st Assigned By</div>
-                        <div class="text-[#000000] dark:text-textDark font-semibold break-words">{{ item.assignedBy }}</div>
+                        <div class="text-[#000000] dark:text-textDark font-semibold truncate" [title]="item.assignedBy">{{ item.assignedBy }}</div>
                     </div>
 
                     <!-- Finalize Button -->
@@ -154,7 +154,7 @@
 
                     <div class="min-w-0">
                         <div class="text-xs text-[#000000] dark:text-textDark mb-1">1st Assigned By</div>
-                        <div class="text-[#000000] dark:text-textDark font-semibold break-words">{{ item.assignedBy }}</div>
+                        <div class="text-[#000000] dark:text-textDark font-semibold truncate" [title]="item.assignedBy">{{ item.assignedBy }}</div>
                     </div>
 
                     <div class="flex justify-center">

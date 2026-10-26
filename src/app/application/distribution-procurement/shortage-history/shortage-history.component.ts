@@ -74,7 +74,7 @@ export class ShortageHistoryComponent implements OnInit {
     this.maxSelectableDate = this.formatDateToYYYYMMDD(today);
 
     this.currentTime = new Date()
-    this.afterSixPm = this.currentTime.getHours() >= 1;
+    this.afterSixPm = this.currentTime.getHours() >= 18;
 
     this.loadShortageHistory();
   }

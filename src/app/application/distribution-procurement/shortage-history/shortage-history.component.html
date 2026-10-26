@@ -131,7 +131,7 @@
                 1st Assigned By
               </p>
               <p class="font-semibold text-[#292929] dark:text-textDark whitespace-nowrap" [title]="item.firstAssignedBy || '----'">
-                ssssssssssssssssssssssssssssssssssssss
+                {{ item.firstAssignedBy || "----" }}
               </p>
             </div>
 
@@ -140,7 +140,7 @@
                 Finalized By
               </p>
               <p class="font-semibold text-[#292929] dark:text-textDark whitespace-nowrap" [title]="item.finalizedBy || '----'">
-                sssssssssssssssssssssssssssssssssssss
+                {{ item.finalizedBy || "----" }}
               </p>
             </div>
           </div>

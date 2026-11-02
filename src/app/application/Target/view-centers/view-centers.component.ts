@@ -121,6 +121,7 @@ provinces: string[] = [
                 this.selectDistrict = '';
             }
         }
+        this.currentPage = 1; // Reset to first page on province change
 
         this.fetchAllCenterDetails();
     }
@@ -136,6 +137,7 @@ provinces: string[] = [
                 this.selectProvince = district.province;
             }
         }
+        this.currentPage = 1; // Reset to first page on district change
 
         this.fetchAllCenterDetails();
     }

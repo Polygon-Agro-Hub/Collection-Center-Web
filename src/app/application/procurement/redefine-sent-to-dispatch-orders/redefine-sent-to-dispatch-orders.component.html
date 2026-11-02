@@ -10,15 +10,15 @@
           : totalItems < 10 ? "0" + totalItems : totalItems }}) </h2>
       </div>
 
-      <div class="grid ml-auto flex-[0_1_36rem] grid-cols-[auto_auto_minmax(11rem,1fr)_minmax(0,2fr)] items-center gap-3 min-w-0 [@container(max-width:760px)]:basis-full [@container(max-width:760px)]:grid-cols-[auto_minmax(0,1fr)]">
+      <div class="grid ml-auto flex-[0_1_36rem] grid-cols-[auto_auto_minmax(13rem,1fr)_minmax(0,2fr)] items-center gap-3 min-w-0 [@container(max-width:760px)]:basis-full [@container(max-width:760px)]:grid-cols-[auto_minmax(0,1fr)]">
 
         <i class="fa-solid text-[#4A4A4A] fa-list text-lg dark:text-white"></i>
 
         <p class="text-[#4A4A4A] dark:text-white whitespace-nowrap">Filter By</p>
 
 
-        <div class="min-w-0 [@container(max-width:760px)]:col-span-full">
-          <app-custom-datepicker placeholderClass="italic whitespace-nowrap" [placeholder]="'Dispatched Date'" [selectedDate]="dateFilter"
+        <div class="relative z-10 min-w-0 [@container(max-width:760px)]:col-span-full">
+          <app-custom-datepicker class="block w-full [&_i]:shrink-0" placeholderClass="italic truncate min-w-0" [placeholder]="'Dispatched Date'" [selectedDate]="dateFilter"
             (dateChange)="onDateChange($event)"></app-custom-datepicker>
         </div>
 
@@ -111,14 +111,16 @@
         </tbody>
       </table>
 
-      <div *ngIf="!hasData" class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6">
+      
+    </div>
+    
+    <div *ngIf="!hasData" class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6">
         <p class="text-[#494949] my-6 dark:text-textDark">
           --No Data Available--
         </p>
         <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
       </div>
-    </div>
-
+      
     <div *ngIf="hasData" class="flex justify-end items-center my-5 mr-5 pt-3 dark:bg-[#1D1D1F] text-right">
       <pagination-controls (pageChange)="onPageChange($event)" [responsive]="true" [previousLabel]="'Previous'"
         [nextLabel]="'Next'" [screenReaderPaginationLabel]="'Pagination'" [screenReaderPageLabel]="'page'"

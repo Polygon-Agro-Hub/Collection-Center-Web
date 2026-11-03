@@ -26,7 +26,7 @@
           (click)="navigate(item.path, item.key)"
         >
           <i
-            [class]="item.icon + ' text-xl px-2'"
+            [class]="item.icon + ' text-xl w-10 shrink-0 text-center'"
             [ngClass]="{
               'text-[#415CFF]': isTabSelected(item.key),
               'text-[#6B6B6B] dark:text-white': !isTabSelected(item.key),

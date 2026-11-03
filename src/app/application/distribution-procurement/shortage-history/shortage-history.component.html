@@ -84,7 +84,7 @@
             class="flex flex-nowrap items-center w-max min-w-full whitespace-nowrap border border-[#C3C3D2] dark:border-[#3A3F55] rounded-lg px-4 py-3">
             <img [src]="item.imageUrl" [alt]="item.itemName"
               class="w-16 h-16 rounded-md object-cover mr-4 flex-shrink-0" />
-            <span class="font-medium text-[#000000] dark:text-textDark w-40 flex-shrink-0">
+            <span class="font-medium text-[#000000] dark:text-textDark min-w-40 w-max mr-4 whitespace-nowrap flex-shrink-0">
               {{ item.itemName }}
             </span>
 
@@ -130,7 +130,7 @@
               <p class="text-xs text-[#000000] dark:text-textDark mb-1">
                 1st Assigned By
               </p>
-              <p class="font-semibold text-[#292929] dark:text-textDark break-words" [title]="item.firstAssignedBy || '----'">
+              <p class="font-semibold text-[#292929] dark:text-textDark truncate" [title]="item.firstAssignedBy || '----'">
                 {{ item.firstAssignedBy || "----" }}
               </p>
             </div>
@@ -139,7 +139,7 @@
               <p class="text-xs text-[#000000] dark:text-textDark mb-1">
                 Finalized By
               </p>
-              <p class="font-semibold text-[#292929] dark:text-textDark break-words" [title]="item.finalizedBy || '----'">
+              <p class="font-semibold text-[#292929] dark:text-textDark truncate" [title]="item.finalizedBy || '----'">
                 {{ item.finalizedBy || "----" }}
               </p>
             </div>
@@ -159,8 +159,8 @@
 
     <div *ngIf="!afterSixPm &&!isPrevToday() && !isLoading"
       class="flex flex-col items-center w-full h-screen px-10 py-7 mt-12 ">
-      <img src="assets/images/ShortageNoData.png" alt="No Data" class="w-24 h-28" />
-      <p class="text-[#000000] my-6 dark:text-textDark text-[20px] font-[600]">--No assigned product shortages yet!--
+      <div #shortageNoDataAnim class="w-48 h-48" role="img" aria-label="No assigned product shortages yet"></div>
+      <p class="text-[#000000] mt-2 mb-6 dark:text-textDark text-[20px] font-[600]">--No assigned product shortages yet!--
       </p>
       <p class="text-center font-[400]">--If there are any shortages, you will be able to view them <span
           class="text-[#494949] font-[700]">after 6:00 PM</span> on {{ currentTime | date:'d MMMM y' }},<br>

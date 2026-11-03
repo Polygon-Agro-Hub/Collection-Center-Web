@@ -34,15 +34,15 @@ export class AddCenterComponent implements OnInit {
   };
 
   provinces: string[] = [
-    'Western',
     'Central',
-    'Southern',
-    'Northern',
     'Eastern',
-    'North Western',
     'North Central',
+    'North Western',
+    'Northern',
+    'Sabaragamuwa',
+    'Southern',
     'Uva',
-    'Sabaragamuwa'
+    'Western'
   ];
 
   // Define all districts with their provinces

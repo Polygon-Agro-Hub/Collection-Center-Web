@@ -1,39 +1,39 @@
 <app-loading-spinner *ngIf="isLoading" />
 
 <div *ngIf="!isLoading"
-    class="flex flex-row items-center mb-4 mr-5 ml-0 gap-5 font-semibold text[#424242] dark:text-white cursor-pointer">
+    class="flex flex-row flex-wrap items-center mb-4 mr-5 ml-0 gap-5 font-semibold text[#424242] dark:text-white cursor-pointer">
     <p (click)="navigateToCenterTarget()"> Centres</p>
     <p onclick="history.back()">Centre Dashboard</p>
     <p>Collection Expenses</p>
 </div>
 
 
-<div *ngIf="!isLoading" class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg overflow-x-auto">
+<div *ngIf="!isLoading" style="container: expenses / inline-size;" class="w-full min-w-0 px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg">
 
-    <div class="w-full px-10 pb-7 pt-4  dark:bg-[#363636] ">
+    <div class="[@container_expenses_(max-width:40rem)]:px-0 w-full min-w-0 px-10 pb-7 pt-4  dark:bg-[#363636] ">
 
         <div class="w-full dark:bg-[#363636]">
-            <div class="flex flex-row items-center justify-center">
-                <p class="text-lg font-semibold text-[#292929] mx-3 dark:text-white">From :</p>
+            <div class="[@container_expenses_(max-width:40rem)]:grid [@container_expenses_(max-width:40rem)]:grid-cols-[auto_minmax(0,1fr)] [@container_expenses_(max-width:40rem)]:gap-3 flex flex-row items-center justify-center">
+                <p class="text-lg font-semibold whitespace-nowrap text-[#292929] mx-3 dark:text-white">From :</p>
 
-                <div class="relative w-56 mr-10">
+                <div class="[@container_expenses_(max-width:40rem)]:w-full [@container_expenses_(max-width:40rem)]:mr-0 min-w-0 relative w-56 mr-10">
                     <app-custom-datepicker #fromDatePicker [(selectedDate)]="selectedFromDate"
                         (dateChange)="onFromDateChange($event)" placeholder="--Select Date--"></app-custom-datepicker>
 
                 </div>
 
-                <p class="text-lg font-semibold text-[#292929] mx-3 dark:text-white">To :</p>
+                <p class="text-lg font-semibold whitespace-nowrap text-[#292929] mx-3 dark:text-white">To :</p>
 
-                <div class="relative w-96 mr-6 flex flex-row">
+                <div class="[@container_expenses_(max-width:40rem)]:w-full [@container_expenses_(max-width:40rem)]:mr-0 [@container_expenses_(max-width:40rem)]:flex-wrap [@container_expenses_(max-width:40rem)]:gap-3 min-w-0 relative w-96 mr-6 flex flex-row">
 
-                    <div class="relative w-56 mr-10">
+                    <div class="[@container_expenses_(max-width:40rem)]:w-full [@container_expenses_(max-width:40rem)]:mr-0 min-w-0 relative w-56 mr-10">
                         <app-custom-datepicker #toDatePicker [(selectedDate)]="selectedToDate"
                             placeholder="--Select Date--" (dateChange)="onToDateChange($event)"></app-custom-datepicker>
 
                     </div>
 
                     <button (click)="goBtn()"
-                        class="bg-[#415CFF]  text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-lg ml-5  dark:text-white">Go</button>
+                        class="bg-[#415CFF]  text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-lg ml-5 [@container_expenses_(max-width:40rem)]:ml-0 dark:text-white">Go</button>
                 </div>
             </div>
 
@@ -42,21 +42,21 @@
         <hr class="mt-2" />
 
         <div *ngIf="hasData && isDateFilterSet">
-            <div class="flex flex-row items-center justify-between mt-6">
+            <div class="[@container_expenses_(max-width:40rem)]:flex-wrap [@container_expenses_(max-width:40rem)]:gap-4 flex flex-row items-center justify-between mt-6">
                 <div class="flex flex-row gap-4">
                     <div class="flex flex-col justify-between flex-shrink-0">
-                        <p class="font-semibold mb-1 text-lg dark:text-white whitespace-nowrap">All Transactions
+                        <p class="font-semibold mb-1 text-lg dark:text-white whitespace-nowrap [@container_expenses_(max-width:30rem)]:whitespace-normal [@container_expenses_(max-width:30rem)]:break-words">All Transactions
                             ( {{totalItems < 10 ? '0' + totalItems : totalItems }} )</p>
                     </div>
                 </div>
 
-                <div class="flex flex-row items-center gap-5 ">
+                <div class="[@container_expenses_(max-width:40rem)]:w-full min-w-0 flex flex-row items-center gap-5 ">
 
-                    <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929] mr-5">
+                    <div class="[@container_expenses_(max-width:40rem)]:w-full min-w-0 [&_button]:shrink-0 flex items-center rounded-full px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929] mr-5">
                         <input type="text" placeholder="Search by GRN No & NIC..." [(ngModel)]="searchText"
                             (keyup.enter)="onSearch()" (keyup.esc)="offSearch()"
                             (ngModelChange)="searchText = $event.trimStart()"
-                            class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
+                            class="bg-transparent outline-none w-full min-w-0 text-textLight dark:text-textDark" />
                         <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                             (click)="onSearch()">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -79,9 +79,9 @@
 
             </div>
 
-            <div class="flex justify-between items-center mb-5 mt-3"> <!-- Changed this line -->
+            <div class="[@container_expenses_(max-width:40rem)]:flex-wrap [@container_expenses_(max-width:40rem)]:gap-4 flex justify-between items-center mb-5 mt-3"> <!-- Changed this line -->
                 <div class="text-lg font-medium">
-                    <p class="font-semibold mb-1 text-lg dark:text-white whitespace-nowrap">
+                    <p class="font-semibold mb-1 text-lg dark:text-white whitespace-nowrap [@container_expenses_(max-width:30rem)]:whitespace-normal [@container_expenses_(max-width:30rem)]:break-words">
                         <span class="text-gray-500 dark:textDark">Total : </span>Rs {{ totalPaymentsAmount |
                         number:'1.2-2'
                         }}
@@ -101,7 +101,7 @@
 
 
             <div
-                class="min-w-max mt-8 mr-5 rounded-lg border-[2px] border-gray-300 dark:border-[#202021] overflow-hidden">
+                class="min-w-0 mt-8 mr-5 rounded-lg border-[2px] border-gray-300 dark:border-[#202021] overflow-x-auto">
                 <table class="w-full min-w-max divide-y-2">
                     <thead class="dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021] text-[#4B5563]">
                         <tr>
@@ -154,19 +154,19 @@
         </div>
 
         <div *ngIf="!hasData && isDateFilterSet" class="h-[500px]">
-            <div class="flex flex-row items-center justify-between mt-6">
+            <div class="[@container_expenses_(max-width:40rem)]:flex-wrap [@container_expenses_(max-width:40rem)]:gap-4 flex flex-row items-center justify-between mt-6">
                 <div class="flex flex-row gap-4">
                     <div class="flex flex-col justify-between flex-shrink-0">
-                        <p class="font-semibold mb-1 text-lg dark:text-white whitespace-nowrap">All Transactions
+                        <p class="font-semibold mb-1 text-lg dark:text-white whitespace-nowrap [@container_expenses_(max-width:30rem)]:whitespace-normal [@container_expenses_(max-width:30rem)]:break-words">All Transactions
                             ( {{totalItems | number:'2.0-0'}} )</p>
                     </div>
                 </div>
 
-                <div class="flex flex-row items-center gap-5 ">
+                <div class="[@container_expenses_(max-width:40rem)]:w-full min-w-0 flex flex-row items-center gap-5 ">
 
-                    <div class="flex items-center rounded-full  px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
+                    <div class="[@container_expenses_(max-width:40rem)]:w-full min-w-0 [&_button]:shrink-0 flex items-center rounded-full px-4 py-2 w-96 bg-[#F1F1F1] dark:bg-[#292929]">
                         <input type="text" placeholder="Search..." [(ngModel)]="searchText" (keyup.enter)="onSearch()"
-                            class="bg-transparent outline-none w-full text-textLight dark:text-textDark" />
+                            class="bg-transparent outline-none w-full min-w-0 text-textLight dark:text-textDark" />
                         <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"
                             (click)="onSearch()">
                             <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24"
@@ -194,4 +194,4 @@
                 <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
             </div>
         </div>
-    </div>
+    </div></div>

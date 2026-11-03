@@ -80,6 +80,7 @@ export class RedefineSentToDispatchOrdersComponent implements OnInit {
           this.hasData = response.total === 0 ? false : true;
           if (response && response.data) {
             this.orders = response.data
+            console.log('this.orders', this.orders)
             this.totalItems = response.total || 0;
           } else {
             this.orders = response.data
@@ -160,19 +161,24 @@ export class RedefineSentToDispatchOrdersComponent implements OnInit {
     }
   }
 
-  getDatePart(dateStr: string): string {
+  getDatePart(dateStr: string | null | undefined): string {
+    const date = dateStr?.match(/^(\d{4})-(\d{2})-(\d{2})(?:[ T]|$)/);
+    if (!date) return '--';
+
     const months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
-    const date = dateStr.split(' ')[0];
-    const [y, m, d] = date.split('-');
+    const [, y, m, d] = date;
+    if (+m < 1 || +m > 12 || +d < 1 || +d > 31) return '--';
 
     return `${d} ${months[+m - 1]}, ${y}`;
   }
 
-  getTimePart(dateStr: string): string {
-    const time = dateStr.split(' ')[1];
+  getTimePart(dateStr: string | null | undefined): string {
+    const time = dateStr?.match(/[ T](\d{2}):(\d{2})(?::|\.|Z|[+-]|$)/);
+    if (!time) return '--';
 
-    let [hh, mm] = time.split(':');
+    const [, hh, mm] = time;
+    if (+hh > 23 || +mm > 59) return '--';
 
     let hour = +hh;
     const ampm = hour >= 12 ? 'PM' : 'AM';

@@ -126,7 +126,7 @@
           Grand Total :
           <span class="ml-2">Rs. {{ this.totalDefinePkgPrice | number : "1.2-2" }}</span>
         </div>
-        <div *ngIf="isWithinLimit" class="text-xs text-[#006C5A] italic">
+        <div *ngIf="isWithinLimit" class="text-xs text-[#006C5A] dark:text-[#0bd949] italic">
           {{limitMassage}}
         </div>
         <div *ngIf="!isWithinLimit" class="text-xs text-[#E11E21] dark:text-red-400 mt-1 italic">

@@ -1,13 +1,13 @@
 <app-loading-spinner *ngIf="isLoading" />
 
-<div class="flex gap-0 mb-4 mr-5 ml-0">
-    <p class="font-semibold text[#424242]  dark:text-[#FFFFFF] dark:bg-blacks cursor-pointer">Complaints</p>
+<div class="flex flex-wrap gap-0 mb-4 mr-5 ml-0">
+    <p class="font-semibold text-[#424242]  dark:text-[#FFFFFF] dark:bg-blacks cursor-pointer">Complaints</p>
 </div>
 
 <div *ngIf="!isLoading">
-    <div class="w-full px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg">
-        <div class="flex flex-row justify-between items-center">
-            <div class="flex flex-row gap-6">
+    <div class="w-full px-4 sm:px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg">
+        <div class="flex flex-row flex-wrap justify-between items-center gap-4">
+            <div class="flex flex-row flex-wrap gap-3 sm:gap-6">
                 <div class="flex flex-row items-center gap-2 border-[2px] rounded-2xl px-4 py-2 cursor-pointer dark:text-textDark dark:bg-[#292929]"
                     [ngClass]="{'text-[#415CFF] border-[#415CFF]': isSelectRecevied}" (click)="selectRecevied()">
                     <i *ngIf="isSelectRecevied" class="fa-solid fa-check"></i>
@@ -21,7 +21,7 @@
                 </div>
             </div>
 
-            <button class="bg-[#415CFF] text-white font-semibold px-4 py-2 rounded-lg shadow-lg"
+            <button class="bg-[#415CFF] text-white font-semibold px-4 py-2 rounded-lg shadow-lg shrink-0"
                 (click)="openAddComplaint()">Add
                 Complaint
             </button>
@@ -35,7 +35,7 @@
     </div>
 
     <div *ngIf="isAddComplaintOpen" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-        <div class="bg-white dark:bg-[#363636] shadow-lg rounded-lg p-6 w-1/2">
+        <div class="bg-white dark:bg-[#363636] shadow-lg rounded-lg p-4 sm:p-6 w-[92%] sm:w-3/4 lg:w-1/2 max-h-[90vh] overflow-y-auto">
             <div>
                 <h2 class="text-[18px] font-semibold text-center mb-2 dark:text-white">Tell us the problem</h2>
                 <p class="text-sm text-gray-500 text-center mb-4 dark:text-textDark">
@@ -58,7 +58,7 @@
                     class="block w-full px-3 py-2 border border-gray-300 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 focus:border-transparent resize-none mb-4 dark:bg-[#292929] dark:text-textDark"></textarea>
 
                 <!-- Buttons -->
-                <div class="flex justify-center space-x-4">
+                <div class="flex flex-wrap justify-center gap-4">
                     <button (click)="closeAddComplaint()"
                         class="px-4 py-2 text-gray-700 border border-gray-300 rounded-lg hover:bg-gray-100 focus:ring-2 focus:ring-gray-200 dark:text-textDark">
                         Cancel

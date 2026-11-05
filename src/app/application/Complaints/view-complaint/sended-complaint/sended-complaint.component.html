@@ -160,7 +160,8 @@
                         {{item.complainCategory}}
                     </td>
 
-                    <td class="px-6 py-4 align-top text-sm text-gray-900 dark:text-gray-300 min-w-[300px] text-left break-words whitespace-pre-line">
+                    <td class="px-6 py-4 align-top text-sm text-gray-900 dark:text-gray-300 min-w-[300px] text-left [overflow-wrap:anywhere] whitespace-pre-line"
+                        [attr.title]="(item.complain || '').length > 150 ? item.complain : null">
                         {{ truncateText(item.complain, item.id) }}
                         <ng-container *ngIf="item.complain.length > 150">
                             <span (click)="toggleText(item.id)" class="text-blue-500 cursor-pointer ml-1">
@@ -210,8 +211,8 @@
     </div>
 
     <div *ngIf="isReplyView" class="fixed inset-0 z-50 flex items-center justify-center bg-black bg-opacity-50">
-        <div class="bg-white dark:bg-[#363636] shadow-lg rounded-lg p-4 sm:p-6 w-[92%] sm:w-3/4 lg:w-2/5 max-h-[90vh] overflow-y-auto">
-            <div class="flex flex-col items-center justify-center gap-5">
+        <div class="bg-white dark:bg-[#363636] shadow-lg rounded-lg p-4 sm:p-6 w-[92%] sm:w-4/5 lg:w-3/5 xl:w-1/2 max-h-[95vh] overflow-y-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden">
+            <div class="flex flex-col items-center justify-center gap-4">
                 <div class="bg-[#F6F6F6] rounded-full shadow-md px-3 py-2">
                     <i class="fa-regular fa-envelope text-xl"></i>
                 </div>
@@ -240,10 +241,7 @@
                         </p>
 
                         <div class="border-none outline-none bg-[#F6F6F6] dark:bg-[#363636] rounded-lg w-full  p-1">
-                            <textarea rows="5"
-                                class="bg-[#F6F6F6] dark:bg-[#363636] w-full border-none outline-none resize-none"
-                                cols="6" [(ngModel)]="replyObj.reply" name="reply" placeholder="[ Add message here... ]"
-                                disabled=""></textarea>
+                            <div class="bg-[#F6F6F6] dark:bg-[#363636] w-full min-h-[3rem] px-1 whitespace-pre-wrap [overflow-wrap:anywhere]">{{ replyObj.reply }}</div>
                         </div>
 
                         <p class="mb-2 mt-2">

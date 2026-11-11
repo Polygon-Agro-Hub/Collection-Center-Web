@@ -370,7 +370,6 @@ export class AddDistributedOfficerComponent implements OnInit {
 
   validateLanguages() {
     this.languagesRequired = !this.personalData.languages || this.personalData.languages.trim() === '';
-    console.log('la', this.languagesRequired);
   }
 
 

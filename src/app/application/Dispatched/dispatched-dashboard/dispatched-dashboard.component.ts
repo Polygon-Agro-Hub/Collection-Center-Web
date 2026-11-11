@@ -27,7 +27,8 @@ export class DispatchedDashboardComponent implements OnInit {
   isLoading: boolean = false;
   activeTab: string = 'all';
   placeholderDate: string = 'Date';
-  selectedDate: string | Date | null = null;
+  readonly today: string = this.formatLocalDate(new Date());
+  selectedDate: string | Date | null = this.today;
   allDeliveries: Delivery[] = [];
   deliveryObj: Partial<Delivery> = {};
   allFilteredDeliveries: Delivery[] = [];
@@ -206,7 +207,10 @@ export class DispatchedDashboardComponent implements OnInit {
         break;
     }
 
-    this.fetchDeliveries(this.activeTab, this.selectedStatus = '', this.searchText = '', this.selectedDate = '');
+    this.selectedDate = ['all', 'out-for-delivery', 'Return Received', 'Picked Up'].includes(tabName)
+      ? this.today
+      : '';
+    this.fetchDeliveries(this.activeTab, this.selectedStatus = '', this.searchText = '', this.selectedDate);
   }
 
   fetchDeliveries(activeTab: string = this.activeTab, status: string = this.selectedStatus, searchText: string = this.searchText, date: string | Date | null = this.selectedDate, timeSlot: string = this.selectedTimeSlot): void {
@@ -428,14 +432,21 @@ export class DispatchedDashboardComponent implements OnInit {
     this.showInfoModal = false;
   }
 
+  private formatLocalDate(date: Date): string {
+    const year = date.getFullYear();
+    const month = String(date.getMonth() + 1).padStart(2, '0');
+    const day = String(date.getDate()).padStart(2, '0');
+    return `${year}-${month}-${day}`;
+  }
+
   onDateChange(newDate: string | Date | null) {
     let dateString: string;
 
     if (!newDate) {
-      dateString = '';
+      dateString = this.today;
     }
     else if (newDate instanceof Date) {
-      dateString = newDate.toISOString().split('T')[0];
+      dateString = this.formatLocalDate(newDate);
     }
     else {
       dateString = newDate;

@@ -194,7 +194,6 @@ export class OfficerTargetViewComponent {
           this.noPermission = false;
         } else {
           this.responseTitle = res.message;
-          console.log('responseTitlef',  res.message);
           if (this.responseTitle === "--You don't have permission to access this data--") {
             this.noPermission = true;
           }

@@ -37,8 +37,8 @@
     <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20 dark:text-textDark" />
   </div>
 
-  <div *ngIf="hasData" class="overflow-hidden mt-8 mr-5 border border-gray-200 rounded-lg dark:border-[#202021]">
-    <table class="w-full divide-y divide-gray-200 dark:divide-[#202021]">
+  <div *ngIf="hasData" class="overflow-x-auto mt-8 mr-5 border border-gray-200 rounded-lg dark:border-[#202021]">
+    <table class="w-full min-w-max divide-y divide-gray-200 dark:divide-[#202021]">
       <thead class="text-[#4B5563] text-base font-medium dark:text-gray-300 dark:bg-[#0F0F0F]">
         <tr>
           <th class="px-5 py-3 text-left text-[#4B5563] text-base font-medium">No</th>
@@ -66,8 +66,12 @@
           <td class="px-5 py-4 text-base text-gray-900 dark:text-gray-300">{{item.empId}}</td>
           <td class="px-5 py-4 text-base text-gray-900 dark:text-gray-300">{{item.firstNameEnglish}}</td>
           <td class="px-5 py-4 text-base text-gray-900 dark:text-gray-300">{{item.lastNameEnglish}}</td>
+          <!-- Centre names over 18 characters are cut with "..." and the full name shows on hover -->
           <td class="px-5 py-4 text-base text-gray-900 dark:text-gray-300"
-            *ngIf="logingRole === 'Collection Centre Head'">{{item.centerName}}</td>
+            *ngIf="logingRole === 'Collection Centre Head'"
+            [attr.title]="(item.centerName || '').length > 18 ? item.centerName : null">
+            {{ (item.centerName || '').length > 18 ? (item.centerName | slice:0:18) + '...' : item.centerName }}
+          </td>
 
           <!-- Monthly Report td -->
           <td class="px-5 py-4 text-center text-base text-gray-900 dark:text-gray-300">

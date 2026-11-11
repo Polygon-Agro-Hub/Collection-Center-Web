@@ -13,6 +13,7 @@ import { SerchableDropdownComponent } from '../../../components/serchable-dropdo
 @Component({
     selector: 'app-view-centers',
     standalone: true,
+    host: { class: 'block w-full min-w-0 max-w-full [container-type:inline-size]' },
     imports: [CommonModule, FormsModule, DropdownModule, NgxPaginationModule, LoadingSpinnerComponent, SerchableDropdownComponent],
     templateUrl: './view-centers.component.html',
     styleUrl: './view-centers.component.css'
@@ -120,6 +121,7 @@ provinces: string[] = [
                 this.selectDistrict = '';
             }
         }
+        this.currentPage = 1; // Reset to first page on province change
 
         this.fetchAllCenterDetails();
     }
@@ -135,6 +137,7 @@ provinces: string[] = [
                 this.selectProvince = district.province;
             }
         }
+        this.currentPage = 1; // Reset to first page on district change
 
         this.fetchAllCenterDetails();
     }

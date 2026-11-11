@@ -15,12 +15,12 @@
         {{ isDownloading ? " Downloading..." : " Download" }}
     </button>
 
-    <div class="flex flex-row flex-wrap items-center justify-between gap-4 mt-2">
+    <div class="flex flex-row flex-nowrap max-[1024px]:flex-wrap items-center justify-between gap-4 mt-2">
         <div class="flex-shrink-0">
             <p class=" dark:text-white whitespace-nowrap">All ({{ totalItems < 10 ? ('0' + totalItems) :
                     totalItems }})</p>
         </div>
-        <div class="flex flex-row flex-wrap items-center justify-end gap-5 flex-1 min-w-0">
+        <div class="flex flex-row flex-nowrap max-[1024px]:flex-wrap items-center justify-end gap-5 flex-1 min-w-0">
             <div class="relative w-24 flex-shrink-0 custom-status-dropdown-container">
                 <!-- Hidden native select -->
                 <select [(ngModel)]="selectType" class="hidden" (change)="filterType()">
@@ -69,7 +69,7 @@
                 </div>
             </div>
 
-            <div class="relative w-52 flex-shrink-0 custom-status-dropdown-container">
+            <div class="relative w-32 flex-shrink-0 custom-status-dropdown-container">
                 <!-- Hidden native select -->
                 <select [(ngModel)]="selectTimeSlot" class="hidden" (change)="filterTimeSlot()">
                     <option value="" selected disabled>TimeSlot</option>
@@ -213,8 +213,8 @@
             </div>
 
             <div
-                class="flex items-center rounded-full px-4 py-2 flex-1 min-w-48 max-w-xs bg-[#F1F1F1] dark:bg-[#292929]">
-                <input type="text" placeholder="Search by Order ID.." [(ngModel)]="searchText"
+                class="flex items-center rounded-full px-4 py-2 flex-1 min-w-32 max-[1024px]:min-w-48 max-w-xs bg-[#F1F1F1] dark:bg-[#292929]">
+                <input type="text" placeholder="Search by Order ID.." title="Search by Order ID" [(ngModel)]="searchText"
                     (keyup.enter)="onSearch()" (keyup.esc)="offSearch()"
                     class="bg-transparent outline-none w-full min-w-0 text-textLight dark:text-textDark" />
                 <button type="button" class="text-gray-500 hover:text-gray-700 focus:outline-none mr-2"

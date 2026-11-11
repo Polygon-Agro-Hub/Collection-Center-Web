@@ -1,0 +1,35 @@
+:host {
+    display: block;
+    min-width: 0;
+}
+
+.officers-panel {
+    container-type: inline-size;
+    container-name: officers;
+}
+
+@container officers (max-width: 56rem) {
+    .officer-filters {
+        flex-basis: 100%;
+        flex-wrap: wrap;
+        justify-content: flex-start;
+    }
+}
+
+@container officers (max-width: 30rem) {
+    .officers-content {
+        padding-inline: 1rem;
+    }
+
+    .officer-actions {
+        flex-wrap: wrap;
+        flex-shrink: 1;
+    }
+
+    .officer-filters > div {
+        width: 100%;
+        min-width: 0;
+        max-width: none;
+        flex-basis: 100%;
+    }
+}

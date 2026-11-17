@@ -229,7 +229,7 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
             const qty = item.qty ?? 0;
             const discountedPrice = selectedProduct?.discountedPrice ?? 0;
 
-            item.price = discountedPrice * qty;
+            // item.price = discountedPrice * qty;
             packageTotal += item.price;
           });
 

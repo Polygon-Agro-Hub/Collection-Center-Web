@@ -224,7 +224,9 @@ export class SentToDispatchPremadeOrdersComponent implements OnInit {
                 selectedProductPrice: pt.price || undefined,
                 quantity: pt.qty || undefined,
                 calculatedPrice:
-                  pt.price && pt.qty ? pt.price * pt.qty : undefined,
+                  pt.price,
+                // calculatedPrice:
+                //   pt.price && pt.qty ? pt.price * pt.qty : undefined,
                 displayName: pt.displayName || undefined,
                 productDescription: pt.productDescription || undefined,
                 isExcluded: pt.isExcluded,

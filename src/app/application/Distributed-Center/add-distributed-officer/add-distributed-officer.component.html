@@ -804,7 +804,7 @@
                 <div>
                     <label for="licenseFrontImageUpload"
                         class="block text-sm font-medium text-[#534E4E] dark:text-textDark my-2">
-                        License's Front Image
+                        License's Front Image *
                     </label>
 
                     <input id="licenseFrontImageUpload" type="file" accept="image/*"
@@ -832,7 +832,7 @@
                 <div>
                     <label for="licenseBackImageUpload"
                         class="block text-sm font-medium text-[#534E4E] dark:text-textDark my-2">License’s Back
-                        Image</label>
+                        Image *</label>
 
                     <input id="licenseBackImageUpload" type="file" accept="image/*"
                         (change)="onLicenseBackImageSelected($event)" class="hidden">
@@ -899,7 +899,7 @@
                 <div>
                     <label for="insurenceFrontImageUpload"
                         class="block text-sm font-medium text-[#534E4E] dark:text-textDark my-2">Insurance’s Front
-                        Image</label>
+                        Image *</label>
                     <input id="insurenceFrontImageUpload" type="file" accept="image/*"
                         (change)="onInsurenceFrontImageSelected($event)" class="hidden">
 
@@ -924,7 +924,7 @@
                 <div>
                     <label for="firstNameEnglish"
                         class="block text-sm font-medium text-[#534E4E] dark:text-textDark my-2">Insurance’s Back
-                        Image</label>
+                        Image *</label>
                     <input id="insuranceBackImageUpload" type="file" accept="image/*"
                         (change)="onInsurenceBackImageSelected($event)" class="hidden">
 
@@ -948,7 +948,7 @@
 
                 <div>
                     <label class="block mb-1 text-sm font-medium text-[#534E4E] dark:text-textDark">
-                        Insurance Expire Date
+                        Insurance Expire Date *
                     </label>
 
                     <app-custom-datepicker name="insExpDate" [(selectedDate)]="driverObj.insExpDate"
@@ -1006,7 +1006,7 @@
 
                 <div>
                     <label for="selectVehicletype"
-                        class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Vehicle Type</label>
+                        class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Vehicle Type *</label>
                     <div class="relative w-full">
                         <div class="relative">
                             <input type="text" id="selectVehicletype" [value]="selectVehicletype?.name || ''"
@@ -1041,7 +1041,7 @@
 
                 <div>
                     <label for="capacity" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Vehicle
-                        Capacity</label>
+                        Capacity *</label>
                     <input id="capacity" placeholder="------------" [value]="selectVehicletype?.capacity"
                         class="form-control mt-1 block w-full p-2 border border-gray-300 hover:bg-gray-200 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                         readonly />
@@ -1050,7 +1050,7 @@
                 <div>
                     <label for="vehicleFrontImageUpload"
                         class="block text-sm font-medium text-[#534E4E] dark:text-textDark my-2">Vehicle’s Front
-                        Image</label>
+                        Image *</label>
                     <input id="vehicleFrontImageUpload" type="file" accept="image/*"
                         (change)="onVehicleFrontImageSelected($event)" class="hidden">
 
@@ -1074,7 +1074,7 @@
                 <div>
                     <label for="vehicleBackImageUpload"
                         class="block text-sm font-medium text-[#534E4E] dark:text-textDark my-2">Vehicle’s Back
-                        Image</label>
+                        Image *</label>
                     <input id="vehicleBackImageUpload" type="file" accept="image/*"
                         (change)="onVehicleBackImageSelected($event)" class="hidden">
 
@@ -1098,7 +1098,7 @@
                 <div>
                     <label for="vehicleSideAImageUpload"
                         class="block text-sm font-medium text-[#534E4E] dark:text-textDark my-2">Vehicle’s Side Image -
-                        1</label>
+                        1 *</label>
                     <input id="vehicleSideAImageUpload" type="file" accept="image/*"
                         (change)="onVehicleSideAImageSelected($event)" class="hidden">
 
@@ -1122,7 +1122,7 @@
                 <div>
                     <label for="vehicleSideBImageUpload"
                         class="block text-sm font-medium text-[#534E4E] dark:text-textDark my-2">Vehicle’s Side Image -
-                        2</label>
+                        2 *</label>
                     <input id="vehicleSideBImageUpload" type="file" accept="image/*"
                         (change)="onVehicleSideBImageSelected($event)" class="hidden">
 

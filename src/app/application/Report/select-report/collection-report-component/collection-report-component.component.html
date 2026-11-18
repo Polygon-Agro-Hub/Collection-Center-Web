@@ -66,8 +66,12 @@
           <td class="px-5 py-4 text-base text-gray-900 dark:text-gray-300">{{item.empId}}</td>
           <td class="px-5 py-4 text-base text-gray-900 dark:text-gray-300">{{item.firstNameEnglish}}</td>
           <td class="px-5 py-4 text-base text-gray-900 dark:text-gray-300">{{item.lastNameEnglish}}</td>
+          <!-- Centre names over 18 characters are cut with "..." and the full name shows on hover -->
           <td class="px-5 py-4 text-base text-gray-900 dark:text-gray-300"
-            *ngIf="logingRole === 'Collection Centre Head'">{{item.centerName}}</td>
+            *ngIf="logingRole === 'Collection Centre Head'"
+            [attr.title]="(item.centerName || '').length > 18 ? item.centerName : null">
+            {{ (item.centerName || '').length > 18 ? (item.centerName | slice:0:18) + '...' : item.centerName }}
+          </td>
 
           <!-- Monthly Report td -->
           <td class="px-5 py-4 text-center text-base text-gray-900 dark:text-gray-300">

@@ -1,23 +1,23 @@
-<div class="flex flex-row items-center gap-5 font-semibold text[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
+<div class="flex flex-row flex-wrap items-center gap-x-5 gap-y-1 font-semibold text-[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
   <p onclick="history.back()">Reports</p>
   <p>Officer Reports</p>
 </div>
 
 <div>
   <div
-    class="flex flex-row items-center justify-center shadow-lg rounded-lg bg-tileLight dark:bg-[#363636] w-full px-10 py-5">
-    <p class="text-xl font-semibold text-[#292929] mx-5 dark:text-[#FFFFFF]">
+    class="flex flex-row flex-wrap items-center justify-center gap-4 shadow-lg rounded-lg bg-tileLight dark:bg-[#363636] w-full px-4 sm:px-10 py-5">
+    <p class="text-xl font-semibold text-center text-[#292929] dark:text-[#FFFFFF]">
       Select Report Type
     </p>
 
-    <div class="relative w-52 mt-4">
+    <div class="relative w-52 max-w-full min-w-0">
       <app-searchable-dropdown [items]="categoryDropdownItems" placeholder="--Select--" searchPlaceholder="Search..."
         [(ngModel)]="reportType" (selectionChange)="onCategorySelectionChange($event)" [clearable]="true"
-        [showSelected]="true" [disabled]="false" class="block w-full mb-4"></app-searchable-dropdown>
+        [showSelected]="true" [disabled]="false" class="block w-full"></app-searchable-dropdown>
 
     </div>
 
-    <button class="bg-[#415CFF] text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-lg ml-5 dark:text-white"
+    <button class="bg-[#415CFF] text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-lg shrink-0 dark:text-white"
       (click)="GoBtn()">
       Go
     </button>
@@ -25,7 +25,7 @@
   </div>
 
   <div *ngIf="type === ''"
-    class="flex flex-col items-center w-full h-screen px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg mt-6 dark:text-black">
+    class="flex flex-col items-center w-full h-screen px-4 sm:px-10 py-7 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg mt-6 dark:text-black">
     <p class="text-[#494949] my-6 dark:text-[#FFFFFF]">--No Data Availabale--</p>
     <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20 dark:text-black" />
   </div>

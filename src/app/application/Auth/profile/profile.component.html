@@ -1,25 +1,25 @@
 <app-loading-spinner *ngIf="isLoading" />
 
 <div *ngIf="!isLoading">
-  <p class="text[#627189] mb-4 mr-5 ml-0 pt-0 dark:text-white">Profile</p>
+  <p class="text-[#627189] mb-4 mr-5 ml-0 pt-0 dark:text-white">Profile</p>
 
-  <div class="w-full px-10 py-4 bg-tileLight dark:bg-[#363638] shadow-lg rounded-lg ">
+  <div class="w-full px-4 sm:px-10 py-4 bg-tileLight dark:bg-[#363638] shadow-lg rounded-lg ">
     <div class="flex flex-col gap-7 px-2 py-2" id="reportcontainer">
       <h1 class="text-[#030308] font-semibold dark:text-white">My profile</h1>
-      <div class="flex flex-row justify-between items-center border-[#F1F7FA] border-[3px] rounded-lg p-6">
-        <div class="flex flex-row items-center">
+      <div class="flex flex-row flex-wrap justify-between items-center gap-4 border-[#F1F7FA] border-[3px] rounded-lg p-4 sm:p-6">
+        <div class="flex flex-row items-center min-w-0">
           <!-- Profile Image with border and size adjustment -->
           <!-- <img class="w-28 h-28 rounded-full border-4 border-[#F1F7FA]"
                      src="https://images.pexels.com/photos/845457/pexels-photo-845457.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" /> -->
           <div *ngIf="officerObj.image">
-            <img class="w-28 h-28 rounded-full object-cover" [src]="officerObj.image" />
+            <img class="w-28 h-28 shrink-0 rounded-full object-cover" [src]="officerObj.image" />
           </div>
 
           <div *ngIf="!officerObj.image"
-            class="flex rounded-full border-solid border-2 justify-center items-center w-32 h-32">
+            class="flex shrink-0 rounded-full border-solid border-2 justify-center items-center w-32 h-32">
             <i class="fa-regular fa-user text-6xl dark:text-white"></i>
           </div>
-          <div class="ml-6">
+          <div class="ml-6 min-w-0 [overflow-wrap:anywhere]">
             <!-- Profile Text with proper spacing -->
             <p class="text-lg font-semibold text-[#030308] dark:text-white">
               {{ officerObj.firstNameEnglish }} {{ officerObj.lastNameEnglish }}
@@ -44,7 +44,7 @@
         </div>
 
         <!-- Buttons with consistent size and styling -->
-        <div class="flex flex-row space-x-4 self-start mt-2">
+        <div class="flex flex-row flex-wrap gap-4 self-start mt-2">
           <button (click)="goToChangePassword()"
             class="bg-[#415CFF] text-white font-semibold rounded-lg shadow-md px-4 py-2">
             Change Password
@@ -61,7 +61,7 @@
           <p class="font-semibold text-[#030308] dark:text-white">Personal Infomation</p>
         </div>
 
-        <div class="grid grid-cols-2 gap-4 text-[#627189] my-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-[#627189] my-4 [&>div]:min-w-0 [&_p]:[overflow-wrap:anywhere]">
           <div>
             <p class="text-[#627189] dark:text-textDark">First Name</p>
             <p class="font-semibold text-[#000000] dark:text-white">
@@ -117,7 +117,7 @@
       <div class="border-[#F1F7FA] border-[3px] rounded-lg shadowmd p-6">
         <p class="font-semibold text-[#030308] dark:text-white">Address Details</p>
 
-        <div class="grid grid-cols-2 gap-4 text-[#627189] my-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-[#627189] my-4 [&>div]:min-w-0 [&_p]:[overflow-wrap:anywhere]">
           <div>
             <p class="text-[#627189] dark:text-textDark">House / Plot Number</p>
             <p class="font-semibold text-[#000000] dark:text-white">
@@ -165,7 +165,7 @@
       <div class="border-[#F1F7FA] border-[3px] rounded-lg shadowmd p-6">
         <p class="font-semibold text-[#030308] dark:text-white ">Bank Details</p>
 
-        <div class="grid grid-cols-2 gap-4 text-[#627189] my-4">
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-4 text-[#627189] my-4 [&>div]:min-w-0 [&_p]:[overflow-wrap:anywhere]">
           <div>
             <p class="text-[#627189] dark:text-textDark">Account Holder’s Name</p>
             <p class="font-semibold text-[#000000] dark:text-white">

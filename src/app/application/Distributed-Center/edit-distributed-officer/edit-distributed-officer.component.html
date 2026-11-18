@@ -819,7 +819,7 @@
                     <div class="flex flex-row items-center gap-4">
                         <label for="licenseFrontImageUpload"
                             class="block text-sm font-medium text-[#534E4E] dark:text-textDark my-2">
-                            License's Front Image
+                            License's Front Image *
                         </label>
                         <a [href]="driverObj.licFrontImg" target="_blank">
                             <i *ngIf="driverObj.licFrontImg" class="fa-solid fa-eye text-lg text-[#415CFF]"></i>
@@ -848,7 +848,7 @@
                     <div class="flex flex-row items-center gap-4">
                         <label for="licenseBackImageUpload"
                             class="block text-sm font-medium text-[#534E4E] dark:text-textDark my-2">License’s Back
-                            Image</label>
+                            Image *</label>
                         <a [href]="driverObj.licBackImg" target="_blank">
                             <i *ngIf="driverObj.licBackImg" class="fa-solid fa-eye text-lg text-[#415CFF]"></i>
                         </a>
@@ -915,7 +915,7 @@
                     <div class="flex flex-row items-center gap-4">
                         <label for="insurenceFrontImageUpload"
                             class="block text-sm font-medium text-[#534E4E] dark:text-textDark my-2">Insurance’s Front
-                            Image</label>
+                            Image *</label>
                         <a [href]="driverObj.insFrontImg" target="_blank">
                             <i *ngIf="driverObj.insFrontImg" class="fa-solid fa-eye text-lg text-[#415CFF]"></i>
                         </a>
@@ -942,7 +942,7 @@
                     <div class="flex flex-row items-center gap-4">
                         <label for="insuranceBackImageUpload"
                             class="block text-sm font-medium text-[#534E4E] dark:text-textDark my-2">Insurance’s Back
-                            Image</label>
+                            Image *</label>
                         <a [href]="driverObj.insBackImg" target="_blank">
                             <i *ngIf="driverObj.insBackImg" class="fa-solid fa-eye text-lg text-[#415CFF]"></i>
                         </a>
@@ -967,7 +967,7 @@
                 <div>
                     <label for="insExpDate"
                         class="block text-sm mb-1 font-medium text-[#534E4E] dark:text-textDark">Insurance
-                        Expire Date</label>
+                        Expire Date *</label>
                     <app-custom-datepicker name="insExpDate" [minDate]="today" [(selectedDate)]="driverObj.insExpDate"
                         placeholder="mm/dd/yyyy" (dateChange)="onInsuranceDateChange($event)"
                         triggerClass="w-full h-12 border-[1.8px] border-gray-300 rounded-xl flex items-center px-3 py-2 cursor-pointer dark:bg-[#292929]"
@@ -1020,7 +1020,7 @@
 
                 <div>
                     <label for="selectVehicletype"
-                        class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Vehicle Type</label>
+                        class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Vehicle Type *</label>
                     <div class="relative w-full">
                         <div class="relative">
                             <input type="text" id="selectVehicletype" [value]="selectVehicletype?.name || ''"
@@ -1057,7 +1057,7 @@
 
                 <div>
                     <label for="capacity" class="block text-sm font-medium text-[#534E4E] dark:text-textDark">Vehicle
-                        Capacity</label>
+                        Capacity *</label>
                     <input id="capacity" placeholder="------------" [value]="selectVehicletype?.capacity"
                         class="form-control mt-1 block w-full p-2 border border-gray-300 rounded-md text-textLight dark:text-textDark bg-tileLight dark:bg-[#1D1D1F]"
                         readonly />
@@ -1068,7 +1068,7 @@
                     <div class="flex flex-row items-center gap-4">
                         <label for="vehicleFrontImageUpload"
                             class="block text-sm font-medium text-[#534E4E] dark:text-textDark my-2">Vehicle’s Front
-                            Image</label>
+                            Image *</label>
                         <a [href]="driverObj.vehFrontImg" target="_blank">
                             <i *ngIf="driverObj.vehFrontImg" class="fa-solid fa-eye text-lg text-[#415CFF]"></i>
                         </a>
@@ -1095,7 +1095,7 @@
                     <div class="flex flex-row items-center gap-4">
                         <label for="vehicleBackImageUpload"
                             class="block text-sm font-medium text-[#534E4E] dark:text-textDark my-2">Vehicle’s Back
-                            Image</label>
+                            Image *</label>
                         <a [href]="driverObj.vehBackImg" target="_blank">
                             <i *ngIf="driverObj.vehBackImg" class="fa-solid fa-eye text-lg text-[#415CFF]"></i>
                         </a>
@@ -1123,7 +1123,7 @@
                         <label for="vehicleSideAImageUpload"
                             class="block text-sm font-medium text-[#534E4E] dark:text-textDark my-2">Vehicle’s Side
                             Image -
-                            1</label>
+                            1 *</label>
                         <a [href]="driverObj.vehSideImgA" target="_blank">
                             <i *ngIf="driverObj.vehSideImgA" class="fa-solid fa-eye text-lg text-[#415CFF]"></i>
                         </a>
@@ -1151,7 +1151,7 @@
                         <label for="vehicleSideBImageUpload"
                             class="block text-sm font-medium text-[#534E4E] dark:text-textDark my-2">Vehicle’s Side
                             Image -
-                            2</label>
+                            2 *</label>
                         <a [href]="driverObj.vehSideImgB" target="_blank">
                             <i *ngIf="driverObj.vehSideImgB" class="fa-solid fa-eye text-lg text-[#415CFF]"></i>
                         </a>

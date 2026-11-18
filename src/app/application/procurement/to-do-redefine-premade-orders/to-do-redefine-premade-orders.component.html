@@ -62,10 +62,11 @@
       <button class="px-4 py-2 bg-[#74788D] text-[#D3D3D3] rounded-lg text-sm" (click)="confirmClear()">
         Cancel
       </button>
-      <button class="px-4 py-2 e rounded-lg text-sm" [disabled]="!isWithinLimit" [class.opacity-50]="!isWithinLimit"
-        [class.cursor-not-allowed]="!isWithinLimit" (click)="confirmComplete()" [ngClass]="{
-          'bg-[#415CFF] text-white': isWithinLimit,
-          'bg-[#F6F7F9] text-[#6B7D8C] border border-[#6B7D8C]': !isWithinLimit
+      <button class="px-4 py-2 e rounded-lg text-sm" [disabled]="!isWithinLimit || isDispatching"
+        [class.opacity-50]="!isWithinLimit || isDispatching"
+        [class.cursor-not-allowed]="!isWithinLimit || isDispatching" (click)="confirmComplete()" [ngClass]="{
+          'bg-[#415CFF] text-white': isWithinLimit && !isDispatching,
+          'bg-[#F6F7F9] text-[#6B7D8C] border border-[#6B7D8C]': !isWithinLimit || isDispatching
         }">
         Dispatch
       </button>

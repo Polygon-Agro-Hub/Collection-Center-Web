@@ -98,6 +98,9 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
 
   isLoading: boolean = true;
 
+  // Prevents dispatching the same order more than once
+  isDispatching: boolean = false;
+
   selectPackageId: number | string = '';
   selectCategoryId: number | string = '';
   newItem: OrderItem = new OrderItem();
@@ -455,6 +458,9 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
   }
 
   onComplete() {
+    if (this.isDispatching) {
+      return;
+    }
     this.loading = true;
 
     const hasInvalidProduct = this.orderdetailsArr.some((pkg, pkgIndex) => {
@@ -557,31 +563,35 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
       return;
     }
 
+    this.isDispatching = true;
+
     this.procurementService.updateDefinePackageItemData(this.orderdetailsArr, this.orderId).subscribe(
       (res) => {
         this.loading = false;
+        // isDispatching stays true: the order is dispatched and must not be sent again
 
-        // Show success message and redirect to sent tab
+        // Show success message and redirect to the dispatched order view
         Swal.fire({
           title: 'Success!',
           text: 'The order has been dispatched successfully.',
           icon: 'success',
           confirmButtonColor: '#415CFF',
+          allowOutsideClick: false,
+          allowEscapeKey: false,
           customClass: {
             popup: 'bg-tileLight dark:bg-tileBlack text-black dark:text-white',
             title: 'font-semibold',
           },
-        }).then((result) => {
-          if (result.isConfirmed) {
-            // Redirect to define-packages component with sent tab
-            this.router.navigate(['/procurement/redefine-orders'], {
-              queryParams: { tab: 'sent' }
-            });
-          }
+        }).then(() => {
+          this.router.navigate(['/procurement/view-dispatched-define-orders'], {
+            queryParams: { id: this.orderId },
+            replaceUrl: true,
+          });
         });
       },
       (err) => {
         this.loading = false;
+        this.isDispatching = false; // allow retry on failure
         console.error('Update failed:', err);
         // Swal.fire('Error', 'Product Update Unsuccessful', 'error');
         Swal.fire({
@@ -772,7 +782,7 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
 
   confirmComplete() {
     // Only show confirmation if within limit
-    if (!this.isWithinLimit) {
+    if (!this.isWithinLimit || this.isDispatching) {
       return;
     }
 

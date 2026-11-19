@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common';
-import { Component, OnInit, Output, EventEmitter } from '@angular/core';
+import { Component, OnInit, OnDestroy, Output, EventEmitter } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { finalize } from 'rxjs/operators';
 import { forkJoin } from 'rxjs';
@@ -66,7 +66,7 @@ interface PackageItem {
   templateUrl: './to-do-redefine-premade-orders.component.html',
   styleUrl: './to-do-redefine-premade-orders.component.css'
 })
-export class ToDoRedefinePremadeOrdersComponent implements OnInit {
+export class ToDoRedefinePremadeOrdersComponent implements OnInit, OnDestroy {
 
   orderdetailsArr: OrderDetails[] = [];
   excludeItemsArr: ExcludeItems[] = [];
@@ -105,6 +105,14 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
   selectCategoryId: number | string = '';
   newItem: OrderItem = new OrderItem();
   limitMassage: string = '';
+
+  // Auto-dispatch countdown pop-up
+  readonly DISPATCH_COUNTDOWN_SECONDS = 30;
+  readonly dispatchRingRadius = 70;
+  readonly dispatchRingCircumference = 2 * Math.PI * 70;
+  showDispatchModal = false;
+  dispatchCountdown = 30;
+  private dispatchTimer: ReturnType<typeof setInterval> | null = null;
 
   constructor(
     private procurementService: ProcurementsService,
@@ -235,6 +243,8 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
             // item.price = discountedPrice * qty;
             packageTotal += item.price;
           });
+
+          this.sortItemsAlphabetically(order.items);
 
           order.definePkgPrice = packageTotal;
           this.totalDefinePkgPrice += packageTotal;
@@ -511,7 +521,7 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
           title: 'font-semibold',
         }
       });
-      return;
+      return false;
     } else if (hasInvalidItem) {
       this.loading = false;
       Swal.fire({
@@ -523,7 +533,7 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
           title: 'font-semibold',
         }
       });
-      return;
+      return false;
     } else if (hasInvalidQty) {
       this.loading = false;
       Swal.fire({
@@ -535,7 +545,7 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
           title: 'font-semibold',
         }
       });
-      return;
+      return false;
     } else if (hasExcludeProduct) {
       this.loading = false;
       // Swal.fire('Invalid Product', 'Please Do not Select Excluded products.', 'warning');
@@ -548,7 +558,7 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
           title: 'font-semibold',
         }
       });
-      return;
+      return false;
     } else if (hasDisabledProduct) {
       this.loading = false;
       Swal.fire({
@@ -560,10 +570,19 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
           title: 'font-semibold',
         }
       });
+      return false;
+    }
+
+    return true;
+  }
+
+  onComplete() {
+    if (!this.validateBeforeDispatch()) {
       return;
     }
 
     this.isDispatching = true;
+    this.loading = true;
 
     this.procurementService.updateDefinePackageItemData(this.orderdetailsArr, this.orderId).subscribe(
       (res) => {
@@ -733,8 +752,15 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
 
     this.newItem = new OrderItem();
 
-    selectedOrderDetail.items.sort((a, b) => a.productTypeId - b.productTypeId);
+    this.sortItemsAlphabetically(selectedOrderDetail.items);
     this.isNewAddPopUp = false;
+  }
+
+  // Sort package items alphabetically by category short code (A → Z)
+  sortItemsAlphabetically(items: OrderItem[]) {
+    items.sort((a, b) =>
+      (a.productTypeShortCode || '').localeCompare(b.productTypeShortCode || '', undefined, { sensitivity: 'base' })
+    );
   }
 
   validateQuantity(item: any) {
@@ -786,24 +812,77 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit {
       return;
     }
 
-    Swal.fire({
-      title: 'Send to Dispatch',
-      text: 'Are you sure you want to send this order to dispatch?',
-      icon: 'warning',
-      showCancelButton: true,
-      confirmButtonColor: '#415CFF',
-      cancelButtonColor: '#74788D',
-      confirmButtonText: 'Yes, send to dispatch!',
-      cancelButtonText: 'Cancel',
-      customClass: {
-        popup: 'bg-tileLight dark:bg-[#363636] text-black dark:text-white',
-        title: 'font-semibold',
-      },
-    }).then((result) => {
-      if (result.isConfirmed) {
-        this.onComplete(); // This should call onComplete, not completeOrder
+    // Validate first so the user isn't made to wait 30s only to see an error
+    if (!this.validateBeforeDispatch()) {
+      return;
+    }
+
+    this.openDispatchCountdown();
+  }
+
+  // ---------- Auto-dispatch countdown pop-up ----------
+
+  get dispatchCountdownLabel(): string {
+    const secs = Math.max(this.dispatchCountdown, 0);
+    const mm = Math.floor(secs / 60).toString().padStart(2, '0');
+    const ss = (secs % 60).toString().padStart(2, '0');
+    return `${mm}:${ss}`;
+  }
+
+  // Length of the visible blue arc (shrinks as time runs out)
+  get dispatchRingOffset(): number {
+    const remaining = Math.max(this.dispatchCountdown, 0) / this.DISPATCH_COUNTDOWN_SECONDS;
+    return this.dispatchRingCircumference * (1 - remaining);
+  }
+
+  // Position of the dot at the end of the blue arc
+  get dispatchRingDot(): { x: number; y: number } {
+    const remaining = Math.max(this.dispatchCountdown, 0) / this.DISPATCH_COUNTDOWN_SECONDS;
+    const angle = (-90 - 360 * remaining) * (Math.PI / 180); // arc runs counter-clockwise from 12 o'clock
+    return {
+      x: 80 + this.dispatchRingRadius * Math.cos(angle),
+      y: 80 + this.dispatchRingRadius * Math.sin(angle),
+    };
+  }
+
+  openDispatchCountdown() {
+    this.clearDispatchTimer();
+    this.dispatchCountdown = this.DISPATCH_COUNTDOWN_SECONDS;
+    this.showDispatchModal = true;
+
+    this.dispatchTimer = setInterval(() => {
+      this.dispatchCountdown--;
+      if (this.dispatchCountdown <= 0) {
+        this.dispatchNow();
       }
-    });
+    }, 1000);
+  }
+
+  // "Back to Edit" — stop the countdown and return to the form
+  cancelDispatchCountdown() {
+    this.clearDispatchTimer();
+    this.showDispatchModal = false;
+  }
+
+  // "Sent to Dispatch" button, or countdown reached 0
+  dispatchNow() {
+    if (!this.showDispatchModal) {
+      return; // already dispatched / cancelled — avoid double submit
+    }
+    this.clearDispatchTimer();
+    this.showDispatchModal = false;
+    this.onComplete();
+  }
+
+  private clearDispatchTimer() {
+    if (this.dispatchTimer) {
+      clearInterval(this.dispatchTimer);
+      this.dispatchTimer = null;
+    }
+  }
+
+  ngOnDestroy() {
+    this.clearDispatchTimer();
   }
 
   clearForm() {

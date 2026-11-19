@@ -21,3 +21,14 @@
       background-color: #7f1d1d !important;
     }
   }
+/* Hide the increase/decrease spinner buttons on quantity inputs */
+input.no-spinner::-webkit-outer-spin-button,
+input.no-spinner::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input.no-spinner[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}

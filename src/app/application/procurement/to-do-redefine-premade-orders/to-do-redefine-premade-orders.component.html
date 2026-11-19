@@ -205,7 +205,7 @@
 
 <div *ngIf="showExcludedItemsModal" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
   (click)="closeExcludedItemsModal()">
-  <div class="bg-white dark:bg-[#363636] rounded-2xl shadow-xl w-full max-w-sm mx-4 max-h-[90vh] flex flex-col"
+  <div class="bg-white dark:bg-[#363636] rounded-2xl shadow-xl w-auto min-w-[24rem] max-w-[calc(100vw-2rem)] mx-4 max-h-[90vh] flex flex-col"
     (click)="$event.stopPropagation()">
     <!-- Modal Header -->
     <div class="px-6 pt-8 pb-6 text-center shrink-0">
@@ -216,17 +216,17 @@
 
     <!-- Table Header (fixed) -->
     <div
-      class="shrink-0 flex text-sm text-[#8492A3] dark:text-gray-400 uppercase pb-4 border-b border-gray-100 dark:border-gray-600">
-      <div class="w-2/5 text-center">NO ({{ excludedItemsCount | number : '2.0-0' }})</div>
-      <div class="flex-1 text-left">Item Name</div>
+      class="shrink-0 grid grid-cols-[9rem_1fr] gap-x-10 px-6 text-sm text-[#8492A3] dark:text-gray-400 uppercase pb-4 border-b border-gray-100 dark:border-gray-600">
+      <div class="text-center">NO ({{ excludedItemsCount | number : '2.0-0' }})</div>
+      <div class="text-left">Item Name</div>
     </div>
 
     <!-- Table Body (scrollable) -->
     <div class="flex-1 overflow-y-auto">
       <div *ngFor="let item of excludeItemsArr; let i = index"
-        class="flex items-center py-6 text-sm border-b border-gray-200 dark:border-gray-600">
-        <div class="w-2/5 text-center text-black dark:text-white">{{ i + 1 | number : '2.0-0' }}</div>
-        <div class="flex-1 text-left pr-4 text-black dark:text-white truncate" [title]="item.displayName">
+        class="grid grid-cols-[9rem_1fr] gap-x-10 px-6 items-center py-6 text-sm border-b border-gray-200 dark:border-gray-600">
+        <div class="text-center text-black dark:text-white">{{ i + 1 | number : '2.0-0' }}</div>
+        <div class="text-left text-black dark:text-white min-w-0 break-words">
           {{ item.displayName }}
         </div>
       </div>
@@ -289,7 +289,7 @@
     <h3 class="text-xl font-semibold text-black dark:text-white">Finish up!</h3>
     <p class="mt-4 text-sm text-[#555] dark:text-gray-300 leading-6">
       Marking as completed in {{ dispatchCountdown }} seconds.<br />
-      Tap ‘Back to Edit’ to edit.
+      Tap ‘Go Back’ to edit.
     </p>
 
     <!-- Countdown ring -->

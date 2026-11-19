@@ -64,7 +64,7 @@
             <th class="px-2 py-3 font-normal text-[#4B5563] dark:text-textDark text-left">
               Sent By
             </th>
-            <th class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-center">
+            <th class="px-4 py-3 font-normal text-[#4B5563] dark:text-textDark text-left">
               Sent To Dispatch
             </th>
 
@@ -102,9 +102,8 @@
             <td class="px-2 py-3 text-left text-[#000000] dark:text-textDark">
               {{ order.dispatchedBy === null ? '--': order.dispatchedBy }}
             </td>
-            <td class="px-4 py-3 text-center text-[#000000] dark:text-textDark">
-              <p>{{ getDatePart(order.processCreatedAt)}}</p>
-              <p>{{ getTimePart(order.processCreatedAt)}}</p>
+            <td class="px-4 py-3 text-left whitespace-nowrap text-[#000000] dark:text-textDark">
+              {{ getDispatchedAt(order.processCreatedAt) }}
             </td>
 
           </tr>

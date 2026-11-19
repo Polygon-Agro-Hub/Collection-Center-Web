@@ -161,6 +161,19 @@ export class RedefineSentToDispatchOrdersComponent implements OnInit {
     }
   }
 
+  // Single-line display, e.g. "At 11.20 AM on 6 Nov, 2024"
+  getDispatchedAt(dateStr: string | null | undefined): string {
+    const date = this.getDatePart(dateStr);
+    const time = this.getTimePart(dateStr);
+    if (date === '--') return '--';
+
+    const dateNoLeadingZero = date.replace(/^0/, '');   // "06 Nov, 2024" -> "6 Nov, 2024"
+    if (time === '--') return dateNoLeadingZero;       // date without a time part
+
+    const timeWithDot = time.replace(':', '.');       // "11:20 AM" -> "11.20 AM"
+    return `At ${timeWithDot} on ${dateNoLeadingZero}`;
+  }
+
   getDatePart(dateStr: string | null | undefined): string {
     const date = dateStr?.match(/^(\d{4})-(\d{2})-(\d{2})(?:[ T]|$)/);
     if (!date) return '--';

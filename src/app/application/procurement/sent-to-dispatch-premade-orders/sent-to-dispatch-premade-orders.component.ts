@@ -149,9 +149,10 @@ export class SentToDispatchPremadeOrdersComponent implements OnInit {
 
         if (matchingItem) {
           productType.productId = matchingItem.productId;
-          productType.quantity = matchingItem.qty;
-          productType.selectedProductPrice = matchingItem.price;
-          productType.calculatedPrice = matchingItem.price * matchingItem.qty;
+          productType.quantity = this.toNumber(matchingItem.qty);
+          productType.selectedProductPrice = this.toNumber(matchingItem.price);
+          productType.calculatedPrice =
+            this.toNumber(matchingItem.price) * this.toNumber(matchingItem.qty);
 
           // Find and set the display name from marketplace items
           const product = this.marketplaceItems.find(
@@ -172,8 +173,8 @@ export class SentToDispatchPremadeOrdersComponent implements OnInit {
         this.marketplaceItems = data.items.map((item: any) => ({
           id: item.id,
           displayName: item.displayName,
-          normalPrice: item.normalPrice,
-          discountedPrice: item.discountedPrice,
+          normalPrice: this.toNumber(item.normalPrice),
+          discountedPrice: this.toNumber(item.discountedPrice),
           isExcluded: false,
         }));
         if (callback) callback();
@@ -221,10 +222,13 @@ export class SentToDispatchPremadeOrdersComponent implements OnInit {
                 shortCode: pt.shortCode,
                 productId: pt.productId || null,
                 productTypeId: pt.productTypeId, // Check API response for correct field
-                selectedProductPrice: pt.price || undefined,
-                quantity: pt.qty || undefined,
+                selectedProductPrice:
+                  pt.price != null ? this.toNumber(pt.price) : undefined,
+                quantity: pt.qty ? this.toNumber(pt.qty) : undefined,
                 calculatedPrice:
-                  pt.price && pt.qty ? pt.price * pt.qty : undefined,
+                  pt.price != null ? this.toNumber(pt.price) : undefined,
+                // calculatedPrice:
+                //   pt.price && pt.qty ? pt.price * pt.qty : undefined,
                 displayName: pt.displayName || undefined,
                 productDescription: pt.productDescription || undefined,
                 isExcluded: pt.isExcluded,
@@ -339,8 +343,15 @@ export class SentToDispatchPremadeOrdersComponent implements OnInit {
     if (!packageItem.productTypes) return 0;
 
     return packageItem.productTypes.reduce((sum, productType) => {
-      return sum + (productType.calculatedPrice || 0);
+      return sum + this.toNumber(productType.calculatedPrice);
     }, 0);
+  }
+
+  // API may return prices/quantities as strings (e.g. "450.00"); coerce to numbers
+  // so totals are added rather than string-concatenated.
+  private toNumber(value: any): number {
+    const num = typeof value === 'number' ? value : parseFloat(value);
+    return isNaN(num) ? 0 : num;
   }
 
   getAllowedLimit(packageItem: OrderDetailItem): string {
@@ -389,7 +400,7 @@ export class SentToDispatchPremadeOrdersComponent implements OnInit {
 
     // Sum of all package product prices
     return this.orderDetails.reduce(
-      (sum, pkg) => sum + (pkg.productPrice || 0),
+      (sum, pkg) => sum + this.toNumber(pkg.productPrice),
       0
     );
   }

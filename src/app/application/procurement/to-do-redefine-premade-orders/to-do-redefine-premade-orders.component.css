@@ -11,13 +11,23 @@
     background-color: #fef2f2 !important;
   }
   
-  /* Dark mode support */
-  @media (prefers-color-scheme: dark) {
-    :host ::ng-deep .dark .text-red-600 {
-      color: #fca5a5 !important;
-    }
-    
-    :host ::ng-deep .dark .bg-red-50 {
-      background-color: #7f1d1d !important;
-    }
+  /* Dark mode (app theme puts .dark on <body>):
+     excluded item keeps the normal dropdown look — only the red border and red icon remain */
+  :host-context(.dark) ::ng-deep .text-red-600 {
+    color: #ffffff !important;
   }
+
+  :host-context(.dark) ::ng-deep .bg-red-50 {
+    background-color: #292929 !important;
+  }
+/* Hide the increase/decrease spinner buttons on quantity inputs */
+input.no-spinner::-webkit-outer-spin-button,
+input.no-spinner::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input.no-spinner[type="number"] {
+  -moz-appearance: textfield;
+  appearance: textfield;
+}

@@ -42,7 +42,6 @@ export class ReportDashboardComponent {
   }
 
   onQuantityReportClick() {
-    // TODO: point this at the Quantity-Based Collection Reports page once its route exists
     this.router.navigate(['reports/quantity-based-collection-reports']);
   }
 

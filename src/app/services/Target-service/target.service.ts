@@ -50,6 +50,22 @@ export class TargetService {
     return this.http.get<any>(url, { headers });
   }
 
+  // Quantity-Based Collection Report: daily target progress for a selected centre within a date range.
+  // centerId is optional — a Centre Manager's own centre is used on the backend.
+  getQuantityBasedCollectionReport(centerId: number | string | null, fromDate: Date | string, toDate: Date | string): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    let url = `${this.apiUrl}/get-quantity-based-collection-report?fromDate=${fromDate}&toDate=${toDate}`;
+
+    if (centerId) {
+      url += `&centerId=${centerId}`;
+    }
+
+    return this.http.get<any>(url, { headers });
+  }
+
   getCenterDetails(page: number = 1, limit: number = 10, province: string = '', district: string = '', search: string = ''): Observable<any> {
     const headers = new HttpHeaders({
       Authorization: `Bearer ${this.token}`

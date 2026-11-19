@@ -467,12 +467,8 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit, OnDestroy {
     return allowedLimit.toFixed(2);
   }
 
-  onComplete() {
-    if (this.isDispatching) {
-      return;
-    }
-    this.loading = true;
-
+  // Runs all product/quantity checks; shows a warning and returns false if anything is invalid
+  private validateBeforeDispatch(): boolean {
     const hasInvalidProduct = this.orderdetailsArr.some((pkg, pkgIndex) => {
       return pkg.items.some((item, itemIndex) => {
         return (
@@ -577,6 +573,9 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit, OnDestroy {
   }
 
   onComplete() {
+    if (this.isDispatching) {
+      return; // already sent — prevent a second dispatch
+    }
     if (!this.validateBeforeDispatch()) {
       return;
     }

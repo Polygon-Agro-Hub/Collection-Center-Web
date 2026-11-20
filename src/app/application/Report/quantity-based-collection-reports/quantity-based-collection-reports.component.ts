@@ -30,12 +30,18 @@ export class QuantityBasedCollectionReportsComponent implements OnInit {
   selectCenter = '';
 
   maxDate: string = new Date().toISOString().split('T')[0];
-  fromDate: Date | string = '';   // yyyy-MM-dd
-  toDate: Date | string = '';     // yyyy-MM-dd
+  fromDate: string = '';   // yyyy-MM-dd
+  toDate: string = '';     // yyyy-MM-dd
 
   /** true once "Go" has been pressed with valid filters (same flag name as the Collection report) */
   isDateFilterSet = false;
-  reportArr: QuantityCollectionRow[] = [];
+
+  targetArr: QuantityCollectionRow[] = [];
+  hasData: boolean = false;
+  totalItems: number = 0;
+
+  /** Filters used for the data currently on screen — Download uses these, not unsaved picker changes */
+  private appliedFilters: { centerId: string | null; fromDate: string; toDate: string } | null = null;
 
   constructor(
     private router: Router,
@@ -55,10 +61,6 @@ export class QuantityBasedCollectionReportsComponent implements OnInit {
 
   get isCentreHead(): boolean {
     return this.logingRole === 'Collection Centre Head';
-  }
-
-  get hasData(): boolean {
-    return this.reportArr.length > 0;
   }
 
   // ---------- Centre dropdown ----------
@@ -95,7 +97,7 @@ export class QuantityBasedCollectionReportsComponent implements OnInit {
   // ---------- Dates (same behaviour as Reports > Collection) ----------
 
   onFromDateChange(date: string | Date | null) {
-    const selectedDate = (date as string) || '';
+    const selectedDate = this.toDateString(date);
 
     if (selectedDate && selectedDate > this.maxDate) {
       this.fromDate = '';
@@ -111,7 +113,7 @@ export class QuantityBasedCollectionReportsComponent implements OnInit {
   }
 
   onToDateChange(date: string | Date | null) {
-    const selectedDate = (date as string) || '';
+    const selectedDate = this.toDateString(date);
 
     if (selectedDate && selectedDate > this.maxDate) {
       this.toDate = '';
@@ -178,23 +180,34 @@ export class QuantityBasedCollectionReportsComponent implements OnInit {
     }
 
     this.isDateFilterSet = true;
-    this.fetchReport();
+    this.appliedFilters = {
+      // Centre Head sends the selected centre; for a Centre Manager the backend uses their own centre
+      centerId: this.isCentreHead ? this.selectCenter : null,
+      // Dates go to the backend as plain 'YYYY-MM-DD' strings
+      fromDate: this.toDateString(this.fromDate),
+      toDate: this.toDateString(this.toDate),
+    };
+    this.fetchAllTarget();
   }
 
-  fetchReport() {
+  // ---------- Data fetching ----------
+
+  fetchAllTarget() {
+    if (!this.appliedFilters) return;
+    const { centerId, fromDate, toDate } = this.appliedFilters;
+
     this.isLoading = true;
-
-    // Centre Head sends the selected centre; for a Centre Manager the backend uses their own centre
-    const centerId = this.isCentreHead ? this.selectCenter : null;
-
-    this.targetSrv.getQuantityBasedCollectionReport(centerId, this.fromDate, this.toDate).subscribe({
+    this.targetSrv.getQuantityBasedCollectionReport(centerId, fromDate, toDate).subscribe({
       next: (res) => {
-        this.reportArr = res?.items || [];
+        this.targetArr = res?.items || [];
+        this.totalItems = res?.totalPages || 0;
+        this.hasData = this.targetArr.length > 0;
         this.isLoading = false;
       },
       error: (err) => {
         console.error('Failed to load quantity-based collection report', err);
-        this.reportArr = [];
+        this.targetArr = [];
+        this.hasData = false;
         this.isLoading = false;
         this.toastSrv.error(err?.error?.error || 'Failed to load the report');
       },
@@ -204,7 +217,40 @@ export class QuantityBasedCollectionReportsComponent implements OnInit {
   // ---------- Download ----------
 
   onDownload() {
-    // TODO: hook up to the download endpoint once it is available
+    if (!this.appliedFilters || this.isDownloading) return;
+    const { centerId, fromDate, toDate } = this.appliedFilters;
+
+    this.isDownloading = true;
+    this.targetSrv.downloadQuantityBasedCollectionReport(centerId, fromDate, toDate).subscribe({
+      next: (blob) => {
+        const url = window.URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = this.buildDownloadFileName(centerId, fromDate, toDate);
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        window.URL.revokeObjectURL(url);
+
+        this.isDownloading = false;
+        this.toastSrv.success('Report downloaded successfully');
+      },
+      error: (err) => {
+        console.error('Failed to download quantity-based collection report', err);
+        this.isDownloading = false;
+        this.toastSrv.error('Failed to download the report');
+      },
+    });
+  }
+
+  // "Qty Collection Report for [CENTRE NAME] - [FROM] to [TO].xlsx"
+  // (Centre Managers have no centre list, so the "for [CENTRE NAME]" part is left out)
+  private buildDownloadFileName(centerId: string | null, fromDate: string, toDate: string): string {
+    const center = centerId ? this.centerArr.find(c => c.id.toString() === centerId) : null;
+    // strip characters that aren't allowed in file names
+    const centerName = center?.centerName?.replace(/[\\/:*?"<>|]/g, '').trim();
+    const centerPart = centerName ? ` for ${centerName}` : '';
+    return `Qty Collection Report${centerPart} - ${fromDate} to ${toDate}.xlsx`;
   }
 
   // ---------- Navigation ----------
@@ -221,24 +267,20 @@ export class QuantityBasedCollectionReportsComponent implements OnInit {
     return m ? `${m[1]}/${m[2]}/${m[3]}` : '--';
   }
 
-  statusClass(status: string): string {
-    switch (status) {
-      case 'Completed': return 'bg-[#c0f8ac] text-[#30911a]';
-      case 'Pending': return 'bg-[#F8FFA6] text-[#A8A100]';
-      case 'Extra': return 'bg-[#FFE4C9] text-[#CD6700]';
-      case 'Exceeded': return 'bg-[#C8E0FF] text-[#415CFF]';
-      default: return 'bg-gray-100 text-gray-500';
+  /** Date | "YYYY-MM-DD" | "YYYY-MM-DDT..." -> "YYYY-MM-DD" ('' when empty/invalid) */
+  toDateString(value: string | Date | null | undefined): string {
+    if (!value) return '';
+    if (value instanceof Date) {
+      if (isNaN(value.getTime())) return '';
+      const y = value.getFullYear();
+      const m = ('0' + (value.getMonth() + 1)).slice(-2);
+      const d = ('0' + value.getDate()).slice(-2);
+      return `${y}-${m}-${d}`;
     }
+    const match = value.match(/^(\d{4})-(\d{2})-(\d{2})/);
+    return match ? `${match[1]}-${match[2]}-${match[3]}` : '';
   }
 
-  validityClass(validity: string | null): string {
-    switch (validity) {
-      case 'Active': return 'bg-[#BBFFC6] text-[#308233]';
-      case 'Expired': return 'bg-[#DCDCDC] text-[#888888]';
-      case 'Unassigned': return 'bg-[#AFF7FF] text-[#00808E]';
-      default: return 'bg-gray-100 text-gray-500';
-    }
-  }
 }
 
 const DEFAULT_CENTER_ID = 59; // Colombo
@@ -260,5 +302,4 @@ export interface QuantityCollectionRow {
   assignStatus: number;
   targetDate: string;   // yyyy-MM-dd
   status: 'Completed' | 'Pending' | 'Extra' | 'Exceeded' | 'No Target' | string;
-  validity: 'Active' | 'Expired' | 'Unassigned' | string | null;
-}
+  validity: 'Active' | 'Expired' | 'Unassigned' | string | null;}

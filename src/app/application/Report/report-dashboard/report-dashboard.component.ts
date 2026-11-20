@@ -41,6 +41,10 @@ export class ReportDashboardComponent {
     }
   }
 
+  onQuantityReportClick() {
+    this.router.navigate(['reports/quantity-based-collection-reports']);
+  }
+
   navigateToOfficerReport() {
     if (this.isOfficerReportClicked) {
       this.router.navigate(['reports/officer-reports']);

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { HttpClient, HttpHeaders, HttpParams } from '@angular/common/http';
 import { Observable } from 'rxjs';
 import { TokenServiceService } from '../Token/token-service.service';
 import { environment } from '../../environments/environment';
@@ -48,6 +48,44 @@ export class TargetService {
 
 
     return this.http.get<any>(url, { headers });
+  }
+
+  // Quantity-Based Collection Report: daily target progress for a selected centre within a date range.
+  // centerId is optional — a Centre Manager's own centre is used on the backend.
+  // fromDate / toDate are 'YYYY-MM-DD' strings
+  getQuantityBasedCollectionReport(centerId: number | string | null, fromDate: string, toDate: string): Observable<any> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    return this.http.get<any>(`${this.apiUrl}/get-quantity-based-collection-report`, {
+      headers,
+      params: this.quantityReportParams(centerId, fromDate, toDate),
+    });
+  }
+
+  // Excel file of the same report (returned as a Blob)
+  downloadQuantityBasedCollectionReport(centerId: number | string | null, fromDate: string, toDate: string): Observable<Blob> {
+    const headers = new HttpHeaders({
+      Authorization: `Bearer ${this.token}`
+    });
+
+    return this.http.get(`${this.apiUrl}/download-quantity-based-collection-report`, {
+      headers,
+      params: this.quantityReportParams(centerId, fromDate, toDate),
+      responseType: 'blob',
+    });
+  }
+
+  private quantityReportParams(centerId: number | string | null, fromDate: string, toDate: string): HttpParams {
+    let params = new HttpParams()
+      .set('fromDate', fromDate)
+      .set('toDate', toDate);
+
+    if (centerId) {
+      params = params.set('centerId', String(centerId));
+    }
+    return params;
   }
 
   getCenterDetails(page: number = 1, limit: number = 10, province: string = '', district: string = '', search: string = ''): Observable<any> {

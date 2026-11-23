@@ -69,11 +69,8 @@ export class QuantityBasedCollectionReportsComponent implements OnInit {
     this.manageOfficerSrv.getCCHOwnCenters().subscribe({
       next: (res) => {
         this.centerArr = res || [];
-        // Default to Colombo; fall back to the first centre if Colombo isn't in this user's list.
-        // Set after the list loads so the dropdown can find and display the item.
-        const hasDefault = this.centerArr.some(c => Number(c.id) === DEFAULT_CENTER_ID);
-        const fallback = this.centerArr[0]?.id;
-        this.selectCenter = hasDefault ? DEFAULT_CENTER_ID.toString() : (fallback ? fallback.toString() : '');
+        // No default centre — the user must pick one
+        this.selectCenter = '';
       },
       error: (err) => console.error('Failed to load centres', err),
     });
@@ -87,17 +84,37 @@ export class QuantityBasedCollectionReportsComponent implements OnInit {
     }));
   }
 
-  onCenterSelectionChange(selectedValue: string) {
-    // Clearing is disabled, so ignore empty values and keep the current centre
+  onCenterSelectionChange(selectedValue: string | null) {
     if (selectedValue) {
       this.selectCenter = selectedValue;
+      return;
     }
+
+    // Centre cleared — dates depend on a centre, so clear them and the report shown
+    this.selectCenter = '';
+    this.clearFromDate();
+    this.clearToDate();
+    this.resetReport();
+  }
+
+  /** Centre Head must pick a centre before choosing dates */
+  private ensureCenterSelected(): boolean {
+    if (this.isCentreHead && !this.selectCenter) {
+      this.toastSrv.warning('Please select a collection centre');
+      return false;
+    }
+    return true;
   }
 
   // ---------- Dates (same behaviour as Reports > Collection) ----------
 
   onFromDateChange(date: string | Date | null) {
     const selectedDate = this.toDateString(date);
+
+    if (selectedDate && !this.ensureCenterSelected()) {
+      this.clearFromDate();
+      return;
+    }
 
     if (selectedDate && selectedDate > this.maxDate) {
       this.fromDate = '';
@@ -114,6 +131,11 @@ export class QuantityBasedCollectionReportsComponent implements OnInit {
 
   onToDateChange(date: string | Date | null) {
     const selectedDate = this.toDateString(date);
+
+    if (selectedDate && !this.ensureCenterSelected()) {
+      this.clearToDate();
+      return;
+    }
 
     if (selectedDate && selectedDate > this.maxDate) {
       this.toDate = '';
@@ -156,11 +178,26 @@ export class QuantityBasedCollectionReportsComponent implements OnInit {
     }
   }
 
+  private clearFromDate() {
+    this.fromDate = '';
+    if (this.fromDatePicker) {
+      this.fromDatePicker.selectedDate = null;
+    }
+  }
+
+  /** Drop the report on screen so Download can't use filters for a cleared centre */
+  private resetReport() {
+    this.isDateFilterSet = false;
+    this.appliedFilters = null;
+    this.targetArr = [];
+    this.hasData = false;
+    this.totalItems = 0;
+  }
+
   // ---------- Go ----------
 
   goBtn() {
-    if (this.isCentreHead && !this.selectCenter) {
-      this.toastSrv.warning('Please select a Centre');
+    if (!this.ensureCenterSelected()) {
       return;
     }
     if (!this.fromDate && !this.toDate) {
@@ -249,8 +286,8 @@ export class QuantityBasedCollectionReportsComponent implements OnInit {
     const center = centerId ? this.centerArr.find(c => c.id.toString() === centerId) : null;
     // strip characters that aren't allowed in file names
     const centerName = center?.centerName?.replace(/[\\/:*?"<>|]/g, '').trim();
-    const centerPart = centerName ? ` for ${centerName}` : '';
-    return `Qty Collection Report${centerPart} - ${fromDate} to ${toDate}.xlsx`;
+    const centerPart = centerName ? `${centerName}` : '';
+    return `Quantity-Based Collection Report - ${centerPart} - ${fromDate} to ${toDate}.xlsx`;
   }
 
   // ---------- Navigation ----------
@@ -282,8 +319,6 @@ export class QuantityBasedCollectionReportsComponent implements OnInit {
   }
 
 }
-
-const DEFAULT_CENTER_ID = 59; // Colombo
 
 class Center {
   id!: number;

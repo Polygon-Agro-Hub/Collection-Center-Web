@@ -601,8 +601,9 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit, OnDestroy {
             title: 'font-semibold',
           },
         }).then(() => {
-          this.router.navigate(['/procurement/view-dispatched-define-orders'], {
-            queryParams: { id: this.orderId },
+          // Go to Redefine Orders parent with the "Sent To Dispatch" tab selected
+          this.router.navigate(['/procurement/redefine-orders'], {
+            queryParams: { route: 'dispatch' },
             replaceUrl: true,
           });
         });

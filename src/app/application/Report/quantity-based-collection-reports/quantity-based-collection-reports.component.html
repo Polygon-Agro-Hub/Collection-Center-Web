@@ -14,8 +14,8 @@
             <p class="font-semibold text-[#292929] dark:text-white">Centre</p>
             <app-searchable-dropdown [items]="centerDropdownItems" placeholder="Select Centre..."
                 searchPlaceholder="Search centre..." [(ngModel)]="selectCenter"
-                (selectionChange)="onCenterSelectionChange($event)" [clearable]="false"
-                [showClearIcon]="false" [showSelected]="true" [disabled]="false"
+                (selectionChange)="onCenterSelectionChange($event)" [clearable]="true"
+                [showClearIcon]="true" [showSelected]="true" [disabled]="false"
                 class="w-full"></app-searchable-dropdown>
         </div>
 
@@ -23,7 +23,8 @@
             <p class="font-semibold text-[#292929] dark:text-white">From</p>
             <div class="relative w-56">
                 <app-custom-datepicker #fromDatePicker [placeholder]="'--Select Date--'"
-                    [(selectedDate)]="fromDate" (dateChange)="onFromDateChange($event)">
+                    [(selectedDate)]="fromDate" (dateChange)="onFromDateChange($event)"
+                    (pickerOpened)="toDatePicker.showCalendar = false">
                 </app-custom-datepicker>
             </div>
         </div>
@@ -32,7 +33,7 @@
             <p class="font-semibold text-[#292929] dark:text-white">To</p>
             <div class="relative w-56">
                 <app-custom-datepicker #toDatePicker [placeholder]="'--Select Date--'" [selectedDate]="toDate"
-                    (dateChange)="onToDateChange($event)">
+                    (dateChange)="onToDateChange($event)" (pickerOpened)="fromDatePicker.showCalendar = false">
                 </app-custom-datepicker>
             </div>
         </div>

@@ -771,6 +771,22 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit, OnDestroy {
     this.calculatePrice(item);
   }
 
+  validateDecimalPlaces(item: any) {
+  if (item.qty == null || item.qty === '') return;
+
+  const value = item.qty.toString();
+
+  if (value.includes('.')) {
+    const parts = value.split('.');
+
+    if (parts[1].length > 2) {
+      item.qty = Number(
+        parts[0] + '.' + parts[1].substring(0, 2)
+      );
+    }
+  }
+}
+
   preventNegativeInput(event: KeyboardEvent) {
     // Prevent minus key (-) from being entered
     if (event.key === '-' || event.key === 'Subtract') {

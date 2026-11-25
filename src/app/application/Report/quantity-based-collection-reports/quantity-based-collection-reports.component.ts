@@ -84,6 +84,12 @@ export class QuantityBasedCollectionReportsComponent implements OnInit {
     }));
   }
 
+  // Tooltip text for the Centre dropdown (full "code - name", which can be cut off in the field)
+  get selectedCenterLabel(): string {
+    const center = this.centerArr.find(c => c.id.toString() === this.selectCenter);
+    return center ? `${center.regCode} - ${center.centerName}` : '';
+  }
+
   onCenterSelectionChange(selectedValue: string | null) {
     if (selectedValue) {
       this.selectCenter = selectedValue;

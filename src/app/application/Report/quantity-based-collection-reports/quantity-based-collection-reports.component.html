@@ -16,7 +16,7 @@
                 searchPlaceholder="Search centre..." [(ngModel)]="selectCenter"
                 (selectionChange)="onCenterSelectionChange($event)" [clearable]="true"
                 [showClearIcon]="true" [showSelected]="true" [disabled]="false"
-                class="w-full"></app-searchable-dropdown>
+                [title]="selectedCenterLabel" class="w-full"></app-searchable-dropdown>
         </div>
 
         <div class="flex flex-col gap-2">

@@ -88,12 +88,13 @@
               {{ item.itemName }}
             </span>
 
-            <div class="mr-8">
-              <div class="bg-[#FBEFE4] dark:bg-[#3A3F55] text-[#FEF7EF] dark:text-textDark rounded px-3 py-1">
+            <!-- Fixed width (fits "10000.000 kg") so the columns after it line up in every row -->
+            <div class="mr-8 w-[130px] flex-shrink-0">
+              <div class="bg-[#FBEFE4] dark:bg-[#3A3F55] text-[#FEF7EF] dark:text-textDark rounded px-3 py-1 w-full">
                 <p class="text-xs text-[#000000] dark:text-textDark mb-1">
                   Shortage
                 </p>
-                <p class="text-sm font-medium text-[#000000] dark:text-textDark">
+                <p class="text-sm font-medium text-[#000000] dark:text-textDark tabular-nums">
                   {{ item.assignedQty }} {{ item.unit }}
                 </p>
               </div>

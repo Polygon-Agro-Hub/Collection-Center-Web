@@ -771,26 +771,33 @@ export class ToDoRedefinePremadeOrdersComponent implements OnInit, OnDestroy {
     this.calculatePrice(item);
   }
 
-  validateDecimalPlaces(item: any) {
-  if (item.qty == null || item.qty === '') return;
+  // Limit the quantity to 2 decimal places while typing/pasting.
+  // Reads the raw input text (item.qty is already a number for type="number", so string methods can't be used on it)
+  validateDecimalPlaces(event: Event, item: any) {
+    const input = event.target as HTMLInputElement;
+    const value = input?.value ?? '';
 
-  const value = item.qty.toString();
+    const match = value.match(/^(\d*)\.(\d{3,})$/);
+    if (!match) return;
 
-  if (value.includes('.')) {
-    const parts = value.split('.');
-
-    if (parts[1].length > 2) {
-      item.qty = Number(
-        parts[0] + '.' + parts[1].substring(0, 2)
-      );
-    }
+    const trimmed = `${match[1] || '0'}.${match[2].substring(0, 2)}`;
+    input.value = trimmed;      // keep the field showing what's allowed
+    item.qty = Number(trimmed); // keep the model in sync
   }
-}
 
   preventNegativeInput(event: KeyboardEvent) {
     // Prevent minus key (-) from being entered
-    if (event.key === '-' || event.key === 'Subtract') {
+    // and stop Up/Down arrow keys from increasing/decreasing the quantity
+    if (event.key === '-' || event.key === 'Subtract' || event.key === 'ArrowUp' || event.key === 'ArrowDown') {
       event.preventDefault();
+    }
+  }
+
+  // Stop the mouse wheel from changing the quantity while the field is focused (page still scrolls)
+  preventWheelChange(event: WheelEvent) {
+    const input = event.target as HTMLInputElement;
+    if (document.activeElement === input) {
+      input.blur();
     }
   }
 

@@ -40,6 +40,7 @@ import { PendingChangesGuard } from './guards/can-deactivate.guard';
 import { AssignCenterTargetViewComponent } from './application/Target/assign-center-target-view/assign-center-target-view/assign-center-target-view.component';
 import { ReportDashboardComponent } from './application/Report/report-dashboard/report-dashboard.component';
 import { CollectionReportsComponent } from './application/Report/collection-reports/collection-reports.component';
+import { QuantityBasedCollectionReportsComponent } from './application/Report/quantity-based-collection-reports/quantity-based-collection-reports.component';
 import { OfficerTargetViewComponent } from './application/Target/officer-target-view/officer-target-view.component';
 import { CenterCollectionExpenseComponent } from './application/Target/center-collection-expense/center-collection-expense.component';
 import { FarmerReportInvoiceComponent } from './application/Report/farmer-report-invoice/farmer-report-invoice.component';
@@ -215,6 +216,10 @@ export const routes: Routes = [
                     {
                         path: 'collection-reports',
                         component: CollectionReportsComponent
+                    },
+                    {
+                        path: 'quantity-based-collection-reports',
+                        component: QuantityBasedCollectionReportsComponent
                     },
                     {
                         path: 'collection-monthly-report/:id',

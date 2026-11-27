@@ -1,0 +1,155 @@
+<app-loading-spinner *ngIf="isLoading" />
+
+<!-- Breadcrumb -->
+<div class="flex flex-row items-center gap-5 font-semibold text-[#424242] dark:text-white mb-4 mr-5 ml-0 cursor-pointer">
+    <p (click)="goBack()">Reports</p>
+    <p>Quantity-Based Collection Report</p>
+</div>
+
+<!-- Filter card: Centre / From / To / Go -->
+<div class="w-full px-10 py-5 bg-tileLight dark:bg-[#363636] shadow-lg rounded-lg">
+    <div class="flex flex-row flex-wrap items-end gap-6">
+
+        <div *ngIf="isCentreHead" class="flex flex-col gap-2 w-64">
+            <p class="font-semibold text-[#292929] dark:text-white">Centre</p>
+            <app-searchable-dropdown [items]="centerDropdownItems" placeholder="Select Centre..."
+                searchPlaceholder="Search centre..." [(ngModel)]="selectCenter"
+                (selectionChange)="onCenterSelectionChange($event)" [clearable]="true"
+                [showClearIcon]="true" [showSelected]="true" [disabled]="false"
+                [title]="selectedCenterLabel" class="w-full"></app-searchable-dropdown>
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <p class="font-semibold text-[#292929] dark:text-white">From</p>
+            <div class="relative w-56">
+                <app-custom-datepicker #fromDatePicker [placeholder]="'--Select Date--'"
+                    [(selectedDate)]="fromDate" (dateChange)="onFromDateChange($event)"
+                    (pickerOpened)="toDatePicker.showCalendar = false">
+                </app-custom-datepicker>
+            </div>
+        </div>
+
+        <div class="flex flex-col gap-2">
+            <p class="font-semibold text-[#292929] dark:text-white">To</p>
+            <div class="relative w-56">
+                <app-custom-datepicker #toDatePicker [placeholder]="'--Select Date--'" [selectedDate]="toDate"
+                    (dateChange)="onToDateChange($event)" (pickerOpened)="fromDatePicker.showCalendar = false">
+                </app-custom-datepicker>
+            </div>
+        </div>
+
+        <button (click)="goBtn()"
+            class="bg-[#415CFF] text-lg text-white font-semibold px-6 py-2 rounded-lg shadow-lg dark:text-white">
+            Go
+        </button>
+    </div>
+</div>
+
+<!-- Result card — same UI as Centre Target > Progress -->
+<div *ngIf="!isLoading" style="container: qty-report / inline-size;"
+    class="w-full min-w-0 mt-5 px-4 sm:px-10 py-7 bg-tileLight shadow-lg rounded-lg dark:text-[#FFFFFF] dark:bg-[#363636]">
+
+    <!-- Before "Go" -->
+    <div *ngIf="!isDateFilterSet" class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6">
+        <p class="text-[#494949] my-6 dark:text-textDark">
+            --Set From & To Dates first--
+        </p>
+        <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
+    </div>
+
+    <div *ngIf="isDateFilterSet">
+        <div *ngIf="!hasData" class="flex flex-col items-center w-full h-screen px-10 py-7 mt-6">
+            <p class="text-[#494949] my-6 dark:text-textDark">--No Data Available--</p>
+            <img src="assets/images/NoData.png" alt="No Data" class="w-20 h-20" />
+        </div>
+
+        <div *ngIf="hasData"
+            class="w-full min-w-0 overflow-x-auto mt-8 border-gray-100 border-[2px] rounded-lg dark:border-[#202021]">
+            <table class="w-full min-w-max divide-y-2 overflow-hidden">
+                <thead class=" text-[#4B5563] dark:text-gray-300 dark:bg-[#0F0F0F] dark:border-[#202021]">
+                    <tr>
+                        <th class="px-6 py-3 text-[#4B5563] text-left text-[14px] font-[400]">No</th>
+                        <th class="px-6 py-3 text-[#4B5563] text-left text-[14px] font-[400]">Crop Name</th>
+                        <th class="px-6 py-3 text-[#4B5563] text-left text-[14px] font-[400]">Variety Name</th>
+                        <th class="px-6 py-3 text-[#4B5563] text-center text-[14px] font-[400]">Grade</th>
+                        <th class="px-6 py-3 text-[#4B5563] text-left text-[14px] font-[400]">Target (kg)</th>
+                        <th class="px-6 py-3 text-[#4B5563] text-left text-[14px] font-[400]">Completed (kg)</th>
+                        <th class="px-6 py-3 text-[#4B5563] text-left text-[14px] font-[400]">Target Date</th>
+                        <th class="px-6 py-3 text-[#4B5563] text-center text-[14px] font-[400]">Status</th>
+                        <th class="px-6 py-3 text-[#4B5563] text-center text-[14px] font-[400]">Validity</th>
+                    </tr>
+                </thead>
+                <tbody class="bg-white dark:bg-[#1D1D1F] dark:border-[#1D1D1F]">
+                    <tr *ngFor="let item of targetArr; let i = index">
+                        <td class="px-6 py-4 text-[#000000] font-[400] text-[16px] dark:text-gray-300">
+                            {{ (i + 1) < 10 ? '0' + (i + 1) : (i + 1) }} </td>
+                        <td class="px-6 py-4 text-[#000000] font-[400] text-[16px] dark:text-gray-300">{{item.cropNameEnglish}}</td>
+                        <td class="px-6 py-4 text-[#000000] font-[400] text-[16px] dark:text-gray-300">{{item.varietyNameEnglish}}
+                        </td>
+                        <td class="px-6 py-4 text-[#000000] font-[400] text-center text-[16px]  dark:text-gray-300">{{item.grade}}
+                        </td>
+                        <td class="px-6 py-4 text-[#000000] font-[400] text-[16px] dark:text-gray-300">
+                            {{ (+item.target || 0) | number : '1.3-3' }}
+                        </td>
+                        <td class="px-6 py-4 text-left text-[#000000] font-[400] text-[16px] dark:text-gray-300">
+                            {{ (+item.complete || 0) | number : '1.3-3' }}
+                        </td>
+                        <td class="px-6 py-4 text-[#000000] font-[400] text-[16px] dark:text-gray-300 whitespace-nowrap">
+                            {{ formatDate(item.targetDate) }}
+                        </td>
+
+                        <td class="px-6 py-4 text-[#000000] font-[400] text-[16px] dark:text-gray-300">
+                            <div class="flex justify-center">
+                                <span *ngIf="item.status === 'Pending'"
+                                    class="bg-[#F8FFA6] text-[#A8A100] text-center rounded-lg px-8 py-1 h-full flex items-center">
+                                    Pending
+                                </span>
+                                <span *ngIf="item.status === 'Exceeded'"
+                                    class="bg-[#C8E0FF] text-[#415CFF] text-center rounded-lg px-6 py-1 h-full flex items-center">
+                                    Exceeded
+                                </span>
+                                <span *ngIf="item.status === 'Completed'"
+                                    class="bg-[#c0f8ac] text-[#30911a] text-center rounded-lg px-4 py-1 h-full flex items-center">
+                                    Completed
+                                </span>
+                                <span *ngIf="item.status === 'Extra'"
+                                    class="bg-[#FFE4C9] text-[#CD6700] text-center rounded-lg px-10 py-1 h-full flex items-center">
+                                    Extra
+                                </span>
+                            </div>
+                        </td>
+
+                        <td class="px-6 py-4 text-[#000000] font-[400] text-[16px] dark:text-gray-300">
+                            <div class="flex justify-center">
+                                <span *ngIf="item.validity === 'Active'"
+                                    class="bg-[#BBFFC6] text-[#308233] text-center rounded-lg px-8 py-1 h-full flex items-center">
+                                    Active
+                                </span>
+                                <span *ngIf="item.validity === 'Expired'"
+                                    class="bg-[#DCDCDC] text-[#888888] text-center rounded-lg px-7 py-1 h-full flex items-center">
+                                    Expired
+                                </span>
+                                <span *ngIf="item.validity === 'Unassigned'"
+                                    class="bg-[#AFF7FF] text-[#00808E] text-center rounded-lg px-4 py-1 h-full flex items-center">
+                                    Unassigned
+                                </span>
+                                <span *ngIf="!item.validity">--</span>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <!-- Download (bottom centre) -->
+        <div *ngIf="hasData" class="flex justify-center items-center mt-8">
+            <button
+                class="bg-[#415CFF] text-white shadow-md font-medium rounded-lg py-2 px-5 text-lg flex items-center disabled:opacity-60"
+                [disabled]="isDownloading" (click)="onDownload()">
+                <i class="fa-solid fa-download px-2" *ngIf="!isDownloading"></i>
+                <i class="fa-solid fa-spinner fa-spin px-2" *ngIf="isDownloading"></i>
+                {{ isDownloading ? ' Downloading...' : ' Download' }}
+            </button>
+        </div>
+    </div>
+</div>
